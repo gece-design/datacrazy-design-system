@@ -59,7 +59,7 @@ export function Codigo({
       {html ? (
         <div className="dc-shiki overflow-x-auto p-5" dangerouslySetInnerHTML={{ __html: html }} />
       ) : (
-        <pre className="overflow-x-auto p-5 font-mono text-body-md leading-[20px] text-foreground">
+        <pre className="overflow-x-auto p-5 font-mono text-[13px] leading-[21px] text-foreground">
           <code>{codigo.trim()}</code>
         </pre>
       )}

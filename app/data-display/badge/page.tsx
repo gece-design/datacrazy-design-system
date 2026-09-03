@@ -302,7 +302,7 @@ export default function BadgePage() {
               ) : (
                 <X size={14} weight="regular" className="mt-1 shrink-0 text-destructive" />
               )}
-              <p className="text-body-lg text-muted-foreground">
+              <p className="chrome-prose text-muted-foreground">
                 <span className="text-foreground">{d.titulo}</span> {d.texto}
               </p>
             </li>

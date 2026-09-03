@@ -1,0 +1,32 @@
+{
+  "product": "DataCrazy",
+  "kit": "3.2",
+  "updated": "2026-09-03",
+  "_doc": "Registro vivo de componentes — a memoria que alimenta a inferencia por analogia. Escrito pela fw-doc ao fim de CADA lote, nunca a mao. source de cada estado: figma | declarado | banco | inferido | humano.",
+  "_divida": "Button e Badge existem em codigo desde 2026-09-01 e NAO estao aqui: foram escritos antes do registro existir. Enquanto a fw-doc nao rodar sobre eles, a verdade desses dois esta no codigo. Nao preencher de memoria — ler o componente.",
+  "components": [
+    {
+      "name": "KpiCard",
+      "family": "superficie",
+      "figmaNode": "269:53",
+      "batch": 1,
+      "variants": ["fill", "outline", "trend:neutral", "trend:up", "trend:down"],
+      "tokens": [
+        "card",
+        "accent",
+        "background",
+        "primary",
+        "foreground",
+        "muted-foreground",
+        "subtle-foreground",
+        "radius/md",
+        "text/heading-4",
+        "text/display",
+        "text/label-lg"
+      ],
+      "motion": null,
+      "states": {},
+      "_states_doc": "Vazio de proposito. O componente e leitura, nao controle: o Figma nao desenhou estado de interacao e o interactions.md nao declara nenhum. Ausencia e decisao (fw-ui, camada 2). Se virar link para o funil filtrado, ganha focus-visible (I4) e alvo de toque (I15) — e ai entra aqui."
+    }
+  ]
+}

@@ -262,10 +262,10 @@ export default function Cor() {
         <div className="divide-y divide-border">
           {pendencias.map((p, i) => (
             <div key={p.titulo} className="flex gap-5 py-5 first:pt-0 last:pb-0">
-              <span className="shrink-0 font-mono text-body-md text-subtle-foreground">{i + 1}</span>
+              <span className="shrink-0 font-mono chrome-label text-subtle-foreground">{i + 1}</span>
               <div className="min-w-0">
-                <p className="text-h4 text-foreground">{p.titulo}</p>
-                <p className="mt-1 text-body-lg text-muted-foreground">{p.porque}</p>
+                <p className="chrome-h3 text-foreground">{p.titulo}</p>
+                <p className="mt-1 chrome-prose text-muted-foreground">{p.porque}</p>
               </div>
             </div>
           ))}

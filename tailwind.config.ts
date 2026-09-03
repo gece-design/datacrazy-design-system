@@ -31,6 +31,13 @@ const config: Config = {
         "warning-hover": "hsl(var(--warning-hover))",
         "info": "hsl(var(--info))",
         "info-hover": "hsl(var(--info-hover))",
+        // nav/item — tokens de componente da coleção "Cor", usados pela Sidebar.
+        "nav-item": "hsl(var(--nav-item-text-default))",
+        "nav-item-hover": "hsl(var(--nav-item-bg-hover))",
+        "nav-item-selected": "hsl(var(--nav-item-bg-selected))",
+        "nav-item-selected-foreground": "hsl(var(--nav-item-text-selected))",
+        "nav-item-selected-icon": "hsl(var(--nav-item-icon-selected))",
+        "sidebar-avatar": "hsl(var(--sidebar-avatar))",
         base: {
           blue: {
           "50": "hsl(var(--blue-50))",
@@ -65,6 +72,13 @@ const config: Config = {
         "overline": ["10px", { lineHeight: "14px", letterSpacing: "0.05em", fontWeight: "500" }],
         "button": ["13px", { lineHeight: "18px", letterSpacing: "0.0em", fontWeight: "500" }],
         "metric": ["16px", { lineHeight: "21px", letterSpacing: "-0.0125em", fontWeight: "600" }],
+      },
+      boxShadow: {
+        // realce interno que o Figma aplica em toda superfície da sidebar:
+        // inset 0 1px 4px #ffffff40. Nomeado para não virar valor mágico (G5).
+        highlight: "inset 0 1px 4px 0 rgb(255 255 255 / 0.25)",
+        // botão que flutua sobre a borda do painel (collapse toggle)
+        float: "0 4px 4px 0 rgb(0 0 0 / 0.08)",
       },
       borderRadius: {
         lg: "var(--radius)",

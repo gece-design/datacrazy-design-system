@@ -24,7 +24,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <header className={`flex h-[76px] items-center pr-10 ${aberta ? "pl-10" : "pl-6"}`}>
           <Colunas>
             <div className="flex items-center justify-between gap-4">
-              <nav aria-label="Trilha" className="flex min-w-0 items-center gap-2 text-body-lg">
+              <nav aria-label="Trilha" className="flex min-w-0 items-center gap-2 chrome-item">
                 <button
                   onClick={() => setAberta((a) => !a)}
                   aria-label={aberta ? "Fechar menu" : "Abrir menu"}

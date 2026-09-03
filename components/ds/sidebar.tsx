@@ -133,7 +133,7 @@ export function Sidebar() {
           );
         })}
         {filtrada.length === 0 && (
-          <p className="px-2.5 py-6 text-center text-body-md text-subtle-foreground">Nada encontrado.</p>
+          <p className="px-2.5 py-6 text-center chrome-meta text-subtle-foreground">Nada encontrado.</p>
         )}
       </nav>
     </aside>

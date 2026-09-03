@@ -77,8 +77,30 @@ por `npm run check:temas`. Proposta de correção pendente de aprovação:
 
 ### Cor — componente
 
-`nav/item/bg-selected` · `bg-hover` · `text-selected` · `icon-selected` ·
-`text-default` — todos alias, com valor próprio no escuro.
+Tokens que pertencem a um componente, não à paleta. No Figma vivem na mesma
+coleção `Cor`, com os dois modos; no código são variáveis em `app/globals.css`
+e cores nomeadas em `tailwind.config.ts`.
+
+| Token (Figma) | Classe | Claro | Escuro |
+|---|---|---|---|
+| `nav/item/text-default` | `text-nav-item` | `muted-foreground` | `muted-foreground` |
+| `nav/item/bg-hover` | `bg-nav-item-hover` | `background` | `card` |
+| `nav/item/bg-selected` | `bg-nav-item-selected` | `blue-50` | `accent` |
+| `nav/item/text-selected` | `text-nav-item-selected-foreground` | `blue-600` | `blue-300` |
+| `nav/item/icon-selected` | `text-nav-item-selected-icon` | `blue-600` | `blue-300` |
+
+Todos são alias. `text-default` aponta para o mesmo alias nos dois modos, e é a
+única exceção declarada em `scripts/check-temas.mjs` — o alias repete, o valor
+não, porque `muted-foreground` já inverte entre os temas.
+
+Dois tokens do painel não existem como variável no Figma: cada variante de tema
+escolheu uma variável diferente, e o código dá nome a essa escolha para não
+ramificar por tema.
+
+| Token | Uso | Claro | Escuro |
+|---|---|---|---|
+| `--sidebar-surface` | superfície do painel, sempre gradiente | `card` → `card` | `background` → `accent` |
+| `--sidebar-avatar` | círculo do avatar sem foto | `surface-inverse` | `blue-700` |
 
 ### Tipografia
 
@@ -115,8 +137,17 @@ O valor de `--radius` é a pendência do eixo Forma.
 
 ### Elevação
 
-Não tokenizada ainda — o Figma não entregou escala de sombra. Nenhuma sombra
-se inventa: sem token, é bloqueio, não estimativa.
+Não há **escala** de sombra: o Figma não entregou uma. O que existe são duas
+sombras nomeadas, extraídas de nós concretos e registradas em
+`tailwind.config.ts` para não virarem valor mágico espalhado (G5).
+
+| Classe | Valor | De onde veio |
+|---|---|---|
+| `shadow-highlight` | `inset 0 1px 4px 0 rgb(255 255 255 / 0.25)` | realce interno que o Figma aplica em toda superfície da sidebar |
+| `shadow-float` | `0 4px 4px 0 rgb(0 0 0 / 0.08)` | botão de colapsar, o único elemento que flutua sobre o painel |
+
+Fora dessas duas, nenhuma sombra se inventa: sem token, é bloqueio, não
+estimativa.
 
 ### Camadas (`z-index`)
 

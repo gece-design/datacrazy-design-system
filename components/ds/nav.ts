@@ -36,13 +36,14 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Input", href: "/forms/input" , descricao: "Campo de texto de uma linha"},
       { titulo: "Select", href: "/forms/select" , descricao: "Escolha numa lista"},
       { titulo: "Checkbox", href: "/forms/checkbox" , descricao: "Alternância booleana"},
+      { titulo: "Date Picker", href: "/forms/date-picker", pronto: true , descricao: "Período em dois meses, com atalhos"},
     ],
   },
   {
     titulo: "Navigation",
     descricao: "Como o usuário se move pelo produto.",
     itens: [
-      { titulo: "Sidebar", href: "/navigation/sidebar" , descricao: "Navegação principal"},
+      { titulo: "Sidebar", href: "/navigation/sidebar", pronto: true, descricao: "Navegação principal"},
       { titulo: "Breadcrumb", href: "/navigation/breadcrumb" , descricao: "Trilha de dois níveis"},
       { titulo: "Pagination", href: "/navigation/pagination" , descricao: "Navegação entre páginas"},
     ],
@@ -51,8 +52,9 @@ export const navegacao: CategoriaNav[] = [
     titulo: "Data Display",
     descricao: "O CRM é denso: esta é a categoria que mais pesa.",
     itens: [
-      { titulo: "Card", href: "/data-display/card", pronto: true , descricao: "Contêiner de conteúdo"},
-      { titulo: "Stat Card", href: "/data-display/stat-card" , descricao: "Métrica em destaque"},
+      // Nome do component set no Figma (269:53). O slot nasceu no roadmap como
+      // "Stat Card"; quem batiza é o arquivo.
+      { titulo: "KPI Card", href: "/data-display/kpi-card", pronto: true , descricao: "Métrica em destaque"},
       { titulo: "Badge", href: "/data-display/badge", pronto: true , descricao: "Rótulo de estado"},
       { titulo: "Avatar", href: "/data-display/avatar" , descricao: "Identificação de pessoa"},
       { titulo: "Table", href: "/data-display/table" , descricao: "Dados tabulares"},

@@ -126,7 +126,7 @@ export function IconBrowser() {
         </div>
       </div>
 
-      <p className="mt-3 text-body-md text-subtle-foreground">
+      <p className="mt-3 chrome-meta text-subtle-foreground">
         {carregando ? "Carregando o catálogo…" : `${filtrados.length} de ${cat?.total ?? 0} ícones`}
         {cat && <> · catálogo oficial <span className="font-mono">@phosphor-icons/core v{cat.versao}</span></>}
       </p>
@@ -151,7 +151,7 @@ export function IconBrowser() {
       </div>
 
       {!carregando && filtrados.length === 0 && (
-        <p className="py-10 text-center text-body-lg text-subtle-foreground">Nenhum ícone com esse termo.</p>
+        <p className="py-10 text-center chrome-prose text-subtle-foreground">Nenhum ícone com esse termo.</p>
       )}
 
       {quantos < filtrados.length && (
@@ -174,8 +174,8 @@ export function IconBrowser() {
               <span className="h-8 w-8" aria-hidden dangerouslySetInnerHTML={{ __html: svgDe(selecionado, 32) }} />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-h3 text-foreground">{selecionado.p}</p>
-              <p className="mt-0.5 text-body-md text-muted-foreground">
+              <p className="chrome-h3 text-foreground">{selecionado.p}</p>
+              <p className="mt-0.5 chrome-meta text-muted-foreground">
                 {selecionado.c.join(" · ")} · peso <span className="font-mono">{peso}</span>
               </p>
               {selecionado.t.length > 0 && (

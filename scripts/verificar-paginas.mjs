@@ -3,7 +3,9 @@ import { chromium } from "playwright";
 const ROTAS = [
   "/", "/getting-started/installation",
   "/foundations/color", "/foundations/typography", "/foundations/icons",
-  "/actions/button", "/data-display/card", "/data-display/badge",
+  "/actions/button", "/forms/date-picker",
+  "/data-display/kpi-card", "/data-display/badge",
+  "/navigation/sidebar",
 ];
 
 const browser = await chromium.launch();
@@ -28,7 +30,10 @@ for (const rota of ROTAS) {
   const r = await page.evaluate(() => {
     const h1 = document.querySelector("main h1");
     const secoes = [...document.querySelectorAll("main section h2")].map((h) => h.textContent.trim());
-    const indice = [...document.querySelectorAll('main a[href^="#"]')].map((a) => a.textContent.trim());
+    // só o trilho "Nesta página" conta como índice — âncora de exemplo dentro
+    // de um preview (a Sidebar tem dezenas) não é item de sumário.
+    const indice = [...document.querySelectorAll('main nav[aria-label="Nesta página"] a[href^="#"]')]
+      .map((a) => a.textContent.trim());
     const abas = document.querySelectorAll("main section button[aria-pressed]").length / 2;
     const fonte = getComputedStyle(document.body).fontFamily.split(",")[0];
     // valores soltos: cor inline que não venha de var()

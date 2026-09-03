@@ -24,6 +24,7 @@ const twMerge = extendTailwindMerge({
             "primary", "primary-foreground", "accent-foreground",
             "surface-inverse-foreground", "card-foreground",
             "success", "warning", "destructive", "info",
+            "nav-item", "nav-item-selected-foreground", "nav-item-selected-icon",
           ],
         },
       ],

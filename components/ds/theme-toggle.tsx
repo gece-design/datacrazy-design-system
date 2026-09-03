@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { Sun, Moon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
-function useTema() {
+/** O tema do site vive numa classe no <html> + localStorage. Exportado porque a
+ *  página do Sidebar liga o `SidebarThemeSwitch` no tema de verdade. */
+export function useTema() {
   const [escuro, setEscuro] = useState(false);
   useEffect(() => setEscuro(document.documentElement.classList.contains("dark")), []);
   function alternar() {

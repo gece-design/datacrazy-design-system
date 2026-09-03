@@ -26,6 +26,12 @@
 | D6 | Anel de foco em componente que pode viver sobre qualquer superfície | Use `outline` com `outline-offset`, **não** `ring` com `ring-offset-*`. O offset do ring é pintado com **cor sólida**: dentro de card, modal ou linha de tabela ele vira um halo da cor errada. O vão do `outline` é transparente e mostra a superfície real, sem o componente precisar saber sobre o que está. Regra curta: **respiro de foco não se pinta, se deixa passar** | Página do Button, 2026-09-01 |
 | D7 | Coluna de número que precisa alinhar (KPI, tabela, moeda) | Use `tabular-nums`, **não** `font-mono`. Trocar a família é o código decidindo o que o Figma não decidiu — `text/metric` declara Geist. A Geist tem dígito de largura fixa; a classe só liga o recurso. Mesma família, mesmo peso, colunas alinhadas | Página do Card, 2026-09-01 |
 | D8 | Token de cor que existe nos dois temas | Rode `npm run check:temas`. Ele reprova qualquer variável semântica com valor idêntico em `:root` e `.dark` sem intenção declarada — é a regra E4, e é o bug #80174 automatizado. Primitivos (`blue-*`, `neutral-*`) e casos declarados ficam numa lista de exceção explícita, não implícita | Auditoria do próprio DS, 2026-09-01 |
+| D9 | Nó do Figma com `stroke` grosso (≥ 8px) em cor de superfície | Não é traço: é respiro do container. Traduza como `border-[Npx] border-<token>` e conte com o `border-box` — o raio interno vira `raio − espessura`, que é o que o Figma desenha. A sidebar tem stroke INSIDE de 16px em `background`: por fora 24px de raio, por dentro 8px, e os 282px de largura já incluem os 16 de cada lado | Sidebar, node 270:15429, 2026-09-03 |
+| D10 | Superfície que é cor num tema e gradiente no outro | Tokenize **sempre como gradiente**, inclusive no tema em que é chapada (`linear-gradient(180deg, X 0%, X 100%)`), e aplique com `bg-[image:var(--token)]`. `background-color` e `background-image` são propriedades diferentes: alternar entre as duas obriga a ramificar o componente por tema, que é o que o critério de pronto nº 3 proíbe | Sidebar, `--sidebar-surface`, 2026-09-03 |
+| D11 | Variante de tema do Figma que usa uma variável **diferente** da variante clara | Não copie o nome da variável da variante escura: ela foi escolhida pelo valor que tem no modo **Claro** do documento, e o rascunho não usa modes. Leia o valor visual, ache o token que entrega esse valor no modo Escuro, e se não houver um único token que sirva aos dois, crie um token de componente com os dois valores. Nunca `dark:` no componente | Sidebar, `--sidebar-avatar` (B8), 2026-09-03 |
+| D12 | Texto que trunca dentro de componente | `truncate` + `title` com o texto inteiro — nunca `overflow: clip` seco, que é o que o Figma desenha. No estado colapsado, o `title` sobe para o elemento raiz, porque vira a única forma de saber o que o ícone significa. É a rede dos tickets #83283, #83274 e #59567 | Sidebar Item, 2026-09-03 |
+| D13 | Ícone de controle (caret, chevron, seta) que o Figma pinta em `subtle-foreground` | Suba um degrau para `muted-foreground`. `subtle-foreground` sobre `card` dá **2.4:1** no claro — abaixo dos 3:1 que a WCAG 1.4.11 exige de componente gráfico não textual. Um caret que promete um menu é affordance, não decoração, e o critério de pronto nº 8 vence a fidelidade de tom aqui | Sidebar: caret do usuário e chevron do toggle, 2026-09-03 |
+| D14 | Nó do Figma com `stroke` **fino** (1–2px) e padding de auto-layout | O Figma desenha o traço POR DENTRO e o CSS soma POR FORA. Traduzir `padding: 18` + `stroke: 1` como `border p-[18px]` engorda a caixa em 2px por eixo. A regra é **borda + padding = padding do Figma**: `border p-[17px]`. Vale para cada caixa aninhada — no KPI Card o erro somava 4px (2 do card + 2 do chip) e a altura fechava em 152 em vez de 148 | KPI Card, node 269:53, 2026-09-03 |
 | D2 | Fonte via `next/font` | Verificar `font-family` computado com Playwright antes de qualquer medição. `GeistSans` esperado; qualquer fallback invalida o diff | `docs/processo/fonts-checklist.md` |
 
 ## Divergências recorrentes em observação
@@ -37,6 +43,13 @@ não confiar na aparência** — a classe pode estar no JSX e não chegar no CSS
 
 Ferramentas no repo: `scripts/medir.mjs` (estilos computados) e
 `scripts/shot.mjs` (screenshot nos dois temas, com checagem anti-fallback de fonte).
+
+**Cache do `.next` esconde token novo.** Cor ou sombra acrescentada em
+`tailwind.config.ts` não aparece no CSS até o `.next` ser apagado e o dev server
+reiniciado — o PostCSS não observa o config. O sintoma engana: a classe está no
+JSX, o elemento renderiza, e a cor simplesmente não é a esperada. Antes de
+investigar o componente, confirme que a utility existe:
+`curl -s localhost:4321/_next/static/css/app/layout.css | grep <classe>`.
 
 ## Herdado com ressalva
 

@@ -49,7 +49,7 @@ const usos: Uso[] = [
 function Item({ mono, children }: { mono: string; children: React.ReactNode }) {
   return (
     <li className="flex flex-wrap items-baseline gap-x-2">
-      <code className="w-40 shrink-0 font-mono text-body-md text-foreground">{mono}</code>
+      <code className="w-40 shrink-0 font-mono chrome-meta text-foreground">{mono}</code>
       <span className="min-w-0">{children}</span>
     </li>
   );
@@ -314,9 +314,9 @@ export default function Botao() {
             <ul className="space-y-3">
               {usos.map((u) => (
                 <li key={u.nome}>
-                  <span className="font-mono text-body-md text-foreground">{u.nome}</span>{" "}
-                  <span className="text-label-md text-subtle-foreground">· {u.regra}</span>
-                  <p className="mt-0.5 text-body-md text-muted-foreground">{u.texto}</p>
+                  <span className="font-mono chrome-label text-foreground">{u.nome}</span>{" "}
+                  <span className="chrome-meta text-subtle-foreground">· {u.regra}</span>
+                  <p className="mt-1 chrome-prose text-muted-foreground">{u.texto}</p>
                 </li>
               ))}
             </ul>

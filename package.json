@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit",
     "check:temas": "node scripts/check-temas.mjs",
     "check:paginas": "node scripts/verificar-paginas.mjs",
+    "check:sidebar": "node scripts/medir-sidebar.mjs claro && node scripts/medir-sidebar.mjs escuro",
     "check": "npm run typecheck && npm run check:temas && npm run check:paginas && npm run check:docs",
     "check:docs": "node .kfe-kit/scripts/kfe-docs.mjs audit",
     "docs:index": "node .kfe-kit/scripts/kfe-docs.mjs index"

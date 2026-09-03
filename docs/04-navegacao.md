@@ -12,7 +12,7 @@ esta tabela: item novo entra lá, com `pronto: true` quando a página existe.
 | Foundations | `/foundations/*` | 3 (color, typography, icons) | 3 |
 | Actions | `/actions/*` | 1 (button) | 2 |
 | Forms | `/forms/*` | 0 | 3 |
-| Navigation | `/navigation/*` | 0 | 3 |
+| Navigation | `/navigation/*` | 1 (sidebar) | 3 |
 | Data Display | `/data-display/*` | 2 (card, badge) | 6 |
 | Feedback & Overlays | `/feedback/*` | 0 | 4 |
 

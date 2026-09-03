@@ -1,11 +1,21 @@
 "use client";
 
-import { ChartBar, Funnel, House, MagnifyingGlass, Plus, Robot } from "@phosphor-icons/react";
+import {
+  ChartBar,
+  Funnel,
+  House,
+  Kanban,
+  MagnifyingGlass,
+  Plus,
+  Robot,
+  UsersThree,
+} from "@phosphor-icons/react";
 import { navegacao } from "@/components/ds/nav";
 import { PaginaDS, Secao, ComoFunciona, Chip, CardComponente } from "@/components/ds/preview";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { SidebarGrupo, SidebarItem } from "@/components/ui/sidebar";
 
 const total = navegacao.reduce((n, c) => n + c.itens.length, 0);
 const prontos = navegacao.reduce((n, c) => n + c.itens.filter((i) => i.pronto).length, 0);
@@ -88,17 +98,21 @@ const previews: Record<string, React.ReactNode> = {
       <Button variant="ghost">Cancelar</Button>
     </div>
   ),
-  "/data-display/card": (
-    <Card className="w-56">
-      <CardHeader>
-        <CardTitle>Total em aberto</CardTitle>
-        <ChartBar size={16} weight="regular" className="text-primary" />
-      </CardHeader>
-      <CardContent>
-        <p className="font-mono text-h1 text-foreground">R$ 3.000,00</p>
-        <Badge className="mt-2">37 negócios</Badge>
-      </CardContent>
-    </Card>
+  "/data-display/kpi-card": (
+    <div className="w-56">
+      <KpiCard title="Total em aberto" value="R$ 3,00K" caption="37 negócios" trend="neutral" />
+    </div>
+  ),
+  "/navigation/sidebar": (
+    <div className="w-52 max-w-full">
+      <SidebarGrupo>
+        <SidebarItem icone={House}>Início</SidebarItem>
+        <SidebarItem icone={Kanban} selecionado>
+          Pipelines
+        </SidebarItem>
+        <SidebarItem icone={UsersThree}>Leads</SidebarItem>
+      </SidebarGrupo>
+    </div>
   ),
   "/data-display/badge": (
     <div className="flex flex-wrap items-center justify-center gap-1.5">
@@ -130,11 +144,10 @@ const descricoes: Record<string, string> = {
   "Input": "Campo de uma linha, com erro inline (E6).",
   "Select": "Escolha única: é o ▾ dos filtros do dashboard.",
   "Checkbox": "Alternância booleana, com estado indeterminado.",
-  "Sidebar": "Colapsável, com accordion e favoritos (G3 e G4).",
+  "Sidebar": "282px que viram 88px, e o item de 36px que ela hospeda.",
   "Breadcrumb": "Dois níveis, e esse é o teto (G5).",
   "Pagination": "Mostrando 10 de 37 negócios, e os controles.",
-  "Card": "Contêiner: borda sutil, sem cor no corpo (A2).",
-  "Stat Card": "KPI do dashboard: rótulo, valor e badge de contagem.",
+  "KPI Card": "Métrica do dashboard: valor, tendência e legenda.",
   "Badge": "Seis variantes. A cor entra na tag, nunca no card (A2).",
   "Avatar": "Inicial em círculo quando não há foto.",
   "Table": "37 negócios, com resize de coluna (G9).",

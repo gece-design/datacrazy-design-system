@@ -149,7 +149,7 @@ export default function Installation() {
         spec="porta 4321"
         descricao="Next 15 e React 19; Node 18.18+ é o piso do Next. Não há passo de build de token: os arquivos já estão espelhados no repo."
       >
-        <p className="mb-5 text-body-md text-subtle-foreground">
+        <p className="mb-5 chrome-meta text-subtle-foreground">
           Node 18.18+ · npm · nenhuma variável de ambiente
         </p>
         <Terminal linhas={comandos} />
@@ -168,12 +168,12 @@ export default function Installation() {
         <ol className="divide-y divide-border">
           {passos.map((p, i) => (
             <li key={p.titulo} className="flex gap-4 py-5 first:pt-0 last:pb-0">
-              <span className="shrink-0 font-mono text-body-md text-subtle-foreground">
+              <span className="shrink-0 font-mono chrome-label text-subtle-foreground">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div className="min-w-0">
-                <p className="text-h4 text-foreground">{p.titulo}</p>
-                <p className="mt-1.5 text-body-lg text-muted-foreground">{p.corpo}</p>
+                <p className="chrome-h3 text-foreground">{p.titulo}</p>
+                <p className="mt-1.5 chrome-prose text-muted-foreground">{p.corpo}</p>
               </div>
             </li>
           ))}
@@ -198,13 +198,13 @@ export default function Installation() {
               key={e.arquivo}
               className="flex flex-col gap-1 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-baseline sm:gap-6"
             >
-              <p className="w-44 shrink-0 font-mono text-body-md text-foreground">{e.arquivo}</p>
-              <p className="text-body-lg text-muted-foreground">{e.guarda}</p>
+              <p className="w-44 shrink-0 font-mono chrome-meta text-foreground">{e.arquivo}</p>
+              <p className="chrome-prose text-muted-foreground">{e.guarda}</p>
             </div>
           ))}
         </div>
 
-        <p className="mt-6 text-body-lg text-muted-foreground">
+        <p className="mt-6 chrome-prose text-muted-foreground">
           Duas regras de conversão valem em toda reexportação: entrelinha vem em px e vira px
           literal, nunca o <Chip>leading-*</Chip> nomeado, que arredonda; tracking vem em px e vira{" "}
           <Chip>em</Chip>, dividido pelo tamanho da fonte. E uma checagem obrigatória:{" "}

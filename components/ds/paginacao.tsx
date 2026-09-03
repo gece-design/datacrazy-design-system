@@ -24,9 +24,9 @@ function Cartao({ item, lado }: { item: ItemNav; lado: "anterior" | "proxima" })
         <ArrowLeft size={16} weight="regular" className="shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
       )}
       <span className="min-w-0">
-        <span className="block truncate text-label-lg text-foreground">{item.titulo}</span>
+        <span className="block truncate chrome-item text-foreground">{item.titulo}</span>
         {item.descricao && (
-          <span className="block truncate text-body-md text-subtle-foreground">{item.descricao}</span>
+          <span className="block truncate chrome-meta text-subtle-foreground">{item.descricao}</span>
         )}
       </span>
     </Link>
@@ -60,7 +60,7 @@ export function Paginacao() {
         {anterior ? <Cartao item={anterior} lado="anterior" /> : <div className="flex-1" />}
         {proxima ? <Cartao item={proxima} lado="proxima" /> : <div className="flex-1" />}
       </div>
-      <p className="mt-3 text-center text-caption text-subtle-foreground">
+      <p className="mt-3 text-center chrome-caption text-subtle-foreground">
         Atalho:{" "}
         <kbd className="rounded border border-border bg-background px-1 py-px font-mono">[</kbd> anterior ·{" "}
         <kbd className="rounded border border-border bg-background px-1 py-px font-mono">]</kbd> próxima

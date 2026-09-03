@@ -19,7 +19,9 @@ markdown é a vista dele.
 ## Inventário
 
 <!-- kfe:index:start -->
-_Nenhum arquivo ainda._
+| Arquivo | Responsabilidade |
+|---------|------------------|
+| [KpiCard.md](KpiCard.md) | Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma |
 <!-- kfe:index:end -->
 
 ## Como ler a coluna "origem" dos estados
