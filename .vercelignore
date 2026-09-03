@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.kfe-kit
+docs
+scripts
+tests
+reports
+*.log
+tsconfig.tsbuildinfo
