@@ -1,0 +1,40 @@
+{
+  "product": "<produto>",
+  "kit": "3.2",
+  "updated": "<ISO-8601>",
+  "_doc": "Registro vivo de componentes — a memoria que alimenta a inferencia por analogia. Escrito pela fw-doc ao fim de CADA lote, nunca a mao. source de cada estado: figma | declarado | banco | inferido | humano.",
+  "components": [
+    {
+      "name": "Button",
+      "family": "acao",
+      "figmaNode": "<id>",
+      "batch": 1,
+      "variants": ["primary", "secondary", "ghost"],
+      "tokens": ["color/brand/500", "radius/md", "space/3"],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "bg-brand-600",
+          "source": "banco",
+          "rule": "I1",
+          "precedent": null,
+          "approvedIn": "lote-1"
+        },
+        "focus": {
+          "impl": "ring-2 ring-focus ring-offset-2",
+          "source": "banco",
+          "rule": "I4",
+          "precedent": null,
+          "approvedIn": "lote-1"
+        },
+        "disabled": {
+          "impl": "opacity-disabled cursor-not-allowed",
+          "source": "banco",
+          "rule": "I5",
+          "precedent": null,
+          "approvedIn": "lote-1"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+openapi: 3.1.0
+info:
+  title: DataCrazy — contrato de API (esqueleto)
+  version: 0.0.0
+  description: >
+    ESQUELETO VAZIO, de propósito. A v1 deste arquivo fixou envelope
+    { data, meta, errors }, paginação e campos em EN — tudo isso foi presumido
+    sob a hipótese de produto novo, e foi REVOGADO em 2026-09-01 ao se
+    confirmar que o DataCrazy é um CRM em produção com API REST já existente.
+    Convenção de API não se decide: descobre-se lendo a API real. Enquanto o
+    repositório não for auditado, nada é afirmado aqui.
+
+    Ciclo atual (new-ds, cenário C) entrega design system, não integração —
+    este arquivo só ganha conteúdo quando telas entrarem.
+
+# O QUE SE SABE (evidência: Artefato-01 Ponto Zero.pdf, 18/08/2026)
+# - Tipo de API: REST (sem GraphQL/Apollo nas dependências do front)
+# - Consumo no front: fetch nativo via hook próprio do time (confirmado pelo Gava)
+# - @tanstack/react-query está nas deps, mas NÃO é o padrão real de uso
+#
+# O QUE NÃO SE SABE (não presumir)
+# - Linguagem e framework do back — repositório do back nunca auditado
+# - Formato de envelope das respostas
+# - Convenção de paginação
+# - Idioma dos nomes de campo (EN ou PT)
+# - Formato de erro e de autenticação
+
+servers: []
+paths: {}
+components: {}

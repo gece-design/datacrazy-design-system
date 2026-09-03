@@ -1,0 +1,82 @@
+{
+  "collectionName": "Cor",
+  "modes": [
+    "Claro",
+    "Escuro"
+  ],
+  "_leiaMe": "Aplicar SOMENTE o modo Escuro; o Claro já existe e não deve ser tocado. Derivação em docs/tokens-estados-escuro.md",
+  "tokens": [
+    {
+      "name": "success",
+      "resolvedType": "COLOR",
+      "description": "Escuro derivado: matiz preservado, L=60.0%, S=45.0%",
+      "values": {
+        "Claro": "#267952",
+        "Escuro": "#6BC79C"
+      }
+    },
+    {
+      "name": "success-hover",
+      "resolvedType": "COLOR",
+      "description": "Escuro derivado: matiz preservado, L=70.0%, S=45.0%",
+      "values": {
+        "Claro": "#294F3D",
+        "Escuro": "#90D5B4"
+      }
+    },
+    {
+      "name": "destructive",
+      "resolvedType": "COLOR",
+      "description": "Escuro derivado: matiz preservado, L=60.0%, S=55.0%",
+      "values": {
+        "Claro": "#C6323C",
+        "Escuro": "#D16169"
+      }
+    },
+    {
+      "name": "destructive-hover",
+      "resolvedType": "COLOR",
+      "description": "Escuro derivado: matiz preservado, L=70.0%, S=55.0%",
+      "values": {
+        "Claro": "#753237",
+        "Escuro": "#DD888F"
+      }
+    },
+    {
+      "name": "warning",
+      "resolvedType": "COLOR",
+      "description": "Escuro derivado: matiz preservado, L=60.0%, S=60.0%",
+      "values": {
+        "Claro": "#975E1D",
+        "Escuro": "#D69D5C"
+      }
+    },
+    {
+      "name": "warning-hover",
+      "resolvedType": "COLOR",
+      "description": "Escuro derivado: matiz preservado, L=70.0%, S=60.0%",
+      "values": {
+        "Claro": "#5E4221",
+        "Escuro": "#E0B685"
+      }
+    },
+    {
+      "name": "info",
+      "resolvedType": "COLOR",
+      "description": "Escuro derivado: matiz preservado, L=60.0%, S=55.0%",
+      "values": {
+        "Claro": "#25719D",
+        "Escuro": "#61A8D1"
+      }
+    },
+    {
+      "name": "info-hover",
+      "resolvedType": "COLOR",
+      "description": "Escuro derivado: matiz preservado, L=70.0%, S=55.0%",
+      "values": {
+        "Claro": "#274B60",
+        "Escuro": "#88BEDD"
+      }
+    }
+  ]
+}
