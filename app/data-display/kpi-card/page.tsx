@@ -31,6 +31,18 @@ const anatomia: Parte[] = [
       "26/32, peso 600, tracking −0.0231em. O tabular-nums alinha as colunas de dígitos sem trocar a família — trocar para mono seria o código decidindo o que o Figma não decidiu.",
   },
   {
+    nome: "Divisória",
+    medida: "-my-px h-0.5 · só no outline",
+    papel:
+      "Dois pixels da cor card que não ocupam altura nenhuma. No arquivo ela é um nó de altura zero com o traço desenhado por fora; a margem negativa devolve isso. Sem esse detalhe o card fecharia em 174 em vez de 172.",
+  },
+  {
+    nome: "Pílula e rodapé",
+    medida: "p-1.5 · px-2 py-1.5 · só no outline",
+    papel:
+      "A variação vive numa pílula ao lado do rótulo; o que ela significa vive num chip abaixo da divisória, com uma linha de contexto embaixo. Os dois usam card como fundo — no outline o card não tem preenchimento, então o fundo sobra para os elementos internos.",
+  },
+  {
     nome: "Meta chip",
     medida: "px-2 py-1 · rounded-sm",
     papel:
@@ -69,28 +81,40 @@ export default function Pagina() {
       <Secao
         titulo="Fill e Outline"
         className="bg-background"
-        spec="2 estilos"
-        descricao="Outline não é uma versão mais clara: é a mesma cor saindo do fundo e entrando na borda, nas três superfícies ao mesmo tempo — card, slot e chip. Só a legenda muda de token, de muted para subtle."
-        codigo={`<KpiCard variant="outline" title="Total perdidos" value="R$ 0,00" caption="0 negócios" trend="down" />`}
+        spec="2 leituras"
+        descricao="Não é o mesmo card com e sem fundo. Fill mostra um número e uma contagem. Outline mostra o número, a variação dele e o que a variação significa — por isso tem divisória, rodapé e 33px a mais de altura."
+        codigo={`<KpiCard
+  variant="outline"
+  trend="up"
+  title="Receita total"
+  value="R$ 1.250,00"
+  delta="+12,5%"
+  footnote="Em alta neste mês"
+  hint="Visitantes nos últimos 6 meses"
+/>`}
         nota={
           <>
-            No Figma o Outline está desenhado só para <Chip>trend=&quot;down&quot;</Chip>. As outras
-            duas tendências saem daqui pela mesma regra das três superfícies — derivação, não desenho.
-            Pendente de aprovação no gate.
+            No Figma o Outline está desenhado só para <Chip>trend=&quot;up&quot;</Chip> — antes era{" "}
+            <Chip>down</Chip>. As outras tendências funcionam, mas não têm desenho: o glifo troca e o
+            resto fica igual. Pendente de aprovação no gate.
           </>
         }
       >
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <KpiCard title="Total perdidos" value="R$ 0,00" caption="0 negócios" trend="down" />
+        <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2">
+          <KpiCard title="Total ganhos" value="R$ 1.250,00" caption="12 negócios" trend="up" />
           <KpiCard
             variant="outline"
-            title="Total perdidos"
-            value="R$ 0,00"
-            caption="0 negócios"
-            trend="down"
+            trend="up"
+            title="Receita total"
+            value="R$ 1.250,00"
+            delta="+12,5%"
+            footnote="Em alta neste mês"
+            hint="Visitantes nos últimos 6 meses"
           />
         </div>
-        <Legenda>À esquerda fill, à direita outline. Mesma altura, mesma caixa.</Legenda>
+        <Legenda>
+          À esquerda fill, 140px. À direita outline, 172px. O traço do outline é de 2px, não 1.
+        </Legenda>
       </Secao>
 
       <Secao

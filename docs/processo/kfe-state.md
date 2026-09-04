@@ -219,6 +219,10 @@ Fica suspenso.
 - 2026-09-04 · KPI Card · slot e chip perderam o traço no Fill: o arquivo dá só preenchimento. Com a borda que havia, a caixa fechava em 30 em vez de 28. Medição: **38/38 campos batendo**
 - 2026-09-04 · **BLOQUEIO ABERTO · Style=Outline foi redesenhado** e o código não acompanha. Virou outro card: traço 2px, pílula de percentual no header, linha divisória, rodapé de duas linhas, altura 172, e a tendência mudou de `Down` para `Up`. Implementar muda a API (props de variação, rodapé e legenda) — decisão do humano pendente
 - 2026-09-04 · Não construídos, e vistos pela primeira vez neste nó: `Card` com Content=List/Donut/Chart (304:5313) e `Empty State` (331:1364). São componentes novos, não atualização
+- 2026-09-04 · **Style=Outline IMPLEMENTADO** conforme o redesenho, por decisão do humano. Deixou de ser "o Fill sem fundo": traço de 2px, pílula de variação ao lado do rótulo, divisória e rodapé de duas linhas. Entram três props, só válidas nessa variante: `delta`, `footnote` e `hint`
+- 2026-09-04 · KPI Card · a divisória do Outline é 2px que **não ocupam altura**: no arquivo é um nó de altura zero com o traço desenhado por fora, e no CSS a margem negativa devolve isso. Sem esse detalhe o card fecharia em 174 em vez de 172
+- 2026-09-04 · KPI Card · os glifos do Outline não são `primary`: a seta da pílula é `muted-foreground` e a do rodapé é `foreground` — as duas herdam do texto ao lado. Medição final: **40/40 campos batendo**
+- 2026-09-04 · Divergência 2 encolheu mas não fechou: o Outline continua desenhado para uma tendência só (agora `Up`, antes `Down`). As outras funcionam, sem desenho
 
 ## Mapa de equivalência (layout antigo → v3.2)
 

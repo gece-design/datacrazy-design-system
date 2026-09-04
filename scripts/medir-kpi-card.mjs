@@ -20,7 +20,7 @@ const SPEC = {
     // o slot, 1px mais baixo no Neutral porque as barras medem 13 e a seta 16.
     altura: 140,
     fill: { bg: [255, 255, 255], border: [255, 255, 255] },
-    outline: { bg: null, border: [255, 255, 255] },
+    outline: { bg: null, border: [255, 255, 255], borderWidth: "2px", gap: "16px", altura: 172 },
   },
   titulo: { size: "13px", lineHeight: "18px", weight: "600", cor: [106, 117, 129] },
   slot: {
@@ -33,7 +33,8 @@ const SPEC = {
   chip: {
     padding: "4px 8px", radius: "4px", size: "12px", lineHeight: "16px", weight: "500",
     fill: { bg: [235, 237, 239], cor: [106, 117, 129] },
-    outline: { bg: null, border: [235, 237, 239], cor: [160, 168, 177] },
+    // No Outline o chip é o rodapé: fundo `card`, texto `foreground`, 8/6.
+    outline: { bg: [255, 255, 255], cor: [28, 28, 37], padding: "6px 8px" },
   },
 };
 
@@ -70,10 +71,10 @@ conf("fonte carregada", fonte, "GeistSans");
 const medido = await page.evaluate(() => {
   // O card é o único elemento com gap 12 e recuo de 16 (1 de traço + 15 de
   // padding) — assinatura do Figma.
-  const cards = [...document.querySelectorAll("div")].filter((el) => {
-    const s = getComputedStyle(el);
-    return s.rowGap === "12px" && parseFloat(s.paddingTop) + parseFloat(s.borderTopWidth) === 16;
-  });
+  const recuo = (s) => parseFloat(s.paddingTop) + parseFloat(s.borderTopWidth);
+  const todos = [...document.querySelectorAll("div")];
+  const cards = todos.filter((el) => { const s = getComputedStyle(el); return s.rowGap === "12px" && recuo(s) === 16; });
+  const outlines = todos.filter((el) => { const s = getComputedStyle(el); return s.rowGap === "16px" && recuo(s) === 16 && s.borderTopWidth === "2px"; });
   const ler = (el) => {
     const s = getComputedStyle(el);
     const r = el.getBoundingClientRect();
@@ -81,7 +82,9 @@ const medido = await page.evaluate(() => {
     const slot = el.querySelector("span");
     const glifo = el.querySelector("span > *");
     const valor = [...el.querySelectorAll("p")].find((p) => p !== titulo);
-    const chip = el.querySelector(":scope > div:last-child");
+    // No Fill o chip é o último bloco. No Outline o último bloco é o rodapé
+    // inteiro, e o chip é o span de dentro.
+    const chip = el.querySelector(":scope > div:last-child > span") ?? el.querySelector(":scope > div:last-child");
     const g = (n) => (n ? getComputedStyle(n) : null);
     const box = (n) => (n ? n.getBoundingClientRect() : null);
     return {
@@ -100,7 +103,7 @@ const medido = await page.evaluate(() => {
       chip: g(chip) && { padding: `${g(chip).paddingTop} ${g(chip).paddingLeft}`, radius: g(chip).borderTopLeftRadius, size: g(chip).fontSize, lineHeight: g(chip).lineHeight, weight: g(chip).fontWeight, bg: g(chip).backgroundColor, border: g(chip).borderTopColor, cor: g(chip).color },
     };
   };
-  return { total: cards.length, primeiro: ler(cards[0]), seta: ler(cards[1]), outline: ler(cards[4]) };
+  return { total: cards.length, primeiro: ler(cards[0]), seta: ler(cards[1]), outline: ler(outlines[0]) };
 });
 
 console.log(`\ncards encontrados na página: ${medido.total}\n`);
@@ -144,13 +147,15 @@ confCor("chip fill · fundo", f.chip.bg, SPEC.chip.fill.bg);
 confCor("chip fill · cor", f.chip.cor, SPEC.chip.fill.cor);
 
 const o = medido.outline;
-confCor("card outline · fundo", o.card.bg, SPEC.card.outline.bg);
-confCor("card outline · borda", o.card.border, SPEC.card.outline.border);
-confCor("slot outline · fundo", o.slot.bg, SPEC.slot.outline.bg);
-confCor("slot outline · borda", o.slot.border, SPEC.slot.outline.border);
-confCor("chip outline · fundo", o.chip.bg, SPEC.chip.outline.bg);
-confCor("chip outline · borda", o.chip.border, SPEC.chip.outline.border);
-confCor("chip outline · cor", o.chip.cor, SPEC.chip.outline.cor);
+conf("outline · traço", o.card.borderWidth, SPEC.card.outline.borderWidth);
+conf("outline · recuo (traço+padding)", `${parseFloat(o.card.padding) + parseFloat(o.card.borderWidth)}px`, SPEC.card.padding);
+conf("outline · gap", o.card.gap, SPEC.card.outline.gap);
+conf("outline · altura", o.card.h, SPEC.card.outline.altura);
+confCor("outline · fundo", o.card.bg, SPEC.card.outline.bg);
+confCor("outline · borda", o.card.border, SPEC.card.outline.border);
+conf("outline rodapé · recuo", o.chip.padding, SPEC.chip.outline.padding);
+confCor("outline rodapé · fundo", o.chip.bg, SPEC.chip.outline.bg);
+confCor("outline rodapé · cor", o.chip.cor, SPEC.chip.outline.cor);
 
 await browser.close();
 

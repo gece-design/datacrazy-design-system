@@ -13,7 +13,7 @@ legenda de apoio.
 ## Par no Figma
 
 Node: `269:53` (component set "KPI Card") · Lote: `1` ·
-Última verificação: **38/38 campos batendo** por medição de valor computado
+Última verificação: **40/40 campos batendo** por medição de valor computado
 (`scripts/medir-kpi-card.mjs`), em 2026-09-04 contra a revisão de recuo 16 /
 gap 12 do arquivo.
 
@@ -28,10 +28,13 @@ por imagem fica pendente.
 |------|------|--------|-------------|-----------|
 | `title` | `string` | — | sim | Rótulo da métrica. Trunca com tooltip nativo. |
 | `value` | `string` | — | sim | O número, já formatado pelo chamador. |
-| `caption` | `string` | — | não | Legenda de apoio. Sem ela o chip não renderiza. |
-| `trend` | `"neutral" \| "up" \| "down"` | `"neutral"` | não | Qual glifo ocupa o slot. Não muda cor. |
-| `variant` | `"fill" \| "outline"` | `"fill"` | não | Superfície cheia ou só contorno. |
-| `icon` | `React.ReactNode` | glifo do `trend` | não | Substitui o conteúdo do slot. |
+| `trend` | `"neutral" \| "up" \| "down"` | `"neutral"` | não | Qual glifo aparece. Não muda cor. |
+| `variant` | `"fill" \| "outline"` | `"fill"` | não | Qual das duas leituras. |
+| `caption` | `string` | — | não | **Fill.** Contagem no chip abaixo do número. |
+| `icon` | `React.ReactNode` | glifo do `trend` | não | **Fill.** Substitui o conteúdo do slot. |
+| `delta` | `string` | — | não | **Outline.** A variação, na pílula ao lado do rótulo. |
+| `footnote` | `string` | — | não | **Outline.** O que a variação significa, no chip do rodapé. |
+| `hint` | `string` | — | não | **Outline.** Linha de contexto abaixo do rodapé. |
 
 O eixo `theme` do Figma **não virou prop**: os dois temas saem dos mesmos
 tokens sob `.dark`.
@@ -40,8 +43,8 @@ tokens sob `.dark`.
 
 | Variante | Quando usar |
 |----------|-------------|
-| `fill` | Padrão. A faixa de métricas no topo do dashboard. |
-| `outline` | Métrica secundária ou desabilitada, sem peso de superfície. |
+| `fill` | Padrão. Um número e uma contagem. A faixa do topo do dashboard. Altura 139–140. |
+| `outline` | Um número, a variação dele e o que ela significa. Tem divisória e rodapé. Traço de 2px, altura 172. |
 | `trend="neutral"` | Não há comparação com período anterior. |
 | `trend="up"` | Variação positiva. |
 | `trend="down"` | Variação negativa. |
@@ -97,13 +100,10 @@ Usado por: faixa de métricas do dashboard (tela ainda não construída)
    up e `destructive` para down; os glifos do arquivo estão os dois em
    `primary`. O código segue o arquivo — decisão do humano em 2026-09-03. Ou o
    arquivo se corrige, ou a descrição.
-2. **Outline foi REDESENHADO no Figma em 2026-09-04 e o código ainda não
-   acompanha.** Deixou de ser o Fill sem preenchimento e virou outro card:
-   traço de 2px, pílula de percentual no header (`+12,5%` sobre `card`), linha
-   divisória, e um rodapé de duas linhas (chip + legenda em
-   `subtle-foreground`). Altura 172. Continua desenhado para uma tendência só —
-   agora `Up`, antes `Down`. Implementar isso muda a API do componente: entram
-   props de variação, de rodapé e de legenda. **Aguardando decisão.**
+2. **Outline desenhado para uma tendência só.** O arquivo tem `Up`; antes tinha
+   `Down`. As outras funcionam — o glifo troca e o resto fica igual —, mas não
+   têm desenho. O redesenho em si foi implementado em 2026-09-04, por decisão do
+   humano.
 3. ~~Outline some no tema escuro.~~ **Resolvido em 2026-09-04** pela mudança de
    token: `card` no escuro passou de `#1E1E24` para `#25252D` e `background` de
    `#1C1C25` para `#16161D`. O contraste entre os dois deixou de ser nulo e a

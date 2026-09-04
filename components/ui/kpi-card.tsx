@@ -58,21 +58,22 @@ const recuoDoSlot: Record<keyof typeof glifos, string> = {
 
 export type Tendencia = keyof typeof glifos;
 
-/* Style=Outline no Figma não é "mais claro": é a MESMA cor saindo do fundo e
- * entrando na borda, nas três superfícies (card, slot e chip). A borda existe
- * nas duas variantes — no Fill ela é da cor do fundo, o que mantém a altura
- * idêntica entre as duas. */
-/* Recuo e gap agora saem de variável no Figma: `space/16` e `space/12`.
- * p-[15px] e não 16 pela regra D14 — o arquivo desenha o traço POR DENTRO da
- * caixa e o CSS soma por fora, então 1 de borda + 15 de padding = os 16 do
- * arquivo, e a altura fecha nos 139px medidos. */
+/* As duas variantes não são o mesmo card com e sem fundo: são leituras
+ * diferentes. Fill mostra um número e uma contagem. Outline mostra um número,
+ * a variação dele e o que essa variação significa — por isso tem divisória e
+ * rodapé, e por isso é mais alto.
+ *
+ * O recuo dos dois é 16 (`space/16` no arquivo), mas o padding escrito aqui é
+ * menor: pela regra D14 o Figma desenha o traço POR DENTRO e o CSS soma por
+ * fora, então traço + padding tem que fechar 16. Daí 1+15 no Fill e 2+14 no
+ * Outline. As alturas caem em 139/140 e 172, como no arquivo. */
 const cardVariants = cva(
-  "flex w-full min-w-0 flex-col items-start gap-3 overflow-hidden rounded-md border p-[15px]",
+  "flex w-full min-w-0 flex-col items-start overflow-hidden rounded-md border-card bg-transparent",
   {
     variants: {
       variant: {
-        fill: "border-card bg-card",
-        outline: "border-card bg-transparent",
+        fill: "gap-3 border bg-card p-[15px]",
+        outline: "gap-4 border-2 p-[14px]",
       },
     },
     defaultVariants: { variant: "fill" },
@@ -82,32 +83,11 @@ const cardVariants = cva(
 /* O slot deixou de ser um quadrado de 28 com glifo posicionado por cima: agora
  * abraça o conteúdo. O padding muda por glifo — 6 em volta da seta de 16, e
  * 8/7 em volta das três barras — e é isso que devolve os mesmos 28px de antes. */
-const slotVariants = cva("flex shrink-0 items-center justify-center rounded-md text-primary", {
-  variants: {
-    variant: {
-      fill: "bg-accent",
-      // Style=Outline está sendo redesenhado no Figma (vira pílula de
-      // percentual sobre `card`). Até lá, mantém o contorno antigo.
-      outline: "border border-accent bg-transparent",
-    },
-  },
-  defaultVariants: { variant: "fill" },
-});
-
-const chipVariants = cva(
-  "flex max-w-full shrink-0 items-start overflow-hidden truncate rounded-sm text-label-lg",
-  {
-    variants: {
-      // No Fill o arquivo dá só fundo, com os 8/4 literais. No Outline, que
-      // está em redesenho, o traço entra e come 1 do recuo (regra D14).
-      variant: {
-        fill: "bg-background px-2 py-1 text-muted-foreground",
-        outline: "border border-background px-[7px] py-[3px] text-subtle-foreground",
-      },
-    },
-    defaultVariants: { variant: "fill" },
-  },
-);
+/* Slot e chip abaixo são do Fill. O Outline tem os seus, com outra cor de
+ * fundo (`card` em vez de `accent`/`background`) e outro conteúdo. */
+const slotFill = "flex shrink-0 items-center justify-center rounded-md bg-accent text-primary";
+const chipFill =
+  "flex max-w-full shrink-0 items-start overflow-hidden truncate rounded-sm bg-background px-2 py-1 text-label-lg text-muted-foreground";
 
 export interface KpiCardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">,
@@ -116,44 +96,102 @@ export interface KpiCardProps
   title: string;
   /** O número em destaque, já formatado. Ex.: "R$ 0,00". */
   value: string;
-  /** Legenda de apoio. Ex.: "0 negócios". Sem ela, o chip não é renderizado. */
-  caption?: string;
-  /** Qual glifo ocupa o slot. Não muda cor — ver a nota dos glifos. */
+  /** Qual glifo aparece. Não muda cor — ver a nota dos glifos. */
   trend?: Tendencia;
-  /** Substitui o glifo do slot. O Figma chama esse nó de "Icon slot". */
+  /** Só no Fill. Contagem de apoio, no chip abaixo do número. Ex.: "0 negócios". */
+  caption?: string;
+  /** Só no Fill. Substitui o glifo do slot — o Figma chama esse nó de "Icon slot". */
   icon?: React.ReactNode;
+  /** Só no Outline. A variação, na pílula ao lado do rótulo. Ex.: "+12,5%". */
+  delta?: string;
+  /** Só no Outline. O que a variação significa, no chip do rodapé. */
+  footnote?: string;
+  /** Só no Outline. A linha de contexto abaixo do rodapé. */
+  hint?: string;
+}
+
+/* Rótulo e número repetem entre as duas variantes, com as mesmas defesas:
+ * `truncate` com `title` nativo, porque a regra do DS proíbe cortar mudo e
+ * es/pt-br são 20–30% mais longos que en. */
+function Rotulo({ children }: { children: string }) {
+  return (
+    <p className="min-w-0 truncate text-h4 text-muted-foreground" title={children}>
+      {children}
+    </p>
+  );
+}
+
+/* tabular-nums, não font-mono: `text/metric` declara Geist no Figma, e trocar a
+ * família seria o código decidindo o que o arquivo não decidiu (regra D7). */
+function Numero({ children }: { children: string }) {
+  return (
+    <p className="w-full truncate text-display tabular-nums text-foreground" title={children}>
+      {children}
+    </p>
+  );
 }
 
 export const KpiCard = React.forwardRef<HTMLDivElement, KpiCardProps>(
-  ({ className, variant, title, value, caption, trend = "neutral", icon, ...props }, ref) => (
+  (
+    { className, variant, title, value, caption, trend = "neutral", icon, delta, footnote, hint, ...props },
+    ref,
+  ) => (
     <div ref={ref} className={cn(cardVariants({ variant }), className)} {...props}>
-      <div className="flex w-full items-center justify-between gap-2 overflow-hidden">
-        {/* title nativo: a regra do DS proíbe truncar mudo, e es/pt-br são
-            20–30% mais longos que en. */}
-        <p className="min-w-0 truncate text-h4 text-muted-foreground" title={title}>
-          {title}
-        </p>
-        <span
-          className={cn(slotVariants({ variant }), icon ? "p-1.5" : recuoDoSlot[trend])}
-          aria-hidden="true"
-        >
-          {icon ?? glifos[trend]}
-        </span>
-      </div>
+      {variant === "outline" ? (
+        <>
+          {/* Rótulo e número andam colados: no arquivo eles são um bloco só,
+              sem gap, e o respiro de 16 fica entre os blocos. */}
+          <div className="flex w-full min-w-0 flex-col">
+            <div className="flex w-full items-center justify-between gap-2 overflow-hidden">
+              <Rotulo>{title}</Rotulo>
+              {delta ? (
+                <span className="flex shrink-0 items-center gap-1 rounded-md bg-card p-1.5 text-label-lg text-muted-foreground">
+                  {delta}
+                  <span className="shrink-0" aria-hidden="true">
+                    {glifos[trend]}
+                  </span>
+                </span>
+              ) : null}
+            </div>
+            <Numero>{value}</Numero>
+          </div>
 
-      {/* tabular-nums, não font-mono: `text/metric` declara Geist no Figma, e
-          trocar a família seria o código decidindo o que o arquivo não decidiu
-          (regra D7 da calibração). */}
-      {/* `truncate` é rede de segurança, não layout: o valor precisa de ~124px
-          livres ("R$ 480,00" em 26/600 mede 123), e abaixo disso o número
-          sangrava para fora do card. Com o `title` nativo, o corte não é mudo —
-          é a mesma regra do rótulo. Quem não quer o corte dá largura ao card:
-          ver a nota da fileira na doc. */}
-      <p className="w-full truncate text-display tabular-nums text-foreground" title={value}>
-        {value}
-      </p>
+          {/* Divisória de 2px que NÃO ocupa altura: no arquivo ela é um nó de
+              altura zero com o traço desenhado por fora, e a margem negativa
+              devolve exatamente isso. Sem ela o card fecharia em 174. */}
+          <div className="-my-px h-0.5 w-full shrink-0 bg-card" />
 
-      {caption ? <div className={cn(chipVariants({ variant }))}>{caption}</div> : null}
+          <div className="flex w-full min-w-0 flex-col items-start gap-1">
+            {footnote ? (
+              <span className="flex max-w-full shrink-0 items-center gap-0.5 overflow-hidden rounded-sm bg-card px-2 py-1.5 text-label-lg text-foreground">
+                <span className="truncate">{footnote}</span>
+                <span className="shrink-0" aria-hidden="true">
+                  {glifos[trend]}
+                </span>
+              </span>
+            ) : null}
+            {hint ? (
+              <p className="w-full truncate text-label-lg text-subtle-foreground" title={hint}>
+                {hint}
+              </p>
+            ) : null}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex w-full items-center justify-between gap-2 overflow-hidden">
+            <Rotulo>{title}</Rotulo>
+            <span
+              className={cn(slotFill, icon ? "p-1.5" : recuoDoSlot[trend])}
+              aria-hidden="true"
+            >
+              {icon ?? glifos[trend]}
+            </span>
+          </div>
+          <Numero>{value}</Numero>
+          {caption ? <div className={chipFill}>{caption}</div> : null}
+        </>
+      )}
     </div>
   ),
 );

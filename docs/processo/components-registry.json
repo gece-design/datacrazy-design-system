@@ -11,6 +11,7 @@
       "figmaNode": "269:53",
       "batch": 1,
       "variants": ["fill", "outline", "trend:neutral", "trend:up", "trend:down"],
+      "_variants_doc": "fill e outline nao sao a mesma caixa: fill tem 139-140 de altura e mostra numero + contagem; outline tem 172, traco de 2px, divisoria e rodape, e mostra numero + variacao + significado.",
       "tokens": [
         "card",
         "accent",
