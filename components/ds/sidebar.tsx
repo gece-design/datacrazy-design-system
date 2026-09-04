@@ -11,6 +11,7 @@ import {
   BoundingBox, StackSimple, CursorClick, HandPointing, Textbox, CaretCircleDown,
   CheckSquare, CalendarBlank, SidebarSimple, Path, ListNumbers, ChartLineUp,
   Tag, UserCircle, Table, ChartBar, ChatTeardropText, Tray, Browsers, ArrowLineLeft,
+  Cards,
 } from "@phosphor-icons/react";
 import { navegacao } from "./nav";
 import { Logo, LogoSimbolo } from "./logo";
@@ -43,6 +44,7 @@ const icones: Record<string, Glifo> = {
   painel: SidebarSimple,
   trilha: Path,
   paginas: ListNumbers,
+  cartao: Cards,
   metrica: ChartLineUp,
   etiqueta: Tag,
   pessoa: UserCircle,

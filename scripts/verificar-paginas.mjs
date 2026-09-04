@@ -5,7 +5,7 @@ const ROTAS = [
   "/foundations/color", "/foundations/typography", "/foundations/icons",
   "/foundations/spacing", "/foundations/radius", "/foundations/elevation",
   "/actions/button", "/forms/date-picker",
-  "/data-display/kpi-card", "/data-display/badge",
+  "/data-display/card", "/data-display/kpi-card", "/data-display/badge",
   "/navigation/sidebar",
 ];
 

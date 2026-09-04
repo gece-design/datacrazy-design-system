@@ -1,7 +1,7 @@
 {
   "product": "DataCrazy",
   "kit": "3.2",
-  "updated": "2026-09-03",
+  "updated": "2026-09-04",
   "_doc": "Registro vivo de componentes — a memoria que alimenta a inferencia por analogia. Escrito pela fw-doc ao fim de CADA lote, nunca a mao. source de cada estado: figma | declarado | banco | inferido | humano.",
   "_divida": "Button e Badge existem em codigo desde 2026-09-01 e NAO estao aqui: foram escritos antes do registro existir. Enquanto a fw-doc nao rodar sobre eles, a verdade desses dois esta no codigo. Nao preencher de memoria — ler o componente.",
   "components": [
@@ -10,7 +10,13 @@
       "family": "superficie",
       "figmaNode": "269:53",
       "batch": 1,
-      "variants": ["fill", "outline", "trend:neutral", "trend:up", "trend:down"],
+      "variants": [
+        "fill",
+        "outline",
+        "trend:neutral",
+        "trend:up",
+        "trend:down"
+      ],
       "_variants_doc": "fill e outline nao sao a mesma caixa: fill tem 139-140 de altura e mostra numero + contagem; outline tem 172, traco de 2px, divisoria e rodape, e mostra numero + variacao + significado.",
       "tokens": [
         "card",
@@ -28,6 +34,57 @@
       "motion": null,
       "states": {},
       "_states_doc": "Vazio de proposito. O componente e leitura, nao controle: o Figma nao desenhou estado de interacao e o interactions.md nao declara nenhum. Ausencia e decisao (fw-ui, camada 2). Se virar link para o funil filtrado, ganha focus-visible (I4) e alvo de toque (I15) — e ai entra aqui."
+    },
+    {
+      "name": "Card",
+      "family": "superficie",
+      "figmaNode": "304:5313",
+      "batch": 2,
+      "variants": [
+        "shell",
+        "list",
+        "donut",
+        "chart",
+        "select"
+      ],
+      "_variants_doc": "No Figma e um eixo Content com List/Donut/Chart. Em codigo a casca e os tres conteudos sao pecas separadas: casca nao conhece conteudo.",
+      "tokens": [
+        "card",
+        "accent",
+        "background",
+        "primary",
+        "foreground",
+        "muted-foreground",
+        "subtle-foreground",
+        "radius/md",
+        "radius/sm",
+        "text/heading-1",
+        "text/heading-3",
+        "text/heading-4",
+        "text/display",
+        "text/body-md",
+        "text/body-sm",
+        "text/caption",
+        "text/label-lg"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "text-foreground",
+          "source": "banco",
+          "rule": "I1",
+          "precedent": null,
+          "approvedIn": "lote-2"
+        },
+        "focus": {
+          "impl": "outline outline-2 outline-offset-2 outline-ring",
+          "source": "banco",
+          "rule": "I4",
+          "precedent": "Button (regra local D6)",
+          "approvedIn": "lote-2"
+        }
+      },
+      "_states_doc": "So o CardSelect e interativo. A casca, a lista, a rosca e as barras sao leitura e nao tem estado."
     }
   ]
 }

@@ -21,6 +21,7 @@ markdown é a vista dele.
 <!-- kfe:index:start -->
 | Arquivo | Responsabilidade |
 |---------|------------------|
+| [Card.md](Card.md) | Superfície que carrega um bloco de dados do dashboard. |
 | [KpiCard.md](KpiCard.md) | Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma |
 <!-- kfe:index:end -->
 

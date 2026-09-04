@@ -223,6 +223,12 @@ Fica suspenso.
 - 2026-09-04 · KPI Card · a divisória do Outline é 2px que **não ocupam altura**: no arquivo é um nó de altura zero com o traço desenhado por fora, e no CSS a margem negativa devolve isso. Sem esse detalhe o card fecharia em 174 em vez de 172
 - 2026-09-04 · KPI Card · os glifos do Outline não são `primary`: a seta da pílula é `muted-foreground` e a do rodapé é `foreground` — as duas herdam do texto ao lado. Medição final: **40/40 campos batendo**
 - 2026-09-04 · Divergência 2 encolheu mas não fechou: o Outline continua desenhado para uma tendência só (agora `Up`, antes `Down`). As outras funcionam, sem desenho
+- 2026-09-04 · **LOTE 2 · CARD** (node 304:5313). No Figma é um componente com eixo `Content` de três valores; em código virou casca + três conteúdos (`CardList`, `CardDonut`, `CardChart`) mais o `CardSelect`. Motivo: `content="chart"` obrigaria a casca a receber dados de gráfico só para repassar
+- 2026-09-04 · Card · o gráfico de barras **não usa SVG nem biblioteca**: são divs com `flex-1` e altura proporcional, e o gradiente é o do Tailwind. Medido no render: 8 barras em 218/3px, plot de 224 e eixo Y de 66 — os mesmos do arquivo
+- 2026-09-04 · Card · a rosca precisa de SVG (arco não se faz com caixa): um círculo por fatia com `stroke-dasharray` proporcional, raio 62,25 e traço 25,5, que é a conta entre os dois círculos do arquivo (externo 75, interno 49,5)
+- 2026-09-04 · **BUG PEGO NA VERIFICAÇÃO**: o gradiente da rosca tinha `id="rosca"` e colidia com o `id` da seção "Rosca" da própria página do showcase — `url(#rosca)` resolvia para um `<section>` e o anel não pintava. Corrigido com `useId`. Vale a regra: id de `<defs>` em componente do DS nunca é literal
+- 2026-09-04 · Card · 4 divergências abertas: separador da lista ligado ao token `card` (invisível); rosca sem paleta categórica (bloqueio B8, agora com segundo dono); alvo de toque do seletor em 32px contra os 44 da regra I15; e altura mínima no código contra altura fixa com corte no arquivo
+- 2026-09-04 · Não construído do mesmo nó: `Empty State` (331:1364), em claro e escuro
 
 ## Mapa de equivalência (layout antigo → v3.2)
 

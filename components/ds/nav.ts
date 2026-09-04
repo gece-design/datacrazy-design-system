@@ -14,7 +14,9 @@ export const navegacao: CategoriaNav[] = [
     descricao: "O ponto de partida.",
     itens: [
       { titulo: "Let's begin", href: "/", icone: "foguete", pronto: true , descricao: "O que é e a regra que sustenta"},
-      { titulo: "Installation", href: "/getting-started/installation", icone: "download", pronto: true , descricao: "Rodar, adotar e atualizar tokens"},
+      // Lock deliberado: a rota existe e responde, mas o conteúdo ainda não
+      // serve — enquanto não servir, não se anuncia como pronta.
+      { titulo: "Installation", href: "/getting-started/installation", icone: "download", descricao: "Rodar, adotar e atualizar tokens"},
     ],
   },
   {
@@ -62,6 +64,7 @@ export const navegacao: CategoriaNav[] = [
     itens: [
       // Nome do component set no Figma (269:53). O slot nasceu no roadmap como
       // "Stat Card"; quem batiza é o arquivo.
+      { titulo: "Card", href: "/data-display/card", icone: "cartao", pronto: true , descricao: "Lista, rosca e barras"},
       { titulo: "KPI Card", href: "/data-display/kpi-card", icone: "metrica", pronto: true , descricao: "Métrica em destaque"},
       { titulo: "Badge", href: "/data-display/badge", icone: "etiqueta", pronto: true , descricao: "Rótulo de estado"},
       { titulo: "Avatar", href: "/data-display/avatar", icone: "pessoa" , descricao: "Identificação de pessoa"},
