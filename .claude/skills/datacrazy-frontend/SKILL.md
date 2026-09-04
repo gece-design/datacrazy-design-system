@@ -89,9 +89,9 @@ Regra viva: divergência corrigida 2x vira linha em `docs/processo/calibration.m
   **Geist**. Line-height está em px → `leading-[Npx]` (G1); tracking em px →
   converter para `em` dividindo pelo tamanho (G2).
 - Toda variável de tema precisa **mudar de valor** entre `:root` e `.dark`,
-  salvo intenção declarada — rode `npm run check:temas` (regra D8). Hoje
-  reprova com 8 tokens de estado; proposta em
-  `docs/processo/tokens-estados-escuro.md`. No CRM eram 13 de ~30: bug #80174.
+  salvo intenção declarada — rode `npm run check:temas` (regra D8). Desde
+  2026-09-04 passa verde: os 8 tokens de estado ganharam par escuro no Figma.
+  No CRM eram 13 de ~30: bug #80174.
 - Valor de token vem do Figma via MCP. Sem o dado → pergunte. Jamais estime.
 - Nomes: `docs/glossario.md`.
 

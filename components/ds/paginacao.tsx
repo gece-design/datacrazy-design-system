@@ -13,7 +13,10 @@ function Cartao({ item, lado }: { item: ItemNav; lado: "anterior" | "proxima" })
     <Link
       href={item.href}
       className={cn(
-        "group flex flex-1 items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 transition-colors",
+        // min-w-0: sem ele o flex-1 não encolhe abaixo do conteúdo e o
+        // `truncate` de dentro nunca dispara — os dois cartões vazavam a tela
+        // no celular em vez de cortar o título.
+        "group flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 transition-colors",
         "hover:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         paraFrente ? "flex-row-reverse text-right" : "text-left"
       )}
@@ -56,9 +59,11 @@ export function Paginacao() {
 
   return (
     <nav aria-label="Navegação entre páginas" className="mt-16 border-t border-border pt-6">
-      <div className="flex items-stretch gap-3">
-        {anterior ? <Cartao item={anterior} lado="anterior" /> : <div className="flex-1" />}
-        {proxima ? <Cartao item={proxima} lado="proxima" /> : <div className="flex-1" />}
+      {/* empilhado no celular: dois cartões lado a lado em 358px sobram ~170px
+          cada, e aí só cabe a seta. O par volta na largura em que ele cabe. */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
+        {anterior ? <Cartao item={anterior} lado="anterior" /> : <div className="hidden flex-1 sm:block" />}
+        {proxima ? <Cartao item={proxima} lado="proxima" /> : <div className="hidden flex-1 sm:block" />}
       </div>
       <p className="mt-3 text-center chrome-caption text-subtle-foreground">
         Atalho:{" "}

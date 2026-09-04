@@ -19,6 +19,9 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Color", href: "/foundations/color", pronto: true, icone: "palette" , descricao: "Paleta e tokens semânticos"},
       { titulo: "Typography", href: "/foundations/typography", pronto: true, icone: "texto" , descricao: "Escala, pesos e estilos"},
       { titulo: "Icons", href: "/foundations/icons", pronto: true, icone: "formas" , descricao: "Phosphor, peso e tamanhos"},
+      { titulo: "Spacing", href: "/foundations/spacing", pronto: true, icone: "formas" , descricao: "Catorze degraus, de 0 a 80"},
+      { titulo: "Radius", href: "/foundations/radius", pronto: true, icone: "formas" , descricao: "Sete degraus, todos de --radius"},
+      { titulo: "Elevation", href: "/foundations/elevation", pronto: true, icone: "formas" , descricao: "Quatro alturas de flutuação"},
     ],
   },
   {

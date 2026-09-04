@@ -1,14 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   MagnifyingGlass, CaretDown, CaretRight, Palette, TextAa, Shapes,
-  Lock, RocketLaunch, DownloadSimple,
+  Lock, RocketLaunch, DownloadSimple, Cube, CursorClick, NotePencil,
+  Compass, Table, ChatCircleDots, X,
 } from "@phosphor-icons/react";
 import { navegacao } from "./nav";
-import { Logo } from "./logo";
+import { Logo, LogoSimbolo } from "./logo";
 import { Tree } from "./tree";
 import { cn } from "@/lib/utils";
 
@@ -22,10 +23,36 @@ const icones: Record<string, React.ComponentType<{ size?: number; weight?: "regu
   download: DownloadSimple,
 };
 
-export function Sidebar() {
+// Ícone por CATEGORIA — existe só para o rail: item de navegação não tem ícone
+// no arquivo (só Foundations e Getting Started têm), então um rail de itens
+// ficaria mudo. Colapsado, quem representa a seção é a categoria.
+const iconesDeCategoria: Record<string, React.ComponentType<{ size?: number; weight?: "regular"; className?: string }>> = {
+  "Getting Started": RocketLaunch,
+  "Foundations": Cube,
+  "Actions": CursorClick,
+  "Forms": NotePencil,
+  "Navigation": Compass,
+  "Data Display": Table,
+  "Feedback & Overlays": ChatCircleDots,
+};
+
+export interface SidebarProps {
+  /** Rail de 64px: só os ícones de categoria. Clicar em qualquer um expande. */
+  rail?: boolean;
+  /** Chamado quando o rail pede para voltar ao painel inteiro. */
+  onExpandir?: () => void;
+  /** Chamado ao navegar — é o que fecha o drawer no celular. */
+  aoNavegar?: () => void;
+  /** Botão de fechar no topo. Só o drawer usa. */
+  onFechar?: () => void;
+  className?: string;
+}
+
+export function Sidebar({ rail = false, onExpandir, aoNavegar, onFechar, className }: SidebarProps) {
   const caminho = usePathname();
   const [busca, setBusca] = useState("");
   const [fechadas, setFechadas] = useState<string[]>([]);
+  const campo = useRef<HTMLInputElement>(null);
 
   const filtrada = useMemo(() => {
     const q = busca.trim().toLowerCase();
@@ -35,14 +62,81 @@ export function Sidebar() {
       .filter((c) => c.itens.length > 0);
   }, [busca]);
 
+  const categoriaAtual = navegacao.find((c) => c.itens.some((i) => i.href === caminho))?.titulo;
+
+  const painel =
+    "flex flex-col gap-3 overflow-hidden rounded-[16px] border border-card bg-background p-[13px]";
+
+  /* ------------------------------------------------------------------ rail */
+  if (rail) {
+    return (
+      <aside aria-label="Navegação recolhida" className={cn(painel, "w-[64px] items-center gap-2", className)}>
+        <Link
+          href="/"
+          onClick={aoNavegar}
+          className="flex h-[26px] w-full items-center justify-center text-foreground rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <LogoSimbolo className="h-[19px] w-auto" />
+        </Link>
+
+        <button
+          onClick={onExpandir}
+          aria-label="Buscar componente"
+          title="Buscar"
+          className="chrome-busca grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground
+                     transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <MagnifyingGlass size={18} weight="regular" />
+        </button>
+
+        <nav aria-label="Categorias" className="flex flex-1 flex-col items-center gap-1 overflow-y-auto pt-1">
+          {navegacao.map((cat) => {
+            const Icone = iconesDeCategoria[cat.titulo] ?? Cube;
+            const atual = categoriaAtual === cat.titulo;
+            return (
+              <button
+                key={cat.titulo}
+                onClick={onExpandir}
+                title={cat.titulo}
+                aria-label={`Abrir menu em ${cat.titulo}`}
+                className={cn(
+                  "grid size-9 shrink-0 place-items-center rounded-md transition-colors",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  atual ? "bg-card text-primary" : "text-muted-foreground hover:bg-card hover:text-foreground"
+                )}
+              >
+                <Icone size={18} weight="regular" />
+              </button>
+            );
+          })}
+        </nav>
+      </aside>
+    );
+  }
+
+  /* -------------------------------------------------------------- expandida */
   return (
-    <aside className="sticky top-3 m-3 hidden h-[calc(100vh-24px)] w-[260px] shrink-0 flex-col gap-3 overflow-hidden rounded-[16px] border border-card bg-background p-[13px] lg:flex">
-      <Link
-        href="/"
-        className="flex h-[26px] items-center justify-center text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
-      >
-        <Logo className="h-[21px] w-auto" />
-      </Link>
+    <aside aria-label="Navegação" className={cn(painel, "w-[260px]", className)}>
+      <div className="flex h-[26px] items-center">
+        <Link
+          href="/"
+          onClick={aoNavegar}
+          className="flex flex-1 items-center justify-center text-foreground rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <Logo className="h-[21px] w-auto" />
+        </Link>
+        {onFechar && (
+          <button
+            onClick={onFechar}
+            aria-label="Fechar menu"
+            className="-mr-1 grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground
+                       transition-colors hover:bg-card hover:text-foreground
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <X size={16} weight="regular" />
+          </button>
+        )}
+      </div>
 
       <div className="relative h-9">
         <MagnifyingGlass
@@ -51,6 +145,7 @@ export function Sidebar() {
           className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground"
         />
         <input
+          ref={campo}
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
           placeholder="Buscar"
@@ -112,6 +207,7 @@ export function Sidebar() {
                       <li key={item.href}>
                         <Link
                           href={item.href}
+                          onClick={aoNavegar}
                           className={cn(
                             base,
                             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
@@ -137,5 +233,44 @@ export function Sidebar() {
         )}
       </nav>
     </aside>
+  );
+}
+
+/** Painel deslizante do celular: a mesma sidebar, por cima do conteúdo. */
+export function SidebarDrawer({ aberto, onFechar }: { aberto: boolean; onFechar: () => void }) {
+  const caminho = usePathname();
+
+  // fecha ao trocar de rota — o clique no item já navegou, o painel não some
+  // sozinho porque a árvore não é desmontada.
+  useEffect(() => { onFechar(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [caminho]);
+
+  useEffect(() => {
+    if (!aberto) return;
+    const aoTeclar = (e: KeyboardEvent) => e.key === "Escape" && onFechar();
+    document.addEventListener("keydown", aoTeclar);
+    // trava a rolagem de trás: senão o dedo arrasta a página sob o painel
+    const antes = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", aoTeclar);
+      document.body.style.overflow = antes;
+    };
+  }, [aberto, onFechar]);
+
+  if (!aberto) return null;
+
+  return (
+    <div className="fixed inset-0 z-modal lg:hidden">
+      <div
+        onClick={onFechar}
+        aria-hidden="true"
+        className="absolute inset-0 bg-neutral-900/50 backdrop-blur-[2px]"
+      />
+      <Sidebar
+        onFechar={onFechar}
+        aoNavegar={onFechar}
+        className="absolute bottom-3 left-3 top-3 h-auto shadow-[0_16px_48px_rgba(0,0,0,0.24)]"
+      />
+    </div>
   );
 }

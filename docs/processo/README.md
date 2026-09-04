@@ -37,7 +37,7 @@ mora na raiz do `docs/`.
 | [inventario-componentes.md](inventario-componentes.md) | Inventário do lote 1, derivado da home no Figma, por categoria | `fw-ux` |
 | [ux-direcao-visual.md](ux-direcao-visual.md) | Evidência da direção visual: 30 stickies do FigJam, tensões, análises do board | `fw-ux` |
 | [tokens-migracao.md](tokens-migracao.md) | Método da medição e as correções aplicadas na coleção `Cor` do Figma | `fw-onboard` |
-| [tokens-estados-escuro.md](tokens-estados-escuro.md) | Proposta (não aplicada) para os 8 tokens de estado sem versão escura | `fw-ui` · pendente de gate |
+| [tokens-estados-escuro.md](tokens-estados-escuro.md) | Diagnóstico dos 8 tokens de estado sem versão escura — RESOLVIDO em 2026-09-04 pelo Figma | `fw-ui` · encerrado |
 | [referencias.md](referencias.md) | Índice das fontes: Figma, FigJam, PDF, repositórios, acessos | orquestrador |
 
 ## Regra da pasta

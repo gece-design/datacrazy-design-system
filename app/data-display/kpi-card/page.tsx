@@ -96,15 +96,30 @@ export default function Pagina() {
       <Secao
         titulo="Em grade"
         className="bg-background"
-        spec="até 5 colunas"
-        descricao="É para isso que ele existe: a faixa de métricas no topo do dashboard. O card ocupa a largura da coluna — não tem largura própria."
-        codigo={`<div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+        spec="piso de 164px"
+        descricao="É para isso que ele existe: a faixa de métricas no topo do dashboard. O card ocupa a largura da coluna — não tem largura própria, e por isso a fileira conta em piso, não em número de colunas."
+        nota={
+          <>
+            <Chip>lg:grid-cols-5</Chip> era o erro: cinco colunas fixas numa coluna de leitura de 820px dão
+            110px livres por card, e <Chip>R$ 480,00</Chip> em 26/600 mede 123 — o número sangrava para fora.
+            O piso de 164px é essa medida mais os 36 de traço e recuo do card, arredondados. Com{" "}
+            <Chip>auto-fit</Chip> quem decide quantas colunas cabem é a largura real: cinco no dashboard,
+            quatro aqui, uma no celular. Nenhum breakpoint precisa ser mantido à mão.
+          </>
+        }
+        codigo={`<div
+  className="grid gap-4"
+  style={{ gridTemplateColumns: "repeat(auto-fit, minmax(164px, 1fr))" }}
+>
   {metricas.map((m) => (
     <KpiCard key={m.title} {...m} />
   ))}
 </div>`}
       >
-        <div className="grid w-full grid-cols-2 gap-4 lg:grid-cols-5">
+        <div
+          className="grid w-full gap-4"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(164px, 1fr))" }}
+        >
           <KpiCard title="Criados" value="R$ 3,00K" caption="37 negócios" trend="neutral" />
           <KpiCard title="Ganhos" value="R$ 1,20K" caption="12 negócios" trend="up" />
           <KpiCard title="Perdidos" value="R$ 480,00" caption="5 negócios" trend="down" />
@@ -127,8 +142,7 @@ export default function Pagina() {
         </div>
       </Secao>
 
-      <Secao titulo="Como funciona" semCaixa>
-        <ComoFunciona>
+      <ComoFunciona>
           <p>
             O Figma tem três eixos neste componente: <Chip>Trend</Chip>, <Chip>Style</Chip> e{" "}
             <Chip>theme</Chip>. Só os dois primeiros viraram prop. Tema como variante de componente é
@@ -155,8 +169,7 @@ export default function Pagina() {
             card virar link para o funil filtrado, aí ele passa a ser interativo e ganha foco visível;
             hoje ele é leitura.
           </p>
-        </ComoFunciona>
-      </Secao>
+      </ComoFunciona>
     </PaginaDS>
   );
 }

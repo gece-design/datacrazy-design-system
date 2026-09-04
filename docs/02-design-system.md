@@ -48,31 +48,72 @@ Lista completa com procedência e citações:
 |---|---|---|---|
 | `foreground` | `#1C1C25` | `#F4F5F6` | texto principal |
 | `muted-foreground` | `#6A7581` | `#A0A8B1` | texto secundário |
-| `subtle-foreground` | `#A0A8B1` | `#6A7581` | texto terciário |
+| `subtle-foreground` | `#A0A8B1` | `#8B95A3` | texto terciário |
 | `background` | `#F4F5F6` | `#1C1C25` | fundo da página |
 | `card` | `#FFFFFF` | `#1E1E24` | superfície elevada |
 | `accent` | `#E8F1FF` | `#232C3D` | realce de superfície |
 | `surface-inverse` | `#232C3D` | `#F4F5F6` | superfície invertida (logo) |
 | `primary` | →`base/blue/500` | →`base/blue/400` | ação primária |
 | `primary-hover` | →`base/blue/600` | →`base/blue/300` | hover da ação primária |
-| `primary-foreground` | `#FFFFFF` | `#FFFFFF` | texto sobre o primário |
+| `primary-foreground` | `#FFFFFF` | `#10131A` | texto sobre o primário |
 | `border` | `#E1E7EF` | `#2E2E38` | traço |
 | `ring` | →`primary` | →`primary` | anel de foco |
+
+### Cor — formulário
+
+Onze tokens (node 431:2718). Todos são **alias exato** de um semântico que já
+existe, nos dois modos — por isso vivem só no `:root` do `globals.css`: o
+`var()` acompanha o tema sozinho, sem uma linha no `.dark`.
+
+| Token | Aponta para |
+|---|---|
+| `input/bg` | `card` |
+| `input/border` | `border` |
+| `input/border-hover` | `muted-foreground` |
+| `input/border-focus` | `primary` |
+| `input/border-error` | `destructive` |
+| `input/text` · `input/label` | `foreground` |
+| `input/placeholder` · `input/helper` | `muted-foreground` |
+| `input/bg-disabled` | `background` |
+| `input/text-disabled` | `subtle-foreground` |
+
+### Cor — overlay
+
+Seis tokens (node 431:2787), para o que flutua sobre a página.
+
+| Token | Claro | Escuro |
+|---|---|---|
+| `overlay/bg` | →`card` | →`card` |
+| `overlay/border` | →`border` | →`border` |
+| `overlay/item-hover` | →`accent` | →`base/neutral/800` |
+| `overlay/item-selected` | →`base/blue/50` | →`accent` |
+| `overlay/item-text-selected` | →`base/blue/600` | →`base/blue/300` |
+| `overlay/scrim` | `#0D0F14` | `#000000` |
+
+Os três do meio trocam de token entre os modos e por isso reaparecem no
+`.dark` — mesmo caso do `--sidebar-avatar` (regra D11).
 
 ### Cor — primitivos (mesmo valor nos dois modos)
 
 `base/blue/50` `#F0F6FF` · `100` `#E0EDFF` · `200` `#ADCEFF` · `300` `#80B3FF` ·
 `400` `#599CFF` · `500` `#3385FF` · `600` `#1266E2` · `700` `#114797` ·
-`base/neutral/900` `#1E1E24`
+`base/neutral/900` `#1E1E24` · `base/neutral/800` `#2A2F3A`
 
 ### Cor — estados
 
-`success` `#267952` · `success-hover` `#294F3D` · `destructive` `#C6323C` ·
-`destructive-hover` `#753237` · `warning` `#975E1D` · `warning-hover` `#5E4221` ·
-`info` `#25719D` · `info-hover` `#274B60`
+| Token | Claro | Escuro |
+|---|---|---|
+| `success` | `#267952` | `#64CEA2` |
+| `success-hover` | `#294F3D` | `#8BDAB9` |
+| `destructive` | `#C6323C` | `#EB7076` |
+| `destructive-hover` | `#753237` | `#F09499` |
+| `warning` | `#975E1D` | `#EDAD5E` |
+| `warning-hover` | `#5E4221` | `#F2C288` |
+| `info` | `#25719D` | `#67B6E4` |
+| `info-hover` | `#274B60` | `#93CBEC` |
 
-⚠️ Os oito repetem valor entre claro e escuro — violação da regra E4, reprovada
-por `npm run check:temas`. Proposta de correção pendente de aprovação:
+Resolvido em 2026-09-04: o Figma passou a dar o par escuro dos oito (node
+431:2667) e `npm run check:temas` ficou verde pela primeira vez. Histórico:
 [processo/tokens-estados-escuro.md](processo/tokens-estados-escuro.md).
 
 ### Cor — componente
@@ -129,24 +170,57 @@ Coluna de número alinha com `tabular-nums`, nunca trocando para `font-mono`
 (regra D7). Fontes instaladas e checagem anti-fallback:
 [processo/fonts-checklist.md](processo/fonts-checklist.md).
 
-### Espaçamento e raio
+### Espaçamento
 
-Escala de espaço: a do Tailwind, sem extensão. Raio: `--radius` em
-`app/globals.css`, com `lg` = `--radius`, `md` = `−2px`, `sm` = `−4px`.
-O valor de `--radius` é a pendência do eixo Forma.
+Catorze degraus (node 431:2893): 0 · 2 · 4 · 6 · 8 · 12 · 16 · 20 · 24 · 32 ·
+40 · 48 · 64 · 80. Todos caem na escala do Tailwind sem extensão — 0, `0.5`,
+`1`, `1.5`, `2`, `3`, `4`, `5`, `6`, `8`, `10`, `12`, `16`, `20`. É a única
+fundação que não gerou linha de código.
+
+Por papel: padding de componente 6–20 · gap entre itens 4–16 · gutter de
+layout 24 · entre seções 32 · respiro de página 40. O arquivo dá as faixas,
+não o apelido de cada degrau dentro delas — não invente `padding-md`.
+
+### Raio
+
+Sete degraus (node 431:2860), todos derivados de `--radius` = 8px:
+
+| Degrau | Valor | Cálculo | Onde |
+|---|---|---|---|
+| `none` | 0px | — | — |
+| `xs` | 2px | `--radius − 6` | checkbox |
+| `sm` | 4px | `--radius − 4` | — |
+| `md` | 6px | `--radius − 2` | button · input · card · nav-item |
+| `lg` | 8px | `--radius` | popover |
+| `xl` | 12px | `--radius + 4` | — |
+| `full` | 999px | — | badge · avatar |
+
+Mudar `--radius` move a escala inteira. Os três degraus sem componente
+atribuído existem na escala e não têm dono: ausência é decisão.
 
 ### Elevação
 
-Não há **escala** de sombra: o Figma não entregou uma. O que existe são duas
-sombras nomeadas, extraídas de nós concretos e registradas em
-`tailwind.config.ts` para não virarem valor mágico espalhado (G5).
+Quatro níveis (node 431:3016), medindo **altura de flutuação**, não ênfase.
+A cor é `#0A0D14` nas sete camadas — azul quase preto, nunca preto puro.
+
+| Classe | Camadas | Onde |
+|---|---|---|
+| `shadow-sm` | `0 1px 2px 0 / 6%` | cards e superfícies em repouso |
+| `shadow-md` | `0 1px 2px −1px / 6%` + `0 2px 4px −1px / 8%` | dropdown, tooltip, flutuantes curtos |
+| `shadow-lg` | `0 2px 4px −2px / 6%` + `0 8px 16px −4px / 10%` | popover, datepicker, menu de contexto |
+| `shadow-xl` | `0 4px 8px −4px / 8%` + `0 16px 32px −8px / 14%` | modal e drawer |
+
+Os nomes `sm`–`xl` **sobrescrevem** os do Tailwind de propósito: com o nome
+ocupado, a sombra de fábrica deixa de ser alcançável por engano.
+
+Mais duas sombras nomeadas, de nós concretos da sidebar:
 
 | Classe | Valor | De onde veio |
 |---|---|---|
 | `shadow-highlight` | `inset 0 1px 4px 0 rgb(255 255 255 / 0.25)` | realce interno que o Figma aplica em toda superfície da sidebar |
 | `shadow-float` | `0 4px 4px 0 rgb(0 0 0 / 0.08)` | botão de colapsar, o único elemento que flutua sobre o painel |
 
-Fora dessas duas, nenhuma sombra se inventa: sem token, é bloqueio, não
+Fora dessas seis, nenhuma sombra se inventa: sem token, é bloqueio, não
 estimativa.
 
 ### Camadas (`z-index`)
@@ -190,8 +264,7 @@ Divergência visual é bug do código — ver
 
 | # | O quê | Por quê importa |
 |---|---|---|
-| 1 | Estados sem versão escura (8 variáveis) | Contraste ruim no escuro; reprova no `check:temas` — [proposta](processo/tokens-estados-escuro.md) |
-| 2 | Rampa neutra incompleta — só existe `base/neutral/900` | Falta escala para superfícies e bordas intermediárias |
-| 3 | Valores soltos no design: `#09090B` (1.764 usos), `#71717A` (1.538), gradientes dos gráficos | Não acompanham o tema; religar muda cor levemente e precisa de decisão |
-| 4 | Gráficos com gradiente solto que clareia até quase branco | Some no tema escuro |
-| 5 | Escala de elevação e de motion inexistentes | Bloqueiam componentes de sobreposição |
+| 1 | Rampa neutra ainda curta — só `base/neutral/800` e `900` | Falta degrau claro para superfícies e bordas intermediárias |
+| 2 | Valores soltos no design: `#09090B` (1.764 usos), `#71717A` (1.538), gradientes dos gráficos | Não acompanham o tema; religar muda cor levemente e precisa de decisão |
+| 3 | Gráficos com gradiente solto que clareia até quase branco | Some no tema escuro |
+| 4 | Motion não tokenizado | Duração, curva e `prefers-reduced-motion` sem dono (I12) |

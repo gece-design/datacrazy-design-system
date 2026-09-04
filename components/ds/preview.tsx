@@ -6,15 +6,11 @@ import { cn } from "@/lib/utils";
 import { Colunas } from "./colunas";
 import { Codigo } from "./codigo";
 import { Paginacao } from "./paginacao";
+import { Indice, IndiceCompacto, slug } from "./indice";
 
-export function slug(s: string) {
-  return s
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
+// slug e o índice moram em ./indice — quem monta o link e quem lê a âncora
+// precisam da mesma função, e duplicá-la é como as duas se soltam.
+export { slug };
 
 /** Trecho de código no meio do texto. */
 export function Chip({ children }: { children: React.ReactNode }) {
@@ -29,32 +25,11 @@ export function PaginaDS({
   titulo, descricao, secoes = [], children,
 }: { titulo: string; descricao: string; secoes?: string[]; children: React.ReactNode }) {
   return (
-    <Colunas
-      trilho={
-        secoes.length > 0 ? (
-          <nav aria-label="Nesta página" className="sticky top-6 hidden h-fit xl:block">
-            <p className="mb-3 chrome-label text-foreground">Nesta página</p>
-            <ul className="border-l border-border">
-              {secoes.map((s) => (
-                <li key={s}>
-                  <a
-                    href={`#${slug(s)}`}
-                    className="-ml-px block border-l border-transparent py-1.5 pl-3 chrome-meta text-muted-foreground
-                               transition-colors hover:border-primary hover:text-foreground
-                               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  >
-                    {s}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ) : null
-      }
-    >
+    <Colunas trilho={<Indice secoes={secoes} />}>
       <h1 className="chrome-h1 text-foreground">{titulo}</h1>
       <p className="mt-3 chrome-lead text-muted-foreground">{descricao}</p>
-      <div className="mt-10 space-y-12">{children}</div>
+      <IndiceCompacto secoes={secoes} />
+      <div className="mt-8 space-y-10 sm:mt-10 sm:space-y-12">{children}</div>
       <Paginacao />
     </Colunas>
   );
@@ -123,7 +98,7 @@ export function Secao({
       ) : (
         <>
           {/* a caixa é só o componente — anotação vai em `nota`, por baixo */}
-          <div className={cn("mt-4 rounded-2xl border border-border bg-card", !semCaixa && "p-8", className)}>
+          <div className={cn("mt-4 rounded-2xl border border-border bg-card", !semCaixa && "p-4 sm:p-6 lg:p-8", className)}>
             {children}
           </div>
           {nota && <div className="mt-3 chrome-meta text-subtle-foreground">{nota}</div>}

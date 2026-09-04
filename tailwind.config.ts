@@ -38,6 +38,24 @@ const config: Config = {
         "nav-item-selected-foreground": "hsl(var(--nav-item-text-selected))",
         "nav-item-selected-icon": "hsl(var(--nav-item-icon-selected))",
         "sidebar-avatar": "hsl(var(--sidebar-avatar))",
+        // input/* e overlay/* — tokens de componente da coleção "Cor".
+        "input-bg": "hsl(var(--input-bg))",
+        "input-border": "hsl(var(--input-border))",
+        "input-border-hover": "hsl(var(--input-border-hover))",
+        "input-border-focus": "hsl(var(--input-border-focus))",
+        "input-border-error": "hsl(var(--input-border-error))",
+        "input-text": "hsl(var(--input-text))",
+        "input-placeholder": "hsl(var(--input-placeholder))",
+        "input-label": "hsl(var(--input-label))",
+        "input-helper": "hsl(var(--input-helper))",
+        "input-bg-disabled": "hsl(var(--input-bg-disabled))",
+        "input-text-disabled": "hsl(var(--input-text-disabled))",
+        "overlay-bg": "hsl(var(--overlay-bg))",
+        "overlay-border": "hsl(var(--overlay-border))",
+        "overlay-item-hover": "hsl(var(--overlay-item-hover))",
+        "overlay-item-selected": "hsl(var(--overlay-item-selected))",
+        "overlay-item-text-selected": "hsl(var(--overlay-item-text-selected))",
+        "overlay-scrim": "hsl(var(--overlay-scrim))",
         base: {
           blue: {
           "50": "hsl(var(--blue-50))",
@@ -49,7 +67,7 @@ const config: Config = {
           "600": "hsl(var(--blue-600))",
           "700": "hsl(var(--blue-700))",
           },
-          neutral: { "900": "hsl(var(--neutral-900))" },
+          neutral: { "800": "hsl(var(--neutral-800))", "900": "hsl(var(--neutral-900))" },
         },
       },
       fontFamily: {
@@ -74,16 +92,29 @@ const config: Config = {
         "metric": ["16px", { lineHeight: "21px", letterSpacing: "-0.0125em", fontWeight: "600" }],
       },
       boxShadow: {
+        // elevation/* do Figma, com TODAS as camadas (G4). Os nomes sm/md/lg/xl
+        // sobrescrevem os do Tailwind DE PROPÓSITO: assim `shadow-md` é a nossa
+        // sombra, e a da biblioteca deixa de ser alcançável por engano.
+        sm: "0 1px 2px 0 rgb(10 13 20 / 0.06)",
+        md: "0 1px 2px -1px rgb(10 13 20 / 0.06), 0 2px 4px -1px rgb(10 13 20 / 0.08)",
+        lg: "0 2px 4px -2px rgb(10 13 20 / 0.06), 0 8px 16px -4px rgb(10 13 20 / 0.10)",
+        xl: "0 4px 8px -4px rgb(10 13 20 / 0.08), 0 16px 32px -8px rgb(10 13 20 / 0.14)",
         // realce interno que o Figma aplica em toda superfície da sidebar:
         // inset 0 1px 4px #ffffff40. Nomeado para não virar valor mágico (G5).
         highlight: "inset 0 1px 4px 0 rgb(255 255 255 / 0.25)",
         // botão que flutua sobre a borda do painel (collapse toggle)
         float: "0 4px 4px 0 rgb(0 0 0 / 0.08)",
       },
+      // Escala do Figma: 0 · 2 · 4 · 6 · 8 · 12 · 999. `--radius` é o degrau
+      // lg (8px) e os outros saem dele, então mudar a base move a escala toda.
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
+        none: "0px",
+        xs: "calc(var(--radius) - 6px)",
         sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius) - 2px)",
+        lg: "var(--radius)",
+        xl: "calc(var(--radius) + 4px)",
+        full: "999px",
       },
       zIndex: {
         base: "0", dropdown: "10", sticky: "20", overlay: "30",

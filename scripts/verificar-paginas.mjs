@@ -3,6 +3,7 @@ import { chromium } from "playwright";
 const ROTAS = [
   "/", "/getting-started/installation",
   "/foundations/color", "/foundations/typography", "/foundations/icons",
+  "/foundations/spacing", "/foundations/radius", "/foundations/elevation",
   "/actions/button", "/forms/date-picker",
   "/data-display/kpi-card", "/data-display/badge",
   "/navigation/sidebar",

@@ -21,6 +21,7 @@
     --blue-600: 215.8 85.2% 47.8%;
     --blue-700: 215.8 79.8% 32.9%;
     --neutral-900: 240.0 9.1% 12.9%;
+    --neutral-800: 221.2 16.0% 19.6%;
 
     /* semânticos — modo Claro */
     --background: 210.0 10.0% 96.1%;
@@ -68,6 +69,31 @@
        no Escuro. Espelhado como token de componente, não como ramificação. */
     --sidebar-avatar: var(--surface-inverse);
 
+    /* formulário — coleção "Cor" do Figma. Os onze são alias exato de um
+       token semântico que já existe, nos DOIS modos: por isso vivem só aqui.
+       O `var()` acompanha o tema sem uma linha no `.dark`. */
+    --input-bg: var(--card);
+    --input-border: var(--border);
+    --input-border-hover: var(--muted-foreground);
+    --input-border-focus: var(--primary);
+    --input-border-error: var(--destructive);
+    --input-text: var(--foreground);
+    --input-placeholder: var(--muted-foreground);
+    --input-label: var(--foreground);
+    --input-helper: var(--muted-foreground);
+    --input-bg-disabled: var(--background);
+    --input-text-disabled: var(--subtle-foreground);
+
+    /* overlay — o que flutua sobre a página (popover, dropdown, menu, modal).
+       Os dois primeiros são alias; os três seguintes trocam de token entre os
+       modos e por isso reaparecem no `.dark`. */
+    --overlay-bg: var(--card);
+    --overlay-border: var(--border);
+    --overlay-item-hover: var(--accent);
+    --overlay-item-selected: var(--blue-50);
+    --overlay-item-text-selected: var(--blue-600);
+    --overlay-scrim: 222.9 21.2% 6.5%;
+
     --radius: 0.5rem;
   }
 
@@ -78,24 +104,31 @@
     --card: 240.0 9.1% 12.9%;
     --card-foreground: 210.0 10.0% 96.1%;
     --muted-foreground: 211.8 9.8% 66.1%;
-    --subtle-foreground: 211.3 9.8% 46.1%;
+    --subtle-foreground: 215.0 11.5% 59.2%;
     --accent: 219.2 27.1% 18.8%;
     --accent-foreground: 210.0 10.0% 96.1%;
     --surface-inverse: 210.0 10.0% 96.1%;
     --surface-inverse-foreground: 240.0 13.8% 12.7%;
     --primary: 215.8 100.0% 67.5%;
     --primary-hover: 215.9 100.0% 75.1%;
-    --primary-foreground: 0.0 0.0% 100.0%;
+    --primary-foreground: 222.0 23.8% 8.2%;
     --border: 240.0 9.8% 20.0%;
     --ring: 215.8 100.0% 67.5%;
-    --success: 151.8 52.2% 31.2%;
-    --success-hover: 151.6 31.7% 23.5%;
-    --destructive: 355.9 59.7% 48.6%;
-    --destructive-hover: 355.5 40.1% 32.7%;
-    --warning: 32.0 67.8% 35.3%;
-    --warning-hover: 32.5 48.0% 24.9%;
-    --info: 202.0 61.9% 38.0%;
-    --info-hover: 202.1 42.2% 26.5%;
+    --success: 155.1 52.0% 60.0%;
+    --success-hover: 154.9 51.6% 70.0%;
+    --destructive: 357.1 75.5% 68.0%;
+    --destructive-hover: 356.7 75.4% 76.1%;
+    --warning: 33.1 79.9% 64.9%;
+    --warning-hover: 32.8 80.3% 74.1%;
+    --info: 202.1 69.8% 64.9%;
+    --info-hover: 202.2 70.1% 75.1%;
+
+    /* overlay — os dois primeiros trocam de token entre os modos; o scrim é
+       preto puro no Escuro. Os demais são alias e ficam só no `:root`. */
+    --overlay-item-hover: var(--neutral-800);
+    --overlay-item-selected: var(--accent);
+    --overlay-item-text-selected: var(--blue-300);
+    --overlay-scrim: 0.0 0.0% 0.0%;
 
     --nav-item-text-default: var(--muted-foreground);
     --nav-item-bg-hover: var(--card);

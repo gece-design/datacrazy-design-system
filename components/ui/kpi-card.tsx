@@ -54,7 +54,7 @@ export type Tendencia = keyof typeof glifos;
  * por fora. Traço de 1 + padding de 17 dá os 18px de recuo do arquivo e devolve
  * a altura de 148 — com p-18 o card fecha em 152. */
 const cardVariants = cva(
-  "flex w-full flex-col items-start gap-[14px] overflow-hidden rounded-md border p-[17px]",
+  "flex w-full min-w-0 flex-col items-start gap-[14px] overflow-hidden rounded-md border p-[17px]",
   {
     variants: {
       variant: {
@@ -83,7 +83,7 @@ const chipVariants = cva(
   // Mesma conta do card: 1 de traço + 7/3 de padding = os 8/4 do Figma. No Fill
   // o traço é da cor do fundo, então some — e as duas variantes ficam do mesmo
   // tamanho, que é o que mantém o card em 148 nas duas.
-  "flex shrink-0 items-start overflow-hidden rounded-sm border px-[7px] py-[3px] text-label-lg",
+  "flex max-w-full shrink-0 items-start overflow-hidden truncate rounded-sm border px-[7px] py-[3px] text-label-lg",
   {
     variants: {
       variant: {
@@ -113,10 +113,10 @@ export interface KpiCardProps
 export const KpiCard = React.forwardRef<HTMLDivElement, KpiCardProps>(
   ({ className, variant, title, value, caption, trend = "neutral", icon, ...props }, ref) => (
     <div ref={ref} className={cn(cardVariants({ variant }), className)} {...props}>
-      <div className="flex w-full items-center justify-between overflow-hidden">
+      <div className="flex w-full items-center justify-between gap-2 overflow-hidden">
         {/* title nativo: a regra do DS proíbe truncar mudo, e es/pt-br são
             20–30% mais longos que en. */}
-        <p className="truncate text-h4 text-muted-foreground" title={title}>
+        <p className="min-w-0 truncate text-h4 text-muted-foreground" title={title}>
           {title}
         </p>
         <span className={cn(slotVariants({ variant }))} aria-hidden="true">
@@ -131,7 +131,14 @@ export const KpiCard = React.forwardRef<HTMLDivElement, KpiCardProps>(
       {/* tabular-nums, não font-mono: `text/metric` declara Geist no Figma, e
           trocar a família seria o código decidindo o que o arquivo não decidiu
           (regra D7 da calibração). */}
-      <p className="text-display tabular-nums text-foreground">{value}</p>
+      {/* `truncate` é rede de segurança, não layout: o valor precisa de ~124px
+          livres ("R$ 480,00" em 26/600 mede 123), e abaixo disso o número
+          sangrava para fora do card. Com o `title` nativo, o corte não é mudo —
+          é a mesma regra do rótulo. Quem não quer o corte dá largura ao card:
+          ver a nota da fileira na doc. */}
+      <p className="w-full truncate text-display tabular-nums text-foreground" title={value}>
+        {value}
+      </p>
 
       {caption ? <div className={cn(chipVariants({ variant }))}>{caption}</div> : null}
     </div>

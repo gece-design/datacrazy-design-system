@@ -1,4 +1,11 @@
-# DataCrazy — Tokens de estado no tema escuro (proposta, não aplicada)
+# DataCrazy — Tokens de estado no tema escuro (RESOLVIDO)
+
+> **Resolvido em 2026-09-04, e não por esta proposta.** O Figma passou a
+> entregar o par escuro dos oito (node 431:2667) e os valores do arquivo foram
+> aplicados direto em `app/globals.css`. `npm run check:temas` ficou verde.
+> Os valores válidos estão em [../02-design-system.md](../02-design-system.md);
+> o que segue abaixo é o registro de como o problema foi diagnosticado e qual
+> derivação teria sido usada se o arquivo não tivesse chegado.
 
 ## O problema
 

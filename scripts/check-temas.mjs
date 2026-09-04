@@ -27,7 +27,6 @@ const escuro = bloco(".dark");
 const INTENCIONAL = new Set([
   ...Object.keys(claro).filter((k) => k.startsWith("blue-") || k.startsWith("neutral-")),
   "radius",
-  "primary-foreground", // branco sobre o azul nos dois temas — decisão registrada
   // No Figma este token é alias de `muted-foreground` nos DOIS modos. O alias
   // repete; o valor não — `muted-foreground` já inverte entre Claro e Escuro.
   "nav-item-text-default",
