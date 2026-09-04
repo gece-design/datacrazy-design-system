@@ -14,23 +14,26 @@ const URL = process.argv[2] ?? "http://localhost:4321/data-display/kpi-card";
 /** Valores do Figma. Nenhum foi estimado — todos saíram do MCP. */
 const SPEC = {
   card: {
-    padding: "18px", gap: "14px", radius: "6px", borderWidth: "1px",
-    altura: 148,
+    padding: "16px", gap: "12px", radius: "6px", borderWidth: "1px",
+    // 140 é a altura da FILEIRA: numa grade os cards esticam para o mais alto.
+    // O Figma dá 139 para o Neutral isolado e 140 para Up/Down — a diferença é
+    // o slot, 1px mais baixo no Neutral porque as barras medem 13 e a seta 16.
+    altura: 140,
     fill: { bg: [255, 255, 255], border: [255, 255, 255] },
     outline: { bg: null, border: [255, 255, 255] },
   },
   titulo: { size: "13px", lineHeight: "18px", weight: "600", cor: [106, 117, 129] },
   slot: {
-    lado: 28, radius: "6px",
-    fill: { bg: [232, 241, 255], border: [232, 241, 255] },
+    ladoNeutral: 27, ladoSeta: 28, radius: "6px",
+    fill: { bg: [232, 241, 255], border: null },
     outline: { bg: null, border: [232, 241, 255] },
-    glifo: { lado: 16, cor: [51, 133, 255] },
+    glifo: { lado: 12, cor: [51, 133, 255] },
   },
   valor: { size: "26px", lineHeight: "32px", weight: "600", tracking: -0.601, cor: [28, 28, 37] },
   chip: {
     padding: "4px 8px", radius: "4px", size: "12px", lineHeight: "16px", weight: "500",
-    fill: { bg: [244, 245, 246], cor: [106, 117, 129] },
-    outline: { bg: null, border: [244, 245, 246], cor: [160, 168, 177] },
+    fill: { bg: [235, 237, 239], cor: [106, 117, 129] },
+    outline: { bg: null, border: [235, 237, 239], cor: [160, 168, 177] },
   },
 };
 
@@ -65,18 +68,18 @@ const fonte = await page.evaluate(() => getComputedStyle(document.body).fontFami
 conf("fonte carregada", fonte, "GeistSans");
 
 const medido = await page.evaluate(() => {
-  // O card é o único elemento com gap 14 e recuo de 18 (1 de traço + 17 de
+  // O card é o único elemento com gap 12 e recuo de 16 (1 de traço + 15 de
   // padding) — assinatura do Figma.
   const cards = [...document.querySelectorAll("div")].filter((el) => {
     const s = getComputedStyle(el);
-    return s.rowGap === "14px" && parseFloat(s.paddingTop) + parseFloat(s.borderTopWidth) === 18;
+    return s.rowGap === "12px" && parseFloat(s.paddingTop) + parseFloat(s.borderTopWidth) === 16;
   });
   const ler = (el) => {
     const s = getComputedStyle(el);
     const r = el.getBoundingClientRect();
     const titulo = el.querySelector("p.truncate");
     const slot = el.querySelector("span");
-    const svg = el.querySelector("svg");
+    const glifo = el.querySelector("span > *");
     const valor = [...el.querySelectorAll("p")].find((p) => p !== titulo);
     const chip = el.querySelector(":scope > div:last-child");
     const g = (n) => (n ? getComputedStyle(n) : null);
@@ -91,13 +94,13 @@ const medido = await page.evaluate(() => {
       slot: g(slot) && {
         w: Math.round(box(slot).width), h: Math.round(box(slot).height),
         radius: g(slot).borderTopLeftRadius, bg: g(slot).backgroundColor, border: g(slot).borderTopColor,
-        glifoCor: g(slot).color, glifoW: svg ? Math.round(box(svg).width) : null,
+        glifoCor: g(slot).color, glifoW: glifo ? Math.round(box(glifo).width) : null,
       },
       valor: g(valor) && { size: g(valor).fontSize, lineHeight: g(valor).lineHeight, weight: g(valor).fontWeight, tracking: g(valor).letterSpacing, cor: g(valor).color, variant: g(valor).fontVariantNumeric },
       chip: g(chip) && { padding: `${g(chip).paddingTop} ${g(chip).paddingLeft}`, radius: g(chip).borderTopLeftRadius, size: g(chip).fontSize, lineHeight: g(chip).lineHeight, weight: g(chip).fontWeight, bg: g(chip).backgroundColor, border: g(chip).borderTopColor, cor: g(chip).color },
     };
   };
-  return { total: cards.length, primeiro: ler(cards[0]), outline: ler(cards[4]) };
+  return { total: cards.length, primeiro: ler(cards[0]), seta: ler(cards[1]), outline: ler(cards[4]) };
 });
 
 console.log(`\ncards encontrados na página: ${medido.total}\n`);
@@ -118,11 +121,12 @@ conf("título · entrelinha", f.titulo.lineHeight, SPEC.titulo.lineHeight);
 conf("título · peso", f.titulo.weight, SPEC.titulo.weight);
 confCor("título · cor", f.titulo.cor, SPEC.titulo.cor);
 
-conf("slot · largura", f.slot.w, SPEC.slot.lado);
-conf("slot · altura", f.slot.h, SPEC.slot.lado);
+conf("slot neutral · altura", f.slot.h, SPEC.slot.ladoNeutral);
+conf("slot seta · altura", medido.seta.slot.h, SPEC.slot.ladoSeta);
+conf("slot seta · largura", medido.seta.slot.w, SPEC.slot.ladoSeta);
 conf("slot · radius", f.slot.radius, SPEC.slot.radius);
 confCor("slot fill · fundo", f.slot.bg, SPEC.slot.fill.bg);
-conf("glifo · lado", f.slot.glifoW, SPEC.slot.glifo.lado);
+conf("glifo neutral · largura (3 barras + 2 gaps)", f.slot.glifoW, SPEC.slot.glifo.lado);
 confCor("glifo · cor", f.slot.glifoCor, SPEC.slot.glifo.cor);
 
 conf("valor · tamanho", f.valor.size, SPEC.valor.size);
@@ -132,7 +136,7 @@ conf("valor · tracking", Math.round(parseFloat(f.valor.tracking) * 1000) / 1000
 confCor("valor · cor", f.valor.cor, SPEC.valor.cor);
 conf("valor · tabular-nums (regra D7)", f.valor.variant, "tabular-nums");
 
-conf("chip · recuo (traço+padding)", `${parseFloat(f.chip.padding) + 1}px ${parseFloat(f.chip.padding.split(" ")[1]) + 1}px`, SPEC.chip.padding);
+conf("chip · recuo", f.chip.padding, SPEC.chip.padding);
 conf("chip · radius", f.chip.radius, SPEC.chip.radius);
 conf("chip · tamanho", f.chip.size, SPEC.chip.size);
 conf("chip · peso", f.chip.weight, SPEC.chip.weight);

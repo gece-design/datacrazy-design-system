@@ -49,8 +49,8 @@ Lista completa com procedência e citações:
 | `foreground` | `#1C1C25` | `#F4F5F6` | texto principal |
 | `muted-foreground` | `#6A7581` | `#A0A8B1` | texto secundário |
 | `subtle-foreground` | `#A0A8B1` | `#8B95A3` | texto terciário |
-| `background` | `#F4F5F6` | `#1C1C25` | fundo da página |
-| `card` | `#FFFFFF` | `#1E1E24` | superfície elevada |
+| `background` | `#EBEDEF` | `#16161D` | fundo da página |
+| `card` | `#FFFFFF` | `#25252D` | superfície elevada |
 | `accent` | `#E8F1FF` | `#232C3D` | realce de superfície |
 | `surface-inverse` | `#232C3D` | `#F4F5F6` | superfície invertida (logo) |
 | `primary` | →`base/blue/500` | →`base/blue/400` | ação primária |

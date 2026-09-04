@@ -13,8 +13,9 @@ legenda de apoio.
 ## Par no Figma
 
 Node: `269:53` (component set "KPI Card") · Lote: `1` ·
-Última verificação: **37/37 campos batendo** por medição de valor computado
-(`scripts/medir-kpi-card.mjs`).
+Última verificação: **38/38 campos batendo** por medição de valor computado
+(`scripts/medir-kpi-card.mjs`), em 2026-09-04 contra a revisão de recuo 16 /
+gap 12 do arquivo.
 
 Diff de pixels **não medido**: exportar o PNG do frame depende da ponte de
 escrita do Figma (`figma-console`), que estava fora do ar. A geometria e a cor
@@ -96,8 +97,14 @@ Usado por: faixa de métricas do dashboard (tela ainda não construída)
    up e `destructive` para down; os glifos do arquivo estão os dois em
    `primary`. O código segue o arquivo — decisão do humano em 2026-09-03. Ou o
    arquivo se corrige, ou a descrição.
-2. **Outline só existe para `Down`.** Neutral e Up saem por derivação (a mesma
-   regra das três superfícies). Precisa de aprovação ou de desenho no Figma.
-3. **Outline some no tema escuro.** A borda é o token `card` (#1E1E24) sobre
-   `background` (#1C1C25) — contraste praticamente nulo. É o que o arquivo
-   manda; provavelmente o token da borda deveria ser `border`.
+2. **Outline foi REDESENHADO no Figma em 2026-09-04 e o código ainda não
+   acompanha.** Deixou de ser o Fill sem preenchimento e virou outro card:
+   traço de 2px, pílula de percentual no header (`+12,5%` sobre `card`), linha
+   divisória, e um rodapé de duas linhas (chip + legenda em
+   `subtle-foreground`). Altura 172. Continua desenhado para uma tendência só —
+   agora `Up`, antes `Down`. Implementar isso muda a API do componente: entram
+   props de variação, de rodapé e de legenda. **Aguardando decisão.**
+3. ~~Outline some no tema escuro.~~ **Resolvido em 2026-09-04** pela mudança de
+   token: `card` no escuro passou de `#1E1E24` para `#25252D` e `background` de
+   `#1C1C25` para `#16161D`. O contraste entre os dois deixou de ser nulo e a
+   borda do Outline aparece.

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CaretRight, List, SidebarSimple } from "@phosphor-icons/react";
+import { CaretRight, List } from "@phosphor-icons/react";
 import { Sidebar, SidebarDrawer } from "./sidebar";
 import { ThemeToggle, ThemeToggleFlutuante } from "./theme-toggle";
 import { Colunas } from "./colunas";
@@ -28,10 +28,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-card">
+      {/* `lg:block` e não `lg:flex`: a moldura agora é o wrapper do botão de
+          colapsar, e quem faz coluna é o <nav> de dentro. */}
       <Sidebar
         rail={rail}
-        onExpandir={() => setRail(false)}
-        className="sticky top-3 m-3 hidden h-[calc(100vh-24px)] lg:flex"
+        onColapsarChange={setRail}
+        className="sticky top-3 m-3 hidden h-[calc(100vh-24px)] lg:block"
       />
       <SidebarDrawer aberto={drawer} onFechar={() => setDrawer(false)} />
 
@@ -40,9 +42,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <Colunas>
             <div className="flex items-center justify-between gap-3">
               <nav aria-label="Trilha" className="flex min-w-0 items-center gap-1.5 chrome-item sm:gap-2">
-                {/* dois botões e não um: qual gesto o menu faz depende da
-                    largura, e ler a largura em JS custaria um salto de
-                    hidratação em toda navegação. O CSS já sabe a resposta. */}
+                {/* só o gesto do celular mora no header. No desktop quem
+                    recolhe é o botão redondo na borda da sidebar — o mesmo
+                    componente do DS (`SidebarToggle`). */}
                 <button
                   onClick={() => setDrawer(true)}
                   aria-label="Abrir menu"
@@ -51,16 +53,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
                              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
                 >
                   <List size={20} weight="regular" />
-                </button>
-                <button
-                  onClick={() => setRail((r) => !r)}
-                  aria-label={rail ? "Expandir menu" : "Recolher menu"}
-                  aria-expanded={!rail}
-                  className="-ml-1.5 hidden h-8 w-8 shrink-0 items-center justify-center rounded-md
-                             text-muted-foreground transition-colors hover:bg-background hover:text-foreground
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:inline-flex"
-                >
-                  <SidebarSimple size={18} weight="regular" />
                 </button>
 
                 <Link

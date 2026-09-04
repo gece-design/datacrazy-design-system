@@ -213,6 +213,12 @@ Fica suspenso.
 - 2026-09-04 · Showcase: três páginas novas em `/foundations/` — Spacing, Radius e Elevation. Todas no `nav.ts` e no `verificar-paginas.mjs`
 - 2026-09-04 · Bug meu corrigido em 4 páginas: `<ComoFunciona>` já cria a própria seção e o próprio `h2`, e eu vinha embrulhando em `<Secao titulo="Como funciona">` — saía título duplicado. Atingia também a página do KPI Card, feita ontem
 - 2026-09-04 · Nota de ambiente: `npm run build` morria com `signal 9`, `PageNotFoundError` e `Cannot find module './611.js'`. Não era o código — era **falta de memória** somada a um `next dev` concorrente escrevendo no mesmo `.next`. Receita: matar o dev server e buildar com `NODE_OPTIONS=--max-old-space-size=4096`. Para verificar páginas nesta máquina, `npm run start` sobre o build pronto gasta uma fração do `npm run dev`
+- 2026-09-04 · **REVISÃO DO KPI CARD** (node 329:27352, canvas `↳ Cards`). Três tokens mudaram no Figma: `background` claro `#F4F5F6`→`#EBEDEF`, `background` escuro `#1C1C25`→`#16161D` e `card` escuro `#1E1E24`→`#25252D`
+- 2026-09-04 · **Divergência 3 do KPI Card RESOLVIDA por tabela**: com `card` e `background` separados no escuro, a borda do Outline deixou de ser invisível. Não precisou de código
+- 2026-09-04 · KPI Card · Fill remedido: recuo 18→16 e gap 14→12, agora ligados a variável no arquivo (`space/16`, `space/12`). O slot do ícone deixou de ser quadrado fixo de 28 com glifo por cima e passou a abraçar o conteúdo — seta de 16 com recuo 6 dá 28, três barras de 13 com recuo 7 dão 27. É por isso que o card do Neutral fecha 1px mais baixo (139) que o de seta (140); numa fileira todos esticam para 140
+- 2026-09-04 · KPI Card · slot e chip perderam o traço no Fill: o arquivo dá só preenchimento. Com a borda que havia, a caixa fechava em 30 em vez de 28. Medição: **38/38 campos batendo**
+- 2026-09-04 · **BLOQUEIO ABERTO · Style=Outline foi redesenhado** e o código não acompanha. Virou outro card: traço 2px, pílula de percentual no header, linha divisória, rodapé de duas linhas, altura 172, e a tendência mudou de `Down` para `Up`. Implementar muda a API (props de variação, rodapé e legenda) — decisão do humano pendente
+- 2026-09-04 · Não construídos, e vistos pela primeira vez neste nó: `Card` com Content=List/Donut/Chart (304:5313) e `Empty State` (331:1364). São componentes novos, não atualização
 
 ## Mapa de equivalência (layout antigo → v3.2)
 

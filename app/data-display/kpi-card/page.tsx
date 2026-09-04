@@ -8,9 +8,9 @@ type Parte = { nome: string; medida: string; papel: string };
 const anatomia: Parte[] = [
   {
     nome: "Card",
-    medida: "border + p-[17px] · gap-[14px] · rounded-md",
+    medida: "border + p-[15px] · gap-3 · rounded-md",
     papel:
-      "Recuo de 18 e gap de 14 vêm medidos do Figma, não da escala do Tailwind. O padding é 17 porque o Figma desenha o traço por dentro da caixa e o CSS soma por fora: 1 de borda mais 17 de padding dá os 18 do arquivo. A altura não é fixada — a soma fecha nos 148px sozinha.",
+      "Recuo de 16 e gap de 12 agora saem de variável no Figma (space/16 e space/12). O padding é 15 porque o arquivo desenha o traço por dentro da caixa e o CSS soma por fora: 1 de borda mais 15 dá os 16. A altura não é fixada — fecha em 139 no Neutral e 140 com seta, e numa fileira todos esticam para o mais alto.",
   },
   {
     nome: "Header",
@@ -20,9 +20,9 @@ const anatomia: Parte[] = [
   },
   {
     nome: "Icon slot",
-    medida: "size-7 · rounded-md · 28px",
+    medida: "hug · rounded-md · 27–28px",
     papel:
-      "Quadrado de 28 com o glifo de 16 centralizado. A borda existe nas duas variantes, o que mantém a caixa do mesmo tamanho no Fill e no Outline.",
+      "Deixou de ser quadrado fixo: agora abraça o glifo. Seta de 16 com 6 de recuo dá 28; as três barras do neutral medem 13 de altura com 7 de recuo e dão 27. É por isso que o card do neutral é 1px mais baixo.",
   },
   {
     nome: "Valor",
@@ -32,7 +32,7 @@ const anatomia: Parte[] = [
   },
   {
     nome: "Meta chip",
-    medida: "border + px-[7px] py-[3px] · rounded-sm",
+    medida: "px-2 py-1 · rounded-sm",
     papel:
       "Legenda de apoio. Some quando caption não é passado — o card não deixa um chip vazio no lugar.",
   },
