@@ -24,7 +24,7 @@ docs/
 ├── regras.md            → regras de negócio transversais
 ├── objetos/             → 0 entidade(s) — atributos, invariantes, relações
 ├── features/            → 0 feature(s) — casos de uso e áreas
-├── componentes/         → 2 componente(s) do design system
+├── componentes/         → 4 componente(s) do design system
 └── processo/            → maquinário do KFE (13 arquivo(s))
 ```
 <!-- kfe:tree:end -->

@@ -69,40 +69,6 @@ export const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
 );
 CardHeader.displayName = "CardHeader";
 
-/**
- * O seletor de recorte do cabeçalho.
- *
- * É um gatilho, não um menu: o componente Select do DS ainda não existe, e o
- * Figma desenha só o estado fechado. Quando o Select existir, este vira o
- * `trigger` dele. Até lá é um botão de verdade — focável, com anel visível —
- * e não uma caixa decorativa que finge ser controle.
- */
-export const CardSelect = React.forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ className, children, ...props }, ref) => (
-  <button
-    ref={ref}
-    type="button"
-    className={cn(
-      "flex shrink-0 items-center justify-center gap-1 rounded-md border border-card bg-background px-3 py-2 text-label-lg text-muted-foreground",
-      // O Figma aplica um realce interno no topo do gatilho.
-      "shadow-[inset_0_4px_5px_0_rgb(106_117_129_/_0.06)]",
-      "transition-colors hover:text-foreground",
-      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-      className,
-    )}
-    {...props}
-  >
-    {children}
-    {/* Caret do arquivo: triângulo de 8×5 apontando para baixo. */}
-    <svg width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true" className="shrink-0">
-      <path d="M4 5L0 0h8L4 5Z" fill="currentColor" />
-    </svg>
-  </button>
-));
-CardSelect.displayName = "CardSelect";
-
 /* ---------------------------------------------------------------- Lista -- */
 
 export type LinhaDaLista = {

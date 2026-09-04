@@ -3,7 +3,6 @@
 import {
   Card,
   CardHeader,
-  CardSelect,
   CardList,
   CardDonut,
   CardChart,
@@ -11,6 +10,7 @@ import {
   type FatiaDaRosca,
   type BarraDoGrafico,
 } from "@/components/ui/card";
+import { SelectTrigger } from "@/components/ui/select-trigger";
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
 
 /* Dados do próprio arquivo (node 304:5313). Não são inventados: é o mesmo
@@ -162,7 +162,7 @@ export default function Pagina() {
     title="Dados diários"
     value="R$ 0,00"
     subtitle="Visualização por valor dos negócios"
-    action={<CardSelect>Valor</CardSelect>}
+    action={<SelectTrigger>Valor</SelectTrigger>}
   />
   <CardDonut fatias={fatias} destaque="100.0%" rotulo="Breno Ramos" />
 </Card>`}
@@ -180,7 +180,7 @@ export default function Pagina() {
               title="Dados diários"
               value="R$ 0,00"
               subtitle="Visualização por valor dos negócios"
-              action={<CardSelect>Valor</CardSelect>}
+              action={<SelectTrigger>Valor</SelectTrigger>}
             />
             <CardDonut fatias={fatias} destaque="100.0%" rotulo="Breno Ramos" />
           </Card>
@@ -197,7 +197,7 @@ export default function Pagina() {
     title="Dados diários"
     value="R$ 3,00K"
     subtitle="Visualização por valor dos negócios"
-    action={<CardSelect>Valor</CardSelect>}
+    action={<SelectTrigger>Valor</SelectTrigger>}
   />
   <CardChart barras={dias} eixoY={eixoY} />
 </Card>`}
@@ -207,7 +207,7 @@ export default function Pagina() {
             title="Dados diários"
             value="R$ 3,00K"
             subtitle="Visualização por valor dos negócios"
-            action={<CardSelect>Valor</CardSelect>}
+            action={<SelectTrigger>Valor</SelectTrigger>}
           />
           <CardChart barras={dias} eixoY={eixoY} />
         </Card>

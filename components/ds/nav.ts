@@ -66,9 +66,10 @@ export const navegacao: CategoriaNav[] = [
       // "Stat Card"; quem batiza é o arquivo.
       { titulo: "Card", href: "/data-display/card", icone: "cartao", pronto: true , descricao: "Lista, rosca e barras"},
       { titulo: "KPI Card", href: "/data-display/kpi-card", icone: "metrica", pronto: true , descricao: "Métrica em destaque"},
-      { titulo: "Badge", href: "/data-display/badge", icone: "etiqueta", pronto: true , descricao: "Rótulo de estado"},
+      // Lock deliberado: a rota responde, mas o conteúdo ainda não serve.
+      { titulo: "Badge", href: "/data-display/badge", icone: "etiqueta", descricao: "Rótulo de estado"},
       { titulo: "Avatar", href: "/data-display/avatar", icone: "pessoa" , descricao: "Identificação de pessoa"},
-      { titulo: "Table", href: "/data-display/table", icone: "tabela" , descricao: "Dados tabulares"},
+      { titulo: "Table", href: "/data-display/table", icone: "tabela", pronto: true , descricao: "A tabela de negócios do CRM"},
       { titulo: "Progress", href: "/data-display/progress", icone: "progresso" , descricao: "Andamento de etapa"},
     ],
   },

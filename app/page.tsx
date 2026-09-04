@@ -151,7 +151,7 @@ const descricoes: Record<string, string> = {
   "KPI Card": "Métrica do dashboard: valor, tendência e legenda.",
   "Badge": "Seis variantes. A cor entra na tag, nunca no card (A2).",
   "Avatar": "Inicial em círculo quando não há foto.",
-  "Table": "37 negócios, com resize de coluna (G9).",
+  "Table": "37 negócios, sete colunas e paginação.",
   "Progress": "Etapa do funil: barra, rótulo e tempo (E5).",
   "Tooltip": "O conteúdo completo de um texto truncado (E1).",
   "Empty State": "Ausência de dados, explicada — não só um ícone.",

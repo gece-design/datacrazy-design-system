@@ -22,7 +22,9 @@ markdown é a vista dele.
 | Arquivo | Responsabilidade |
 |---------|------------------|
 | [Card.md](Card.md) | Superfície que carrega um bloco de dados do dashboard. |
+| [DataTable.md](DataTable.md) | Lista os negócios do CRM em colunas, com filtros e paginação. |
 | [KpiCard.md](KpiCard.md) | Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma |
+| [SelectTrigger.md](SelectTrigger.md) | O gatilho de um seletor: rótulo, caret e nada mais. |
 <!-- kfe:index:end -->
 
 ## Como ler a coluna "origem" dos estados

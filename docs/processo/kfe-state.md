@@ -229,6 +229,11 @@ Fica suspenso.
 - 2026-09-04 · **BUG PEGO NA VERIFICAÇÃO**: o gradiente da rosca tinha `id="rosca"` e colidia com o `id` da seção "Rosca" da própria página do showcase — `url(#rosca)` resolvia para um `<section>` e o anel não pintava. Corrigido com `useId`. Vale a regra: id de `<defs>` em componente do DS nunca é literal
 - 2026-09-04 · Card · 4 divergências abertas: separador da lista ligado ao token `card` (invisível); rosca sem paleta categórica (bloqueio B8, agora com segundo dono); alvo de toque do seletor em 32px contra os 44 da regra I15; e altura mínima no código contra altura fixa com corte no arquivo
 - 2026-09-04 · Não construído do mesmo nó: `Empty State` (331:1364), em claro e escuro
+- 2026-09-04 · **LOTE 2 · DATA TABLE** (node 331:1354). Barra de filtros, 7 colunas, 10 linhas e paginação. É `<table>` de verdade, não caixas empilhadas como o arquivo desenha: num CRM o leitor de tela precisa anunciar linha e coluna, e ordenação/seleção/teclado se apoiam nessa estrutura depois
+- 2026-09-04 · Data Table · as larguras do arquivo (230·170·160·150·200·180·42) entram como **peso**, não pixel. Coluna fixa em px é a família de bugs #83285/#80170/#79852 — medida que só fecha numa resolução. Abaixo de 1160px a tabela rola na horizontal em vez de espremer
+- 2026-09-04 · Data Table · medido no render: etiqueta 20px e barra de progresso 5px com 44% preenchidos, iguais ao arquivo; linha em 67 contra 66 (o 1px do traço, regra D14). A etiqueta só bateu depois de descontar a borda da `Badge` do padding — mesma conta da D14
+- 2026-09-04 · **`SelectTrigger` extraído**: o mesmo controle aparecia no recorte do Card (261:333) e no filtro da tabela (261:463). Virou componente único com dois tamanhos, e o `CardSelect` foi removido. Continua sem menu — o Select do DS não existe
+- 2026-09-04 · Data Table · 5 divergências abertas: linhas sem separador visível (mesmo caso da lista do Card — agora são DUAS ocorrências do `border` ligado ao token `card`); etiqueta com raio 3px fora da escala; alvo de toque da paginação em 28px contra os 44 da I15; sem hover de linha; e a largura mínima de 1160
 
 ## Mapa de equivalência (layout antigo → v3.2)
 

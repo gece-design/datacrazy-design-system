@@ -85,6 +85,92 @@
         }
       },
       "_states_doc": "So o CardSelect e interativo. A casca, a lista, a rosca e as barras sao leitura e nao tem estado."
+    },
+    {
+      "name": "DataTable",
+      "family": "superficie",
+      "figmaNode": "331:1354",
+      "batch": 2,
+      "variants": [
+        "tabela",
+        "toolbar",
+        "paginacao",
+        "celulas"
+      ],
+      "tokens": [
+        "card",
+        "accent",
+        "background",
+        "primary",
+        "foreground",
+        "muted-foreground",
+        "radius/md",
+        "radius/sm",
+        "text/heading-3",
+        "text/heading-4",
+        "text/body-lg",
+        "text/body-md",
+        "text/body-sm",
+        "text/label-lg",
+        "text/label-md",
+        "text/label-sm",
+        "text/caption"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "text-foreground",
+          "source": "banco",
+          "rule": "I1",
+          "precedent": null,
+          "approvedIn": "lote-2"
+        },
+        "focus": {
+          "impl": "outline outline-2 outline-offset-2 outline-ring",
+          "source": "banco",
+          "rule": "I4",
+          "precedent": "Button (regra local D6)",
+          "approvedIn": "lote-2"
+        }
+      },
+      "_states_doc": "Interativos: botao de acoes da linha, controles de paginacao e filtros. A LINHA nao tem hover — o arquivo nao desenha, e ausencia e decisao. Ver divergencia 4 na doc."
+    },
+    {
+      "name": "SelectTrigger",
+      "family": "entrada",
+      "figmaNode": "261:333 / 261:463",
+      "batch": 2,
+      "variants": [
+        "md",
+        "sm"
+      ],
+      "tokens": [
+        "card",
+        "background",
+        "muted-foreground",
+        "foreground",
+        "ring",
+        "radius/md",
+        "text/label-lg"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "text-foreground",
+          "source": "banco",
+          "rule": "I1",
+          "precedent": null,
+          "approvedIn": "lote-2"
+        },
+        "focus": {
+          "impl": "outline outline-2 outline-offset-2 outline-ring",
+          "source": "banco",
+          "rule": "I4",
+          "precedent": "Button (regra local D6)",
+          "approvedIn": "lote-2"
+        }
+      },
+      "_states_doc": "Gatilho sem menu: o Select do DS nao existe e o arquivo desenha so o estado fechado. Nasceu de duas ocorrencias iguais no Figma (recorte do Card e filtro da Data Table)."
     }
   ]
 }
