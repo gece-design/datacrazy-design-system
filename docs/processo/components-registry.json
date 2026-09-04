@@ -119,10 +119,10 @@
       "motion": "fast",
       "states": {
         "hover": {
-          "impl": "text-foreground",
-          "source": "banco",
-          "rule": "I1",
-          "precedent": null,
+          "impl": "bg-overlay-item-hover na linha",
+          "source": "humano",
+          "rule": null,
+          "precedent": "overlay/item-hover",
           "approvedIn": "lote-2"
         },
         "focus": {
@@ -133,16 +133,17 @@
           "approvedIn": "lote-2"
         }
       },
-      "_states_doc": "Interativos: botao de acoes da linha, controles de paginacao e filtros. A LINHA nao tem hover — o arquivo nao desenha, e ausencia e decisao. Ver divergencia 4 na doc."
+      "_states_doc": "Hover de LINHA adicionado por decisao do humano (2026-09-04): em 37 linhas o realce sob o cursor evita ler o dado da linha errada. O arquivo nao desenha."
     },
     {
-      "name": "SelectTrigger",
+      "name": "Select",
       "family": "entrada",
       "figmaNode": "261:333 / 261:463",
       "batch": 2,
       "variants": [
         "md",
-        "sm"
+        "sm",
+        "aberto"
       ],
       "tokens": [
         "card",
@@ -151,7 +152,14 @@
         "foreground",
         "ring",
         "radius/md",
-        "text/label-lg"
+        "text/label-lg",
+        "overlay/bg",
+        "overlay/border",
+        "overlay/item-hover",
+        "overlay/item-selected",
+        "overlay/item-text-selected",
+        "radius/lg",
+        "radius/sm"
       ],
       "motion": "fast",
       "states": {
@@ -168,9 +176,71 @@
           "rule": "I4",
           "precedent": "Button (regra local D6)",
           "approvedIn": "lote-2"
+        },
+        "aberto": {
+          "impl": "caret girado 180 + text-foreground",
+          "source": "humano",
+          "rule": null,
+          "precedent": null,
+          "approvedIn": "lote-2"
         }
       },
-      "_states_doc": "Gatilho sem menu: o Select do DS nao existe e o arquivo desenha so o estado fechado. Nasceu de duas ocorrencias iguais no Figma (recorte do Card e filtro da Data Table)."
+      "_states_doc": "A lista aberta NAO esta no arquivo: derivada dos tokens overlay/* e da escala de elevacao. Teclado, clique fora e aria implementados a mao — a base so tem react-slot."
+    },
+    {
+      "name": "Pagination",
+      "family": "navegacao",
+      "figmaNode": "261:790",
+      "batch": 2,
+      "variants": [
+        "com resumo",
+        "sem resumo"
+      ],
+      "tokens": [
+        "accent",
+        "background",
+        "card",
+        "primary",
+        "foreground",
+        "muted-foreground",
+        "overlay/item-hover",
+        "ring",
+        "radius/md",
+        "text/label-lg",
+        "text/body-md"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "bg-overlay-item-hover text-foreground",
+          "source": "humano",
+          "rule": null,
+          "precedent": "overlay/item-hover",
+          "approvedIn": "lote-2"
+        },
+        "focus": {
+          "impl": "outline outline-2 outline-offset-2 outline-ring",
+          "source": "banco",
+          "rule": "I4",
+          "precedent": "Button (regra local D6)",
+          "approvedIn": "lote-2"
+        },
+        "disabled": {
+          "impl": "opacity-50 pointer-events-none",
+          "source": "banco",
+          "rule": "I5",
+          "precedent": null,
+          "approvedIn": "lote-2"
+        },
+        "atual": {
+          "impl": "bg-accent text-primary border-accent + aria-current",
+          "source": "humano",
+          "rule": null,
+          "precedent": null,
+          "approvedIn": "lote-2"
+        }
+      },
+      "_states_doc": "O ativo usa DOIS sinais (fundo accent e texto primary) porque so a borda do arquivo sumia no tema escuro. Decisao do humano 2026-09-04."
     }
   ]
 }

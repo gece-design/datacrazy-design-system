@@ -6,7 +6,6 @@ import {
   DataTableRow,
   DataTableCell,
   DataTableToolbar,
-  DataTablePagination,
   CelulaLead,
   CelulaDupla,
   CelulaTexto,
@@ -15,7 +14,8 @@ import {
   CelulaAcoes,
   type ColunaTabela,
 } from "@/components/ui/data-table";
-import { SelectTrigger } from "@/components/ui/select-trigger";
+import { Pagination } from "@/components/ui/pagination";
+import { Select, type OpcaoSelect } from "@/components/ui/select";
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
 
 /* Larguras do arquivo (node 261:805) usadas como peso. */
@@ -27,6 +27,28 @@ const colunas: ColunaTabela[] = [
   { chave: "etapa", rotulo: "Etapa", peso: 200 },
   { chave: "dados", rotulo: "Dados", peso: 180 },
   { chave: "acoes", rotulo: "", peso: 42, alinharFim: true },
+];
+
+/* Opções simuladas dos filtros — o arquivo desenha só o estado fechado. */
+const etapas: OpcaoSelect[] = [
+  { valor: "todas", rotulo: "Todas as etapas" },
+  { valor: "qualificacao", rotulo: "Qualificação" },
+  { valor: "proposta", rotulo: "Proposta" },
+  { valor: "negociacao", rotulo: "Negociação" },
+  { valor: "fechamento", rotulo: "Fechamento" },
+];
+
+const atendentes: OpcaoSelect[] = [
+  { valor: "todos", rotulo: "Todos os atendentes" },
+  { valor: "breno", rotulo: "Breno Ramos" },
+  { valor: "millena", rotulo: "Millena Aragão" },
+  { valor: "junior", rotulo: "Junior Santos" },
+];
+
+const visoes: OpcaoSelect[] = [
+  { valor: "colunas", rotulo: "Colunas" },
+  { valor: "compacta", rotulo: "Visão compacta" },
+  { valor: "completa", rotulo: "Visão completa" },
 ];
 
 /* A barra do arquivo mede 88 de 200 — 44%. */
@@ -85,6 +107,9 @@ const anatomia: Parte[] = [
 
 export default function Pagina() {
   const [pagina, setPagina] = useState(1);
+  const [etapa, setEtapa] = useState("todas");
+  const [atendente, setAtendente] = useState("todos");
+  const [visao, setVisao] = useState("colunas");
 
   return (
     <PaginaDS
@@ -131,9 +156,27 @@ export default function Pagina() {
       >
         <div className="w-full overflow-hidden rounded-md bg-card">
           <DataTableToolbar rotulo="Total de resultados" total="37 negócios">
-            <SelectTrigger size="sm">Todas as etapas</SelectTrigger>
-            <SelectTrigger size="sm">Todos os atendentes</SelectTrigger>
-            <SelectTrigger size="sm">Colunas</SelectTrigger>
+            <Select
+              size="sm"
+              rotulo="Filtrar por etapa"
+              opcoes={etapas}
+              valor={etapa}
+              aoEscolher={setEtapa}
+            />
+            <Select
+              size="sm"
+              rotulo="Filtrar por atendente"
+              opcoes={atendentes}
+              valor={atendente}
+              aoEscolher={setAtendente}
+            />
+            <Select
+              size="sm"
+              rotulo="Escolher visão das colunas"
+              opcoes={visoes}
+              valor={visao}
+              aoEscolher={setVisao}
+            />
           </DataTableToolbar>
 
           <DataTable colunas={colunas} className="rounded-none">
@@ -169,7 +212,8 @@ export default function Pagina() {
             ))}
           </DataTable>
 
-          <DataTablePagination
+          <Pagination
+            className="px-5 py-3.5"
             resumo="Mostrando 10 de 37 negócios"
             paginas={4}
             atual={pagina}

@@ -6,7 +6,7 @@ const ROTAS = [
   "/foundations/spacing", "/foundations/radius", "/foundations/elevation",
   "/actions/button", "/forms/date-picker",
   "/data-display/card", "/data-display/kpi-card", "/data-display/badge", "/data-display/table",
-  "/navigation/sidebar",
+  "/navigation/sidebar", "/navigation/pagination",
 ];
 
 const browser = await chromium.launch();

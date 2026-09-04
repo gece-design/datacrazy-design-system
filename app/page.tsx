@@ -146,7 +146,7 @@ const descricoes: Record<string, string> = {
   "Checkbox": "Alternância booleana, com estado indeterminado.",
   "Sidebar": "282px que viram 88px, e o item de 36px que ela hospeda.",
   "Breadcrumb": "Dois níveis, e esse é o teto (G5).",
-  "Pagination": "Mostrando 10 de 37 negócios, e os controles.",
+  "Pagination": "Controles de página, com o resumo do que está à vista.",
   "Card": "A superfície que carrega um bloco de dados.",
   "KPI Card": "Métrica do dashboard: valor, tendência e legenda.",
   "Badge": "Seis variantes. A cor entra na tag, nunca no card (A2).",

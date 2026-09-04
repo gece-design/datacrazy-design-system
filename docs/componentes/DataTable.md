@@ -38,15 +38,6 @@ Diff de pixels **não medido**: depende da ponte de escrita do Figma
 | `total` | `string` | Linha em destaque. Ex.: "37 negócios". |
 | `children` | `ReactNode` | Os filtros à direita. |
 
-### `DataTablePagination`
-
-| Prop | Tipo | Descrição |
-|------|------|-----------|
-| `resumo` | `string` | Ex.: "Mostrando 10 de 37 negócios". |
-| `paginas` | `number` | Quantas páginas existem. |
-| `atual` | `number` | Página atual, começando em 1. |
-| `onIr` | `(p: number) => void` | Chamado ao trocar de página. |
-
 ### Células
 
 `CelulaLead` (nome + etiquetas) · `CelulaDupla` (valor + apoio) ·
@@ -62,28 +53,32 @@ Não tem. O arquivo desenha um layout só, com eixo apenas de tema.
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| hover | `text-foreground` | banco | I1 |
+| hover | `bg-overlay-item-hover na linha` | humano | overlay/item-hover |
 | focus | `outline outline-2 outline-offset-2 outline-ring` | banco | I4 |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
 decisão, não buraco a preencher.
 
-A tabela é leitura. Interativos são o botão de ações da linha, os controles de
-paginação e os filtros (`SelectTrigger`) — todos com `hover` e
-`focus-visible`. O arquivo **não desenha hover de linha**, então a linha não
-tem: ausência é decisão.
+A tabela é leitura, com três exceções interativas: o botão de ações da linha,
+os filtros ([Select](Select.md)) e a [paginação](Pagination.md).
+
+**A linha ganhou hover** por decisão do humano em 2026-09-04. O arquivo não
+desenha, mas em 37 linhas o realce sob o cursor é o que evita ler o dado da
+linha errada. Token: `overlay/item-hover`, que clareia nos dois temas.
 
 ## Tokens consumidos
 
 `card` · `accent` · `background` · `primary` · `foreground` ·
 `muted-foreground` · `radius/md` · `radius/sm` · `text/heading-3` ·
 `text/heading-4` · `text/body-lg` · `text/body-md` · `text/body-sm` ·
-`text/label-lg` · `text/label-md` · `text/label-sm` · `text/caption`
+`text/label-lg` · `text/label-md` · `text/label-sm` · `text/caption` ·
+`overlay/item-hover`
 
 ## Composição
 
-Usa: `Badge` nas etiquetas (sem doc ainda — dívida registrada) · `SelectTrigger` nos filtros ·
+Usa: `Badge` nas etiquetas (sem doc ainda — dívida registrada) ·
+[Select](Select.md) nos filtros · [Pagination](Pagination.md) no rodapé ·
 Usado por: tela de negócios (ainda não construída)
 
 ## Exemplo de uso
@@ -127,8 +122,7 @@ Usado por: tela de negócios (ainda não construída)
    (`xs`) e 4 (`sm`). O código usa `sm`. Um pixel, mas é escala.
 3. **Alvo de toque da paginação.** 28px contra os 44 da regra I15. O arquivo
    desenha 28.
-4. **Sem hover de linha.** Numa tabela de 37 linhas o realce da linha sob o
-   cursor é o que evita ler o dado da linha errada. O arquivo não desenha, e
-   por isso não foi criado — mas vale decidir.
+4. ~~Sem hover de linha.~~ **Resolvido em 2026-09-04** por decisão do humano:
+   a linha usa `overlay/item-hover`. Não está no arquivo.
 5. **A tabela pede 1160px.** Abaixo disso ela rola na horizontal em vez de
    espremer coluna. O showcase mostra isso porque a coluna de leitura tem 820.

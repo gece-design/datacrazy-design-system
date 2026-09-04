@@ -24,7 +24,8 @@ markdown é a vista dele.
 | [Card.md](Card.md) | Superfície que carrega um bloco de dados do dashboard. |
 | [DataTable.md](DataTable.md) | Lista os negócios do CRM em colunas, com filtros e paginação. |
 | [KpiCard.md](KpiCard.md) | Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma |
-| [SelectTrigger.md](SelectTrigger.md) | O gatilho de um seletor: rótulo, caret e nada mais. |
+| [Pagination.md](Pagination.md) | Navegar entre as páginas de uma lista longa. |
+| [Select.md](Select.md) | Escolher uma opção numa lista curta. |
 <!-- kfe:index:end -->
 
 ## Como ler a coluna "origem" dos estados

@@ -234,6 +234,13 @@ Fica suspenso.
 - 2026-09-04 · Data Table · medido no render: etiqueta 20px e barra de progresso 5px com 44% preenchidos, iguais ao arquivo; linha em 67 contra 66 (o 1px do traço, regra D14). A etiqueta só bateu depois de descontar a borda da `Badge` do padding — mesma conta da D14
 - 2026-09-04 · **`SelectTrigger` extraído**: o mesmo controle aparecia no recorte do Card (261:333) e no filtro da tabela (261:463). Virou componente único com dois tamanhos, e o `CardSelect` foi removido. Continua sem menu — o Select do DS não existe
 - 2026-09-04 · Data Table · 5 divergências abertas: linhas sem separador visível (mesmo caso da lista do Card — agora são DUAS ocorrências do `border` ligado ao token `card`); etiqueta com raio 3px fora da escala; alvo de toque da paginação em 28px contra os 44 da I15; sem hover de linha; e a largura mínima de 1160
+- 2026-09-04 · **DECISÃO DO HUMANO · caret vem da biblioteca**, não do arquivo. O Figma desenha um triângulo cheio de 8×5; agora todo gatilho usa `CaretDown` do Phosphor. Vale para todos os componentes — a fonte de ícone do DS é o Phosphor, e triângulo desenhado à mão é ícone fora dela. Só o `select-trigger.tsx` tinha o desenho à mão; o resto do repo já usava Phosphor
+- 2026-09-04 · **`Select` com lista aberta** — o arquivo desenha só o estado fechado. O painel foi derivado dos tokens `overlay/*` (que ganharam o primeiro consumidor) e do degrau `shadow-lg` da escala de elevação. Feito à mão: a base tem só `@radix-ui/react-slot`, e trazer pacote é decisão de stack, não de componente
+- 2026-09-04 · `Select` · teclado completo (setas, Home/End, Enter, Espaço, Escape, Tab), clique fora, foco que entra no painel ao abrir e volta ao gatilho ao fechar, `aria-haspopup`/`aria-expanded`/`role=listbox`/`aria-selected`. Verificado com Playwright: abre, 5 opções, seta+Enter escolhe, Escape e clique fora fecham
+- 2026-09-04 · **`Pagination` extraído da Data Table** para componente próprio, com página e doc. O slot `/navigation/pagination` já existia no roadmap
+- 2026-09-04 · **DECISÃO DO HUMANO · página atual com DOIS sinais**: fundo `accent` e texto `primary`. O arquivo marcava só a borda, que no tema escuro quase some contra o fundo do próprio botão. Hover do inativo usa `overlay/item-hover` com texto `foreground` — mesmo fundo do ativo, texto diferente, para os dois estados não se confundirem
+- 2026-09-04 · **DECISÃO DO HUMANO · hover na linha da tabela**, que o arquivo não desenha. Token `overlay/item-hover`. Fecha a divergência 4 da Data Table
+- 2026-09-04 · Medido: hover de linha vai de transparente para `accent`; paginação ativa em `accent`+`primary`, inativa em `background`+`muted`, e inativa sob o cursor em `accent`+`foreground`
 
 ## Mapa de equivalência (layout antigo → v3.2)
 

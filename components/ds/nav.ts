@@ -55,7 +55,7 @@ export const navegacao: CategoriaNav[] = [
     itens: [
       { titulo: "Sidebar", href: "/navigation/sidebar", icone: "painel", pronto: true, descricao: "Navegação principal"},
       { titulo: "Breadcrumb", href: "/navigation/breadcrumb", icone: "trilha" , descricao: "Trilha de dois níveis"},
-      { titulo: "Pagination", href: "/navigation/pagination", icone: "paginas" , descricao: "Navegação entre páginas"},
+      { titulo: "Pagination", href: "/navigation/pagination", icone: "paginas", pronto: true , descricao: "Controles de página de uma lista"},
     ],
   },
   {

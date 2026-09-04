@@ -58,10 +58,10 @@ Só superfície. Aceita `className` e filhos.
 | `barras` | `BarraDoGrafico[]` | `rotulo` e `valor`. |
 | `eixoY` | `string[]` | Rótulos do topo para a base, já formatados. |
 
-### `CardSelect`
+### Seletor do cabeçalho
 
-Gatilho do recorte. Botão de verdade, com foco visível, mas **sem menu**: o
-Select do DS não existe e o Figma desenha só o estado fechado.
+O recorte usa o [Select](Select.md), que virou componente próprio quando a Data
+Table pediu o mesmo controle.
 
 ## Variantes
 
@@ -84,7 +84,7 @@ Estado que não está nesta tabela **o componente não tem**. Ausência é
 decisão, não buraco a preencher.
 
 A casca e os três conteúdos são leitura. O único elemento interativo é o
-`CardSelect`, que tem `hover` e `focus-visible` (regra I4).
+[Select](Select.md) do cabeçalho.
 
 ## Tokens consumidos
 
@@ -116,9 +116,9 @@ Usado por: dashboard (tela ainda não construída)
 
 | Item | Como está resolvido |
 |------|---------------------|
-| Foco visível | `CardSelect` usa `outline` com offset (regra D6) |
+| Foco visível | O [Select](Select.md) usa `outline` com offset (regra D6) |
 | Papel/rótulo | Texto real em toda parte. Anel, barras, avatar e eixos são `aria-hidden`: são desenho do número que já está escrito ao lado |
-| Alvo de toque | `CardSelect` mede 32px de altura — **abaixo dos 44 da regra I15** |
+| Alvo de toque | O [Select](Select.md) mede 32px de altura — **abaixo dos 44 da regra I15** |
 | Movimento | Só a transição de cor do seletor |
 | Contraste | `muted-foreground` sobre `card` = 4,6:1 no claro |
 
@@ -133,7 +133,7 @@ Usado por: dashboard (tela ainda não construída)
    fatia em 100% — o caso desenhado — bate exato. É o bloqueio **B8** do
    roadmap, e ele agora tem um segundo dono.
 3. **Alvo de toque do seletor.** 32px de altura contra os 44 que a regra I15
-   pede. O arquivo desenha 32.
+   pede. O arquivo desenha 32. Ver [Select](Select.md).
 4. **Altura mínima, não fixa.** O arquivo fixa 382 e 452 com corte; o código usa
    `min-h`. Na largura de desenho a medida é a mesma, mas um nome longo faz o
    card crescer em vez de esconder conteúdo.

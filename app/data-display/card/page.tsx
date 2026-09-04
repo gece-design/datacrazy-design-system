@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import {
   Card,
   CardHeader,
@@ -10,7 +12,7 @@ import {
   type FatiaDaRosca,
   type BarraDoGrafico,
 } from "@/components/ui/card";
-import { SelectTrigger } from "@/components/ui/select-trigger";
+import { Select } from "@/components/ui/select";
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
 
 /* Dados do próprio arquivo (node 304:5313). Não são inventados: é o mesmo
@@ -84,6 +86,13 @@ const dias: BarraDoGrafico[] = [
 
 const eixoY = ["R$ 1,00K", "R$ 750,00", "R$ 500,00", "R$ 250,00", "R$ 0,00"];
 
+/* Opções simuladas do recorte — o arquivo desenha só o estado fechado. */
+const recortes = [
+  { valor: "valor", rotulo: "Valor" },
+  { valor: "quantidade", rotulo: "Quantidade" },
+  { valor: "ticket", rotulo: "Ticket médio" },
+];
+
 type Parte = { nome: string; medida: string; papel: string };
 
 const anatomia: Parte[] = [
@@ -126,6 +135,8 @@ const anatomia: Parte[] = [
 ];
 
 export default function Pagina() {
+  const [recorte, setRecorte] = useState("valor");
+
   return (
     <PaginaDS
       titulo="Card"
@@ -162,7 +173,7 @@ export default function Pagina() {
     title="Dados diários"
     value="R$ 0,00"
     subtitle="Visualização por valor dos negócios"
-    action={<SelectTrigger>Valor</SelectTrigger>}
+    action={<Select rotulo="Recorte do gráfico" opcoes={recortes} valor={recorte} aoEscolher={setRecorte} />}
   />
   <CardDonut fatias={fatias} destaque="100.0%" rotulo="Breno Ramos" />
 </Card>`}
@@ -180,7 +191,7 @@ export default function Pagina() {
               title="Dados diários"
               value="R$ 0,00"
               subtitle="Visualização por valor dos negócios"
-              action={<SelectTrigger>Valor</SelectTrigger>}
+              action={<Select rotulo="Recorte do gráfico" opcoes={recortes} valor={recorte} aoEscolher={setRecorte} />}
             />
             <CardDonut fatias={fatias} destaque="100.0%" rotulo="Breno Ramos" />
           </Card>
@@ -197,7 +208,7 @@ export default function Pagina() {
     title="Dados diários"
     value="R$ 3,00K"
     subtitle="Visualização por valor dos negócios"
-    action={<SelectTrigger>Valor</SelectTrigger>}
+    action={<Select rotulo="Recorte do gráfico" opcoes={recortes} valor={recorte} aoEscolher={setRecorte} />}
   />
   <CardChart barras={dias} eixoY={eixoY} />
 </Card>`}
@@ -207,7 +218,7 @@ export default function Pagina() {
             title="Dados diários"
             value="R$ 3,00K"
             subtitle="Visualização por valor dos negócios"
-            action={<SelectTrigger>Valor</SelectTrigger>}
+            action={<Select rotulo="Recorte do gráfico" opcoes={recortes} valor={recorte} aoEscolher={setRecorte} />}
           />
           <CardChart barras={dias} eixoY={eixoY} />
         </Card>

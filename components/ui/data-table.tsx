@@ -72,12 +72,23 @@ export const DataTable = React.forwardRef<
 });
 DataTable.displayName = "DataTable";
 
-/** Uma linha. O traço superior é do token `card` — ver a divergência na doc. */
+/**
+ * Uma linha. O traço superior é do token `card` — ver a divergência na doc.
+ *
+ * O hover NÃO está no arquivo: foi decisão do humano (2026-09-04). Numa lista
+ * de 37 linhas o realce sob o cursor é o que evita ler o dado da linha errada.
+ * O token é `overlay/item-hover`, que existe para exatamente isto e clareia nos
+ * dois temas.
+ */
 export const DataTableRow = React.forwardRef<
   HTMLTableRowElement,
   React.HTMLAttributes<HTMLTableRowElement>
 >(({ className, ...props }, ref) => (
-  <tr ref={ref} className={cn("border-t border-card", className)} {...props} />
+  <tr
+    ref={ref}
+    className={cn("border-t border-card transition-colors hover:bg-overlay-item-hover", className)}
+    {...props}
+  />
 ));
 DataTableRow.displayName = "DataTableRow";
 
@@ -239,68 +250,5 @@ export function CelulaAcoes({ rotulo = "Ações da linha" }: { rotulo?: string }
         <span aria-hidden="true">•••</span>
       </button>
     </div>
-  );
-}
-
-/* ----------------------------------------------------------- Paginação -- */
-
-export function DataTablePagination({
-  resumo,
-  paginas,
-  atual,
-  onIr,
-}: {
-  /** Ex.: "Mostrando 10 de 37 negócios". */
-  resumo: string;
-  /** Quantas páginas existem. */
-  paginas: number;
-  /** Página atual, começando em 1. */
-  atual: number;
-  onIr?: (pagina: number) => void;
-}) {
-  const botao =
-    "inline-flex h-7 items-center justify-center rounded-md border bg-background px-3 text-label-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50";
-  return (
-    <nav
-      className="flex w-full flex-wrap items-center justify-between gap-4 px-5 py-3.5"
-      aria-label="Paginação"
-    >
-      <p className="text-body-md text-muted-foreground">{resumo}</p>
-      <div className="flex flex-wrap items-center gap-1.5">
-        <button
-          type="button"
-          className={cn(botao, "border-card text-muted-foreground hover:text-foreground")}
-          disabled={atual <= 1}
-          onClick={() => onIr?.(atual - 1)}
-        >
-          Anterior
-        </button>
-        {Array.from({ length: paginas }, (_, i) => i + 1).map((n) => (
-          <button
-            key={n}
-            type="button"
-            aria-current={n === atual ? "page" : undefined}
-            className={cn(
-              botao,
-              "w-[30px] px-0",
-              n === atual
-                ? "border-accent text-primary"
-                : "border-card text-muted-foreground hover:text-foreground",
-            )}
-            onClick={() => onIr?.(n)}
-          >
-            {n}
-          </button>
-        ))}
-        <button
-          type="button"
-          className={cn(botao, "border-card text-muted-foreground hover:text-foreground")}
-          disabled={atual >= paginas}
-          onClick={() => onIr?.(atual + 1)}
-        >
-          Próxima
-        </button>
-      </div>
-    </nav>
   );
 }
