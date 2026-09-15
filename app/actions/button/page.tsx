@@ -128,7 +128,7 @@ export default function Botao() {
                 sem superfície em repouso · hover <Chip>accent</Chip>
               </Item>
               <Item mono='variant="destructive"'>
-                <Chip>bg-destructive</Chip> · hover <Chip>destructive-hover</Chip>
+                <Chip>bg-destructive</Chip> + sombra interna · hover <Chip>destructive-hover</Chip>
               </Item>
               <Item mono='variant="soft"'>
                 <Chip>base/blue/50</Chip> + texto <Chip>base/blue/600</Chip> · hover <Chip>base/blue/100</Chip>
@@ -141,7 +141,8 @@ export default function Botao() {
               Os seis botões acima são os de verdade: passe o mouse para ver cada hover no token que lhe cabe. No
               Figma, <Chip>soft</Chip> e <Chip>outline</Chip> se chamam &ldquo;Secondary&rdquo; e &ldquo;Ghost&rdquo;;
               entraram com nome próprio para não mudar o que <Chip>secondary</Chip> e <Chip>ghost</Chip> já são nas
-              telas prontas. O primary ganhou a sombra interna do arquivo (<Chip>shadow-button-inner</Chip>).
+              telas prontas. O primary e o destructive têm a sombra interna do arquivo (<Chip>shadow-button-inner</Chip>) —
+              a do destructive conferida no botão Excluir do Modal.
             </p>
           </>
         }

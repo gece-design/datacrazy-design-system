@@ -74,7 +74,7 @@ Usa: — · Usado por: —
 | Toque | **Ignorado de propósito**: não há `pointerleave` no toque e o balão ficaria preso. O conteúdo não pode ser a única via para a informação |
 | Posição | Portal no `body`, `fixed`, medido antes de pintar; vira de lado e se ajusta para ficar a 8px da borda da janela (E3) |
 | Camada | `z-popover` (E2) |
-| Movimento | Sem animação — motion não tem token (I12) |
+| Movimento | Dissolve ao abrir em 150ms (`fade-in-fast`); fecha seco, para não ficar por cima do próximo gatilho. Sob `motion-safe:` (I12) |
 | Contraste | `primary-foreground` sobre `surface-inverse` nos dois temas |
 
 ## Divergências abertas (para o gate)

@@ -56,6 +56,7 @@ que devolve o id para `fecharToast(id)`.
 | hover | `X: bg-overlay-item-hover text-foreground` | inferido | Pagination (overlay/item-hover) |
 | focus | `outline outline-2 outline-offset-2 outline-ring` | banco | I4 |
 | pausado | `relógio parado com cursor ou foco dentro` | declarado | roadmap-componentes § Toast |
+| saindo | `translate-x-[calc(100%+1rem)] opacity-0, depois grid-rows-[0fr] -mt-2` | humano | I12 |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -85,11 +86,11 @@ toast({ variant: "success", titulo: "Negócio salvo", descricao: "As alteraçõe
 | Item | Como está resolvido |
 |------|---------------------|
 | Anúncio | A lista do `Toaster` é `aria-live="polite"` e existe desde o primeiro render — região criada junto com a mensagem costuma não ser lida |
-| Tempo de leitura | 5s por padrão (`duracao`), e o relógio para com cursor ou foco em cima |
+| Tempo de leitura | 8s por padrão (`duracao`), e o relógio para com cursor ou foco em cima |
 | Papel/rótulo | X é `<button>` com `aria-label` vindo de fora |
 | Foco visível | `outline` com offset (regra D6) |
 | Alvo de toque | X de 24px — **abaixo dos 44 da regra I15** |
-| Movimento | Sem animação de entrada e saída — motion não tem token (I12) |
+| Movimento | Entra abrindo o espaço (200ms) e dissolvendo (250ms); sai deslizando para a direita (200ms) e depois fecha o vão (200ms). Tudo sob `motion-safe:` — com `prefers-reduced-motion`, aparece e some na hora (I12) |
 | Cor não é o único sinal | Glifo por variante; erro e atenção compartilham o glifo, então o título carrega a diferença |
 
 ## Divergências abertas (para o gate)
@@ -103,7 +104,12 @@ toast({ variant: "success", titulo: "Negócio salvo", descricao: "As alteraçõe
    círculo. As quatro variantes do claro fecham em 0,12 nos três canais do pixel.
    A ponte do Figma desktop estava desconectada para ler o valor direto.
 3. **Fila, posição e tempo não estão no arquivo.** Canto inferior direito a 16px,
-   8px entre cartões, três visíveis e 5s são derivação.
+   8px entre cartões, três visíveis e 8s são derivação. O humano pediu mais
+   tempo que os 5s de antes (2026-09-15); os 8s são o valor escolhido.
 4. **Texto quebra linha.** O arquivo usa texto numa linha só; aqui quebra, para
    não truncar mudo (E1) em `es` e `pt-br`.
 5. **Hover do X** usa `overlay/item-hover` (E-01). Não está desenhado.
+6. **Movimento não está no arquivo nem tem token.** Durações e curvas vivem
+   nomeadas em `tailwind.config.ts` (`fade-in`, `toast-open`) até a pendência 4
+   de `02-design-system.md` fechar. Pedido do humano em 2026-09-15: dissolver na
+   entrada, deslizar para o lado na saída.

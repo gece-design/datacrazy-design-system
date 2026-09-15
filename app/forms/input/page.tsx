@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowSquareOut, CalendarBlank, Copy, EnvelopeSimple, PencilSimple } from "@phosphor-icons/react";
-import { Input, AcaoCampo } from "@/components/ui/input";
+import { ArrowSquareOut, CalendarBlank, EnvelopeSimple, PencilSimple } from "@phosphor-icons/react";
+import { Input, AcaoCampo, AcaoCopiar } from "@/components/ui/input";
 import { Rating } from "@/components/ui/rating";
 import { Select } from "@/components/ui/select";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
@@ -86,14 +86,16 @@ export default function InputPage() {
   rotulo="Site"
   defaultValue="joeljota.com.br"
   acoes={<>
-    <AcaoCampo icone={Copy} rotulo="Copiar site" onClick={copiar} />
+    <AcaoCopiar rotulo="Copiar site" rotuloCopiado="Site copiado" />
     <AcaoCampo icone={ArrowSquareOut} rotulo="Abrir site" onClick={abrir} />
   </>}
 />`}
         nota={
           <>
             <Chip>AcaoCampo</Chip> é botão de verdade: tem foco, <Chip>aria-label</Chip> e <Chip>title</Chip>. Ícone
-            de ação sem rótulo é o bug que virou a regra E7.
+            de ação sem rótulo é o bug que virou a regra E7. <Chip>AcaoCopiar</Chip> é o ícone de dois quadrados: lê
+            o valor do próprio campo — inclusive o que acabou de ser digitado —, copia e vira um check em{" "}
+            <Chip>success</Chip> por 1,5s, anunciado ao leitor de tela. Com o campo vazio, só leva o foco para ele.
           </>
         }
       >
@@ -104,7 +106,7 @@ export default function InputPage() {
             defaultValue="joeljota.com.br"
             acoes={
               <>
-                <AcaoCampo icone={Copy} rotulo="Copiar site" onClick={() => void navigator.clipboard?.writeText("joeljota.com.br")} />
+                <AcaoCopiar rotulo="Copiar site" rotuloCopiado="Site copiado" />
                 <AcaoCampo icone={ArrowSquareOut} rotulo="Abrir site" onClick={() => window.open("https://joeljota.com.br", "_blank", "noopener,noreferrer")} />
               </>
             }
@@ -114,7 +116,7 @@ export default function InputPage() {
             defaultValue="contato@joeljota.com.br"
             acoes={
               <>
-                <AcaoCampo icone={Copy} rotulo="Copiar e-mail" onClick={() => void navigator.clipboard?.writeText("contato@joeljota.com.br")} />
+                <AcaoCopiar rotulo="Copiar e-mail" rotuloCopiado="E-mail copiado" />
                 <AcaoCampo icone={EnvelopeSimple} rotulo="Enviar e-mail" />
               </>
             }

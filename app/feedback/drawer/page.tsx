@@ -12,10 +12,11 @@ import {
   DrawerPerfil,
   HierarquiaNo,
   LinhaDoTempo,
+  type TomPerfil,
 } from "@/components/ui/drawer";
 import { Tag } from "@/components/ui/tag";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
-import { DrawerLead, LEADS, MENU_LEAD } from "./drawer-lead";
+import { CATALOGO_TAGS, DrawerLead, LEADS, MENU_LEAD, tagsEscolhidas } from "./drawer-lead";
 
 function PerfilDeExemplo({ estilo }: { estilo: "outline" | "fill" }) {
   const [menu, setMenu] = useState("historicos");
@@ -29,11 +30,13 @@ function PerfilDeExemplo({ estilo }: { estilo: "outline" | "fill" }) {
       email={lead.email}
       estilo={estilo}
       className="rounded-md border"
-      tags={lead.tags.slice(0, 3).map((t) => (
-        <Tag key={t.rotulo} status={t.status} foto={t.foto}>
-          {t.rotulo}
-        </Tag>
-      ))}
+      tags={tagsEscolhidas(CATALOGO_TAGS, lead.tags)
+        .slice(0, 3)
+        .map((t) => (
+          <Tag key={t.id} status={t.status} foto={t.foto}>
+            {t.rotulo}
+          </Tag>
+        ))}
     >
       <DrawerBloco titulo="Métricas">
         <DrawerMetricas itens={lead.metricas} />
@@ -48,7 +51,20 @@ function PerfilDeExemplo({ estilo }: { estilo: "outline" | "fill" }) {
   );
 }
 
+const tons: { tom: TomPerfil; nome: string; tipo: "pessoa" | "empresa"; origem: string }[] = [
+  { tom: "azul", nome: "Rafael Pinto Pinheiro", tipo: "pessoa", origem: "arquivo · 565:6447" },
+  { tom: "roxo", nome: "Joel Jota", tipo: "empresa", origem: "arquivo · 565:8651" },
+  { tom: "rosa", nome: "Marina Albuquerque", tipo: "pessoa", origem: "matiz 330°" },
+  { tom: "laranja", nome: "Norte Logística", tipo: "empresa", origem: "matiz 24°" },
+];
+
+const leadsDoPreview = [
+  { id: "rafael" as const, rotulo: "Rafael · pessoa" },
+  { id: "joel" as const, rotulo: "Joel Jota · empresa" },
+];
+
 export default function DrawerPage() {
+  const [lead, setLead] = useState<keyof typeof LEADS>("rafael");
   const [fechadoNoPreview, setFechadoNoPreview] = useState(false);
   const [camada, setCamada] = useState(false);
   const [menuSolto, setMenuSolto] = useState("historicos");
@@ -57,7 +73,7 @@ export default function DrawerPage() {
     <PaginaDS
       titulo="Drawer"
       descricao="O lead aberto pela direita: uma coluna de perfil com 320px e o conteúdo da seção escolhida no menu. O arquivo desenha cinco seções — Histórico, Perfil, Campos adicionais, Negócios e Hierarquia — e todas estão abaixo, vivas."
-      secoes={["Como funciona", "Drawer do lead", "Perfil", "Menu", "Linha do tempo", "Hierarquia", "Camada", "Quando usar"]}
+      secoes={["Como funciona", "Drawer do lead", "Perfil", "Cores do perfil", "Menu", "Linha do tempo", "Hierarquia", "Camada", "Quando usar"]}
     >
       <ComoFunciona>
         <p>
@@ -76,23 +92,21 @@ export default function DrawerPage() {
           tem recuo vertical, é um anel interno — senão a caixa cresceria 4px.
         </p>
         <p>
-          Tudo sai de token. O gradiente do topo do perfil vai de <Chip>card</Chip> a{" "}
-          <Chip>--drawer-perfil-brilho</Chip>, que no claro é o <Chip>base/blue/100</Chip> do arquivo. Esse primitivo
-          não tem modo escuro — no escuro ele viraria uma faixa clara — então o valor escuro aponta para{" "}
-          <Chip>accent</Chip>. Isso é <span className="text-foreground">derivação</span>, não desenho, e está nas
-          divergências da doc junto com o que mais o arquivo não diz: a opacidade do scrim, o ligado do switch e o
-          conteúdo das sete seções sem desenho.
+          Com altura definida — a tela inteira, na camada — <span className="text-foreground">perfil e conteúdo rolam
+          cada um por conta própria</span>: descer no menu não tira o título da seção de vista, e ler a linha do tempo
+          não esconde de quem é o lead. A cor do topo do perfil é o <Chip>tom</Chip>: anel e letra do avatar, texto da
+          tag de tipo e brilho do degradê. Azul e roxo são do arquivo; rosa e laranja seguem a mesma regra.
         </p>
       </ComoFunciona>
 
       <Secao
         titulo="Drawer do lead"
         spec="1080px · 5 seções desenhadas"
-        descricao="Troque a seção no menu à esquerda. O botão do canto direito do perfil recolhe a coluna; o X fecha o drawer."
-        codigo={`<DrawerPainel>
-  <DrawerPerfil nome="Rafael Pinto Pinheiro" tipo="pessoa" rotuloTipo="Pessoa"
-    telefone="+55 (54) 44346-5346" email="contato@datacrazy.com"
-    tags={<>…<TagAdicionar rotulo="Adicionar tag" /></>}
+        descricao="Troque o lead e a seção no menu. O + no fim das tags abre o seletor; os dois quadrados de um campo copiam o valor; o botão do canto direito do perfil recolhe a coluna."
+        codigo={`<DrawerPainel className="h-[760px]">
+  <DrawerPerfil nome="Joel Jota" tipo="empresa" rotuloTipo="Empresa"
+    telefone="+55 (11) 98765-4321" email="contact@datawave.com"
+    tags={<>{tags}<SeletorTags grupos={catalogo} selecionadas={ids} aoAlternar={…} aoCriar={…} rotulos={…} /></>}
     acoes={<><Button>Automação</Button><Button variant="soft">Atendimento</Button></>}
     aoFechar={fechar} aoRecolher={recolher}>
     <DrawerBloco titulo="Métricas"><DrawerMetricas itens={metricas} /></DrawerBloco>
@@ -107,11 +121,28 @@ export default function DrawerPage() {
 </DrawerPainel>`}
         nota={
           <>
-            O preview mostra o painel sem a camada, para caber na página. Abaixo de 1080px ele rola na horizontal. A
-            versão com scrim, foco preso e Escape está em <span className="text-foreground">Camada</span>.
+            O preview fixa o painel em 760px de altura para mostrar as duas colunas rolando. Na{" "}
+            <span className="text-foreground">Camada</span> ele ocupa a tela inteira. Abaixo de 1080px de largura, a
+            caixa rola na horizontal.
           </>
         }
       >
+        <div className="mb-4 flex flex-wrap gap-2">
+          {leadsDoPreview.map((l) => (
+            <Button
+              key={l.id}
+              size="sm"
+              variant={lead === l.id ? "soft" : "outline"}
+              aria-pressed={lead === l.id}
+              onClick={() => {
+                setLead(l.id);
+                setFechadoNoPreview(false);
+              }}
+            >
+              {l.rotulo}
+            </Button>
+          ))}
+        </div>
         <div className="overflow-x-auto">
           {fechadoNoPreview ? (
             <div className="flex justify-center py-10">
@@ -123,7 +154,7 @@ export default function DrawerPage() {
           ) : (
             // max-w-none: no preview o painel mantém os 1080px e a caixa rola;
             // sem isso ele encolhe até a coluna e o conteúdo fica com 430px.
-            <DrawerLead aoFechar={() => setFechadoNoPreview(true)} className="max-w-none" />
+            <DrawerLead key={lead} lead={lead} aoFechar={() => setFechadoNoPreview(true)} className="h-[760px] max-w-none" />
           )}
         </div>
       </Secao>
@@ -134,18 +165,54 @@ export default function DrawerPage() {
         descricao="A mesma coluna nos dois estilos. Outline desenha as caixas com traço de 2px em background; fill, com fundo background."
         codigo={`<DrawerPerfil estilo="outline" …>…</DrawerPerfil>
 <DrawerPerfil estilo="fill" …>…</DrawerPerfil>`}
-        nota={
-          <>
-            O arquivo tem uma terceira variante, <Chip>outline - roxo</Chip>, para empresa: anel, inicial, tag e
-            gradiente em roxo. Os três roxos (<Chip>#F2E8FF</Chip>, <Chip>#6C12E2</Chip>, <Chip>#8B33FF</Chip>) e o
-            fim do gradiente (<Chip>#EEE0FF</Chip>) <span className="text-foreground">não são variáveis</span> no
-            Figma. Sem token, não entrou — a empresa usa o azul até o arquivo ganhar a cor.
-          </>
-        }
       >
         <div className="flex flex-wrap justify-center gap-4">
           <PerfilDeExemplo estilo="outline" />
           <PerfilDeExemplo estilo="fill" />
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Cores do perfil"
+        spec="tom · 4"
+        descricao="O tom muda o anel e a letra do avatar, o texto da tag de tipo e o brilho do topo. O resto — botões, tags, menu — continua azul. Sem a prop, pessoa sai azul e empresa sai roxo, como no arquivo."
+        codigo={`<DrawerPerfil tipo="pessoa" …/>              {/* azul */}
+<DrawerPerfil tipo="empresa" …/>             {/* roxo */}
+<DrawerPerfil tipo="pessoa" tom="rosa" …/>
+<DrawerPerfil tipo="empresa" tom="laranja" …/>`}
+        nota={
+          <>
+            Os quatro roxos do arquivo (<Chip>#F2E8FF</Chip>, <Chip>#6C12E2</Chip>, <Chip>#8B33FF</Chip>,{" "}
+            <Chip>#EEE0FF</Chip>) são exatamente o azul do sistema com o matiz girado para 266° — mesma saturação, mesma
+            luminosidade. Rosa (330°) e laranja (24°) saem da mesma conta, e o escuro de cada um repete o S/L do azul
+            escuro. Os valores moram em <Chip>[data-tom]</Chip> no <Chip>globals.css</Chip>. Verde e amarelo ficaram de
+            fora: na mesma luminosidade, o texto da tag não se lê sobre branco.
+          </>
+        }
+      >
+        <div className="grid justify-center gap-4 sm:grid-cols-[repeat(2,320px)]">
+          {tons.map((t) => (
+            <div key={t.tom} className="flex flex-col gap-2">
+              <span className="chrome-caption text-subtle-foreground">
+                <span className="font-mono text-foreground">tom=&quot;{t.tom}&quot;</span> · {t.origem}
+              </span>
+              <DrawerPerfil
+                nome={t.nome}
+                tipo={t.tipo}
+                tom={t.tom}
+                rotuloTipo={t.tipo === "pessoa" ? "Pessoa" : "Empresa"}
+                telefone="+55 (11) 98765-4321"
+                email="contato@datacrazy.com"
+                className="rounded-md border"
+                tags={
+                  <>
+                    <Tag>Lista de leads</Tag>
+                    <Tag status="success">Agendado</Tag>
+                  </>
+                }
+              />
+            </div>
+          ))}
         </div>
       </Secao>
 
@@ -240,15 +307,15 @@ export default function DrawerPage() {
       <Secao
         titulo="Camada"
         spec='role="dialog"'
-        descricao="O drawer de verdade: abre pela direita sobre um scrim, prende o foco, fecha no X, no Escape e no clique fora, e devolve o foco ao botão que o abriu."
+        descricao="O drawer de verdade: abre pela direita sobre um scrim, ocupa a altura da tela, prende o foco, fecha no X, no Escape e no clique fora, e devolve o foco ao botão que o abriu."
         codigo={`<Button onClick={() => setAberto(true)}>Abrir lead</Button>
-<Drawer aberto={aberto} aoFechar={() => setAberto(false)} rotulo="Lead Rafael Pinto Pinheiro">
-  <DrawerLead aoFechar={() => setAberto(false)} />
+<Drawer aberto={aberto} aoFechar={() => setAberto(false)} rotulo="Lead Joel Jota">
+  <DrawerLead lead="joel" aoFechar={() => setAberto(false)} />
 </Drawer>`}
         nota={
           <>
             O scrim é <Chip>overlay/scrim</Chip> a 40%. O token existe; a opacidade, não — o arquivo não desenha a
-            camada. Enquanto aberto, a página de trás não rola.
+            camada. Com o seletor de tags aberto, Escape fecha só o seletor.
           </>
         }
       >
@@ -258,8 +325,8 @@ export default function DrawerPage() {
             Abrir lead
           </Button>
         </div>
-        <Drawer aberto={camada} aoFechar={() => setCamada(false)} rotulo="Lead Rafael Pinto Pinheiro">
-          <DrawerLead aoFechar={() => setCamada(false)} className="rounded-none" />
+        <Drawer aberto={camada} aoFechar={() => setCamada(false)} rotulo="Lead Joel Jota">
+          <DrawerLead lead="joel" aoFechar={() => setCamada(false)} className="rounded-none" />
         </Drawer>
       </Secao>
 
@@ -278,12 +345,12 @@ export default function DrawerPage() {
             coluna da direita; o perfil fica parado para a pessoa não perder de vista de quem é o dado.
           </li>
           <li>
-            <span className="text-foreground">Fecha sempre do mesmo jeito.</span> X no canto, Escape e clique no
-            scrim. Edição não salva ao fechar é decisão da tela, não do drawer — e precisa de confirmação.
+            <span className="text-foreground">Tom identifica o tipo, não enfeita.</span> Um tom por tipo de registro,
+            igual em toda a conta. Tom por gosto de cada lead vira ruído.
           </li>
           <li>
-            <span className="text-foreground">Texto vem de fora.</span> Rótulos do menu, títulos e o texto da tag de
-            tipo são props: o componente não escreve português.
+            <span className="text-foreground">Fecha sempre do mesmo jeito.</span> X no canto, Escape e clique no
+            scrim. Edição não salva ao fechar é decisão da tela, não do drawer — e precisa de confirmação.
           </li>
         </ul>
       </Secao>

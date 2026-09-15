@@ -122,7 +122,7 @@ export function Drawer({ aberto, aoFechar, rotulo, children }: DrawerProps) {
         aria-modal="true"
         aria-label={rotulo}
         tabIndex={-1}
-        className="relative flex h-full max-w-full overflow-y-auto focus:outline-none"
+        className="relative flex h-full max-w-full focus:outline-none"
       >
         {children}
       </div>
@@ -131,12 +131,14 @@ export function Drawer({ aberto, aoFechar, rotulo, children }: DrawerProps) {
   );
 }
 
-/** A caixa do drawer. Raio só à esquerda: o lado direito encosta na tela. */
+/** A caixa do drawer. Raio só à esquerda: o lado direito encosta na tela.
+ *  Com altura definida (a tela inteira, na camada), perfil e conteúdo rolam
+ *  cada um por conta própria. */
 export function DrawerPainel({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "flex min-h-full w-[1080px] max-w-full shrink-0 items-stretch overflow-hidden rounded-l-xl border border-border bg-card shadow-xl",
+        "flex h-full w-[1080px] max-w-full shrink-0 items-stretch overflow-hidden rounded-l-xl border border-border bg-card shadow-xl",
         className,
       )}
       {...props}
@@ -172,12 +174,21 @@ export function DrawerBotaoCanto({
 
 /* ----------------------------------------------------------------- Perfil -- */
 
+/** Cor do topo do perfil. Os valores moram em `app/globals.css` (`[data-tom]`). */
+export type TomPerfil = "azul" | "roxo" | "rosa" | "laranja";
+
+/** Rolagem de coluna: barra fina e sem arrastar a página junto no fim. */
+const rolagem = "min-h-0 overflow-y-auto overscroll-contain [scrollbar-width:thin]";
+
 export interface DrawerPerfilProps {
   nome: string;
   telefone?: string;
   email?: string;
   /** Pessoa ou empresa: muda o ícone da tag sobre o avatar. */
   tipo: "pessoa" | "empresa";
+  /** Cor do anel, da inicial, da tag de tipo e do brilho do topo. Padrão:
+   *  `azul` para pessoa e `roxo` para empresa, como o arquivo desenha. */
+  tom?: TomPerfil;
   /** O texto da tag de tipo. Vem de fora (i18n). Ex.: "Pessoa". */
   rotuloTipo: string;
   /** `outline` desenha as caixas com traço; `fill`, com fundo. */
@@ -200,6 +211,7 @@ export function DrawerPerfil({
   telefone,
   email,
   tipo,
+  tom,
   rotuloTipo,
   estilo = "outline",
   tags,
@@ -215,16 +227,18 @@ export function DrawerPerfil({
     <EstiloDoPerfil.Provider value={estilo}>
       <aside
         aria-label={nome}
+        data-tom={tom ?? (tipo === "empresa" ? "roxo" : "azul")}
         className={cn(
           // D14: 20px de recuo com o traço direito por dentro — 19 + 1 aqui.
-          "flex w-[320px] shrink-0 flex-col border-r border-border bg-drawer-perfil py-5 pl-5 pr-[19px]",
+          "flex w-[320px] shrink-0 flex-col border-r border-border bg-drawer-perfil bg-local py-5 pl-5 pr-[19px]",
+          rolagem,
           className,
         )}
       >
-        <div className="relative flex flex-col items-center">
+        <div className="relative flex shrink-0 flex-col items-center">
           <div className="relative flex w-full flex-col items-center gap-4 pt-2">
             <div className="flex flex-col items-center gap-1">
-              <Avatar nome={nome} size="lg" aria-hidden="true" />
+              <Avatar nome={nome} size="lg" aria-hidden="true" className="border-tom-anel text-tom-texto" />
               <h2 className="text-center text-h1 text-foreground">{nome}</h2>
               {telefone ? (
                 <p className="flex items-start justify-center gap-1 text-label-sm text-foreground">
@@ -242,7 +256,7 @@ export function DrawerPerfil({
             {/* A tag de tipo flutua sobre a borda do avatar, na posição exata do
                 arquivo. Nessa instância o fundo é `background` e o recuo é 4px
                 em volta — override do próprio arquivo sobre a Tag. */}
-            <Tag tipo={tipo} className="absolute left-[158px] top-[13px] bg-background p-1">
+            <Tag tipo={tipo} className="absolute left-[158px] top-[13px] bg-background p-1 text-tom-tag">
               {rotuloTipo}
             </Tag>
             {tags ? <div className="flex w-full flex-wrap items-center justify-center gap-1">{tags}</div> : null}
@@ -267,7 +281,7 @@ export function DrawerPerfil({
           ) : null}
         </div>
 
-        {children ? <div className="flex flex-col gap-4 pt-4">{children}</div> : null}
+        {children ? <div className="flex shrink-0 flex-col gap-4 pt-4">{children}</div> : null}
       </aside>
     </EstiloDoPerfil.Provider>
   );
@@ -466,8 +480,11 @@ export function DrawerConteudo({
 }) {
   const id = React.useId().replace(/:/g, "");
   return (
-    <section aria-labelledby={`titulo-${id}`} className={cn("flex min-w-0 flex-1 flex-col gap-4 bg-card py-5", className)}>
-      <div className="flex flex-col gap-5">
+    <section
+      aria-labelledby={`titulo-${id}`}
+      className={cn("flex min-w-0 flex-1 flex-col gap-4 bg-card py-5", rolagem, className)}
+    >
+      <div className="flex shrink-0 flex-col gap-5">
         <div className="flex items-center justify-between gap-4 px-5">
           <div className="flex min-w-0 items-center gap-3">
             {antesDoTitulo}
@@ -482,7 +499,7 @@ export function DrawerConteudo({
         </div>
         <div aria-hidden="true" className="h-px w-full bg-border" />
       </div>
-      {children ? <div className="flex flex-col gap-4 px-5">{children}</div> : null}
+      {children ? <div className="flex shrink-0 flex-col gap-4 px-5">{children}</div> : null}
     </section>
   );
 }

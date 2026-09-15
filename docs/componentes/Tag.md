@@ -12,7 +12,8 @@ Mostrar uma etiqueta que o usuário pôs no lead.
 ## Par no Figma
 
 Node: `538:197` ("Tag", canvas do Drawer) · Lote: `3` · Oito temas: Text,
-Status, theme8, Status 2, Atendente, Empresa, Pessoa, Adicionar.
+Status, theme8, Status 2, Atendente, Empresa, Pessoa, Adicionar. O painel do
+seletor parte do Select Menu `544:122` e do Select Item `544:99`.
 
 Diff de pixels **não medido** (`figma-console` fora do ar).
 
@@ -31,6 +32,16 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 
 `rotulo` (obrigatório) e os atributos de `<button>`.
 
+### `SeletorTags`
+
+| Prop | Tipo | Obrigatória | Descrição |
+|------|------|-------------|-----------|
+| `grupos` | `GrupoTags[]` | sim | Uma aba por grupo: `id`, `rotulo`, `tags`. |
+| `selecionadas` | `string[]` | sim | Ids das tags do lead. |
+| `aoAlternar` | `(tag) => void` | sim | Põe ou tira a tag. |
+| `aoCriar` | `(rotulo, grupoId) => void` | não | Sem ela, a busca só filtra. |
+| `rotulos` | `{ gatilho, busca, vazio, criar }` | sim | Textos (i18n). `criar` recebe texto e aba. |
+
 ## Variantes
 
 | Arquivo | Código |
@@ -46,8 +57,10 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| hover | `bg-primary-hover no TagAdicionar` | banco | I1 |
+| hover | `bg-primary-hover no TagAdicionar; bg-overlay-item-hover no item do seletor` | figma | Select Item 544:99 |
 | focus | `outline outline-2 outline-offset-2 outline-ring` | banco | I4 |
+| selecionada | `bg-overlay-item-selected + Check overlay-item-text-selected` | figma | Select Item 544:99 |
+| aberto | `painel em portal fixo + foco na busca + Escape so no painel` | humano | Select (lista aberta) |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -59,13 +72,15 @@ A `Tag` é leitura. Só o `TagAdicionar` é interativo.
 
 `input/bg-disabled` · `foreground` · `primary` · `primary-hover` ·
 `destructive` · `info` · `success` · `background` · `radius/full` ·
-`text/label-sm` · `shadow-button-inner`
+`text/label-sm` · `shadow-button-inner` · no seletor: `overlay/bg` ·
+`overlay/border` · `overlay/item-hover` · `overlay/item-selected` ·
+`overlay/item-text-selected` · `elevation/lg` · `radius/lg` · `text/body-md`
 
 ## Composição
 
-Usa: Phosphor (`User`, `Buildings`, `Plus`) ·
-Usado por: [Drawer](Drawer.md) (perfil, tabela de negócios, nó da hierarquia) ·
-página do Badge
+Usa: [Tabs](Tabs.md) e a caixa do [Input](Input.md) no seletor · Phosphor
+(`User`, `Buildings`, `Plus`, `Check`, `MagnifyingGlass`) ·
+Usado por: [Drawer](Drawer.md) (perfil, tabela de negócios, nó da hierarquia)
 
 ## Exemplo de uso
 
@@ -85,6 +100,8 @@ página do Badge
 | Cor | A bolinha é `aria-hidden`: o sentido está no texto, não na cor |
 | Caixa alta | `uppercase` no CSS — o leitor de tela lê a string original |
 | Adicionar | `<button>` com `aria-label` e `title` (regra E7) |
+| Seletor | Painel `role="dialog"`; abas do `Tabs`; busca `role="combobox"` com `aria-activedescendant` numa `listbox` multisseleção |
+| Teclado | Setas andam na lista, Enter põe/tira ou cria, Escape fecha só o painel e devolve o foco ao + |
 | Alvo de toque | `TagAdicionar` tem 22px — **abaixo dos 44 da regra I15** |
 
 ## Divergências abertas (para o gate)
@@ -95,5 +112,10 @@ página do Badge
 2. **Ícone do "+" em `background`.** O SVG vem em `#EBEDEF`. No escuro,
    `background` é quase preto sobre o azul claro — confere com o
    `primary-foreground` escuro, mas não é o mesmo token.
-3. **Empresa roxa.** Na variante roxa do perfil a tag de empresa é `#8B33FF`,
-   sem variável. Não entrou (ver [Drawer](Drawer.md)).
+3. **Empresa roxa.** No perfil, a cor da tag de tipo vem do tom
+   (`--tom-tag`) — ver [Drawer](Drawer.md). A Tag solta segue em `primary`.
+4. **Abas e busca do seletor não estão no arquivo.** Pedido do humano
+   (2026-09-15), montado com a Tab (535:21) e a caixa do Input sobre o Select
+   Menu. A contagem por aba vai no rótulo da aba.
+5. **Painel em portal com posição fixa.** Necessário porque o perfil do drawer
+   rola; o painel vira para cima quando não cabe embaixo.

@@ -1,7 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { Buildings, Plus, User } from "@phosphor-icons/react";
+import { createPortal } from "react-dom";
+import { Buildings, Check, MagnifyingGlass, Plus, User } from "@phosphor-icons/react";
+import { caixaDeCampo } from "@/components/ui/input";
+import { Tabs } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 /**
@@ -10,11 +13,8 @@ import { cn } from "@/lib/utils";
  * O arquivo desenha oito "temas" num eixo só; aqui eles viram três props que
  * se combinam: `status` (bolinha de 6px), `tipo` (pessoa ou empresa, com
  * ícone) e `foto` (atendente). Sem nenhuma, é a tag de texto. O de adicionar é
- * um botão — clicável não é tag — e mora em `TagAdicionar`.
- *
- * Diferente do `Badge`: pílula cheia, caixa alta e fundo `input/bg-disabled`.
- * O Badge é o rótulo de estado da tabela; a Tag é a etiqueta que o usuário põe
- * no lead.
+ * um botão — clicável não é tag — e mora em `TagAdicionar`; com a lista de
+ * tags para escolher, em `SeletorTags`.
  */
 
 const pontos = {
@@ -62,9 +62,10 @@ export interface TagAdicionarProps extends React.ButtonHTMLAttributes<HTMLButton
 }
 
 /** O "+" do fim da fileira de tags. É botão, então tem foco e rótulo. */
-export function TagAdicionar({ rotulo, className, ...props }: TagAdicionarProps) {
-  return (
+export const TagAdicionar = React.forwardRef<HTMLButtonElement, TagAdicionarProps>(
+  ({ rotulo, className, ...props }, ref) => (
     <button
+      ref={ref}
       type="button"
       aria-label={rotulo}
       title={rotulo}
@@ -77,5 +78,272 @@ export function TagAdicionar({ rotulo, className, ...props }: TagAdicionarProps)
     >
       <Plus size={14} weight="regular" aria-hidden="true" />
     </button>
+  ),
+);
+TagAdicionar.displayName = "TagAdicionar";
+
+/* ------------------------------------------------------------ Seletor -- */
+
+export type OpcaoTag = { id: string; rotulo: string; status?: TagProps["status"]; foto?: string };
+export type GrupoTags = { id: string; rotulo: string; tags: OpcaoTag[] };
+
+export interface SeletorTagsProps {
+  /** Um grupo por aba. Ex.: Status, Listas, Atendentes. */
+  grupos: GrupoTags[];
+  /** Ids das tags que o lead tem. */
+  selecionadas: string[];
+  /** Clique numa tag da lista: põe ou tira. */
+  aoAlternar: (tag: OpcaoTag) => void;
+  /** Sem esta prop, a busca só filtra — não oferece criar. */
+  aoCriar?: (rotulo: string, grupoId: string) => void;
+  rotulos: {
+    /** Nome do botão "+" e do painel. Ex.: "Adicionar tag". */
+    gatilho: string;
+    /** Placeholder e rótulo da busca. Ex.: "Buscar ou criar tag". */
+    busca: string;
+    /** Aba sem resultado. Ex.: "Nenhuma tag nesta aba". */
+    vazio: string;
+    /** A opção de criar. Ex.: (t, g) => `Criar "${t}" em ${g}`. */
+    criar: (texto: string, grupo: string) => string;
+  };
+  className?: string;
+}
+
+// 360: cabem quatro abas com a contagem (356px medidos) sem a fileira rolar.
+const LARGURA = 360;
+/** Altura aproximada do painel aberto: decide se ele abre para cima. */
+const ALTURA = 360;
+
+/**
+ * SeletorTags — o "+" que abre a lista de tags do lead.
+ *
+ * O painel parte do Select Menu do Figma (544:122): superfície `overlay/bg`,
+ * traço `overlay/border`, `elevation/lg`, recuo 6 e item com check à direita
+ * quando escolhido. Por cima dele, a pedido do humano (2026-09-15): abas por
+ * tipo de tag — a Tab do canvas do drawer (535:21) — e uma busca que também
+ * cria a tag quando o texto não existe.
+ *
+ * Abre num portal com posição fixa, porque o perfil do drawer rola e cortaria
+ * um painel absoluto. Escape fecha só o painel (não o drawer por trás) e
+ * devolve o foco ao "+".
+ */
+export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos, className }: SeletorTagsProps) {
+  const [aberto, setAberto] = React.useState(false);
+  const [aba, setAba] = React.useState(grupos[0]?.id ?? "");
+  const [busca, setBusca] = React.useState("");
+  const [ativo, setAtivo] = React.useState(0);
+  const [pos, setPos] = React.useState<{ top?: number; bottom?: number; left: number } | null>(null);
+  const gatilho = React.useRef<HTMLButtonElement>(null);
+  const painel = React.useRef<HTMLDivElement>(null);
+  const campo = React.useRef<HTMLInputElement>(null);
+  const id = React.useId().replace(/:/g, "");
+  // Base de ids das abas: o `Tabs` monta `${base}-aba-x` e aponta para `${base}-painel-x`.
+  const base = `tags-${id}`;
+
+  const grupo = grupos.find((g) => g.id === aba) ?? grupos[0];
+  const termo = busca.trim();
+  const minusculo = termo.toLocaleLowerCase("pt-BR");
+  const filtradas = (grupo?.tags ?? []).filter((t) => t.rotulo.toLocaleLowerCase("pt-BR").includes(minusculo));
+  const existe = grupos.some((g) => g.tags.some((t) => t.rotulo.toLocaleLowerCase("pt-BR") === minusculo));
+  const podeCriar = Boolean(aoCriar && grupo && termo && !existe);
+  const total = filtradas.length + (podeCriar ? 1 : 0);
+
+  const posicionar = React.useCallback(() => {
+    const r = gatilho.current?.getBoundingClientRect();
+    if (!r) return;
+    const left = Math.min(Math.max(8, r.left + r.width / 2 - LARGURA / 2), window.innerWidth - LARGURA - 8);
+    const abaixo = window.innerHeight - r.bottom;
+    setPos(abaixo < ALTURA && r.top > abaixo ? { bottom: window.innerHeight - r.top + 6, left } : { top: r.bottom + 6, left });
+  }, []);
+
+  function abrir() {
+    posicionar();
+    setBusca("");
+    setAtivo(0);
+    setAberto(true);
+  }
+
+  function fechar(devolverFoco = true) {
+    setAberto(false);
+    if (devolverFoco) gatilho.current?.focus();
+  }
+
+  React.useEffect(() => {
+    if (!aberto) return;
+    campo.current?.focus();
+    const fora = (e: MouseEvent) => {
+      const alvo = e.target as Node;
+      if (!painel.current?.contains(alvo) && !gatilho.current?.contains(alvo)) setAberto(false);
+    };
+    document.addEventListener("mousedown", fora);
+    window.addEventListener("resize", posicionar);
+    window.addEventListener("scroll", posicionar, true);
+    return () => {
+      document.removeEventListener("mousedown", fora);
+      window.removeEventListener("resize", posicionar);
+      window.removeEventListener("scroll", posicionar, true);
+    };
+  }, [aberto, posicionar]);
+
+  function mudarAba(novo: string) {
+    setAba(novo);
+    setAtivo(0);
+  }
+
+  function escolher(i: number) {
+    if (i < filtradas.length) {
+      aoAlternar(filtradas[i]);
+    } else if (podeCriar && grupo) {
+      aoCriar?.(termo, grupo.id);
+      setBusca("");
+      setAtivo(0);
+    }
+  }
+
+  function teclado(e: React.KeyboardEvent) {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      // o drawer também escuta Escape no document: aqui ele fecha só o painel
+      e.stopPropagation();
+      e.nativeEvent.stopImmediatePropagation();
+      fechar();
+    } else if (e.key === "ArrowDown" && total) {
+      e.preventDefault();
+      setAtivo((a) => (a + 1) % total);
+    } else if (e.key === "ArrowUp" && total) {
+      e.preventDefault();
+      setAtivo((a) => (a - 1 + total) % total);
+    } else if (e.key === "Enter" && e.target === campo.current && total) {
+      e.preventDefault();
+      escolher(ativo);
+    }
+  }
+
+  const idLista = grupo ? `${base}-painel-${grupo.id}` : undefined;
+
+  return (
+    <>
+      <TagAdicionar
+        ref={gatilho}
+        rotulo={rotulos.gatilho}
+        aria-haspopup="dialog"
+        aria-expanded={aberto}
+        aria-controls={aberto ? `seletor-${id}` : undefined}
+        onClick={() => (aberto ? fechar(false) : abrir())}
+        className={className}
+      />
+      {aberto && pos
+        ? createPortal(
+            <div
+              ref={painel}
+              id={`seletor-${id}`}
+              role="dialog"
+              aria-label={rotulos.gatilho}
+              onKeyDown={teclado}
+              style={{ top: pos.top, bottom: pos.bottom, left: pos.left, width: LARGURA }}
+              className="fixed z-popover flex flex-col overflow-hidden rounded-lg border border-overlay-border bg-overlay-bg shadow-lg"
+            >
+              {/* As abas são o `Tabs` do DS (Tab 535:21). Quantas tags do lead há em
+                  cada aba vai no rótulo, para a pessoa saber onde procurar. */}
+              <Tabs
+                id={base}
+                rotulo={rotulos.gatilho}
+                atual={grupo?.id ?? ""}
+                aoEscolher={mudarAba}
+                itens={grupos.map((g) => {
+                  const quantas = g.tags.filter((t) => selecionadas.includes(t.id)).length;
+                  return { valor: g.id, rotulo: quantas ? `${g.rotulo} · ${quantas}` : g.rotulo };
+                })}
+                className="border-b border-border px-3"
+              />
+
+              <div className="p-1.5">
+                <label htmlFor={`busca-${id}`} className="sr-only">
+                  {rotulos.busca}
+                </label>
+                <div className={caixaDeCampo()}>
+                  <MagnifyingGlass size={16} weight="regular" aria-hidden="true" className="shrink-0 text-input-placeholder" />
+                  <input
+                    ref={campo}
+                    id={`busca-${id}`}
+                    role="combobox"
+                    aria-expanded="true"
+                    aria-controls={idLista}
+                    aria-autocomplete="list"
+                    aria-activedescendant={total ? `opcao-${id}-${ativo}` : undefined}
+                    autoComplete="off"
+                    value={busca}
+                    onChange={(e) => {
+                      setBusca(e.target.value);
+                      setAtivo(0);
+                    }}
+                    placeholder={rotulos.busca}
+                    className="h-full min-w-0 flex-1 bg-transparent text-body-md text-input-text outline-none placeholder:text-input-placeholder"
+                  />
+                </div>
+              </div>
+
+              <div
+                id={idLista}
+                role="listbox"
+                aria-multiselectable="true"
+                aria-labelledby={grupo ? `${base}-aba-${grupo.id}` : undefined}
+                className="flex max-h-60 flex-col gap-0.5 overflow-y-auto overscroll-contain px-1.5 pb-1.5 [scrollbar-width:thin]"
+              >
+                {filtradas.map((t, i) => {
+                  const escolhida = selecionadas.includes(t.id);
+                  const emFoco = i === ativo;
+                  return (
+                    <div
+                      key={t.id}
+                      id={`opcao-${id}-${i}`}
+                      role="option"
+                      aria-selected={escolhida}
+                      onMouseEnter={() => setAtivo(i)}
+                      // o foco fica na busca: clicar não tira o cursor de lá
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => escolher(i)}
+                      className={cn(
+                        "flex cursor-pointer items-center justify-between gap-2 rounded-md px-3 py-1.5 transition-colors",
+                        escolhida ? "bg-overlay-item-selected" : emFoco && "bg-overlay-item-hover",
+                        // escolhida E sob o teclado: o fundo já é o de selecionada, então o foco ganha traço
+                        escolhida && emFoco && "ring-1 ring-inset ring-ring",
+                      )}
+                    >
+                      <Tag status={t.status} foto={t.foto}>
+                        {t.rotulo}
+                      </Tag>
+                      {escolhida ? (
+                        <Check size={16} weight="regular" aria-hidden="true" className="shrink-0 text-overlay-item-text-selected" />
+                      ) : null}
+                    </div>
+                  );
+                })}
+
+                {podeCriar && grupo ? (
+                  <div
+                    id={`opcao-${id}-${filtradas.length}`}
+                    role="option"
+                    aria-selected={false}
+                    onMouseEnter={() => setAtivo(filtradas.length)}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => escolher(filtradas.length)}
+                    className={cn(
+                      "flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-body-md text-overlay-item-text-selected transition-colors",
+                      ativo === filtradas.length && "bg-overlay-item-hover",
+                    )}
+                  >
+                    <Plus size={16} weight="regular" aria-hidden="true" className="shrink-0" />
+                    <span className="min-w-0 truncate">{rotulos.criar(termo, grupo.rotulo)}</span>
+                  </div>
+                ) : null}
+
+                {total === 0 ? <p className="px-3 py-2 text-body-md text-muted-foreground">{rotulos.vazio}</p> : null}
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
   );
 }

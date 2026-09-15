@@ -38,7 +38,7 @@ export default function ToastPage() {
   return (
     <PaginaDS
       titulo="Toast"
-      descricao="Cartão de 380px com recuo de 16, raio de 6px e elevation/lg. Quatro estados, e cada um põe a cor em três lugares: a barra de 3px, o glifo de 16 e o círculo de 28 atrás dele, a 12%. Some sozinho em 5 segundos, e o relógio para enquanto o cursor ou o foco estão em cima."
+      descricao="Cartão de 380px com recuo de 16, raio de 6px e elevation/lg. Quatro estados, e cada um põe a cor em três lugares: a barra de 3px, o glifo de 16 e o círculo de 28 atrás dele, a 12%. Entra dissolvendo, sai deslizando para a direita e some sozinho em 8 segundos — o relógio para enquanto o cursor ou o foco estão em cima."
       secoes={["Como funciona", "Variantes", "Na fila"]}
     >
       <Toaster />
@@ -56,6 +56,13 @@ export default function ToastPage() {
           <span className="text-foreground">nunca preenche o cartão</span> — entra na barra, no glifo e num círculo
           de 12%, a mesma regra do Badge. Os 12% não estão no arquivo como variável: foram medidos no pixel, e as
           quatro variantes do claro fecham no mesmo valor.
+        </p>
+        <p>
+          O movimento tem dois tempos em cada ponta. Na entrada, o espaço abre em 200ms e o cartão dissolve em 250ms.
+          Na saída, o cartão desliza para a direita em 200ms e <span className="text-foreground">só depois</span> o vão
+          fecha, em mais 200ms — junto, a pilha andaria por baixo de um cartão ainda visível. A altura anima por{" "}
+          <Chip>grid-template-rows</Chip>, sem medir o cartão. Com <Chip>prefers-reduced-motion</Chip> ligado no
+          sistema, nada anima: o toast aparece e some na hora.
         </p>
         <p>
           O traço do cartão é desenhado por cima, não com <Chip>border</Chip>. No arquivo ele não ocupa espaço — o

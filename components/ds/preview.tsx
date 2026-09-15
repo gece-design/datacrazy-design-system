@@ -15,7 +15,9 @@ export { slug };
 /** Trecho de código no meio do texto. */
 export function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <code className="rounded bg-background px-1.5 py-0.5 font-mono chrome-chip text-foreground">
+    // Fora da caixa o chip é `background` sobre a página branca; dentro da
+    // caixa de preview, que já é `background`, ele inverte para `card`.
+    <code className="rounded bg-background px-1.5 py-0.5 font-mono chrome-chip text-foreground [[data-caixa]_&]:bg-card">
       {children}
     </code>
   );
@@ -97,8 +99,11 @@ export function Secao({
         <Codigo codigo={codigo!} lang={lang} className="mt-4" />
       ) : (
         <>
-          {/* a caixa é só o componente — anotação vai em `nota`, por baixo */}
-          <div className={cn("mt-4 rounded-2xl border border-border bg-card", !semCaixa && "p-4 sm:p-6 lg:p-8", className)}>
+          {/* a caixa é só o componente — anotação vai em `nota`, por baixo.
+              Fundo `background`, não `card`: é a superfície sobre a qual o
+              componente vive no produto. Em `card` a caixa se funde com a
+              página e controles claros (checkbox, switch, tag) somem. */}
+          <div data-caixa className={cn("mt-4 rounded-2xl border border-border bg-background", !semCaixa && "p-4 sm:p-6 lg:p-8", className)}>
             {children}
           </div>
           {nota && <div className="mt-3 chrome-meta text-subtle-foreground">{nota}</div>}

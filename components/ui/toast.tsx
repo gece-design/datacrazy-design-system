@@ -129,13 +129,23 @@ type ItemDaFila = {
   titulo: string;
   descricao?: string;
   duracao: number;
+  /** Já foi fechado e está animando a saída. Sai da fila quando ela termina. */
+  saindo?: boolean;
 };
 
-export type NovoToast = Omit<ItemDaFila, "id" | "duracao" | "variant"> & {
+export type NovoToast = Omit<ItemDaFila, "id" | "duracao" | "variant" | "saindo"> & {
   variant?: ToastVariant;
   /** Milissegundos na tela. Pausa enquanto o cursor ou o foco estão nele. */
   duracao?: number;
 };
+
+// Saída em dois tempos: o cartão desliza para a direita e, só depois, o vão
+// que ele deixou fecha. Os dois juntos fariam a pilha andar por baixo de um
+// cartão que ainda está visível. Motion não tem token (pendência 4 de
+// docs/02-design-system.md): os tempos ficam nomeados aqui e batem com as
+// classes `duration-200` e `delay-200` do `ItemDoToaster`.
+const SAIDA_MS = 200;
+const COLAPSO_MS = 200;
 
 let fila: ItemDaFila[] = [];
 let proximoId = 0;
@@ -151,8 +161,19 @@ function assinar(o: () => void) {
   return () => ouvintes.delete(o);
 }
 
+function remover(id: number) {
+  fila = fila.filter((t) => t.id !== id);
+  avisar();
+}
+
+// Quem pediu menos movimento ao sistema não espera animação nenhuma: o toast
+// some na hora (regra I12).
+function semMovimento() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 /** Mostra um toast. Devolve o id, para fechar antes do tempo com `fecharToast`. */
-export function toast({ variant = "success", duracao = 5000, ...resto }: NovoToast) {
+export function toast({ variant = "success", duracao = 8000, ...resto }: NovoToast) {
   const id = ++proximoId;
   fila = [...fila, { id, variant, duracao, ...resto }];
   avisar();
@@ -160,8 +181,12 @@ export function toast({ variant = "success", duracao = 5000, ...resto }: NovoToa
 }
 
 export function fecharToast(id: number) {
-  fila = fila.filter((t) => t.id !== id);
+  const item = fila.find((t) => t.id === id);
+  if (!item || item.saindo) return;
+  if (semMovimento()) return remover(id);
+  fila = fila.map((t) => (t.id === id ? { ...t, saindo: true } : t));
   avisar();
+  setTimeout(() => remover(id), SAIDA_MS + COLAPSO_MS);
 }
 
 export interface ToasterProps {
@@ -178,10 +203,15 @@ export function Toaster({ maximo = 3, rotulo = "Notificações", rotuloFechar }:
   const [montado, setMontado] = React.useState(false);
   React.useEffect(() => setMontado(true), []);
 
-  // Passou do máximo, o mais antigo sai da fila de vez. Só esconder não serve:
-  // escondido ele não tem relógio, e voltaria à tela quando os outros saíssem.
-  React.useEffect(() => {
-    itens.slice(0, -maximo).forEach((t) => fecharToast(t.id));
+  // Passou do máximo, o mais antigo sai da fila de vez — com a mesma animação
+  // de quem é fechado. Só esconder não serve: escondido ele não tem relógio, e
+  // voltaria à tela quando os outros saíssem. Antes de pintar, para o quarto
+  // nunca aparecer por um quadro.
+  React.useLayoutEffect(() => {
+    itens
+      .filter((t) => !t.saindo)
+      .slice(0, -maximo)
+      .forEach((t) => fecharToast(t.id));
   }, [itens, maximo]);
 
   // Portal para o body: `fixed` dentro de um ancestral com transform deixa de
@@ -193,7 +223,7 @@ export function Toaster({ maximo = 3, rotulo = "Notificações", rotuloFechar }:
         aria-live="polite"
         className="fixed bottom-4 right-4 z-toast flex w-[380px] max-w-[calc(100vw-2rem)] flex-col gap-2"
       >
-        {itens.slice(-maximo).map((item) => (
+        {itens.map((item) => (
           <ItemDoToaster key={item.id} item={item} rotuloFechar={rotuloFechar} />
         ))}
       </ol>
@@ -209,14 +239,14 @@ function ItemDoToaster({ item, rotuloFechar }: { item: ItemDaFila; rotuloFechar?
   // O relógio só anda sem cursor e sem foco em cima. Quem está lendo ou indo
   // até o X não perde a mensagem no meio do caminho.
   React.useEffect(() => {
-    if (pausado) return;
+    if (pausado || item.saindo) return;
     const inicio = Date.now();
     const t = setTimeout(() => fecharToast(item.id), restante.current);
     return () => {
       clearTimeout(t);
       restante.current -= Date.now() - inicio;
     };
-  }, [pausado, item.id]);
+  }, [pausado, item.id, item.saindo]);
 
   return (
     <li
@@ -226,15 +256,31 @@ function ItemDoToaster({ item, rotuloFechar }: { item: ItemDaFila; rotuloFechar?
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node)) setPausado(false);
       }}
+      className={cn(
+        // A altura anda por `grid-template-rows` (0fr ↔ 1fr): é o jeito de
+        // animar "abrir espaço" sem medir o cartão. A margem negativa leva junto
+        // os 8px do gap do container, que senão pulariam no fim.
+        "grid grid-rows-[1fr] motion-safe:animate-toast-open",
+        "motion-safe:transition-[grid-template-rows,margin-top] motion-safe:delay-200 motion-safe:duration-200 motion-safe:ease-out",
+        item.saindo && "pointer-events-none -mt-2 grid-rows-[0fr]",
+      )}
     >
-      <Toast
-        variant={item.variant}
-        titulo={item.titulo}
-        descricao={item.descricao}
-        aoFechar={() => fecharToast(item.id)}
-        rotuloFechar={rotuloFechar}
-        className="w-full"
-      />
+      <div className="min-h-0">
+        <Toast
+          variant={item.variant}
+          titulo={item.titulo}
+          descricao={item.descricao}
+          aoFechar={() => fecharToast(item.id)}
+          rotuloFechar={rotuloFechar}
+          className={cn(
+            "w-full motion-safe:animate-fade-in",
+            // Sai pela direita, por onde fica a borda da tela: 100% da largura
+            // mais os 16px do recuo do container, para sumir inteiro.
+            "motion-safe:transition-[transform,opacity] motion-safe:duration-200 motion-safe:ease-in",
+            item.saindo && "translate-x-[calc(100%+1rem)] opacity-0",
+          )}
+        />
+      </div>
     </li>
   );
 }

@@ -75,11 +75,6 @@
     --avatar-md-fundo: var(--accent);
     --avatar-md-anel: var(--card);
 
-    /* brilho do topo do perfil no drawer. O arquivo liga o gradiente a
-       `base/blue/100`, primitivo sem modo: no Escuro viraria faixa clara. O
-       valor escuro (`accent`) é DERIVADO, não desenhado — ver Drawer.md. */
-    --drawer-perfil-brilho: var(--blue-100);
-
     /* formulário — coleção "Cor" do Figma. Os onze são alias exato de um
        token semântico que já existe, nos DOIS modos: por isso vivem só aqui.
        O `var()` acompanha o tema sem uma linha no `.dark`. */
@@ -152,7 +147,61 @@
 
     --avatar-md-fundo: var(--card);
     --avatar-md-anel: var(--accent);
-    --drawer-perfil-brilho: var(--accent);
+  }
+
+  /* Tom do perfil no Drawer — anel e letra do avatar, texto da tag de tipo e
+     brilho do topo. `azul` é o do arquivo (565:6447) e aponta para tokens.
+     `roxo` é a variante "outline - roxo" (565:8651): os quatro hex do arquivo
+     são o azul com o matiz girado para 266°, mesma saturação e luminosidade.
+     `rosa` (330°) e `laranja` (24°) seguem a mesma regra, por pedido do
+     humano (2026-09-15). No Escuro, os quatro repetem o S/L do azul escuro:
+     anel e brilho no L de `accent`, letra no de `blue-300`, tag no de
+     `primary`. O brilho escuro do azul (`accent`) é derivado — ver Drawer.md. */
+  [data-tom] {
+    --tom-anel: var(--accent);
+    --tom-texto: var(--blue-600);
+    --tom-tag: var(--primary);
+    --tom-brilho: var(--blue-100);
+  }
+  .dark [data-tom] {
+    --tom-texto: var(--blue-300);
+    --tom-brilho: var(--accent);
+  }
+  [data-tom="roxo"] {
+    --tom-anel: 266 100% 95.5%;
+    --tom-texto: 266 85.2% 47.8%;
+    --tom-tag: 266 100% 60%;
+    --tom-brilho: 266 100% 93.9%;
+  }
+  [data-tom="rosa"] {
+    --tom-anel: 330 100% 95.5%;
+    --tom-texto: 330 85.2% 47.8%;
+    --tom-tag: 330 100% 60%;
+    --tom-brilho: 330 100% 93.9%;
+  }
+  [data-tom="laranja"] {
+    --tom-anel: 24 100% 95.5%;
+    --tom-texto: 24 85.2% 47.8%;
+    --tom-tag: 24 100% 60%;
+    --tom-brilho: 24 100% 93.9%;
+  }
+  .dark [data-tom="roxo"] {
+    --tom-anel: 266 27.1% 18.8%;
+    --tom-texto: 266 100% 75.1%;
+    --tom-tag: 266 100% 67.5%;
+    --tom-brilho: 266 27.1% 18.8%;
+  }
+  .dark [data-tom="rosa"] {
+    --tom-anel: 330 27.1% 18.8%;
+    --tom-texto: 330 100% 75.1%;
+    --tom-tag: 330 100% 67.5%;
+    --tom-brilho: 330 27.1% 18.8%;
+  }
+  .dark [data-tom="laranja"] {
+    --tom-anel: 24 27.1% 18.8%;
+    --tom-texto: 24 100% 75.1%;
+    --tom-tag: 24 100% 67.5%;
+    --tom-brilho: 24 27.1% 18.8%;
   }
 
   * {

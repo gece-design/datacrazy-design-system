@@ -88,7 +88,9 @@ export default function AvatarPage() {
           </>
         }
       >
-        <div className="flex flex-wrap items-center justify-around gap-8 py-4">
+        {/* Os três contextos são superfície `card` no produto — o anel do
+            avatar e a pílula da tag só existem contra ela. */}
+        <div className="flex flex-wrap items-center justify-around gap-8 rounded-md bg-card p-5">
           <div className="flex items-center gap-2">
             <Avatar nome="Jojota Podcast LTDA." size="md" aria-hidden="true" />
             <p className="text-label-lg text-foreground">Jojota Podcast LTDA.</p>

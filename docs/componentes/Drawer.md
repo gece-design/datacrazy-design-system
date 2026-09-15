@@ -43,6 +43,7 @@ conteúdo da coluna direita.
 | `rotuloTipo` | `string` | sim | Texto dessa tag (i18n). |
 | `telefone`, `email` | `string` | não | Linhas sob o nome. |
 | `estilo` | `"outline" \| "fill"` | não | Padrão `outline`. Desce por contexto aos blocos. |
+| `tom` | `"azul" \| "roxo" \| "rosa" \| "laranja"` | não | Anel e letra do avatar, tag de tipo e brilho. Padrão: azul para pessoa, roxo para empresa. |
 | `tags`, `acoes` | `ReactNode` | não | Fileira de tags e os dois botões. |
 | `aoFechar`, `aoRecolher` | `() => void` | não | Sem eles, o botão do canto não aparece. |
 
@@ -62,6 +63,10 @@ conteúdo da coluna direita.
 |----------|-------------|
 | `estilo="outline"` | Padrão. Caixas com traço de 2px em `background`. |
 | `estilo="fill"` | Caixas com fundo `background`, sem traço. |
+| `tom` | Azul e roxo são do arquivo; rosa e laranja giram o matiz do azul (330° e 24°). |
+
+Com altura definida (a tela inteira, na camada), perfil e conteúdo **rolam
+cada um por conta própria**.
 
 ## Estados
 
@@ -82,14 +87,14 @@ decisão, não buraco a preencher.
 
 `card` · `background` · `border` · `foreground` · `muted-foreground` ·
 `accent` · `primary` · `nav/item/*` · `overlay/scrim` ·
-`--drawer-perfil-brilho` · `base/blue/200` · `radius/xl` · `radius/lg` ·
+`--tom-anel` · `--tom-texto` · `--tom-tag` · `--tom-brilho` · `base/blue/200` · `radius/xl` · `radius/lg` ·
 `radius/md` · `radius/sm` · `shadow-xl` · `text/heading-1` · `text/heading-4` ·
 `text/metric` · `text/label-lg` · `text/label-sm` · `text/body-sm` ·
 `text/caption`
 
 ## Composição
 
-Usa: [Avatar](Avatar.md) · [Tag](Tag.md) · [Input](Input.md) ·
+Usa: [Avatar](Avatar.md) · [Tag](Tag.md) (com `SeletorTags`) · [Input](Input.md) ·
 [Select](Select.md) · [DataTable](DataTable.md) (layout compacto) · `Button`
 (`soft` e `outline`) · Phosphor ·
 Usado por: tela de leads (ainda não construída)
@@ -125,9 +130,10 @@ Usado por: tela de leads (ainda não construída)
 
 ## Divergências abertas (para o gate)
 
-1. **Perfil roxo não entrou.** A variante "outline - roxo" (empresa) usa quatro
-   roxos sem variável no Figma (`#F2E8FF`, `#6C12E2`, `#8B33FF`, `#EEE0FF`).
-   Sem token, empresa sai no azul.
+1. **Tons do perfil sem variável no Figma.** Os quatro roxos do arquivo
+   (`#F2E8FF`, `#6C12E2`, `#8B33FF`, `#EEE0FF`) são o azul do sistema com o
+   matiz em 266°. Entraram como `[data-tom]` no CSS por decisão do humano
+   (2026-09-15), com rosa e laranja pela mesma conta. Os escuros são derivados.
 2. **Brilho do topo no escuro é derivado.** O gradiente vai a
    `base/blue/100`, primitivo sem modo; no escuro aponta para `accent`.
 3. **A camada não está no arquivo.** Scrim a 40%, foco preso e Escape são

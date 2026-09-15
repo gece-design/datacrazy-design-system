@@ -68,6 +68,13 @@ A explicação tem dois lugares, os dois fora da caixa:
 - **acima**, na `descricao` da seção — a frase que prepara o que se vai ver
 - **abaixo**, na prop `nota` — o detalhe que só faz sentido depois de ver
 
+**O fundo da caixa é `background`**, o mesmo do produto, e é padrão do `Secao`
+— nenhuma página precisa pedir. Em `card` a caixa se fundia com a página branca
+e controles claros (checkbox, switch) sumiam. Componente que no produto mora
+sobre `card` (Tag, Pagination, contextos do drawer) entra num bloco
+`rounded-md bg-card p-5` dentro da caixa. Chip de código dentro da caixa inverte
+para `card` sozinho.
+
 Por quê: quem abre a página quer ver o componente como ele é. Anotação dentro do
 preview transforma a demonstração em diagrama, e o leitor deixa de conseguir
 julgar se aquilo é bonito, denso ou legível — que é exatamente o que ele veio

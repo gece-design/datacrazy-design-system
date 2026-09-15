@@ -32,6 +32,12 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 
 `icone` e `rotulo` (obrigatório — é botão só de ícone).
 
+### `AcaoCopiar`
+
+`rotulo` e `rotuloCopiado`. Copia o valor atual do próprio campo (lido pelo
+contexto do Input) e vira um check em `success` por 1,5s, anunciado por
+`role="status"`. Campo vazio: só leva o foco para ele.
+
 ### `Rating`
 
 `rotulo`, `valor` (0–5) e `aoMudar`. Sem `aoMudar`, é só leitura.

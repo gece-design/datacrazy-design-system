@@ -13,11 +13,12 @@ import {
 import { navegacao } from "@/components/ds/nav";
 import { PaginaDS, Secao, ComoFunciona, Chip, CardComponente } from "@/components/ds/preview";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Tag } from "@/components/ui/tag";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { SidebarGrupo, SidebarItem } from "@/components/ui/sidebar";
 import { TooltipContent } from "@/components/ui/tooltip";
 import { Toast } from "@/components/ui/toast";
+import { Tabs } from "@/components/ui/tabs";
 
 const total = navegacao.reduce((n, c) => n + c.itens.length, 0);
 const prontos = navegacao.reduce((n, c) => n + c.itens.filter((i) => i.pronto).length, 0);
@@ -116,17 +117,29 @@ const previews: Record<string, React.ReactNode> = {
       </SidebarGrupo>
     </div>
   ),
-  "/data-display/badge": (
-    <div className="flex flex-wrap items-center justify-center gap-1.5">
-      <Badge variant="primary">Frio</Badge>
-      <Badge variant="success">Ganho</Badge>
-      <Badge variant="warning">Atrasado</Badge>
-      <Badge variant="destructive">Perdido</Badge>
-      <Badge>+1</Badge>
+  "/data-display/tag": (
+    <div className="flex w-56 max-w-full flex-wrap items-center justify-center gap-1">
+      <Tag foto="/ds/atendente.png">Esther</Tag>
+      <Tag>Lista de leads</Tag>
+      <Tag status="destructive">Abandonou</Tag>
+      <Tag status="success">Agendado</Tag>
     </div>
   ),
   "/feedback/tooltip": <TooltipContent>Copiar para a área de transferência</TooltipContent>,
   "/feedback/toast": <Toast titulo="Negócio salvo" descricao="As alterações já aparecem no funil." />,
+  "/navigation/tabs": (
+    <Tabs
+      id="preview-tabs"
+      rotulo="Seções do lead"
+      itens={[
+        { valor: "historico", rotulo: "Histórico" },
+        { valor: "atividades", rotulo: "Atividades" },
+        { valor: "arquivos", rotulo: "Arquivos" },
+      ]}
+      atual="historico"
+      aoEscolher={() => {}}
+    />
+  ),
 };
 
 const esqueleto = (
@@ -153,9 +166,10 @@ const descricoes: Record<string, string> = {
   "Sidebar": "282px que viram 88px, e o item de 36px que ela hospeda.",
   "Breadcrumb": "Dois níveis, e esse é o teto (G5).",
   "Pagination": "Controles de página, com o resumo do que está à vista.",
+  "Tabs": "Seções do mesmo registro, numa fileira que rola e nunca quebra.",
   "Card": "A superfície que carrega um bloco de dados.",
   "KPI Card": "Métrica do dashboard: valor, tendência e legenda.",
-  "Badge": "O estado que o sistema calcula e a tag que o usuário põe.",
+  "Tag": "A etiqueta do lead, com seletor em abas que também cria.",
   "Avatar": "Inicial em disco com anel: 32, 48 e 90px.",
   "Table": "37 negócios, sete colunas e paginação.",
   "Progress": "Etapa do funil: barra, rótulo e tempo (E5).",

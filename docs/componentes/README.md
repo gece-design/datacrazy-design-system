@@ -28,10 +28,12 @@ markdown é a vista dele.
 | [Drawer.md](Drawer.md) | Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida. |
 | [Input.md](Input.md) | Receber um valor curto digitado, com rótulo visível e erro inline. |
 | [KpiCard.md](KpiCard.md) | Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma |
+| [Modal.md](Modal.md) | Pedir uma decisão bloqueando a tela até ela ser tomada. |
 | [Pagination.md](Pagination.md) | Navegar entre as páginas de uma lista longa. |
 | [RadioGroup.md](RadioGroup.md) | Escolher exatamente uma opção entre poucas, todas visíveis ao mesmo tempo. |
 | [Select.md](Select.md) | Escolher uma opção numa lista curta. |
 | [Switch.md](Switch.md) | Ligar ou desligar algo que passa a valer na hora, sem botão de salvar. |
+| [Tabs.md](Tabs.md) | Alternar entre as seções de um mesmo registro. |
 | [Tag.md](Tag.md) | Mostrar uma etiqueta que o usuário pôs no lead. |
 | [Toast.md](Toast.md) | Confirmar o resultado de uma ação sem bloquear a tela. |
 | [Tooltip.md](Tooltip.md) | Mostrar um texto curto ancorado num gatilho, por cursor ou teclado. |

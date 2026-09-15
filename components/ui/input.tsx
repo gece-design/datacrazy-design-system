@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import type { Icon } from "@phosphor-icons/react";
+import { Check, Copy, type Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -29,6 +29,9 @@ export function caixaDeCampo({ erro, disabled }: { erro?: boolean; disabled?: bo
   );
 }
 
+/** O `<input>` do campo, para as ações que agem sobre o valor (copiar). */
+const CampoAtual = React.createContext<React.RefObject<HTMLInputElement | null> | null>(null);
+
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   /** Texto do rótulo, sempre visível. */
   rotulo: string;
@@ -36,7 +39,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   erro?: string;
   /** Ícone de 16px antes do texto. Ex.: `CalendarBlank`. */
   iconeInicio?: Icon;
-  /** Ações de 16px depois do texto. Use `AcaoCampo`. */
+  /** Ações de 16px depois do texto. Use `AcaoCampo` ou `AcaoCopiar`. */
   acoes?: React.ReactNode;
 }
 
@@ -45,6 +48,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const gerado = React.useId().replace(/:/g, "");
     const campoId = id ?? `campo-${gerado}`;
     const erroId = `${campoId}-erro`;
+    const campo = React.useRef<HTMLInputElement>(null);
+    React.useImperativeHandle(ref, () => campo.current!);
 
     return (
       <div className={cn("flex min-w-0 flex-col gap-1", className)}>
@@ -56,7 +61,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <IconeInicio size={16} weight="regular" aria-hidden="true" className="shrink-0 text-input-placeholder" />
           ) : null}
           <input
-            ref={ref}
+            ref={campo}
             id={campoId}
             disabled={disabled}
             aria-invalid={erro ? true : undefined}
@@ -64,7 +69,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className="h-full min-w-0 flex-1 truncate bg-transparent text-body-md text-input-text outline-none placeholder:text-input-placeholder disabled:cursor-not-allowed disabled:text-input-text-disabled"
             {...props}
           />
-          {acoes ? <div className="flex shrink-0 items-center gap-1.5">{acoes}</div> : null}
+          {acoes ? (
+            <CampoAtual.Provider value={campo}>
+              <div className="flex shrink-0 items-center gap-1.5">{acoes}</div>
+            </CampoAtual.Provider>
+          ) : null}
         </div>
         {erro ? (
           <p id={erroId} className="text-caption text-destructive">
@@ -79,11 +88,11 @@ Input.displayName = "Input";
 
 export interface AcaoCampoProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icone: Icon;
-  /** Obrigatório: a ação só tem ícone. Ex.: "Copiar". */
+  /** Obrigatório: a ação só tem ícone. Ex.: "Abrir site". */
   rotulo: string;
 }
 
-/** Ação de 16px dentro do campo: copiar, abrir link, ligar. */
+/** Ação de 16px dentro do campo: abrir link, ligar, editar. */
 export function AcaoCampo({ icone: Icone, rotulo, className, ...props }: AcaoCampoProps) {
   return (
     <button
@@ -100,5 +109,65 @@ export function AcaoCampo({ icone: Icone, rotulo, className, ...props }: AcaoCam
     >
       <Icone size={16} weight="regular" aria-hidden="true" />
     </button>
+  );
+}
+
+/**
+ * Copia o valor do próprio campo — o ícone de dois quadrados do arquivo.
+ *
+ * Lê o `<input>` pelo contexto do Input, então funciona igual com `value` ou
+ * `defaultValue`, e copia o que a pessoa acabou de digitar. O retorno é o
+ * ícone virar um check em `success` por 1,5s, anunciado ao leitor de tela.
+ * Campo vazio não copia nada: o foco vai para o campo.
+ */
+export function AcaoCopiar({
+  rotulo,
+  rotuloCopiado,
+  className,
+}: {
+  /** Ex.: "Copiar CNPJ". */
+  rotulo: string;
+  /** Ex.: "CNPJ copiado". */
+  rotuloCopiado: string;
+  className?: string;
+}) {
+  const campo = React.useContext(CampoAtual);
+  const [copiado, setCopiado] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!copiado) return;
+    const t = window.setTimeout(() => setCopiado(false), 1500);
+    return () => window.clearTimeout(t);
+  }, [copiado]);
+
+  async function copiar() {
+    const input = campo?.current;
+    const valor = input?.value ?? "";
+    if (!input || !valor) {
+      input?.focus();
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(valor);
+    } catch {
+      // sem permissão de área de transferência (iframe, http): cópia pelo DOM
+      input.select();
+      document.execCommand("copy");
+    }
+    setCopiado(true);
+  }
+
+  return (
+    <>
+      <AcaoCampo
+        icone={copiado ? Check : Copy}
+        rotulo={copiado ? rotuloCopiado : rotulo}
+        onClick={copiar}
+        className={cn(copiado && "text-success hover:text-success", className)}
+      />
+      <span role="status" aria-live="polite" className="sr-only">
+        {copiado ? rotuloCopiado : ""}
+      </span>
+    </>
   );
 }

@@ -40,6 +40,10 @@ const config: Config = {
         "sidebar-avatar": "hsl(var(--sidebar-avatar))",
         "avatar-md-fundo": "hsl(var(--avatar-md-fundo))",
         "avatar-md-anel": "hsl(var(--avatar-md-anel))",
+        // tom do perfil no drawer — só existem dentro de um [data-tom]
+        "tom-anel": "hsl(var(--tom-anel))",
+        "tom-texto": "hsl(var(--tom-texto))",
+        "tom-tag": "hsl(var(--tom-tag))",
         // input/* e overlay/* — tokens de componente da coleção "Cor".
         "input-bg": "hsl(var(--input-bg))",
         "input-border": "hsl(var(--input-border))",
@@ -111,9 +115,9 @@ const config: Config = {
         "button-inner": "inset 2px 4px 8px 0 rgb(232 241 255 / 0.4)",
       },
       backgroundImage: {
-        // topo do perfil no drawer (node 565:6447): card até 79,91%, brilho no fim.
+        // topo do perfil no drawer (node 565:6447): card até 79,91%, brilho do tom no fim.
         "drawer-perfil":
-          "linear-gradient(2.2deg, hsl(var(--card)) 79.91%, hsl(var(--drawer-perfil-brilho)) 96.01%)",
+          "linear-gradient(2.2deg, hsl(var(--card)) 79.91%, hsl(var(--tom-brilho)) 96.01%)",
       },
       // Escala do Figma: 0 · 2 · 4 · 6 · 8 · 12 · 999. `--radius` é o degrau
       // lg (8px) e os outros saem dele, então mudar a base move a escala toda.
@@ -129,6 +133,23 @@ const config: Config = {
       zIndex: {
         base: "0", dropdown: "10", sticky: "20", overlay: "30",
         modal: "40", popover: "50", toast: "60",
+      },
+      // Motion — ainda não é token do Figma (pendência 4 de docs/02-design-system.md).
+      // Nomeado aqui para não virar valor solto em componente. Use sempre com
+      // `motion-safe:`: quem pede menos movimento ao sistema não vê nenhuma (I12).
+      keyframes: {
+        "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
+        // abre o espaço do toast na pilha: altura por grid-template-rows e o
+        // gap de 8px do container pela margem, para nada pular
+        "toast-open": {
+          from: { gridTemplateRows: "0fr", marginTop: "-0.5rem" },
+          to: { gridTemplateRows: "1fr", marginTop: "0" },
+        },
+      },
+      animation: {
+        "fade-in": "fade-in 250ms ease-out",
+        "fade-in-fast": "fade-in 150ms ease-out",
+        "toast-open": "toast-open 200ms ease-out",
       },
     },
   },

@@ -144,12 +144,14 @@ ramificar por tema.
 | `--sidebar-avatar` | círculo do avatar sem foto | `surface-inverse` | `blue-700` |
 | `--avatar-md-fundo` | disco do Avatar `md` | `accent` | `card` |
 | `--avatar-md-anel` | anel do Avatar `md` | `card` | `accent` |
-| `--drawer-perfil-brilho` | fim do gradiente do perfil no Drawer | `blue-100` | `accent` **(derivado)** |
+| `--tom-anel` · `--tom-texto` · `--tom-tag` · `--tom-brilho` | perfil do Drawer, dentro de `[data-tom]` | `accent` · `blue-600` · `primary` · `blue-100` | `accent` · `blue-300` · `primary` · `accent` **(derivado)** |
 
 Os dois do Avatar `md` são o mesmo caso: o arquivo troca os papéis de disco e
-anel entre as variantes de tema. O brilho do Drawer é diferente — o arquivo liga
-o gradiente a `base/blue/100`, primitivo sem modo, e o valor escuro foi
-**derivado**, não desenhado. Ver [Drawer](componentes/Drawer.md).
+anel entre as variantes de tema. Os de tom são diferentes: valem só dentro de
+um `[data-tom]`. O azul aponta para tokens; `roxo` usa os hex do arquivo, que
+são o azul com o matiz em 266°; `rosa` (330°) e `laranja` (24°) seguem a mesma
+regra por decisão do humano (2026-09-15). O brilho escuro e os escuros dos três
+tons são **derivados**. Ver [Drawer](componentes/Drawer.md).
 
 Efeito de sombra: `button inner shadow` do Figma virou `shadow-button-inner`
 (`inset 2px 4px 8px #E8F1FF66`), usado no Button `primary` e `soft` e no
@@ -280,6 +282,6 @@ Divergência visual é bug do código — ver
 | 2 | Valores soltos no design: `#09090B` (1.764 usos), `#71717A` (1.538), gradientes dos gráficos | Não acompanham o tema; religar muda cor levemente e precisa de decisão |
 | 3 | Gráficos com gradiente solto que clareia até quase branco | Some no tema escuro |
 | 4 | Motion não tokenizado | Duração, curva e `prefers-reduced-motion` sem dono (I12) |
-| 5 | Roxo de empresa sem variável: `#F2E8FF`, `#6C12E2`, `#8B33FF`, `#EEE0FF` | O perfil "outline - roxo" do Drawer não entra sem token |
+| 5 | Tons do perfil (roxo, rosa, laranja) sem variável no Figma | Resolvido no código por `[data-tom]` (decisão do humano, 2026-09-15); falta levar ao arquivo como coleção com modos |
 | 6 | Button redesenhado no Figma (269:32): texto 12px, gap 6, sombra interna | O código segue 13px e gap 8; só a sombra e as variantes `soft`/`outline` entraram |
-| 7 | Scrim sem opacidade definida | `overlay/scrim` existe, mas a camada nunca foi desenhada; o Drawer usa 40% |
+| 7 | Scrim sem opacidade definida | `overlay/scrim` existe, mas a camada nunca foi desenhada; Drawer e Modal usam 40% |

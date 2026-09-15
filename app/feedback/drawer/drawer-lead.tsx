@@ -9,7 +9,6 @@ import {
   ChatCircleDots,
   ChatText,
   ClockCounterClockwise,
-  Copy,
   EnvelopeSimple,
   File,
   FunnelSimple,
@@ -32,9 +31,9 @@ import {
   UsersThree,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-import { Tag, TagAdicionar, type TagProps } from "@/components/ui/tag";
+import { Tag, SeletorTags, type GrupoTags, type OpcaoTag } from "@/components/ui/tag";
 import { Avatar } from "@/components/ui/avatar";
-import { Input, AcaoCampo } from "@/components/ui/input";
+import { Input, AcaoCampo, AcaoCopiar } from "@/components/ui/input";
 import { Rating } from "@/components/ui/rating";
 import { Select } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
@@ -63,19 +62,68 @@ import {
   type ItemMenuDrawer,
   type LinhaContato,
   type MetricaDrawer,
+  type TomPerfil,
 } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
 
 /* Composição do showcase: os dados do arquivo (Figma 565:5959) montados com os
    componentes do DS. Nada aqui é componente — é a tela de exemplo. */
 
-type TagDoLead = { rotulo: string; status?: TagProps["status"]; foto?: string };
+/** O catálogo de tags da conta, por aba do seletor. */
+export const CATALOGO_TAGS: GrupoTags[] = [
+  {
+    id: "status",
+    rotulo: "Status",
+    tags: [
+      { id: "abandonou", rotulo: "Abandonou", status: "destructive" },
+      { id: "agendado", rotulo: "Agendado", status: "success" },
+      { id: "passou", rotulo: "Passou", status: "info" },
+      { id: "em-aberto", rotulo: "Em aberto", status: "info" },
+    ],
+  },
+  {
+    id: "listas",
+    rotulo: "Listas",
+    tags: [
+      { id: "lista-de-leads", rotulo: "Lista de leads" },
+      { id: "isaias-123", rotulo: "Isaias 123" },
+      { id: "prospect-list", rotulo: "Prospect list" },
+      { id: "premium", rotulo: "Premium" },
+    ],
+  },
+  {
+    id: "atendentes",
+    rotulo: "Atendentes",
+    tags: [
+      { id: "esther", rotulo: "Esther", foto: "/ds/atendente.png" },
+      { id: "liam", rotulo: "Liam", foto: "/ds/atendente.png" },
+      { id: "marina", rotulo: "Marina" },
+    ],
+  },
+  {
+    id: "temperatura",
+    rotulo: "Temperatura",
+    tags: [
+      { id: "frio", rotulo: "Frio" },
+      { id: "warm", rotulo: "Warm" },
+      { id: "quente", rotulo: "Quente" },
+    ],
+  },
+];
+
+/** No perfil, o atendente vem primeiro — é a ordem do arquivo. */
+const ORDEM_NO_PERFIL = ["atendentes", "listas", "status", "temperatura"];
+
+export function tagsEscolhidas(grupos: GrupoTags[], ids: string[]): OpcaoTag[] {
+  return ORDEM_NO_PERFIL.flatMap((g) => grupos.find((x) => x.id === g)?.tags ?? []).filter((t) => ids.includes(t.id));
+}
+
 type Lead = {
   nome: string;
   tipo: "pessoa" | "empresa";
   telefone: string;
   email: string;
-  tags: TagDoLead[];
+  tags: string[];
   metricas: MetricaDrawer[];
   contato: LinhaContato[];
 };
@@ -86,14 +134,7 @@ export const LEADS: Record<"rafael" | "joel", Lead> = {
     tipo: "pessoa",
     telefone: "+55 (54) 44346-5346",
     email: "contato@datacrazy.com",
-    tags: [
-      { rotulo: "Esther", foto: "/ds/atendente.png" },
-      { rotulo: "Lista de leads" },
-      { rotulo: "Isaias 123" },
-      { rotulo: "Abandonou", status: "destructive" },
-      { rotulo: "Agendado", status: "success" },
-      { rotulo: "Frio" },
-    ],
+    tags: ["esther", "lista-de-leads", "isaias-123", "abandonou", "agendado", "frio"],
     metricas: [
       { rotulo: "Ticket médio", valor: "R$ 0,00" },
       { rotulo: "Total", valor: "R$ 0,00" },
@@ -111,14 +152,7 @@ export const LEADS: Record<"rafael" | "joel", Lead> = {
     tipo: "empresa",
     telefone: "+55 (11) 98765-4321",
     email: "contact@datawave.com",
-    tags: [
-      { rotulo: "Liam", foto: "/ds/atendente.png" },
-      { rotulo: "Prospect list" },
-      { rotulo: "Premium" },
-      { rotulo: "Passou", status: "info" },
-      { rotulo: "Agendado", status: "success" },
-      { rotulo: "Warm" },
-    ],
+    tags: ["liam", "prospect-list", "premium", "passou", "agendado", "warm"],
     metricas: [
       { rotulo: "Ticket médio", valor: "R$ 150,00" },
       { rotulo: "Total", valor: "R$ 9.877,00" },
@@ -148,7 +182,6 @@ export const MENU_LEAD: ItemMenuDrawer[] = [
   { id: "notas", rotulo: "Notas", icone: Note },
 ];
 
-const copiar = (texto: string) => void navigator.clipboard?.writeText(texto);
 const abrir = (url: string) => window.open(url, "_blank", "noopener,noreferrer");
 
 /* -------------------------------------------------------------- Conteúdos -- */
@@ -208,7 +241,11 @@ function ConteudoPerfil() {
         <div className="grid grid-cols-3 gap-3">
           <Input rotulo="Razão social" defaultValue="Joel Jota Performance LTDA" />
           <Input rotulo="Nome fantasia" defaultValue="Joel Jota" />
-          <Input rotulo="CNPJ" placeholder="00.000.000/0000-00" acoes={<AcaoCampo icone={Copy} rotulo="Copiar CNPJ" />} />
+          <Input
+            rotulo="CNPJ"
+            placeholder="00.000.000/0000-00"
+            acoes={<AcaoCopiar rotulo="Copiar CNPJ" rotuloCopiado="CNPJ copiado" />}
+          />
           <Input rotulo="Origem" defaultValue="Indicação" />
           <Input rotulo="Segmento" defaultValue="Educação e alta performance" />
           <Input rotulo="Data de fundação" placeholder="dd/mm/aaaa" iconeInicio={CalendarBlank} />
@@ -217,7 +254,7 @@ function ConteudoPerfil() {
             defaultValue="joeljota.com.br"
             acoes={
               <>
-                <AcaoCampo icone={Copy} rotulo="Copiar site" onClick={() => copiar("joeljota.com.br")} />
+                <AcaoCopiar rotulo="Copiar site" rotuloCopiado="Site copiado" />
                 <AcaoCampo icone={ArrowSquareOut} rotulo="Abrir site" onClick={() => abrir("https://joeljota.com.br")} />
               </>
             }
@@ -227,7 +264,7 @@ function ConteudoPerfil() {
             defaultValue="@joeljota"
             acoes={
               <>
-                <AcaoCampo icone={Copy} rotulo="Copiar Instagram" onClick={() => copiar("@joeljota")} />
+                <AcaoCopiar rotulo="Copiar Instagram" rotuloCopiado="Instagram copiado" />
                 <AcaoCampo icone={InstagramLogo} rotulo="Abrir Instagram" onClick={() => abrir("https://instagram.com/joeljota")} />
               </>
             }
@@ -248,7 +285,7 @@ function ConteudoPerfil() {
             defaultValue="contato@joeljota.com.br"
             acoes={
               <>
-                <AcaoCampo icone={Copy} rotulo="Copiar e-mail" onClick={() => copiar("contato@joeljota.com.br")} />
+                <AcaoCopiar rotulo="Copiar e-mail" rotuloCopiado="E-mail copiado" />
                 <AcaoCampo icone={EnvelopeSimple} rotulo="Enviar e-mail" onClick={() => abrir("mailto:contato@joeljota.com.br")} />
               </>
             }
@@ -258,7 +295,7 @@ function ConteudoPerfil() {
             placeholder="+55 (00) 00000-0000"
             acoes={
               <>
-                <AcaoCampo icone={Copy} rotulo="Copiar telefone" />
+                <AcaoCopiar rotulo="Copiar telefone" rotuloCopiado="Telefone copiado" />
                 <AcaoCampo icone={Phone} rotulo="Ligar" />
               </>
             }
@@ -286,7 +323,7 @@ function ConteudoPerfil() {
             defaultValue="+55 (45) 64564-5645"
             acoes={
               <>
-                <AcaoCampo icone={Copy} rotulo="Copiar telefone" onClick={() => copiar("+55 (45) 64564-5645")} />
+                <AcaoCopiar rotulo="Copiar telefone" rotuloCopiado="Telefone copiado" />
                 <AcaoCampo icone={Phone} rotulo="Ligar" onClick={() => abrir("tel:+5545645645645")} />
               </>
             }
@@ -296,7 +333,7 @@ function ConteudoPerfil() {
             defaultValue="contato@joeljota.com.br"
             acoes={
               <>
-                <AcaoCampo icone={Copy} rotulo="Copiar e-mail" onClick={() => copiar("contato@joeljota.com.br")} />
+                <AcaoCopiar rotulo="Copiar e-mail" rotuloCopiado="E-mail copiado" />
                 <AcaoCampo icone={EnvelopeSimple} rotulo="Enviar e-mail" onClick={() => abrir("mailto:contato@joeljota.com.br")} />
               </>
             }
@@ -306,7 +343,7 @@ function ConteudoPerfil() {
             defaultValue="joeljota.com.br"
             acoes={
               <>
-                <AcaoCampo icone={Copy} rotulo="Copiar site" onClick={() => copiar("joeljota.com.br")} />
+                <AcaoCopiar rotulo="Copiar site" rotuloCopiado="Site copiado" />
                 <AcaoCampo icone={ArrowSquareOut} rotulo="Abrir site" onClick={() => abrir("https://joeljota.com.br")} />
               </>
             }
@@ -516,17 +553,54 @@ const cabecalhos: Record<string, { titulo: string; descricao: string; Corpo: () 
   },
 };
 
+/* ------------------------------------------------------------ Tags do lead -- */
+
+/** Fileira de tags do perfil com o seletor no fim. O catálogo é estado da
+ *  tela: tag criada no seletor entra na aba e já sai escolhida. */
+export function TagsDoLead({ iniciais }: { iniciais: string[] }) {
+  const [grupos, setGrupos] = React.useState(CATALOGO_TAGS);
+  const [escolhidas, setEscolhidas] = React.useState(iniciais);
+
+  return (
+    <>
+      {tagsEscolhidas(grupos, escolhidas).map((t) => (
+        <Tag key={t.id} status={t.status} foto={t.foto}>
+          {t.rotulo}
+        </Tag>
+      ))}
+      <SeletorTags
+        grupos={grupos}
+        selecionadas={escolhidas}
+        aoAlternar={(t) => setEscolhidas((ids) => (ids.includes(t.id) ? ids.filter((x) => x !== t.id) : [...ids, t.id]))}
+        aoCriar={(rotulo, grupoId) => {
+          const id = `${grupoId}-${Date.now()}`;
+          setGrupos((gs) => gs.map((g) => (g.id === grupoId ? { ...g, tags: [...g.tags, { id, rotulo }] } : g)));
+          setEscolhidas((ids) => [...ids, id]);
+        }}
+        rotulos={{
+          gatilho: "Adicionar tag",
+          busca: "Buscar ou criar tag",
+          vazio: "Nenhuma tag nesta aba",
+          criar: (texto, grupo) => `Criar "${texto}" em ${grupo}`,
+        }}
+      />
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ Tela -- */
 
 export function DrawerLead({
   lead = "rafael",
   estilo = "outline",
+  tom,
   menuInicial = "historicos",
   aoFechar,
   className,
 }: {
   lead?: keyof typeof LEADS;
   estilo?: "outline" | "fill";
+  tom?: TomPerfil;
   menuInicial?: string;
   aoFechar?: () => void;
   className?: string;
@@ -534,7 +608,6 @@ export function DrawerLead({
   const dados = LEADS[lead];
   const [menu, setMenu] = React.useState(menuInicial);
   const [perfilAberto, setPerfilAberto] = React.useState(true);
-  const [tags, setTags] = React.useState(dados.tags);
 
   const item = MENU_LEAD.find((m) => m.id === menu) ?? MENU_LEAD[0];
   const desenhado = cabecalhos[menu];
@@ -546,25 +619,14 @@ export function DrawerLead({
         <DrawerPerfil
           nome={dados.nome}
           tipo={dados.tipo}
+          tom={tom}
           rotuloTipo={dados.tipo === "pessoa" ? "Pessoa" : "Empresa"}
           telefone={dados.telefone}
           email={dados.email}
           estilo={estilo}
           aoFechar={aoFechar}
           aoRecolher={() => setPerfilAberto(false)}
-          tags={
-            <>
-              {tags.map((t) => (
-                <Tag key={t.rotulo} status={t.status} foto={t.foto}>
-                  {t.rotulo}
-                </Tag>
-              ))}
-              <TagAdicionar
-                rotulo="Adicionar tag"
-                onClick={() => setTags((ts) => [...ts, { rotulo: `Nova ${ts.length - dados.tags.length + 1}` }])}
-              />
-            </>
-          }
+          tags={<TagsDoLead iniciais={dados.tags} />}
           acoes={
             <>
               <Button>

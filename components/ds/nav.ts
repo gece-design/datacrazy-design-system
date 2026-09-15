@@ -58,6 +58,9 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Sidebar", href: "/navigation/sidebar", icone: "painel", pronto: true, descricao: "Navegação principal"},
       { titulo: "Breadcrumb", href: "/navigation/breadcrumb", icone: "trilha" , descricao: "Trilha de dois níveis"},
       { titulo: "Pagination", href: "/navigation/pagination", icone: "paginas", pronto: true , descricao: "Controles de página de uma lista"},
+      // Estava no escopo negativo do roadmap (anti-referência nº 11). Entrou por
+      // decisão do humano em 2026-09-15, com fileira que rola em vez de quebrar.
+      { titulo: "Tabs", href: "/navigation/tabs", icone: "abas", pronto: true , descricao: "Seções do mesmo registro"},
     ],
   },
   {
@@ -68,7 +71,7 @@ export const navegacao: CategoriaNav[] = [
       // "Stat Card"; quem batiza é o arquivo.
       { titulo: "Card", href: "/data-display/card", icone: "cartao", pronto: true , descricao: "Lista, rosca e barras"},
       { titulo: "KPI Card", href: "/data-display/kpi-card", icone: "metrica", pronto: true , descricao: "Métrica em destaque"},
-      { titulo: "Badge", href: "/data-display/badge", icone: "etiqueta", pronto: true, descricao: "Rótulo de estado e tag do lead"},
+      { titulo: "Tag", href: "/data-display/tag", icone: "etiqueta", pronto: true, descricao: "Etiqueta do lead e seletor"},
       { titulo: "Avatar", href: "/data-display/avatar", icone: "pessoa", pronto: true , descricao: "Identificação de pessoa"},
       { titulo: "Table", href: "/data-display/table", icone: "tabela", pronto: true , descricao: "A tabela de negócios do CRM"},
       { titulo: "Progress", href: "/data-display/progress", icone: "progresso" , descricao: "Andamento de etapa"},
@@ -81,7 +84,7 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Tooltip", href: "/feedback/tooltip", icone: "balao", pronto: true , descricao: "Conteúdo de texto truncado"},
       { titulo: "Toast", href: "/feedback/toast", icone: "sino", pronto: true , descricao: "Confirmação que não bloqueia"},
       { titulo: "Empty State", href: "/feedback/empty-state", icone: "bandeja" , descricao: "Ausência de dados"},
-      { titulo: "Modal", href: "/feedback/modal", icone: "camada" , descricao: "Camada que exige decisão"},
+      { titulo: "Modal", href: "/feedback/modal", icone: "camada", pronto: true , descricao: "Camada que exige decisão"},
       { titulo: "Drawer", href: "/feedback/drawer", icone: "gaveta", pronto: true , descricao: "O lead aberto pela direita"},
     ],
   },

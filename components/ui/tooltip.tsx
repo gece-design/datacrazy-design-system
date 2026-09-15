@@ -223,7 +223,10 @@ export function Tooltip({ content, position = "top", delay = 400, children }: To
                 role="tooltip"
                 position={lado}
                 style={pos ? { left: pos.left, top: pos.top } : undefined}
-                className={cn("pointer-events-none fixed left-0 top-0 z-popover", !pos && "invisible")}
+                // Dissolve ao abrir, e rápido: quem passa o cursor quer ler, não
+                // esperar. Fecha seco — um balão que demora a sumir fica por cima
+                // do próximo gatilho.
+                className={cn("pointer-events-none fixed left-0 top-0 z-popover motion-safe:animate-fade-in-fast", !pos && "invisible")}
               >
                 {content}
               </TooltipContent>
