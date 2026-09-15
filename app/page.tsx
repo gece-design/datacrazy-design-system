@@ -16,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { SidebarGrupo, SidebarItem } from "@/components/ui/sidebar";
+import { TooltipContent } from "@/components/ui/tooltip";
+import { Toast } from "@/components/ui/toast";
 
 const total = navegacao.reduce((n, c) => n + c.itens.length, 0);
 const prontos = navegacao.reduce((n, c) => n + c.itens.filter((i) => i.pronto).length, 0);
@@ -123,6 +125,8 @@ const previews: Record<string, React.ReactNode> = {
       <Badge>+1</Badge>
     </div>
   ),
+  "/feedback/tooltip": <TooltipContent>Copiar para a área de transferência</TooltipContent>,
+  "/feedback/toast": <Toast titulo="Negócio salvo" descricao="As alterações já aparecem no funil." />,
 };
 
 const esqueleto = (
@@ -141,22 +145,25 @@ const descricoes: Record<string, string> = {
   "Icons": "Phosphor num peso só: regular; fill só no selecionado (A8).",
   "Button": "Quatro variantes, três tamanhos, estados por regra.",
   "Icon Button": "Ação sem rótulo: exige tooltip e aria-label (E7).",
-  "Input": "Campo de uma linha, com erro inline (E6).",
+  "Input": "Rótulo, cinco estados e ações dentro da caixa (E6).",
   "Select": "Escolha única: é o ▾ dos filtros do dashboard.",
   "Checkbox": "Alternância booleana, com estado indeterminado.",
+  "Radio Group": "Escolha exclusiva: setas movem e selecionam.",
+  "Switch": "Efeito imediato, sem botão de salvar.",
   "Sidebar": "282px que viram 88px, e o item de 36px que ela hospeda.",
   "Breadcrumb": "Dois níveis, e esse é o teto (G5).",
   "Pagination": "Controles de página, com o resumo do que está à vista.",
   "Card": "A superfície que carrega um bloco de dados.",
   "KPI Card": "Métrica do dashboard: valor, tendência e legenda.",
-  "Badge": "Seis variantes. A cor entra na tag, nunca no card (A2).",
-  "Avatar": "Inicial em círculo quando não há foto.",
+  "Badge": "O estado que o sistema calcula e a tag que o usuário põe.",
+  "Avatar": "Inicial em disco com anel: 32, 48 e 90px.",
   "Table": "37 negócios, sete colunas e paginação.",
   "Progress": "Etapa do funil: barra, rótulo e tempo (E5).",
   "Tooltip": "O conteúdo completo de um texto truncado (E1).",
+  "Toast": "Quatro estados, com fila e pausa sob o cursor.",
   "Empty State": "Ausência de dados, explicada — não só um ícone.",
   "Modal": "Grupos à esquerda, conteúdo à direita, botões à parte (G10).",
-  "Drawer": "Registro aberto lateralmente, fecha no X (G1).",
+  "Drawer": "O lead pela direita: perfil, menu e cinco seções (G1).",
 };
 
 export default function Home() {

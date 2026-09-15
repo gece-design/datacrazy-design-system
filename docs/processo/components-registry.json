@@ -241,6 +241,210 @@
         }
       },
       "_states_doc": "O ativo usa DOIS sinais (fundo accent e texto primary) porque so a borda do arquivo sumia no tema escuro. Decisao do humano 2026-09-04."
+    },
+    {
+      "name": "Toast",
+      "family": "feedback",
+      "figmaNode": "548:52",
+      "batch": 2,
+      "variants": [
+        "success",
+        "destructive",
+        "warning",
+        "info"
+      ],
+      "tokens": [
+        "overlay/bg",
+        "overlay/border",
+        "overlay/item-hover",
+        "success",
+        "destructive",
+        "warning",
+        "info",
+        "foreground",
+        "muted-foreground",
+        "ring",
+        "radius/md",
+        "elevation/lg",
+        "text/label-lg",
+        "text/body-sm",
+        "z/toast"
+      ],
+      "motion": null,
+      "states": {
+        "hover": {
+          "impl": "X: bg-overlay-item-hover text-foreground",
+          "source": "inferido",
+          "rule": null,
+          "precedent": "Pagination (overlay/item-hover)",
+          "approvedIn": null
+        },
+        "focus": {
+          "impl": "outline outline-2 outline-offset-2 outline-ring",
+          "source": "banco",
+          "rule": "I4",
+          "precedent": "Button (regra local D6)",
+          "approvedIn": null
+        },
+        "pausado": {
+          "impl": "relógio parado com cursor ou foco dentro",
+          "source": "declarado",
+          "rule": null,
+          "precedent": "roadmap-componentes § Toast",
+          "approvedIn": null
+        }
+      },
+      "_states_doc": "Circulo a 12% medido no pixel. No escuro o arquivo usa o valor claro do token no circulo e no glifo (modo errado na camada Icon); o codigo segue o token."
+    },
+    {
+      "name": "Tooltip",
+      "family": "overlay",
+      "figmaNode": "548:73",
+      "batch": 2,
+      "variants": [
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "tokens": [
+        "surface-inverse",
+        "primary-foreground",
+        "radius/md",
+        "elevation/md",
+        "text/caption",
+        "z/popover"
+      ],
+      "motion": null,
+      "states": {
+        "aberto": {
+          "impl": "cursor após 400ms (exceto toque) · foco de teclado na hora · Escape e blur fecham",
+          "source": "declarado",
+          "rule": "E7",
+          "precedent": "roadmap-componentes § Tooltip",
+          "approvedIn": null
+        }
+      },
+      "_states_doc": "position = lado do gatilho onde o balao fica (regra de Top/Bottom do arquivo). Left/Right do arquivo estao invertidos entre os temas."
+    },
+    {
+      "name": "Drawer",
+      "family": "overlay",
+      "figmaNode": "533:3809 / 565:5959",
+      "batch": 3,
+      "variants": ["estilo:outline", "estilo:fill", "camada", "painel"],
+      "_variants_doc": "O eixo Menu do component set (Historico, Perfil, Campos adicionais, Negocios, Hierarquia) NAO e variante: e o item escolhido no menu, e cada valor e so o conteudo da coluna direita. Pecas: DrawerPainel, DrawerPerfil, DrawerBloco, DrawerMetricas, DrawerContato, DrawerMenu, DrawerConteudo, DrawerSecao, LinhaDoTempo, HierarquiaNo, HierarquiaCanvas.",
+      "tokens": [
+        "card", "background", "border", "foreground", "muted-foreground", "accent", "primary",
+        "nav/item/bg-hover", "nav/item/bg-selected", "nav/item/text-selected", "nav/item/icon-selected", "nav/item/text-default",
+        "overlay/scrim", "--drawer-perfil-brilho", "base/blue/200",
+        "radius/xl", "radius/lg", "radius/md", "radius/sm", "elevation/xl",
+        "text/heading-1", "text/heading-4", "text/metric", "text/label-lg", "text/label-sm", "text/body-sm", "text/caption"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": { "impl": "bg-nav-item-hover no item do menu", "source": "figma", "rule": null, "precedent": null, "approvedIn": "lote-3" },
+        "selecionado": { "impl": "bg-nav-item-selected + texto e icone nav-item-selected + CaretRight", "source": "figma", "rule": null, "precedent": null, "approvedIn": "lote-3" },
+        "focus": { "impl": "outline outline-2 outline-offset-2 outline-ring", "source": "banco", "rule": "I4", "precedent": "Button (regra local D6)", "approvedIn": "lote-3" },
+        "aberto": { "impl": "scrim overlay/scrim 40% + foco preso + Escape", "source": "inferido", "rule": null, "precedent": "Select (lista aberta)", "approvedIn": null },
+        "recolhido": { "impl": "bloco com hidden + caret -90°", "source": "inferido", "rule": null, "precedent": "Select (caret girado)", "approvedIn": null }
+      },
+      "_states_doc": "A camada (scrim, foco preso, Escape) nao esta no arquivo: o Figma desenha so o painel. Opacidade do scrim derivada."
+    },
+    {
+      "name": "Input",
+      "family": "entrada",
+      "figmaNode": "535:48 / 590:3000 / 544:129",
+      "batch": 3,
+      "variants": ["com icone", "com acoes", "rating", "select field"],
+      "tokens": [
+        "input/bg", "input/border", "input/border-hover", "input/border-focus", "input/border-error",
+        "input/text", "input/placeholder", "input/label", "input/bg-disabled", "input/text-disabled",
+        "destructive", "muted-foreground", "primary", "base/blue/300",
+        "radius/md", "text/label-md", "text/body-md", "text/caption"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": { "impl": "border-input-border-hover (fora do foco)", "source": "banco", "rule": "I1", "precedent": null, "approvedIn": "lote-3" },
+        "focus": { "impl": "border-input-border-focus + ring-1 inset", "source": "figma", "rule": null, "precedent": null, "approvedIn": "lote-3" },
+        "erro": { "impl": "border-input-border-error + caption destructive + aria-invalid", "source": "figma", "rule": null, "precedent": null, "approvedIn": "lote-3" },
+        "disabled": { "impl": "bg-input-bg-disabled + text-input-text-disabled", "source": "figma", "rule": null, "precedent": null, "approvedIn": "lote-3" }
+      },
+      "_states_doc": "Filled do arquivo nao e estado: e o campo com valor. Rating e Select size=field compartilham a caixa."
+    },
+    {
+      "name": "Avatar",
+      "family": "midia",
+      "figmaNode": "538:200",
+      "batch": 3,
+      "variants": ["sm", "md", "lg", "com foto"],
+      "tokens": ["card", "accent", "--avatar-md-fundo", "--avatar-md-anel", "nav/item/text-selected", "radius/full", "text/label-md", "text/heading-3"],
+      "motion": null,
+      "states": {},
+      "_states_doc": "Vazio de proposito: avatar e leitura. O md troca disco e anel entre os temas via --avatar-md-*."
+    },
+    {
+      "name": "Tag",
+      "family": "superficie",
+      "figmaNode": "538:197",
+      "batch": 3,
+      "variants": ["texto", "status:destructive", "status:info", "status:success", "tipo:pessoa", "tipo:empresa", "foto", "adicionar"],
+      "tokens": ["input/bg-disabled", "foreground", "primary", "primary-hover", "destructive", "info", "success", "background", "radius/full", "text/label-sm", "shadow-button-inner"],
+      "motion": "fast",
+      "states": {
+        "hover": { "impl": "bg-primary-hover no TagAdicionar", "source": "banco", "rule": "I1", "precedent": null, "approvedIn": "lote-3" },
+        "focus": { "impl": "outline outline-2 outline-offset-2 outline-ring", "source": "banco", "rule": "I4", "precedent": "Button (regra local D6)", "approvedIn": "lote-3" }
+      },
+      "_states_doc": "So o TagAdicionar e interativo."
+    },
+    {
+      "name": "Checkbox",
+      "family": "entrada",
+      "figmaNode": "547:28",
+      "batch": 2,
+      "variants": ["com rotulo", "sem rotulo", "indeterminado"],
+      "tokens": ["input/bg", "input/border", "input/border-hover", "input/bg-disabled", "input/text-disabled", "primary", "primary-hover", "primary-foreground", "subtle-foreground", "foreground", "ring", "radius/xs", "text/body-md"],
+      "motion": "fast",
+      "states": {
+        "hover": { "impl": "ring-input-border-hover (desmarcado) · bg-primary-hover (marcado)", "source": "banco", "rule": "I1", "precedent": "Input (border-input-border-hover)", "approvedIn": null },
+        "focus": { "impl": "outline outline-2 outline-offset-2 outline-ring na caixa (peer-focus-visible)", "source": "banco", "rule": "I4", "precedent": "Button (regra local D6)", "approvedIn": null },
+        "marcado": { "impl": "bg-primary + Check 12px em primary-foreground", "source": "figma", "rule": null, "precedent": null, "approvedIn": null },
+        "indeterminado": { "impl": "input.indeterminate + fundo do marcado + Minus 12px", "source": "inferido", "rule": null, "precedent": "marcado (mesmo fundo e glifo na mesma medida)", "approvedIn": null },
+        "disabled": { "impl": "bg-input-bg-disabled · marcado bg-subtle-foreground · rotulo input-text-disabled", "source": "figma", "rule": null, "precedent": null, "approvedIn": null }
+      },
+      "_states_doc": "Traco em ring-inset, nao border (D18). Glifo do marcado em primary-foreground: o arquivo exporta branco fixo, que no escuro da ~2,5:1."
+    },
+    {
+      "name": "RadioGroup",
+      "family": "entrada",
+      "figmaNode": "547:45",
+      "batch": 3,
+      "variants": ["vertical", "em linha"],
+      "tokens": ["input/bg", "input/border", "input/border-hover", "input/bg-disabled", "input/text-disabled", "primary", "primary-hover", "subtle-foreground", "foreground", "ring", "radius/full", "text/body-md"],
+      "motion": "fast",
+      "states": {
+        "hover": { "impl": "ring-input-border-hover (desmarcado) · ring-primary-hover (marcado)", "source": "banco", "rule": "I1", "precedent": "Input (border-input-border-hover)", "approvedIn": null },
+        "focus": { "impl": "outline outline-2 outline-offset-2 outline-ring no circulo (peer-focus-visible)", "source": "banco", "rule": "I4", "precedent": "Button (regra local D6)", "approvedIn": null },
+        "marcado": { "impl": "ring-inset 5px primary sobre input/bg (miolo de 8px)", "source": "figma", "rule": null, "precedent": null, "approvedIn": null },
+        "disabled": { "impl": "bg-input-bg-disabled · marcado ring-subtle-foreground · rotulo input-text-disabled", "source": "figma", "rule": null, "precedent": null, "approvedIn": null }
+      },
+      "_states_doc": "Teclado e o nativo dos radios com o mesmo name: setas movem e selecionam, Tab sai do grupo. Gap de 20 vem do espacamento do component set."
+    },
+    {
+      "name": "Switch",
+      "family": "entrada",
+      "figmaNode": "547:66 / 595:10896",
+      "batch": 3,
+      "variants": ["com rotulo", "sem rotulo"],
+      "tokens": ["input/border", "input/border-hover", "input/bg-disabled", "input/text-disabled", "primary", "primary-hover", "subtle-foreground", "card", "foreground", "ring", "radius/full", "text/body-md"],
+      "motion": "fast",
+      "states": {
+        "hover": { "impl": "bg-input-border-hover (desligado) · bg-primary-hover (ligado)", "source": "banco", "rule": "I1", "precedent": "Input (border-input-border-hover)", "approvedIn": null },
+        "focus": { "impl": "outline outline-2 outline-offset-2 outline-ring no trilho (peer-focus-visible)", "source": "banco", "rule": "I4", "precedent": "Button (regra local D6)", "approvedIn": null },
+        "ligado": { "impl": "bg-primary + botao translate-x-4", "source": "figma", "rule": null, "precedent": null, "approvedIn": null },
+        "disabled": { "impl": "bg-input-bg-disabled · ligado bg-subtle-foreground · rotulo input-text-disabled", "source": "figma", "rule": null, "precedent": null, "approvedIn": null }
+      },
+      "_states_doc": "input checkbox com role=switch. Substituiu a versao derivada da instancia do drawer, combinado entre as sessoes em 2026-09-14. Hover do desligado pinta o trilho inteiro: revisar no gate."
     }
   ]
 }

@@ -2,6 +2,7 @@
 
 import { Check, X } from "@phosphor-icons/react";
 import { Badge, type BadgeProps } from "@/components/ui/badge";
+import { Tag, TagAdicionar } from "@/components/ui/tag";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 
 type Variante = NonNullable<BadgeProps["variant"]>;
@@ -167,10 +168,17 @@ export default function BadgePage() {
   return (
     <PaginaDS
       titulo="Badge"
-      descricao="Seis variantes de 20px de altura, tipografia de 10px e raio de 6px — o mesmo do botão. Nenhuma tem fundo cheio: cinco são traço da cor a 25% sobre um fundo sutil da mesma cor, e desse fundo só um é token desenhado — os outros quatro são alpha a 10%."
-      secoes={["Como funciona", "Variantes", "No card do lead", "Quando usar"]}
+      descricao="Dois rótulos. A Tag, em pílula e caixa alta, é a etiqueta que o usuário põe no lead — vem do drawer do Figma. O Badge, de 20px e raio de 6px, é o rótulo de estado que o sistema calcula, em seis variantes."
+      secoes={["Como funciona", "Tag", "Tag no perfil", "Variantes", "No card do lead", "Quando usar"]}
     >
       <ComoFunciona>
+        <p>
+          A <Chip>Tag</Chip> saiu do drawer do lead (node 538:197). O arquivo desenha oito &ldquo;temas&rdquo; num
+          eixo só; em código eles viram três props que se combinam — <Chip>status</Chip> põe a bolinha de 6px,{" "}
+          <Chip>tipo</Chip> põe o ícone de pessoa ou empresa e <Chip>foto</Chip> encosta a foto do atendente — e o{" "}
+          <Chip>+</Chip> do fim da fileira é <Chip>TagAdicionar</Chip>, um botão, porque clicável não é tag. O fundo é{" "}
+          <Chip>input/bg-disabled</Chip> e a caixa alta é CSS: a string chega como veio.
+        </p>
         <p>
           O componente é um <Chip>&lt;span&gt;</Chip> e uma string. O <Chip>cva</Chip> guarda a base — que vale
           sempre: <Chip>inline-flex</Chip>, <Chip>rounded-md</Chip>, <Chip>px-1.5 py-0.5</Chip> e{" "}
@@ -215,6 +223,60 @@ export default function BadgePage() {
           <Chip>className</Chip> na instância.
         </p>
       </ComoFunciona>
+
+      <Secao
+        titulo="Tag"
+        spec="22px · pílula"
+        descricao="Texto, três status, dois tipos, atendente e o botão de adicionar. Todas com 22px de altura."
+        codigo={`<Tag>Lista de leads</Tag>
+<Tag status="destructive">Abandonou</Tag>
+<Tag status="info">Passou</Tag>
+<Tag status="success">Agendado</Tag>
+<Tag tipo="pessoa">Pessoa</Tag>
+<Tag tipo="empresa">Empresa</Tag>
+<Tag foto="/fotos/esther.png">Esther</Tag>
+<TagAdicionar rotulo="Adicionar tag" />`}
+        nota={
+          <>
+            A bolinha usa <Chip>destructive</Chip>, <Chip>info</Chip> e <Chip>success</Chip> — os valores exatos do
+            arquivo. Ela reforça; quem carrega o sentido é o texto. O botão de adicionar tem{" "}
+            <Chip>aria-label</Chip> e a sombra interna do botão primário do Figma.
+          </>
+        }
+      >
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <Tag>Lista de leads</Tag>
+          <Tag status="destructive">Abandonou</Tag>
+          <Tag status="info">Passou</Tag>
+          <Tag status="success">Agendado</Tag>
+          <Tag tipo="pessoa">Pessoa</Tag>
+          <Tag tipo="empresa">Empresa</Tag>
+          <Tag foto="/ds/atendente.png">Esther</Tag>
+          <TagAdicionar rotulo="Adicionar tag" />
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Tag no perfil"
+        spec="gap 4 · centralizado"
+        descricao="A fileira do topo do perfil no drawer: atendente primeiro, depois listas e status, e o + no fim. Quebra em quantas linhas precisar, sempre centralizada."
+        codigo={`<div className="flex flex-wrap justify-center gap-1">
+  <Tag foto={foto}>Esther</Tag>
+  <Tag>Lista de leads</Tag>
+  <Tag status="destructive">Abandonou</Tag>
+  <TagAdicionar rotulo="Adicionar tag" />
+</div>`}
+      >
+        <div className="mx-auto flex w-[280px] flex-wrap items-center justify-center gap-1">
+          <Tag foto="/ds/atendente.png">Esther</Tag>
+          <Tag>Lista de leads</Tag>
+          <Tag>Isaias 123</Tag>
+          <Tag status="destructive">Abandonou</Tag>
+          <Tag status="success">Agendado</Tag>
+          <Tag>Frio</Tag>
+          <TagAdicionar rotulo="Adicionar tag" />
+        </div>
+      </Secao>
 
       <Secao
         titulo="Variantes"

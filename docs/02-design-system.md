@@ -142,6 +142,18 @@ ramificar por tema.
 |---|---|---|---|
 | `--sidebar-surface` | superfície do painel, sempre gradiente | `card` → `card` | `background` → `accent` |
 | `--sidebar-avatar` | círculo do avatar sem foto | `surface-inverse` | `blue-700` |
+| `--avatar-md-fundo` | disco do Avatar `md` | `accent` | `card` |
+| `--avatar-md-anel` | anel do Avatar `md` | `card` | `accent` |
+| `--drawer-perfil-brilho` | fim do gradiente do perfil no Drawer | `blue-100` | `accent` **(derivado)** |
+
+Os dois do Avatar `md` são o mesmo caso: o arquivo troca os papéis de disco e
+anel entre as variantes de tema. O brilho do Drawer é diferente — o arquivo liga
+o gradiente a `base/blue/100`, primitivo sem modo, e o valor escuro foi
+**derivado**, não desenhado. Ver [Drawer](componentes/Drawer.md).
+
+Efeito de sombra: `button inner shadow` do Figma virou `shadow-button-inner`
+(`inset 2px 4px 8px #E8F1FF66`), usado no Button `primary` e `soft` e no
+botão de adicionar tag.
 
 ### Tipografia
 
@@ -192,7 +204,7 @@ Sete degraus (node 431:2860), todos derivados de `--radius` = 8px:
 | `sm` | 4px | `--radius − 4` | — |
 | `md` | 6px | `--radius − 2` | button · input · card · nav-item |
 | `lg` | 8px | `--radius` | popover |
-| `xl` | 12px | `--radius + 4` | — |
+| `xl` | 12px | `--radius + 4` | drawer |
 | `full` | 999px | — | badge · avatar |
 
 Mudar `--radius` move a escala inteira. Os três degraus sem componente
@@ -268,3 +280,6 @@ Divergência visual é bug do código — ver
 | 2 | Valores soltos no design: `#09090B` (1.764 usos), `#71717A` (1.538), gradientes dos gráficos | Não acompanham o tema; religar muda cor levemente e precisa de decisão |
 | 3 | Gráficos com gradiente solto que clareia até quase branco | Some no tema escuro |
 | 4 | Motion não tokenizado | Duração, curva e `prefers-reduced-motion` sem dono (I12) |
+| 5 | Roxo de empresa sem variável: `#F2E8FF`, `#6C12E2`, `#8B33FF`, `#EEE0FF` | O perfil "outline - roxo" do Drawer não entra sem token |
+| 6 | Button redesenhado no Figma (269:32): texto 12px, gap 6, sombra interna | O código segue 13px e gap 8; só a sombra e as variantes `soft`/`outline` entraram |
+| 7 | Scrim sem opacidade definida | `overlay/scrim` existe, mas a camada nunca foi desenhada; o Drawer usa 40% |

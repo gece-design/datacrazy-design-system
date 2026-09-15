@@ -28,6 +28,10 @@ const triggerVariants = cva(
         md: "px-3 py-2 shadow-[inset_0_4px_5px_0_rgb(106_117_129_/_0.06)]",
         /** Tabela: 29px, sem realce. */
         sm: "h-[29px] px-3 py-1.5",
+        /** Formulário (node 544:129): a caixa de 36px do Input, com o caret à
+         *  direita. D14: traço de 1 + recuo de 11 = os 12 do arquivo. */
+        field:
+          "h-9 w-full justify-between border-input-border bg-input-bg px-[11px] text-body-md text-input-text hover:border-input-border-hover hover:text-input-text data-[aberto=true]:border-input-border-focus data-[aberto=true]:text-input-text data-[vazio=true]:text-input-placeholder",
       },
     },
     defaultVariants: { size: "md" },
@@ -39,27 +43,35 @@ export interface SelectTriggerProps
     VariantProps<typeof triggerVariants> {
   /** Gira o caret e marca o gatilho como ativo. */
   aberto?: boolean;
+  /** Nada escolhido: no `field`, o texto sai na cor de placeholder. */
+  vazio?: boolean;
 }
 
 /** Só o gatilho. Use quando a abertura for controlada por outro componente. */
 export const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
-  ({ className, size, children, aberto, ...props }, ref) => (
+  ({ className, size, children, aberto, vazio, ...props }, ref) => (
     <button
       ref={ref}
       type="button"
       data-aberto={aberto ? "true" : undefined}
+      data-vazio={vazio ? "true" : undefined}
       className={cn(triggerVariants({ size }), className)}
       {...props}
     >
       {children}
       {/* Caret da biblioteca de ícones, não desenhado à mão. O arquivo usa um
           triângulo cheio; a decisão do humano (2026-09-04) foi padronizar no
-          Phosphor, que é a fonte de ícone do DS. */}
+          Phosphor, que é a fonte de ícone do DS. No `field` o arquivo já usa o
+          CaretDown de 16px, em peso regular. */}
       <CaretDown
-        size={12}
-        weight="bold"
+        size={size === "field" ? 16 : 12}
+        weight={size === "field" ? "regular" : "bold"}
         aria-hidden="true"
-        className={cn("shrink-0 transition-transform", aberto && "rotate-180")}
+        className={cn(
+          "shrink-0 transition-transform",
+          size === "field" && "text-input-placeholder",
+          aberto && "rotate-180",
+        )}
       />
     </button>
   ),
@@ -162,6 +174,7 @@ export function Select({
         ref={gatilho}
         size={size}
         aberto={aberto}
+        vazio={!escolhido}
         aria-haspopup="listbox"
         aria-expanded={aberto}
         aria-controls={aberto ? `lista-${id}` : undefined}

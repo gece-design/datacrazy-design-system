@@ -1,4 +1,5 @@
 import * as React from "react";
+import { DotsThree } from "@phosphor-icons/react/dist/ssr";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
@@ -13,6 +14,9 @@ import { Badge } from "@/components/ui/badge";
  * As larguras do arquivo (230 · 170 · 160 · 150 · 200 · 180 · 42) viram
  * proporção, não pixel: a tabela do CRM vive em telas de largura variável, e
  * coluna fixa em px é o bug #83285 esperando acontecer.
+ *
+ * `layout="compacta"` é o `Layout=Compact` que o drawer usa (node 597:5983):
+ * traço `border` em volta e entre linhas, recuo de 12px e sem largura mínima.
  */
 
 export type ColunaTabela = {
@@ -24,56 +28,67 @@ export type ColunaTabela = {
   alinharFim?: boolean;
 };
 
+type Layout = "padrao" | "compacta";
+const LayoutTabela = React.createContext<Layout>("padrao");
+
 export const DataTable = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { colunas: ColunaTabela[] }
->(({ className, colunas, children, ...props }, ref) => {
+  React.HTMLAttributes<HTMLDivElement> & { colunas: ColunaTabela[]; layout?: Layout }
+>(({ className, colunas, layout = "padrao", children, ...props }, ref) => {
   const total = colunas.reduce((n, c) => n + c.peso, 0);
+  const compacta = layout === "compacta";
   return (
-    <div
-      ref={ref}
-      className={cn("w-full overflow-hidden rounded-md bg-card", className)}
-      {...props}
-    >
-      {/* O scroll horizontal vive aqui: numa tela estreita a tabela rola,
-          em vez de espremer coluna até o texto virar uma letra por linha. */}
-      <div className="w-full overflow-x-auto">
-        <table className="w-full min-w-[1160px] table-fixed border-collapse">
-          <colgroup>
-            {colunas.map((c) => (
-              <col key={c.chave} style={{ width: `${(c.peso / total) * 100}%` }} />
-            ))}
-          </colgroup>
-          <thead>
-            <tr className="bg-background">
-              {colunas.map((c, i) => (
-                <th
-                  key={c.chave}
-                  scope="col"
-                  className={cn(
-                    "px-2 py-2.5 text-left align-middle text-label-md font-medium text-muted-foreground",
-                    c.alinharFim && "text-right",
-                    i === 0 && "pl-5",
-                    i === colunas.length - 1 && "pr-5",
-                  )}
-                >
-                  {/* A coluna de ações tem rótulo vazio no arquivo. Vazio para
-                      quem vê, nomeado para quem ouve. */}
-                  {c.rotulo || <span className="sr-only">Ações</span>}
-                </th>
+    <LayoutTabela.Provider value={layout}>
+      <div
+        ref={ref}
+        className={cn(
+          "w-full overflow-hidden rounded-md bg-card",
+          compacta && "border border-border",
+          className,
+        )}
+        {...props}
+      >
+        {/* O scroll horizontal vive aqui: numa tela estreita a tabela rola,
+            em vez de espremer coluna até o texto virar uma letra por linha. */}
+        <div className="w-full overflow-x-auto">
+          <table className={cn("w-full table-fixed border-collapse", !compacta && "min-w-[1160px]")}>
+            <colgroup>
+              {colunas.map((c) => (
+                <col key={c.chave} style={{ width: `${(c.peso / total) * 100}%` }} />
               ))}
-            </tr>
-          </thead>
-          <tbody>{children}</tbody>
-        </table>
+            </colgroup>
+            <thead>
+              <tr className="bg-background">
+                {colunas.map((c, i) => (
+                  <th
+                    key={c.chave}
+                    scope="col"
+                    className={cn(
+                      "px-2 py-2.5 text-left align-middle text-label-md font-medium text-muted-foreground",
+                      c.alinharFim && "text-right",
+                      i === 0 && (compacta ? "pl-3" : "pl-5"),
+                      i === colunas.length - 1 && (compacta ? "pr-3" : "pr-5"),
+                    )}
+                  >
+                    {/* A coluna de ações tem rótulo vazio no arquivo. Vazio para
+                        quem vê, nomeado para quem ouve. */}
+                    {c.rotulo || <span className="sr-only">Ações</span>}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>{children}</tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </LayoutTabela.Provider>
   );
 });
 DataTable.displayName = "DataTable";
 
 /**
- * Uma linha. O traço superior é do token `card` — ver a divergência na doc.
+ * Uma linha. No layout padrão o traço superior é do token `card` — ver a
+ * divergência na doc. No compacto o arquivo usa `border`, e ele aparece.
  *
  * O hover NÃO está no arquivo: foi decisão do humano (2026-09-04). Numa lista
  * de 37 linhas o realce sob o cursor é o que evita ler o dado da linha errada.
@@ -83,30 +98,40 @@ DataTable.displayName = "DataTable";
 export const DataTableRow = React.forwardRef<
   HTMLTableRowElement,
   React.HTMLAttributes<HTMLTableRowElement>
->(({ className, ...props }, ref) => (
-  <tr
-    ref={ref}
-    className={cn("border-t border-card transition-colors hover:bg-overlay-item-hover", className)}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  const layout = React.useContext(LayoutTabela);
+  return (
+    <tr
+      ref={ref}
+      className={cn(
+        "border-t transition-colors hover:bg-overlay-item-hover",
+        layout === "compacta" ? "border-border" : "border-card",
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 DataTableRow.displayName = "DataTableRow";
 
 export const DataTableCell = React.forwardRef<
   HTMLTableCellElement,
   React.TdHTMLAttributes<HTMLTableCellElement> & { primeira?: boolean; ultima?: boolean }
->(({ className, primeira, ultima, ...props }, ref) => (
-  <td
-    ref={ref}
-    className={cn(
-      "px-2 py-3 align-middle",
-      primeira && "pl-5",
-      ultima && "pr-5",
-      className,
-    )}
-    {...props}
-  />
-));
+>(({ className, primeira, ultima, ...props }, ref) => {
+  const compacta = React.useContext(LayoutTabela) === "compacta";
+  return (
+    <td
+      ref={ref}
+      className={cn(
+        "px-2 py-3 align-middle",
+        primeira && (compacta ? "pl-3" : "pl-5"),
+        ultima && (compacta ? "pr-3" : "pr-5"),
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 DataTableCell.displayName = "DataTableCell";
 
 /* ------------------------------------------------------------- Toolbar -- */
@@ -114,20 +139,24 @@ DataTableCell.displayName = "DataTableCell";
 export function DataTableToolbar({
   rotulo,
   total,
+  layout = "padrao",
   children,
 }: {
   /** Linha de cima, pequena. Ex.: "Total de resultados". */
   rotulo: string;
   /** Linha de baixo, em destaque. Ex.: "37 negócios". */
   total: string;
+  /** `compacta`: sem recuo próprio, rótulo em caption e total em h4. */
+  layout?: Layout;
   /** Os filtros à direita. */
   children?: React.ReactNode;
 }) {
+  const compacta = layout === "compacta";
   return (
-    <div className="flex w-full flex-wrap items-center justify-between gap-4 px-5 py-4">
-      <div className="flex flex-col gap-[3px]">
-        <p className="text-body-sm text-muted-foreground">{rotulo}</p>
-        <p className="text-h3 text-foreground">{total}</p>
+    <div className={cn("flex w-full flex-wrap items-center justify-between gap-4", !compacta && "px-5 py-4")}>
+      <div className={cn("flex flex-col", compacta ? "gap-0.5" : "gap-[3px]")}>
+        <p className={cn("text-muted-foreground", compacta ? "text-caption" : "text-body-sm")}>{rotulo}</p>
+        <p className={cn("text-foreground", compacta ? "text-h4" : "text-h3")}>{total}</p>
       </div>
       {children ? <div className="flex flex-wrap items-start gap-2">{children}</div> : null}
     </div>
@@ -238,16 +267,18 @@ export function CelulaEstatisticas({
   );
 }
 
-/** O botão de ações da linha. No arquivo é só "•••". */
+/** O botão de ações da linha. `DotsThree` do Phosphor, como pede a regra de
+ *  ícone do DS — o arquivo desenha "•••" no layout padrão e o glifo no compacto. */
 export function CelulaAcoes({ rotulo = "Ações da linha" }: { rotulo?: string }) {
   return (
     <div className="flex justify-end">
       <button
         type="button"
         aria-label={rotulo}
-        className="rounded-sm px-1 text-h4 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        title={rotulo}
+        className="rounded-sm p-0.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
-        <span aria-hidden="true">•••</span>
+        <DotsThree size={16} weight="regular" aria-hidden="true" />
       </button>
     </div>
   );

@@ -43,9 +43,11 @@ export const navegacao: CategoriaNav[] = [
     titulo: "Forms",
     descricao: "Entrada e edição de dados.",
     itens: [
-      { titulo: "Input", href: "/forms/input", icone: "campo" , descricao: "Campo de texto de uma linha"},
+      { titulo: "Input", href: "/forms/input", icone: "campo", pronto: true , descricao: "Campo de texto de uma linha"},
       { titulo: "Select", href: "/forms/select", icone: "selecao" , descricao: "Escolha numa lista"},
-      { titulo: "Checkbox", href: "/forms/checkbox", icone: "caixa" , descricao: "Alternância booleana"},
+      { titulo: "Checkbox", href: "/forms/checkbox", icone: "caixa", pronto: true , descricao: "Marcação, com indeterminado"},
+      { titulo: "Radio Group", href: "/forms/radio-group", icone: "radio", pronto: true , descricao: "Escolha exclusiva por setas"},
+      { titulo: "Switch", href: "/forms/switch", icone: "interruptor", pronto: true , descricao: "Liga e desliga na hora"},
       { titulo: "Date Picker", href: "/forms/date-picker", icone: "calendario", pronto: true , descricao: "Período em dois meses, com atalhos"},
     ],
   },
@@ -66,9 +68,8 @@ export const navegacao: CategoriaNav[] = [
       // "Stat Card"; quem batiza é o arquivo.
       { titulo: "Card", href: "/data-display/card", icone: "cartao", pronto: true , descricao: "Lista, rosca e barras"},
       { titulo: "KPI Card", href: "/data-display/kpi-card", icone: "metrica", pronto: true , descricao: "Métrica em destaque"},
-      // Lock deliberado: a rota responde, mas o conteúdo ainda não serve.
-      { titulo: "Badge", href: "/data-display/badge", icone: "etiqueta", descricao: "Rótulo de estado"},
-      { titulo: "Avatar", href: "/data-display/avatar", icone: "pessoa" , descricao: "Identificação de pessoa"},
+      { titulo: "Badge", href: "/data-display/badge", icone: "etiqueta", pronto: true, descricao: "Rótulo de estado e tag do lead"},
+      { titulo: "Avatar", href: "/data-display/avatar", icone: "pessoa", pronto: true , descricao: "Identificação de pessoa"},
       { titulo: "Table", href: "/data-display/table", icone: "tabela", pronto: true , descricao: "A tabela de negócios do CRM"},
       { titulo: "Progress", href: "/data-display/progress", icone: "progresso" , descricao: "Andamento de etapa"},
     ],
@@ -77,10 +78,11 @@ export const navegacao: CategoriaNav[] = [
     titulo: "Feedback & Overlays",
     descricao: "O que aparece por cima e o que responde ao usuário.",
     itens: [
-      { titulo: "Tooltip", href: "/feedback/tooltip", icone: "balao" , descricao: "Conteúdo de texto truncado"},
+      { titulo: "Tooltip", href: "/feedback/tooltip", icone: "balao", pronto: true , descricao: "Conteúdo de texto truncado"},
+      { titulo: "Toast", href: "/feedback/toast", icone: "sino", pronto: true , descricao: "Confirmação que não bloqueia"},
       { titulo: "Empty State", href: "/feedback/empty-state", icone: "bandeja" , descricao: "Ausência de dados"},
       { titulo: "Modal", href: "/feedback/modal", icone: "camada" , descricao: "Camada que exige decisão"},
-      { titulo: "Drawer", href: "/feedback/drawer", icone: "gaveta" , descricao: "Registro aberto lateralmente"},
+      { titulo: "Drawer", href: "/feedback/drawer", icone: "gaveta", pronto: true , descricao: "O lead aberto pela direita"},
     ],
   },
 ];

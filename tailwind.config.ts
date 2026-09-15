@@ -38,6 +38,8 @@ const config: Config = {
         "nav-item-selected-foreground": "hsl(var(--nav-item-text-selected))",
         "nav-item-selected-icon": "hsl(var(--nav-item-icon-selected))",
         "sidebar-avatar": "hsl(var(--sidebar-avatar))",
+        "avatar-md-fundo": "hsl(var(--avatar-md-fundo))",
+        "avatar-md-anel": "hsl(var(--avatar-md-anel))",
         // input/* e overlay/* — tokens de componente da coleção "Cor".
         "input-bg": "hsl(var(--input-bg))",
         "input-border": "hsl(var(--input-border))",
@@ -104,6 +106,14 @@ const config: Config = {
         highlight: "inset 0 1px 4px 0 rgb(255 255 255 / 0.25)",
         // botão que flutua sobre a borda do painel (collapse toggle)
         float: "0 4px 4px 0 rgb(0 0 0 / 0.08)",
+        // "button inner shadow" — estilo de efeito do Figma (269:32), aplicado
+        // no Primary, no Secondary e no botão de adicionar tag.
+        "button-inner": "inset 2px 4px 8px 0 rgb(232 241 255 / 0.4)",
+      },
+      backgroundImage: {
+        // topo do perfil no drawer (node 565:6447): card até 79,91%, brilho no fim.
+        "drawer-perfil":
+          "linear-gradient(2.2deg, hsl(var(--card)) 79.91%, hsl(var(--drawer-perfil-brilho)) 96.01%)",
       },
       // Escala do Figma: 0 · 2 · 4 · 6 · 8 · 12 · 999. `--radius` é o degrau
       // lg (8px) e os outros saem dele, então mudar a base move a escala toda.

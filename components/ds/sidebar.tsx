@@ -11,7 +11,7 @@ import {
   BoundingBox, StackSimple, CursorClick, HandPointing, Textbox, CaretCircleDown,
   CheckSquare, CalendarBlank, SidebarSimple, Path, ListNumbers, ChartLineUp,
   Tag, UserCircle, Table, ChartBar, ChatTeardropText, Tray, Browsers, ArrowLineLeft,
-  Cards,
+  Cards, RadioButton, ToggleRight, Bell,
 } from "@phosphor-icons/react";
 import { navegacao } from "./nav";
 import { Logo, LogoSimbolo } from "./logo";
@@ -40,6 +40,8 @@ const icones: Record<string, Glifo> = {
   campo: Textbox,
   selecao: CaretCircleDown,
   caixa: CheckSquare,
+  radio: RadioButton,
+  interruptor: ToggleRight,
   calendario: CalendarBlank,
   painel: SidebarSimple,
   trilha: Path,
@@ -51,6 +53,7 @@ const icones: Record<string, Glifo> = {
   tabela: Table,
   progresso: ChartBar,
   balao: ChatTeardropText,
+  sino: Bell,
   bandeja: Tray,
   camada: Browsers,
   gaveta: ArrowLineLeft,

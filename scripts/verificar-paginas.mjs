@@ -4,9 +4,10 @@ const ROTAS = [
   "/", "/getting-started/installation",
   "/foundations/color", "/foundations/typography", "/foundations/icons",
   "/foundations/spacing", "/foundations/radius", "/foundations/elevation",
-  "/actions/button", "/forms/date-picker",
-  "/data-display/card", "/data-display/kpi-card", "/data-display/badge", "/data-display/table",
+  "/actions/button", "/forms/checkbox", "/forms/radio-group", "/forms/switch", "/forms/date-picker", "/forms/input",
+  "/data-display/card", "/data-display/kpi-card", "/data-display/badge", "/data-display/avatar", "/data-display/table", "/feedback/drawer",
   "/navigation/sidebar", "/navigation/pagination",
+  "/feedback/tooltip", "/feedback/toast",
 ];
 
 const browser = await chromium.launch();

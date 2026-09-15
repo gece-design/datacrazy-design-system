@@ -15,10 +15,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
+        primary: "bg-primary text-primary-foreground shadow-button-inner hover:bg-primary-hover",
         secondary: "border border-border bg-card text-foreground hover:bg-accent",
         ghost: "text-muted-foreground hover:bg-accent hover:text-foreground",
         destructive: "bg-destructive text-primary-foreground hover:bg-destructive-hover",
+        // Os dois abaixo vêm do redesenho do Button no Figma (269:32), onde se
+        // chamam "Secondary" e "Ghost". Entraram com nome próprio para não mudar
+        // o que `secondary` e `ghost` já significam nas telas prontas.
+        soft: "bg-base-blue-50 text-base-blue-600 shadow-button-inner hover:bg-base-blue-100",
+        outline: "border border-background text-surface-inverse hover:bg-background",
       },
       size: {
         sm: "h-7 px-2.5",

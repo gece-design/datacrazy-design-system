@@ -59,7 +59,7 @@ export default function Botao() {
   return (
     <PaginaDS
       titulo="Button"
-      descricao="Quatro variantes por três tamanhos: 12 combinações saídas de uma base cva única, com 28, 32 e 36px de altura e raio de 6px. Hover, foco e desabilitado não são desenhados — vêm de regra ancorada em token."
+      descricao="Seis variantes por três tamanhos: 18 combinações saídas de uma base cva única, com 28, 32 e 36px de altura e raio de 6px. Hover, foco e desabilitado não são desenhados — vêm de regra ancorada em token."
       secoes={["Como funciona", "Variantes", "Tamanhos", "Com ícone", "Estados", "Anatomia", "Quando usar cada variante"]}
     >
       <ComoFunciona>
@@ -107,12 +107,14 @@ export default function Botao() {
 
       <Secao
         titulo="Variantes"
-        spec="4 · variant"
-        descricao="Cor não preenche superfície: das quatro, só duas carregam cor na superfície. É o que mantém cor como sinal e não como decoração — anti-referência nº 3."
+        spec="6 · variant"
+        descricao="Cor não preenche superfície: das seis, só duas carregam cor cheia. soft e outline chegaram com o redesenho do Button no Figma (269:32), usados no drawer do lead."
         codigo={`<Button variant="primary">Nova campanha</Button>
 <Button variant="secondary">Filtros</Button>
 <Button variant="ghost">Cancelar</Button>
-<Button variant="destructive">Excluir negócio</Button>`}
+<Button variant="destructive">Excluir negócio</Button>
+<Button variant="soft">Atendimento</Button>
+<Button variant="outline">Todos</Button>`}
         nota={
           <>
             <ul className="space-y-1.5">
@@ -128,9 +130,18 @@ export default function Botao() {
               <Item mono='variant="destructive"'>
                 <Chip>bg-destructive</Chip> · hover <Chip>destructive-hover</Chip>
               </Item>
+              <Item mono='variant="soft"'>
+                <Chip>base/blue/50</Chip> + texto <Chip>base/blue/600</Chip> · hover <Chip>base/blue/100</Chip>
+              </Item>
+              <Item mono='variant="outline"'>
+                traço <Chip>background</Chip> + texto <Chip>surface-inverse</Chip> · hover <Chip>background</Chip>
+              </Item>
             </ul>
             <p className="mt-2.5">
-              Os quatro botões acima são os de verdade: passe o mouse para ver cada hover no token que lhe cabe.
+              Os seis botões acima são os de verdade: passe o mouse para ver cada hover no token que lhe cabe. No
+              Figma, <Chip>soft</Chip> e <Chip>outline</Chip> se chamam &ldquo;Secondary&rdquo; e &ldquo;Ghost&rdquo;;
+              entraram com nome próprio para não mudar o que <Chip>secondary</Chip> e <Chip>ghost</Chip> já são nas
+              telas prontas. O primary ganhou a sombra interna do arquivo (<Chip>shadow-button-inner</Chip>).
             </p>
           </>
         }
@@ -140,6 +151,8 @@ export default function Botao() {
           <Button variant="secondary">Filtros</Button>
           <Button variant="ghost">Cancelar</Button>
           <Button variant="destructive">Excluir negócio</Button>
+          <Button variant="soft">Atendimento</Button>
+          <Button variant="outline">Todos</Button>
         </div>
       </Secao>
 

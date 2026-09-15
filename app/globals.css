@@ -69,6 +69,17 @@
        no Escuro. Espelhado como token de componente, não como ramificação. */
     --sidebar-avatar: var(--surface-inverse);
 
+    /* avatar md (node 538:200) — o arquivo troca os papéis entre os temas: no
+       Claro o disco é `accent` com anel `card`; no Escuro, `card` com anel
+       `accent`. Mesmo caso do `--sidebar-avatar`: nome para a escolha. */
+    --avatar-md-fundo: var(--accent);
+    --avatar-md-anel: var(--card);
+
+    /* brilho do topo do perfil no drawer. O arquivo liga o gradiente a
+       `base/blue/100`, primitivo sem modo: no Escuro viraria faixa clara. O
+       valor escuro (`accent`) é DERIVADO, não desenhado — ver Drawer.md. */
+    --drawer-perfil-brilho: var(--blue-100);
+
     /* formulário — coleção "Cor" do Figma. Os onze são alias exato de um
        token semântico que já existe, nos DOIS modos: por isso vivem só aqui.
        O `var()` acompanha o tema sem uma linha no `.dark`. */
@@ -138,6 +149,10 @@
 
     --sidebar-surface: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--accent)) 100%);
     --sidebar-avatar: var(--blue-700);
+
+    --avatar-md-fundo: var(--card);
+    --avatar-md-anel: var(--accent);
+    --drawer-perfil-brilho: var(--accent);
   }
 
   * {

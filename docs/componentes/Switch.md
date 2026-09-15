@@ -1,0 +1,101 @@
+# Componente: Switch
+
+## Responsabilidade
+
+Ligar ou desligar algo que passa a valer na hora, sem botão de salvar.
+
+## Família
+
+`entrada` — define a regra de estado herdada
+([../02-design-system.md](../02-design-system.md)).
+
+## Par no Figma
+
+Node: `547:66` (component set "Switch", canvas `↳ Form controls`) · Também
+instanciado no drawer (`595:10896`), só desligado · Lote: `3` (antecipado) ·
+Última verificação: **2026-09-14**, medição de valor computado — trilho,
+botão, posição do botão, cores e gap nos 4 estados × 2 temas, em densidade 1× e
+2×. Zero divergência. Diff de pixels não medido (ponte `figma-console` fora do ar).
+
+A primeira versão deste arquivo saiu da instância do drawer, com o ligado e o
+desabilitado derivados. Foi substituída por esta, que segue o component set —
+acordado com a sessão do drawer em 2026-09-14.
+
+## Props
+
+| Prop | Tipo | Padrão | Obrigatória | Descrição |
+|------|------|--------|-------------|-----------|
+| `children` | `ReactNode` | — | não | Rótulo: **o que** liga. Sem ele, `aria-label`. |
+| `checked` / `defaultChecked` | `boolean` | — | não | Controlado ou solto. |
+| `onChange` | `ChangeEventHandler` | — | não | Evento nativo: `e.target.checked`. |
+| `disabled`, `name`, `aria-*` | nativos | — | não | Repassados ao `<input>`. |
+
+É um `<input type="checkbox" role="switch">`.
+
+## Variantes
+
+| Variante | Quando usar |
+|----------|-------------|
+| com rótulo | Preferência isolada ("Notificações por e-mail"). |
+| sem rótulo | Linha de lista (automações, integrações), com `aria-label` citando o item. |
+
+## Estados
+
+<!-- kfe:estados:start -->
+| Estado | Implementação | Origem | Precedente / regra |
+|--------|---------------|--------|--------------------|
+| hover | `bg-input-border-hover (desligado) · bg-primary-hover (ligado)` | banco | I1 |
+| focus | `outline outline-2 outline-offset-2 outline-ring no trilho (peer-focus-visible)` | banco | I4 |
+| ligado | `bg-primary + botao translate-x-4` | figma | — |
+| disabled | `bg-input-bg-disabled · ligado bg-subtle-foreground · rotulo input-text-disabled` | figma | — |
+<!-- kfe:estados:end -->
+
+Estado que não está nesta tabela **o componente não tem**. Ausência é
+decisão, não buraco a preencher.
+
+## Tokens consumidos
+
+`input/border` · `input/border-hover` · `input/bg-disabled` ·
+`input/text-disabled` · `primary` · `primary-hover` · `subtle-foreground` ·
+`card` · `foreground` · `ring` · `radius/full` · `text/body-md`
+
+## Composição
+
+Usa: nenhum componente do DS — é primitivo ·
+Usado por: Drawer (`components/ui/drawer.tsx`) e a página do Input, da outra
+frente de trabalho.
+
+## Exemplo de uso
+
+```tsx
+<Switch checked={ativa} onChange={(e) => alternarAutomacao(e.target.checked)}>
+  {t("notificacoesPorEmail")}
+</Switch>
+```
+
+## Acessibilidade
+
+| Item | Como está resolvido |
+|------|---------------------|
+| Foco visível | Outline de 2px com respiro transparente (D6), no trilho |
+| Papel/rótulo | `role="switch"`: anuncia ligado/desligado |
+| Teclado | Espaço alterna — nativo. Verificado com Playwright |
+| Estado sem depender de cor | O botão muda de lado (E7) |
+| Alvo de toque | 20px de trilho, estendido pelo `<label>`. Abaixo dos 44px da I15 |
+| Movimento | Botão desliza 16px; `motion-reduce` desliga a transição |
+| Contraste | Ver divergências 1 e 2 |
+
+## Divergências abertas (para o gate)
+
+1. **Desligado com trilho fraco** — `input/border` sobre `card`, ~1,2:1. Mesma
+   causa do Checkbox e do Radio.
+2. **Botão some no escuro desligado.** Botão `card` (`#25252D`) sobre trilho
+   `input/border` (`#2E2E38`). O arquivo desenha assim. A posição continua
+   dizendo o estado, mas o botão quase não se vê.
+3. **Hover do desligado pesa mais que nos outros dois.** A regra é a mesma
+   (`input/border` → `input/border-hover`), mas aqui ela pinta o trilho
+   inteiro de `muted-foreground`, não um traço de 1.5px. Vale revisar.
+4. **Retorno do efeito** não é do componente: quem usa precisa mostrar o
+   resultado e desfazer a posição se o back recusar. O Toast já existe
+   (outra frente) e é o candidato.
+5. **Alvo de toque** 20px contra os 44 da I15.
