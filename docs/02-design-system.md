@@ -57,6 +57,7 @@ Lista completa com procedência e citações:
 | `primary-hover` | →`base/blue/600` | →`base/blue/300` | hover da ação primária |
 | `primary-foreground` | `#FFFFFF` | `#10131A` | texto sobre o primário |
 | `border` | `#E1E7EF` | `#2E2E38` | traço |
+| `divider` | `#C3CCD8` | `#3A3A46` | separador entre grupos de ação sobre `background` (Header) |
 | `ring` | →`primary` | →`primary` | anel de foco |
 
 ### Cor — formulário
@@ -283,5 +284,5 @@ Divergência visual é bug do código — ver
 | 3 | Gráficos com gradiente solto que clareia até quase branco | Some no tema escuro |
 | 4 | Motion não tokenizado | Duração, curva e `prefers-reduced-motion` sem dono (I12) |
 | 5 | Tons do perfil (roxo, rosa, laranja) sem variável no Figma | Resolvido no código por `[data-tom]` (decisão do humano, 2026-09-15); falta levar ao arquivo como coleção com modos |
-| 6 | Button redesenhado no Figma (269:32): texto 12px, gap 6, sombra interna | O código segue 13px e gap 8; só a sombra e as variantes `soft`/`outline` entraram |
+| 6 | Button redesenhado no Figma (269:32): texto 12px, gap 6, sombra interna | O código segue 13px e gap 8; só a sombra e as variantes `soft`/`outline`/`tertiary` entraram. É o que deixa as ações do Header a 5,18% do arquivo (o resto fecha em ~1%) |
 | 7 | Scrim sem opacidade definida | `overlay/scrim` existe, mas a camada nunca foi desenhada; Drawer e Modal usam 40% |

@@ -17,6 +17,10 @@ next-env.d.ts
 # deploy
 .vercel
 
+# catálogo shadcn — gerado por scripts/gerar-registry.mjs antes do build
+/public/r/
+/public/llms.txt
+
 # testes / evidências geradas
 /coverage
 /test-results

@@ -22,15 +22,18 @@ markdown é a vista dele.
 | Arquivo | Responsabilidade |
 |---------|------------------|
 | [Avatar.md](Avatar.md) | Identificar pessoa ou empresa pela inicial, ou pela foto. |
+| [Breadcrumb.md](Breadcrumb.md) | Mostrar o caminho até a página atual e levar de volta a qualquer nível dele. |
 | [Card.md](Card.md) | Superfície que carrega um bloco de dados do dashboard. |
 | [Checkbox.md](Checkbox.md) | Marcar ou desmarcar uma opção independente, inclusive o "parte marcada" de |
 | [DataTable.md](DataTable.md) | Lista os negócios do CRM em colunas, com filtros e paginação. |
 | [Drawer.md](Drawer.md) | Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida. |
+| [Header.md](Header.md) | O topo de uma página do CRM: onde a pessoa está, que página é e o que dá para |
 | [Input.md](Input.md) | Receber um valor curto digitado, com rótulo visível e erro inline. |
 | [KpiCard.md](KpiCard.md) | Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma |
 | [Modal.md](Modal.md) | Pedir uma decisão bloqueando a tela até ela ser tomada. |
 | [Pagination.md](Pagination.md) | Navegar entre as páginas de uma lista longa. |
 | [RadioGroup.md](RadioGroup.md) | Escolher exatamente uma opção entre poucas, todas visíveis ao mesmo tempo. |
+| [SegmentedControl.md](SegmentedControl.md) | Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualização. |
 | [Select.md](Select.md) | Escolher uma opção numa lista curta. |
 | [Switch.md](Switch.md) | Ligar ou desligar algo que passa a valer na hora, sem botão de salvar. |
 | [Tabs.md](Tabs.md) | Alternar entre as seções de um mesmo registro. |

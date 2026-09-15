@@ -509,17 +509,35 @@ export function DateRangePicker({
 
   return (
     <div ref={raiz} className={cn("relative inline-block", className)}>
-      <Button
+      {/* Gatilho — "Data button" do Figma (node 471:2809). Não é o Button
+          secundário: o arquivo desenha um controle próprio, de 29px, sem traço,
+          com `text/body-md` e DOIS estados de repouso — Default (`card` +
+          `muted-foreground`) e Active (`accent` + `primary`). Active é o painel
+          aberto, então quem manda nele é `aberto`, não uma prop.
+          Medidas do arquivo: px 8 · py 6 · gap 4 · raio 6 (`radius/md`).
+          O ícone não tem cor própria: sai em currentColor junto com o texto —
+          no arquivo os dois viram `primary` juntos quando o painel abre. */}
+      <button
         ref={gatilho}
-        variant="secondary"
-        size="lg"
+        type="button"
         disabled={disabled}
         aria-haspopup="dialog"
         aria-expanded={aberto}
         onClick={() => (aberto ? fechar() : abrir())}
-        className="max-w-full"
+        className={cn(
+          "inline-flex max-w-full items-center gap-1 rounded-md px-2 py-1.5 text-body-md",
+          "outline-none transition-colors",
+          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          "disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0",
+          aberto
+            ? "bg-accent text-primary"
+            // hover derivado (E-01): empresta a superfície do Active, que é
+            // token que já existe, e mantém o texto em `muted-foreground` —
+            // é o azul do rótulo que continua separando os dois estados.
+            : "bg-card text-muted-foreground hover:bg-accent"
+        )}
       >
-        <CalendarBlank size={16} weight="regular" className="text-muted-foreground" />
+        <CalendarBlank size={16} weight="regular" />
         {/* O ICU do Node e o do navegador não separam o intervalo igual: um usa
             espaço fino (U+2009) em volta do travessão, o outro usa espaço
             comum. Mesma data, mesmo locale, dois bytes diferentes — e o React
@@ -529,7 +547,7 @@ export function DateRangePicker({
         <span className="truncate" suppressHydrationWarning>
           {rotuloDoGatilho}
         </span>
-      </Button>
+      </button>
 
       {aberto && (
         <div

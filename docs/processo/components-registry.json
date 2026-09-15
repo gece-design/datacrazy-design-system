@@ -1,7 +1,7 @@
 {
   "product": "DataCrazy",
   "kit": "3.2",
-  "updated": "2026-09-04",
+  "updated": "2026-09-15",
   "_doc": "Registro vivo de componentes — a memoria que alimenta a inferencia por analogia. Escrito pela fw-doc ao fim de CADA lote, nunca a mao. source de cada estado: figma | declarado | banco | inferido | humano.",
   "_divida": "Button e Badge existem em codigo desde 2026-09-01 e NAO estao aqui: foram escritos antes do registro existir. Enquanto a fw-doc nao rodar sobre eles, a verdade desses dois esta no codigo. Nao preencher de memoria — ler o componente.",
   "components": [
@@ -869,6 +869,191 @@
         }
       },
       "_states_doc": "Arquivo desenha so a caixa em repouso. Scrim a 40% e derivacao do Drawer. No escuro o arquivo pinta circulo e glifo do alerta com o destructive CLARO (mesmo erro de modo do Toast); o codigo segue o token."
+    },
+    {
+      "name": "Header",
+      "family": "navegacao",
+      "figmaNode": "601:464",
+      "batch": 3,
+      "variants": [],
+      "tokens": [
+        "background",
+        "border",
+        "foreground",
+        "muted-foreground",
+        "card",
+        "divider",
+        "destructive",
+        "primary-foreground",
+        "ring",
+        "text/heading-1",
+        "text/body-sm",
+        "text/label-sm",
+        "text/label-lg",
+        "radius/md",
+        "radius/full",
+        "button inner shadow"
+      ],
+      "motion": "transition-colors",
+      "states": {
+        "repouso": {
+          "impl": "px-8 py-4 border-b bg-background · linha de cima min-h-8 · ações gap-2",
+          "source": "figma",
+          "rule": null,
+          "precedent": "Actions=Default (601:12)",
+          "approvedIn": null
+        },
+        "sem espaço": {
+          "impl": "ações descem para linha própria (flex-wrap + ml-auto) e quebram entre si",
+          "source": "inferido",
+          "rule": "E3",
+          "precedent": null,
+          "approvedIn": null
+        },
+        "texto longo": {
+          "impl": "título, subtítulo e níveis da trilha truncate + title",
+          "source": "declarado",
+          "rule": "D12",
+          "precedent": null,
+          "approvedIn": null
+        },
+        "hover (sino)": {
+          "impl": "hover:bg-accent do Button tertiary",
+          "source": "inferido",
+          "rule": null,
+          "precedent": "gatilho do Date Picker",
+          "approvedIn": null
+        },
+        "focus (busca)": {
+          "impl": "focus-within:outline-2 outline-offset-2 outline-ring",
+          "source": "declarado",
+          "rule": "D6",
+          "precedent": null,
+          "approvedIn": null
+        }
+      },
+      "_states_doc": "Sem prop de variante: as 6 combinações do arquivo são composição de trilha/utilitarios/acoes. Set do Figma com erro (6 variantes com o mesmo nome). Escuro não desenhado, sai dos tokens. Selo em primary-foreground (destructive-foreground do arquivo é branco nos dois modos)."
+    },
+    {
+      "name": "Breadcrumb",
+      "family": "navegacao",
+      "figmaNode": "261:269",
+      "batch": 3,
+      "variants": [],
+      "tokens": [
+        "subtle-foreground",
+        "muted-foreground",
+        "accent",
+        "primary",
+        "card",
+        "ring",
+        "text/label-md",
+        "text/label-sm",
+        "space/component/gap-xs",
+        "space/2",
+        "radius/full"
+      ],
+      "motion": "transition-colors",
+      "states": {
+        "ancestral": {
+          "impl": "text-subtle-foreground, link",
+          "source": "figma",
+          "rule": null,
+          "precedent": "theme=Light (261:269)",
+          "approvedIn": null
+        },
+        "atual": {
+          "impl": "text-muted-foreground + aria-current=page, não navega",
+          "source": "figma",
+          "rule": null,
+          "precedent": "theme=Light (261:269)",
+          "approvedIn": null
+        },
+        "hover": {
+          "impl": "ancestral sobe para muted-foreground",
+          "source": "inferido",
+          "rule": null,
+          "precedent": "tom do nível atual",
+          "approvedIn": null
+        },
+        "focus": {
+          "impl": "outline-2 outline-offset-2 outline-ring",
+          "source": "declarado",
+          "rule": "D6",
+          "precedent": null,
+          "approvedIn": null
+        },
+        "recolhida": {
+          "impl": "primeiro + botão de reticências + últimos (maximo − 1) · clique abre no lugar e passa o foco",
+          "source": "declarado",
+          "rule": null,
+          "precedent": "nota do componente no arquivo",
+          "approvedIn": null
+        },
+        "texto longo": {
+          "impl": "truncate + title por nível",
+          "source": "declarado",
+          "rule": "D12",
+          "precedent": null,
+          "approvedIn": null
+        }
+      },
+      "_states_doc": "Qualquer número de níveis. maximo=3 segue o desenho; a nota do arquivo (2 níveis) fica em maximo={2}. Contraste subtle-foreground sobre background 2,2:1 aberto."
+    },
+    {
+      "name": "SegmentedControl",
+      "family": "entrada",
+      "figmaNode": "269:68",
+      "batch": 3,
+      "variants": [
+        "SegmentedControl",
+        "ViewSwitcher (471:2947)"
+      ],
+      "tokens": [
+        "card",
+        "accent",
+        "overlay/item-text-selected",
+        "primary",
+        "muted-foreground",
+        "foreground",
+        "ring",
+        "radius/md",
+        "radius/sm",
+        "text/body-md",
+        "button inner shadow"
+      ],
+      "motion": "transition-colors",
+      "states": {
+        "selecionada": {
+          "impl": "Segmented: bg-accent text-overlay-item-text-selected · View: bg-accent text-primary shadow-button-inner · aria-checked",
+          "source": "figma",
+          "rule": null,
+          "precedent": "Selected=Mês (269:54) · View=Chart (471:2940)",
+          "approvedIn": null
+        },
+        "hover": {
+          "impl": "text-foreground",
+          "source": "inferido",
+          "rule": null,
+          "precedent": "Tabs",
+          "approvedIn": null
+        },
+        "focus": {
+          "impl": "outline-2 outline-offset-2 outline-ring",
+          "source": "declarado",
+          "rule": "D6",
+          "precedent": null,
+          "approvedIn": null
+        },
+        "disabled": {
+          "impl": "opacity-50 pointer-events-none, pulada pelas setas",
+          "source": "banco",
+          "rule": "I5",
+          "precedent": null,
+          "approvedIn": null
+        }
+      },
+      "_states_doc": "Grupo de rádio com setas e ativação automática. Dois sets no Figma, duas exportações no mesmo arquivo."
     }
   ]
 }

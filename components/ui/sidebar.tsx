@@ -37,8 +37,9 @@ function MarcaDagua({ colapsada }: { colapsada: boolean }) {
     >
       <defs>
         <radialGradient id={id}>
-          <stop offset="0%" stopColor="hsl(var(--primary))" />
-          <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+          {/* currentColor + classe do token: vale no Tailwind v3 e no v4 */}
+          <stop offset="0%" stopColor="currentColor" className="text-primary" />
+          <stop offset="100%" stopColor="currentColor" className="text-primary" stopOpacity="0" />
         </radialGradient>
       </defs>
       <path

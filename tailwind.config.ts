@@ -27,6 +27,7 @@ const config: Config = {
         "success-hover": "hsl(var(--success-hover))",
         "destructive": "hsl(var(--destructive))",
         "destructive-hover": "hsl(var(--destructive-hover))",
+        "divider": "hsl(var(--divider))",
         "warning": "hsl(var(--warning))",
         "warning-hover": "hsl(var(--warning-hover))",
         "info": "hsl(var(--info))",

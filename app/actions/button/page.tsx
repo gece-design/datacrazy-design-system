@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, CaretDown, Trash } from "@phosphor-icons/react";
+import { Plus, CaretDown, Trash, Bell, MagnifyingGlass } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 
@@ -59,7 +59,7 @@ export default function Botao() {
   return (
     <PaginaDS
       titulo="Button"
-      descricao="Seis variantes por três tamanhos: 18 combinações saídas de uma base cva única, com 28, 32 e 36px de altura e raio de 6px. Hover, foco e desabilitado não são desenhados — vêm de regra ancorada em token."
+      descricao="Sete variantes e quatro tamanhos saídos de uma base cva única: 28, 32 e 36px de altura, mais o quadrado de 32 só com ícone, e raio de 6px. Hover, foco e desabilitado não são desenhados — vêm de regra ancorada em token."
       secoes={["Como funciona", "Variantes", "Tamanhos", "Com ícone", "Estados", "Anatomia", "Quando usar cada variante"]}
     >
       <ComoFunciona>
@@ -107,14 +107,18 @@ export default function Botao() {
 
       <Secao
         titulo="Variantes"
-        spec="6 · variant"
-        descricao="Cor não preenche superfície: das seis, só duas carregam cor cheia. soft e outline chegaram com o redesenho do Button no Figma (269:32), usados no drawer do lead."
+        spec="7 · variant"
+        descricao="Cor não preenche superfície: das sete, só duas carregam cor cheia. soft e outline chegaram com o redesenho do Button no Figma (269:32), usados no drawer do lead; tertiary chegou com o Header."
         codigo={`<Button variant="primary">Nova campanha</Button>
 <Button variant="secondary">Filtros</Button>
 <Button variant="ghost">Cancelar</Button>
 <Button variant="destructive">Excluir negócio</Button>
 <Button variant="soft">Atendimento</Button>
-<Button variant="outline">Todos</Button>`}
+<Button variant="outline">Todos</Button>
+<Button variant="tertiary">
+  <MagnifyingGlass size={16} weight="regular" />
+  Pesquisar
+</Button>`}
         nota={
           <>
             <ul className="space-y-1.5">
@@ -136,13 +140,23 @@ export default function Botao() {
               <Item mono='variant="outline"'>
                 traço <Chip>background</Chip> + texto <Chip>surface-inverse</Chip> · hover <Chip>background</Chip>
               </Item>
+              <Item mono='variant="tertiary"'>
+                <Chip>bg-card</Chip> sem traço + texto <Chip>muted-foreground</Chip> + sombra interna · hover{" "}
+                <Chip>accent</Chip>
+              </Item>
             </ul>
             <p className="mt-2.5">
-              Os seis botões acima são os de verdade: passe o mouse para ver cada hover no token que lhe cabe. No
+              Os sete botões acima são os de verdade: passe o mouse para ver cada hover no token que lhe cabe. No
               Figma, <Chip>soft</Chip> e <Chip>outline</Chip> se chamam &ldquo;Secondary&rdquo; e &ldquo;Ghost&rdquo;;
               entraram com nome próprio para não mudar o que <Chip>secondary</Chip> e <Chip>ghost</Chip> já são nas
               telas prontas. O primary e o destructive têm a sombra interna do arquivo (<Chip>shadow-button-inner</Chip>) —
               a do destructive conferida no botão Excluir do Modal.
+            </p>
+            <p className="mt-2.5">
+              <Chip>tertiary</Chip> é o &ldquo;Treecondary&rdquo; do arquivo (563:4287): o botão de apoio das barras de
+              ferramenta, como Pesquisar e Filtros no Header. Difere do <Chip>secondary</Chip> por não ter traço — ele
+              mora sobre <Chip>background</Chip>, onde o <Chip>card</Chip> já separa. No escuro o arquivo pinta o texto
+              de <Chip>base/blue/600</Chip>, cópia do Secondary; o código mantém <Chip>muted-foreground</Chip>.
             </p>
           </>
         }
@@ -154,34 +168,53 @@ export default function Botao() {
           <Button variant="destructive">Excluir negócio</Button>
           <Button variant="soft">Atendimento</Button>
           <Button variant="outline">Todos</Button>
+          <Button variant="tertiary">
+            <MagnifyingGlass size={16} weight="regular" />
+            Pesquisar
+          </Button>
         </div>
       </Secao>
 
       <Secao
         titulo="Tamanhos"
-        spec="28 · 32 · 36px"
-        descricao="Três alturas, mesma tipografia: o que muda é altura e padding, nunca o corpo do texto. Num CRM a densidade é estrutural, então sm existe para barra de filtro e ação de linha, não para casos apertados."
+        spec="28 · 32 · 36px · 32²"
+        descricao="Três alturas, mesma tipografia: o que muda é altura e padding, nunca o corpo do texto. Num CRM a densidade é estrutural, então sm existe para barra de filtro e ação de linha, não para casos apertados. O quarto tamanho, icon, é o quadrado de 32 para ação só com ícone."
         codigo={`<Button size="sm">Nova campanha</Button>
 <Button size="md">Nova campanha</Button>  {/* md é o padrão: pode omitir */}
-<Button size="lg">Nova campanha</Button>`}
+<Button size="lg">Nova campanha</Button>
+<Button size="icon" variant="tertiary" aria-label="Notificações">
+  <Bell size={16} weight="regular" />
+</Button>`}
         nota={
-          <ul className="space-y-1.5">
-            <Item mono='size="sm"'>
-              <Chip>h-7</Chip> · 28px · <Chip>px-2.5</Chip>
-            </Item>
-            <Item mono='size="md"'>
-              <Chip>h-8</Chip> · 32px · <Chip>px-3</Chip> · o padrão, sai quando <Chip>size</Chip> é omitido
-            </Item>
-            <Item mono='size="lg"'>
-              <Chip>h-9</Chip> · 36px · <Chip>px-4</Chip>
-            </Item>
-          </ul>
+          <>
+            <ul className="space-y-1.5">
+              <Item mono='size="sm"'>
+                <Chip>h-7</Chip> · 28px · <Chip>px-2.5</Chip>
+              </Item>
+              <Item mono='size="md"'>
+                <Chip>h-8</Chip> · 32px · <Chip>px-3</Chip> · o padrão, sai quando <Chip>size</Chip> é omitido
+              </Item>
+              <Item mono='size="lg"'>
+                <Chip>h-9</Chip> · 36px · <Chip>px-4</Chip>
+              </Item>
+              <Item mono='size="icon"'>
+                <Chip>size-8</Chip> · 32×32 · sem padding · o sino do Header
+              </Item>
+            </ul>
+            <p className="mt-2.5">
+              Botão sem rótulo não tem nome: <Chip>aria-label</Chip> é obrigatório, e o Header ainda põe um tooltip com
+              o mesmo texto (<Chip>HeaderNotificacoes</Chip>).
+            </p>
+          </>
         }
       >
         <div className="flex flex-wrap items-center gap-3">
           <Button size="sm">Nova campanha</Button>
           <Button size="md">Nova campanha</Button>
           <Button size="lg">Nova campanha</Button>
+          <Button size="icon" variant="tertiary" aria-label="Notificações">
+            <Bell size={16} weight="regular" />
+          </Button>
         </div>
       </Secao>
 

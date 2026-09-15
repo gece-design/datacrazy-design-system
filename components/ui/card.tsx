@@ -170,8 +170,10 @@ export function CardDonut({
           <svg viewBox="0 0 150 150" className="size-full" aria-hidden="true">
             <defs>
               <linearGradient id={idGradiente} x1="75" y1="0" x2="75" y2="150" gradientUnits="userSpaceOnUse">
-                <stop stopColor="hsl(var(--primary))" />
-                <stop offset="1" stopColor="hsl(var(--accent))" />
+                {/* currentColor + classe do token, e não a variável direto:
+                    assim a cor vale no Tailwind v3 e no v4 (catálogo do shadcn). */}
+                <stop stopColor="currentColor" className="text-primary" />
+                <stop offset="1" stopColor="currentColor" className="text-accent" />
               </linearGradient>
             </defs>
             {fatias

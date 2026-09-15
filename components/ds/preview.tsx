@@ -122,7 +122,9 @@ export function CardComponente({
 }: { titulo: string; descricao: string; href: string; pronto?: boolean; children: React.ReactNode }) {
   const conteudo = (
     <>
-      <div className="grid h-44 place-items-center overflow-hidden border-b border-border bg-background px-6">
+      {/* inert: o card inteiro já é o link. Botão, campo ou trilha dentro do
+          preview não recebem foco nem clique, e o clique cai no card. */}
+      <div inert className="grid h-44 place-items-center overflow-hidden border-b border-border bg-background px-6">
         {children}
       </div>
       <div className="p-4">

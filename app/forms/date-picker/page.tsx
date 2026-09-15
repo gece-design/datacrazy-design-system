@@ -49,7 +49,7 @@ const anatomia: Parte[] = [
   {
     nome: "Gatilho",
     papel:
-      "Botão secundário com ícone de calendário. O rótulo é o próprio período formatado — não há texto fixo do lado do valor.",
+      "Controle próprio do arquivo (node 471:2809), não o Button secundário: 29px, sem traço, `text-body-md`. Dois estados de repouso — Default em `card` + `muted-foreground`, Active em `accent` + `primary` — e Active é o painel aberto. O rótulo é o próprio período formatado.",
   },
   {
     nome: "Coluna de atalhos",

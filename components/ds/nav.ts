@@ -14,9 +14,7 @@ export const navegacao: CategoriaNav[] = [
     descricao: "O ponto de partida.",
     itens: [
       { titulo: "Let's begin", href: "/", icone: "foguete", pronto: true , descricao: "O que é e a regra que sustenta"},
-      // Lock deliberado: a rota existe e responde, mas o conteúdo ainda não
-      // serve — enquanto não servir, não se anuncia como pronta.
-      { titulo: "Installation", href: "/getting-started/installation", icone: "download", descricao: "Rodar, adotar e atualizar tokens"},
+      { titulo: "Installation", href: "/getting-started/installation", icone: "download", pronto: true, descricao: "Usar o DS no Claude Code"},
     ],
   },
   {
@@ -56,7 +54,8 @@ export const navegacao: CategoriaNav[] = [
     descricao: "Como o usuário se move pelo produto.",
     itens: [
       { titulo: "Sidebar", href: "/navigation/sidebar", icone: "painel", pronto: true, descricao: "Navegação principal"},
-      { titulo: "Breadcrumb", href: "/navigation/breadcrumb", icone: "trilha" , descricao: "Trilha de dois níveis"},
+      { titulo: "Header", href: "/navigation/header", icone: "cabecalho", pronto: true, descricao: "Topo da página: trilha, título e ações"},
+      { titulo: "Breadcrumb", href: "/navigation/breadcrumb", icone: "trilha", pronto: true, descricao: "Trilha que recolhe os níveis do meio"},
       { titulo: "Pagination", href: "/navigation/pagination", icone: "paginas", pronto: true , descricao: "Controles de página de uma lista"},
       // Estava no escopo negativo do roadmap (anti-referência nº 11). Entrou por
       // decisão do humano em 2026-09-15, com fileira que rola em vez de quebrar.

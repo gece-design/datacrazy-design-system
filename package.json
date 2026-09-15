@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "registry": "node scripts/gerar-registry.mjs",
+    "predev": "npm run registry",
     "dev": "next dev -p 4321",
+    "prebuild": "npm run registry",
     "build": "next build",
     "start": "next start -p 4321",
     "typecheck": "tsc --noEmit",

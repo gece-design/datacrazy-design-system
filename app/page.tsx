@@ -3,11 +3,13 @@
 import {
   ChartBar,
   Funnel,
+  Handshake,
   House,
   Kanban,
   MagnifyingGlass,
   Plus,
   Robot,
+  Trash,
   UsersThree,
 } from "@phosphor-icons/react";
 import { navegacao } from "@/components/ds/nav";
@@ -19,6 +21,18 @@ import { SidebarGrupo, SidebarItem } from "@/components/ui/sidebar";
 import { TooltipContent } from "@/components/ui/tooltip";
 import { Toast } from "@/components/ui/toast";
 import { Tabs } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, Radio } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
+import { DateRangePicker, type RotulosDoDatePicker } from "@/components/ui/date-picker";
+import { Header, HeaderNotificacoes } from "@/components/ui/header";
+import { Breadcrumb, type ItemBreadcrumb } from "@/components/ui/breadcrumb";
+import { Pagination } from "@/components/ui/pagination";
+import { Card, CardHeader } from "@/components/ui/card";
+import { Avatar } from "@/components/ui/avatar";
+import { DataTable, DataTableRow, DataTableCell, CelulaLead, CelulaProgresso } from "@/components/ui/data-table";
+import { ModalPainel } from "@/components/ui/modal";
 
 const total = navegacao.reduce((n, c) => n + c.itens.length, 0);
 const prontos = navegacao.reduce((n, c) => n + c.itens.filter((i) => i.pronto).length, 0);
@@ -26,6 +40,48 @@ const percentual = Math.round((prontos / total) * 100);
 
 const rampa = ["50", "100", "200", "300", "400", "500", "600", "700"];
 const estados = ["success", "warning", "destructive", "info"];
+const degrausDeEspaco = [4, 8, 16, 24, 32, 48];
+const degrausDeRaio = [
+  { nome: "none", classe: "rounded-none" },
+  { nome: "sm", classe: "rounded-sm" },
+  { nome: "md", classe: "rounded-md" },
+  { nome: "lg", classe: "rounded-lg" },
+  { nome: "xl", classe: "rounded-xl" },
+  { nome: "full", classe: "rounded-full" },
+];
+const alturas = [
+  { nome: "sm", classe: "shadow-sm" },
+  { nome: "md", classe: "shadow-md" },
+  { nome: "lg", classe: "shadow-lg" },
+  { nome: "xl", classe: "shadow-xl" },
+];
+
+// Os textos são literais porque a doc é em português; no CRM vêm do next-intl.
+const rotulosTrilha = { rotulo: "Trilha de navegação", rotuloRecolhidos: (n: number) => `Mostrar ${n} níveis ocultos` };
+// Sem href: o card já é um link, e <a> dentro de <a> não vale.
+const trilhaLonga: ItemBreadcrumb[] = [
+  { rotulo: "DataCrazy", avatar: { destaque: true } },
+  { rotulo: "Comercial" },
+  { rotulo: "Pipelines" },
+  { rotulo: "Vendas B2B", icone: Kanban },
+  { rotulo: "Negócio #4821", icone: Handshake },
+];
+const rotulosData: RotulosDoDatePicker = {
+  vazio: "Selecione um período",
+  atalhos: "Selecione",
+  mes: "Mês",
+  ano: "Ano",
+  mesAnterior: "Mês anterior",
+  proximoMes: "Próximo mês",
+  aplicar: "Aplicar",
+  cancelar: "Cancelar",
+};
+// Datas fixas: `new Date()` daria um texto no servidor e outro no navegador.
+const periodoDoPreview = { inicio: new Date(2026, 8, 1), fim: new Date(2026, 8, 15) };
+const negociosDoPreview = [
+  { nome: "Giovanna", etapa: "Proposta", percentual: 44 },
+  { nome: "Breno Ramos", etapa: "Negociação", percentual: 72 },
+];
 
 // Preview ao vivo de cada item, por rota. Item sem página ainda cai no esqueleto.
 const previews: Record<string, React.ReactNode> = {
@@ -46,12 +102,12 @@ const previews: Record<string, React.ReactNode> = {
   "/getting-started/installation": (
     <div className="w-60 max-w-full rounded-md border border-border bg-card p-3 font-mono text-body-sm">
       <p className="text-subtle-foreground">
-        <span className="text-primary">$</span> npm install
+        <span className="text-primary">$</span> npx shadcn add @datacrazy/setup
       </p>
       <p className="mt-1 text-subtle-foreground">
-        <span className="text-primary">$</span> npm run dev
+        <span className="text-primary">$</span> npx shadcn mcp init
       </p>
-      <p className="mt-2 text-foreground">localhost:4321</p>
+      <p className="mt-2 text-foreground">Claude Code conectado</p>
     </div>
   ),
   "/foundations/color": (
@@ -140,6 +196,152 @@ const previews: Record<string, React.ReactNode> = {
       aoEscolher={() => {}}
     />
   ),
+  "/foundations/spacing": (
+    <div className="flex w-60 max-w-full flex-col gap-1.5">
+      {degrausDeEspaco.map((px) => (
+        <div key={px} className="flex items-center gap-3">
+          <span className="w-6 shrink-0 text-right font-mono text-caption text-subtle-foreground">{px}</span>
+          <div className="h-2 rounded-sm bg-primary" style={{ width: px * 3 }} />
+        </div>
+      ))}
+    </div>
+  ),
+  "/foundations/radius": (
+    <div className="flex items-end gap-2.5">
+      {degrausDeRaio.map((d) => (
+        <div key={d.nome} className="flex flex-col items-center gap-1.5">
+          <div className={`size-8 border border-border bg-card ${d.classe}`} />
+          <span className="font-mono text-caption text-subtle-foreground">{d.nome}</span>
+        </div>
+      ))}
+    </div>
+  ),
+  "/foundations/elevation": (
+    <div className="flex items-center gap-4">
+      {alturas.map((a) => (
+        <div
+          key={a.nome}
+          className={`grid size-12 place-items-center rounded-md bg-card font-mono text-caption text-subtle-foreground ${a.classe}`}
+        >
+          {a.nome}
+        </div>
+      ))}
+    </div>
+  ),
+  "/forms/input": (
+    <div className="w-60 max-w-full">
+      <Input rotulo="E-mail" placeholder="Exemplo: email@dominio.com" />
+    </div>
+  ),
+  "/forms/checkbox": (
+    <div className="flex flex-col gap-2.5">
+      <Checkbox defaultChecked>Negócios em aberto</Checkbox>
+      <Checkbox indeterminado>Todas as colunas</Checkbox>
+      <Checkbox>Mostrar arquivados</Checkbox>
+    </div>
+  ),
+  "/forms/radio-group": (
+    <RadioGroup rotulo="Tipo de pessoa" valorPadrao="fisica">
+      <Radio value="fisica">Pessoa física</Radio>
+      <Radio value="juridica">Pessoa jurídica</Radio>
+    </RadioGroup>
+  ),
+  "/forms/switch": (
+    <div className="flex flex-col gap-2.5">
+      <Switch defaultChecked>Notificações por e-mail</Switch>
+      <Switch>Resumo semanal</Switch>
+    </div>
+  ),
+  "/forms/date-picker": (
+    <DateRangePicker valor={periodoDoPreview} onValorChange={() => {}} locale="pt-BR" rotulos={rotulosData} />
+  ),
+  "/navigation/header": (
+    <Header
+      className="w-full rounded-md border px-4 py-3"
+      titulo="Negócios"
+      subtitulo="37 em aberto"
+      trilha={<Breadcrumb {...rotulosTrilha} itens={[trilhaLonga[0], trilhaLonga[3]]} />}
+      utilitarios={<HeaderNotificacoes rotulo="Notificações: 5 não lidas" contagem={5} />}
+      acoes={
+        <Button size="sm">
+          <Plus size={16} weight="regular" />
+          Novo
+        </Button>
+      }
+    />
+  ),
+  "/navigation/breadcrumb": <Breadcrumb {...rotulosTrilha} itens={trilhaLonga} className="max-w-full" />,
+  "/navigation/pagination": (
+    <Pagination paginas={4} atual={2} />
+  ),
+  "/data-display/card": (
+    <Card className="w-64 max-w-full">
+      <CardHeader title="Dados diários" value="R$ 3,00K" subtitle="Visualização por valor dos negócios" />
+    </Card>
+  ),
+  "/data-display/avatar": (
+    <div className="flex items-center gap-4">
+      <Avatar nome="Rafael Pinto Pinheiro" size="sm" />
+      <Avatar nome="Esther Lima" src="/ds/atendente.png" size="md" />
+      <Avatar nome="Joel Jota" size="lg" />
+    </div>
+  ),
+  "/data-display/table": (
+    <DataTable
+      layout="compacta"
+      className="w-72 max-w-full"
+      colunas={[
+        { chave: "lead", rotulo: "Lead", peso: 230 },
+        { chave: "etapa", rotulo: "Etapa", peso: 200 },
+      ]}
+    >
+      {negociosDoPreview.map((n) => (
+        <DataTableRow key={n.nome}>
+          <DataTableCell primeira>
+            <CelulaLead nome={n.nome} />
+          </DataTableCell>
+          <DataTableCell ultima>
+            <CelulaProgresso etapa={n.etapa} percentual={n.percentual} />
+          </DataTableCell>
+        </DataTableRow>
+      ))}
+    </DataTable>
+  ),
+  "/feedback/modal": (
+    // o painel mede 400 × 240; reduzido para caber na caixa de 176
+    <div className="origin-center scale-[0.66]">
+      <ModalPainel
+        variant="destructive"
+        titulo="Excluir negócio?"
+        descricao="Ele sai do funil e do histórico do lead. Não dá para desfazer."
+        aoFechar={() => {}}
+        acoes={
+          <>
+            <Button variant="outline">Cancelar</Button>
+            <Button variant="destructive">
+              <Trash size={16} weight="regular" />
+              Excluir
+            </Button>
+          </>
+        }
+      />
+    </div>
+  ),
+  "/feedback/drawer": (
+    <div className="relative h-32 w-64 max-w-full overflow-hidden rounded-md border border-border bg-card">
+      {/* a tela por baixo fica só à esquerda: não passa por trás do painel */}
+      <div className="flex w-28 flex-col gap-2 p-3">
+        <div className="h-2 w-2/3 rounded bg-border" />
+        <div className="h-2 w-full rounded bg-border" />
+        <div className="h-2 w-1/2 rounded bg-border" />
+      </div>
+      <div className="absolute inset-y-0 right-0 flex w-36 flex-col items-start gap-2 border-l border-overlay-border bg-overlay-bg p-3 shadow-xl">
+        <Avatar nome="Joel Jota" size="sm" />
+        <p className="w-full truncate text-label-md text-foreground">Joel Jota</p>
+        <Tag status="success">Agendado</Tag>
+      </div>
+    </div>
+  ),
 };
 
 const esqueleto = (
@@ -152,10 +354,13 @@ const esqueleto = (
 
 const descricoes: Record<string, string> = {
   "Let's begin": "Esta página: o inventário e a regra que o sustenta.",
-  "Installation": "Rodar o site e levar um componente para o CRM.",
+  "Installation": "Três comandos para o Claude Code criar telas com o DS.",
   "Color": "31 variáveis, dois modos, nenhum nome de cor.",
   "Typography": "15 papéis, de 26px a 10px, hierarquia por peso.",
   "Icons": "Phosphor num peso só: regular; fill só no selecionado (A8).",
+  "Spacing": "Catorze degraus de 0 a 80px, todos da escala do Tailwind.",
+  "Radius": "Sete degraus que saem de uma variável só: --radius.",
+  "Elevation": "Quatro sombras, do card em repouso ao modal.",
   "Button": "Quatro variantes, três tamanhos, estados por regra.",
   "Icon Button": "Ação sem rótulo: exige tooltip e aria-label (E7).",
   "Input": "Rótulo, cinco estados e ações dentro da caixa (E6).",
@@ -163,8 +368,10 @@ const descricoes: Record<string, string> = {
   "Checkbox": "Alternância booleana, com estado indeterminado.",
   "Radio Group": "Escolha exclusiva: setas movem e selecionam.",
   "Switch": "Efeito imediato, sem botão de salvar.",
+  "Date Picker": "Período em dois meses, com atalhos e confirmação explícita.",
   "Sidebar": "282px que viram 88px, e o item de 36px que ela hospeda.",
-  "Breadcrumb": "Dois níveis, e esse é o teto (G5).",
+  "Header": "Trilha, título e ações, montados por composição.",
+  "Breadcrumb": "Qualquer número de níveis; passando de três, os do meio recolhem.",
   "Pagination": "Controles de página, com o resumo do que está à vista.",
   "Tabs": "Seções do mesmo registro, numa fileira que rola e nunca quebra.",
   "Card": "A superfície que carrega um bloco de dados.",

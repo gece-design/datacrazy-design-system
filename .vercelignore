@@ -2,8 +2,12 @@ node_modules
 .next
 .git
 .kfe-kit
-docs
-scripts
+# o gerador do catálogo roda no build da Vercel e lê a doc dos componentes
+docs/*
+!docs/componentes/
+!docs/regras.md
+scripts/*
+!scripts/gerar-registry.mjs
 tests
 reports
 *.log

@@ -25,11 +25,18 @@ const buttonVariants = cva(
         // o que `secondary` e `ghost` já significam nas telas prontas.
         soft: "bg-base-blue-50 text-base-blue-600 shadow-button-inner hover:bg-base-blue-100",
         outline: "border border-background text-surface-inverse hover:bg-background",
+        // "Treecondary" no arquivo (563:4287): card sem traço, texto apagado e a
+        // sombra interna. É o botão de apoio das barras de ferramenta — Pesquisar
+        // e Filtros no Header (601:464). Hover derivado (E-01), o mesmo do
+        // gatilho do Date Picker.
+        tertiary: "bg-card text-muted-foreground shadow-button-inner hover:bg-accent",
       },
       size: {
         sm: "h-7 px-2.5",
         md: "h-8 px-3",
         lg: "h-9 px-4",
+        // quadrado de 32, só ícone — o sino do Header. Exige `aria-label`.
+        icon: "size-8",
       },
     },
     defaultVariants: { variant: "primary", size: "md" },
