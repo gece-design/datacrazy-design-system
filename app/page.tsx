@@ -354,7 +354,7 @@ const esqueleto = (
 
 const descricoes: Record<string, string> = {
   "Let's begin": "Esta página: o inventário e a regra que o sustenta.",
-  "Installation": "Três comandos para o Claude Code criar telas com o DS.",
+  "SystemCrazy": "Três comandos para o Claude Code criar telas com o DS.",
   "Color": "31 variáveis, dois modos, nenhum nome de cor.",
   "Typography": "15 papéis, de 26px a 10px, hierarquia por peso.",
   "Icons": "Phosphor num peso só: regular; fill só no selecionado (A8).",

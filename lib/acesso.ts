@@ -7,4 +7,4 @@
 // Aqui fica o hash, nunca a senha. Para trocar, gere o novo e cole abaixo:
 //   node -e 'console.log(require("crypto").createHash("sha256").update("NOVA-SENHA").digest("hex"))'
 export const COOKIE_ACESSO = "dc-acesso";
-export const HASH_DA_SENHA = "1259c76f4ab0e2a5534066b815ae5702c8c34bfbac8742d33f0befbe71d4d8b5";
+export const HASH_DA_SENHA = "8d6d4bf3a078bb9bd89767b596bdce8646765af2184858d5aaa05111743a9b2f";

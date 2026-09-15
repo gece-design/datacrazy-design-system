@@ -16,7 +16,7 @@ const semMoldura = "border-0 bg-transparent";
 export default function Installation() {
   return (
     <PaginaDS
-      titulo="Installation"
+      titulo="SystemCrazy"
       descricao="O design system entra no seu projeto pelo shadcn CLI e no Claude Code por MCP. São três comandos — registrar o catálogo, instalar a base e conectar o Claude — e depois é só pedir a tela."
       secoes={["Como funciona", "Registrar o catálogo", "Instalar a base", "Conectar o Claude Code", "Pedir a tela", "Atualizar"]}
     >

@@ -14,7 +14,7 @@ export const navegacao: CategoriaNav[] = [
     descricao: "O ponto de partida.",
     itens: [
       { titulo: "Let's begin", href: "/", icone: "foguete", pronto: true , descricao: "O que é e a regra que sustenta"},
-      { titulo: "Installation", href: "/getting-started/installation", icone: "download", pronto: true, descricao: "Usar o DS no Claude Code"},
+      { titulo: "SystemCrazy", href: "/getting-started/installation", icone: "download", pronto: true, descricao: "Usar o DS no Claude Code"},
     ],
   },
   {
