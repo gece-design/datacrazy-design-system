@@ -118,6 +118,7 @@ type PropsDoGatilho = {
   onPointerLeave?: React.PointerEventHandler;
   onFocus?: React.FocusEventHandler;
   onBlur?: React.FocusEventHandler;
+  onClick?: React.MouseEventHandler;
   "aria-describedby"?: string;
 };
 
@@ -207,6 +208,13 @@ export function Tooltip({ content, position = "top", delay = 400, children }: To
     },
     onBlur: (e: React.FocusEvent) => {
       p.onBlur?.(e);
+      fechar();
+    },
+    // Clicou: o balão já cumpriu o papel. Sem isto ele fica aberto por cima do
+    // que o clique abriu — foi assim que o tooltip do sino tapou o painel de
+    // notificações do Header.
+    onClick: (e: React.MouseEvent) => {
+      p.onClick?.(e);
       fechar();
     },
   });

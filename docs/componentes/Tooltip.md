@@ -41,6 +41,7 @@ Node: `548:73` (canvas `↳ Feedback`, 8 variantes: Position × theme) · Lote: 
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | aberto | `cursor após 400ms (exceto toque) · foco de teclado na hora · Escape e blur fecham` | declarado | E7 |
+| clique | `fecha o balão (o clique abriu outra coisa por cima)` | declarado | sino do Header tapado pelo próprio tooltip |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é

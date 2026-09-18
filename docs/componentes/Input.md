@@ -26,6 +26,7 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 | `erro` | `string` | não | Presente = estado de erro, com a mensagem embaixo. |
 | `iconeInicio` | `Icon` | não | Ícone de 16px antes do texto. |
 | `acoes` | `ReactNode` | não | Ações de 16px depois do texto (`AcaoCampo`). |
+| `cartao` | `boolean` | não | Põe o campo no cartão do drawer: rótulo em bold, superfície própria, caixa sangrando 8px para os lados. Em formulário aberto não use. |
 | demais | `InputHTMLAttributes` | — | `value`, `placeholder`, `disabled`… vão para o `<input>`. |
 
 ### `AcaoCampo`
@@ -40,7 +41,34 @@ contexto do Input) e vira um check em `success` por 1,5s, anunciado por
 
 ### `Rating`
 
-`rotulo`, `valor` (0–5) e `aoMudar`. Sem `aoMudar`, é só leitura.
+`rotulo`, `valor`, `max` (padrão **10**, decisão do humano em 2026-09-17) e
+`aoMudar`. Sem `aoMudar`, é só leitura. Acima de seis estrelas elas caem de 20
+para 16px e o respiro de 8 para 4 — senão a fileira não cabe na coluna do
+formulário.
+
+**Não usa a caixa do Input em momento nenhum** (decisão do humano,
+2026-09-18): é o mesmo cartão do `CampoEditavel` — superfície `background/50`
+em repouso, `accent` sob o cursor, 12px de respiro e rótulo em bold. A caixa
+tinha `overflow-hidden`, e em coluna estreita — o drawer dentro do preview —
+cortava a última estrela; agora a fileira quebra de linha em vez de cortar. A
+nota sai também em número (`7/10`) no fim da linha do rótulo, para não obrigar
+a contar estrela.
+
+Hover e foco mostram a nota que o clique daria; o clique responde com um pulo
+da estrela em cascata e um halo que some crescendo. Tudo sob `motion-safe:`
+(regra I12): quem pede menos movimento ao sistema vê a nota mudar sem animação.
+
+### `CartaoDeCampo`
+
+`rotulo`, `para` (o `id` do controle, quando couber `<label htmlFor>`) e o
+filho, que é a caixa. É o cartão para quem já traz a própria caixa e não tem
+prop `cartao` — no drawer, o Select de formulário. `Input` e `InputTelefone`
+fazem o mesmo por dentro com `cartao`.
+
+O rótulo fica nos 12px de respiro do cartão (é ele que alinha a grade) e a
+caixa sangra 8px para os lados. Sem essa sangria um telefone com máscara
+trunca dentro da coluna de 232px do drawer — e truncar mudo é bug conhecido
+(#83283).
 
 ### Select de formulário
 
@@ -70,13 +98,17 @@ decisão, não buraco a preencher.
 `input/bg` · `input/border` · `input/border-hover` · `input/border-focus` ·
 `input/border-error` · `input/text` · `input/placeholder` · `input/label` ·
 `input/bg-disabled` · `input/text-disabled` · `destructive` · `muted-foreground` ·
-`primary` · `base/blue/300` · `radius/md` · `text/label-md` · `text/body-md` ·
+`primary` · `accent` (realce do cartão sob o cursor) · `background/50`
+(superfície do cartão em repouso — **falta token** de superfície sutil) ·
+`base/blue/300` · `radius/md` · `radius/lg` · `text/label-md` · `text/body-md` ·
 `text/caption`
 
 ## Composição
 
 Usa: Phosphor ·
-Usado por: [Drawer](Drawer.md) (Perfil e Campos adicionais)
+Usado por: [Drawer](Drawer.md) (Perfil e Campos adicionais) ·
+Vizinhos que compartilham a caixa: [Telefone](Telefone.md) e
+[TimePicker](TimePicker.md)
 
 ## Exemplo de uso
 
@@ -112,7 +144,16 @@ Usado por: [Drawer](Drawer.md) (Perfil e Campos adicionais)
    borda de 1 + anel interno de 1, para o texto não pular.
 3. **Hover não desenhado.** Vem da regra I1, apoiado no token
    `input/border-hover`, que já existia.
-4. **Rating sem hover de pré-visualização.** O arquivo não desenha; não
-   entrou.
-5. **Lista aberta do Select de formulário** é a mesma derivação do
+4. **Rating com hover de pré-visualização e animação de clique.** O arquivo
+   não desenha nenhum dos dois; entraram por pedido do humano (2026-09-18),
+   sob a exceção E-01.
+5. **Rating de 0 a 10.** O arquivo desenha cinco estrelas; o padrão do código é
+   dez, por decisão do humano. `max={5}` volta ao desenho.
+6. **`CampoEditavel` não está no arquivo.** Clicar para editar é pedido do
+   humano (2026-09-17): em tela de leitura o campo é texto até o clique.
+   Desde 2026-09-18 o bloco é cartão: superfície própria em repouso
+   (`background/50`), realce `accent` sob o cursor, 12px de respiro, rótulo em
+   bold e valor na mesma margem do rótulo. A caixa do Input só aparece no
+   clique, por dentro do cartão. Tela de leitura não tem cara de formulário.
+7. **Lista aberta do Select de formulário** é a mesma derivação do
    [Select](Select.md).

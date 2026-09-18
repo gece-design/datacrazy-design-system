@@ -27,6 +27,7 @@ const twMerge = extendTailwindMerge({
             "nav-item", "nav-item-selected-foreground", "nav-item-selected-icon",
             "input-text", "input-placeholder", "input-label", "input-helper",
             "input-text-disabled", "overlay-item-text-selected",
+            "button-soft-foreground",
           ],
         },
       ],

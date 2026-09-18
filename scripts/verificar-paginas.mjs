@@ -4,14 +4,23 @@ const ROTAS = [
   "/", "/getting-started/installation",
   "/foundations/color", "/foundations/typography", "/foundations/icons",
   "/foundations/spacing", "/foundations/radius", "/foundations/elevation",
-  "/actions/button", "/forms/checkbox", "/forms/radio-group", "/forms/switch", "/forms/date-picker", "/forms/input",
-  "/data-display/card", "/data-display/kpi-card", "/data-display/tag", "/data-display/avatar", "/data-display/table", "/feedback/drawer",
+  "/actions/button", "/forms/checkbox", "/forms/radio-group", "/forms/switch", "/forms/date-picker", "/forms/time-picker", "/forms/input",
+  "/data-display/card", "/data-display/kpi-card", "/data-display/tag", "/data-display/avatar", "/data-display/table", "/feedback/drawer", "/feedback/drawer-lead-2",
   "/navigation/sidebar", "/navigation/header", "/navigation/breadcrumb", "/navigation/pagination", "/navigation/tabs",
   "/feedback/tooltip", "/feedback/toast", "/feedback/modal",
+  "/exemplos/pipeline",
 ];
 
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+// O site tem portão por senha (middleware.ts). O cookie de acesso vale o login:
+// o hash é público no código, e sem ele toda rota responde a tela de senha.
+const { HASH_DA_SENHA, COOKIE_ACESSO } = await import("../lib/acesso.ts").catch(() => ({
+  HASH_DA_SENHA: "8d6d4bf3a078bb9bd89767b596bdce8646765af2184858d5aaa05111743a9b2f",
+  COOKIE_ACESSO: "dc-acesso",
+}));
+const contexto = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+await contexto.addCookies([{ name: COOKIE_ACESSO, value: HASH_DA_SENHA, domain: "localhost", path: "/" }]);
+const page = await contexto.newPage();
 let falhas = 0;
 
 for (const rota of ROTAS) {

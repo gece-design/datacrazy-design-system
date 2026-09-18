@@ -6,6 +6,10 @@ import {
   ArrowsOut,
   CaretDown,
   CaretRight,
+  CaretUp,
+  PushPin,
+  Rows,
+  SquaresFour,
   EnvelopeSimple,
   Minus,
   Phone,
@@ -75,6 +79,23 @@ export function Drawer({ aberto, aoFechar, rotulo, children }: DrawerProps) {
   const [montado, setMontado] = React.useState(false);
   React.useEffect(() => setMontado(true), []);
 
+  // Fechar tem que ser visto: o painel fica no ar enquanto desliza para fora.
+  // Quem pediu menos movimento ao sistema não espera nada — sai na hora (I12).
+  const [saindo, setSaindo] = React.useState(false);
+  const jaAbriu = React.useRef(false);
+  React.useEffect(() => {
+    if (aberto) {
+      jaAbriu.current = true;
+      setSaindo(false);
+      return;
+    }
+    if (!jaAbriu.current) return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    setSaindo(true);
+    const fim = setTimeout(() => setSaindo(false), DURACAO_SAIDA);
+    return () => clearTimeout(fim);
+  }, [aberto]);
+
   React.useEffect(() => {
     if (!aberto) return;
     const anterior = document.activeElement as HTMLElement | null;
@@ -112,17 +133,28 @@ export function Drawer({ aberto, aoFechar, rotulo, children }: DrawerProps) {
     };
   }, [aberto]);
 
-  if (!montado || !aberto) return null;
+  if (!montado || (!aberto && !saindo)) return null;
   return createPortal(
-    <div className="fixed inset-0 z-modal flex justify-end">
-      <div aria-hidden="true" onClick={aoFechar} className="absolute inset-0 bg-overlay-scrim/40" />
+    <div className={cn("fixed inset-0 z-modal flex justify-end", saindo && "pointer-events-none")}>
+      <div
+        aria-hidden="true"
+        onClick={aoFechar}
+        className={cn(
+          "absolute inset-0 bg-overlay-scrim/40",
+          saindo ? "motion-safe:animate-fade-out" : "motion-safe:animate-fade-in-fast",
+        )}
+      />
       <div
         ref={painel}
         role="dialog"
         aria-modal="true"
         aria-label={rotulo}
+        aria-hidden={saindo || undefined}
         tabIndex={-1}
-        className="relative flex h-full max-w-full focus:outline-none"
+        className={cn(
+          "relative flex h-full max-w-full focus:outline-none",
+          saindo ? "motion-safe:animate-drawer-sai" : "motion-safe:animate-drawer-entra",
+        )}
       >
         {children}
       </div>
@@ -175,10 +207,127 @@ export function DrawerBotaoCanto({
 /* ----------------------------------------------------------------- Perfil -- */
 
 /** Cor do topo do perfil. Os valores moram em `app/globals.css` (`[data-tom]`). */
-export type TomPerfil = "azul" | "roxo" | "rosa" | "laranja";
+export type TomPerfil =
+  | "azul"
+  | "roxo"
+  | "rosa"
+  | "laranja"
+  | "verde"
+  | "ciano"
+  | "ambar"
+  | "vermelho";
 
 /** Rolagem de coluna: barra fina e sem arrastar a página junto no fim. */
 const rolagem = "min-h-0 overflow-y-auto overscroll-contain [scrollbar-width:thin]";
+
+/** Tem conteúdo acima? E abaixo? Reage à rolagem e a mudança de tamanho —
+ *  recolher um bloco do perfil muda o que sobra para rolar. */
+function usarRolagem(alvo: React.RefObject<HTMLElement | null>) {
+  const [estado, setEstado] = React.useState({ acima: false, abaixo: false });
+
+  React.useEffect(() => {
+    const el = alvo.current;
+    if (!el) return;
+    const medir = () => {
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      // 4px de folga: arredondamento de zoom não vale como "tem mais conteúdo"
+      setEstado({ acima: scrollTop > 4, abaixo: scrollTop + clientHeight < scrollHeight - 4 });
+    };
+    medir();
+    el.addEventListener("scroll", medir, { passive: true });
+    const observador = new ResizeObserver(medir);
+    observador.observe(el);
+    for (const filho of Array.from(el.children)) observador.observe(filho);
+    return () => {
+      el.removeEventListener("scroll", medir);
+      observador.disconnect();
+    };
+  }, [alvo]);
+
+  return estado;
+}
+
+/** Tem que bater com `drawer-sai` no tailwind.config: é o tempo do desmonte. */
+const DURACAO_SAIDA = 200;
+
+export type RotulosDeRolagem = { subir: string; descer: string };
+
+/** Nomes de fábrica das setas. Toda seta é clicável; a tela só troca o texto. */
+export const ROTULOS_DE_ROLAGEM: RotulosDeRolagem = { subir: "Subir", descer: "Descer" };
+
+/**
+ * Seta que diz que a coluna continua além da borda.
+ *
+ * Sai da própria superfície: uma faixa da cor do `card` atravessa a coluna
+ * inteira e some em degradê, abrindo espaço para a seta sem cortar o conteúdo
+ * que passa por baixo. A faixa não recebe clique; a pastilha, sim.
+ *
+ * Cada seta é sempre um botão que rola quase uma tela: seta que parece clicável
+ * e não é vira reclamação. O nome vem de `ROTULOS_DE_ROLAGEM` e a tela troca
+ * pelo texto do contexto — botão sem nome não entra no DS (regra E7).
+ */
+function IndicadorDeRolagem({
+  acima,
+  abaixo,
+  alvo,
+  rotulos,
+}: {
+  acima: boolean;
+  abaixo: boolean;
+  alvo: React.RefObject<HTMLElement | null>;
+  rotulos: RotulosDeRolagem;
+}) {
+  const pastilha =
+    "flex size-6 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors";
+
+  function rolar(direcao: 1 | -1) {
+    const el = alvo.current;
+    if (!el) return;
+    // 80% da altura visível: sobra contexto entre um clique e o outro
+    el.scrollBy({ top: direcao * el.clientHeight * 0.8, behavior: "smooth" });
+  }
+
+  const seta = (direcao: 1 | -1, visivel: boolean) => {
+    const cima = direcao === -1;
+    const Glifo = cima ? CaretUp : CaretDown;
+    const conteudo = <Glifo size={14} weight="bold" aria-hidden="true" />;
+    return (
+      // A faixa é a "sombrinha": cobre a largura inteira da coluna e some em
+      // degradê na direção do conteúdo, para a seta nunca encostar no texto.
+      // Ela não recebe clique — só a pastilha, que fica acima dela.
+      <span
+        className={cn(
+          "pointer-events-none absolute inset-x-0 z-10 flex h-12 justify-center from-card via-card/85 transition-opacity",
+          cima ? "top-0 items-start bg-gradient-to-b pt-1" : "bottom-0 items-end bg-gradient-to-t pb-1",
+          !visivel && "opacity-0",
+        )}
+      >
+        <button
+          type="button"
+          tabIndex={visivel ? 0 : -1}
+          aria-label={cima ? rotulos.subir : rotulos.descer}
+          title={cima ? rotulos.subir : rotulos.descer}
+          onClick={() => rolar(direcao)}
+          className={cn(
+            pastilha,
+            "hover:bg-accent hover:text-foreground",
+            foco,
+            visivel ? "pointer-events-auto" : "pointer-events-none",
+          )}
+        >
+          {conteudo}
+        </button>
+      </span>
+    );
+  };
+
+  return (
+    <>
+      {seta(-1, acima)}
+      {seta(1, abaixo)}
+    </>
+  );
+}
 
 export interface DrawerPerfilProps {
   nome: string;
@@ -197,6 +346,8 @@ export interface DrawerPerfilProps {
   tags?: React.ReactNode;
   /** Os dois botões sob as tags. */
   acoes?: React.ReactNode;
+  /** Com eles, as setas de rolagem viram botões. Sem, são só decoração. */
+  rotulosRolagem?: RotulosDeRolagem;
   aoFechar?: () => void;
   rotuloFechar?: string;
   aoRecolher?: () => void;
@@ -216,6 +367,7 @@ export function DrawerPerfil({
   estilo = "outline",
   tags,
   acoes,
+  rotulosRolagem = ROTULOS_DE_ROLAGEM,
   aoFechar,
   rotuloFechar = "Fechar",
   aoRecolher,
@@ -223,16 +375,24 @@ export function DrawerPerfil({
   children,
   className,
 }: DrawerPerfilProps) {
+  const coluna = React.useRef<HTMLElement>(null);
+  const { acima, abaixo } = usarRolagem(coluna);
+
   return (
     <EstiloDoPerfil.Provider value={estilo}>
-      <aside
-        aria-label={nome}
+      {/* A casca não rola: é ela que segura o indicador parado na borda,
+          enquanto o conteúdo passa por baixo. */}
+      <div
         data-tom={tom ?? (tipo === "empresa" ? "roxo" : "azul")}
+        className={cn("relative flex w-[320px] shrink-0 border-r border-border bg-drawer-perfil bg-local", className)}
+      >
+      <aside
+        ref={coluna}
+        aria-label={nome}
         className={cn(
           // D14: 20px de recuo com o traço direito por dentro — 19 + 1 aqui.
-          "flex w-[320px] shrink-0 flex-col border-r border-border bg-drawer-perfil bg-local py-5 pl-5 pr-[19px]",
+          "flex w-full flex-col py-5 pl-5 pr-[19px]",
           rolagem,
-          className,
         )}
       >
         <div className="relative flex shrink-0 flex-col items-center">
@@ -283,6 +443,8 @@ export function DrawerPerfil({
 
         {children ? <div className="flex shrink-0 flex-col gap-4 pt-4">{children}</div> : null}
       </aside>
+      <IndicadorDeRolagem acima={acima} abaixo={abaixo} alvo={coluna} rotulos={rotulosRolagem} />
+      </div>
     </EstiloDoPerfil.Provider>
   );
 }
@@ -291,37 +453,67 @@ export function DrawerPerfil({
 export function DrawerBloco({
   titulo,
   inicialAberto = true,
+  acoes,
   children,
 }: {
   titulo: string;
   inicialAberto?: boolean;
+  /**
+   * Controle do bloco, na linha do título — é onde o olho procura.
+   * Fica FORA do botão de abrir/fechar: botão dentro de botão é inválido.
+   */
+  acoes?: React.ReactNode;
   children: React.ReactNode;
 }) {
   const [aberto, setAberto] = React.useState(inicialAberto);
   const id = React.useId().replace(/:/g, "");
   return (
     <section className="flex flex-col gap-0.5">
-      <h3>
-        <button
-          type="button"
-          aria-expanded={aberto}
-          aria-controls={`bloco-${id}`}
-          onClick={() => setAberto((a) => !a)}
-          className={cn(
-            // tamanho do body-sm com peso e entrelinha do heading-4: é a mistura do arquivo
-            "flex w-full items-center justify-between rounded-sm text-body-sm font-semibold leading-[18px] uppercase text-muted-foreground transition-colors hover:text-foreground",
-            foco,
-          )}
-        >
-          {titulo}
-          <CaretDown
-            size={16}
-            weight="regular"
-            aria-hidden="true"
-            className={cn("shrink-0 transition-transform", !aberto && "-rotate-90")}
-          />
-        </button>
-      </h3>
+      <div className="flex items-center gap-2">
+        <h3 className="min-w-0 flex-1">
+          <button
+            type="button"
+            aria-expanded={aberto}
+            aria-controls={`bloco-${id}`}
+            onClick={() => setAberto((a) => !a)}
+            className={cn(
+              // tamanho do body-sm com peso e entrelinha do heading-4: é a mistura do arquivo
+              "flex w-full items-center justify-between rounded-sm text-body-sm font-semibold leading-[18px] uppercase text-muted-foreground transition-colors hover:text-foreground",
+              foco,
+            )}
+          >
+            {titulo}
+            {acoes ? null : (
+              <CaretDown
+                size={16}
+                weight="regular"
+                aria-hidden="true"
+                className={cn("shrink-0 transition-transform", !aberto && "-rotate-90")}
+              />
+            )}
+          </button>
+        </h3>
+        {acoes ? (
+          <>
+            {acoes}
+            <button
+              type="button"
+              aria-expanded={aberto}
+              aria-controls={`bloco-${id}`}
+              aria-label={titulo}
+              onClick={() => setAberto((a) => !a)}
+              className={cn("shrink-0 rounded-sm text-muted-foreground transition-colors hover:text-foreground", foco)}
+            >
+              <CaretDown
+                size={16}
+                weight="regular"
+                aria-hidden="true"
+                className={cn("transition-transform", !aberto && "-rotate-90")}
+              />
+            </button>
+          </>
+        ) : null}
+      </div>
       <div id={`bloco-${id}`} hidden={!aberto}>
         {children}
       </div>
@@ -329,7 +521,14 @@ export function DrawerBloco({
   );
 }
 
-export type MetricaDrawer = { rotulo: string; valor: string };
+export type MetricaDrawer = {
+  rotulo: string;
+  valor: string;
+  /** Ícone de 16px no canto do cartão, na cor do tom. */
+  icone?: Icon;
+  /** Tom do cartão. Sem ele, herda o tom do perfil em volta. */
+  tom?: TomPerfil;
+};
 
 /** "Card info": rótulo em caption e número em metric. */
 export function DrawerMetricas({
@@ -350,13 +549,18 @@ export function DrawerMetricas({
       {itens.map((m) => (
         <div
           key={m.rotulo}
+          data-tom={m.tom}
           className={cn(
-            "flex min-w-0 flex-col gap-0.5 rounded-md",
-            // D14: traço de 2 por dentro — 2 + 6 e 2 + 10 dão os 8 e 12 do arquivo
-            e === "outline" ? "border-2 border-background px-1.5 py-2.5" : "bg-background px-2 py-3",
+            "flex min-w-0 flex-col gap-0.5 rounded-md px-2 py-3",
+            // Sem traço por decisão do humano (2026-09-17): o que separa o
+            // cartão do fundo é o gradiente, o mesmo do topo do perfil.
+            e === "outline" ? "bg-metrica" : "bg-background",
           )}
         >
-          <dt className="truncate text-caption text-muted-foreground">{m.rotulo}</dt>
+          <dt className="flex items-center justify-between gap-2 text-caption text-muted-foreground">
+            <span className="min-w-0 truncate">{m.rotulo}</span>
+            {m.icone ? <m.icone size={16} weight="regular" aria-hidden="true" className="shrink-0 text-tom-texto" /> : null}
+          </dt>
           <dd className="truncate text-metric text-foreground">{m.valor}</dd>
         </div>
       ))}
@@ -394,6 +598,153 @@ export function DrawerContato({ linhas, estilo }: { linhas: LinhaContato[]; esti
 
 export type ItemMenuDrawer = { id: string; rotulo: string; icone: Icon };
 
+/** Lista (uma coluna, ícone ao lado) ou cards (duas colunas, ícone em cima). */
+export type VisaoDoMenu = "lista" | "cards";
+
+export interface VisualizacaoDoMenu {
+  modo: VisaoDoMenu;
+  aoMudar: (modo: VisaoDoMenu) => void;
+  /** Nome do interruptor. Ex.: "Ver o menu em cards". */
+  rotulo: string;
+}
+
+/**
+ * Interruptor pequeno e cinza: lista ↔ cards.
+ *
+ * O lugar dele é a linha do título do bloco (`DrawerBloco acoes=…`), que é onde
+ * o olho procura o controle da seção; dentro da caixa do menu ninguém acha.
+ *
+ * Não é o `Switch` do DS de propósito — aquele é azul quando ligado, e azul
+ * aqui competiria com o item selecionado, que é o que a pessoa precisa achar.
+ * Este fica em cinza nos dois estados: quem diz o modo é o botão que anda.
+ */
+export function SeletorDeVisao({ modo, aoMudar, rotulo }: VisualizacaoDoMenu) {
+  const cards = modo === "cards";
+  return (
+    // Os dois ícones ficam de fora do botão: eles dizem o que o interruptor
+    // faz sem texto para traduzir, e é por eles que a pessoa acha o controle.
+    <span className="flex items-center gap-1.5">
+      <Rows
+        size={12}
+        weight="fill"
+        aria-hidden="true"
+        className={cards ? "text-input-border" : "text-muted-foreground"}
+      />
+      <button
+        type="button"
+        role="switch"
+        aria-checked={cards}
+        aria-label={rotulo}
+        title={rotulo}
+        onClick={() => aoMudar(cards ? "lista" : "cards")}
+        className={cn(
+          "flex h-4 w-7 shrink-0 items-center rounded-full px-0.5 transition-colors",
+          foco,
+          cards ? "bg-muted-foreground" : "bg-input-border",
+        )}
+      >
+        <span
+          aria-hidden="true"
+          className={cn("size-3 rounded-full bg-card shadow-sm transition-transform", cards && "translate-x-3")}
+        />
+      </button>
+      <SquaresFour
+        size={12}
+        weight="fill"
+        aria-hidden="true"
+        className={cards ? "text-muted-foreground" : "text-input-border"}
+      />
+    </span>
+  );
+}
+
+export interface FixacaoDoMenu {
+  /** Ids fixados, na ordem em que aparecem no topo. */
+  fixados: string[];
+  aoAlternar: (id: string) => void;
+  /** Ex.: (item) => `Fixar ${item.rotulo} no topo`. */
+  rotuloFixar: (item: ItemMenuDrawer) => string;
+  rotuloDesafixar: (item: ItemMenuDrawer) => string;
+}
+
+function ItemDoMenu({
+  item,
+  selecionado,
+  fixado,
+  aoEscolher,
+  fixacao,
+  visao = "lista",
+}: {
+  item: ItemMenuDrawer;
+  selecionado: boolean;
+  fixado: boolean;
+  aoEscolher?: (id: string) => void;
+  fixacao?: FixacaoDoMenu;
+  visao?: VisaoDoMenu;
+}) {
+  const Icone = item.icone;
+  const cartao = visao === "cards";
+  return (
+    <li className="group/item relative">
+      <button
+        type="button"
+        aria-current={selecionado ? "true" : undefined}
+        onClick={() => aoEscolher?.(item.id)}
+        className={cn(
+          "w-full rounded-md text-label-lg transition-colors",
+          foco,
+          cartao
+            // cartão: ícone em cima do rótulo, duas colunas na grade de fora
+            ? "flex flex-col items-center gap-1.5 px-2 py-3 text-center"
+            // 36px = 9 + 18 + 9. O recuo de 8 à esquerda é o gap do arquivo.
+            : "flex items-center justify-between py-[9px] pl-2 pr-2.5 text-left",
+          // com o alfinete à direita, o caret recua para não ficar embaixo dele
+          fixacao && !cartao && "pr-9",
+          selecionado
+            ? "bg-nav-item-selected text-nav-item-selected-foreground"
+            : "text-foreground hover:bg-nav-item-hover",
+        )}
+      >
+        <span className={cn("flex min-w-0", cartao ? "flex-col items-center gap-1.5" : "items-center gap-2")}>
+          <Icone
+            size={cartao ? 20 : 18}
+            weight="regular"
+            aria-hidden="true"
+            className={cn("shrink-0", selecionado ? "text-nav-item-selected-icon" : "text-nav-item")}
+          />
+          <span className={cn("truncate", cartao && "w-full")}>{item.rotulo}</span>
+        </span>
+        {selecionado && !cartao ? (
+          <CaretRight size={14} weight="regular" aria-hidden="true" className="shrink-0 text-nav-item-selected-icon" />
+        ) : null}
+      </button>
+
+      {fixacao ? (
+        // Fora do <button> de propósito: botão dentro de botão é HTML inválido.
+        <button
+          type="button"
+          aria-pressed={fixado}
+          aria-label={fixado ? fixacao.rotuloDesafixar(item) : fixacao.rotuloFixar(item)}
+          title={fixado ? fixacao.rotuloDesafixar(item) : fixacao.rotuloFixar(item)}
+          onClick={() => fixacao.aoAlternar(item.id)}
+          className={cn(
+            "absolute rounded-sm p-0.5 transition-opacity",
+            // no cartão ele sobe para o canto; na lista fica no meio da linha
+            cartao ? "right-1 top-1" : "right-2 top-1/2 -translate-y-1/2",
+            foco,
+            // fixado fica sempre à vista; o resto só sob o cursor ou no foco
+            fixado
+              ? "text-nav-item-selected-icon"
+              : "text-nav-item opacity-0 group-hover/item:opacity-100 focus-visible:opacity-100",
+          )}
+        >
+          <PushPin size={14} weight={fixado ? "fill" : "regular"} aria-hidden="true" />
+        </button>
+      ) : null}
+    </li>
+  );
+}
+
 /** "Drawer / Menu": a lista que troca o conteúdo da direita. */
 export function DrawerMenu({
   itens,
@@ -401,6 +752,9 @@ export function DrawerMenu({
   aoEscolher,
   rotulo,
   estilo,
+  fixacao,
+  visao,
+  visualizacao,
 }: {
   itens: ItemMenuDrawer[];
   atual: string;
@@ -408,53 +762,61 @@ export function DrawerMenu({
   /** Nome da navegação para leitor de tela. Ex.: "Seções do lead". */
   rotulo: string;
   estilo?: EstiloPerfil;
+  /** Liga o alfinete de cada item. Sem ela, o menu é só a lista do arquivo. */
+  fixacao?: FixacaoDoMenu;
+  /** Layout da lista quando o interruptor está fora (no título do bloco). */
+  visao?: VisaoDoMenu;
+  /** Põe o interruptor DENTRO da caixa do menu — só para menu sem bloco. */
+  visualizacao?: VisualizacaoDoMenu;
 }) {
   const e = useEstilo(estilo);
+  const modo = visualizacao?.modo ?? visao ?? "lista";
+
+  // Fixados sobem na ordem em que foram fixados; o resto segue a ordem original.
+  const fixados = fixacao ? (fixacao.fixados.map((id) => itens.find((i) => i.id === id)).filter(Boolean) as ItemMenuDrawer[]) : [];
+  const resto = itens.filter((i) => !fixacao?.fixados.includes(i.id));
+
+  const linha = (item: ItemMenuDrawer, fixado: boolean) => (
+    <ItemDoMenu
+      key={item.id}
+      item={item}
+      selecionado={item.id === atual}
+      fixado={fixado}
+      aoEscolher={aoEscolher}
+      fixacao={fixacao}
+      visao={modo}
+    />
+  );
+
+  const grade = modo === "cards" ? "grid grid-cols-2 gap-1" : "flex flex-col";
+
   return (
-    <nav aria-label={rotulo}>
-      <ul
-        className={cn(
-          "flex flex-col rounded-lg",
-          // No outline o traço de 2px fica POR DENTRO e o menu não tem recuo
-          // vertical: anel interno em vez de borda, senão a caixa cresce 4px.
-          e === "outline" ? "px-1 ring-2 ring-inset ring-background" : "bg-background p-2",
-        )}
-      >
-        {itens.map((item) => {
-          const selecionado = item.id === atual;
-          const Icone = item.icone;
-          return (
-            <li key={item.id}>
-              <button
-                type="button"
-                aria-current={selecionado ? "true" : undefined}
-                onClick={() => aoEscolher?.(item.id)}
-                className={cn(
-                  // 36px = 9 + 18 + 9. O recuo de 8 à esquerda é o gap do arquivo.
-                  "flex w-full items-center justify-between rounded-md py-[9px] pl-2 pr-2.5 text-left text-label-lg transition-colors",
-                  foco,
-                  selecionado
-                    ? "bg-nav-item-selected text-nav-item-selected-foreground"
-                    : "text-foreground hover:bg-nav-item-hover",
-                )}
-              >
-                <span className="flex min-w-0 items-center gap-2">
-                  <Icone
-                    size={18}
-                    weight="regular"
-                    aria-hidden="true"
-                    className={cn("shrink-0", selecionado ? "text-nav-item-selected-icon" : "text-nav-item")}
-                  />
-                  <span className="truncate">{item.rotulo}</span>
-                </span>
-                {selecionado ? (
-                  <CaretRight size={14} weight="regular" aria-hidden="true" className="shrink-0 text-nav-item-selected-icon" />
-                ) : null}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+    <nav
+      aria-label={rotulo}
+      className={cn(
+        "rounded-lg",
+        // No outline o traço de 2px fica POR DENTRO e o menu não tem recuo
+        // vertical: anel interno em vez de borda, senão a caixa cresce 4px.
+        e === "outline" ? "px-1 ring-2 ring-inset ring-background" : "bg-background p-2",
+      )}
+    >
+      {visualizacao ? (
+        <div className="flex items-center justify-end py-1.5">
+          <SeletorDeVisao {...visualizacao} />
+        </div>
+      ) : null}
+
+      {fixados.length > 0 ? (
+        <>
+          <ul className={grade}>{fixados.map((item) => linha(item, true))}</ul>
+          {resto.length > 0 ? (
+            // Separa sem título: o alfinete cheio já diz por que aqueles estão em cima.
+            <div aria-hidden="true" className="my-1 h-0.5 bg-background" />
+          ) : null}
+        </>
+      ) : null}
+
+      <ul className={grade}>{resto.map((item) => linha(item, false))}</ul>
     </nav>
   );
 }
@@ -466,6 +828,7 @@ export function DrawerConteudo({
   descricao,
   acoes,
   antesDoTitulo,
+  rotulosRolagem = ROTULOS_DE_ROLAGEM,
   children,
   className,
 }: {
@@ -475,14 +838,21 @@ export function DrawerConteudo({
   acoes?: React.ReactNode;
   /** Algo antes do título — ex.: o botão que reabre o perfil recolhido. */
   antesDoTitulo?: React.ReactNode;
+  /** Com eles, as setas de rolagem viram botões. Sem, são só decoração. */
+  rotulosRolagem?: RotulosDeRolagem;
   children?: React.ReactNode;
   className?: string;
 }) {
   const id = React.useId().replace(/:/g, "");
+  const coluna = React.useRef<HTMLElement>(null);
+  const { acima, abaixo } = usarRolagem(coluna);
+
   return (
+    <div className={cn("relative flex min-w-0 flex-1 bg-card", className)}>
     <section
+      ref={coluna}
       aria-labelledby={`titulo-${id}`}
-      className={cn("flex min-w-0 flex-1 flex-col gap-4 bg-card py-5", rolagem, className)}
+      className={cn("flex w-full flex-col gap-4 py-5", rolagem)}
     >
       <div className="flex shrink-0 flex-col gap-5">
         <div className="flex items-center justify-between gap-4 px-5">
@@ -501,6 +871,8 @@ export function DrawerConteudo({
       </div>
       {children ? <div className="flex shrink-0 flex-col gap-4 px-5">{children}</div> : null}
     </section>
+    <IndicadorDeRolagem acima={acima} abaixo={abaixo} alvo={coluna} rotulos={rotulosRolagem} />
+    </div>
   );
 }
 
@@ -516,7 +888,9 @@ export function DrawerSecao({
 }) {
   return (
     <section className={cn("flex flex-col gap-3", className)}>
-      <h3 className="border-b border-background pb-0.5 text-body-sm font-semibold leading-[18px] uppercase text-muted-foreground">
+      {/* sem traço por baixo (decisão do humano, 2026-09-18): os cartões dos
+          campos já separam os grupos, e a linha virava um segundo separador */}
+      <h3 className="text-body-sm font-semibold leading-[18px] uppercase text-muted-foreground">
         {titulo}
       </h3>
       {children}

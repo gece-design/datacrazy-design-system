@@ -78,6 +78,13 @@
     --avatar-md-fundo: var(--accent);
     --avatar-md-anel: var(--card);
 
+    /* tom padrão (azul). Os outros tons trocam estes quatro dentro de
+       `[data-tom]` — ver o bloco depois do `.dark`. */
+    --tom-anel: var(--accent);
+    --tom-texto: var(--blue-600);
+    --tom-tag: var(--primary);
+    --tom-brilho: var(--blue-100);
+
     /* formulário — coleção "Cor" do Figma. Os onze são alias exato de um
        token semântico que já existe, nos DOIS modos: por isso vivem só aqui.
        O `var()` acompanha o tema sem uma linha no `.dark`. */
@@ -102,6 +109,26 @@
     --overlay-item-selected: var(--blue-50);
     --overlay-item-text-selected: var(--blue-600);
     --overlay-scrim: 222.9 21.2% 6.5%;
+
+    /* Sombra interna do arquivo (#E8F1FF a 40%). É um brilho CLARO: no escuro
+       ele lava a superfície e apaga a diferença entre selecionado e trilha,
+       então some. O Button `primary` é a exceção — lá o brilho está sobre azul
+       cheio e continua lendo como relevo (`shadow-button-inner-primary`). */
+    --shadow-button-inner: inset 2px 4px 8px 0 rgb(232 241 255 / 0.4);
+
+    /* Button `soft`. O arquivo repete o claro no escuro (fundo `base/blue/50`),
+       e um botão branco-azulado no escuro é o mesmo erro de modo do Toast.
+       Espelha o par que o próprio arquivo já usa em `nav/item` e `overlay/item`:
+       superfície `accent`, texto `blue-300`. */
+    --button-soft-bg: var(--blue-50);
+    --button-soft-foreground: var(--blue-600);
+    --button-soft-hover: var(--blue-100);
+
+    /* Opção selecionada do Segmented Control e do View Switcher. No claro é o
+       `accent` do arquivo; no escuro `accent` (#232C3D) é quase o `card`
+       (#25252D) da trilha e o selecionado somia — vira o fundo da página,
+       que afunda a opção em vez de clareá-la. Mesmo caso do `nav/item`. */
+    --segmented-item-selected: var(--accent);
 
     --radius: 0.5rem;
   }
@@ -151,6 +178,17 @@
 
     --avatar-md-fundo: var(--card);
     --avatar-md-anel: var(--accent);
+
+    --shadow-button-inner: none;
+
+    --button-soft-bg: var(--accent);
+    --button-soft-foreground: var(--blue-300);
+    --button-soft-hover: var(--neutral-800);
+
+    --segmented-item-selected: var(--background);
+
+    --tom-texto: var(--blue-300);
+    --tom-brilho: var(--accent);
   }
 
   /* Tom do perfil no Drawer — anel e letra do avatar, texto da tag de tipo e
@@ -158,9 +196,18 @@
      `roxo` é a variante "outline - roxo" (565:8651): os quatro hex do arquivo
      são o azul com o matiz girado para 266°, mesma saturação e luminosidade.
      `rosa` (330°) e `laranja` (24°) seguem a mesma regra, por pedido do
-     humano (2026-09-15). No Escuro, os quatro repetem o S/L do azul escuro:
+     humano (2026-09-15). No Escuro, todos repetem o S/L do azul escuro:
      anel e brilho no L de `accent`, letra no de `blue-300`, tag no de
-     `primary`. O brilho escuro do azul (`accent`) é derivado — ver Drawer.md. */
+     `primary`. O brilho escuro do azul (`accent`) é derivado — ver Drawer.md.
+
+     2026-09-18: mais quatro tons, a pedido do humano — `verde` (142°),
+     `ciano` (190°), `ambar` (45°) e `vermelho` (356°). Os três primeiros NÃO
+     copiam o L do azul: no mesmo 60%/47.8% o texto da tag fica em 1,4:1 sobre
+     o fundo claro, que é exatamente por que verde e amarelo tinham sido
+     recusados em 2026-09-15. O matiz gira, o L desce até o tom empatar com o
+     AZUL — 3,0:1 na tag e 5,3:1 na letra sobre card. O vermelho, por ser
+     escuro por natureza, fecha a conta quase no L do azul. No Escuro nenhum
+     deles precisa de ajuste: o fundo é escuro e todos passam de 6:1. */
   [data-tom] {
     --tom-anel: var(--accent);
     --tom-texto: var(--blue-600);
@@ -189,6 +236,31 @@
     --tom-tag: 24 100% 60%;
     --tom-brilho: 24 100% 93.9%;
   }
+  /* Os três abaixo têm L próprio na letra e na tag — ver a nota do bloco. */
+  [data-tom="verde"] {
+    --tom-anel: 142 100% 95.5%;
+    --tom-texto: 142 85.2% 26.3%;
+    --tom-tag: 142 100% 30.5%;
+    --tom-brilho: 142 100% 93.9%;
+  }
+  [data-tom="ciano"] {
+    --tom-anel: 190 100% 95.5%;
+    --tom-texto: 190 85.2% 29.3%;
+    --tom-tag: 190 100% 35%;
+    --tom-brilho: 190 100% 93.9%;
+  }
+  [data-tom="ambar"] {
+    --tom-anel: 45 100% 95.5%;
+    --tom-texto: 45 85.2% 28.3%;
+    --tom-tag: 45 100% 33.5%;
+    --tom-brilho: 45 100% 93.9%;
+  }
+  [data-tom="vermelho"] {
+    --tom-anel: 356 100% 95.5%;
+    --tom-texto: 356 85.2% 45.3%;
+    --tom-tag: 356 100% 60%;
+    --tom-brilho: 356 100% 93.9%;
+  }
   .dark [data-tom="roxo"] {
     --tom-anel: 266 27.1% 18.8%;
     --tom-texto: 266 100% 75.1%;
@@ -206,6 +278,30 @@
     --tom-texto: 24 100% 75.1%;
     --tom-tag: 24 100% 67.5%;
     --tom-brilho: 24 27.1% 18.8%;
+  }
+  .dark [data-tom="verde"] {
+    --tom-anel: 142 27.1% 18.8%;
+    --tom-texto: 142 100% 75.1%;
+    --tom-tag: 142 100% 67.5%;
+    --tom-brilho: 142 27.1% 18.8%;
+  }
+  .dark [data-tom="ciano"] {
+    --tom-anel: 190 27.1% 18.8%;
+    --tom-texto: 190 100% 75.1%;
+    --tom-tag: 190 100% 67.5%;
+    --tom-brilho: 190 27.1% 18.8%;
+  }
+  .dark [data-tom="ambar"] {
+    --tom-anel: 45 27.1% 18.8%;
+    --tom-texto: 45 100% 75.1%;
+    --tom-tag: 45 100% 67.5%;
+    --tom-brilho: 45 27.1% 18.8%;
+  }
+  .dark [data-tom="vermelho"] {
+    --tom-anel: 356 27.1% 18.8%;
+    --tom-texto: 356 100% 75.1%;
+    --tom-tag: 356 100% 67.5%;
+    --tom-brilho: 356 27.1% 18.8%;
   }
 
   * {

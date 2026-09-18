@@ -44,7 +44,7 @@ Picker, que já existe.
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| selecionada | `Segmented: bg-accent text-overlay-item-text-selected · View: bg-accent text-primary shadow-button-inner · aria-checked` | figma | Selected=Mês (269:54) · View=Chart (471:2940) |
+| selecionada | `Segmented: bg-segmented-item-selected text-overlay-item-text-selected · View: + text-primary e sombra interna (só no Claro) · aria-checked` | figma | Selected=Mês (269:54) · View=Chart (471:2940) |
 | hover | `text-foreground` | inferido | Tabs |
 | focus | `outline-2 outline-offset-2 outline-ring` | declarado | D6 |
 | disabled | `opacity-50 pointer-events-none, pulada pelas setas` | banco | I5 |
@@ -55,7 +55,7 @@ decisão, não buraco a preencher.
 
 ## Tokens consumidos
 
-`card` · `accent` · `overlay/item-text-selected` · `primary` ·
+`card` · `segmented-item-selected` · `overlay/item-text-selected` · `primary` ·
 `muted-foreground` · `foreground` · `ring` · `radius/md` · `radius/sm` ·
 `text/body-md` · `button inner shadow`
 
@@ -85,6 +85,10 @@ Usa: Tooltip (View Switcher) · Usado por: Header (por encaixe)
 1. **"Semana" em `label-lg`** no arquivo, as outras em `body-md`. Código usa
    `body-md` em todas: peso por opção muda a largura quando a seleção troca.
 2. **Descrição do set diz "ativa recebe superfície card"**; o desenho usa `accent`. Código segue o desenho.
-3. **View Switcher escuro sem sombra interna** no arquivo; o código mantém a
-   sombra nos dois temas (a sombra não tem token por tema).
+3. **Resolvido (2026-09-18)**: a sombra interna agora vale só no Claro, em todo
+   o DS menos no Button `primary` — era o que o arquivo já fazia no View
+   Switcher escuro.
+5. **Superfície da escolhida é token próprio**: `accent` no Claro (o do arquivo)
+   e `background` no Escuro, porque lá `accent` é quase o `card` da trilha e a
+   seleção sumia.
 4. **Hover não está desenhado.**

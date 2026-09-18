@@ -9,9 +9,9 @@ import {
   // design system (regra A8: um peso só na interface inteira).
   RocketLaunch, DownloadSimple, Palette, TextAa, Shapes, ArrowsOutLineHorizontal,
   BoundingBox, StackSimple, CursorClick, HandPointing, Textbox, CaretCircleDown,
-  CheckSquare, CalendarBlank, SidebarSimple, Path, ListNumbers, ChartLineUp,
+  CheckSquare, CalendarBlank, Clock, SidebarSimple, Path, ListNumbers, ChartLineUp,
   Tag, UserCircle, Table, ChartBar, ChatTeardropText, Tray, Browsers, ArrowLineLeft,
-  Cards, RadioButton, ToggleRight, Bell, Tabs, Browser,
+  Cards, RadioButton, ToggleRight, Bell, Tabs, Browser, Flask, Kanban,
 } from "@phosphor-icons/react";
 import { navegacao } from "./nav";
 import { Logo, LogoSimbolo } from "./logo";
@@ -43,6 +43,7 @@ const icones: Record<string, Glifo> = {
   radio: RadioButton,
   interruptor: ToggleRight,
   calendario: CalendarBlank,
+  relogio: Clock,
   painel: SidebarSimple,
   trilha: Path,
   paginas: ListNumbers,
@@ -59,6 +60,8 @@ const icones: Record<string, Glifo> = {
   bandeja: Tray,
   camada: Browsers,
   gaveta: ArrowLineLeft,
+  proposta: Flask,
+  kanban: Kanban,
 };
 
 const glifo = (chave?: string): Glifo | null => (chave ? icones[chave] ?? null : null);

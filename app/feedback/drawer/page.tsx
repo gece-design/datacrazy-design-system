@@ -13,6 +13,7 @@ import {
   HierarquiaNo,
   LinhaDoTempo,
   type TomPerfil,
+  type VisaoDoMenu,
 } from "@/components/ui/drawer";
 import { Tag } from "@/components/ui/tag";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
@@ -56,6 +57,10 @@ const tons: { tom: TomPerfil; nome: string; tipo: "pessoa" | "empresa"; origem: 
   { tom: "roxo", nome: "Joel Jota", tipo: "empresa", origem: "arquivo · 565:8651" },
   { tom: "rosa", nome: "Marina Albuquerque", tipo: "pessoa", origem: "matiz 330°" },
   { tom: "laranja", nome: "Norte Logística", tipo: "empresa", origem: "matiz 24°" },
+  { tom: "verde", nome: "Campo Vivo Agro", tipo: "empresa", origem: "matiz 142°" },
+  { tom: "ciano", nome: "Helena Moraes", tipo: "pessoa", origem: "matiz 190°" },
+  { tom: "ambar", nome: "Oficina Farol", tipo: "empresa", origem: "matiz 45°" },
+  { tom: "vermelho", nome: "Tomás Vilela", tipo: "pessoa", origem: "matiz 356°" },
 ];
 
 const leadsDoPreview = [
@@ -68,6 +73,8 @@ export default function DrawerPage() {
   const [fechadoNoPreview, setFechadoNoPreview] = useState(false);
   const [camada, setCamada] = useState(false);
   const [menuSolto, setMenuSolto] = useState("historicos");
+  const [fixadosSoltos, setFixadosSoltos] = useState<string[]>(["negocios", "hierarquia"]);
+  const [visaoSolta, setVisaoSolta] = useState<VisaoDoMenu>("lista");
 
   return (
     <PaginaDS
@@ -94,7 +101,8 @@ export default function DrawerPage() {
         <p>
           Com altura definida — a tela inteira, na camada — <span className="text-foreground">perfil e conteúdo rolam
           cada um por conta própria</span>: descer no menu não tira o título da seção de vista, e ler a linha do tempo
-          não esconde de quem é o lead. A cor do topo do perfil é o <Chip>tom</Chip>: anel e letra do avatar, texto da
+          não esconde de quem é o lead. Cada coluna mostra uma seta na borda quando continua além dela, e a seta some
+          quando chega ao fim — é decoração, fora do caminho do Tab. A cor do topo do perfil é o <Chip>tom</Chip>: anel e letra do avatar, texto da
           tag de tipo e brilho do degradê. Azul e roxo são do arquivo; rosa e laranja seguem a mesma regra.
         </p>
       </ComoFunciona>
@@ -174,19 +182,26 @@ export default function DrawerPage() {
 
       <Secao
         titulo="Cores do perfil"
-        spec="tom · 4"
+        spec="tom · 8"
         descricao="O tom muda o anel e a letra do avatar, o texto da tag de tipo e o brilho do topo. O resto — botões, tags, menu — continua azul. Sem a prop, pessoa sai azul e empresa sai roxo, como no arquivo."
         codigo={`<DrawerPerfil tipo="pessoa" …/>              {/* azul */}
 <DrawerPerfil tipo="empresa" …/>             {/* roxo */}
 <DrawerPerfil tipo="pessoa" tom="rosa" …/>
-<DrawerPerfil tipo="empresa" tom="laranja" …/>`}
+<DrawerPerfil tipo="empresa" tom="laranja" …/>
+<DrawerPerfil tipo="empresa" tom="verde" …/>
+<DrawerPerfil tipo="pessoa" tom="ciano" …/>
+<DrawerPerfil tipo="empresa" tom="ambar" …/>
+<DrawerPerfil tipo="pessoa" tom="vermelho" …/>`}
         nota={
           <>
             Os quatro roxos do arquivo (<Chip>#F2E8FF</Chip>, <Chip>#6C12E2</Chip>, <Chip>#8B33FF</Chip>,{" "}
             <Chip>#EEE0FF</Chip>) são exatamente o azul do sistema com o matiz girado para 266° — mesma saturação, mesma
             luminosidade. Rosa (330°) e laranja (24°) saem da mesma conta, e o escuro de cada um repete o S/L do azul
-            escuro. Os valores moram em <Chip>[data-tom]</Chip> no <Chip>globals.css</Chip>. Verde e amarelo ficaram de
-            fora: na mesma luminosidade, o texto da tag não se lê sobre branco.
+            escuro. Os valores moram em <Chip>[data-tom]</Chip> no <Chip>globals.css</Chip>. Verde (142°), ciano (190°)
+            e âmbar (45°) entraram depois (2026-09-18) e <span className="text-foreground">não copiam a luminosidade
+            do azul</span>: no mesmo 60% o texto da tag fica em 1,4:1 sobre o fundo claro — o motivo de eles terem
+            sido recusados antes. O matiz gira e o L desce até empatar com o azul: 3,0:1 na tag, 5,3:1 na letra sobre
+            o card. O vermelho (356°) já fecha a conta quase no L do azul.
           </>
         }
       >
@@ -218,13 +233,19 @@ export default function DrawerPage() {
 
       <Secao
         titulo="Menu"
-        spec="36px · 3 estados"
-        descricao="Repouso, hover e selecionado — os três desenhados no arquivo, nos dois temas. O selecionado ganha fundo, texto e ícone azuis e o caret à direita."
+        spec="36px · fixar · lista ou cards"
+        descricao="Repouso, hover e selecionado — os três desenhados no arquivo, nos dois temas. O selecionado ganha fundo, texto e ícone azuis e o caret à direita. Passe o cursor num item para ver o alfinete: o que é fixado sobe para o topo e fica com o alfinete cheio. O interruptor cinza no topo troca a lista por cards de duas colunas, com o ícone acima do nome."
         codigo={`<DrawerMenu
   rotulo="Seções do lead"
   itens={[{ id: "perfil", rotulo: "Perfil", icone: User }, …]}
   atual={secao}
   aoEscolher={setSecao}
+  fixacao={{
+    fixados,
+    aoAlternar: (id) => alternarFixado(id),
+    rotuloFixar: (item) => \`Fixar \${item.rotulo} no topo\`,
+    rotuloDesafixar: (item) => \`Desafixar \${item.rotulo}\`,
+  }}
 />`}
         nota={
           <>
@@ -232,11 +253,32 @@ export default function DrawerPage() {
             <Chip>nav/item/bg-selected</Chip>, <Chip>nav/item/text-selected</Chip>. O ícone em repouso é{" "}
             <Chip>nav/item/text-default</Chip> e o texto é <Chip>foreground</Chip>. Cada item é{" "}
             <Chip>&lt;button&gt;</Chip> com <Chip>aria-current</Chip> no escolhido.
+            <br />
+            Fixar <span className="text-foreground">não está no arquivo</span> (pedido do humano, 2026-09-18). O
+            alfinete é um botão separado, irmão do item — botão dentro de botão é HTML inválido —, com{" "}
+            <Chip>aria-pressed</Chip> e rótulo que diz o que vai acontecer. Sem a prop <Chip>fixacao</Chip>, o menu é
+            a lista do arquivo, sem alfinete nenhum.
           </>
         }
       >
         <div className="mx-auto w-[280px]">
-          <DrawerMenu rotulo="Menu de exemplo" itens={MENU_LEAD} atual={menuSolto} aoEscolher={setMenuSolto} />
+          <DrawerMenu
+            rotulo="Menu de exemplo"
+            itens={MENU_LEAD}
+            atual={menuSolto}
+            aoEscolher={setMenuSolto}
+            fixacao={{
+              fixados: fixadosSoltos,
+              aoAlternar: (id) => setFixadosSoltos((f) => (f.includes(id) ? f.filter((x) => x !== id) : [...f, id])),
+              rotuloFixar: (item) => `Fixar ${item.rotulo} no topo`,
+              rotuloDesafixar: (item) => `Desafixar ${item.rotulo}`,
+            }}
+            visualizacao={{
+              modo: visaoSolta,
+              aoMudar: setVisaoSolta,
+              rotulo: visaoSolta === "cards" ? "Ver o menu em lista" : "Ver o menu em cards",
+            }}
+          />
         </div>
       </Secao>
 

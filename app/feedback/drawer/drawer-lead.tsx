@@ -2,38 +2,45 @@
 
 import * as React from "react";
 import {
+  ArrowsClockwise,
   ArrowSquareOut,
   Buildings,
   CalendarBlank,
+  CalendarCheck,
+  CurrencyCircleDollar,
   CaretDown,
   ChatCircleDots,
   ChatText,
   ClockCounterClockwise,
   EnvelopeSimple,
   File,
+  Fire,
   FunnelSimple,
   Handshake,
   InstagramLogo,
   MapPin,
   Minus,
   Note,
-  PencilSimple,
   Phone,
   Play,
   Plus,
   Pulse,
   SidebarSimple,
+  Snowflake,
   SquaresFour,
+  ThermometerSimple,
   Toolbox,
   TreeStructure,
   User,
   Users,
   UsersThree,
+  Wallet,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-import { Tag, SeletorTags, type GrupoTags, type OpcaoTag } from "@/components/ui/tag";
+import { Tag, SeletorTags, tomDe, type GrupoTags, type OpcaoTag } from "@/components/ui/tag";
 import { Avatar } from "@/components/ui/avatar";
-import { Input, AcaoCampo, AcaoCopiar } from "@/components/ui/input";
+import { Input, AcaoCampo, AcaoCopiar, CampoEditavel, CartaoDeCampo } from "@/components/ui/input";
+import { InputTelefone, telefoneCompleto } from "@/components/ui/telefone";
 import { Rating } from "@/components/ui/rating";
 import { Select } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
@@ -53,6 +60,7 @@ import {
   DrawerMetricas,
   DrawerContato,
   DrawerMenu,
+  SeletorDeVisao,
   DrawerConteudo,
   DrawerSecao,
   DrawerBotaoCanto,
@@ -63,6 +71,7 @@ import {
   type LinhaContato,
   type MetricaDrawer,
   type TomPerfil,
+  type VisaoDoMenu,
 } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
 
@@ -75,38 +84,47 @@ export const CATALOGO_TAGS: GrupoTags[] = [
     id: "status",
     rotulo: "Status",
     tags: [
-      { id: "abandonou", rotulo: "Abandonou", status: "destructive" },
-      { id: "agendado", rotulo: "Agendado", status: "success" },
-      { id: "passou", rotulo: "Passou", status: "info" },
-      { id: "em-aberto", rotulo: "Em aberto", status: "info" },
+      // A cor do status não é escolha: vem do significado.
+      { id: "abandonou", rotulo: "Abandonou", status: "destructive", tom: "vermelho" },
+      { id: "agendado", rotulo: "Agendado", status: "success", tom: "verde" },
+      { id: "passou", rotulo: "Passou", status: "info", tom: "ciano" },
+      { id: "em-aberto", rotulo: "Em aberto", status: "info", tom: "azul" },
     ],
   },
   {
     id: "listas",
     rotulo: "Listas",
+    // a única aba em que a cor é escolha de quem cria
+    corLivre: true,
     tags: [
-      { id: "lista-de-leads", rotulo: "Lista de leads" },
-      { id: "isaias-123", rotulo: "Isaias 123" },
-      { id: "prospect-list", rotulo: "Prospect list" },
-      { id: "premium", rotulo: "Premium" },
+      // Cor livre. Sem escolha, `tomDe` dá uma — a lista nunca nasce cinza.
+      { id: "lista-de-leads", rotulo: "Lista de leads", tom: tomDe("lista-de-leads") },
+      { id: "isaias-123", rotulo: "Isaias 123", tom: tomDe("isaias-123") },
+      { id: "prospect-list", rotulo: "Prospect list", tom: tomDe("prospect-list") },
+      { id: "premium", rotulo: "Premium", tom: "ambar" },
     ],
   },
   {
     id: "atendentes",
     rotulo: "Atendentes",
     tags: [
+      // Atendente não leva cor: a foto já distingue. Sem foto, o ícone de pessoa
+      // segura o lugar — a tag não fica um texto solto no cinza.
       { id: "esther", rotulo: "Esther", foto: "/ds/atendente.png" },
-      { id: "liam", rotulo: "Liam", foto: "/ds/atendente.png" },
-      { id: "marina", rotulo: "Marina" },
+      { id: "liam", rotulo: "Liam", foto: "/ds/atendente-2.svg" },
+      { id: "marina", rotulo: "Marina", icone: User },
+      { id: "camila", rotulo: "Camila", foto: "/ds/atendente-3.svg" },
+      { id: "diego", rotulo: "Diego", foto: "/ds/atendente-4.svg" },
     ],
   },
   {
     id: "temperatura",
     rotulo: "Temperatura",
     tags: [
-      { id: "frio", rotulo: "Frio" },
-      { id: "warm", rotulo: "Warm" },
-      { id: "quente", rotulo: "Quente" },
+      // Escala, não categoria: o tom sobe junto com o ícone.
+      { id: "frio", rotulo: "Frio", tom: "ciano", icone: Snowflake },
+      { id: "morno", rotulo: "Morno", tom: "ambar", icone: ThermometerSimple },
+      { id: "quente", rotulo: "Quente", tom: "vermelho", icone: Fire },
     ],
   },
 ];
@@ -136,10 +154,10 @@ export const LEADS: Record<"rafael" | "joel", Lead> = {
     email: "contato@datacrazy.com",
     tags: ["esther", "lista-de-leads", "isaias-123", "abandonou", "agendado", "frio"],
     metricas: [
-      { rotulo: "Ticket médio", valor: "R$ 0,00" },
-      { rotulo: "Total", valor: "R$ 0,00" },
-      { rotulo: "Ciclo de compra", valor: "0d" },
-      { rotulo: "Última compra", valor: "0d" },
+      { rotulo: "Ticket médio", valor: "R$ 0,00", icone: CurrencyCircleDollar, tom: "azul" },
+      { rotulo: "Total", valor: "R$ 0,00", icone: Wallet, tom: "roxo" },
+      { rotulo: "Ciclo de compra", valor: "0d", icone: ArrowsClockwise, tom: "rosa" },
+      { rotulo: "Última compra", valor: "0d", icone: CalendarCheck, tom: "laranja" },
     ],
     contato: [
       { texto: "Guitarrista", icone: User, rotulo: "Cargo" },
@@ -154,10 +172,10 @@ export const LEADS: Record<"rafael" | "joel", Lead> = {
     email: "contact@datawave.com",
     tags: ["liam", "prospect-list", "premium", "passou", "agendado", "warm"],
     metricas: [
-      { rotulo: "Ticket médio", valor: "R$ 150,00" },
-      { rotulo: "Total", valor: "R$ 9.877,00" },
-      { rotulo: "Ciclo de compra", valor: "89d" },
-      { rotulo: "Última compra", valor: "3d" },
+      { rotulo: "Ticket médio", valor: "R$ 150,00", icone: CurrencyCircleDollar, tom: "azul" },
+      { rotulo: "Total", valor: "R$ 9.877,00", icone: Wallet, tom: "roxo" },
+      { rotulo: "Ciclo de compra", valor: "89d", icone: ArrowsClockwise, tom: "rosa" },
+      { rotulo: "Última compra", valor: "3d", icone: CalendarCheck, tom: "laranja" },
     ],
     contato: [
       { texto: "Drummer", icone: User, rotulo: "Cargo" },
@@ -216,8 +234,7 @@ const reclamacoes = [
 /** Select com rótulo visível — o "Select" de formulário do arquivo (544:129). */
 function CampoSelect({ rotulo, valor, aoEscolher }: { rotulo: string; valor?: string; aoEscolher: (v: string) => void }) {
   return (
-    <div className="flex min-w-0 flex-col gap-1">
-      <span className="text-label-md text-input-label">{rotulo}</span>
+    <CartaoDeCampo rotulo={rotulo}>
       <Select
         size="field"
         rotulo={rotulo}
@@ -227,45 +244,87 @@ function CampoSelect({ rotulo, valor, aoEscolher }: { rotulo: string; valor?: st
         aoEscolher={aoEscolher}
         className="block w-full"
       />
-    </div>
+    </CartaoDeCampo>
   );
 }
 
 function ConteudoPerfil() {
   const [prosseguir, setProsseguir] = React.useState(false);
-  const [colaboradores, setColaboradores] = React.useState(45);
   const [reclamacao, setReclamacao] = React.useState<string>();
+  const [pais, setPais] = React.useState("BR");
+  const [paisMae, setPaisMae] = React.useState("BR");
+  const [dados, setDados] = React.useState({
+    razao: "Joel Jota Performance LTDA",
+    fantasia: "Joel Jota",
+    cnpj: "",
+    origem: "Indicação",
+    segmento: "Educação e alta performance",
+    fundacao: "",
+    site: "joeljota.com.br",
+    instagram: "@joeljota",
+    email: "contato@joeljota.com.br",
+    telefone: "",
+    maeTelefone: "(45) 64564-5645",
+    maeEmail: "contato@joeljota.com.br",
+    maeSite: "joeljota.com.br",
+    colaboradores: "45",
+    chegada: "",
+  });
+
+  /** valor + aoSalvar de um campo, para não repetir o setState em cada um. */
+  const campo = (chave: keyof typeof dados) => ({
+    valor: dados[chave],
+    aoSalvar: (v: string) => setDados((d) => ({ ...d, [chave]: v })),
+  });
+
   return (
     <>
       <DrawerSecao titulo="Dados cadastrais">
         <div className="grid grid-cols-3 gap-3">
-          <Input rotulo="Razão social" defaultValue="Joel Jota Performance LTDA" />
-          <Input rotulo="Nome fantasia" defaultValue="Joel Jota" />
-          <Input
+          <CampoEditavel rotulo="Razão social" {...campo("razao")} rotuloEditar="Editar razão social" textoVazio="Adicionar" />
+          <CampoEditavel rotulo="Nome fantasia" {...campo("fantasia")} rotuloEditar="Editar nome fantasia" textoVazio="Adicionar" />
+          <CampoEditavel
             rotulo="CNPJ"
-            placeholder="00.000.000/0000-00"
-            acoes={<AcaoCopiar rotulo="Copiar CNPJ" rotuloCopiado="CNPJ copiado" />}
+            {...campo("cnpj")}
+            rotuloEditar="Editar CNPJ"
+            textoVazio="00.000.000/0000-00"
+            inputMode="numeric"
+            acoes={<AcaoCopiar rotulo="Copiar CNPJ" rotuloCopiado="CNPJ copiado" valor={dados.cnpj} />}
           />
-          <Input rotulo="Origem" defaultValue="Indicação" />
-          <Input rotulo="Segmento" defaultValue="Educação e alta performance" />
-          <Input rotulo="Data de fundação" placeholder="dd/mm/aaaa" iconeInicio={CalendarBlank} />
-          <Input
+          <CampoEditavel rotulo="Origem" {...campo("origem")} rotuloEditar="Editar origem" textoVazio="Adicionar" />
+          <CampoEditavel rotulo="Segmento" {...campo("segmento")} rotuloEditar="Editar segmento" textoVazio="Adicionar" />
+          <CampoEditavel
+            rotulo="Data de fundação"
+            {...campo("fundacao")}
+            rotuloEditar="Editar data de fundação"
+            textoVazio="dd/mm/aaaa"
+            iconeInicio={CalendarBlank}
+          />
+          <CampoEditavel
             rotulo="Site"
-            defaultValue="joeljota.com.br"
+            {...campo("site")}
+            rotuloEditar="Editar site"
+            textoVazio="Adicionar"
             acoes={
               <>
-                <AcaoCopiar rotulo="Copiar site" rotuloCopiado="Site copiado" />
-                <AcaoCampo icone={ArrowSquareOut} rotulo="Abrir site" onClick={() => abrir("https://joeljota.com.br")} />
+                <AcaoCopiar rotulo="Copiar site" rotuloCopiado="Site copiado" valor={dados.site} />
+                <AcaoCampo icone={ArrowSquareOut} rotulo="Abrir site" onClick={() => abrir(`https://${dados.site}`)} />
               </>
             }
           />
-          <Input
+          <CampoEditavel
             rotulo="Instagram"
-            defaultValue="@joeljota"
+            {...campo("instagram")}
+            rotuloEditar="Editar Instagram"
+            textoVazio="Adicionar"
             acoes={
               <>
-                <AcaoCopiar rotulo="Copiar Instagram" rotuloCopiado="Instagram copiado" />
-                <AcaoCampo icone={InstagramLogo} rotulo="Abrir Instagram" onClick={() => abrir("https://instagram.com/joeljota")} />
+                <AcaoCopiar rotulo="Copiar Instagram" rotuloCopiado="Instagram copiado" valor={dados.instagram} />
+                <AcaoCampo
+                  icone={InstagramLogo}
+                  rotulo="Abrir Instagram"
+                  onClick={() => abrir(`https://instagram.com/${dados.instagram.replace("@", "")}`)}
+                />
               </>
             }
           />
@@ -280,24 +339,33 @@ function ConteudoPerfil() {
 
       <DrawerSecao titulo="Contatos">
         <div className="grid grid-cols-3 gap-3">
-          <Input
+          <CampoEditavel
             rotulo="E-mail"
-            defaultValue="contato@joeljota.com.br"
+            {...campo("email")}
+            rotuloEditar="Editar e-mail"
+            textoVazio="Adicionar"
             acoes={
               <>
-                <AcaoCopiar rotulo="Copiar e-mail" rotuloCopiado="E-mail copiado" />
-                <AcaoCampo icone={EnvelopeSimple} rotulo="Enviar e-mail" onClick={() => abrir("mailto:contato@joeljota.com.br")} />
+                <AcaoCopiar rotulo="Copiar e-mail" rotuloCopiado="E-mail copiado" valor={dados.email} />
+                <AcaoCampo icone={EnvelopeSimple} rotulo="Enviar e-mail" onClick={() => abrir(`mailto:${dados.email}`)} />
               </>
             }
           />
-          <Input
+          <InputTelefone
+            cartao
             rotulo="Telefone"
-            placeholder="+55 (00) 00000-0000"
+            rotuloPais="País do telefone"
+            pais={pais}
+            aoMudarPais={setPais}
+            valor={dados.telefone}
+            aoMudar={(v) => setDados((d) => ({ ...d, telefone: v }))}
+            placeholder="(00) 00000-0000"
             acoes={
-              <>
-                <AcaoCopiar rotulo="Copiar telefone" rotuloCopiado="Telefone copiado" />
-                <AcaoCampo icone={Phone} rotulo="Ligar" />
-              </>
+              <AcaoCampo
+                icone={Phone}
+                rotulo="Ligar"
+                onClick={() => abrir(`tel:${telefoneCompleto(pais, dados.telefone).replace(/\D/g, "")}`)}
+              />
             }
           />
         </div>
@@ -318,33 +386,43 @@ function ConteudoPerfil() {
           <p className="text-label-lg text-foreground">Jojota Podcast LTDA.</p>
         </div>
         <div className="grid grid-cols-3 gap-3">
-          <Input
+          <InputTelefone
+            cartao
             rotulo="Telefone"
-            defaultValue="+55 (45) 64564-5645"
+            rotuloPais="País do telefone da empresa mãe"
+            pais={paisMae}
+            aoMudarPais={setPaisMae}
+            valor={dados.maeTelefone}
+            aoMudar={(v) => setDados((d) => ({ ...d, maeTelefone: v }))}
             acoes={
-              <>
-                <AcaoCopiar rotulo="Copiar telefone" rotuloCopiado="Telefone copiado" />
-                <AcaoCampo icone={Phone} rotulo="Ligar" onClick={() => abrir("tel:+5545645645645")} />
-              </>
+              <AcaoCampo
+                icone={Phone}
+                rotulo="Ligar"
+                onClick={() => abrir(`tel:${telefoneCompleto(paisMae, dados.maeTelefone).replace(/\D/g, "")}`)}
+              />
             }
           />
-          <Input
+          <CampoEditavel
             rotulo="E-mail"
-            defaultValue="contato@joeljota.com.br"
+            {...campo("maeEmail")}
+            rotuloEditar="Editar e-mail da empresa mãe"
+            textoVazio="Adicionar"
             acoes={
               <>
-                <AcaoCopiar rotulo="Copiar e-mail" rotuloCopiado="E-mail copiado" />
-                <AcaoCampo icone={EnvelopeSimple} rotulo="Enviar e-mail" onClick={() => abrir("mailto:contato@joeljota.com.br")} />
+                <AcaoCopiar rotulo="Copiar e-mail" rotuloCopiado="E-mail copiado" valor={dados.maeEmail} />
+                <AcaoCampo icone={EnvelopeSimple} rotulo="Enviar e-mail" onClick={() => abrir(`mailto:${dados.maeEmail}`)} />
               </>
             }
           />
-          <Input
+          <CampoEditavel
             rotulo="Site"
-            defaultValue="joeljota.com.br"
+            {...campo("maeSite")}
+            rotuloEditar="Editar site da empresa mãe"
+            textoVazio="Adicionar"
             acoes={
               <>
-                <AcaoCopiar rotulo="Copiar site" rotuloCopiado="Site copiado" />
-                <AcaoCampo icone={ArrowSquareOut} rotulo="Abrir site" onClick={() => abrir("https://joeljota.com.br")} />
+                <AcaoCopiar rotulo="Copiar site" rotuloCopiado="Site copiado" valor={dados.maeSite} />
+                <AcaoCampo icone={ArrowSquareOut} rotulo="Abrir site" onClick={() => abrir(`https://${dados.maeSite}`)} />
               </>
             }
           />
@@ -353,20 +431,36 @@ function ConteudoPerfil() {
 
       <DrawerSecao titulo="Campos personalizados">
         <div className="grid grid-cols-3 gap-3">
+          {/* Contador segue campo aberto: o + e o − são a ação principal aqui. */}
           <Input
+            cartao
             rotulo="Quantos colaboradores"
             inputMode="numeric"
-            value={String(colaboradores)}
-            onChange={(e) => setColaboradores(Number(e.target.value.replace(/\D/g, "")) || 0)}
+            value={dados.colaboradores}
+            onChange={(e) => setDados((d) => ({ ...d, colaboradores: e.target.value.replace(/\D/g, "") }))}
             acoes={
               <>
-                <AcaoCampo icone={Minus} rotulo="Diminuir" onClick={() => setColaboradores((n) => Math.max(0, n - 1))} />
-                <AcaoCampo icone={Plus} rotulo="Aumentar" onClick={() => setColaboradores((n) => n + 1)} />
+                <AcaoCampo
+                  icone={Minus}
+                  rotulo="Diminuir"
+                  onClick={() => setDados((d) => ({ ...d, colaboradores: String(Math.max(0, Number(d.colaboradores || 0) - 1)) }))}
+                />
+                <AcaoCampo
+                  icone={Plus}
+                  rotulo="Aumentar"
+                  onClick={() => setDados((d) => ({ ...d, colaboradores: String(Number(d.colaboradores || 0) + 1) }))}
+                />
               </>
             }
           />
           <CampoSelect rotulo="Reclamações" valor={reclamacao} aoEscolher={setReclamacao} />
-          <Input rotulo="Data de chegada" placeholder="dd/mm/aaaa hh:mm" iconeInicio={CalendarBlank} />
+          <CampoEditavel
+            rotulo="Data de chegada"
+            {...campo("chegada")}
+            rotuloEditar="Editar data de chegada"
+            textoVazio="dd/mm/aaaa hh:mm"
+            iconeInicio={CalendarBlank}
+          />
         </div>
       </DrawerSecao>
     </>
@@ -374,29 +468,55 @@ function ConteudoPerfil() {
 }
 
 function ConteudoCampos() {
-  const [score, setScore] = React.useState(3);
-  const [restrito, setRestrito] = React.useState(4);
+  const [score, setScore] = React.useState(7);
+  const [restrito, setRestrito] = React.useState(9);
   const [reclamacao, setReclamacao] = React.useState<string>();
-  const editar = (rotulo: string) => <AcaoCampo icone={PencilSimple} rotulo={`Editar ${rotulo.toLowerCase()}`} />;
+  const [textos, setTextos] = React.useState({ habilita: "", palavras: "", observacao: "Prefere e-mail" });
+  const campo = (chave: keyof typeof textos) => ({
+    valor: textos[chave],
+    aoSalvar: (v: string) => setTextos((t) => ({ ...t, [chave]: v })),
+  });
   return (
     <>
       <DrawerSecao titulo="Campos gerais">
         <div className="grid grid-cols-3 gap-3">
           <Rating rotulo="ScoreDavi" valor={score} aoMudar={setScore} />
-          <Input rotulo="Habilita empresa" placeholder="Insira um valor" acoes={editar("Habilita empresa")} />
+          <CampoEditavel
+            rotulo="Habilita empresa"
+            {...campo("habilita")}
+            rotuloEditar="Editar habilita empresa"
+            textoVazio="Insira um valor"
+          />
         </div>
       </DrawerSecao>
       <DrawerSecao titulo="Suporte">
         <div className="grid grid-cols-3 gap-3">
           <CampoSelect rotulo="Reclamações" valor={reclamacao} aoEscolher={setReclamacao} />
-          <Input rotulo="Data de chegada" placeholder="dd/mm/aaaa hh:mm" iconeInicio={CalendarBlank} />
-          <Input rotulo="Texto de até 50 palavras" placeholder="Insira um valor" acoes={editar("Texto")} />
+          <CampoEditavel
+            rotulo="Data de chegada"
+            valor=""
+            aoSalvar={() => undefined}
+            rotuloEditar="Editar data de chegada"
+            textoVazio="dd/mm/aaaa hh:mm"
+            iconeInicio={CalendarBlank}
+          />
+          <CampoEditavel
+            rotulo="Texto de até 50 palavras"
+            {...campo("palavras")}
+            rotuloEditar="Editar texto"
+            textoVazio="Insira um valor"
+          />
         </div>
       </DrawerSecao>
       <DrawerSecao titulo="Empresa restrito">
         <div className="grid grid-cols-3 gap-3">
           <Rating rotulo="Restrito 6" valor={restrito} aoMudar={setRestrito} />
-          <Input rotulo="Observação interna" defaultValue="Prefere e-mail" acoes={editar("Observação interna")} />
+          <CampoEditavel
+            rotulo="Observação interna"
+            {...campo("observacao")}
+            rotuloEditar="Editar observação interna"
+            textoVazio="Insira um valor"
+          />
         </div>
       </DrawerSecao>
       <div className="flex justify-center">
@@ -429,12 +549,11 @@ function ConteudoNegocios() {
     <>
       <DrawerMetricas
         colunas={4}
-        estilo="fill"
         itens={[
-          { rotulo: "Ticket médio", valor: "R$ 3.290,00" },
-          { rotulo: "Total", valor: "R$ 9.877,00" },
-          { rotulo: "Ciclo de compra", valor: "89d" },
-          { rotulo: "Última compra", valor: "3d" },
+          { rotulo: "Ticket médio", valor: "R$ 3.290,00", icone: CurrencyCircleDollar, tom: "azul" },
+          { rotulo: "Total", valor: "R$ 9.877,00", icone: Wallet, tom: "roxo" },
+          { rotulo: "Ciclo de compra", valor: "89d", icone: ArrowsClockwise, tom: "rosa" },
+          { rotulo: "Última compra", valor: "3d", icone: CalendarCheck, tom: "laranja" },
         ]}
       />
       <DataTableToolbar layout="compacta" rotulo="Total de negócios" total="3 negócios">
@@ -537,7 +656,9 @@ function ConteudoHierarquia() {
   );
 }
 
-const cabecalhos: Record<string, { titulo: string; descricao: string; Corpo: () => React.ReactElement }> = {
+/* Exportado: a tela do pipeline (app/exemplos/pipeline) monta o MESMO drawer,
+   com este menu e estes conteúdos. Duplicar lá seria uma segunda verdade. */
+export const cabecalhos: Record<string, { titulo: string; descricao: string; Corpo: () => React.ReactElement }> = {
   historicos: { titulo: "Histórico", descricao: "Veja o histórico do seu lead", Corpo: ConteudoHistorico },
   perfil: { titulo: "Perfil", descricao: "Dados cadastrais e contatos do lead", Corpo: ConteudoPerfil },
   campos: {
@@ -564,7 +685,7 @@ export function TagsDoLead({ iniciais }: { iniciais: string[] }) {
   return (
     <>
       {tagsEscolhidas(grupos, escolhidas).map((t) => (
-        <Tag key={t.id} status={t.status} foto={t.foto}>
+        <Tag key={t.id} status={t.status} foto={t.foto} tom={t.tom} icone={t.icone}>
           {t.rotulo}
         </Tag>
       ))}
@@ -572,9 +693,9 @@ export function TagsDoLead({ iniciais }: { iniciais: string[] }) {
         grupos={grupos}
         selecionadas={escolhidas}
         aoAlternar={(t) => setEscolhidas((ids) => (ids.includes(t.id) ? ids.filter((x) => x !== t.id) : [...ids, t.id]))}
-        aoCriar={(rotulo, grupoId) => {
+        aoCriar={(rotulo, grupoId, tom) => {
           const id = `${grupoId}-${Date.now()}`;
-          setGrupos((gs) => gs.map((g) => (g.id === grupoId ? { ...g, tags: [...g.tags, { id, rotulo }] } : g)));
+          setGrupos((gs) => gs.map((g) => (g.id === grupoId ? { ...g, tags: [...g.tags, { id, rotulo, tom }] } : g)));
           setEscolhidas((ids) => [...ids, id]);
         }}
         rotulos={{
@@ -582,6 +703,7 @@ export function TagsDoLead({ iniciais }: { iniciais: string[] }) {
           busca: "Buscar ou criar tag",
           vazio: "Nenhuma tag nesta aba",
           criar: (texto, grupo) => `Criar "${texto}" em ${grupo}`,
+          cor: "Cor",
         }}
       />
     </>
@@ -608,6 +730,9 @@ export function DrawerLead({
   const dados = LEADS[lead];
   const [menu, setMenu] = React.useState(menuInicial);
   const [perfilAberto, setPerfilAberto] = React.useState(true);
+  // Quem fixa é a pessoa, e cada lead guarda a própria lista no CRM.
+  const [fixados, setFixados] = React.useState<string[]>(["negocios"]);
+  const [visaoMenu, setVisaoMenu] = React.useState<VisaoDoMenu>("lista");
 
   const item = MENU_LEAD.find((m) => m.id === menu) ?? MENU_LEAD[0];
   const desenhado = cabecalhos[menu];
@@ -624,6 +749,7 @@ export function DrawerLead({
           telefone={dados.telefone}
           email={dados.email}
           estilo={estilo}
+          rotulosRolagem={{ subir: "Subir no perfil", descer: "Descer no perfil" }}
           aoFechar={aoFechar}
           aoRecolher={() => setPerfilAberto(false)}
           tags={<TagsDoLead iniciais={dados.tags} />}
@@ -646,8 +772,29 @@ export function DrawerLead({
           <DrawerBloco titulo="Contato principal">
             <DrawerContato linhas={dados.contato} />
           </DrawerBloco>
-          <DrawerBloco titulo="Menu">
-            <DrawerMenu rotulo="Seções do lead" itens={MENU_LEAD} atual={menu} aoEscolher={setMenu} />
+          <DrawerBloco
+            titulo="Menu"
+            acoes={
+              <SeletorDeVisao
+                modo={visaoMenu}
+                aoMudar={setVisaoMenu}
+                rotulo={visaoMenu === "cards" ? "Ver o menu em lista" : "Ver o menu em cards"}
+              />
+            }
+          >
+            <DrawerMenu
+              rotulo="Seções do lead"
+              itens={MENU_LEAD}
+              atual={menu}
+              aoEscolher={setMenu}
+              visao={visaoMenu}
+              fixacao={{
+                fixados,
+                aoAlternar: (id) => setFixados((f) => (f.includes(id) ? f.filter((x) => x !== id) : [...f, id])),
+                rotuloFixar: (item) => `Fixar ${item.rotulo} no topo`,
+                rotuloDesafixar: (item) => `Desafixar ${item.rotulo}`,
+              }}
+            />
           </DrawerBloco>
         </DrawerPerfil>
       ) : null}
@@ -655,6 +802,7 @@ export function DrawerLead({
       <DrawerConteudo
         titulo={desenhado?.titulo ?? item.rotulo}
         descricao={desenhado?.descricao}
+        rotulosRolagem={{ subir: "Subir no conteúdo", descer: "Descer no conteúdo" }}
         antesDoTitulo={
           perfilAberto ? null : (
             <DrawerBotaoCanto rotulo="Mostrar perfil" onClick={() => setPerfilAberto(true)} className="bg-background">

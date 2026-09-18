@@ -342,6 +342,28 @@ const previews: Record<string, React.ReactNode> = {
       </div>
     </div>
   ),
+  "/exemplos/pipeline": (
+    <div className="flex w-full max-w-full gap-2">
+      {[
+        { etapa: "Novo lead", ponto: "bg-subtle-foreground", cartoes: 2 },
+        { etapa: "Proposta", ponto: "bg-primary", cartoes: 3 },
+        { etapa: "Fechamento", ponto: "bg-success", cartoes: 1 },
+      ].map((c) => (
+        <div key={c.etapa} className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <p className="flex items-center gap-1 truncate text-label-sm text-muted-foreground">
+            <span className={`size-1.5 shrink-0 rounded-full ${c.ponto}`} />
+            {c.etapa}
+          </p>
+          {Array.from({ length: c.cartoes }).map((_, i) => (
+            <div key={i} className="flex flex-col gap-1 rounded-md bg-card p-2 shadow-sm">
+              <div className="h-1.5 w-2/3 rounded bg-border" />
+              <div className="h-1.5 w-full rounded bg-border" />
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  ),
 };
 
 const esqueleto = (
@@ -368,6 +390,7 @@ const descricoes: Record<string, string> = {
   "Checkbox": "Alternância booleana, com estado indeterminado.",
   "Radio Group": "Escolha exclusiva: setas movem e selecionam.",
   "Switch": "Efeito imediato, sem botão de salvar.",
+  "Time Picker": "Hora e data-hora, com fuso à vista.",
   "Date Picker": "Período em dois meses, com atalhos e confirmação explícita.",
   "Sidebar": "282px que viram 88px, e o item de 36px que ela hospeda.",
   "Header": "Trilha, título e ações, montados por composição.",
@@ -385,6 +408,7 @@ const descricoes: Record<string, string> = {
   "Empty State": "Ausência de dados, explicada — não só um ícone.",
   "Modal": "Grupos à esquerda, conteúdo à direita, botões à parte (G10).",
   "Drawer": "O lead pela direita: perfil, menu e cinco seções (G1).",
+  "Pipeline": "O funil do CRM: arraste um lead e abra o registro.",
 };
 
 export default function Home() {

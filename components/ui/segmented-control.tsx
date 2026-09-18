@@ -91,7 +91,7 @@ export function SegmentedControl({ itens, atual, aoEscolher, rotulo, className }
               // mudar de largura quando a seleção troca.
               "h-7 rounded-md px-2.5 text-body-md",
               selecionada
-                ? "bg-accent text-overlay-item-text-selected"
+                ? "bg-segmented-item-selected text-overlay-item-text-selected"
                 // hover derivado (E-01), o mesmo do Tabs
                 : "text-muted-foreground hover:text-foreground",
             )}
@@ -137,7 +137,7 @@ export function ViewSwitcher({ itens, atual, aoEscolher, rotulo, className }: Gr
                 opcaoBase,
                 "h-full flex-1 rounded-sm px-2.5",
                 selecionada
-                  ? "bg-accent text-primary shadow-button-inner"
+                  ? "bg-segmented-item-selected text-primary shadow-button-inner"
                   : "text-muted-foreground hover:text-foreground",
               )}
             >

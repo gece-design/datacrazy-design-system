@@ -23,6 +23,25 @@ const pontos = {
   success: "bg-success",
 } as const;
 
+/** Os oito tons de `[data-tom]` no globals.css. A tag não inventa cor: escolhe um. */
+export const TONS = ["azul", "roxo", "rosa", "laranja", "verde", "ciano", "ambar", "vermelho"] as const;
+export type Tom = (typeof TONS)[number];
+
+/** Fora do sorteio: verde e vermelho querem dizer "deu certo" e "deu errado".
+    Uma lista qualquer em vermelho lê como alarme. Quem escolher, escolhe. */
+const SORTEAVEIS = TONS.filter((t) => t !== "verde" && t !== "vermelho");
+
+/**
+ * Tom estável a partir de um texto — a mesma lista recebe sempre a mesma cor,
+ * em qualquer máquina e entre recargas. Serve de padrão quando ninguém
+ * escolheu: uma tag nova nasce colorida em vez de cinza.
+ */
+export function tomDe(chave: string): Tom {
+  let h = 0;
+  for (let i = 0; i < chave.length; i++) h = (h * 31 + chave.charCodeAt(i)) >>> 0;
+  return SORTEAVEIS[h % SORTEAVEIS.length];
+}
+
 export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Bolinha de 6px antes do texto. O texto continua sendo o sinal: a cor só reforça. */
   status?: keyof typeof pontos;
@@ -30,17 +49,27 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   tipo?: "pessoa" | "empresa";
   /** Foto de 22px encostada à esquerda — a tag do atendente. */
   foto?: string;
+  /** Um dos oito tons. Sem tom, a tag é cinza — é assim que o atendente fica. */
+  tom?: Tom;
+  /** Ícone de 12px antes do texto, para quem não distingue as cores. */
+  icone?: React.ComponentType<{ size?: number; weight?: "regular" | "fill"; className?: string }>;
 }
 
-export function Tag({ status, tipo, foto, className, children, ...props }: TagProps) {
-  const Icone = tipo === "pessoa" ? User : tipo === "empresa" ? Buildings : null;
+export function Tag({ status, tipo, foto, tom, icone, className, children, ...props }: TagProps) {
+  const Icone = icone ?? (tipo === "pessoa" ? User : tipo === "empresa" ? Buildings : null);
   return (
     <span
+      // `data-tom` liga os quatro --tom-* daquele tom neste span (globals.css)
+      data-tom={tom}
       className={cn(
         // 22px = 14 de entrelinha + 4 de respiro em cima e embaixo
-        "inline-flex h-[22px] shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full bg-input-bg-disabled px-1.5 text-label-sm uppercase text-foreground",
+        "inline-flex h-[22px] shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full px-1.5 text-label-sm uppercase text-foreground",
+        // com tom: pastel por fundo, a mesma cor escura na letra. Sem: o cinza de antes.
+        tom ? "bg-tom-brilho text-tom-texto" : "bg-input-bg-disabled",
         foto && "pl-0",
-        tipo && "text-primary",
+        // a tag de tipo não colore o fundo: fica cinza e pega a cor do lead
+        // (`--tom-texto` do `[data-tom]` que o perfil do drawer já define).
+        tipo && !tom && "text-tom-texto",
         className,
       )}
       {...props}
@@ -49,8 +78,10 @@ export function Tag({ status, tipo, foto, className, children, ...props }: TagPr
         // eslint-disable-next-line @next/next/no-img-element
         <img src={foto} alt="" className="size-[22px] shrink-0 rounded-full object-cover" />
       ) : null}
-      {status ? <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", pontos[status])} /> : null}
-      {Icone ? <Icone size={12} weight="regular" aria-hidden="true" className="shrink-0" /> : null}
+      {status ? (
+        <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", tom ? "bg-tom-tag" : pontos[status])} />
+      ) : null}
+      {Icone ? <Icone size={12} weight="regular" className="shrink-0" aria-hidden="true" /> : null}
       {children}
     </span>
   );
@@ -70,7 +101,7 @@ export const TagAdicionar = React.forwardRef<HTMLButtonElement, TagAdicionarProp
       aria-label={rotulo}
       title={rotulo}
       className={cn(
-        "inline-flex size-[22px] shrink-0 items-center justify-center rounded-full bg-primary text-background shadow-button-inner transition-colors hover:bg-primary-hover",
+        "inline-flex size-[22px] shrink-0 items-center justify-center rounded-full bg-primary text-background shadow-button-inner-primary transition-colors hover:bg-primary-hover",
         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         className,
       )}
@@ -84,8 +115,21 @@ TagAdicionar.displayName = "TagAdicionar";
 
 /* ------------------------------------------------------------ Seletor -- */
 
-export type OpcaoTag = { id: string; rotulo: string; status?: TagProps["status"]; foto?: string };
-export type GrupoTags = { id: string; rotulo: string; tags: OpcaoTag[] };
+export type OpcaoTag = {
+  id: string;
+  rotulo: string;
+  status?: TagProps["status"];
+  foto?: string;
+  tom?: Tom;
+  icone?: TagProps["icone"];
+};
+export type GrupoTags = {
+  id: string;
+  rotulo: string;
+  tags: OpcaoTag[];
+  /** Nesta aba a cor é escolha de quem cria (Listas). Nas outras ela é regra. */
+  corLivre?: boolean;
+};
 
 export interface SeletorTagsProps {
   /** Um grupo por aba. Ex.: Status, Listas, Atendentes. */
@@ -94,8 +138,9 @@ export interface SeletorTagsProps {
   selecionadas: string[];
   /** Clique numa tag da lista: põe ou tira. */
   aoAlternar: (tag: OpcaoTag) => void;
-  /** Sem esta prop, a busca só filtra — não oferece criar. */
-  aoCriar?: (rotulo: string, grupoId: string) => void;
+  /** Sem esta prop, a busca só filtra — não oferece criar. O `tom` só vem
+      quando a aba tem `corLivre`; nas outras a cor é da regra do grupo. */
+  aoCriar?: (rotulo: string, grupoId: string, tom?: Tom) => void;
   rotulos: {
     /** Nome do botão "+" e do painel. Ex.: "Adicionar tag". */
     gatilho: string;
@@ -105,6 +150,8 @@ export interface SeletorTagsProps {
     vazio: string;
     /** A opção de criar. Ex.: (t, g) => `Criar "${t}" em ${g}`. */
     criar: (texto: string, grupo: string) => string;
+    /** Rótulo da fileira de cores. Ex.: "Cor da tag". */
+    cor: string;
   };
   className?: string;
 }
@@ -132,6 +179,8 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
   const [aba, setAba] = React.useState(grupos[0]?.id ?? "");
   const [busca, setBusca] = React.useState("");
   const [ativo, setAtivo] = React.useState(0);
+  // `null` = ninguém escolheu ainda: vale o tom que `tomDe` dá ao texto digitado.
+  const [tomNovo, setTomNovo] = React.useState<Tom | null>(null);
   const [pos, setPos] = React.useState<{ top?: number; bottom?: number; left: number } | null>(null);
   const gatilho = React.useRef<HTMLButtonElement>(null);
   const painel = React.useRef<HTMLDivElement>(null);
@@ -160,6 +209,7 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
     posicionar();
     setBusca("");
     setAtivo(0);
+    setTomNovo(null);
     setAberto(true);
   }
 
@@ -188,15 +238,17 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
   function mudarAba(novo: string) {
     setAba(novo);
     setAtivo(0);
+    setTomNovo(null);
   }
 
   function escolher(i: number) {
     if (i < filtradas.length) {
       aoAlternar(filtradas[i]);
     } else if (podeCriar && grupo) {
-      aoCriar?.(termo, grupo.id);
+      aoCriar?.(termo, grupo.id, grupo.corLivre ? (tomNovo ?? tomDe(termo)) : undefined);
       setBusca("");
       setAtivo(0);
+      setTomNovo(null);
     }
   }
 
@@ -310,7 +362,7 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                         escolhida && emFoco && "ring-1 ring-inset ring-ring",
                       )}
                     >
-                      <Tag status={t.status} foto={t.foto}>
+                      <Tag status={t.status} foto={t.foto} tom={t.tom} icone={t.icone}>
                         {t.rotulo}
                       </Tag>
                       {escolhida ? (
@@ -329,17 +381,54 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => escolher(filtradas.length)}
                     className={cn(
-                      "flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-body-md text-overlay-item-text-selected transition-colors",
+                      "flex cursor-pointer items-center justify-between gap-2 rounded-md px-3 py-2 text-body-md text-overlay-item-text-selected transition-colors",
                       ativo === filtradas.length && "bg-overlay-item-hover",
                     )}
                   >
-                    <Plus size={16} weight="regular" aria-hidden="true" className="shrink-0" />
-                    <span className="min-w-0 truncate">{rotulos.criar(termo, grupo.rotulo)}</span>
+                    <span className="flex min-w-0 items-center gap-2">
+                      <Plus size={16} weight="regular" aria-hidden="true" className="shrink-0" />
+                      <span className="min-w-0 truncate">{rotulos.criar(termo, grupo.rotulo)}</span>
+                    </span>
+                    {/* prévia: a tag sai daqui exatamente assim */}
+                    {grupo.corLivre ? <Tag tom={tomNovo ?? tomDe(termo)}>{termo}</Tag> : null}
                   </div>
                 ) : null}
 
                 {total === 0 ? <p className="px-3 py-2 text-body-md text-muted-foreground">{rotulos.vazio}</p> : null}
               </div>
+
+              {/* Fileira de cores — fora do listbox, porque amostra não é opção
+                  de tag. Só nas abas de cor livre: nas outras a cor é regra. */}
+              {podeCriar && grupo?.corLivre ? (
+                <div role="radiogroup" aria-label={rotulos.cor} className="flex items-center gap-2 border-t border-border px-3 py-2">
+                  <span className="shrink-0 text-label-sm uppercase text-muted-foreground">{rotulos.cor}</span>
+                  <div className="flex flex-wrap items-center gap-1">
+                    {TONS.map((t) => {
+                      const marcada = (tomNovo ?? tomDe(termo)) === t;
+                      return (
+                        <button
+                          key={t}
+                          type="button"
+                          role="radio"
+                          aria-checked={marcada}
+                          aria-label={t}
+                          title={t}
+                          data-tom={t}
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={() => setTomNovo(t)}
+                          // a amostra mostra as duas cores que a tag vai ter:
+                          // o pastel do fundo e a letra por dentro do anel
+                          className={cn(
+                            "size-4 shrink-0 rounded-full bg-tom-brilho ring-2 ring-inset ring-tom-texto transition-transform",
+                            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                            marcada ? "scale-110 outline outline-2 outline-offset-2 outline-foreground" : "hover:scale-110",
+                          )}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
             </div>,
             document.body,
           )

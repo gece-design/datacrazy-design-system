@@ -1,12 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Eye, Code as CodeIcon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Colunas } from "./colunas";
 import { Codigo } from "./codigo";
 import { Paginacao } from "./paginacao";
 import { Indice, IndiceCompacto, slug } from "./indice";
+import {
+  SeletorDeFundo,
+  classeDoFundo,
+  lerFundoSalvo,
+  primeiroFundoLimpo,
+  salvarFundo,
+  somemNoFundo,
+  type Fundo,
+} from "./fundo-preview";
+
+export { FUNDOS, type Fundo } from "./fundo-preview";
 
 // slug e o índice moram em ./indice — quem monta o link e quem lê a âncora
 // precisam da mesma função, e duplicá-la é como as duas se soltam.
@@ -48,7 +60,7 @@ export function ComoFunciona({ children }: { children: React.ReactNode }) {
 }
 
 export function Secao({
-  titulo, spec, descricao, codigo, lang = "tsx", nota, children, className, semCaixa,
+  titulo, spec, descricao, codigo, lang = "tsx", nota, children, className, semCaixa, fundo, semSeletorDeFundo,
 }: {
   titulo: string;
   spec?: string;
@@ -63,9 +75,56 @@ export function Secao({
   children: React.ReactNode;
   className?: string;
   semCaixa?: boolean;
+  /** Fixa o fundo inicial da caixa. Passar isto DESLIGA a regra de contraste:
+   *  quem declarou já decidiu. O humano ainda pode trocar pelas amostras. */
+  fundo?: Fundo;
+  /** Esconde as amostras. Só para preview que traz o próprio palco — um mock
+   *  externo, por exemplo, onde a cor da caixa não encosta em nada. */
+  semSeletorDeFundo?: boolean;
 }) {
   const [aba, setAba] = useState<"preview" | "codigo">("preview");
   const temCodigo = Boolean(codigo);
+
+  const caixaRef = useRef<HTMLDivElement>(null);
+  const [fundoAtual, setFundoAtual] = useState<Fundo>(fundo ?? "background");
+  // `true` só enquanto ninguém tocou nas amostras: é o que autoriza a regra a
+  // decidir e o que acende a etiqueta "contraste".
+  const [trocadoAuto, setTrocadoAuto] = useState(false);
+  const humanoEscolheu = useRef(false);
+
+  // A caixa não tem id próprio: rota + título da seção é o par estável.
+  const rota = usePathname();
+  const chaveDoFundo = `${rota}#${slug(titulo)}`;
+
+  // A escolha salva. Só depois de montar — no servidor não existe storage, e
+  // ler no primeiro render trocaria o HTML por baixo da hidratação.
+  useEffect(() => {
+    const salvo = lerFundoSalvo(chaveDoFundo);
+    if (!salvo) return;
+    humanoEscolheu.current = true;
+    setTrocadoAuto(false);
+    setFundoAtual(salvo);
+  }, [chaveDoFundo]);
+
+  // A regra de contraste. Roda uma vez, depois da primeira pintura do preview:
+  // se no fundo padrão algum elemento some, cai no primeiro neutro em que não
+  // some. Ver `somemNoFundo` em ./fundo-preview.
+  useEffect(() => {
+    if (fundo || semSeletorDeFundo || humanoEscolheu.current) return;
+    if (temCodigo && aba !== "preview") return;
+    const caixa = caixaRef.current;
+    if (!caixa) return;
+    const id = requestAnimationFrame(() => {
+      if (!somemNoFundo(caixa)) return;
+      const limpo = primeiroFundoLimpo(caixa);
+      if (!limpo || limpo === "background") return;
+      setFundoAtual(limpo);
+      setTrocadoAuto(true);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [fundo, semSeletorDeFundo, temCodigo, aba]);
+
+  const mostrarControles = (temCodigo || !semSeletorDeFundo) && !(temCodigo && aba === "codigo" && semSeletorDeFundo);
 
   return (
     <section id={slug(titulo)} className="scroll-mt-6">
@@ -75,23 +134,41 @@ export function Secao({
       </div>
       {descricao && <p className="mt-2 chrome-prose text-muted-foreground">{descricao}</p>}
 
-      {temCodigo && (
-        <div className="mt-4 inline-flex rounded-lg border border-border bg-background p-0.5">
-          {([["preview", "Preview", Eye], ["codigo", "Código", CodeIcon]] as const).map(([id, rot, Icone]) => (
-            <button
-              key={id}
-              onClick={() => setAba(id)}
-              aria-pressed={aba === id}
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 chrome-label transition-colors",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                aba === id ? "bg-card text-foreground" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              <Icone size={15} weight="regular" />
-              {rot}
-            </button>
-          ))}
+      {mostrarControles && (
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          {temCodigo ? (
+            <div className="inline-flex rounded-lg border border-border bg-background p-0.5">
+              {([["preview", "Preview", Eye], ["codigo", "Código", CodeIcon]] as const).map(([id, rot, Icone]) => (
+                <button
+                  key={id}
+                  onClick={() => setAba(id)}
+                  aria-pressed={aba === id}
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 chrome-label transition-colors",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    aba === id ? "bg-card text-foreground" : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <Icone size={15} weight="regular" />
+                  {rot}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <span />
+          )}
+          {!semSeletorDeFundo && aba === "preview" && (
+            <SeletorDeFundo
+              valor={fundoAtual}
+              trocadoAuto={trocadoAuto}
+              aoEscolher={(f) => {
+                humanoEscolheu.current = true;
+                setTrocadoAuto(false);
+                setFundoAtual(f);
+                salvarFundo(chaveDoFundo, f);
+              }}
+            />
+          )}
         </div>
       )}
 
@@ -100,10 +177,21 @@ export function Secao({
       ) : (
         <>
           {/* a caixa é só o componente — anotação vai em `nota`, por baixo.
-              Fundo `background`, não `card`: é a superfície sobre a qual o
-              componente vive no produto. Em `card` a caixa se funde com a
-              página e controles claros (checkbox, switch, tag) somem. */}
-          <div data-caixa className={cn("mt-4 rounded-2xl border border-border bg-background", !semCaixa && "p-4 sm:p-6 lg:p-8", className)}>
+              O fundo padrão é `background`: é a superfície sobre a qual o
+              componente vive no produto. As amostras ao lado do título trocam
+              esse palco por outro neutro, e a regra de contraste troca sozinha
+              quando o padrão faz alguma peça sumir. */}
+          <div
+            ref={caixaRef}
+            data-caixa
+            data-fundo={fundoAtual}
+            className={cn(
+              "mt-4 rounded-2xl border border-border",
+              classeDoFundo(fundoAtual),
+              !semCaixa && "p-4 sm:p-6 lg:p-8",
+              className,
+            )}
+          >
             {children}
           </div>
           {nota && <div className="mt-3 chrome-meta text-subtle-foreground">{nota}</div>}

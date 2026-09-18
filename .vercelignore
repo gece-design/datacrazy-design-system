@@ -12,3 +12,9 @@ tests
 reports
 *.log
 tsconfig.tsbuildinfo
+
+# Material interno: a versão das propostas do cliente refeita com o design
+# system. Não sobe para a Vercel — nem como chunk. A rota pública é
+# app/feedback/drawer-lead-2, com os mocks dele como ele mandou.
+# (Cinto e suspensório: a página também responde 404 em produção.)
+app/feedback/drawer-lead-2/ds

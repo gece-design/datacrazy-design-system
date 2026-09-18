@@ -28,6 +28,12 @@ const config: Config = {
         "destructive": "hsl(var(--destructive))",
         "destructive-hover": "hsl(var(--destructive-hover))",
         "divider": "hsl(var(--divider))",
+        // Button `soft` e opção selecionada do Segmented — tokens de componente
+        // com par próprio no escuro (o arquivo repete o claro nos dois).
+        "button-soft": "hsl(var(--button-soft-bg))",
+        "button-soft-foreground": "hsl(var(--button-soft-foreground))",
+        "button-soft-hover": "hsl(var(--button-soft-hover))",
+        "segmented-item-selected": "hsl(var(--segmented-item-selected))",
         "warning": "hsl(var(--warning))",
         "warning-hover": "hsl(var(--warning-hover))",
         "info": "hsl(var(--info))",
@@ -45,6 +51,7 @@ const config: Config = {
         "tom-anel": "hsl(var(--tom-anel))",
         "tom-texto": "hsl(var(--tom-texto))",
         "tom-tag": "hsl(var(--tom-tag))",
+        "tom-brilho": "hsl(var(--tom-brilho))",
         // input/* e overlay/* — tokens de componente da coleção "Cor".
         "input-bg": "hsl(var(--input-bg))",
         "input-border": "hsl(var(--input-border))",
@@ -111,11 +118,17 @@ const config: Config = {
         highlight: "inset 0 1px 4px 0 rgb(255 255 255 / 0.25)",
         // botão que flutua sobre a borda do painel (collapse toggle)
         float: "0 4px 4px 0 rgb(0 0 0 / 0.08)",
-        // "button inner shadow" — estilo de efeito do Figma (269:32), aplicado
-        // no Primary, no Secondary e no botão de adicionar tag.
-        "button-inner": "inset 2px 4px 8px 0 rgb(232 241 255 / 0.4)",
+        // "button inner shadow" — estilo de efeito do Figma (269:32). Vem de
+        // variável porque no escuro ele SOME: o brilho é claro e lava a
+        // superfície (decisão do humano, 2026-09-18).
+        "button-inner": "var(--shadow-button-inner)",
+        // A exceção: sobre o azul cheio do `primary` o brilho continua relevo
+        // nos dois temas, então aqui o valor é literal.
+        "button-inner-primary": "inset 2px 4px 8px 0 rgb(232 241 255 / 0.4)",
       },
       backgroundImage: {
+        // cartão de métrica do drawer: mesma ideia do topo do perfil, na diagonal
+        "metrica": "linear-gradient(135deg, hsl(var(--card)) 30%, hsl(var(--tom-brilho)) 100%)",
         // topo do perfil no drawer (node 565:6447): card até 79,91%, brilho do tom no fim.
         "drawer-perfil":
           "linear-gradient(2.2deg, hsl(var(--card)) 79.91%, hsl(var(--tom-brilho)) 96.01%)",
@@ -140,17 +153,42 @@ const config: Config = {
       // `motion-safe:`: quem pede menos movimento ao sistema não vê nenhuma (I12).
       keyframes: {
         "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
+        "fade-out": { from: { opacity: "1" }, to: { opacity: "0" } },
+        // Drawer: entra deslizando da direita, sai pelo mesmo caminho.
+        "drawer-entra": { from: { transform: "translateX(100%)" }, to: { transform: "translateX(0)" } },
+        "drawer-sai": { from: { transform: "translateX(0)" }, to: { transform: "translateX(100%)" } },
         // abre o espaço do toast na pilha: altura por grid-template-rows e o
         // gap de 8px do container pela margem, para nada pular
         "toast-open": {
           from: { gridTemplateRows: "0fr", marginTop: "-0.5rem" },
           to: { gridTemplateRows: "1fr", marginTop: "0" },
         },
+        // Rating: a estrela salta e volta ao clicar. O passo de 0,92 é o
+        // contrapeso — sem ele o movimento sobe e para, e parece travar.
+        "estrela-pop": {
+          "0%": { transform: "scale(1) rotate(0deg)" },
+          "35%": { transform: "scale(1.45) rotate(-10deg)" },
+          "70%": { transform: "scale(0.92) rotate(4deg)" },
+          "100%": { transform: "scale(1) rotate(0deg)" },
+        },
+        // o halo que sai da estrela clicada e some crescendo
+        "estrela-brilho": {
+          from: { transform: "scale(0.4)", opacity: "0.55" },
+          to: { transform: "scale(2.2)", opacity: "0" },
+        },
       },
       animation: {
         "fade-in": "fade-in 250ms ease-out",
         "fade-in-fast": "fade-in 150ms ease-out",
+        "fade-out": "fade-out 180ms ease-in forwards",
+        // A curva de entrada desacelera bem no fim: o painel "assenta" em vez
+        // de parar seco. A saída é mais curta e acelera — sair não é evento.
+        "drawer-entra": "drawer-entra 280ms cubic-bezier(0.32, 0.72, 0, 1)",
+        "drawer-sai": "drawer-sai 200ms cubic-bezier(0.4, 0, 1, 1) forwards",
         "toast-open": "toast-open 200ms ease-out",
+        // a curva com overshoot é o que dá o "pulo"; o brilho sai em ease-out
+        "estrela-pop": "estrela-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both",
+        "estrela-brilho": "estrela-brilho 480ms ease-out forwards",
       },
     },
   },

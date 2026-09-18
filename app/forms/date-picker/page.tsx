@@ -8,6 +8,8 @@ import {
   type IntervaloDeDatas,
   type RotulosDoDatePicker,
 } from "@/components/ui/date-picker";
+import { Checkbox } from "@/components/ui/checkbox";
+import { criarAtalhos, PERIODOS, type ChaveDePeriodo } from "@/lib/periodos";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 
 /* Na doc os textos são literais porque a doc é escrita em português. No CRM
@@ -23,25 +25,32 @@ const rotulos: RotulosDoDatePicker = {
   cancelar: "Cancelar",
 };
 
-function menosDias(d: Date, n: number) {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate() - n);
-}
+/* Os rótulos ficam na tela (i18n, regra 4); as contas moram em lib/periodos.ts. */
+const ROTULOS_DE_PERIODO: Record<ChaveDePeriodo, string> = {
+  hoje: "Hoje",
+  ontem: "Ontem",
+  ultimos3: "Últimos 3 dias",
+  ultimos7: "Últimos 7 dias",
+  ultimos15: "Últimos 15 dias",
+  ultimos30: "Últimos 30 dias",
+  ultimos90: "Últimos 90 dias",
+  estaSemana: "Esta semana",
+  semanaPassada: "Semana passada",
+  esteMes: "Este mês",
+  mesPassado: "Mês passado",
+  esteTrimestre: "Este trimestre",
+  trimestreAnterior: "Trimestre anterior",
+  esteAno: "Este ano",
+  anoPassado: "Ano passado",
+  ultimos12Meses: "Últimos 12 meses",
+};
 
-const atalhos: AtalhoDeIntervalo[] = [
-  { id: "hoje", rotulo: "Hoje", intervalo: (h) => ({ inicio: h, fim: h }) },
-  { id: "7d", rotulo: "Últimos 7 dias", intervalo: (h) => ({ inicio: menosDias(h, 6), fim: h }) },
-  { id: "15d", rotulo: "Últimos 15 dias", intervalo: (h) => ({ inicio: menosDias(h, 14), fim: h }) },
-  {
-    id: "3m",
-    rotulo: "Últimos 3 meses",
-    intervalo: (h) => ({ inicio: new Date(h.getFullYear(), h.getMonth() - 3, h.getDate()), fim: h }),
-  },
-  {
-    id: "1a",
-    rotulo: "Último ano",
-    intervalo: (h) => ({ inicio: new Date(h.getFullYear() - 1, h.getMonth(), h.getDate()), fim: h }),
-  },
-];
+const TODAS_AS_CHAVES = Object.keys(ROTULOS_DE_PERIODO) as ChaveDePeriodo[];
+
+const atalhos = criarAtalhos(
+  ["hoje", "ultimos7", "ultimos15", "ultimos30", "trimestreAnterior"],
+  ROTULOS_DE_PERIODO,
+);
 
 type Parte = { nome: string; papel: string };
 
@@ -155,13 +164,21 @@ const idiomas = [
 ];
 
 export default function DatePickerPage() {
+  const [escolhidos, setEscolhidos] = React.useState<ChaveDePeriodo[]>([
+    "hoje",
+    "ultimos3",
+    "estaSemana",
+    "mesPassado",
+    "trimestreAnterior",
+  ]);
+  const [periodoDoCatalogo, setPeriodoDoCatalogo] = React.useState<IntervaloDeDatas>({ inicio: null, fim: null });
   const hoje = React.useMemo(() => {
     const d = new Date();
     return new Date(d.getFullYear(), d.getMonth(), d.getDate());
   }, []);
 
   const periodoInicial = React.useMemo<IntervaloDeDatas>(
-    () => ({ inicio: menosDias(hoje, 6), fim: hoje }),
+    () => PERIODOS.ultimos7(hoje),
     [hoje]
   );
 
@@ -174,7 +191,7 @@ export default function DatePickerPage() {
     <PaginaDS
       titulo="Date Picker"
       descricao="Seleção de período em dois meses, com coluna de atalhos e confirmação explícita. É o componente mais exposto à regra de idioma do design system: nome de mês, nome de dia, ordem dd/mm e primeiro dia da semana são os quatro pontos onde en, es e pt-br discordam."
-      secoes={["Como funciona", "Anatomia", "Padrão", "Sem atalhos", "Com limite de data", "Nos três idiomas", "Regras"]}
+      secoes={["Como funciona", "Anatomia", "Padrão", "Períodos prontos", "Sem atalhos", "Com limite de data", "Nos três idiomas", "Regras"]}
     >
       <ComoFunciona>
         <p>
@@ -272,6 +289,61 @@ export default function DatePickerPage() {
             rotulos={rotulos}
             atalhos={atalhos}
           />
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Períodos prontos"
+        spec="16 · criarAtalhos"
+        descricao="A lista de períodos é da tela, não do componente. Marque abaixo quais entram e veja a coluna do painel mudar — trimestre anterior, últimos 3 dias, semana passada, o que a operação pedir."
+        codigo={`import { criarAtalhos } from "@/lib/periodos";
+
+const atalhos = criarAtalhos(
+  ["hoje", "ultimos3", "esteMes", "trimestreAnterior"],
+  {
+    hoje: t("hoje"),
+    ultimos3: t("ultimos3"),
+    esteMes: t("esteMes"),
+    trimestreAnterior: t("trimestreAnterior"),
+  },
+  { primeiroDiaDaSemana: 0 },
+);
+
+<DateRangePicker atalhos={atalhos} … />`}
+        nota={
+          <>
+            <Chip>lib/periodos.ts</Chip> guarda só as contas — <Chip>PERIODOS</Chip> é um mapa de chave para
+            função que recebe <Chip>hoje</Chip> e devolve o intervalo. Os rótulos continuam vindo da tela, e a
+            ordem é a das chaves. Período que não está no catálogo se escreve à mão: um objeto com{" "}
+            <Chip>id</Chip>, <Chip>rotulo</Chip> e <Chip>intervalo</Chip> entra na mesma lista.
+          </>
+        }
+      >
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            {TODAS_AS_CHAVES.map((chave) => (
+              <Checkbox
+                key={chave}
+                checked={escolhidos.includes(chave)}
+                onChange={(e) =>
+                  setEscolhidos((atuais) =>
+                    e.target.checked ? [...TODAS_AS_CHAVES.filter((c) => atuais.includes(c) || c === chave)] : atuais.filter((c) => c !== chave),
+                  )
+                }
+              >
+                {ROTULOS_DE_PERIODO[chave]}
+              </Checkbox>
+            ))}
+          </div>
+          <div className="flex justify-center">
+            <DateRangePicker
+              valor={periodoDoCatalogo}
+              onValorChange={setPeriodoDoCatalogo}
+              rotulos={rotulos}
+              locale="pt-BR"
+              atalhos={criarAtalhos(escolhidos, ROTULOS_DE_PERIODO)}
+            />
+          </div>
         </div>
       </Secao>
 

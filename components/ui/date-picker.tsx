@@ -263,7 +263,8 @@ type CabecalhoProps = {
   mes: Date;
   nomesDosMeses: string[];
   anos: number[];
-  rotulos: RotulosDoDatePicker;
+  /** Só os dois rótulos dos seletores — o calendário de dia não tem o resto. */
+  rotulos: Pick<RotulosDoDatePicker, "mes" | "ano">;
   onMudarMes: (mes: Date) => void;
 };
 
@@ -670,6 +671,151 @@ export function DateRangePicker({
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/* --- calendário de um dia ------------------------------------------------- */
+
+export type RotulosDoCalendario = Pick<RotulosDoDatePicker, "mes" | "ano" | "mesAnterior" | "proximoMes">;
+
+export interface CalendarioDeDiaProps {
+  valor: Date | null;
+  aoEscolher: (dia: Date) => void;
+  /** BCP-47, como no DateRangePicker. */
+  locale: string;
+  rotulos: RotulosDoCalendario;
+  dataMinima?: Date;
+  dataMaxima?: Date;
+  className?: string;
+}
+
+/**
+ * Um mês, um dia escolhido — a mesma grade do intervalo, sem o segundo clique.
+ *
+ * Existe para o `DateTimePicker` não redesenhar calendário: aqui a grade, o
+ * cabeçalho, o foco itinerante e as teclas são os mesmos do período.
+ */
+export function CalendarioDeDia({
+  valor, aoEscolher, locale, rotulos, dataMinima, dataMaxima, className,
+}: CalendarioDeDiaProps) {
+  const hoje = React.useMemo(() => {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }, []);
+  const [mes, setMes] = React.useState(() => inicioDoMes(valor ?? hoje));
+  const [foco, setFoco] = React.useState<Date>(valor ?? hoje);
+  const grade = React.useRef<HTMLDivElement>(null);
+  const moverFoco = React.useRef(false);
+
+  const primeiroDia = React.useMemo(() => primeiroDiaDaSemana(locale), [locale]);
+
+  const nomesDosDias = React.useMemo(() => {
+    const curto = new Intl.DateTimeFormat(locale, { weekday: "short", timeZone: "UTC" });
+    const longo = new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: "UTC" });
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(Date.UTC(2024, 0, 7 + ((primeiroDia + i) % 7)));
+      return { curto: curto.format(d).replace(/\.$/, ""), longo: longo.format(d) };
+    });
+  }, [locale, primeiroDia]);
+
+  const nomesDosMeses = React.useMemo(() => {
+    const f = new Intl.DateTimeFormat(locale, { month: "long", timeZone: "UTC" });
+    return Array.from({ length: 12 }, (_, i) => maiuscula(f.format(new Date(Date.UTC(2024, i, 1))), locale));
+  }, [locale]);
+
+  const anos = React.useMemo(() => {
+    const primeiro = dataMinima ? dataMinima.getFullYear() : hoje.getFullYear() - 10;
+    const ultimo = dataMaxima ? dataMaxima.getFullYear() : hoje.getFullYear() + 10;
+    return Array.from({ length: Math.max(1, ultimo - primeiro + 1) }, (_, i) => primeiro + i);
+  }, [dataMinima, dataMaxima, hoje]);
+
+  const estaDesabilitada = React.useCallback(
+    (d: Date) => {
+      const k = chaveDoDia(d);
+      if (dataMinima && k < chaveDoDia(dataMinima)) return true;
+      if (dataMaxima && k > chaveDoDia(dataMaxima)) return true;
+      return false;
+    },
+    [dataMinima, dataMaxima]
+  );
+
+  React.useEffect(() => {
+    if (!moverFoco.current) return;
+    moverFoco.current = false;
+    grade.current?.querySelector<HTMLElement>(`[data-dia="${chaveDoDia(foco)}"]`)?.focus();
+  }, [foco, mes]);
+
+  function irPara(d: Date) {
+    moverFoco.current = true;
+    setFoco(d);
+    if (!mesmoMes(d, mes)) setMes(inicioDoMes(d));
+  }
+
+  function noTeclado(e: React.KeyboardEvent) {
+    const passo: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+    if (e.key in passo) {
+      e.preventDefault();
+      irPara(somarDias(foco, passo[e.key]));
+      return;
+    }
+    if (e.key === "Home" || e.key === "End") {
+      e.preventDefault();
+      const desloc = (foco.getDay() - primeiroDia + 7) % 7;
+      irPara(somarDias(foco, e.key === "Home" ? -desloc : 6 - desloc));
+      return;
+    }
+    if (e.key === "PageUp" || e.key === "PageDown") {
+      e.preventDefault();
+      const n = e.key === "PageUp" ? -1 : 1;
+      const alvo = new Date(foco.getFullYear(), foco.getMonth() + n, 1);
+      const ultimo = new Date(alvo.getFullYear(), alvo.getMonth() + 1, 0).getDate();
+      irPara(new Date(alvo.getFullYear(), alvo.getMonth(), Math.min(foco.getDate(), ultimo)));
+    }
+  }
+
+  return (
+    <div className={cn("flex flex-col gap-2", className)}>
+      <div className="flex items-center gap-1">
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label={rotulos.mesAnterior}
+          onClick={() => setMes(somarMeses(mes, -1))}
+          className="px-1.5"
+        >
+          <CaretLeft size={14} weight="bold" />
+        </Button>
+        <CabecalhoDoMes mes={mes} nomesDosMeses={nomesDosMeses} anos={anos} rotulos={rotulos} onMudarMes={setMes} />
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label={rotulos.proximoMes}
+          onClick={() => setMes(somarMeses(mes, 1))}
+          className="px-1.5"
+        >
+          <CaretRight size={14} weight="bold" />
+        </Button>
+      </div>
+      <div ref={grade} onKeyDown={noTeclado}>
+        <GradeDoMes
+          mes={mes}
+          locale={locale}
+          primeiroDia={primeiroDia}
+          nomesDosDias={nomesDosDias}
+          // um dia só: início e fim no mesmo lugar, sem prévia de arrasto
+          rascunho={{ inicio: valor, fim: valor }}
+          previa={null}
+          foco={foco}
+          hoje={hoje}
+          estaDesabilitada={estaDesabilitada}
+          onEscolher={(d) => {
+            setFoco(d);
+            aoEscolher(d);
+          }}
+          onPrevia={() => undefined}
+        />
+      </div>
     </div>
   );
 }

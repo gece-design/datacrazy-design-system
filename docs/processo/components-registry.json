@@ -1,7 +1,7 @@
 {
   "product": "DataCrazy",
   "kit": "3.2",
-  "updated": "2026-09-15",
+  "updated": "2026-09-18",
   "_doc": "Registro vivo de componentes — a memoria que alimenta a inferencia por analogia. Escrito pela fw-doc ao fim de CADA lote, nunca a mao. source de cada estado: figma | declarado | banco | inferido | humano.",
   "_divida": "Button e Badge existem em codigo desde 2026-09-01 e NAO estao aqui: foram escritos antes do registro existir. Enquanto a fw-doc nao rodar sobre eles, a verdade desses dois esta no codigo. Nao preencher de memoria — ler o componente.",
   "components": [
@@ -330,6 +330,13 @@
           "rule": "E7",
           "precedent": "roadmap-componentes § Tooltip",
           "approvedIn": null
+        },
+        "clique": {
+          "impl": "fecha o balão (o clique abriu outra coisa por cima)",
+          "source": "declarado",
+          "rule": null,
+          "precedent": "sino do Header tapado pelo próprio tooltip",
+          "approvedIn": "2026-09-18"
         }
       },
       "_states_doc": "position = lado do gatilho onde o balao fica (regra de Top/Bottom do arquivo). Left/Right do arquivo estao invertidos entre os temas."
@@ -340,49 +347,51 @@
       "figmaNode": "533:3809 / 565:5959",
       "batch": 3,
       "variants": [
-        "estilo:outline",
-        "estilo:fill",
-        "tom:azul",
-        "tom:roxo",
-        "tom:rosa",
-        "tom:laranja",
         "camada",
-        "painel"
+        "estilo:fill",
+        "estilo:outline",
+        "menu com fixados",
+        "menu em cards",
+        "painel",
+        "tom:azul",
+        "tom:laranja",
+        "tom:rosa",
+        "tom:roxo"
       ],
       "_variants_doc": "O eixo Menu do component set (Historico, Perfil, Campos adicionais, Negocios, Hierarquia) NAO e variante: e o item escolhido no menu, e cada valor e so o conteudo da coluna direita. Pecas: DrawerPainel, DrawerPerfil, DrawerBloco, DrawerMetricas, DrawerContato, DrawerMenu, DrawerConteudo, DrawerSecao, LinhaDoTempo, HierarquiaNo, HierarquiaCanvas.",
       "tokens": [
-        "card",
+        "--tom-anel",
+        "--tom-brilho",
+        "--tom-tag",
+        "--tom-texto",
+        "accent",
         "background",
+        "base/blue/200",
         "border",
+        "card",
+        "elevation/xl",
         "foreground",
         "muted-foreground",
-        "accent",
-        "primary",
         "nav/item/bg-hover",
         "nav/item/bg-selected",
-        "nav/item/text-selected",
         "nav/item/icon-selected",
         "nav/item/text-default",
+        "nav/item/text-selected",
         "overlay/scrim",
-        "--tom-anel",
-        "--tom-texto",
-        "--tom-tag",
-        "--tom-brilho",
-        "base/blue/200",
-        "radius/xl",
+        "primary",
         "radius/lg",
         "radius/md",
         "radius/sm",
-        "elevation/xl",
+        "radius/xl",
+        "text/body-sm",
+        "text/caption",
         "text/heading-1",
         "text/heading-4",
-        "text/metric",
         "text/label-lg",
         "text/label-sm",
-        "text/body-sm",
-        "text/caption"
+        "text/metric"
       ],
-      "motion": "fast",
+      "motion": "drawer-entra 280ms / drawer-sai 200ms / fade do scrim",
       "states": {
         "hover": {
           "impl": "bg-nav-item-hover no item do menu",
@@ -418,9 +427,16 @@
           "rule": null,
           "precedent": "Select (caret girado)",
           "approvedIn": null
+        },
+        "fixado": {
+          "impl": "item sobe para o topo do menu + PushPin fill em nav-item-icon-selected",
+          "source": "humano",
+          "rule": null,
+          "precedent": null,
+          "approvedIn": "lote-4"
         }
       },
-      "_states_doc": "A camada (scrim, foco preso, Escape) nao esta no arquivo: o Figma desenha so o painel. Opacidade do scrim derivada. Perfil e conteudo rolam cada um por conta propria."
+      "_states_doc": "A camada (scrim, foco preso, Escape) nao esta no arquivo: o Figma desenha so o painel. Opacidade do scrim derivada. Perfil e conteudo rolam cada um por conta propria. Cartao de metrica sem traco, com gradiente e icone por tom (2026-09-17). Indicador de rolagem (seta na borda da coluna) e alfinete de fixar sao pedido do humano (2026-09-18), nao estao no arquivo. Seta de rolagem clicavel sobre faixa em degrade da propria superficie; menu alterna lista/cards por interruptor cinza (2026-09-18). Camada entra e sai deslizando (motion-safe), interruptor lista/cards mora na linha do titulo do bloco (2026-09-18)."
     },
     {
       "name": "Input",
@@ -428,9 +444,10 @@
       "figmaNode": "535:48 / 590:3000 / 544:129",
       "batch": 3,
       "variants": [
-        "com icone",
         "com acoes",
+        "com icone",
         "copiar",
+        "editavel",
         "rating",
         "select field"
       ],
@@ -485,7 +502,7 @@
           "approvedIn": "lote-3"
         }
       },
-      "_states_doc": "Filled do arquivo nao e estado: e o campo com valor. Rating e Select size=field compartilham a caixa."
+      "_states_doc": "Filled do arquivo nao e estado: e o campo com valor. Rating, Telefone e o Select size=field compartilham a caixa. CampoEditavel troca texto por campo no clique (pedido do humano, 2026-09-17)."
     },
     {
       "name": "Avatar",
@@ -892,7 +909,10 @@
         "text/label-lg",
         "radius/md",
         "radius/full",
-        "button inner shadow"
+        "overlay/bg",
+        "overlay/border",
+        "overlay/item-hover",
+        "button inner shadow (só no Claro)"
       ],
       "motion": "transition-colors",
       "states": {
@@ -930,9 +950,16 @@
           "rule": "D6",
           "precedent": null,
           "approvedIn": null
+        },
+        "notificações": {
+          "impl": "sino abre painel da tela (portal, overlay/*, shadow-lg); Escape devolve o foco",
+          "source": "declarado",
+          "rule": null,
+          "precedent": "lista aberta do Select",
+          "approvedIn": "humano 2026-09-18"
         }
       },
-      "_states_doc": "Sem prop de variante: as 6 combinações do arquivo são composição de trilha/utilitarios/acoes. Set do Figma com erro (6 variantes com o mesmo nome). Escuro não desenhado, sai dos tokens. Selo em primary-foreground (destructive-foreground do arquivo é branco nos dois modos)."
+      "_states_doc": "Sem prop de variante: as 6 combinações do arquivo são composição de trilha/utilitarios/acoes. Set do Figma com erro (6 variantes com o mesmo nome). Escuro não desenhado, sai dos tokens. Selo em primary-foreground (destructive-foreground do arquivo é branco nos dois modos). Subtítulo fora por padrão e escuro sem seção própria (humano, 2026-09-18)."
     },
     {
       "name": "Breadcrumb",
@@ -1011,7 +1038,7 @@
       ],
       "tokens": [
         "card",
-        "accent",
+        "segmented-item-selected",
         "overlay/item-text-selected",
         "primary",
         "muted-foreground",
@@ -1020,12 +1047,12 @@
         "radius/md",
         "radius/sm",
         "text/body-md",
-        "button inner shadow"
+        "button inner shadow (só no Claro)"
       ],
       "motion": "transition-colors",
       "states": {
         "selecionada": {
-          "impl": "Segmented: bg-accent text-overlay-item-text-selected · View: bg-accent text-primary shadow-button-inner · aria-checked",
+          "impl": "Segmented: bg-segmented-item-selected text-overlay-item-text-selected · View: + text-primary e sombra interna (só no Claro) · aria-checked",
           "source": "figma",
           "rule": null,
           "precedent": "Selected=Mês (269:54) · View=Chart (471:2940)",
@@ -1054,6 +1081,128 @@
         }
       },
       "_states_doc": "Grupo de rádio com setas e ativação automática. Dois sets no Figma, duas exportações no mesmo arquivo."
+    },
+    {
+      "name": "Telefone",
+      "family": "entrada",
+      "figmaNode": null,
+      "batch": 4,
+      "variants": [
+        "por pais"
+      ],
+      "_variants_doc": "Nao esta no arquivo: bandeira e DDI entraram por pedido do humano (2026-09-17).",
+      "tokens": [
+        "input/bg",
+        "input/border",
+        "input/border-hover",
+        "input/border-focus",
+        "input/border-error",
+        "input/text",
+        "input/placeholder",
+        "input/label",
+        "destructive",
+        "radius/md",
+        "text/label-md",
+        "text/body-md"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "border-input-border-hover (fora do foco)",
+          "source": "banco",
+          "rule": "I1",
+          "precedent": "Input",
+          "approvedIn": "lote-4"
+        },
+        "focus": {
+          "impl": "border-input-border-focus + ring-1 inset",
+          "source": "figma",
+          "rule": null,
+          "precedent": "Input",
+          "approvedIn": "lote-4"
+        },
+        "erro": {
+          "impl": "border-input-border-error + caption destructive",
+          "source": "figma",
+          "rule": null,
+          "precedent": "Input",
+          "approvedIn": "lote-4"
+        },
+        "disabled": {
+          "impl": "bg-input-bg-disabled + text-input-text-disabled",
+          "source": "figma",
+          "rule": null,
+          "precedent": "Input",
+          "approvedIn": "lote-4"
+        }
+      },
+      "_states_doc": "Herda tudo da caixa do Input. O seletor de pais e um select nativo, como o de mes e ano do Date Picker."
+    },
+    {
+      "name": "TimePicker",
+      "family": "entrada",
+      "figmaNode": null,
+      "batch": 4,
+      "variants": [
+        "hora",
+        "hora com segundos",
+        "data e hora",
+        "com seletor de fuso"
+      ],
+      "_variants_doc": "TimePicker guarda texto (hora de parede); DateTimePicker guarda Date (instante). Nao estao no arquivo.",
+      "tokens": [
+        "input/bg",
+        "input/border",
+        "input/border-focus",
+        "input/text",
+        "input/placeholder",
+        "input/label",
+        "overlay/bg",
+        "overlay/border",
+        "overlay/item-hover",
+        "overlay/item-selected",
+        "overlay/item-text-selected",
+        "border",
+        "muted-foreground",
+        "radius/lg",
+        "radius/md",
+        "elevation/lg",
+        "text/body-md",
+        "text/label-md",
+        "text/caption"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "bg-overlay-item-hover no item da lista",
+          "source": "figma",
+          "rule": null,
+          "precedent": "Select Item 544:99",
+          "approvedIn": "lote-4"
+        },
+        "focus": {
+          "impl": "outline outline-2 outline-offset-2 outline-ring",
+          "source": "banco",
+          "rule": "I4",
+          "precedent": "Button (regra local D6)",
+          "approvedIn": "lote-4"
+        },
+        "selecionado": {
+          "impl": "bg-overlay-item-selected + text-overlay-item-text-selected",
+          "source": "figma",
+          "rule": null,
+          "precedent": "Select Item 544:99",
+          "approvedIn": "lote-4"
+        },
+        "aberto": {
+          "impl": "painel com elevacao lg; vira para cima quando nao cabe",
+          "source": "inferido",
+          "rule": null,
+          "precedent": "DateRangePicker",
+          "approvedIn": null
+        }
+      },
+      "_states_doc": "Ciente de fuso: lib/fusos.ts converte partes<->instante com Intl, sem biblioteca de data."
     }
   ]
 }

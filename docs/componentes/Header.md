@@ -12,7 +12,7 @@ fazer nela.
 
 ## Par no Figma
 
-Node: `601:464` (set "Header", 6 variantes) · Lote: `3` ·
+Node: `601:464` (set "Header", 6 variantes) · Lote: `3` · 111px, com ou sem subtítulo ·
 Última verificação: ver [processo/kfe-state.md](../processo/kfe-state.md), entrada de 2026-09-15.
 
 **O set está com erro no arquivo.** As seis variantes se chamam
@@ -29,7 +29,7 @@ que o produto ainda vai ter — são composição dos encaixes.
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
 | `titulo` | `string` | — | sim | `h1`, trunca com `title`. |
-| `subtitulo` | `string` | — | não | `body-sm` a 2px do título. |
+| `subtitulo` | `string` | — | não | `body-sm` a 2px do título. **Fora por padrão** (2026-09-18): título e descrição decorativos em toda tela são anti-referência. A linha guarda `min-h-[46px]` — o espaço que ele ocupava — para as ações não encostarem no sino. |
 | `trilha` | `ReactNode` | — | não | Em cima, à esquerda. Normalmente `Breadcrumb`. |
 | `utilitarios` | `ReactNode` | — | não | Em cima, à direita. Normalmente `HeaderNotificacoes`. |
 | `acoes` | `ReactNode` | — | não | Embaixo, à direita, alinhadas pela base do título. |
@@ -59,6 +59,7 @@ Não tem. Ver "Par no Figma".
 | texto longo | `título, subtítulo e níveis da trilha truncate + title` | declarado | D12 |
 | hover (sino) | `hover:bg-accent do Button tertiary` | inferido | gatilho do Date Picker |
 | focus (busca) | `focus-within:outline-2 outline-offset-2 outline-ring` | declarado | D6 |
+| notificações | `sino abre painel da tela (portal, overlay/*, shadow-lg); Escape devolve o foco` | declarado | lista aberta do Select |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -67,7 +68,8 @@ decisão, não buraco a preencher.
 ## Tokens consumidos
 
 `background` · `border` · `foreground` · `muted-foreground` · `card` ·
-`divider` · `destructive` · `primary-foreground` · `ring` · `text/heading-1` ·
+`divider` · `destructive` · `primary-foreground` · `ring` · `overlay/*` (painel
+de notificações da tela) · `text/heading-1` ·
 `text/body-sm` · `text/label-sm` · `text/label-lg` · `radius/md` ·
 `radius/full` · `button inner shadow`
 
@@ -120,3 +122,9 @@ Usa: Button · Tooltip · (por encaixe) Breadcrumb, SegmentedControl, ViewSwitch
 6. **Quebra de linha das ações e truncamento** não estão no arquivo.
 7. **Escuro do Header não desenhado**: saiu dos tokens; as peças (Button,
    Segmented, View Switcher, Breadcrumb) têm variante escura e batem.
+8. **Sombra interna só no Claro** (2026-09-18): `--shadow-button-inner` vira
+   `none` no Escuro em tudo menos no Button `primary`. O arquivo mantém o brilho
+   nas variantes escuras — ali ele lava a superfície.
+9. **Painel de notificações não existe no arquivo.** O sino e o selo existem; a
+   lista que abre é cenário da tela, derivada de `overlay/*` + `shadow-lg`, e
+   mora na página do DS, não no componente.

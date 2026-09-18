@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowSquareOut, CalendarBlank, EnvelopeSimple, PencilSimple } from "@phosphor-icons/react";
-import { Input, AcaoCampo, AcaoCopiar } from "@/components/ui/input";
+import { ArrowSquareOut, CalendarBlank, EnvelopeSimple, Minus, PencilSimple, Plus } from "@phosphor-icons/react";
+import { Input, AcaoCampo, AcaoCopiar, CampoEditavel } from "@/components/ui/input";
+import { InputTelefone } from "@/components/ui/telefone";
 import { Rating } from "@/components/ui/rating";
 import { Select } from "@/components/ui/select";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
@@ -21,14 +22,21 @@ const origens = [
 ];
 
 export default function InputPage() {
-  const [nota, setNota] = useState(3);
+  const [nota, setNota] = useState(7);
   const [origem, setOrigem] = useState<string>();
+  const [cargo, setCargo] = useState("Guitarrista");
+  const [observacao, setObservacao] = useState("");
+  const [colaboradores, setColaboradores] = useState("45");
+  const [paisCartao, setPaisCartao] = useState("BR");
+  const [telefoneCartao, setTelefoneCartao] = useState("");
+  const [pais, setPais] = useState("BR");
+  const [telefone, setTelefone] = useState("(54) 44346-5346");
 
   return (
     <PaginaDS
       titulo="Input"
       descricao="Campo de uma linha com rótulo: caixa de 36px, texto de 12px e raio de 6px. O arquivo desenha cinco estados nos dois temas; o mesmo corpo serve ao Select de formulário e ao Rating."
-      secoes={["Como funciona", "Estados", "Ícone e ações", "Select no formulário", "Rating", "Quando usar"]}
+      secoes={["Como funciona", "Estados", "Ícone e ações", "Clicar para editar", "Campo em cartão", "Telefone", "Select no formulário", "Rating", "Quando usar"]}
     >
       <ComoFunciona>
         <p>
@@ -126,6 +134,147 @@ export default function InputPage() {
       </Secao>
 
       <Secao
+        titulo="Clicar para editar"
+        spec="CampoEditavel"
+        // o cartão é `background` a 50%: sobre a caixa cinza ele sumiria, e o
+        // branco é o que o drawer tem por baixo de verdade
+        fundo="card"
+        descricao="Em tela de leitura o campo é cartão, não formulário: rótulo e valor na mesma margem, sem caixa. O cursor acende a superfície e o lápis; o clique põe o cursor no lugar do texto, sem nada pular. Passe o mouse nos dois abaixo e clique."
+        codigo={`<CampoEditavel
+  rotulo="Cargo"
+  valor={cargo}
+  aoSalvar={setCargo}
+  rotuloEditar="Editar cargo"
+  textoVazio="Adicionar"
+  acoes={<AcaoCopiar rotulo="Copiar cargo" rotuloCopiado="Cargo copiado" valor={cargo} />}
+/>`}
+        nota={
+          <>
+            Enter e sair do campo salvam; Escape desfaz. O Escape não passa adiante de propósito — dentro do
+            drawer ele fecharia a camada inteira. No modo leitura o <Chip>AcaoCopiar</Chip> copia pelo{" "}
+            <Chip>valor</Chip>, já que ali não existe <Chip>&lt;input&gt;</Chip> para ler. A superfície do cartão é{" "}
+            <Chip>background/50</Chip> — um cinza mais claro que o da página. Falta um token de superfície sutil na
+            coleção; quando ele existir, é essa linha que muda.
+          </>
+        }
+      >
+        <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
+          <CampoEditavel
+            rotulo="Cargo"
+            valor={cargo}
+            aoSalvar={setCargo}
+            rotuloEditar="Editar cargo"
+            textoVazio="Adicionar"
+            acoes={<AcaoCopiar rotulo="Copiar cargo" rotuloCopiado="Cargo copiado" valor={cargo} />}
+          />
+          <CampoEditavel
+            rotulo="Observação interna"
+            valor={observacao}
+            aoSalvar={setObservacao}
+            rotuloEditar="Editar observação interna"
+            textoVazio="Insira um valor"
+          />
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Campo em cartão"
+        spec="cartao"
+        fundo="card"
+        descricao="No drawer, campo que já é campo entra no mesmo cartão do CampoEditavel: rótulo em bold, superfície própria, caixa por dentro. Assim uma coluna de leitura não mistura dois visuais."
+        codigo={`<Input cartao rotulo="Quantos colaboradores" value={n} onChange={…} acoes={…} />
+
+<CartaoDeCampo rotulo="Reclamações">      {/* quem traz a própria caixa */}
+  <Select size="field" rotulo="Reclamações" textoVazio="Selecione uma opção" … />
+</CartaoDeCampo>`}
+        nota={
+          <>
+            A caixa sangra 8px para os lados: o rótulo fica nos 12px de respiro do cartão — é ele que alinha a
+            grade — e a caixa recupera a largura que o cartão tirou. Sem isso, um telefone com máscara trunca na
+            coluna de 232px do drawer. Em formulário aberto não use <Chip>cartao</Chip>: ali o campo é o campo.
+          </>
+        }
+      >
+        <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
+          <Input
+            cartao
+            rotulo="Quantos colaboradores"
+            inputMode="numeric"
+            value={colaboradores}
+            onChange={(e) => setColaboradores(e.target.value.replace(/\D/g, ""))}
+            acoes={
+              <>
+                <AcaoCampo
+                  icone={Minus}
+                  rotulo="Diminuir"
+                  onClick={() => setColaboradores(String(Math.max(0, Number(colaboradores || 0) - 1)))}
+                />
+                <AcaoCampo
+                  icone={Plus}
+                  rotulo="Aumentar"
+                  onClick={() => setColaboradores(String(Number(colaboradores || 0) + 1))}
+                />
+              </>
+            }
+          />
+          <InputTelefone
+            cartao
+            rotulo="Telefone"
+            rotuloPais="País do telefone em cartão"
+            pais={paisCartao}
+            aoMudarPais={setPaisCartao}
+            valor={telefoneCartao}
+            aoMudar={setTelefoneCartao}
+            placeholder="(00) 00000-0000"
+          />
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Telefone"
+        spec="bandeira + DDI"
+        descricao="País à esquerda, número à direita. O DDI fica escrito ao lado da bandeira — em Windows a bandeira não desenha, e o código é o que sobra."
+        codigo={`<InputTelefone
+  rotulo="Telefone"
+  rotuloPais="País do telefone"
+  pais={pais}
+  aoMudarPais={setPais}
+  valor={telefone}
+  aoMudar={setTelefone}
+  acoes={<AcaoCampo icone={Phone} rotulo="Ligar" onClick={ligar} />}
+/>`}
+        nota={
+          <>
+            O seletor de país é um <Chip>&lt;select&gt;</Chip> nativo invisível por cima da bandeira — a mesma
+            escolha dos seletores de mês e ano do Date Picker. Ganha teclado, busca por letra e a roda do
+            sistema no celular sem código. <Chip>telefoneCompleto(pais, numero)</Chip> monta o{" "}
+            <Chip>+55 …</Chip> que vai para o back e para o <Chip>tel:</Chip>.
+          </>
+        }
+      >
+        <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
+          <InputTelefone
+            rotulo="Telefone"
+            rotuloPais="País do telefone"
+            pais={pais}
+            aoMudarPais={setPais}
+            valor={telefone}
+            aoMudar={setTelefone}
+            placeholder="(00) 00000-0000"
+          />
+          <InputTelefone
+            rotulo="WhatsApp"
+            rotuloPais="País do WhatsApp"
+            pais="PT"
+            aoMudarPais={() => undefined}
+            valor=""
+            aoMudar={() => undefined}
+            placeholder="000 000 000"
+          />
+        </div>
+      </Secao>
+
+      <Secao
         titulo="Select no formulário"
         spec='size="field"'
         descricao="O Select ganhou o tamanho do campo: mesma caixa de 36px, placeholder na cor do input e o caret de 16px à direita."
@@ -157,21 +306,23 @@ export default function InputPage() {
 
       <Secao
         titulo="Rating"
-        spec="0–5 · estrela 20px"
-        descricao="Nota de 0 a 5 na caixa do input. Clique numa estrela ou use as setas: é um grupo de rádio."
-        codigo={`<Rating rotulo="ScoreDavi" valor={nota} aoMudar={setNota} />
-<Rating rotulo="Satisfação" valor={4} />  {/* sem aoMudar: só leitura */}`}
+        spec="0–10 · estrela 16px"
+        fundo="card"
+        descricao="Nota de 0 a 10 no mesmo bloco do campo editável — cartão, nunca caixa de campo. Clique numa estrela ou use as setas: é um grupo de rádio. O cursor mostra a nota que o clique daria, e o clique responde com o pulo das estrelas."
+        codigo={`<Rating rotulo="ScoreDavi" valor={nota} aoMudar={setNota} />        {/* 0–10 */}
+<Rating rotulo="Satisfação" valor={4} max={5} />                  {/* só leitura, 0–5 */}`}
         nota={
           <>
             Estrela cheia em <Chip>primary</Chip>, vazia em <Chip>base/blue/300</Chip> — é o que o arquivo pinta. A
             descrição do componente no Figma promete <Chip>foreground</Chip> e <Chip>subtle-foreground</Chip>; um dos
-            dois está errado, e a divergência está na doc.
+            dois está errado, e a divergência está na doc. A animação vive sob <Chip>motion-safe:</Chip>: quem pede
+            menos movimento ao sistema vê a nota mudar sem pulo nenhum.
           </>
         }
       >
         <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
           <Rating rotulo="ScoreDavi" valor={nota} aoMudar={setNota} />
-          <Rating rotulo="Satisfação (só leitura)" valor={4} />
+          <Rating rotulo="Satisfação (só leitura, 0–5)" valor={4} max={5} />
         </div>
       </Secao>
 

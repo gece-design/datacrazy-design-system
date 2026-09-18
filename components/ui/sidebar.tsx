@@ -181,8 +181,10 @@ export function SidebarGrupo({
 --------------------------------------------------------------------------- */
 
 const itemVariants = cva(
+  // `text-left`: com `componente="button"` a raiz é um <button>, que centraliza
+  // o texto por padrão do navegador — o rótulo saía do eixo dos outros itens.
   "group relative flex h-9 w-full items-center overflow-hidden rounded-md p-2 " +
-    "text-button transition-colors " +
+    "text-left text-button transition-colors " +
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring " +
     "aria-disabled:pointer-events-none aria-disabled:opacity-50 " +
     "disabled:pointer-events-none disabled:opacity-50",

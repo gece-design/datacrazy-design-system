@@ -145,6 +145,8 @@ ramificar por tema.
 | `--sidebar-avatar` | círculo do avatar sem foto | `surface-inverse` | `blue-700` |
 | `--avatar-md-fundo` | disco do Avatar `md` | `accent` | `card` |
 | `--avatar-md-anel` | anel do Avatar `md` | `card` | `accent` |
+| `--button-soft-bg` · `-foreground` · `-hover` | Button `soft` | `blue-50` · `blue-600` · `blue-100` | `accent` · `blue-300` · `neutral-800` |
+| `--segmented-item-selected` | opção escolhida do Segmented e do View Switcher | `accent` | `background` |
 | `--tom-anel` · `--tom-texto` · `--tom-tag` · `--tom-brilho` | perfil do Drawer, dentro de `[data-tom]` | `accent` · `blue-600` · `primary` · `blue-100` | `accent` · `blue-300` · `primary` · `accent` **(derivado)** |
 
 Os dois do Avatar `md` são o mesmo caso: o arquivo troca os papéis de disco e
@@ -153,10 +155,22 @@ um `[data-tom]`. O azul aponta para tokens; `roxo` usa os hex do arquivo, que
 são o azul com o matiz em 266°; `rosa` (330°) e `laranja` (24°) seguem a mesma
 regra por decisão do humano (2026-09-15). O brilho escuro e os escuros dos três
 tons são **derivados**. Ver [Drawer](componentes/Drawer.md).
+Em 2026-09-18 entraram `verde` (142°), `ciano` (190°), `ambar` (45°) e
+`vermelho` (356°). Os três primeiros baixam o L da letra e da tag até o
+contraste empatar com o do azul — no L do arquivo o texto da tag não se lê
+sobre o fundo claro.
 
-Efeito de sombra: `button inner shadow` do Figma virou `shadow-button-inner`
-(`inset 2px 4px 8px #E8F1FF66`), usado no Button `primary` e `soft` e no
-botão de adicionar tag.
+Os três últimos nascem da mesma causa: o arquivo repete o modo Claro no Escuro
+e o código não pode repetir junto (decisão do humano, 2026-09-18). O `soft`
+saía branco-azulado sobre fundo escuro; a opção escolhida em `accent` (#232C3D)
+era quase o `card` (#25252D) da trilha e a seleção sumia.
+
+Efeito de sombra: `button inner shadow` do Figma (`inset 2px 4px 8px #E8F1FF66`)
+virou **dois** nomes. `shadow-button-inner` sai de `--shadow-button-inner` e
+**vale só no Claro** — é um brilho claro, e no Escuro ele lava a superfície;
+usam-no `tertiary`, `soft`, `destructive`, a busca do Header e a opção do View
+Switcher. `shadow-button-inner-primary` é o valor literal, nos dois temas, para
+quem tem azul cheio embaixo: Button `primary` e o botão de adicionar tag.
 
 ### Tipografia
 

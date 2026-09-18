@@ -15,7 +15,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground shadow-button-inner hover:bg-primary-hover",
+        primary: "bg-primary text-primary-foreground shadow-button-inner-primary hover:bg-primary-hover",
         secondary: "border border-border bg-card text-foreground hover:bg-accent",
         ghost: "text-muted-foreground hover:bg-accent hover:text-foreground",
         // Sombra interna conferida no botão "Excluir" do Modal (545:168).
@@ -23,7 +23,7 @@ const buttonVariants = cva(
         // Os dois abaixo vêm do redesenho do Button no Figma (269:32), onde se
         // chamam "Secondary" e "Ghost". Entraram com nome próprio para não mudar
         // o que `secondary` e `ghost` já significam nas telas prontas.
-        soft: "bg-base-blue-50 text-base-blue-600 shadow-button-inner hover:bg-base-blue-100",
+        soft: "bg-button-soft text-button-soft-foreground shadow-button-inner hover:bg-button-soft-hover",
         outline: "border border-background text-surface-inverse hover:bg-background",
         // "Treecondary" no arquivo (563:4287): card sem traço, texto apagado e a
         // sombra interna. É o botão de apoio das barras de ferramenta — Pesquisar

@@ -32,7 +32,7 @@ const umaLinha = (t) => t.replace(/\s+/g, " ").trim();
 // e inventar a partir do código é pior que declarar aqui.
 const DESCRICAO_FIXA = {
   badge: "Selo curto de status — a cor fica na borda e no texto, nunca preenchendo a superfície.",
-  rating: "Avaliação de 0 a 5 estrelas: editável por setas, ou só leitura.",
+  rating: "Avaliação de 0 a 10 estrelas (o máximo é prop): editável por setas, ou só leitura.",
   "logo-datacrazy": "Símbolo e logotipo do DataCrazy, em currentColor para acompanhar o tema.",
 };
 const TITULO_FIXO = { "data-table": "Data Table", "logo-datacrazy": "Logo DataCrazy" };

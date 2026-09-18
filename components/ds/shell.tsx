@@ -24,6 +24,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const [rail, setRail] = useState(false);
   const [drawer, setDrawer] = useState(false);
 
+  // Tela de exemplo não tem moldura: /exemplos/* é uma tela do CRM, com a
+  // sidebar e o header do PRODUTO, e ocupa a janela inteira. A vitrine, com
+  // sua própria sidebar e trilha, apareceria como um segundo produto em volta.
+  if (caminho.startsWith("/exemplos/")) return <>{children}</>;
+
   const recuo = rail ? "lg:pl-8" : "lg:pl-10";
 
   return (

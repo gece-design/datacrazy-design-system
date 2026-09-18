@@ -19,8 +19,12 @@ import { cn } from "@/lib/utils";
  *   acoes        → embaixo, à direita, alinhadas pela base do título
  *
  * Medidas do arquivo: recuo 32×16, traço de baixo em `border`, linha de cima
- * com a altura do botão (32), título `h1` + subtítulo `body-sm` com vão 2,
- * ações com vão 8. Fecha em 111px.
+ * com a altura do botão (32), título `h1` e, quando houver, subtítulo `body-sm`
+ * a 2px; ações com vão 8. Fecha em 111px, com ou sem subtítulo.
+ *
+ * O subtítulo fica FORA por padrão (decisão do humano, 2026-09-18): título e
+ * descrição decorativos em toda tela são anti-referência, e a trilha acima já
+ * diz onde a pessoa está.
  *
  * Quando não cabe, as ações descem para uma linha própria, à direita, e
  * quebram entre si; título e subtítulo truncam com `title` (D12).
@@ -28,6 +32,7 @@ import { cn } from "@/lib/utils";
 
 export interface HeaderProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
   titulo: string;
+  /** Fora por padrão. Passe só quando a frase disser o que o título não diz. */
   subtitulo?: string;
   /** Em cima, à esquerda. Normalmente um `Breadcrumb`. */
   trilha?: React.ReactNode;
@@ -46,7 +51,11 @@ export function Header({ titulo, subtitulo, trilha, utilitarios, acoes, classNam
           {utilitarios ? <div className="flex shrink-0 items-center gap-2">{utilitarios}</div> : null}
         </div>
       ) : null}
-      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+      {/* min-h 46: é a altura que o título + subtítulo tinham no arquivo, e é o
+          que mantém as ações 14px abaixo do sino. Sem ela, um Header sem
+          subtítulo encolhe a linha para os 28 do h1 e a fileira de ações sobe
+          e encosta no sino — o header fecha em 111px com ou sem subtítulo. */}
+      <div className="flex min-h-[46px] flex-wrap items-end justify-between gap-x-6 gap-y-3">
         <div className="flex min-w-0 flex-col gap-0.5">
           <h1 title={titulo} className="truncate text-h1 text-foreground">
             {titulo}
@@ -84,10 +93,10 @@ export interface HeaderNotificacoesProps extends React.ButtonHTMLAttributes<HTML
  * arquivo: aquele é branco nos dois modos (reprova a D8) e, no escuro, branco
  * sobre o `destructive` claro dá 2,6:1. É a mesma escolha do Button destructive.
  */
-export function HeaderNotificacoes({ rotulo, contagem = 0, className, ...props }: HeaderNotificacoesProps) {
-  return (
+export const HeaderNotificacoes = React.forwardRef<HTMLButtonElement, HeaderNotificacoesProps>(
+  ({ rotulo, contagem = 0, className, ...props }, ref) => (
     <Tooltip content={rotulo} position="bottom">
-      <Button variant="tertiary" size="icon" aria-label={rotulo} className={cn("relative", className)} {...props}>
+      <Button ref={ref} variant="tertiary" size="icon" aria-label={rotulo} className={cn("relative", className)} {...props}>
         <Bell size={16} weight="regular" aria-hidden="true" />
         {contagem > 0 ? (
           <span
@@ -100,8 +109,9 @@ export function HeaderNotificacoes({ rotulo, contagem = 0, className, ...props }
         ) : null}
       </Button>
     </Tooltip>
-  );
-}
+  ),
+);
+HeaderNotificacoes.displayName = "HeaderNotificacoes";
 
 export interface HeaderBuscaProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
   /** Nome do campo para leitor de tela. Ex.: "Pesquisar leads". */

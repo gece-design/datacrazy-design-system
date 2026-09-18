@@ -47,6 +47,7 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Radio Group", href: "/forms/radio-group", icone: "radio", pronto: true , descricao: "Escolha exclusiva por setas"},
       { titulo: "Switch", href: "/forms/switch", icone: "interruptor", pronto: true , descricao: "Liga e desliga na hora"},
       { titulo: "Date Picker", href: "/forms/date-picker", icone: "calendario", pronto: true , descricao: "Período em dois meses, com atalhos"},
+      { titulo: "Time Picker", href: "/forms/time-picker", icone: "relogio", pronto: true , descricao: "Hora e data-hora, cientes de fuso"},
     ],
   },
   {
@@ -85,6 +86,27 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Empty State", href: "/feedback/empty-state", icone: "bandeja" , descricao: "Ausência de dados"},
       { titulo: "Modal", href: "/feedback/modal", icone: "camada", pronto: true , descricao: "Camada que exige decisão"},
       { titulo: "Drawer", href: "/feedback/drawer", icone: "gaveta", pronto: true , descricao: "O lead aberto pela direita"},
+      // Não é componente: são as telas que o cliente propôs, reproduzidas para
+      // a reunião de decisão. Sai do repo junto com a decisão.
+      //
+      // ATENÇÃO: título e descrição aqui aparecem na sidebar e nos cards da
+      // home — o CLIENTE lê. Nada de linguagem interna. A leitura técnica do
+      // material fica em /feedback/drawer-lead-2/ds, sem link e com 404 em
+      // produção.
+      { titulo: "Drawer · propostas", href: "/feedback/drawer-lead-2", icone: "proposta", pronto: true, descricao: "Três telas do arquivo enviado, navegáveis"},
+    ],
+  },
+  {
+    // Não é categoria de componente: são TELAS montadas só com o que a
+    // biblioteca já entrega. Existe para o cliente testar o resultado, e é a
+    // primeira coisa que sai do repo quando o DS entrar no CRM de verdade.
+    //
+    // ATENÇÃO: título e descrição aparecem na sidebar e nos cards da home — o
+    // CLIENTE lê. Nada de linguagem interna.
+    titulo: "Telas de exemplo",
+    descricao: "O design system montado em tela de produto, para usar de verdade.",
+    itens: [
+      { titulo: "Pipeline", href: "/exemplos/pipeline", icone: "kanban", pronto: true, descricao: "Funil em kanban, com arrastar e soltar" },
     ],
   },
 ];
