@@ -2,10 +2,11 @@ node_modules
 .next
 .git
 .kfe-kit
-# o gerador do catálogo roda no build da Vercel e lê a doc dos componentes
-docs/*
-!docs/componentes/
-!docs/regras.md
+# docs/ sobe inteira: o gerador do catálogo lê docs/componentes e
+# docs/regras.md no build, e a Vercel não re-inclui pasta excluída por `docs/*`.
+docs/processo
+docs/objetos
+docs/features
 scripts/*
 !scripts/gerar-registry.mjs
 tests
