@@ -1,8 +1,8 @@
 "use client";
 
 /* As três propostas do cliente refeitas com os componentes do DS. Nada aqui
-   vira componente: é tela de exemplo, existe para ser olhada lado a lado com
-   /feedback/drawer-lead-2 (os mocks como ele mandou) e com /feedback/drawer.
+   vira componente: é tela de exemplo, para ser olhada lado a lado com o
+   drawer principal em /feedback/drawer.
 
    Origem: "Ícones dos botões de ação (standalone).html", mocks 1A, 2C e 2B. */
 
@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/drawer";
 import { Tag } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
-import { CATALOGO_TAGS, LEADS, MENU_LEAD, tagsEscolhidas } from "../../drawer/drawer-lead";
+import { CATALOGO_TAGS, LEADS, MENU_LEAD, tagsEscolhidas } from "../drawer/drawer-lead";
 
 const LEAD = LEADS.joel;
 
@@ -231,7 +231,7 @@ export function PropostaTrilhoDeIcones({ className }: { className?: string }) {
               Davi Baldin
             </Button>
           </div>
-          <DrawerMetricas itens={LEAD.metricas} estilo="fill" className="w-full" />
+          <DrawerMetricas itens={LEAD.metricas} className="w-full" />
         </div>
       </div>
       <ConteudoHistoricos />

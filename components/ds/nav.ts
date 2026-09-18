@@ -86,14 +86,7 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Empty State", href: "/feedback/empty-state", icone: "bandeja" , descricao: "Ausência de dados"},
       { titulo: "Modal", href: "/feedback/modal", icone: "camada", pronto: true , descricao: "Camada que exige decisão"},
       { titulo: "Drawer", href: "/feedback/drawer", icone: "gaveta", pronto: true , descricao: "O lead aberto pela direita"},
-      // Não é componente: são as telas que o cliente propôs, reproduzidas para
-      // a reunião de decisão. Sai do repo junto com a decisão.
-      //
-      // ATENÇÃO: título e descrição aqui aparecem na sidebar e nos cards da
-      // home — o CLIENTE lê. Nada de linguagem interna. A leitura técnica do
-      // material fica em /feedback/drawer-lead-2/ds, sem link e com 404 em
-      // produção.
-      { titulo: "Drawer · propostas", href: "/feedback/drawer-lead-2", icone: "proposta", pronto: true, descricao: "Três telas do arquivo enviado, navegáveis"},
+{ titulo: "Drawer variações", href: "/feedback/drawer-variacoes", icone: "proposta", pronto: true, descricao: "Cores, menu, linha do tempo e propostas"},
     ],
   },
   {

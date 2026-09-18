@@ -136,7 +136,7 @@ export function tagsEscolhidas(grupos: GrupoTags[], ids: string[]): OpcaoTag[] {
   return ORDEM_NO_PERFIL.flatMap((g) => grupos.find((x) => x.id === g)?.tags ?? []).filter((t) => ids.includes(t.id));
 }
 
-type Lead = {
+export type LeadDoDrawer = {
   nome: string;
   tipo: "pessoa" | "empresa";
   telefone: string;
@@ -146,7 +146,7 @@ type Lead = {
   contato: LinhaContato[];
 };
 
-export const LEADS: Record<"rafael" | "joel", Lead> = {
+export const LEADS: Record<"rafael" | "joel", LeadDoDrawer> = {
   rafael: {
     nome: "Rafael Pinto Pinheiro",
     tipo: "pessoa",
@@ -712,8 +712,16 @@ export function TagsDoLead({ iniciais }: { iniciais: string[] }) {
 
 /* ------------------------------------------------------------------ Tela -- */
 
+export type SecaoDoDrawer = { titulo: string; descricao: string; Corpo: () => React.ReactElement };
+
+/* `dados`, `tags` e `secoes` existem para a tela do pipeline (app/exemplos)
+   abrir ESTE drawer com o lead clicado no quadro, em vez de montar um segundo.
+   Sem eles, é o showcase: os dois leads do arquivo. */
 export function DrawerLead({
   lead = "rafael",
+  dados: dadosDeFora,
+  tags,
+  secoes,
   estilo = "outline",
   tom,
   menuInicial = "historicos",
@@ -721,13 +729,19 @@ export function DrawerLead({
   className,
 }: {
   lead?: keyof typeof LEADS;
+  /** O lead a mostrar. Sem ele, um dos dois do arquivo. */
+  dados?: LeadDoDrawer;
+  /** A fileira de tags do perfil. Sem ela, a do arquivo, com o seletor. */
+  tags?: React.ReactNode;
+  /** Seções com conteúdo próprio, por id do menu. As outras vêm do arquivo. */
+  secoes?: Partial<Record<string, SecaoDoDrawer>>;
   estilo?: "outline" | "fill";
   tom?: TomPerfil;
   menuInicial?: string;
   aoFechar?: () => void;
   className?: string;
 }) {
-  const dados = LEADS[lead];
+  const dados = dadosDeFora ?? LEADS[lead];
   const [menu, setMenu] = React.useState(menuInicial);
   const [perfilAberto, setPerfilAberto] = React.useState(true);
   // Quem fixa é a pessoa, e cada lead guarda a própria lista no CRM.
@@ -735,7 +749,7 @@ export function DrawerLead({
   const [visaoMenu, setVisaoMenu] = React.useState<VisaoDoMenu>("lista");
 
   const item = MENU_LEAD.find((m) => m.id === menu) ?? MENU_LEAD[0];
-  const desenhado = cabecalhos[menu];
+  const desenhado = secoes?.[menu] ?? cabecalhos[menu];
   const Corpo = desenhado?.Corpo;
 
   return (
@@ -752,7 +766,7 @@ export function DrawerLead({
           rotulosRolagem={{ subir: "Subir no perfil", descer: "Descer no perfil" }}
           aoFechar={aoFechar}
           aoRecolher={() => setPerfilAberto(false)}
-          tags={<TagsDoLead iniciais={dados.tags} />}
+          tags={tags ?? <TagsDoLead iniciais={dados.tags} />}
           acoes={
             <>
               <Button>

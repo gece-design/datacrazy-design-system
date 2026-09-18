@@ -408,6 +408,7 @@ const descricoes: Record<string, string> = {
   "Empty State": "Ausência de dados, explicada — não só um ícone.",
   "Modal": "Grupos à esquerda, conteúdo à direita, botões à parte (G10).",
   "Drawer": "O lead pela direita: perfil, menu e cinco seções (G1).",
+  "Drawer variações": "Tons, menu, linha do tempo, hierarquia, camada e as três propostas.",
   "Pipeline": "O funil do CRM: arraste um lead e abra o registro.",
 };
 
