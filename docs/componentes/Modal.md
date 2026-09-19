@@ -72,7 +72,7 @@ decisão, não buraco a preencher.
 
 ## Composição
 
-Usa: `Warning` e `X` do Phosphor · `useCamada` (`lib/use-camada.ts`) ·
+Usa: `BotaoFechar` do [Button](Button.md) (o X, 28px) e `lib/use-camada.ts` (foco preso, Escape, rolagem travada).
 nos exemplos, [Button](../../components/ui/button.tsx) e [Input](Input.md) ·
 Usado por: —
 

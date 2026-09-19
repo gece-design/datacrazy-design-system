@@ -3,11 +3,12 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { cva } from "class-variance-authority";
-import { Warning, X } from "@phosphor-icons/react";
+import { Warning } from "@phosphor-icons/react";
 import { useCamada } from "@/lib/use-camada";
 import { cn } from "@/lib/utils";
 
 import { foco } from "@/lib/estados";
+import { BotaoFechar } from "@/components/ui/button";
 /**
  * Modal — camada que exige decisão (node 545:168, 12 variantes: Type × Size × theme).
  *
@@ -87,21 +88,7 @@ export const ModalPainel = React.forwardRef<HTMLDivElement, ModalPainelProps>(fu
           </div>
         </div>
 
-        {aoFechar ? (
-          <button
-            type="button"
-            onClick={aoFechar}
-            aria-label={rotuloFechar}
-            className={cn(
-              "flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors",
-              // hover derivado (E-01): o mesmo do X do Toast.
-              "hover:bg-overlay-item-hover hover:text-foreground",
-              `${foco}`,
-            )}
-          >
-            <X size={16} weight="regular" />
-          </button>
-        ) : null}
+        {aoFechar ? <BotaoFechar rotulo={rotuloFechar} onClick={aoFechar} /> : null}
       </div>
 
       {/* O corpo é o que rola: com zoom alto ou conteúdo longo, cabeçalho e

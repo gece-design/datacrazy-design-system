@@ -83,7 +83,7 @@ linha errada. Token: `overlay/item-hover`, que clareia nos dois temas.
 
 ## Composição
 
-Usa: `Badge` nas etiquetas (sem doc ainda — dívida registrada) ·
+Usa: [Badge](Badge.md) nas etiquetas e `AcaoCampo` do [Input](Input.md) no botão de ações da linha (a mesma ação de 16px do campo).
 [Select](Select.md) nos filtros · [Pagination](Pagination.md) no rodapé ·
 Usado por: tela de negócios (ainda não construída)
 

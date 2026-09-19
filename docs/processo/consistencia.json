@@ -634,9 +634,9 @@
       "gravidade": "alta",
       "lote": "B4",
       "verificacao": "check:tokens#botao-cru",
-      "status": "aberto",
-      "nota": "BotaoFechar em button.tsx — única mudança visual da rodada (1–2px de glifo)",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "BotaoFechar em button.tsx (ghost + icon-sm, glifo 16; icon-xs com glifo 14 para o Toast, medida do arquivo). Modal, Toast e a moldura do site usam. O canto do Drawer fica próprio: quadrado de 29px com fundo card, medido em 565:5959 — não é ghost",
+      "fechadoEm": "B4"
     },
     {
       "id": "AUD-037",
@@ -657,9 +657,9 @@
       "gravidade": "alta",
       "lote": "B4",
       "verificacao": "check:tokens#botao-cru",
-      "status": "aberto",
-      "nota": "size icon-sm 28 · icon 32 · icon-lg 36",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "size icon-xs 24 · icon-sm 28 · icon 32 · icon-lg 36. Os botões que sobram crus no Drawer (pastilha de rolagem redonda com traço, alfinete de 14, zoom) e na Sidebar (toggle redondo com shadow-float, trilho de tema, usuário) não têm forma de Button: são peças medidas; todos usam `foco` (check botao-cru passa)",
+      "fechadoEm": "B4"
     },
     {
       "id": "AUD-038",
@@ -673,10 +673,10 @@
       ],
       "regra": "lista negativa",
       "gravidade": "media",
-      "lote": "B4",
+      "lote": "B8",
       "verificacao": "check:tokens#botao-cru",
       "status": "aberto",
-      "nota": "",
+      "nota": "página de proposta (mock): 38px e 36px não são degraus do Button; trocar muda o repouso do mock — decidir em B8 com o humano (Button icon-lg 36 ou manter)",
       "fechadoEm": null
     },
     {
@@ -882,9 +882,9 @@
       "gravidade": "media",
       "lote": "B4",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "CelulaAcoes usa AcaoCampo do Input com p-0.5 (caixa de 20 do arquivo)",
+      "fechadoEm": "B4"
     },
     {
       "id": "AUD-052",

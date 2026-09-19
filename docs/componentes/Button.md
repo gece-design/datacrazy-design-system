@@ -26,11 +26,21 @@ nas ações do Header (2026-09-15), o excesso é este.
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
 | `variant` | `"primary" \| "secondary" \| "ghost" \| "destructive" \| "soft" \| "outline" \| "tertiary"` | `"primary"` | não | Ver Variantes. |
-| `size` | `"sm" \| "md" \| "lg" \| "icon"` | `"md"` | não | 28 · 32 · 36px de altura; `icon` é o quadrado de 32 só com ícone e **exige `aria-label`**. |
+| `size` | `"sm" \| "md" \| "lg" \| "icon-xs" \| "icon-sm" \| "icon" \| "icon-lg"` | `"md"` | não | 28 · 32 · 36px de altura. Os `icon-*` são quadrados só de ícone (24 · 28 · 32 · 36) e **exigem `aria-label`**. |
 | `asChild` | `boolean` | `false` | não | Renderiza o filho (`Slot` do Radix) com as classes do botão — para `Link`. |
 | demais | `ButtonHTMLAttributes` | — | não | `type`, `disabled`, `onClick`… vão para o `<button>`. |
 
 `buttonVariants` é exportado para quem precisa das classes sem o elemento.
+
+### `BotaoFechar`
+
+O X de fechar de Modal, Toast e painéis: Button `ghost` quadrado com o glifo `X` do Phosphor. Hover no token de "item sob o cursor" do overlay (D22).
+
+| Prop | Tipo | Padrão | Obrigatória | Descrição |
+|------|------|--------|-------------|-----------|
+| `rotulo` | `string` | — | sim | Nome para leitor de tela e `title`. Ex.: "Fechar". |
+| `size` | `"icon-xs" \| "icon-sm" \| "icon"` | `"icon-sm"` | não | 24 (Toast, glifo 14), 28 (Modal) ou 32. |
+| demais | `ButtonHTMLAttributes` | — | não | `onClick`, `className`… |
 
 ## Variantes
 
@@ -72,8 +82,9 @@ por decisão (interactions.md L5).
 Usa: `Slot` do Radix (`asChild`) ·
 Usado por: [Header](Header.md) (sino, `tertiary` `icon`), [DatePicker](DatePicker.md)
 (gatilho e rodapé), [TimePicker](TimePicker.md), [Modal](Modal.md) e [Drawer](Drawer.md)
-pelos exemplos. O X de fechar do Modal, do Toast e do Drawer **ainda não** é
-Button (lote B4 da auditoria de consistência: `BotaoFechar`).
+pelos exemplos. O X de fechar do [Modal](Modal.md) e do [Toast](Toast.md) é o
+`BotaoFechar` daqui (lote B4). O botão do canto do [Drawer](Drawer.md) fica
+próprio: é um quadrado de 29px com fundo `card` medido no arquivo.
 
 ## Exemplo de uso
 

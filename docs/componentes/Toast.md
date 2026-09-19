@@ -71,7 +71,8 @@ decisão, não buraco a preencher.
 
 ## Composição
 
-Usa: `Check`, `Warning`, `ChatText` e `X` do Phosphor · Usado por: —
+Usa: `BotaoFechar` do [Button](Button.md) em `size="icon-xs"` (24px, glifo 14 — a medida do arquivo).
+
 
 ## Exemplo de uso
 

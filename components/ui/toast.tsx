@@ -3,11 +3,12 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { cva } from "class-variance-authority";
-import { ChatText, Check, Warning, X, type Icon } from "@phosphor-icons/react";
+import { ChatText, Check, Warning, type Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { DURACAO, PERMANENCIA, reduzido } from "@/lib/movimento";
 
 import { foco } from "@/lib/estados";
+import { BotaoFechar } from "@/components/ui/button";
 /**
  * Toast — confirmação que não bloqueia (node 548:52, canvas `↳ Feedback`).
  *
@@ -101,21 +102,8 @@ export function Toast({
         {descricao ? <p className="text-body-sm text-muted-foreground">{descricao}</p> : null}
       </div>
 
-      {aoFechar ? (
-        <button
-          type="button"
-          onClick={aoFechar}
-          aria-label={rotuloFechar}
-          className={cn(
-            "flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors",
-            // hover derivado (E-01): o token de "item sob o cursor" do overlay.
-            "hover:bg-overlay-item-hover hover:text-foreground",
-            `${foco}`,
-          )}
-        >
-          <X size={14} weight="regular" />
-        </button>
-      ) : null}
+      {/* 24px com glifo de 14: a medida do arquivo (548:52) */}
+      {aoFechar ? <BotaoFechar size="icon-xs" rotulo={rotuloFechar} onClick={aoFechar} /> : null}
     </div>
   );
 }

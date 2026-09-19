@@ -3,7 +3,7 @@ import { DotsThree } from "@phosphor-icons/react/dist/ssr";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
-import { foco } from "@/lib/estados";
+import { AcaoCampo } from "@/components/ui/input";
 /**
  * Data Table — espelho do component set "Data Table" do Figma (node 331:1354).
  *
@@ -273,14 +273,8 @@ export function CelulaEstatisticas({
 export function CelulaAcoes({ rotulo = "Ações da linha" }: { rotulo?: string }) {
   return (
     <div className="flex justify-end">
-      <button
-        type="button"
-        aria-label={rotulo}
-        title={rotulo}
-        className={`rounded-sm p-0.5 text-muted-foreground transition-colors hover:text-foreground ${foco}`}
-      >
-        <DotsThree size={16} weight="regular" aria-hidden="true" />
-      </button>
+      {/* é a mesma ação de 16px do campo (AcaoCampo); o p-0.5 mantém a caixa de 20 do arquivo */}
+      <AcaoCampo icone={DotsThree} rotulo={rotulo} className="p-0.5" />
     </div>
   );
 }

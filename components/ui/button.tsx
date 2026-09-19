@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import { X } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 import { foco, desabilitado } from "@/lib/estados";
@@ -36,8 +37,13 @@ const buttonVariants = cva(
         sm: "h-7 px-2.5",
         md: "h-8 px-3",
         lg: "h-9 px-4",
-        // quadrado de 32, só ícone — o sino do Header. Exige `aria-label`.
+        // Quadrados só de ícone — exigem `aria-label`. 32 é o sino do Header;
+        // 28 e 24 são os X de fechar (Modal, Toast); 36 é o degrau `lg`.
+        // Lote B4 da auditoria: antes cada um era um <button> à mão.
+        "icon-xs": "size-6",
+        "icon-sm": "size-7",
         icon: "size-8",
+        "icon-lg": "size-9",
       },
     },
     defaultVariants: { variant: "primary", size: "md" },
@@ -58,3 +64,35 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 export { buttonVariants };
+
+export interface BotaoFecharProps extends Omit<ButtonProps, "variant" | "size" | "children"> {
+  /** Nome do botão para leitor de tela e tooltip nativo. Ex.: "Fechar". Obrigatório: só tem ícone. */
+  rotulo: string;
+  /** 24 (Toast), 28 (Modal, painéis) ou 32. Padrão 28. */
+  size?: "icon-xs" | "icon-sm" | "icon";
+}
+
+/**
+ * O X de fechar: Button `ghost` quadrado com o glifo do Phosphor. Vive em
+ * superfície flutuante (Modal, Toast, menu), por isso o hover é o token de
+ * "item sob o cursor" do overlay (D22), não o `accent` do ghost comum.
+ * Antes eram quatro cópias com três tamanhos de glifo e dois tokens de hover
+ * (auditoria de consistência, AUD-036).
+ */
+export const BotaoFechar = React.forwardRef<HTMLButtonElement, BotaoFecharProps>(
+  ({ rotulo, size = "icon-sm", className, ...props }, ref) => (
+    <Button
+      ref={ref}
+      type="button"
+      variant="ghost"
+      size={size}
+      aria-label={rotulo}
+      title={rotulo}
+      className={cn("shrink-0 enabled:hover:bg-overlay-item-hover", className)}
+      {...props}
+    >
+      <X size={size === "icon-xs" ? 14 : 16} weight="regular" aria-hidden="true" />
+    </Button>
+  ),
+);
+BotaoFechar.displayName = "BotaoFechar";

@@ -21,6 +21,7 @@ import { SidebarToggle } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
 import { foco } from "@/lib/estados";
+import { BotaoFechar } from "@/components/ui/button";
 // Medidas do Figma (node 255:6493): sidebar 260 · padding 13 · conteúdo 234
 // busca h36 p8 · categoria h28 px10 · item h32 passo 34 · ícone x32 · texto x56
 
@@ -200,17 +201,7 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
           >
             <Logo className="h-[28px] w-auto" />
           </Link>
-          {onFechar && (
-            <button
-              onClick={onFechar}
-              aria-label="Fechar menu"
-              className={`-mr-1 grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground
-                         transition-colors hover:bg-card hover:text-foreground
-                         ${foco}`}
-            >
-              <X size={16} weight="regular" />
-            </button>
-          )}
+          {onFechar && <BotaoFechar rotulo="Fechar menu" onClick={onFechar} className="-mr-1" />}
         </div>
 
         <div className="relative h-9 shrink-0">
