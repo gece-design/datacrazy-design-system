@@ -21,7 +21,9 @@ import {
 import { Avatar } from "@/components/ui/avatar";
 import { Tag } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
-import { DURACAO, reduzido } from "@/lib/movimento";
+import { useCamada } from "@/lib/use-camada";
+import { useMontado, useSaida } from "@/lib/use-saida";
+import { Scrim } from "@/components/ui/modal";
 
 import { foco } from "@/lib/estados";
 /**
@@ -73,76 +75,19 @@ export interface DrawerProps {
  */
 export function Drawer({ aberto, aoFechar, rotulo, children }: DrawerProps) {
   const painel = React.useRef<HTMLDivElement>(null);
-  const fechar = React.useRef(aoFechar);
-  fechar.current = aoFechar;
-  const [montado, setMontado] = React.useState(false);
-  React.useEffect(() => setMontado(true), []);
-
-  // Fechar tem que ser visto: o painel fica no ar enquanto desliza para fora.
-  // Quem pediu menos movimento ao sistema não espera nada — sai na hora (I12).
-  const [saindo, setSaindo] = React.useState(false);
-  const jaAbriu = React.useRef(false);
-  React.useEffect(() => {
-    if (aberto) {
-      jaAbriu.current = true;
-      setSaindo(false);
-      return;
-    }
-    if (!jaAbriu.current) return;
-    if (reduzido()) return;
-    setSaindo(true);
-    const fim = setTimeout(() => setSaindo(false), DURACAO_SAIDA);
-    return () => clearTimeout(fim);
-  }, [aberto]);
-
-  React.useEffect(() => {
-    if (!aberto) return;
-    const anterior = document.activeElement as HTMLElement | null;
-    const rolagem = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    painel.current?.focus();
-
-    const tecla = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        fechar.current();
-        return;
-      }
-      if (e.key !== "Tab" || !painel.current) return;
-      const focaveis = painel.current.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      );
-      if (focaveis.length === 0) return;
-      const primeiro = focaveis[0];
-      const ultimo = focaveis[focaveis.length - 1];
-      const atual = document.activeElement;
-      if (e.shiftKey && (atual === primeiro || atual === painel.current)) {
-        e.preventDefault();
-        ultimo.focus();
-      } else if (!e.shiftKey && atual === ultimo) {
-        e.preventDefault();
-        primeiro.focus();
-      }
-    };
-    document.addEventListener("keydown", tecla);
-    return () => {
-      document.removeEventListener("keydown", tecla);
-      document.body.style.overflow = rolagem;
-      anterior?.focus();
-    };
-  }, [aberto]);
+  const montado = useMontado();
+  // Fechar tem que ser visto: o painel fica no ar enquanto desliza para fora
+  // (lib/use-saida.ts — nasceu aqui e saiu para o Modal e os painéis usarem).
+  const { saindo } = useSaida(aberto);
+  // Foco preso, Escape, rolagem travada com a barra compensada e foco devolvido:
+  // a mesma camada do Modal (lib/use-camada.ts), com pilha — um modal aberto
+  // de dentro do drawer é quem escuta o teclado.
+  useCamada(montado && aberto, painel, aoFechar);
 
   if (!montado || (!aberto && !saindo)) return null;
   return createPortal(
     <div className={cn("fixed inset-0 z-modal flex justify-end", saindo && "pointer-events-none")}>
-      <div
-        aria-hidden="true"
-        onClick={aoFechar}
-        className={cn(
-          "absolute inset-0 bg-overlay-scrim/40",
-          saindo ? "motion-safe:animate-fade-out" : "motion-safe:animate-fade-in-fast",
-        )}
-      />
+      <Scrim saindo={saindo} onClick={aoFechar} />
       <div
         ref={painel}
         role="dialog"
@@ -246,9 +191,6 @@ function usarRolagem(alvo: React.RefObject<HTMLElement | null>) {
   return estado;
 }
 
-/** O mesmo número de `drawer-sai` no tailwind.config: é o tempo do desmonte (D20). */
-const DURACAO_SAIDA = DURACAO.base;
-
 export type RotulosDeRolagem = { subir: string; descer: string };
 
 /** Nomes de fábrica das setas. Toda seta é clicável; a tela só troca o texto. */
@@ -296,7 +238,7 @@ function IndicadorDeRolagem({
       // Ela não recebe clique — só a pastilha, que fica acima dela.
       <span
         className={cn(
-          "pointer-events-none absolute inset-x-0 z-10 flex h-12 justify-center from-card via-card/85 transition-opacity",
+          "pointer-events-none absolute inset-x-0 z-dropdown flex h-12 justify-center from-card via-card/85 transition-opacity",
           cima ? "top-0 items-start bg-gradient-to-b pt-1" : "bottom-0 items-end bg-gradient-to-t pb-1",
           !visivel && "opacity-0",
         )}

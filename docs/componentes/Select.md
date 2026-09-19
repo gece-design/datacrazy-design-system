@@ -68,7 +68,7 @@ decisão, não buraco a preencher.
 
 ## Composição
 
-Usa: `CaretDown` do Phosphor ·
+Usa: `PainelFlutuante` do [Popover](Popover.md) na lista aberta e `useCliqueFora` (lib) para fechar no clique fora; `SelectTrigger` é o gatilho, também usado pelo Card.
 Usado por: [Card](Card.md) e [DataTable](DataTable.md)
 
 ## Exemplo de uso

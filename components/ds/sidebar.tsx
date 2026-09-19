@@ -350,6 +350,7 @@ export function SidebarDrawer({ aberto, onFechar }: { aberto: boolean; onFechar:
       <div
         onClick={onFechar}
         aria-hidden="true"
+        // check-tokens:ignore scrim-literal — moldura do site (D3), decisão do humano em 2026-09-19: o menu no celular mantém o blur; Modal, Drawer e tela de senha usam o Scrim do DS
         className="absolute inset-0 bg-neutral-900/50 backdrop-blur-[2px]"
       />
       <Sidebar

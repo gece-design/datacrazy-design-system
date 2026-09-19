@@ -4,6 +4,8 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CaretDown } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { useCliqueFora } from "@/lib/use-clique-fora";
+import { PainelFlutuante } from "@/components/ui/popover";
 
 import { foco } from "@/lib/estados";
 /**
@@ -128,16 +130,8 @@ export function Select({
     fechar();
   }
 
-  /* Clique fora e rolagem fecham — é o que a pessoa espera de um menu, e sem
-     isso o painel fica preso quando a página se move embaixo dele. */
-  React.useEffect(() => {
-    if (!aberto) return;
-    const foraDaCaixa = (e: MouseEvent) => {
-      if (!caixa.current?.contains(e.target as Node)) setAberto(false);
-    };
-    document.addEventListener("mousedown", foraDaCaixa);
-    return () => document.removeEventListener("mousedown", foraDaCaixa);
-  }, [aberto]);
+  /* Clique fora fecha — é o que a pessoa espera de um menu (lib/use-clique-fora.ts). */
+  useCliqueFora(aberto, [caixa], () => setAberto(false));
 
   /* O foco entra na lista assim que ela abre: sem isso o teclado continua no
      gatilho e as setas não movem nada. */
@@ -192,7 +186,7 @@ export function Select({
       </SelectTrigger>
 
       {aberto ? (
-        <div
+        <PainelFlutuante
           ref={lista}
           id={`lista-${id}`}
           role="listbox"
@@ -200,9 +194,8 @@ export function Select({
           aria-activedescendant={`opcao-${id}-${emFoco}`}
           tabIndex={-1}
           onKeyDown={tecladoDaLista}
-          /* `shadow-lg` é o degrau da escala reservado a popover e menu de
-             contexto — ver a página de Elevation. */
-          className="absolute right-0 z-popover mt-1 max-h-64 min-w-full overflow-auto rounded-lg border border-overlay-border bg-overlay-bg p-1 shadow-lg focus:outline-none"
+          aDireita
+          className="max-h-64 min-w-full overflow-auto p-1 focus:outline-none"
         >
           {opcoes.map((o, i) => {
             const selecionado = o.valor === valor;
@@ -228,7 +221,7 @@ export function Select({
               </div>
             );
           })}
-        </div>
+        </PainelFlutuante>
       ) : null}
     </div>
   );

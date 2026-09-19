@@ -81,8 +81,7 @@ A `Tag` é leitura. Só o `TagAdicionar` é interativo.
 
 ## Composição
 
-Usa: [Tabs](Tabs.md) e a caixa do [Input](Input.md) no seletor · Phosphor
-(`User`, `Buildings`, `Plus`, `Check`, `MagnifyingGlass`) ·
+Usa: `caixaDeCampo` do [Input](Input.md) na busca, [Tabs](Tabs.md) nas abas do seletor, `PainelFlutuante` do [Popover](Popover.md) em modo `fixo` (portal) e `useCliqueFora` (lib); ícones Phosphor (`User`, `Buildings`, `Plus`, `Check`, `MagnifyingGlass`) ·
 Usado por: [Drawer](Drawer.md) (perfil, tabela de negócios, nó da hierarquia)
 
 ## Exemplo de uso

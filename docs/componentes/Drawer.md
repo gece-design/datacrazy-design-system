@@ -136,9 +136,7 @@ decisão, não buraco a preencher.
 
 ## Composição
 
-Usa: [Avatar](Avatar.md) · [Tag](Tag.md) (com `SeletorTags`) · [Input](Input.md) ·
-[Select](Select.md) · [DataTable](DataTable.md) (layout compacto) · `Button`
-(`soft` e `outline`) · Phosphor ·
+Usa: [Avatar](Avatar.md) · [Tag](Tag.md) (com `SeletorTags`) · [Input](Input.md) · [Select](Select.md) · [DataTable](DataTable.md) (layout compacto) · [Button](Button.md) (`soft` e `outline`) · Phosphor · `Scrim` do [Modal](Modal.md) · `useCamada` (lib/use-camada.ts — foco preso, Escape, rolagem travada, pilha com o Modal) · `useSaida` e `useMontado` (lib/use-saida.ts). O botão do canto é próprio: 29px com fundo `card`, medido no arquivo ·
 Usado por: tela de leads (ainda não construída)
 
 ## Exemplo de uso

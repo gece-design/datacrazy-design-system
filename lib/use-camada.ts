@@ -84,10 +84,11 @@ export function useCamada(ativa: boolean, painel: React.RefObject<HTMLElement | 
       pilha.splice(pilha.indexOf(eu), 1);
       document.body.style.overflow = overflow;
       document.body.style.paddingRight = paddingRight;
-      // Só devolve o foco se a camada saiu mesmo da tela. No dev, o StrictMode
-      // desmonta e remonta o efeito com o painel ainda no DOM — devolver ali
-      // tiraria o foco do `autoFocus`.
-      if (!el.isConnected) anterior.current?.focus();
+      // Só devolve o foco se a camada saiu mesmo da tela: desmontou, ou ficou
+      // montada só para a animação de saída (`aria-hidden`, useSaida). No dev,
+      // o StrictMode desmonta e remonta o efeito com o painel ainda no DOM e
+      // visível — devolver ali tiraria o foco do `autoFocus`.
+      if (!el.isConnected || el.getAttribute("aria-hidden") === "true") anterior.current?.focus();
     };
   }, [ativa, painel]);
 }

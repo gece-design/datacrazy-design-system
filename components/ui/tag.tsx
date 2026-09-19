@@ -6,6 +6,8 @@ import { Buildings, Check, MagnifyingGlass, Plus, User } from "@phosphor-icons/r
 import { caixaDeCampo } from "@/components/ui/input";
 import { Tabs } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { useCliqueFora } from "@/lib/use-clique-fora";
+import { PainelFlutuante } from "@/components/ui/popover";
 
 import { foco } from "@/lib/estados";
 /**
@@ -219,18 +221,13 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
     if (devolverFoco) gatilho.current?.focus();
   }
 
+  useCliqueFora(aberto, [painel, gatilho], () => setAberto(false));
   React.useEffect(() => {
     if (!aberto) return;
     campo.current?.focus();
-    const fora = (e: MouseEvent) => {
-      const alvo = e.target as Node;
-      if (!painel.current?.contains(alvo) && !gatilho.current?.contains(alvo)) setAberto(false);
-    };
-    document.addEventListener("mousedown", fora);
     window.addEventListener("resize", posicionar);
     window.addEventListener("scroll", posicionar, true);
     return () => {
-      document.removeEventListener("mousedown", fora);
       window.removeEventListener("resize", posicionar);
       window.removeEventListener("scroll", posicionar, true);
     };
@@ -287,14 +284,15 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
       />
       {aberto && pos
         ? createPortal(
-            <div
+            <PainelFlutuante
               ref={painel}
               id={`seletor-${id}`}
               role="dialog"
               aria-label={rotulos.gatilho}
               onKeyDown={teclado}
+              fixo
               style={{ top: pos.top, bottom: pos.bottom, left: pos.left, width: LARGURA }}
-              className="fixed z-popover flex flex-col overflow-hidden rounded-lg border border-overlay-border bg-overlay-bg shadow-lg"
+              className="flex flex-col overflow-hidden"
             >
               {/* As abas são o `Tabs` do DS (Tab 535:21). Quantas tags do lead há em
                   cada aba vai no rótulo, para a pessoa saber onde procurar. */}
@@ -430,7 +428,7 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                   </div>
                 </div>
               ) : null}
-            </div>,
+            </PainelFlutuante>,
             document.body,
           )
         : null}

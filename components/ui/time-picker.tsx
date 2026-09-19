@@ -15,6 +15,9 @@ import {
   rotuloDoFuso,
 } from "@/lib/fusos";
 import { cn } from "@/lib/utils";
+import { usePosicao } from "@/lib/use-posicao";
+import { useCliqueFora } from "@/lib/use-clique-fora";
+import { PainelFlutuante } from "@/components/ui/popover";
 
 import { foco } from "@/lib/estados";
 /**
@@ -46,54 +49,21 @@ export type RotulosDeHora = {
 const dois = (n: number) => String(n).padStart(2, "0");
 const lista = (fim: number, passo: number) => Array.from({ length: Math.ceil(fim / passo) }, (_, i) => i * passo);
 
-/** Abre para cima quando não cabe embaixo, e alinha à direita quando vaza. */
-function usarPosicao(aberto: boolean) {
-  const gatilho = React.useRef<HTMLButtonElement>(null);
-  const painel = React.useRef<HTMLDivElement>(null);
-  const [acima, setAcima] = React.useState(false);
-  const [aDireita, setADireita] = React.useState(false);
-
-  React.useEffect(() => {
-    if (!aberto) return;
-    function medir() {
-      const g = gatilho.current?.getBoundingClientRect();
-      const p = painel.current?.getBoundingClientRect();
-      if (!g || !p) return;
-      setAcima(g.bottom + p.height + 8 > window.innerHeight && g.top - p.height - 8 > 0);
-      setADireita(g.left + p.width + 8 > window.innerWidth);
-    }
-    medir();
-    window.addEventListener("resize", medir);
-    window.addEventListener("scroll", medir, true);
-    return () => {
-      window.removeEventListener("resize", medir);
-      window.removeEventListener("scroll", medir, true);
-    };
-  }, [aberto]);
-
-  return { gatilho, painel, acima, aDireita };
-}
-
-/** Fecha no clique fora e no Escape, sem levar junto o drawer de trás. */
+/** Escape fecha só o painel, sem levar junto o drawer de trás; o clique fora
+ *  é o de lib/use-clique-fora.ts. */
 function usarFechamento(aberto: boolean, fechar: (devolverFoco?: boolean) => void, raiz: React.RefObject<HTMLDivElement | null>) {
+  useCliqueFora(aberto, [raiz], () => fechar(false));
   React.useEffect(() => {
     if (!aberto) return;
-    const fora = (e: MouseEvent) => {
-      if (!raiz.current?.contains(e.target as Node)) fechar(false);
-    };
     const tecla = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
       e.preventDefault();
       e.stopImmediatePropagation();
       fechar();
     };
-    document.addEventListener("mousedown", fora);
     document.addEventListener("keydown", tecla, true);
-    return () => {
-      document.removeEventListener("mousedown", fora);
-      document.removeEventListener("keydown", tecla, true);
-    };
-  }, [aberto, fechar, raiz]);
+    return () => document.removeEventListener("keydown", tecla, true);
+  }, [aberto, fechar]);
 }
 
 function Coluna({
@@ -243,7 +213,7 @@ export function TimePicker({
 }: TimePickerProps) {
   const [aberto, setAberto] = React.useState(false);
   const raiz = React.useRef<HTMLDivElement>(null);
-  const { gatilho, painel, acima, aDireita } = usarPosicao(aberto);
+  const { gatilho, painel, acima, aDireita } = usePosicao(aberto);
   const id = React.useId().replace(/:/g, "");
   const zona = fuso ?? fusoLocal();
 
@@ -284,15 +254,13 @@ export function TimePicker({
       </button>
 
       {aberto ? (
-        <div
+        <PainelFlutuante
           ref={painel}
           role="dialog"
           aria-label={rotulo}
-          className={cn(
-            "absolute z-popover flex w-max flex-col rounded-lg border border-overlay-border bg-overlay-bg shadow-lg",
-            acima ? "bottom-full mb-1" : "top-full mt-1",
-            aDireita ? "right-0" : "left-0",
-          )}
+          acima={acima}
+          aDireita={aDireita}
+          className="flex w-max flex-col"
         >
           <div className="flex gap-1 p-2">
             <Coluna rotulo={rotulos.horas} valores={lista(24, 1)} atual={partes.hora} aoEscolher={(h) => escolher({ hora: h })} />
@@ -321,7 +289,7 @@ export function TimePicker({
             }}
             aoLimpar={() => aoMudar(null)}
           />
-        </div>
+        </PainelFlutuante>
       ) : null}
     </div>
   );
@@ -369,7 +337,7 @@ export function DateTimePicker({
 }: DateTimePickerProps) {
   const [aberto, setAberto] = React.useState(false);
   const raiz = React.useRef<HTMLDivElement>(null);
-  const { gatilho, painel, acima, aDireita } = usarPosicao(aberto);
+  const { gatilho, painel, acima, aDireita } = usePosicao(aberto);
   const id = React.useId().replace(/:/g, "");
   const zona = fuso ?? fusoLocal();
 
@@ -423,15 +391,13 @@ export function DateTimePicker({
       </button>
 
       {aberto ? (
-        <div
+        <PainelFlutuante
           ref={painel}
           role="dialog"
           aria-label={rotulo}
-          className={cn(
-            "absolute z-popover flex w-max flex-col rounded-lg border border-overlay-border bg-overlay-bg shadow-lg",
-            acima ? "bottom-full mb-1" : "top-full mt-1",
-            aDireita ? "right-0" : "left-0",
-          )}
+          acima={acima}
+          aDireita={aDireita}
+          className="flex w-max flex-col"
         >
           <div className="flex items-start gap-2 p-3">
             <CalendarioDeDia
@@ -474,7 +440,7 @@ export function DateTimePicker({
             aoAgora={() => aoMudar(new Date())}
             aoLimpar={() => aoMudar(null)}
           />
-        </div>
+        </PainelFlutuante>
       ) : null}
     </div>
   );

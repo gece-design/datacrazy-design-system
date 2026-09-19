@@ -1521,6 +1521,27 @@
       "motion": null,
       "states": {},
       "_states_doc": "Leitura: nenhum estado. Exportado do arquivo; nunca redesenhar."
+    },
+    {
+      "name": "Popover",
+      "family": "overlay",
+      "figmaNode": null,
+      "batch": 5,
+      "variants": [
+        "absoluto",
+        "fixo"
+      ],
+      "_variants_doc": "Casca extraída no lote B5 da auditoria de consistência; sem desenho próprio (derivação do Select aberto, 2026-09-04). Select Menu do arquivo (544:81) não reconciliado.",
+      "tokens": [
+        "overlay-bg",
+        "overlay-border",
+        "shadow-lg",
+        "z-index/popover",
+        "radius/lg"
+      ],
+      "motion": null,
+      "states": {},
+      "_states_doc": "Sem estado próprio: abre e fecha por quem usa (Select, TimePicker, DatePicker, Tag). Movimento de entrada/saída entra em B7 com precedente Modal/Tooltip."
     }
   ]
 }

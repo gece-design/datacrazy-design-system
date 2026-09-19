@@ -4,6 +4,9 @@ import * as React from "react";
 import { CalendarBlank, CaretDown, CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { usePosicao } from "@/lib/use-posicao";
+import { useCliqueFora } from "@/lib/use-clique-fora";
+import { PainelFlutuante } from "@/components/ui/popover";
 
 import { foco, focoInterno, desabilitado } from "@/lib/estados";
 /* ---------------------------------------------------------------------------
@@ -21,11 +24,6 @@ import { foco, focoInterno, desabilitado } from "@/lib/estados";
    ele ainda não existe (roadmap, lote de overlays). Quando existir, o painel
    passa a ser filho dele e este arquivo perde o posicionamento e o clique-fora.
 --------------------------------------------------------------------------- */
-
-/** useLayoutEffect avisa no console quando o componente é renderizado no
- *  servidor. A medição só acontece no cliente, então o hook cai para useEffect
- *  no SSR em vez de gerar ruído. */
-const useEfeitoDeLayout = typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
 
 export type IntervaloDeDatas = { inicio: Date | null; fim: Date | null };
 
@@ -317,8 +315,8 @@ export function DateRangePicker({
   const [aberto, setAberto] = React.useState(false);
   const [rascunho, setRascunho] = React.useState<IntervaloDeDatas>(valor);
   const [previa, setPrevia] = React.useState<Date | null>(null);
-  const [acima, setAcima] = React.useState(false);
-  const [aDireita, setADireita] = React.useState(false);
+  // lado e alinhamento medidos (lib/use-posicao.ts), com os refs do gatilho e do painel
+  const { gatilho, painel, acima, aDireita } = usePosicao(aberto);
 
   const hoje = React.useMemo(() => {
     const d = new Date();
@@ -329,8 +327,6 @@ export function DateRangePicker({
   const [foco, setFoco] = React.useState(() => valor.inicio ?? hoje);
 
   const raiz = React.useRef<HTMLDivElement>(null);
-  const gatilho = React.useRef<HTMLButtonElement>(null);
-  const painel = React.useRef<HTMLDivElement>(null);
   const grades = React.useRef<HTMLDivElement>(null);
   const moverFoco = React.useRef(false);
 
@@ -381,45 +377,19 @@ export function DateRangePicker({
     if (devolverFoco) gatilho.current?.focus();
   }, []);
 
-  // Clique fora e Escape. O painel é uma camada: sai por onde entrou.
+  // Clique fora (lib/use-clique-fora.ts) e Escape. O painel é uma camada: sai por onde entrou.
+  useCliqueFora(aberto, [raiz], () => fechar(false));
   React.useEffect(() => {
     if (!aberto) return;
-    function noPonteiro(e: PointerEvent) {
-      if (!raiz.current?.contains(e.target as Node)) fechar(false);
-    }
     function naTecla(e: KeyboardEvent) {
       if (e.key === "Escape") {
         e.stopPropagation();
         fechar();
       }
     }
-    document.addEventListener("pointerdown", noPonteiro, true);
     document.addEventListener("keydown", naTecla);
-    return () => {
-      document.removeEventListener("pointerdown", noPonteiro, true);
-      document.removeEventListener("keydown", naTecla);
-    };
+    return () => document.removeEventListener("keydown", naTecla);
   }, [aberto, fechar]);
-
-  // Lado em que o painel abre. Medido, não presumido: com zoom acima de 100%
-  // o viewport encolhe em CSS px e o painel de ~660px deixa de caber (E3).
-  useEfeitoDeLayout(() => {
-    if (!aberto) return;
-    function medir() {
-      const g = gatilho.current?.getBoundingClientRect();
-      const p = painel.current?.getBoundingClientRect();
-      if (!g || !p) return;
-      setAcima(g.bottom + p.height + 8 > window.innerHeight && g.top - p.height - 8 > 0);
-      setADireita(g.left + p.width + 8 > window.innerWidth);
-    }
-    medir();
-    window.addEventListener("resize", medir);
-    window.addEventListener("scroll", medir, true);
-    return () => {
-      window.removeEventListener("resize", medir);
-      window.removeEventListener("scroll", medir, true);
-    };
-  }, [aberto]);
 
   // Foco itinerante: um dia por vez carrega tabIndex 0, e o teclado o move.
   React.useEffect(() => {
@@ -551,17 +521,9 @@ export function DateRangePicker({
         </span>
       </button>
 
+      {/* casca de painel flutuante (D22): overlay-* e shadow-lg, como os outros — decisão do humano, gate B4 */}
       {aberto && (
-        <div
-          ref={painel}
-          role="dialog"
-          aria-label={rotuloDoGatilho}
-          className={cn(
-            "absolute z-popover mt-1 flex w-max rounded-lg border border-border bg-card shadow-float",
-            acima ? "bottom-full mb-1 mt-0" : "top-full",
-            aDireita ? "right-0" : "left-0"
-          )}
-        >
+        <PainelFlutuante ref={painel} role="dialog" aria-label={rotuloDoGatilho} acima={acima} aDireita={aDireita} className="flex w-max">
           {atalhos.length > 0 && (
             <div className="hidden w-40 shrink-0 border-r border-border p-3 sm:block">
               <p className="px-2 pb-1 text-h4 text-foreground">{rotulos.atalhos}</p>
@@ -670,7 +632,7 @@ export function DateRangePicker({
               </Button>
             </div>
           </div>
-        </div>
+        </PainelFlutuante>
       )}
     </div>
   );

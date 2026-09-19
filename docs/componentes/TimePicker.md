@@ -76,8 +76,7 @@ decisão, não buraco a preencher.
 
 ## Composição
 
-Usa: `caixaDeCampo` do [Input](Input.md) · `CalendarioDeDia` do Date Picker ·
-`Button` no rodapé · `lib/fusos.ts` ·
+Usa: [Button](Button.md) (gatilho e rodapé), `CalendarioDeDia` do [DatePicker](DatePicker.md), `caixaDeCampo` do [Input](Input.md), `PainelFlutuante` do [Popover](Popover.md) nos dois painéis, `usePosicao` e `useCliqueFora` (lib), `lib/fusos.ts` ·
 Usado por: agenda de atendimento (tela ainda não construída)
 
 ## Exemplo de uso

@@ -36,6 +36,7 @@ markdown é a vista dele.
 | [LogoDatacrazy.md](LogoDatacrazy.md) | Símbolo e logotipo do DataCrazy (`LogoDataCrazy` no código), em `currentColor` para acompanhar o tema. É a |
 | [Modal.md](Modal.md) | Pedir uma decisão bloqueando a tela até ela ser tomada. |
 | [Pagination.md](Pagination.md) | Navegar entre as páginas de uma lista longa. |
+| [Popover.md](Popover.md) | A casca de todo painel flutuante do DS — lista do Select, calendário, hora, |
 | [RadioGroup.md](RadioGroup.md) | Escolher exatamente uma opção entre poucas, todas visíveis ao mesmo tempo. |
 | [Rating.md](Rating.md) | Avaliação de 0 a 10 estrelas (o máximo é prop): editável por clique e setas, |
 | [SegmentedControl.md](SegmentedControl.md) | Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualização. |

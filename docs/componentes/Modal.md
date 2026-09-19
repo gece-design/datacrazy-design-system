@@ -42,6 +42,13 @@ Tema não virou prop: é token, e um componente atende os dois temas.
 | `aoFechar` | `() => void` | — | não | X, Escape e clique no fundo chamam. Sem ele, nada fecha por dentro — quem abriu decide. |
 | `fecharNoFundo` | `boolean` | `variant !== "destructive"` | não | Clique no fundo fecha. |
 
+`Scrim` — o fundo da camada, exportado daqui para o Drawer e a tela de senha.
+
+| Prop | Tipo | Padrão | Obrigatória | Descrição |
+|------|------|--------|-------------|-----------|
+| `saindo` | `boolean` | `false` | não | Troca a entrada (`fade-in-fast`) pela saída (`fade-out`) enquanto a camada some. |
+| demais | `HTMLAttributes<HTMLDivElement>` | — | não | `onClick` (clique no fundo fecha), `className`. |
+
 ## Variantes
 
 | Variante | Quando usar |
@@ -72,8 +79,7 @@ decisão, não buraco a preencher.
 
 ## Composição
 
-Usa: `BotaoFechar` do [Button](Button.md) (o X, 28px) e `lib/use-camada.ts` (foco preso, Escape, rolagem travada).
-nos exemplos, [Button](../../components/ui/button.tsx) e [Input](Input.md) ·
+Usa: `BotaoFechar` do [Button](Button.md) (o X, 28px), `lib/use-camada.ts` (foco preso, Escape, rolagem travada) e, nos exemplos, [Button](Button.md) e [Input](Input.md). Exporta o `Scrim` — o fundo de toda camada bloqueante (`overlay-scrim` com `opacity.scrim`, 40%), usado também pelo [Drawer](Drawer.md) e pela tela de senha ·
 Usado por: —
 
 ## Exemplo de uso

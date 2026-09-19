@@ -343,9 +343,9 @@
       "gravidade": "alta",
       "lote": "B5",
       "verificacao": "check:tokens#scrim-literal",
-      "status": "aberto",
-      "nota": "Scrim único exportado pelo Modal · token opacity.scrim (/scrim) existe desde B2; aplicação no Scrim único em B5",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "Scrim exportado do Modal (bg-overlay-scrim/scrim, opacity.scrim): Modal, Drawer e tela de senha usam. O menu do site no celular mantém o blur por decisão do humano (D3) — exceção declarada na linha",
+      "fechadoEm": "B5"
     },
     {
       "id": "AUD-020",
@@ -421,9 +421,9 @@
       "gravidade": "alta",
       "lote": "B5",
       "verificacao": "check:tokens#z-cru",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "z-dropdown (mesmo valor, 10)",
+      "fechadoEm": "B5"
     },
     {
       "id": "AUD-025",
@@ -757,9 +757,9 @@
       "gravidade": "alta",
       "lote": "B5",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "components/ui/popover.tsx + lib/use-clique-fora.ts; adoção Tag → TimePicker → Select → DatePicker",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "components/ui/popover.tsx (PainelFlutuante) + lib/use-posicao.ts + lib/use-clique-fora.ts; Select, TimePicker (2), DatePicker e seletor de tags usam. A lista de notificações da página do Header fica para B8",
+      "fechadoEm": "B5"
     },
     {
       "id": "AUD-044",
@@ -772,9 +772,9 @@
       "gravidade": "media",
       "lote": "B5",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "zero diff: overlay-bg/border são alias de card/border",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "overlay-* e shadow-lg pela casca (D22), decisão do humano em 2026-09-19",
+      "fechadoEm": "B5"
     },
     {
       "id": "AUD-045",
@@ -802,9 +802,9 @@
       "gravidade": "alta",
       "lote": "B5",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "conferir se há sessão editando o Drawer antes de abrir",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "Drawer usa useCamada (pilha com o Modal, barra de rolagem compensada) e useSaida/useMontado de lib/use-saida.ts",
+      "fechadoEm": "B5"
     },
     {
       "id": "AUD-047",
@@ -818,9 +818,9 @@
       "gravidade": "media",
       "lote": "B5",
       "verificacao": "check:tokens#scrim-literal",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "tela de senha usa o Scrim; a moldura mantém o blur por decisão (exceção declarada)",
+      "fechadoEm": "B5"
     },
     {
       "id": "AUD-048",

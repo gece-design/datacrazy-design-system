@@ -66,11 +66,8 @@ Diff de pixels não medido.
 
 ## Composição
 
-Usa: [Button](Button.md) (gatilho `tertiary`, setas `ghost`, rodapé) e
-`<select>` nativo para mês e ano (mesma escolha do [Telefone](Telefone.md)) ·
-Usado por: [TimePicker](TimePicker.md) (`CalendarioDeDia`), [Header](Header.md)
-pelos exemplos. O painel usa `border`/`card`/`shadow-float` e migra para
-`overlay-*` no lote B5 (D22, AUD-041).
+Usa: [Button](Button.md) (gatilho `tertiary`, setas `ghost`, rodapé), `<select>` nativo para mês e ano (mesma escolha do [Telefone](Telefone.md)), `PainelFlutuante` do [Popover](Popover.md) no painel — `overlay-*` e `shadow-lg` (D22, decisão do humano em 2026-09-19; antes era `border`/`card`/`shadow-float`), `usePosicao` e `useCliqueFora` (lib) ·
+Usado por: [TimePicker](TimePicker.md) (`CalendarioDeDia`), [Header](Header.md) pelos exemplos
 
 ## Exemplo de uso
 

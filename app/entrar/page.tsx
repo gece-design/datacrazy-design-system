@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ModalPainel } from "@/components/ui/modal";
+import { ModalPainel, Scrim } from "@/components/ui/modal";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -40,7 +40,7 @@ export default function Entrar() {
 
   return (
     <div className="fixed inset-0 z-modal flex items-center justify-center p-4">
-      <div aria-hidden="true" className="absolute inset-0 bg-overlay-scrim/40 motion-safe:animate-fade-in-fast" />
+      <Scrim />
       <ModalPainel
         role="dialog"
         aria-modal="true"

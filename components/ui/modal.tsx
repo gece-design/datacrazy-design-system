@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { cva } from "class-variance-authority";
 import { Warning } from "@phosphor-icons/react";
 import { useCamada } from "@/lib/use-camada";
+import { useMontado } from "@/lib/use-saida";
 import { cn } from "@/lib/utils";
 
 import { foco } from "@/lib/estados";
@@ -126,21 +127,35 @@ export interface ModalProps extends ModalPainelProps {
  * 40% — a mesma opacidade do Drawer, que o arquivo não define. Para o foco
  * abrir num botão (o Cancelar do destrutivo), ponha `autoFocus` nele.
  */
+/**
+ * O fundo de toda camada bloqueante: `overlay-scrim` com a opacidade `scrim`
+ * da escala (40%, derivação do Drawer, ADR-013). `saindo` troca a entrada
+ * pela saída. Modal, Drawer e a tela de senha usam — era uma cópia em cada.
+ */
+export function Scrim({ saindo, className, ...props }: React.HTMLAttributes<HTMLDivElement> & { saindo?: boolean }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "absolute inset-0 bg-overlay-scrim/scrim",
+        saindo ? "motion-safe:animate-fade-out" : "motion-safe:animate-fade-in-fast",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
 export function Modal({ aberto, aoFechar, fecharNoFundo, variant = "default", className, ...props }: ModalProps) {
   const painel = React.useRef<HTMLDivElement>(null);
-  const [montado, setMontado] = React.useState(false);
-  React.useEffect(() => setMontado(true), []);
+  const montado = useMontado();
   useCamada(montado && aberto, painel, aoFechar);
 
   if (!montado || !aberto) return null;
   const fundoFecha = fecharNoFundo ?? variant !== "destructive";
   return createPortal(
     <div className="fixed inset-0 z-modal flex items-center justify-center p-4">
-      <div
-        aria-hidden="true"
-        onClick={fundoFecha ? aoFechar : undefined}
-        className="absolute inset-0 bg-overlay-scrim/40 motion-safe:animate-fade-in-fast"
-      />
+      <Scrim onClick={fundoFecha ? aoFechar : undefined} />
       <ModalPainel
         ref={painel}
         role="dialog"
