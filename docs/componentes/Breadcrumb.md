@@ -56,7 +56,8 @@ decisão, não buraco a preencher.
 
 ## Composição
 
-Usa: `inicialDe` (Avatar) · Usado por: Header (por encaixe)
+Usa: [Avatar](Avatar.md) em `size="xs"` no nível com avatar (era um disco próprio de 20px, lote B6); `CaretRight` desenhado em SVG como separador ·
+Usado por: [Header](Header.md) (`trilha`)
 
 ## Exemplo de uso
 

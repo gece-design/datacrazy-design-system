@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
 
 /**
  * KPI Card — espelho do component set "KPI Card" do Figma (node 269:53).
@@ -67,18 +68,18 @@ export type Tendencia = keyof typeof glifos;
  * menor: pela regra D14 o Figma desenha o traço POR DENTRO e o CSS soma por
  * fora, então traço + padding tem que fechar 16. Daí 1+15 no Fill e 2+14 no
  * Outline. As alturas caem em 139/140 e 172, como no arquivo. */
-const cardVariants = cva(
-  "flex w-full min-w-0 flex-col items-start overflow-hidden rounded-md border-card bg-transparent",
-  {
-    variants: {
-      variant: {
-        fill: "gap-3 border bg-card p-[15px]",
-        outline: "gap-4 border-2 p-[14px]",
-      },
+/* A casca é o Card do DS (lote B6): raio, traço `card` e fundo vêm de lá; aqui
+ * só o que o KPI muda — largura cheia, o recuo por variante (D14) e, no
+ * Outline, o traço de 2 sem fundo. */
+const cardVariants = cva("w-full", {
+  variants: {
+    variant: {
+      fill: "gap-3 p-[15px]",
+      outline: "gap-4 border-2 bg-transparent p-[14px]",
     },
-    defaultVariants: { variant: "fill" },
   },
-);
+  defaultVariants: { variant: "fill" },
+});
 
 /* O slot deixou de ser um quadrado de 28 com glifo posicionado por cima: agora
  * abraça o conteúdo. O padding muda por glifo — 6 em volta da seta de 16, e
@@ -136,7 +137,7 @@ export const KpiCard = React.forwardRef<HTMLDivElement, KpiCardProps>(
     { className, variant, title, value, caption, trend = "neutral", icon, delta, footnote, hint, ...props },
     ref,
   ) => (
-    <div ref={ref} className={cn(cardVariants({ variant }), className)} {...props}>
+    <Card ref={ref} className={cn(cardVariants({ variant }), className)} {...props}>
       {variant === "outline" ? (
         <>
           {/* Rótulo e número andam colados: no arquivo eles são um bloco só,
@@ -192,7 +193,7 @@ export const KpiCard = React.forwardRef<HTMLDivElement, KpiCardProps>(
           {caption ? <div className={chipFill}>{caption}</div> : null}
         </>
       )}
-    </div>
+    </Card>
   ),
 );
 KpiCard.displayName = "KpiCard";

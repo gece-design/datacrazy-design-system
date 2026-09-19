@@ -72,8 +72,8 @@ interativo e aí ganha `focus-visible` (I4) e alvo de toque (I15).
 
 ## Composição
 
-Usa: nenhum componente do DS — é primitivo ·
-Usado por: faixa de métricas do dashboard (tela ainda não construída)
+Usa: [Card](Card.md) como casca (raio, traço `card` e fundo; lote B6) — o KPI só muda largura, recuo por variante (D14) e, no Outline, o traço de 2 sem fundo; glifos exportados do arquivo ·
+Usado por: home do site (galeria) e dashboard (tela ainda não construída)
 
 ## Exemplo de uso
 

@@ -68,7 +68,7 @@ decisão, não buraco a preencher.
 
 ## Composição
 
-Usa: `PainelFlutuante` do [Popover](Popover.md) na lista aberta e `useCliqueFora` (lib) para fechar no clique fora; `SelectTrigger` é o gatilho, também usado pelo Card.
+Usa: `PainelFlutuante` do [Popover](Popover.md) na lista aberta, `useCliqueFora` (lib) para fechar no clique fora e, no `size="field"`, a própria `caixaDeCampo` de `lib/campo.ts` — a caixa do [Input](Input.md), com o traço + anel interno no foco em vez do outline do botão. `SelectTrigger` é o gatilho, também usado pelo Card ·
 Usado por: [Card](Card.md) e [DataTable](DataTable.md)
 
 ## Exemplo de uso

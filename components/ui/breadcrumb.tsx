@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import type { Icon } from "@phosphor-icons/react";
-import { inicialDe } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
 import { foco } from "@/lib/estados";
@@ -64,20 +64,13 @@ function Nivel({ item, atual, Link }: { item: ItemBreadcrumb; atual: boolean; Li
   const conteudo = (
     <>
       {item.avatar ? (
-        <span
+        <Avatar
+          size="xs"
+          nome={item.rotulo}
+          src={item.avatar.src}
           aria-hidden="true"
-          className={cn(
-            "grid size-5 shrink-0 place-items-center overflow-hidden rounded-full text-label-sm",
-            item.avatar.destaque ? "bg-accent text-primary" : "bg-card text-muted-foreground",
-          )}
-        >
-          {item.avatar.src ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={item.avatar.src} alt="" className="size-full object-cover" />
-          ) : (
-            inicialDe(item.rotulo)
-          )}
-        </span>
+          className={cn("shrink-0", item.avatar.destaque && "bg-accent text-primary")}
+        />
       ) : Icone ? (
         <Icone size={14} weight="regular" aria-hidden="true" className="shrink-0" />
       ) : null}

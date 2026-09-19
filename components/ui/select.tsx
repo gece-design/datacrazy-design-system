@@ -4,6 +4,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CaretDown } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { caixaDeCampo } from "@/lib/campo";
 import { useCliqueFora } from "@/lib/use-clique-fora";
 import { PainelFlutuante } from "@/components/ui/popover";
 
@@ -33,8 +34,13 @@ const triggerVariants = cva(
         sm: "h-[29px] px-3 py-1.5",
         /** Formulário (node 544:129): a caixa de 36px do Input, com o caret à
          *  direita. D14: traço de 1 + recuo de 11 = os 12 do arquivo. */
-        field:
-          "h-9 w-full justify-between border-input-border bg-input-bg px-[11px] text-body-md text-input-text hover:border-input-border-hover hover:text-input-text data-[aberto=true]:border-input-border-focus data-[aberto=true]:text-input-text data-[vazio=true]:text-input-placeholder",
+        // A própria caixa do Input (lib/campo.ts), com o que o gatilho acrescenta:
+        // caret à direita e, no foco, o traço + anel interno do campo em vez do
+        // outline do botão — é campo de formulário, e é assim que os vizinhos ficam.
+        field: cn(
+          caixaDeCampo(),
+          "gap-1 justify-between text-body-md text-input-text hover:text-input-text focus-visible:outline-none data-[aberto=true]:border-input-border-focus data-[aberto=true]:text-input-text data-[vazio=true]:text-input-placeholder",
+        ),
       },
     },
     defaultVariants: { size: "md" },

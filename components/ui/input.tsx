@@ -3,6 +3,11 @@
 import * as React from "react";
 import { Check, Copy, PencilSimple, type Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { caixaDeCampo, blocoDeCampo, rotuloDoBloco, rotuloDeCampo, caixaNoCartao, erroDeCampo } from "@/lib/campo";
+
+// As classes do campo moram em lib/campo.ts (D21) e seguem exportadas daqui
+// por compatibilidade com quem já importava do Input.
+export { caixaDeCampo, blocoDeCampo, rotuloDeCampo, caixaNoCartao } from "@/lib/campo";
 import { PERMANENCIA } from "@/lib/movimento";
 
 import { foco, desabilitado } from "@/lib/estados";
@@ -16,20 +21,6 @@ import { foco, desabilitado } from "@/lib/estados";
  * O foco do arquivo é um traço de 2px. Aqui é o traço de 1px mais um anel
  * interno de 1px: soma os mesmos 2px sem empurrar o conteúdo.
  */
-
-/** A caixa de 36px. Exportada porque o Rating usa a mesma. */
-export function caixaDeCampo({ erro, disabled }: { erro?: boolean; disabled?: boolean } = {}) {
-  return cn(
-    // D14: o arquivo dá 12px de recuo com o traço por dentro — 1 + 11 aqui.
-    "flex h-9 w-full items-center gap-2 overflow-hidden rounded-md border border-input-border bg-input-bg px-[11px] transition-colors",
-    // hover não troca a borda de quem está em foco
-    "[&:hover:not(:focus-within)]:border-input-border-hover",
-    "focus-within:border-input-border-focus focus-within:ring-1 focus-within:ring-inset focus-within:ring-input-border-focus",
-    erro &&
-      "border-input-border-error [&:hover:not(:focus-within)]:border-input-border-error focus-within:border-input-border-error focus-within:ring-input-border-error",
-    disabled && "bg-input-bg-disabled [&:hover:not(:focus-within)]:border-input-border",
-  );
-}
 
 /** O `<input>` do campo, para as ações que agem sobre o valor (copiar). */
 const CampoAtual = React.createContext<React.RefObject<HTMLInputElement | null> | null>(null);
@@ -81,7 +72,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ) : null}
         </div>
         {erro ? (
-          <p id={erroId} className="text-caption text-destructive">
+          <p id={erroId} className={erroDeCampo}>
             {erro}
           </p>
         ) : null}
@@ -198,17 +189,6 @@ export function AcaoCopiar({
  * Exportado porque o Rating usa o mesmo bloco: os dois vivem lado a lado na
  * mesma grade e não podem contar histórias diferentes.
  */
-export function blocoDeCampo({ realce }: { realce?: boolean } = {}) {
-  return cn(
-    // gap-0.5: no cartão o rótulo é título do bloco, não etiqueta solta — os
-    // dois textos andam juntos (decisão do humano, 2026-09-18)
-    "group relative flex min-w-0 flex-col gap-0.5 rounded-lg bg-background/50 p-3 transition-colors",
-    // só quem vira campo no clique acende: um campo que já está aberto
-    // responde pela própria caixa, e dois realces na mesma peça brigam
-    realce && "hover:bg-accent",
-  );
-}
-
 /** Campo que já é campo (Select, Telefone, contador) dentro do mesmo cartão.
  *  O rótulo vem daqui, em bold; o filho é só a caixa. */
 export function CartaoDeCampo({
@@ -240,21 +220,6 @@ export function CartaoDeCampo({
       {caixa}
     </div>
   );
-}
-
-/** O rótulo do cartão. Bold por decisão do humano (2026-09-18): no cartão ele
- *  é título do bloco, não etiqueta de campo. */
-const rotuloDoBloco = "text-label-md font-semibold text-input-label";
-
-/** No cartão, a caixa do campo sangra 8px para os lados. O rótulo fica nos
- *  12px de respiro do cartão — é ele que alinha a grade — e a caixa recupera a
- *  largura que o cartão tirou, senão um telefone com máscara trunca. */
-export const caixaNoCartao = "-mx-2 w-auto";
-
-/** O rótulo certo para cada casca. Exportado para quem monta a própria caixa
- *  (Telefone, Select de formulário) não repetir a regra. */
-export function rotuloDeCampo(cartao?: boolean) {
-  return cartao ? rotuloDoBloco : "text-label-md text-input-label";
 }
 
 export interface CampoEditavelProps {

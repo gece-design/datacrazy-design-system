@@ -17,6 +17,8 @@ const avatarVariants = cva(
   {
     variants: {
       size: {
+        // 20px, sem anel: o avatar do nível da trilha (Breadcrumb). Cor por className.
+        xs: "size-5 bg-card text-label-sm text-muted-foreground",
         sm: "size-8 border-4 border-card bg-accent text-label-md",
         md: "size-12 border-[6px] border-avatar-md-anel bg-avatar-md-fundo text-h3",
         // 29,25/36 não é degrau da escala tipográfica: é o valor do arquivo.

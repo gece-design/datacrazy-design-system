@@ -53,7 +53,7 @@ contexto do Input) e vira um check em `success` por 1,5s, anunciado por
 
 ### Helpers de classe
 
-`caixaDeCampo({ erro?, disabled? })`, `blocoDeCampo({ realce? })`, `rotuloDeCampo(cartao?)` e `caixaNoCartao` são as classes do campo, exportadas para `InputTelefone`, `TimePicker`, `Rating` e `Select size="field"` desenharem a mesma caixa. Migram para `lib/campo.ts` no lote B6 (regra D21).
+`caixaDeCampo({ erro?, disabled? })`, `blocoDeCampo({ realce? })`, `rotuloDeCampo(cartao?)`, `caixaNoCartao` e `erroDeCampo` são as classes do campo. Moram em `lib/campo.ts` (regra D21, lote B6) — `InputTelefone`, `TimePicker`, `Rating` e `Select size="field"` importam de lá — e o Input as re-exporta por compatibilidade.
 
 ### `Rating`
 

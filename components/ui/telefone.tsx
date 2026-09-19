@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { CaretDown } from "@phosphor-icons/react";
-import { blocoDeCampo, caixaDeCampo, caixaNoCartao, rotuloDeCampo } from "@/components/ui/input";
+import { blocoDeCampo, caixaDeCampo, caixaNoCartao, rotuloDeCampo, erroDeCampo } from "@/lib/campo";
 import { cn } from "@/lib/utils";
 
 /**
@@ -133,7 +133,7 @@ export function InputTelefone({
         {acoes ? <div className="flex shrink-0 items-center gap-1.5">{acoes}</div> : null}
       </div>
       {erro ? (
-        <p id={erroId} className="text-caption text-destructive">
+        <p id={erroId} className={erroDeCampo}>
           {erro}
         </p>
       ) : null}

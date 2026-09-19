@@ -22,7 +22,7 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 |------|------|--------|-------------|-----------|
 | `nome` | `string` | — | sim | Dá a inicial (primeira letra) e o `aria-label`. |
 | `src` | `string` | — | não | Foto. Sem ela, a inicial. |
-| `size` | `"sm" \| "md" \| "lg"` | `"sm"` | não | 32, 48 ou 90px. |
+| `size` | `"xs" \| "sm" \| "md" \| "lg"` | `"sm"` | não | 32, 48 ou 90px. |
 
 ## Variantes
 
@@ -51,7 +51,7 @@ Avatar é leitura. Se clicar abre algo, o clique vai no elemento em volta.
 ## Composição
 
 Usa: nenhum componente do DS · Exporta também `inicialDe(nome)`, a inicial que o disco mostra ·
-Usado por: [Drawer](Drawer.md) (perfil, empresa mãe, nó da hierarquia) e [Breadcrumb](Breadcrumb.md) (`inicialDe`)
+Usado por: [Drawer](Drawer.md) (perfil, empresa mãe, nó da hierarquia) e [Breadcrumb](Breadcrumb.md) (`size="xs"` no nível com avatar)
 
 ## Exemplo de uso
 

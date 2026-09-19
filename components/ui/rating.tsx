@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Star } from "@phosphor-icons/react";
-import { blocoDeCampo } from "@/components/ui/input";
+import { blocoDeCampo } from "@/lib/campo";
 import { cn } from "@/lib/utils";
 
 /**

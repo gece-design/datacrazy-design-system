@@ -3,7 +3,7 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { Buildings, Check, MagnifyingGlass, Plus, User } from "@phosphor-icons/react";
-import { caixaDeCampo } from "@/components/ui/input";
+import { caixaDeCampo } from "@/lib/campo";
 import { Tabs } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useCliqueFora } from "@/lib/use-clique-fora";

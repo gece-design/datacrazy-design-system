@@ -4,7 +4,7 @@ import * as React from "react";
 import { CalendarBlank, Clock, GlobeHemisphereWest } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { CalendarioDeDia, type RotulosDoCalendario } from "@/components/ui/date-picker";
-import { caixaDeCampo } from "@/components/ui/input";
+import { caixaDeCampo, rotuloDeCampo } from "@/lib/campo";
 import {
   formatarNoFuso,
   fusoLocal,
@@ -229,7 +229,7 @@ export function TimePicker({
 
   return (
     <div ref={raiz} className={cn("relative flex min-w-0 flex-col gap-1", className)}>
-      <label htmlFor={`hora-${id}`} className="text-label-md text-input-label">
+      <label htmlFor={`hora-${id}`} className={rotuloDeCampo()}>
         {rotulo}
       </label>
       <button
@@ -363,7 +363,7 @@ export function DateTimePicker({
 
   return (
     <div ref={raiz} className={cn("relative flex min-w-0 flex-col gap-1", className)}>
-      <label htmlFor={`datahora-${id}`} className="text-label-md text-input-label">
+      <label htmlFor={`datahora-${id}`} className={rotuloDeCampo()}>
         {rotulo}
       </label>
       <button

@@ -721,9 +721,9 @@
       "gravidade": "media",
       "lote": "B6",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "<Card className=\"p-[15px] gap-3\">",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "KpiCard renderiza <Card>; o cva só carrega largura, recuo por variante (D14) e o traço de 2 do Outline. Registry: kpi-card depende de card",
+      "fechadoEm": "B6"
     },
     {
       "id": "AUD-042",
@@ -787,9 +787,9 @@
       "gravidade": "media",
       "lote": "B6",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "Telefone e TimePicker chamam a função",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "field = caixaDeCampo() de lib/campo + o que o gatilho acrescenta; no foco ganha o traço + anel interno do campo em vez do outline do botão",
+      "fechadoEm": "B6"
     },
     {
       "id": "AUD-046",
@@ -866,9 +866,9 @@
       "gravidade": "media",
       "lote": "B6",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "Avatar ganha size xs (aditivo); Sidebar usa token próprio, avaliar",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "Breadcrumb usa <Avatar size=\"xs\"> (20px, novo degrau). O disco da Sidebar fica: usa o token sidebar-avatar com shadow-highlight, outra peça medida",
+      "fechadoEm": "B6"
     },
     {
       "id": "AUD-051",
@@ -899,9 +899,9 @@
       "gravidade": "media",
       "lote": "B6",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "lib/campo.ts",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "rotuloDeCampo() nos dois rótulos; erroDeCampo (lib/campo) no Input e no Telefone",
+      "fechadoEm": "B6"
     },
     {
       "id": "AUD-053",

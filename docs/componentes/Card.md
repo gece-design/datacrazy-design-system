@@ -95,8 +95,8 @@ A casca e os três conteúdos são leitura. O único elemento interativo é o
 
 ## Composição
 
-Usa: nenhum componente do DS ·
-Usado por: dashboard (tela ainda não construída)
+Usa: `SelectTrigger` do [Select](Select.md) no cabeçalho ·
+Usado por: [KpiCard](KpiCard.md) (a casca, desde o lote B6) e as páginas do site
 
 ## Exemplo de uso
 
