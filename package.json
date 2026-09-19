@@ -20,7 +20,7 @@
     "check:regressao": "node scripts/regressao-visual.mjs check",
     "check:sidebar": "node scripts/medir-sidebar.mjs claro && node scripts/medir-sidebar.mjs escuro",
     "check": "npm run typecheck && npm run check:temas && npm run check:tokens && npm run check:rotas && npm run check:doc-codigo && npm run check:docs",
-    "check:completo": "npm run check && npm run check:paginas && npm run check:exemplos",
+    "check:completo": "npm run check && npm run check:paginas && npm run check:exemplos && npm run check:regressao -- test-results/regressao/base",
     "docs:index": "node .kfe-kit/scripts/kfe-docs.mjs index",
     "consistencia": "node scripts/consistencia.mjs"
   },

@@ -304,9 +304,9 @@
       "gravidade": "baixa",
       "lote": "B9",
       "verificacao": "check:tokens#icone-fora-da-escala",
-      "status": "aberto",
-      "nota": "esperado: aceito com nota D3",
-      "fechadoEm": null
+      "status": "aceito",
+      "nota": "ADR-004 (moldura ≠ produto)",
+      "fechadoEm": "B9"
     },
     {
       "id": "AUD-018",
@@ -375,9 +375,9 @@
       "gravidade": "baixa",
       "lote": "B9",
       "verificacao": "check:tokens#sombra-arbitraria",
-      "status": "aberto",
-      "nota": "conferir se a da página de elevação é exemplo de 'não faça'",
-      "fechadoEm": null
+      "status": "aceito",
+      "nota": "ADR-004; a da página de elevação é o exemplo de 'não faça' e fica",
+      "fechadoEm": "B9"
     },
     {
       "id": "AUD-022",
@@ -406,9 +406,9 @@
       "gravidade": "baixa",
       "lote": "B9",
       "verificacao": "check:tokens#tipografia-arbitraria",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "aceito",
+      "nota": "ADR-004: escala de leitura própria da moldura (D3)",
+      "fechadoEm": "B9"
     },
     {
       "id": "AUD-024",
@@ -917,9 +917,9 @@
       "gravidade": "baixa",
       "lote": "B9",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "esperado: aceito com nota D3",
-      "fechadoEm": null
+      "status": "aceito",
+      "nota": "ADR-004; comportamento copiado é dívida conhecida, registrada em kfe-retro.md",
+      "fechadoEm": "B9"
     },
     {
       "id": "AUD-054",
@@ -933,11 +933,11 @@
       ],
       "regra": "lista negativa",
       "gravidade": "baixa",
-      "lote": "B9",
+      "lote": "figma",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "adiado",
+      "nota": "a marca do site e a do produto compartilham o símbolo; unificar exige decisão de marca — remedição",
+      "fechadoEm": "B9"
     },
     {
       "id": "AUD-055",
@@ -1263,9 +1263,9 @@
       "gravidade": "baixa",
       "lote": "B9",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "decidir next lint + no-restricted-syntax espelhando os checks",
-      "fechadoEm": null
+      "status": "aceito",
+      "nota": "decisão da rodada (kfe-retro.md): next lint + no-restricted-syntax espelhando o check-tokens fica para depois; CI roda tipos, checks e build",
+      "fechadoEm": "B9"
     },
     {
       "id": "AUD-075",
@@ -1278,9 +1278,9 @@
       "gravidade": "baixa",
       "lote": "B9",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "repouso coberto na Fase A; hover/foco ficam por roteiro Playwright",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "regressão do repouso em scripts/regressao-visual.mjs (70 capturas); hover/foco por roteiro Playwright nos lotes B3, B5 e B7. Golden por estado (tests/golden/) fica para a remedição",
+      "fechadoEm": "B9"
     },
     {
       "id": "AUD-076",

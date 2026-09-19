@@ -143,9 +143,34 @@ O que esse exemplo ensina: token semântico em vez de cor · `focus-visible`
 sempre · `disabled` tratado · variantes fechadas por `cva` · `cn` para
 composição · zero conhecimento de domínio.
 
+## Convenções fixadas pela auditoria de consistência (2026-09-19)
+
+Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14) ·
+`calibration.md` (D19–D24) · `adr.md` (ADR-001…024).
+
+- **Foco e disabled** vêm de `lib/estados.ts`: `foco` (outline 2px, D6), `focoAnel`
+  (contêiner que rola, D19), `focoInterno`, `focoPeer`, `focoDentro`, `desabilitado`
+  (I5: opacidade por token + cursor, eventos mantidos; hover sob `enabled:`),
+  `desabilitadoLink`. Nunca escreva o anel à mão; `<button>` sem `foco` reprova.
+- **Campo** vem de `lib/campo.ts`: `caixaDeCampo`, `blocoDeCampo`, `rotuloDeCampo`,
+  `caixaNoCartao`, `erroDeCampo`. Helper de classe mora em `lib/`, nunca exportado
+  de componente (D21: o registry deriva dependências dos imports).
+- **Movimento** vem de `lib/movimento.ts` (`DURACAO` fast 150 · base 200 · slow 280,
+  `CURVA`, `PERMANENCIA`, `reduzido()`): `duration-*`, `ease-*`, `animate-*` — nunca
+  `duration-200` nem `setTimeout(…, 200)`. Redução é global no `globals.css`.
+  Saída animada: `useSaida` (lib/use-saida.ts), estado derivado no render (D23).
+- **Camada e painel**: `useCamada` (foco preso, Escape, pilha), `Scrim` do Modal,
+  `PainelFlutuante` do Popover (`overlay-*` + `shadow-lg`, D22) com `usePosicao` e
+  `useCliqueFora`. Botão de ícone: `Button size="icon-xs|icon-sm|icon|icon-lg"`;
+  X de fechar: `BotaoFechar`. Ação de 16px em campo/célula: `AcaoCampo`.
+- **Antes de commitar**: `npm run check` (rápido) — e `npm run check:completo` com o
+  site no ar antes de fechar um lote (páginas, exemplos compilando, regressão a 0%).
+  Mudança visual só entra declarada no gate (D24). Os checks têm catraca em
+  `scripts/baseline/`: `--estrito` mostra tudo, `--atualizar-base` abaixa a base.
+
 ## Definição de pronto (todo componente)
 
-1. `lint` · `tsc --noEmit` · `build` verdes
+1. `npm run check` · `tsc --noEmit` · `build` verdes (o repo não tem lint: decisão em `kfe-retro.md`)
 2. Todos os estados: default, hover, focus-visible, active, disabled (+
    loading/empty/error quando aplicável)
 3. Funciona em claro **e** escuro sem ramificação de código, e nenhuma
