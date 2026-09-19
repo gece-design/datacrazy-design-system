@@ -7,8 +7,11 @@ node_modules
 docs/processo
 docs/objetos
 docs/features
-scripts/*
-!scripts/gerar-registry.mjs
+# scripts/ sobe quase inteira: o gerador importa scripts/lib/fonte.mjs, e
+# `scripts/*` + `!scripts/gerar-registry.mjs` derrubava o build — a Vercel
+# não re-inclui pasta excluída por glob (mesmo caso da docs/). Só a base das
+# catracas e os screenshots ficam de fora.
+scripts/baseline
 tests
 reports
 *.log
