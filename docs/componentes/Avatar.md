@@ -50,8 +50,8 @@ Avatar é leitura. Se clicar abre algo, o clique vai no elemento em volta.
 
 ## Composição
 
-Usa: nenhum componente do DS ·
-Usado por: [Drawer](Drawer.md) (perfil, empresa mãe, nó da hierarquia)
+Usa: nenhum componente do DS · Exporta também `inicialDe(nome)`, a inicial que o disco mostra ·
+Usado por: [Drawer](Drawer.md) (perfil, empresa mãe, nó da hierarquia) e [Breadcrumb](Breadcrumb.md) (`inicialDe`)
 
 ## Exemplo de uso
 
@@ -75,10 +75,6 @@ Usado por: [Drawer](Drawer.md) (perfil, empresa mãe, nó da hierarquia)
 
 ## Divergências abertas (para o gate)
 
-1. **Letra do `lg` fora da escala.** 29,25/36 semibold, com tracking de
-   -0,675px, é o valor do arquivo — não bate com nenhum degrau tipográfico.
-2. **O `md` troca papéis entre os temas.** Resolvido com dois tokens de
-   componente (`--avatar-md-fundo`, `--avatar-md-anel`); no Figma são duas
-   variáveis diferentes por variante de tema, não um token.
-3. **Sem cor por pessoa.** Todas as iniciais saem no mesmo azul. Se o CRM
-   quiser distinguir pessoas pela cor, é paleta categórica — o bloqueio B8.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-086, AUD-087, AUD-088 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

@@ -37,12 +37,18 @@ Diff de pixels **não medido**: depende da ponte de escrita do Figma
 | `rotulo` | `string` | Linha pequena. Ex.: "Total de resultados". |
 | `total` | `string` | Linha em destaque. Ex.: "37 negócios". |
 | `children` | `ReactNode` | Os filtros à direita. |
+| `layout` | `"padrao" \| "compacta"` | `compacta` (597:5983, Negócios no drawer): sem recuo próprio, rótulo em caption e total em h4. |
 
 ### Células
 
-`CelulaLead` (nome + etiquetas) · `CelulaDupla` (valor + apoio) ·
-`CelulaTexto` (uma linha, com `enfase` para `primary`) · `CelulaProgresso`
-(etapa + barra) · `CelulaEstatisticas` (pares número/rótulo) · `CelulaAcoes`.
+| Célula | Props | O que mostra |
+|--------|-------|--------------|
+| `CelulaLead` | `nome`, `etiquetas?` | Nome + Badges |
+| `CelulaDupla` | `principal`, `apoio?` | Valor com linha de apoio |
+| `CelulaTexto` | `children`, `enfase?` | Uma linha; `enfase` pinta em `primary` |
+| `CelulaProgresso` | `etapa`, `percentual` | Etapa + barra de 5px |
+| `CelulaEstatisticas` | `itens: { valor, rotulo }[]` | Pares número/rótulo |
+| `CelulaAcoes` | `rotulo?` | Botão `DotsThree` |
 
 ## Variantes
 
@@ -53,8 +59,8 @@ Não tem. O arquivo desenha um layout só, com eixo apenas de tema.
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| hover | `bg-overlay-item-hover na linha` | humano | overlay/item-hover |
-| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | I4 |
+| hover | `bg-overlay-item-hover na linha` | humano | L2 |
+| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -114,15 +120,6 @@ Usado por: tela de negócios (ainda não construída)
 
 ## Divergências abertas (para o gate)
 
-1. **Linhas sem separador visível.** O traço superior está ligado ao token
-   `card` — a mesma cor do fundo. É o mesmo caso da lista do [Card](Card.md), e
-   agora aparece duas vezes: ou é intenção do sistema, ou é um `border`
-   apontando para o token errado nos dois lugares.
-2. **Etiqueta com raio fora da escala.** O arquivo desenha 3px; a escala tem 2
-   (`xs`) e 4 (`sm`). O código usa `sm`. Um pixel, mas é escala.
-3. **Alvo de toque da paginação.** 28px contra os 44 da regra I15. O arquivo
-   desenha 28.
-4. ~~Sem hover de linha.~~ **Resolvido em 2026-09-04** por decisão do humano:
-   a linha usa `overlay/item-hover`. Não está no arquivo.
-5. **A tabela pede 1160px.** Abaixo disso ela rola na horizontal em vez de
-   espremer coluna. O showcase mostra isso porque a coluna de leitura tem 820.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-103, AUD-104, AUD-105, AUD-106, AUD-107 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

@@ -28,10 +28,13 @@ página de Elevation reserva a popover e menu de contexto).
 |------|------|--------|-------------|-----------|
 | `opcoes` | `OpcaoSelect[]` | — | sim | `valor` e `rotulo`. |
 | `rotulo` | `string` | — | sim | Nome do controle para leitor de tela. Ex.: "Filtrar por etapa". |
-| `valor` | `string` | — | não | O valor escolhido. |
+| `valor` | `string` | — | sim | O valor escolhido (controlado). Vazio = o gatilho mostra `textoVazio`. |
 | `aoEscolher` | `(v: string) => void` | — | não | Chamado ao escolher. |
 | `textoVazio` | `string` | `"Selecione"` | não | O que o gatilho mostra sem escolha. |
-| `size` | `"md" \| "sm"` | `"md"` | não | `md` no Card (32px, com realce interno); `sm` na tabela (29px). |
+| `size` | `"md" \| "sm" \| "field"` | `"md"` | não | `md` no Card (32px, com realce interno); `sm` na tabela (29px); `field` é o campo de formulário (36px, a caixa do Input). |
+| `className` | `string` | — | não | — |
+
+`SelectTrigger` recebe `aberto` (gira o caret e marca o gatilho como ativo) e `vazio` (no `field`, o texto sai na cor de placeholder).
 
 `SelectTrigger` é exportado à parte, para quando a abertura for controlada por
 outro componente.
@@ -49,8 +52,8 @@ outro componente.
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | hover | `text-foreground` | banco | I1 |
-| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | I4 |
-| aberto | `caret girado 180 + text-foreground` | humano | — |
+| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
+| aberto | `caret girado 180 + text-foreground` | humano | L11 |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -93,13 +96,6 @@ Usado por: [Card](Card.md) e [DataTable](DataTable.md)
 
 ## Divergências abertas (para o gate)
 
-1. **Caret do Phosphor, não o do arquivo.** O Figma desenha um triângulo cheio
-   de 8×5; aqui vai o `CaretDown` da biblioteca. Decisão do humano em
-   2026-09-04, valendo para todos os componentes — a fonte de ícone do DS é o
-   Phosphor, e um triângulo desenhado à mão é um ícone fora dela.
-2. **A lista aberta é derivação, não desenho.** Espaçamento, elevação e realce
-   saíram dos tokens, não do arquivo. Vale desenhar para confirmar.
-3. **Alvo de toque.** 29px no `sm` e 32 no `md`, contra os 44 da regra I15.
-4. **Não é um `<select>` nativo nem Radix.** Foi feito à mão porque a base do
-   projeto só tem `react-slot` e trazer pacote é decisão de stack. Se o Radix
-   entrar, este componente é o primeiro a migrar.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-159, AUD-160, AUD-161, AUD-162 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

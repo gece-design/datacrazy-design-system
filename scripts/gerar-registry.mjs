@@ -11,30 +11,25 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
+import {
+  RAIZ, ler, existe, pascal, umaLinha,
+  lerNavegacao, dependenciasDe, exportsDe, secoesDoMd as secoesBrutas, exemplosDaPagina,
+} from "./lib/fonte.mjs";
 
 const require = createRequire(import.meta.url);
-const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const URL_DS = (process.env.DS_URL || "https://datacrazy-design-system.vercel.app").replace(/\/$/, "");
+// A URL pública mora em lib/site.ts (dono único); DS_URL só para teste local.
+const URL_DS = (process.env.DS_URL || ler("lib/site.ts").match(/URL_DS = "([^"]+)"/)[1]).replace(/\/$/, "");
 const NAMESPACE = "@datacrazy";
 // `~` é a raiz do projeto de quem instala, não a home do usuário.
 const PASTA_SKILL = "~/.claude/skills/datacrazy-ds";
 const SAIDA = path.join(RAIZ, "public/r");
 const SCHEMA_ITEM = "https://ui.shadcn.com/schema/registry-item.json";
 
-const ler = (rel) => fs.readFileSync(path.join(RAIZ, rel), "utf8");
-const existe = (rel) => fs.existsSync(path.join(RAIZ, rel));
 const urlDoItem = (nome) => `${URL_DS}/r/${nome}.json`;
-const pascal = (nome) => nome.split("-").map((p) => p[0].toUpperCase() + p.slice(1)).join("");
-const umaLinha = (t) => t.replace(/\s+/g, " ").trim();
 
-// Componente sem página nem doc própria: a descrição tem de vir de algum lugar,
-// e inventar a partir do código é pior que declarar aqui.
-const DESCRICAO_FIXA = {
-  badge: "Selo curto de status — a cor fica na borda e no texto, nunca preenchendo a superfície.",
-  rating: "Avaliação de 0 a 10 estrelas (o máximo é prop): editável por setas, ou só leitura.",
-  "logo-datacrazy": "Símbolo e logotipo do DataCrazy, em currentColor para acompanhar o tema.",
-};
+// Todo componente tem doc (lote B1 da auditoria): a descrição vem da seção
+// Responsabilidade. Sem doc, a geração quebra de propósito.
+const DESCRICAO_FIXA = {};
 const TITULO_FIXO = { "data-table": "Data Table", "logo-datacrazy": "Logo DataCrazy" };
 // Slug da página no site quando difere do nome do arquivo.
 const PAGINA_FIXA = { "data-table": "table" };
@@ -45,89 +40,15 @@ const SECOES_UTEIS = ["Props", "Variantes", "Estados", "Composição", "Exemplo 
 
 /* ------------------------------------------------------------------------- */
 
-function lerNavegacao() {
-  const fonte = ler("components/ds/nav.ts");
-  const paginas = [];
-  let categoria = null;
-  // Categoria: `titulo` seguido de `descricao`. Item: `titulo` seguido de `href`.
-  for (const m of fonte.matchAll(/titulo:\s*"([^"]+)",\s*(href:\s*"([^"]+)"[^}]*)?/g)) {
-    if (!m[2]) {
-      categoria = m[1];
-      continue;
-    }
-    paginas.push({
-      titulo: m[1],
-      href: m[3],
-      categoria,
-      descricao: m[2].match(/descricao:\s*"([^"]+)"/)?.[1],
-    });
-  }
-  return paginas;
-}
+// Leitores do código (nav, imports, exports, seções do .md, exemplos das
+// páginas) moram em scripts/lib/fonte.mjs — os check-*.mjs leem pelos mesmos.
 
-function importsDe(fonte) {
-  return [...fonte.matchAll(/(?:from|import)\s+"([^"]+)"/g)].map((m) => m[1]);
-}
-
-/** Separa o que vira item do catálogo do que vira pacote do npm. */
-function dependenciasDe(fonte, arquivo) {
-  const itens = new Set();
-  const pacotes = new Set();
-  for (const spec of importsDe(fonte)) {
-    if (spec.startsWith("@/components/ui/") || spec.startsWith("@/lib/") || spec.startsWith("./")) {
-      itens.add(path.basename(spec));
-    } else if (spec.startsWith("@/") || spec.startsWith(".")) {
-      // Import de fora de ui/ e lib/ (ex.: components/ds) não existe no projeto
-      // de quem instala. Melhor quebrar a geração do que publicar componente quebrado.
-      throw new Error(`${arquivo}: import "${spec}" não pode ir para o catálogo`);
-    } else {
-      const pacote = spec.startsWith("@") ? spec.split("/").slice(0, 2).join("/") : spec.split("/")[0];
-      if (!["react", "react-dom", "next"].includes(pacote)) pacotes.add(pacote);
-    }
-  }
-  return { itens: [...itens], pacotes: [...pacotes] };
-}
-
-function exportsDe(fonte) {
-  const nomes = new Set();
-  for (const m of fonte.matchAll(/export\s+(?:default\s+)?(?:async\s+)?(?:function|const|class|type|interface|enum)\s+([A-Za-z_]\w*)/g)) {
-    nomes.add(m[1]);
-  }
-  for (const m of fonte.matchAll(/export\s+(?:type\s+)?\{([^}]+)\}/g)) {
-    for (const parte of m[1].split(",")) {
-      const nome = parte.trim().replace(/^type\s+/, "").split(/\s+as\s+/).pop();
-      if (nome) nomes.add(nome);
-    }
-  }
-  return [...nomes];
-}
-
-function secoesDoMd(rel) {
-  if (!existe(rel)) return null;
-  const secoes = {};
-  for (const parte of ler(rel).split(/^## /m).slice(1)) {
-    const [titulo, ...resto] = parte.split("\n");
-    secoes[titulo.trim()] = resto
-      .join("\n")
-      // link relativo aponta para o nosso repo, que o cliente não tem
-      .replace(/\[([^\]]+)\]\((?!https?:)[^)]+\)/g, "$1")
-      .replace(/<!-- kfe:[^>]+-->\n?/g, "")
-      .trim();
-  }
-  return secoes;
-}
-
-/** Os trechos da aba "Código" da página do componente no site. */
-function exemplosDaPagina(rel) {
-  if (!rel || !existe(rel)) return [];
-  const exemplos = new Set();
-  for (const m of ler(rel).matchAll(/codigo\w*\s*=\s*\{?\s*`((?:\\[\s\S]|[^`\\])*)`/g)) {
-    // interpolação de verdade: o texto final só existe em runtime
-    if (/(^|[^\\])\$\{/.test(m[1])) continue;
-    exemplos.add(m[1].replace(/\\([`$\\])/g, "$1").trim());
-  }
-  return [...exemplos];
-}
+/** Seções do .md como quem USA vai ler: link relativo aponta para o nosso
+ *  repo, que o cliente não tem; marcador kfe é maquinário nosso. */
+const secoesDoMd = (rel) =>
+  secoesBrutas(rel, (t) =>
+    t.replace(/\[([^\]]+)\]\((?!https?:)[^)]+\)/g, "$1").replace(/<!-- kfe:[^>]+-->\n?/g, ""),
+  );
 
 /* ------------------------------------------------------------------------- */
 /* Tokens                                                                    */
@@ -331,7 +252,17 @@ padrão (\`bg-blue-500\`, \`text-gray-600\`) estão fora.
   (\`fill\` só no item selecionado); 16px em botão e campo.
 - **Tema escuro:** classe \`dark\` no \`<html>\`. Os tokens trocam sozinhos —
   nunca ramifique código por tema.
-- **Fonte:** Geist, pela variável \`--font-geist-sans\` (a do create-next-app).
+- **Gradiente** (\`bg-\`): ${lista(Object.keys(ext.backgroundImage))}
+- **Fonte:** Geist, pela variável \`--font-geist-sans\`. O setup instala o pacote
+  \`geist\`; a variável só existe se o layout raiz a declarar:
+
+  \`\`\`tsx
+  import { GeistSans } from "geist/font/sans";
+  import { GeistMono } from "geist/font/mono";
+  <html lang="pt-BR" className={\`\${GeistSans.variable} \${GeistMono.variable}\`}>
+  \`\`\`
+
+  Conferir com \`getComputedStyle(document.body).fontFamily\` — tem de começar com GeistSans.
 
 ## Regras
 
@@ -347,6 +278,17 @@ ${componentes
 `;
 }
 
+/** Itens do catálogo que um trecho usa além do próprio: vira a linha "Exige:"
+ *  no exemplo publicado, para o agente instalar antes de copiar (AUD-066). */
+function exigeDe(trecho, c, componentes) {
+  const itens = new Set();
+  for (const m of trecho.matchAll(/<([A-Z]\w*)/g)) {
+    const dono = componentes.find((x) => x.name !== c.name && x.exports.includes(m[1]));
+    if (dono && !c.itens.includes(dono.name)) itens.add(dono.name);
+  }
+  return [...itens].sort();
+}
+
 function referenciaDoComponente(c) {
   const linhas = [
     `# ${c.title}`,
@@ -357,12 +299,20 @@ function referenciaDoComponente(c) {
     `- Importar de \`@/components/ui/${c.name}\`: ${c.exports.map((e) => `\`${e}\``).join(", ")}`,
   ];
   if (c.pagina) linhas.push(`- Ver vivo: ${URL_DS}${c.pagina.href}`);
+  const exige = (trecho) => {
+    const itens = exigeDe(trecho, c, componentes);
+    return itens.length ? `// Exige: ${itens.map((n) => `${NAMESPACE}/${n}`).join(", ")}\n` : "";
+  };
   for (const s of SECOES_UTEIS) {
-    if (c.md?.[s]) linhas.push("", `## ${s}`, "", c.md[s]);
+    if (!c.md?.[s]) continue;
+    // no "Exemplo de uso", cada bloco de código ganha a linha "Exige:" com os
+    // itens do catálogo que ele usa além do próprio — o agente instala antes de copiar
+    const corpo = s === "Exemplo de uso" ? c.md[s].replace(/```tsx\n([\s\S]*?)```/g, (_, t) => `\`\`\`tsx\n${exige(t)}${t}\`\`\``) : c.md[s];
+    linhas.push("", `## ${s}`, "", corpo);
   }
   if (c.exemplos.length) {
     linhas.push("", "## Exemplos do site", "");
-    for (const e of c.exemplos) linhas.push("```tsx", e, "```", "");
+    for (const e of c.exemplos) linhas.push("```tsx", exige(e) + e, "```", "");
   }
   return linhas.join("\n").trim() + "\n";
 }
@@ -448,7 +398,8 @@ const itensDeComponente = componentes.map((c) => ({
   registryDependencies: c.itens.map(urlDoItem),
   files: [arquivo(c.rel, c.fonte, "registry:ui")],
   ...(c.categoria && { categories: [c.categoria] }),
-  ...(c.pagina && { docs: `${c.title}: ${URL_DS}${c.pagina.href}` }),
+  // só rota que existe: item do nav com pronto:false era um 404 publicado (AUD-070)
+  ...(c.pagina?.pronto && { docs: `${c.title}: ${URL_DS}${c.pagina.href}` }),
 }));
 
 const arquivosDaSkill = [
@@ -470,6 +421,9 @@ const itemSetup = (versao) => ({
   type: "registry:theme",
   title: versao === "v4" ? "Setup" : "Setup (Tailwind v3)",
   description: `A base do DS para Tailwind ${versao}: tokens, cn() e a skill datacrazy-ds para o Claude Code, com as regras e a referência de cada componente.`,
+  // A escala tipográfica inteira aponta para --font-geist-sans: sem o pacote,
+  // tudo cai na fonte de sistema em silêncio (AUD-067).
+  dependencies: ["geist"],
   registryDependencies: [urlDoItem(versao === "v4" ? "tokens" : "tokens-v3"), urlDoItem("utils")],
   files: arquivosDaSkill,
   docs: "Skill instalada em .claude/skills/datacrazy-ds. Reinicie o Claude Code para ele carregar.",

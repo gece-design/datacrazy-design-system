@@ -47,7 +47,7 @@ divergência. Diff de pixels não medido (ponte `figma-console` fora do ar).
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | hover | `ring-input-border-hover (desmarcado) · ring-primary-hover (marcado)` | banco | I1 |
-| focus | `outline outline-2 outline-offset-2 outline-ring no circulo (peer-focus-visible)` | banco | I4 |
+| focus | `outline outline-2 outline-offset-2 outline-ring no circulo (peer-focus-visible)` | banco | D6 |
 | marcado | `ring-inset 5px primary sobre input/bg (miolo de 8px)` | figma | — |
 | disabled | `bg-input-bg-disabled · marcado ring-subtle-foreground · rotulo input-text-disabled` | figma | — |
 <!-- kfe:estados:end -->
@@ -89,9 +89,6 @@ motivo de perda.
 
 ## Divergências abertas (para o gate)
 
-1. **Desmarcado com contorno fraco** — mesma do Checkbox: é o token
-   `input/border` sobre `card`, abaixo dos 3:1 da WCAG 1.4.11.
-2. **Gap de 20 entre itens** vem do espaçamento do component set no arquivo,
-   não de uma spec de grupo. Se o grupo tiver desenho próprio, ele manda.
-3. **Alvo de toque** 18px contra os 44 da I15.
-4. **Hover derivado** (E-01), a mesma regra do Checkbox e do Switch.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-150, AUD-151, AUD-152, AUD-153 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

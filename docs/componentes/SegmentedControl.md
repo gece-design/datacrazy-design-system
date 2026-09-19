@@ -6,7 +6,7 @@ Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualiza�
 
 ## Família
 
-`entrada` — define a regra de estado herdada
+`navegacao` — define a regra de estado herdada
 ([../02-design-system.md](../02-design-system.md)).
 
 ## Par no Figma
@@ -45,7 +45,7 @@ Picker, que já existe.
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | selecionada | `Segmented: bg-segmented-item-selected text-overlay-item-text-selected · View: + text-primary e sombra interna (só no Claro) · aria-checked` | figma | Selected=Mês (269:54) · View=Chart (471:2940) |
-| hover | `text-foreground` | inferido | Tabs |
+| hover | `text-foreground` | inferido | L2 |
 | focus | `outline-2 outline-offset-2 outline-ring` | declarado | D6 |
 | disabled | `opacity-50 pointer-events-none, pulada pelas setas` | banco | I5 |
 <!-- kfe:estados:end -->
@@ -82,13 +82,6 @@ Usa: Tooltip (View Switcher) · Usado por: Header (por encaixe)
 
 ## Divergências abertas (para o gate)
 
-1. **"Semana" em `label-lg`** no arquivo, as outras em `body-md`. Código usa
-   `body-md` em todas: peso por opção muda a largura quando a seleção troca.
-2. **Descrição do set diz "ativa recebe superfície card"**; o desenho usa `accent`. Código segue o desenho.
-3. **Resolvido (2026-09-18)**: a sombra interna agora vale só no Claro, em todo
-   o DS menos no Button `primary` — era o que o arquivo já fazia no View
-   Switcher escuro.
-5. **Superfície da escolhida é token próprio**: `accent` no Claro (o do arquivo)
-   e `background` no Escuro, porque lá `accent` é quase o `card` da trilha e a
-   seleção sumia.
-4. **Hover não está desenhado.**
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-154, AUD-155, AUD-156, AUD-157, AUD-158 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

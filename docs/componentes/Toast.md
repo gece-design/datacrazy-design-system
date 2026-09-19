@@ -54,7 +54,7 @@ que devolve o id para `fecharToast(id)`.
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | hover | `X: bg-overlay-item-hover text-foreground` | inferido | Pagination (overlay/item-hover) |
-| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | I4 |
+| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
 | pausado | `relógio parado com cursor ou foco dentro` | declarado | roadmap-componentes § Toast |
 | saindo | `translate-x-[calc(100%+1rem)] opacity-0, depois grid-rows-[0fr] -mt-2` | humano | I12 |
 <!-- kfe:estados:end -->
@@ -95,21 +95,6 @@ toast({ variant: "success", titulo: "Negócio salvo", descricao: "As alteraçõe
 
 ## Divergências abertas (para o gate)
 
-1. **Tema escuro do círculo e do glifo.** No arquivo, as variantes `theme=Dark`
-   pintam o círculo e o glifo com o valor **claro** do token (`success`
-   `#267952` a 12% sobre `#25252D`), enquanto a barra usa o escuro (`#64CEA2`).
-   É o modo da variável errado na camada `Icon`. Aqui os três seguem o token,
-   então no escuro o círculo e o glifo saem mais claros que no arquivo.
-2. **12% medido, não lido.** O Figma não exporta a opacidade do preenchimento do
-   círculo. As quatro variantes do claro fecham em 0,12 nos três canais do pixel.
-   A ponte do Figma desktop estava desconectada para ler o valor direto.
-3. **Fila, posição e tempo não estão no arquivo.** Canto inferior direito a 16px,
-   8px entre cartões, três visíveis e 8s são derivação. O humano pediu mais
-   tempo que os 5s de antes (2026-09-15); os 8s são o valor escolhido.
-4. **Texto quebra linha.** O arquivo usa texto numa linha só; aqui quebra, para
-   não truncar mudo (E1) em `es` e `pt-br`.
-5. **Hover do X** usa `overlay/item-hover` (E-01). Não está desenhado.
-6. **Movimento não está no arquivo nem tem token.** Durações e curvas vivem
-   nomeadas em `tailwind.config.ts` (`fade-in`, `toast-open`) até a pendência 4
-   de `02-design-system.md` fechar. Pedido do humano em 2026-09-15: dissolver na
-   entrada, deslizar para o lado na saída.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-186, AUD-187, AUD-188, AUD-189, AUD-190, AUD-191 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

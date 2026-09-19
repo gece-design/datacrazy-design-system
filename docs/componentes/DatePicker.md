@@ -1,0 +1,101 @@
+# Componente: DatePicker
+
+## Responsabilidade
+
+Período em dois meses, com atalhos: um gatilho no estilo do Button `tertiary`
+que abre o painel de intervalo. `CalendarioDeDia` é a mesma grade com um dia
+só, para o [TimePicker](TimePicker.md) não redesenhar calendário.
+
+## Família
+
+`entrada` — define a regra de estado herdada
+([../02-design-system.md](../02-design-system.md)).
+
+## Par no Figma
+
+Node não registrado no log (o arquivo estava em edição pelo humano em
+2026-09-14) · Lote: `1` · Escrito em 2026-09-03, antes do registro existir ·
+O estado "hoje" não está desenhado: é derivado (sinal por cor, não moldura) ·
+Diff de pixels não medido.
+
+## Props
+
+`DateRangePicker`
+
+| Prop | Tipo | Obrigatória | Descrição |
+|------|------|-------------|-----------|
+| `valor` | `IntervaloDeDatas` | sim | `{ inicio: Date \| null, fim: Date \| null }`. Só `Date`: comparar por chave AAAAMMDD evita o "mesmo dia, horas diferentes". |
+| `onValorChange` | `(valor: IntervaloDeDatas) => void` | sim | No Aplicar e nos atalhos. |
+| `rotulos` | `RotulosDoDatePicker` | sim | `vazio`, `atalhos`, `mes`, `ano`, `mesAnterior`, `proximoMes`, `aplicar`, `cancelar` — todos obrigatórios (i18n). |
+| `locale` | `string` | sim | BCP-47. No CRM é o locale ativo do next-intl, nunca um literal: decide o primeiro dia da semana e o formato do intervalo. |
+| `atalhos` | `AtalhoDeIntervalo[]` | não | `{ id, rotulo, intervalo(hoje) }`. `criarAtalhos` em `lib/periodos.ts` traz 16 contas prontas. |
+| `dataMinima`, `dataMaxima` | `Date` | não | Fora delas o dia não clica. |
+| `disabled`, `className` | — | não | — |
+
+`CalendarioDeDia`: `valor: Date \| null`, `aoEscolher(dia)`, `locale`,
+`rotulos: RotulosDoCalendario` (`mes`, `ano`), `dataMinima`, `dataMaxima`,
+`className`.
+
+## Variantes
+
+| Variante | Quando |
+|----------|--------|
+| dois meses | Padrão do intervalo |
+| com atalhos | Coluna à esquerda com os períodos prontos |
+| `CalendarioDeDia` | Um mês, um dia — dentro do `DateTimePicker` |
+
+## Estados
+
+<!-- kfe:estados:start -->
+| Estado | Implementação | Origem | Precedente / regra |
+|--------|---------------|--------|--------------------|
+| hover | `dia sob o cursor: bg-accent com texto muted-foreground (empresta a superfície do selecionado, texto separa os dois)` | banco | L2 |
+| selected | `intervalo bg-accent text-accent-foreground · extremos bg-primary text-primary-foreground` | figma | L7 |
+| hoje | `cor, não moldura (sinal por texto primary)` | banco | E-01 (estado derivado) |
+| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
+| disabled | `opacity-50 pointer-events-none no gatilho; dia fora de dataMinima/dataMaxima não clica` | banco | I5 |
+| aberto | `painel absoluto z-popover, border/card/shadow-float (migra para overlay-* em B5, D22); vira de lado quando não cabe; clique fora e Escape fecham` | humano | L11 |
+<!-- kfe:estados:end -->
+
+## Tokens consumidos
+
+`accent` · `accent-foreground` · `primary` · `primary-foreground` · `card` ·
+`border` · `foreground` · `muted-foreground` · `subtle-foreground` · `ring` ·
+`radius/md` · `radius/lg` · `shadow-float` · `text/body-lg` · `text/body-md` ·
+`text/label-lg` · `text/h4`
+
+## Composição
+
+Usa: [Button](Button.md) (gatilho `tertiary`, setas `ghost`, rodapé) e
+`<select>` nativo para mês e ano (mesma escolha do [Telefone](Telefone.md)) ·
+Usado por: [TimePicker](TimePicker.md) (`CalendarioDeDia`), [Header](Header.md)
+pelos exemplos. O painel usa `border`/`card`/`shadow-float` e migra para
+`overlay-*` no lote B5 (D22, AUD-041).
+
+## Exemplo de uso
+
+```tsx
+<DateRangePicker
+  valor={periodo}
+  onValorChange={setPeriodo}
+  locale={locale}
+  rotulos={rotulos}
+  atalhos={criarAtalhos(["hoje", "ultimos7", "esteMes"], t)}
+  dataMaxima={hoje}
+/>
+```
+
+## Acessibilidade
+
+| Item | Como está resolvido |
+|------|---------------------|
+| Foco visível | Outline de 2px (D6); foco itinerante na grade — um dia por vez com `tabIndex 0` |
+| Teclado | Setas movem o dia, mês anterior/próximo mantêm o foco dentro da grade; Escape fecha |
+| Lado do painel | Medido, não presumido: com zoom acima de 100% o painel de ~660px vira para o lado que cabe (E3) |
+| Dia de outro mês | Visível para fechar a grade, nunca clicável: o mesmo dia em dois lugares é ambiguidade |
+| Intervalo | Primeiro clique abre, segundo fecha; clicar antes do início recomeça em vez de inverter |
+| Movimento | Painel abre seco — AUD-009, lote B7 |
+
+## Divergências abertas (para o gate)
+
+Nenhuma registrada além das da auditoria (AUD-009, AUD-041).

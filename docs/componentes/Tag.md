@@ -26,6 +26,8 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 | `status` | `"destructive" \| "info" \| "success"` | não | Bolinha de 6px antes do texto. |
 | `tipo` | `"pessoa" \| "empresa"` | não | Ícone de 12px e texto em `primary`. |
 | `foto` | `string` | não | Foto de 22px encostada à esquerda (atendente). |
+| `tom` | `Tom` | não | Um dos oito tons de `[data-tom]` (`TONS`): `azul` `roxo` `rosa` `laranja` `verde` `ciano` `ambar` `vermelho`. Sem tom, a tag é cinza — o atendente. `tomDe(chave)` dá um tom estável para um texto (verde e vermelho ficam fora do sorteio). |
+| `icone` | `ComponentType` | não | Ícone de 12px antes do texto, para quem não distingue as cores. |
 | `children` | `ReactNode` | sim | O texto. A caixa alta é CSS. |
 
 ### `TagAdicionar`
@@ -36,11 +38,12 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 
 | Prop | Tipo | Obrigatória | Descrição |
 |------|------|-------------|-----------|
-| `grupos` | `GrupoTags[]` | sim | Uma aba por grupo: `id`, `rotulo`, `tags`. |
+| `grupos` | `GrupoTags[]` | sim | Uma aba por grupo: `id`, `rotulo`, `tags` (`OpcaoTag`: `id`, `rotulo`, `status?`, `foto?`, `tom?`, `icone?`) e `corLivre?` — nesta aba a cor é escolha de quem cria (Listas); nas outras é regra. |
 | `selecionadas` | `string[]` | sim | Ids das tags do lead. |
 | `aoAlternar` | `(tag) => void` | sim | Põe ou tira a tag. |
-| `aoCriar` | `(rotulo, grupoId) => void` | não | Sem ela, a busca só filtra. |
-| `rotulos` | `{ gatilho, busca, vazio, criar }` | sim | Textos (i18n). `criar` recebe texto e aba. |
+| `aoCriar` | `(rotulo, grupoId, tom?) => void` | não | Sem ela, a busca só filtra. O `tom` só vem quando a aba tem `corLivre`. |
+| `rotulos` | `{ gatilho, busca, vazio, criar, cor }` | sim | Textos (i18n), **os cinco obrigatórios**. `criar(texto, grupo)` devolve a frase da opção; `cor` é o rótulo da fileira de cores. |
+| `className` | `string` | não | — |
 
 ## Variantes
 
@@ -58,9 +61,9 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | hover | `bg-primary-hover no TagAdicionar; bg-overlay-item-hover no item do seletor` | figma | Select Item 544:99 |
-| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | I4 |
+| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
 | selecionada | `bg-overlay-item-selected + Check overlay-item-text-selected` | figma | Select Item 544:99 |
-| aberto | `painel em portal fixo + foco na busca + Escape so no painel` | humano | Select (lista aberta) |
+| aberto | `painel em portal fixo + foco na busca + Escape so no painel` | humano | L11 |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -106,16 +109,6 @@ Usado por: [Drawer](Drawer.md) (perfil, tabela de negócios, nó da hierarquia)
 
 ## Divergências abertas (para o gate)
 
-1. **Tag de tipo no perfil tem override do arquivo.** O componente usa fundo
-   `input/bg-disabled` e recuo 6px; a instância sobre o avatar usa `background`
-   e 4px em volta. O Drawer repete o override por `className`.
-2. **Ícone do "+" em `background`.** O SVG vem em `#EBEDEF`. No escuro,
-   `background` é quase preto sobre o azul claro — confere com o
-   `primary-foreground` escuro, mas não é o mesmo token.
-3. **Empresa roxa.** No perfil, a cor da tag de tipo vem do tom
-   (`--tom-tag`) — ver [Drawer](Drawer.md). A Tag solta segue em `primary`.
-4. **Abas e busca do seletor não estão no arquivo.** Pedido do humano
-   (2026-09-15), montado com a Tab (535:21) e a caixa do Input sobre o Select
-   Menu. A contagem por aba vai no rótulo da aba.
-5. **Painel em portal com posição fixa.** Necessário porque o perfil do drawer
-   rola; o painel vira para cima quando não cabe embaixo.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-174, AUD-175, AUD-176, AUD-177, AUD-178 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

@@ -39,7 +39,7 @@ Não tem. Adorno por nível (`avatar` com ou sem `destaque`, `icone`, nenhum) é
 |--------|---------------|--------|--------------------|
 | ancestral | `text-subtle-foreground, link` | figma | theme=Light (261:269) |
 | atual | `text-muted-foreground + aria-current=page, não navega` | figma | theme=Light (261:269) |
-| hover | `ancestral sobe para muted-foreground` | inferido | tom do nível atual |
+| hover | `ancestral sobe para muted-foreground` | inferido | L2 |
 | focus | `outline-2 outline-offset-2 outline-ring` | declarado | D6 |
 | recolhida | `primeiro + botão de reticências + últimos (maximo − 1) · clique abre no lugar e passa o foco` | declarado | nota do componente no arquivo |
 | texto longo | `truncate + title por nível` | declarado | D12 |
@@ -85,11 +85,6 @@ Usa: `inicialDe` (Avatar) · Usado por: Header (por encaixe)
 
 ## Divergências abertas (para o gate)
 
-1. **Contraste dos ancestrais abaixo de AA.** Está como o arquivo desenha;
-   subir para `muted-foreground` apaga a diferença para o nível atual. Pede
-   decisão de token.
-2. **Nota × desenho**: dois ou três níveis à vista. Código segue o desenho.
-3. **Reticências e hover não estão no arquivo.**
-4. **Ícone do nível atual**: o arquivo usa um sino que não é Phosphor; o
-   ícone é dado do item, e a doc usa `BellSimple`.
-5. **Separador é o vetor do arquivo** (traço de 1,5), não `CaretRight`.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-089, AUD-090, AUD-091, AUD-092, AUD-093 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

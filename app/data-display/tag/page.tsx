@@ -98,6 +98,7 @@ export default function TagPage() {
     busca: "Buscar ou criar tag",
     vazio: "Nenhuma tag nesta aba",
     criar: (texto, grupo) => \`Criar "\${texto}" em \${grupo}\`,
+    cor: "Cor da tag",
   }}
 />`}
         nota={

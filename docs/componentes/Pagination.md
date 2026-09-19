@@ -39,8 +39,8 @@ Não tem. O que muda é a presença do `resumo`.
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| hover | `bg-overlay-item-hover text-foreground` | humano | overlay/item-hover |
-| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | I4 |
+| hover | `bg-overlay-item-hover text-foreground` | humano | L2 |
+| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
 | disabled | `opacity-50 pointer-events-none` | banco | I5 |
 | atual | `bg-accent text-primary border-accent + aria-current` | humano | — |
 <!-- kfe:estados:end -->
@@ -84,14 +84,6 @@ Usado por: [DataTable](DataTable.md)
 
 ## Divergências abertas (para o gate)
 
-1. **Accent no ativo é decisão do humano, não do arquivo.** O Figma marca a
-   página atual só com a borda; no tema escuro ela quase some contra o fundo do
-   próprio botão. Aqui entram fundo `accent` e texto `primary` — dois sinais.
-   Decisão de 2026-09-04.
-2. **Hover não está no arquivo.** Usa `overlay/item-hover`, o token de "item sob
-   o cursor", que clareia nos dois temas.
-3. **Setas nos extremos.** O arquivo escreve só "Anterior" e "Próxima"; aqui
-   entram os carets do Phosphor, pela mesma decisão que padronizou o ícone.
-4. **Alvo de toque.** 28px contra os 44 da regra I15. É o que o arquivo desenha.
-5. **Sem reticências.** Com muitas páginas a lista cresce sem cortar. O arquivo
-   desenha 4 páginas e não diz o que fazer com 40.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-145, AUD-146, AUD-147, AUD-148, AUD-149 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

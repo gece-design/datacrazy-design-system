@@ -10,11 +10,11 @@ nunca à mão, nunca de memória. A seção **Estados** de cada arquivo é gerad
 pelo `kfe-docs index` a partir do registro: o JSON é o dono do fato, o
 markdown é a vista dele.
 
-> **Estado hoje (2026-09-02): vazio, com dívida declarada.** O showcase já tem
-> `Button`, `Badge` e `Card` em código (`components/ui/`), e nenhum deles tem
-> arquivo aqui nem entrada no registro — a `fw-doc` nunca rodou sobre eles.
-> Enquanto isso não for feito, **a verdade sobre esses três está no código**,
-> não aqui. Ausência de arquivo não significa ausência de componente.
+> **Estado (2026-09-19): completo.** Os 27 componentes de `components/ui/`
+> têm arquivo aqui e entrada no registro. A dívida dos seis escritos antes do
+> registro (Button, Badge, Sidebar, DatePicker, Rating, LogoDatacrazy) foi
+> quitada no lote B1 da auditoria de consistência, lendo o código.
+> `npm run check:doc-codigo` reprova doc que se afasta do TypeScript.
 
 ## Inventário
 
@@ -22,19 +22,25 @@ markdown é a vista dele.
 | Arquivo | Responsabilidade |
 |---------|------------------|
 | [Avatar.md](Avatar.md) | Identificar pessoa ou empresa pela inicial, ou pela foto. |
+| [Badge.md](Badge.md) | Selo curto de status — a cor fica na borda e no texto, nunca preenchendo a |
 | [Breadcrumb.md](Breadcrumb.md) | Mostrar o caminho até a página atual e levar de volta a qualquer nível dele. |
+| [Button.md](Button.md) | Ação do usuário: sete variantes de peso visual e quatro tamanhos, com o mesmo |
 | [Card.md](Card.md) | Superfície que carrega um bloco de dados do dashboard. |
 | [Checkbox.md](Checkbox.md) | Marcar ou desmarcar uma opção independente, inclusive o "parte marcada" de |
 | [DataTable.md](DataTable.md) | Lista os negócios do CRM em colunas, com filtros e paginação. |
+| [DatePicker.md](DatePicker.md) | Período em dois meses, com atalhos: um gatilho no estilo do Button `tertiary` |
 | [Drawer.md](Drawer.md) | Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida. |
 | [Header.md](Header.md) | O topo de uma página do CRM: onde a pessoa está, que página é e o que dá para |
 | [Input.md](Input.md) | Receber um valor curto digitado, com rótulo visível e erro inline. |
 | [KpiCard.md](KpiCard.md) | Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma |
+| [LogoDatacrazy.md](LogoDatacrazy.md) | Símbolo e logotipo do DataCrazy (`LogoDataCrazy` no código), em `currentColor` para acompanhar o tema. É a |
 | [Modal.md](Modal.md) | Pedir uma decisão bloqueando a tela até ela ser tomada. |
 | [Pagination.md](Pagination.md) | Navegar entre as páginas de uma lista longa. |
 | [RadioGroup.md](RadioGroup.md) | Escolher exatamente uma opção entre poucas, todas visíveis ao mesmo tempo. |
+| [Rating.md](Rating.md) | Avaliação de 0 a 10 estrelas (o máximo é prop): editável por clique e setas, |
 | [SegmentedControl.md](SegmentedControl.md) | Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualização. |
 | [Select.md](Select.md) | Escolher uma opção numa lista curta. |
+| [Sidebar.md](Sidebar.md) | Navegação principal do CRM: marca, grupos de itens com ícone e rótulo, |
 | [Switch.md](Switch.md) | Ligar ou desligar algo que passa a valer na hora, sem botão de salvar. |
 | [Tabs.md](Tabs.md) | Alternar entre as seções de um mesmo registro. |
 | [Tag.md](Tag.md) | Mostrar uma etiqueta que o usuário pôs no lead. |

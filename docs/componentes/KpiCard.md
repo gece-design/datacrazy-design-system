@@ -96,15 +96,6 @@ Usado por: faixa de métricas do dashboard (tela ainda não construída)
 
 ## Divergências abertas (para o gate)
 
-1. **Cor do trend.** A descrição do componente no Figma promete `success` para
-   up e `destructive` para down; os glifos do arquivo estão os dois em
-   `primary`. O código segue o arquivo — decisão do humano em 2026-09-03. Ou o
-   arquivo se corrige, ou a descrição.
-2. **Outline desenhado para uma tendência só.** O arquivo tem `Up`; antes tinha
-   `Down`. As outras funcionam — o glifo troca e o resto fica igual —, mas não
-   têm desenho. O redesenho em si foi implementado em 2026-09-04, por decisão do
-   humano.
-3. ~~Outline some no tema escuro.~~ **Resolvido em 2026-09-04** pela mudança de
-   token: `card` no escuro passou de `#1E1E24` para `#25252D` e `background` de
-   `#1C1C25` para `#16161D`. O contraste entre os dois deixou de ser nulo e a
-   borda do Outline aparece.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-136, AUD-137, AUD-138 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

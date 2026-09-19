@@ -1,8 +1,6 @@
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
 import { Codigo } from "@/components/ds/codigo";
-
-// A mesma URL que scripts/gerar-registry.mjs grava dentro de cada item do catálogo.
-const URL_DS = "https://datacrazy-design-system.vercel.app";
+import { URL_DS } from "@/lib/site";
 
 const pedidos = [
   "Crie a página de contatos com tabela, filtros e paginação usando os componentes do @datacrazy.",

@@ -40,8 +40,8 @@ Node: `548:73` (canvas `↳ Feedback`, 8 variantes: Position × theme) · Lote: 
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| aberto | `cursor após 400ms (exceto toque) · foco de teclado na hora · Escape e blur fecham` | declarado | E7 |
 | clique | `fecha o balão (o clique abriu outra coisa por cima)` | declarado | sino do Header tapado pelo próprio tooltip |
+| visivel | `cursor após 400ms (exceto toque) · foco de teclado na hora · Escape e blur fecham` | declarado | L12 |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -80,21 +80,6 @@ Usa: — · Usado por: —
 
 ## Divergências abertas (para o gate)
 
-1. **Left e Right do arquivo não seguem Top e Bottom.** Top e Bottom nomeiam o
-   lado onde o balão fica, com a seta apontando para o gatilho. No claro, Left e
-   Right têm a seta do lado do nome — o contrário. No escuro, a seta está do lado
-   certo mas gira para dentro do balão. Aqui os quatro seguem Top e Bottom.
-2. **Distância até o gatilho (4px), margem até a janela (8px) e espera de 400ms**
-   não estão no arquivo, que desenha o balão solto.
-3. **Largura máxima de 320px** (`max-w-xs`). O arquivo usa uma linha só; acima
-   disso o texto quebra em vez de atravessar a janela.
-4. **Com a posição ajustada na borda, a seta continua no centro do balão** e pode
-   não apontar para o meio do gatilho.
-5. **Sem equivalente de toque** (G7). Falta decidir se toque longo abre.
-6. **Ligado sempre, não só quando o texto corta.** Isso é o primitivo `Truncate`
-   do roadmap, que ainda não existe.
-7. **Diff de 9,5% é do texto.** Das 516 diferenças, 3 ficam fora da linha de
-   texto: o balão tem 26 de altura, a seta 10×6 no lugar certo. O texto mede
-   160,3 no navegador contra 161 no arquivo, e esse ajuste abaixo de 1px
-   desloca todos os glifos. Numa peça de 181×30 o texto é metade da área, então
-   o limite de 1% não fecha só com antialias.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-192, AUD-193, AUD-194, AUD-195, AUD-196, AUD-197, AUD-198 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

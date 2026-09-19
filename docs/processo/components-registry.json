@@ -1,9 +1,9 @@
 {
   "product": "DataCrazy",
   "kit": "3.2",
-  "updated": "2026-09-18",
+  "updated": "2026-09-19",
   "_doc": "Registro vivo de componentes — a memoria que alimenta a inferencia por analogia. Escrito pela fw-doc ao fim de CADA lote, nunca a mao. source de cada estado: figma | declarado | banco | inferido | humano.",
-  "_divida": "Button e Badge existem em codigo desde 2026-09-01 e NAO estao aqui: foram escritos antes do registro existir. Enquanto a fw-doc nao rodar sobre eles, a verdade desses dois esta no codigo. Nao preencher de memoria — ler o componente.",
+  "_divida": "Quitada em 2026-09-19 (lote B1): os seis componentes escritos antes do registro (Button, Badge, Sidebar, DatePicker, Rating, LogoDatacrazy) ganharam entrada lida do código.",
   "components": [
     {
       "name": "KpiCard",
@@ -72,14 +72,14 @@
         "hover": {
           "impl": "text-foreground",
           "source": "banco",
-          "rule": "I1",
+          "rule": "L2",
           "precedent": null,
           "approvedIn": "lote-2"
         },
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": "lote-2"
         }
@@ -121,14 +121,14 @@
         "hover": {
           "impl": "bg-overlay-item-hover na linha",
           "source": "humano",
-          "rule": null,
+          "rule": "L2",
           "precedent": "overlay/item-hover",
           "approvedIn": "lote-2"
         },
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": "lote-2"
         }
@@ -173,14 +173,14 @@
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": "lote-2"
         },
         "aberto": {
           "impl": "caret girado 180 + text-foreground",
           "source": "humano",
-          "rule": null,
+          "rule": "L11",
           "precedent": null,
           "approvedIn": "lote-2"
         }
@@ -214,14 +214,14 @@
         "hover": {
           "impl": "bg-overlay-item-hover text-foreground",
           "source": "humano",
-          "rule": null,
+          "rule": "L2",
           "precedent": "overlay/item-hover",
           "approvedIn": "lote-2"
         },
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": "lote-2"
         },
@@ -277,12 +277,12 @@
           "source": "inferido",
           "rule": null,
           "precedent": "Pagination (overlay/item-hover)",
-          "approvedIn": null
+          "approvedIn": "B0"
         },
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": null
         },
@@ -324,22 +324,22 @@
       ],
       "motion": "entrada: fade-in-fast 150ms · saída: seca · reduce: nenhuma",
       "states": {
-        "aberto": {
-          "impl": "cursor após 400ms (exceto toque) · foco de teclado na hora · Escape e blur fecham",
-          "source": "declarado",
-          "rule": "E7",
-          "precedent": "roadmap-componentes § Tooltip",
-          "approvedIn": null
-        },
         "clique": {
           "impl": "fecha o balão (o clique abriu outra coisa por cima)",
           "source": "declarado",
           "rule": null,
           "precedent": "sino do Header tapado pelo próprio tooltip",
           "approvedIn": "2026-09-18"
+        },
+        "visivel": {
+          "impl": "cursor após 400ms (exceto toque) · foco de teclado na hora · Escape e blur fecham",
+          "source": "declarado",
+          "rule": "L12",
+          "precedent": "roadmap-componentes § Tooltip",
+          "approvedIn": null
         }
       },
-      "_states_doc": "position = lado do gatilho onde o balao fica (regra de Top/Bottom do arquivo). Left/Right do arquivo estao invertidos entre os temas."
+      "_states_doc": "position = lado do gatilho onde o balao fica (regra de Top/Bottom do arquivo). Left/Right do arquivo estao invertidos entre os temas. `visivel`, não `aberto`: o balão não é camada (não prende foco, não trava rolagem) — regra L12 de interactions.md."
     },
     {
       "name": "Drawer",
@@ -410,23 +410,23 @@
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": "lote-3"
         },
         "aberto": {
           "impl": "scrim overlay/scrim 40% + foco preso + Escape",
           "source": "inferido",
-          "rule": null,
+          "rule": "L10",
           "precedent": "Select (lista aberta)",
-          "approvedIn": null
+          "approvedIn": "B0"
         },
         "recolhido": {
           "impl": "bloco com hidden + caret -90°",
           "source": "inferido",
           "rule": null,
           "precedent": "Select (caret girado)",
-          "approvedIn": null
+          "approvedIn": "B0"
         },
         "fixado": {
           "impl": "item sobe para o topo do menu + PushPin fill em nav-item-icon-selected",
@@ -577,7 +577,7 @@
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": "lote-3"
         },
@@ -591,7 +591,7 @@
         "aberto": {
           "impl": "painel em portal fixo + foco na busca + Escape so no painel",
           "source": "humano",
-          "rule": null,
+          "rule": "L11",
           "precedent": "Select (lista aberta)",
           "approvedIn": "lote-3"
         }
@@ -635,7 +635,7 @@
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring na caixa (peer-focus-visible)",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": null
         },
@@ -651,7 +651,7 @@
           "source": "inferido",
           "rule": null,
           "precedent": "marcado (mesmo fundo e glifo na mesma medida)",
-          "approvedIn": null
+          "approvedIn": "B0"
         },
         "disabled": {
           "impl": "bg-input-bg-disabled · marcado bg-subtle-foreground · rotulo input-text-disabled",
@@ -698,7 +698,7 @@
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring no circulo (peer-focus-visible)",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": null
         },
@@ -754,7 +754,7 @@
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring no trilho (peer-focus-visible)",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": null
         },
@@ -803,14 +803,14 @@
         "hover": {
           "impl": "text-foreground (sem traço)",
           "source": "inferido",
-          "rule": null,
+          "rule": "L2",
           "precedent": "Select (hover:text-foreground)",
-          "approvedIn": null
+          "approvedIn": "B0"
         },
         "focus": {
-          "impl": "ring-2 ring-inset ring-ring",
+          "impl": "ring-2 ring-inset ring-ring (D19: a fileira rola e cortaria o offset)",
           "source": "declarado",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "fileira rola e cortaria o outline com offset (D6)",
           "approvedIn": null
         },
@@ -861,19 +861,19 @@
           "source": "inferido",
           "rule": null,
           "precedent": "Toast (X do cartao)",
-          "approvedIn": null
+          "approvedIn": "B0"
         },
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": null
         },
         "aberto": {
           "impl": "portal no body, z-modal, scrim overlay/scrim 40%, foco preso, Escape fecha, rolagem travada, foco volta ao gatilho",
           "source": "declarado",
-          "rule": "E7",
+          "rule": "L10",
           "precedent": "roadmap-componentes § Focus Scope, Scroll Lock e Scrim",
           "approvedIn": null
         },
@@ -882,7 +882,7 @@
           "source": "inferido",
           "rule": null,
           "precedent": "roadmap-componentes § Confirm Dialog",
-          "approvedIn": null
+          "approvedIn": "B0"
         }
       },
       "_states_doc": "Arquivo desenha so a caixa em repouso. Scrim a 40% e derivacao do Drawer. No escuro o arquivo pinta circulo e glifo do alerta com o destructive CLARO (mesmo erro de modo do Toast); o codigo segue o token."
@@ -925,7 +925,7 @@
         },
         "sem espaço": {
           "impl": "ações descem para linha própria (flex-wrap + ml-auto) e quebram entre si",
-          "source": "inferido",
+          "source": "banco",
           "rule": "E3",
           "precedent": null,
           "approvedIn": null
@@ -942,7 +942,7 @@
           "source": "inferido",
           "rule": null,
           "precedent": "gatilho do Date Picker",
-          "approvedIn": null
+          "approvedIn": "B0"
         },
         "focus (busca)": {
           "impl": "focus-within:outline-2 outline-offset-2 outline-ring",
@@ -954,7 +954,7 @@
         "notificações": {
           "impl": "sino abre painel da tela (portal, overlay/*, shadow-lg); Escape devolve o foco",
           "source": "declarado",
-          "rule": null,
+          "rule": "L11",
           "precedent": "lista aberta do Select",
           "approvedIn": "humano 2026-09-18"
         }
@@ -999,9 +999,9 @@
         "hover": {
           "impl": "ancestral sobe para muted-foreground",
           "source": "inferido",
-          "rule": null,
+          "rule": "L2",
           "precedent": "tom do nível atual",
-          "approvedIn": null
+          "approvedIn": "B0"
         },
         "focus": {
           "impl": "outline-2 outline-offset-2 outline-ring",
@@ -1029,7 +1029,7 @@
     },
     {
       "name": "SegmentedControl",
-      "family": "entrada",
+      "family": "navegacao",
       "figmaNode": "269:68",
       "batch": 3,
       "variants": [
@@ -1061,9 +1061,9 @@
         "hover": {
           "impl": "text-foreground",
           "source": "inferido",
-          "rule": null,
+          "rule": "L2",
           "precedent": "Tabs",
-          "approvedIn": null
+          "approvedIn": "B0"
         },
         "focus": {
           "impl": "outline-2 outline-offset-2 outline-ring",
@@ -1080,7 +1080,8 @@
           "approvedIn": null
         }
       },
-      "_states_doc": "Grupo de rádio com setas e ativação automática. Dois sets no Figma, duas exportações no mesmo arquivo."
+      "_states_doc": "Grupo de rádio com setas e ativação automática. Dois sets no Figma, duas exportações no mesmo arquivo.",
+      "_family_doc": "Era `entrada`. Movido para `navegacao` no lote B0: escolhe a vista (como Tabs), não recebe dado (como Input); os estados seguem a família de navegação (L2)."
     },
     {
       "name": "Telefone",
@@ -1183,7 +1184,7 @@
         "focus": {
           "impl": "outline outline-2 outline-offset-2 outline-ring",
           "source": "banco",
-          "rule": "I4",
+          "rule": "D6",
           "precedent": "Button (regra local D6)",
           "approvedIn": "lote-4"
         },
@@ -1197,12 +1198,329 @@
         "aberto": {
           "impl": "painel com elevacao lg; vira para cima quando nao cabe",
           "source": "inferido",
-          "rule": null,
+          "rule": "L11",
           "precedent": "DateRangePicker",
-          "approvedIn": null
+          "approvedIn": "B0"
         }
       },
       "_states_doc": "Ciente de fuso: lib/fusos.ts converte partes<->instante com Intl, sem biblioteca de data."
+    },
+    {
+      "name": "Button",
+      "family": "acao",
+      "figmaNode": "269:32",
+      "batch": 0,
+      "variants": [
+        "primary",
+        "secondary",
+        "ghost",
+        "destructive",
+        "soft",
+        "outline",
+        "tertiary",
+        "size:sm",
+        "size:md",
+        "size:lg",
+        "size:icon"
+      ],
+      "_variants_doc": "soft, outline e tertiary vieram do redesenho (269:32) com nome próprio para não mudar secondary e ghost nas telas prontas. O texto segue 13px e gap 8 do desenho original: pendência 6.",
+      "tokens": [
+        "primary",
+        "primary-foreground",
+        "primary-hover",
+        "card",
+        "border",
+        "foreground",
+        "muted-foreground",
+        "accent",
+        "destructive",
+        "destructive-hover",
+        "button-soft-bg",
+        "button-soft-foreground",
+        "button-soft-hover",
+        "background",
+        "surface-inverse",
+        "ring",
+        "radius/md",
+        "text/button",
+        "shadow-button-inner",
+        "shadow-button-inner-primary"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "primary→primary-hover · destructive→destructive-hover · soft→button-soft-hover · secondary/ghost/tertiary→bg-accent · outline→bg-background",
+          "source": "banco",
+          "rule": "L3",
+          "precedent": null,
+          "approvedIn": "B0"
+        },
+        "focus": {
+          "impl": "outline outline-2 outline-offset-2 outline-ring",
+          "source": "banco",
+          "rule": "D6",
+          "precedent": null,
+          "approvedIn": "B0"
+        },
+        "disabled": {
+          "impl": "opacity-50 pointer-events-none",
+          "source": "banco",
+          "rule": "I5",
+          "precedent": null,
+          "approvedIn": "B0"
+        }
+      },
+      "_states_doc": "Escrito em 2026-09-01, antes do registro; entrada feita no lote B1 lendo o código. disabled muda para I5 (eventos mantidos) no lote B3, decisão do gate B0."
+    },
+    {
+      "name": "Badge",
+      "family": "feedback",
+      "figmaNode": null,
+      "batch": 0,
+      "variants": [
+        "neutral",
+        "primary",
+        "success",
+        "warning",
+        "destructive",
+        "info"
+      ],
+      "tokens": [
+        "border",
+        "background",
+        "muted-foreground",
+        "primary",
+        "accent",
+        "success",
+        "warning",
+        "destructive",
+        "info",
+        "radius/md",
+        "text/label-sm"
+      ],
+      "motion": null,
+      "states": {},
+      "_states_doc": "Leitura: nenhum estado. Fora do showcase por decisão do humano (ADR-012); usado pela DataTable."
+    },
+    {
+      "name": "Sidebar",
+      "family": "navegacao",
+      "figmaNode": "270:15429",
+      "batch": 1,
+      "variants": [
+        "expandida",
+        "colapsada",
+        "item selecionado"
+      ],
+      "tokens": [
+        "sidebar-surface",
+        "background",
+        "card",
+        "nav-item-hover",
+        "nav-item-selected",
+        "nav-item-selected-icon",
+        "nav-item-selected-foreground",
+        "nav-item-text",
+        "sidebar-avatar",
+        "muted-foreground",
+        "foreground",
+        "surface-inverse",
+        "primary",
+        "ring",
+        "shadow-highlight",
+        "shadow-float",
+        "radius/xl",
+        "radius/md",
+        "radius/full",
+        "text/button",
+        "text/body-lg"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "bg-nav-item-hover no item",
+          "source": "figma",
+          "rule": "L2",
+          "precedent": "nav/item/bg-hover (variável do arquivo)",
+          "approvedIn": null
+        },
+        "selected": {
+          "impl": "bg-nav-item-selected + texto nav-item-selected-foreground + ícone nav-item-selected-icon",
+          "source": "figma",
+          "rule": "L7",
+          "precedent": "nav/item/bg-selected",
+          "approvedIn": null
+        },
+        "focus": {
+          "impl": "outline outline-2 outline-offset-2 outline-ring",
+          "source": "banco",
+          "rule": "D6",
+          "precedent": "Button (regra local D6)",
+          "approvedIn": "B0"
+        },
+        "disabled": {
+          "impl": "aria-disabled:opacity-50 aria-disabled:pointer-events-none no item",
+          "source": "banco",
+          "rule": "I5",
+          "precedent": "Button",
+          "approvedIn": "B0"
+        },
+        "recolhida": {
+          "impl": "282→88px, rótulos somem, title/aria-label sobem para a raiz (D12), toggle com aria-expanded",
+          "source": "humano",
+          "rule": null,
+          "precedent": "padrão G4 do FigJam",
+          "approvedIn": null
+        }
+      },
+      "_states_doc": "Colapso sem transição (AUD-011, lote B7). Chevrons em muted-foreground por D13."
+    },
+    {
+      "name": "DatePicker",
+      "family": "entrada",
+      "figmaNode": null,
+      "batch": 1,
+      "variants": [
+        "dois meses",
+        "com atalhos",
+        "CalendarioDeDia"
+      ],
+      "_variants_doc": "Node não registrado no log: o arquivo estava em edição pelo humano em 2026-09-14.",
+      "tokens": [
+        "accent",
+        "accent-foreground",
+        "primary",
+        "primary-foreground",
+        "card",
+        "border",
+        "foreground",
+        "muted-foreground",
+        "subtle-foreground",
+        "ring",
+        "radius/md",
+        "radius/lg",
+        "shadow-float",
+        "text/body-lg",
+        "text/body-md",
+        "text/label-lg",
+        "text/h4"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "dia sob o cursor: bg-accent com texto muted-foreground (empresta a superfície do selecionado, texto separa os dois)",
+          "source": "banco",
+          "rule": "L2",
+          "precedent": null,
+          "approvedIn": "B0"
+        },
+        "selected": {
+          "impl": "intervalo bg-accent text-accent-foreground · extremos bg-primary text-primary-foreground",
+          "source": "figma",
+          "rule": "L7",
+          "precedent": null,
+          "approvedIn": null
+        },
+        "hoje": {
+          "impl": "cor, não moldura (sinal por texto primary)",
+          "source": "banco",
+          "rule": "E-01 (estado derivado)",
+          "precedent": null,
+          "approvedIn": "B0"
+        },
+        "focus": {
+          "impl": "outline outline-2 outline-offset-2 outline-ring",
+          "source": "banco",
+          "rule": "D6",
+          "precedent": "Button (regra local D6)",
+          "approvedIn": "B0"
+        },
+        "disabled": {
+          "impl": "opacity-50 pointer-events-none no gatilho; dia fora de dataMinima/dataMaxima não clica",
+          "source": "banco",
+          "rule": "I5",
+          "precedent": "Button",
+          "approvedIn": "B0"
+        },
+        "aberto": {
+          "impl": "painel absoluto z-popover, border/card/shadow-float (migra para overlay-* em B5, D22); vira de lado quando não cabe; clique fora e Escape fecham",
+          "source": "humano",
+          "rule": "L11",
+          "precedent": null,
+          "approvedIn": null
+        }
+      },
+      "_states_doc": "Painel abre seco (AUD-009, lote B7)."
+    },
+    {
+      "name": "Rating",
+      "family": "entrada",
+      "figmaNode": "590:3000",
+      "batch": 3,
+      "variants": [
+        "editável",
+        "só leitura",
+        "max"
+      ],
+      "tokens": [
+        "primary",
+        "base/blue/300",
+        "input-label",
+        "muted-foreground",
+        "background",
+        "accent",
+        "ring",
+        "radius/sm",
+        "text/label-md"
+      ],
+      "motion": "estrela-pop 420ms · estrela-brilho 480ms · transition-transform 150ms (literais — lote B2)",
+      "states": {
+        "hover": {
+          "impl": "prévia da nota (estrelas até a do cursor em primary/70) + scale-125 e -translate-y-px sob motion-safe",
+          "source": "humano",
+          "rule": null,
+          "precedent": null,
+          "approvedIn": null
+        },
+        "active": {
+          "impl": "scale-90 sob motion-safe — parte da animação da estrela",
+          "source": "humano",
+          "rule": null,
+          "precedent": null,
+          "approvedIn": null
+        },
+        "focus": {
+          "impl": "outline outline-2 outline-offset-1 outline-ring",
+          "source": "banco",
+          "rule": "D6",
+          "precedent": "Button (offset 1: fileira apertada)",
+          "approvedIn": "B0"
+        },
+        "marcado": {
+          "impl": "estrela cheia weight=fill em primary; vazia regular em base/blue/300",
+          "source": "figma",
+          "rule": null,
+          "precedent": null,
+          "approvedIn": null
+        }
+      },
+      "_states_doc": "Único componente com active (interactions.md L5). Estrela vazia: o arquivo pinta blue-300, a descrição promete subtle-foreground — divergência no backlog, lote figma."
+    },
+    {
+      "name": "LogoDatacrazy",
+      "family": "midia",
+      "figmaNode": "270:7595",
+      "batch": 1,
+      "variants": [
+        "marca completa",
+        "simbolo"
+      ],
+      "tokens": [
+        "currentColor"
+      ],
+      "motion": null,
+      "states": {},
+      "_states_doc": "Leitura: nenhum estado. Exportado do arquivo; nunca redesenhar."
     }
   ]
 }

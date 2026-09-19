@@ -48,7 +48,7 @@ lê o estado por CSS (`peer-*`), sem estado próprio.
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | hover | `ring-input-border-hover (desmarcado) · bg-primary-hover (marcado)` | banco | I1 |
-| focus | `outline outline-2 outline-offset-2 outline-ring na caixa (peer-focus-visible)` | banco | I4 |
+| focus | `outline outline-2 outline-offset-2 outline-ring na caixa (peer-focus-visible)` | banco | D6 |
 | marcado | `bg-primary + Check 12px em primary-foreground` | figma | — |
 | indeterminado | `input.indeterminate + fundo do marcado + Minus 12px` | inferido | marcado (mesmo fundo e glifo na mesma medida) |
 | disabled | `bg-input-bg-disabled · marcado bg-subtle-foreground · rotulo input-text-disabled` | figma | — |
@@ -101,16 +101,6 @@ const todas = marcadas.length === colunas.length;
 
 ## Divergências abertas (para o gate)
 
-1. **Desmarcado com contorno fraco.** `input/border` sobre `card` dá ~1,2:1 no
-   claro (`#E1E7EF` sobre branco) e no escuro. A WCAG 1.4.11 pede 3:1 para o
-   limite de um controle. O código segue o arquivo. A decisão é do token
-   `input/border`, não deste componente: vale igual para Radio, Switch e Input.
-2. **Glifo do marcado no escuro.** O arquivo exporta o check com `fill="white"`
-   fixo, sem variável. Em código ele é `primary-foreground`, que no escuro é
-   `#10131A`. Branco sobre `#599CFF` dá ~2,5:1, e foi por isso que o
-   `primary-foreground` escuro mudou em 2026-09-04.
-3. **Indeterminado sem desenho.** Derivado: fundo do marcado + `Minus` a 12px.
-4. **Alvo de toque.** 18px contra os 44 da I15, mesma pendência de Card, Data
-   Table e Pagination.
-5. **Hover derivado** (E-01): `input/border` → `input/border-hover` e
-   `primary` → `primary-hover`. A mesma regra nos três controles de formulário.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-098, AUD-099, AUD-100, AUD-101, AUD-102 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

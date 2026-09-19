@@ -42,7 +42,7 @@ Peças do mesmo arquivo:
 | `HeaderNotificacoes` | `rotulo`, `contagem?` + props de botão | Button `tertiary` `icon` com sino e selo; acima de 99, "99+" |
 | `HeaderBusca` | `rotulo` + props de input | Busca inline de 184px (variante Search, 610:14049) |
 
-Controles que entram em `acoes` e têm doc própria: [Button](../../app/actions/button/page.tsx)
+Controles que entram em `acoes` e têm doc própria: [Button](Button.md)
 (`tertiary`), [SegmentedControl](SegmentedControl.md), [Breadcrumb](Breadcrumb.md), Date Picker.
 
 ## Variantes
@@ -55,11 +55,11 @@ Não tem. Ver "Par no Figma".
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | repouso | `px-8 py-4 border-b bg-background · linha de cima min-h-8 · ações gap-2` | figma | Actions=Default (601:12) |
-| sem espaço | `ações descem para linha própria (flex-wrap + ml-auto) e quebram entre si` | inferido | E3 |
+| sem espaço | `ações descem para linha própria (flex-wrap + ml-auto) e quebram entre si` | banco | E3 |
 | texto longo | `título, subtítulo e níveis da trilha truncate + title` | declarado | D12 |
 | hover (sino) | `hover:bg-accent do Button tertiary` | inferido | gatilho do Date Picker |
 | focus (busca) | `focus-within:outline-2 outline-offset-2 outline-ring` | declarado | D6 |
-| notificações | `sino abre painel da tela (portal, overlay/*, shadow-lg); Escape devolve o foco` | declarado | lista aberta do Select |
+| notificações | `sino abre painel da tela (portal, overlay/*, shadow-lg); Escape devolve o foco` | declarado | L11 |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -109,22 +109,6 @@ Usa: Button · Tooltip · (por encaixe) Breadcrumb, SegmentedControl, ViewSwitch
 
 ## Divergências abertas (para o gate)
 
-1. **Set do Figma com erro**: seis variantes com o mesmo nome. Renomear `Actions`
-   (ex.: Default, Date, Analytics, Compact, Minimal, Search) destrava leitura e
-   a criação da variante escura no arquivo.
-2. **Button do código ≠ Button do Header no arquivo**: 13px e vão 8 contra 12px
-   e vão 6 — pendência nº 6 de [02-design-system.md](../02-design-system.md).
-3. **Gatilho do Date Picker com 29px**, o arquivo desenha 32 no Header.
-4. **Número do selo em `primary-foreground`**: o `destructive-foreground` do
-   arquivo é branco nos dois modos (reprova a D8; 2,6:1 no escuro).
-5. **`tertiary` escuro**: o arquivo pinta o texto de `base/blue/600`, cópia do
-   Secondary; o código mantém `muted-foreground`.
-6. **Quebra de linha das ações e truncamento** não estão no arquivo.
-7. **Escuro do Header não desenhado**: saiu dos tokens; as peças (Button,
-   Segmented, View Switcher, Breadcrumb) têm variante escura e batem.
-8. **Sombra interna só no Claro** (2026-09-18): `--shadow-button-inner` vira
-   `none` no Escuro em tudo menos no Button `primary`. O arquivo mantém o brilho
-   nas variantes escuras — ali ele lava a superfície.
-9. **Painel de notificações não existe no arquivo.** O sino e o selo existem; a
-   lista que abre é cenário da tela, derivada de `overlay/*` + `shadow-lg`, e
-   mora na página do DS, não no componente.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-120, AUD-121, AUD-122, AUD-123, AUD-124, AUD-125, AUD-126, AUD-127, AUD-128 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

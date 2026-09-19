@@ -39,7 +39,7 @@ Tema não virou prop: é token, e um componente atende os dois temas.
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
 | `aberto` | `boolean` | — | sim | Mostra ou não a camada. |
-| `aoFechar` | `() => void` | — | sim | X, Escape e clique no fundo chamam. |
+| `aoFechar` | `() => void` | — | não | X, Escape e clique no fundo chamam. Sem ele, nada fecha por dentro — quem abriu decide. |
 | `fecharNoFundo` | `boolean` | `variant !== "destructive"` | não | Clique no fundo fecha. |
 
 ## Variantes
@@ -55,8 +55,8 @@ Tema não virou prop: é token, e um componente atende os dois temas.
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | hover | `X: bg-overlay-item-hover text-foreground` | inferido | Toast (X do cartao) |
-| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | I4 |
-| aberto | `portal no body, z-modal, scrim overlay/scrim 40%, foco preso, Escape fecha, rolagem travada, foco volta ao gatilho` | declarado | E7 |
+| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
+| aberto | `portal no body, z-modal, scrim overlay/scrim 40%, foco preso, Escape fecha, rolagem travada, foco volta ao gatilho` | declarado | L10 |
 | fundo | `clique no scrim fecha; no destructive nao fecha (fecharNoFundo troca)` | inferido | roadmap-componentes § Confirm Dialog |
 <!-- kfe:estados:end -->
 
@@ -109,20 +109,6 @@ Usado por: —
 
 ## Divergências abertas (para o gate)
 
-1. **Alerta no escuro.** O arquivo pinta círculo e glifo com o `destructive`
-   **claro** (`#C6323C`) nas variantes `theme=Dark`, e o botão com o escuro
-   (`#EB7076`). Mesmo erro de modo da camada `Icon` do Toast. Aqui os dois
-   seguem o token.
-2. **12% medido, não lido.** O Figma não exporta a opacidade do círculo; o pixel
-   fecha em 0,12 nos três canais do claro. Ponte do Figma desktop desligada.
-3. **Cancelar no escuro.** No arquivo é o Ghost escuro (331:762): sem traço,
-   texto `muted-foreground`. O `outline` do código mantém traço `background` e
-   texto `surface-inverse` nos dois temas — resolver pede token por tema no
-   Button, não no Modal.
-4. **Lixeira do escuro** sai `#1C1C25` no arquivo, e o texto do mesmo botão
-   `primary-foreground` (`#10131A`). O código usa a cor do texto nos dois.
-5. **Texto e vão dos botões.** Arquivo: 12px e 6px entre ícone e texto; Button
-   do código: 13px e 8px. Divergência já aberta no Button.
-6. **Não está no arquivo:** fundo (40%, derivado do Drawer), foco preso,
-   Escape, clique fora, movimento, quebra de linha do título e vão de 12 entre
-   título e X.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-139, AUD-140, AUD-141, AUD-142, AUD-143, AUD-144 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

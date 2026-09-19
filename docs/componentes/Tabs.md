@@ -49,8 +49,8 @@ Não tem. Os dois estados do arquivo (Default e Selected) são estado, não vari
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | selecionada | `text-primary + traço bg-primary h-0.5 + aria-selected` | figma | State=Selected (535:20) |
-| hover | `text-foreground (sem traço)` | inferido | Select (hover:text-foreground) |
-| focus | `ring-2 ring-inset ring-ring` | declarado | I4 |
+| hover | `text-foreground (sem traço)` | inferido | L2 |
+| focus | `ring-2 ring-inset ring-ring (D19: a fileira rola e cortaria o offset)` | declarado | D6 |
 | disabled | `opacity-50 pointer-events-none, pulada pelas setas` | banco | I5 |
 <!-- kfe:estados:end -->
 
@@ -88,16 +88,6 @@ Usa: — · Usado por: —
 
 ## Divergências abertas (para o gate)
 
-1. **A fileira não está no arquivo.** O vão de 12px entre abas (`gap-md`), a
-   ausência de linha de base embaixo da fileira e a rolagem horizontal são
-   derivação.
-2. **Hover não está desenhado.** O rótulo sobe para `foreground` (E-01), sem traço.
-3. **Foco por anel interno** em vez da D6, pelo motivo acima.
-4. **Barra de rolagem escondida.** Rola por trackpad, arrasto e teclado; com mouse
-   de roda vertical, a pessoa pode não perceber que há mais abas.
-5. **Escopo negativo do roadmap.** A linha "Tabs como navegação" em
-   `processo/roadmap-componentes.md` continua dizendo que fica fora; a decisão
-   do humano de 2026-09-15 está no log do ciclo.
-6. **Diff acima de 1% é do texto.** Nenhum pixel diferente fora da linha do
-   rótulo. "Histórico" mede 50,1px no navegador contra 51 no arquivo, a mesma
-   diferença de métrica da Geist vista no Tooltip; a aba fecha em 58,1 contra 59.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-168, AUD-169, AUD-170, AUD-171, AUD-172, AUD-173 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

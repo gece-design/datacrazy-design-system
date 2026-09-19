@@ -45,7 +45,7 @@ acordado com a sessão do drawer em 2026-09-14.
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | hover | `bg-input-border-hover (desligado) · bg-primary-hover (ligado)` | banco | I1 |
-| focus | `outline outline-2 outline-offset-2 outline-ring no trilho (peer-focus-visible)` | banco | I4 |
+| focus | `outline outline-2 outline-offset-2 outline-ring no trilho (peer-focus-visible)` | banco | D6 |
 | ligado | `bg-primary + botao translate-x-4` | figma | — |
 | disabled | `bg-input-bg-disabled · ligado bg-subtle-foreground · rotulo input-text-disabled` | figma | — |
 <!-- kfe:estados:end -->
@@ -87,15 +87,6 @@ frente de trabalho.
 
 ## Divergências abertas (para o gate)
 
-1. **Desligado com trilho fraco** — `input/border` sobre `card`, ~1,2:1. Mesma
-   causa do Checkbox e do Radio.
-2. **Botão some no escuro desligado.** Botão `card` (`#25252D`) sobre trilho
-   `input/border` (`#2E2E38`). O arquivo desenha assim. A posição continua
-   dizendo o estado, mas o botão quase não se vê.
-3. **Hover do desligado pesa mais que nos outros dois.** A regra é a mesma
-   (`input/border` → `input/border-hover`), mas aqui ela pinta o trilho
-   inteiro de `muted-foreground`, não um traço de 1.5px. Vale revisar.
-4. **Retorno do efeito** não é do componente: quem usa precisa mostrar o
-   resultado e desfazer a posição se o back recusar. O Toast já existe
-   (outra frente) e é o candidato.
-5. **Alvo de toque** 20px contra os 44 da I15.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-163, AUD-164, AUD-165, AUD-166, AUD-167 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

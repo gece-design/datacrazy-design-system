@@ -35,13 +35,29 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 
 ### `AcaoCopiar`
 
-`rotulo` e `rotuloCopiado`. Copia o valor atual do próprio campo (lido pelo
+`rotulo`, `rotuloCopiado` e, fora de um Input (modo leitura do `CampoEditavel`), `valor` — o texto a copiar. Copia o valor atual do próprio campo (lido pelo
 contexto do Input) e vira um check em `success` por 1,5s, anunciado por
 `role="status"`. Campo vazio: só leva o foco para ele.
 
+### `CampoEditavel`
+
+| Prop | Tipo | Obrigatória | Descrição |
+|------|------|-------------|-----------|
+| `rotulo` | `string` | sim | Rótulo do cartão. |
+| `valor` | `string` | sim | O texto em leitura. |
+| `aoSalvar` | `(valor: string) => void` | sim | Enter salva; Escape desfaz e não vaza para o drawer. |
+| `rotuloEditar` | `string` | sim | O que o botão de leitura anuncia. Ex.: "Editar razão social". |
+| `textoVazio` | `string` | sim | No lugar do valor vazio. Ex.: "Adicionar". |
+| `acoes` | `ReactNode` | não | À direita, no modo leitura. Ex.: `AcaoCopiar` com `valor`. |
+| `iconeInicio`, `placeholder`, `inputMode`, `className` | — | não | Vão para o `<input>` do modo edição. |
+
+### Helpers de classe
+
+`caixaDeCampo({ erro?, disabled? })`, `blocoDeCampo({ realce? })`, `rotuloDeCampo(cartao?)` e `caixaNoCartao` são as classes do campo, exportadas para `InputTelefone`, `TimePicker`, `Rating` e `Select size="field"` desenharem a mesma caixa. Migram para `lib/campo.ts` no lote B6 (regra D21).
+
 ### `Rating`
 
-`rotulo`, `valor`, `max` (padrão **10**, decisão do humano em 2026-09-17) e
+Tem doc própria: [Rating.md](Rating.md). Resumo: `rotulo`, `valor`, `max` (padrão **10**, decisão do humano em 2026-09-17) e
 `aoMudar`. Sem `aoMudar`, é só leitura. Acima de seis estrelas elas caem de 20
 para 16px e o respiro de 8 para 4 — senão a fileira não cabe na coluna do
 formulário.
@@ -137,23 +153,6 @@ Vizinhos que compartilham a caixa: [Telefone](Telefone.md) e
 
 ## Divergências abertas (para o gate)
 
-1. **Cor das estrelas.** O arquivo pinta cheia em `primary` e vazia em
-   `base/blue/300`; a descrição do Rating no Figma promete `foreground` e
-   `subtle-foreground`. O código segue a pintura.
-2. **Foco com 2px de outro jeito.** O arquivo troca a borda para 2px; aqui é
-   borda de 1 + anel interno de 1, para o texto não pular.
-3. **Hover não desenhado.** Vem da regra I1, apoiado no token
-   `input/border-hover`, que já existia.
-4. **Rating com hover de pré-visualização e animação de clique.** O arquivo
-   não desenha nenhum dos dois; entraram por pedido do humano (2026-09-18),
-   sob a exceção E-01.
-5. **Rating de 0 a 10.** O arquivo desenha cinco estrelas; o padrão do código é
-   dez, por decisão do humano. `max={5}` volta ao desenho.
-6. **`CampoEditavel` não está no arquivo.** Clicar para editar é pedido do
-   humano (2026-09-17): em tela de leitura o campo é texto até o clique.
-   Desde 2026-09-18 o bloco é cartão: superfície própria em repouso
-   (`background/50`), realce `accent` sob o cursor, 12px de respiro, rótulo em
-   bold e valor na mesma margem do rótulo. A caixa do Input só aparece no
-   clique, por dentro do cartão. Tela de leitura não tem cara de formulário.
-7. **Lista aberta do Select de formulário** é a mesma derivação do
-   [Select](Select.md).
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-129, AUD-130, AUD-131, AUD-132, AUD-133, AUD-134, AUD-135 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

@@ -30,7 +30,8 @@ lista, a escala de elevação no painel e a grade do Date Picker no calendário
 | `passoSegundos` | `number` | não | Padrão 10. |
 | `fuso` | `string` | não | IANA. Padrão: o do navegador. |
 | `locale` | `string` | sim | BCP-47. |
-| `rotulos` | `RotulosDeHora` | sim | `vazio`, `horas`, `minutos`, `segundos`, `agora`, `limpar`, `fuso`. |
+| `rotulos` | `RotulosDeHora` | sim | Os sete textos, **todos obrigatórios**: `vazio`, `horas`, `minutos`, `segundos`, `agora`, `limpar`, `fuso` (aria-label do seletor de fuso). |
+| `disabled`, `className` | — | não | — |
 
 ### `DateTimePicker`
 
@@ -57,9 +58,9 @@ Tudo o que o `TimePicker` tem, mais:
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
 | hover | `bg-overlay-item-hover no item da lista` | figma | Select Item 544:99 |
-| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | I4 |
+| focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
 | selecionado | `bg-overlay-item-selected + text-overlay-item-text-selected` | figma | Select Item 544:99 |
-| aberto | `painel com elevacao lg; vira para cima quando nao cabe` | inferido | DateRangePicker |
+| aberto | `painel com elevacao lg; vira para cima quando nao cabe` | inferido | L11 |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -108,10 +109,6 @@ Usado por: agenda de atendimento (tela ainda não construída)
 
 ## Divergências abertas (para o gate)
 
-1. **Não está no Figma.** Tudo aqui é derivação de tokens e de componentes que
-   já existiam. Vale desenhar para confirmar.
-2. **Lista, não roleta.** Em celular o padrão do sistema é roleta; aqui são
-   colunas roláveis, iguais nos dois.
-3. **`passoMinutos` some com valores fora do passo.** Uma hora vinda do back com
-   `09:07` aparece no gatilho, mas não fica marcada na coluna de 5 em 5.
-4. **Sem intervalo de hora.** "Das 9 às 18" são dois componentes hoje.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-182, AUD-183, AUD-184, AUD-185 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.

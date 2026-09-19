@@ -28,7 +28,8 @@ dá para saber se falta país ou falta DDD.
 | `pais` | `string` | sim | ISO 3166-1 alpha-2. Ex.: `"BR"`. |
 | `aoMudarPais` | `(codigo: string) => void` | sim | Troca de país. |
 | `rotuloPais` | `string` | sim | Nome do seletor para leitor de tela. |
-| `paises` | `Pais[]` | não | Padrão: `PAISES`, os doze do CRM hoje. |
+| `paises` | `Pais[]` | não | Padrão: `PAISES`, os doze do CRM hoje. `Pais` = `codigo` (ISO 3166-1 alpha-2), `nome`, `ddi` (com o "+"), `bandeira`. |
+| `placeholder`, `cartao`, `disabled`, `className` | — | não | Como no `Input`. |
 | `acoes` | `ReactNode` | não | Ações de 16px depois do número. |
 | `erro` | `string` | não | Mensagem sob o campo. |
 
@@ -90,9 +91,6 @@ Usado por: [Drawer](Drawer.md) (contatos e empresa mãe)
 
 ## Divergências abertas (para o gate)
 
-1. **Não está no Figma.** Decisão do humano; o arquivo ainda mostra o telefone
-   como campo de texto.
-2. **Bandeira é emoji.** O Windows não desenha bandeira: lá aparece o código do
-   país. Por isso o DDI fica escrito ao lado, e não só a bandeira.
-3. **Sem máscara.** O número entra como a pessoa digita. Máscara por país é
-   decisão de produto, e muda a cada país da lista.
+Migradas para [../processo/consistencia.json](../processo/consistencia.json) em
+2026-09-19 (lote B1 da auditoria de consistência): AUD-179, AUD-180, AUD-181 — status
+`adiado`, lote `figma`. Reabrem na remedição contra o arquivo.
