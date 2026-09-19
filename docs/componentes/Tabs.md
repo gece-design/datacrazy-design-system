@@ -71,7 +71,8 @@ Usa: — · Usado por: —
 ```tsx
 <Tabs id="lead" rotulo="Seções do lead" itens={secoes} atual={secao} aoEscolher={setSecao} />
 
-<TabPanel id="lead" valor="historico" atual={secao}>…</TabPanel>
+<TabPanel id="lead" valor="historico" atual={secao}>{historico}</TabPanel>
+<TabPanel id="lead" valor="atividades" atual={secao}>{atividades}</TabPanel>
 ```
 
 ## Acessibilidade

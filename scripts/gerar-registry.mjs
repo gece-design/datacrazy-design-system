@@ -33,6 +33,13 @@ const DESCRICAO_FIXA = {};
 const TITULO_FIXO = { "data-table": "Data Table", "logo-datacrazy": "Logo DataCrazy" };
 // Slug da página no site quando difere do nome do arquivo.
 const PAGINA_FIXA = { "data-table": "table" };
+// Componente que vive como SEÇÃO de outra página (decisão do humano, 2026-09-19):
+// o `docs:` aponta para a âncora da seção, não para uma página própria.
+const SECAO_FIXA = {
+  rating: { pagina: "/forms/input", ancora: "rating" },
+  telefone: { pagina: "/forms/input", ancora: "telefone" },
+  "segmented-control": { pagina: "/navigation/header", ancora: "segmented-control-e-view-switcher" },
+};
 
 // O que da doc do componente serve a quem USA. Par no Figma, lote e divergências
 // abertas são maquinário do nosso processo — ficam fora.
@@ -346,7 +353,10 @@ const componentes = fs
       throw new Error(`${rel}: hsl(var(--…)) só funciona no Tailwind v3 — use a classe do token (ex.: currentColor + text-primary)`);
     }
     const slug = PAGINA_FIXA[name] ?? name;
-    const pagina = paginas.find((p) => p.href.split("/").pop() === slug);
+    const secao = SECAO_FIXA[name];
+    const pagina = secao
+      ? { ...paginas.find((p) => p.href === secao.pagina), href: `${secao.pagina}#${secao.ancora}` }
+      : paginas.find((p) => p.href.split("/").pop() === slug);
     const md = secoesDoMd(`docs/componentes/${pascal(name)}.md`);
     const description =
       DESCRICAO_FIXA[name] ?? (md?.Responsabilidade && umaLinha(md.Responsabilidade)) ?? pagina?.descricao;

@@ -35,7 +35,7 @@ export const navegacao: CategoriaNav[] = [
     descricao: "O que o usuário aciona.",
     itens: [
       { titulo: "Button", href: "/actions/button", icone: "clique", pronto: true , descricao: "Ação do usuário, quatro variantes"},
-      { titulo: "Icon Button", href: "/actions/icon-button", icone: "toque" , descricao: "Ação sem rótulo"},
+      { titulo: "Icon Button", href: "/actions/icon-button", icone: "toque", pronto: true, descricao: "Ação só de ícone, em quatro tamanhos"},
     ],
   },
   {
@@ -43,7 +43,7 @@ export const navegacao: CategoriaNav[] = [
     descricao: "Entrada e edição de dados.",
     itens: [
       { titulo: "Input", href: "/forms/input", icone: "campo", pronto: true , descricao: "Campo de texto de uma linha"},
-      { titulo: "Select", href: "/forms/select", icone: "selecao" , descricao: "Escolha numa lista"},
+      { titulo: "Select", href: "/forms/select", icone: "selecao", pronto: true, descricao: "Escolha numa lista, com a lista aberta"},
       { titulo: "Checkbox", href: "/forms/checkbox", icone: "caixa", pronto: true , descricao: "Marcação, com indeterminado"},
       { titulo: "Radio Group", href: "/forms/radio-group", icone: "radio", pronto: true , descricao: "Escolha exclusiva por setas"},
       { titulo: "Switch", href: "/forms/switch", icone: "interruptor", pronto: true , descricao: "Liga e desliga na hora"},
@@ -101,6 +101,8 @@ export const navegacao: CategoriaNav[] = [
     descricao: "O design system montado em tela de produto, para usar de verdade.",
     itens: [
       { titulo: "Pipeline", href: "/exemplos/pipeline", icone: "kanban", pronto: true, descricao: "Funil em kanban, com arrastar e soltar" },
+      // Decisão do humano em 2026-09-19: a proposta de cor das tags fica pública.
+      { titulo: "Tags coloridas", href: "/exemplos/tags-proposta", icone: "etiqueta", pronto: true, descricao: "Antes e depois: a cor da tag vem da regra do grupo" },
     ],
   },
 ];

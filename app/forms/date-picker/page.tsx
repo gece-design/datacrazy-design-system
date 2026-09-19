@@ -309,7 +309,7 @@ const atalhos = criarAtalhos(
   { primeiroDiaDaSemana: 0 },
 );
 
-<DateRangePicker atalhos={atalhos} … />`}
+<DateRangePicker valor={periodo} onValorChange={setPeriodo} locale={locale} rotulos={rotulos} atalhos={atalhos} />`}
         nota={
           <>
             <Chip>lib/periodos.ts</Chip> guarda só as contas — <Chip>PERIODOS</Chip> é um mapa de chave para

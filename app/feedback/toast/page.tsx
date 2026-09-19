@@ -24,9 +24,9 @@ const amostras: Amostra[] = [
 ];
 
 const codigoVariantes = `<Toast variant="success" titulo="Negócio salvo" descricao="As alterações já aparecem no funil." aoFechar={fechar} />
-<Toast variant="destructive" titulo="Não foi possível salvar" descricao="…" aoFechar={fechar} />
-<Toast variant="warning" titulo="Importação parcial" descricao="…" aoFechar={fechar} />
-<Toast variant="info" titulo="Nova mensagem" descricao="…" aoFechar={fechar} />`;
+<Toast variant="destructive" titulo="Não foi possível salvar" descricao="A conexão caiu. Tente de novo em instantes." aoFechar={fechar} />
+<Toast variant="warning" titulo="Importação parcial" descricao="12 contatos ficaram de fora por e-mail repetido." aoFechar={fechar} />
+<Toast variant="info" titulo="Nova mensagem" descricao="Marina Albuquerque respondeu no WhatsApp." aoFechar={fechar} />`;
 
 const codigoFila = `// uma vez, perto da raiz
 <Toaster />

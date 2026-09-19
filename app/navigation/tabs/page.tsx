@@ -34,8 +34,8 @@ const codigoEstados = `<Tabs
 
 const codigoAoVivo = `<Tabs id="lead" rotulo="Seções do lead" itens={secoes} atual={secao} aoEscolher={setSecao} />
 
-<TabPanel id="lead" valor="historico" atual={secao}>…</TabPanel>
-<TabPanel id="lead" valor="atividades" atual={secao}>…</TabPanel>`;
+<TabPanel id="lead" valor="historico" atual={secao}>{historico}</TabPanel>
+<TabPanel id="lead" valor="atividades" atual={secao}>{atividades}</TabPanel>`;
 
 export default function TabsPage() {
   const [estado, setEstado] = useState("historico");

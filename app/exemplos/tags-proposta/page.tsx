@@ -1,7 +1,7 @@
 "use client";
 
-/* TEMPORÁRIO — só para o print da proposta de cor das tags (2026-09-18).
-   Apagar depois da decisão. */
+/* Proposta de cor das tags (2026-09-18). Ficou pública em Telas de exemplo
+   por decisão do humano em 2026-09-19 — o cliente vê o antes e o depois. */
 
 import { Fire, Snowflake, ThermometerSimple, User } from "@phosphor-icons/react";
 import { Tag, TONS, tomDe } from "@/components/ui/tag";
@@ -27,7 +27,7 @@ function Linha({ rotulo, children }: { rotulo: string; children: React.ReactNode
 
 export default function Page() {
   return (
-    <div className="mx-auto flex max-w-[860px] flex-col gap-6 p-8">
+    <main className="mx-auto flex max-w-[860px] flex-col gap-6 p-8">
       <h1 className="text-heading-md text-foreground">Tags do drawer · proposta de cor</h1>
 
       <Bloco titulo="Antes" nota="Tudo cinza, tudo em caixa alta. A fileira do perfil hoje.">
@@ -99,6 +99,6 @@ export default function Page() {
           ))}
         </div>
       </Bloco>
-    </div>
+    </main>
   );
 }

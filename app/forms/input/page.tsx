@@ -182,10 +182,23 @@ export default function InputPage() {
         spec="cartao"
         fundo="card"
         descricao="No drawer, campo que já é campo entra no mesmo cartão do CampoEditavel: rótulo em bold, superfície própria, caixa por dentro. Assim uma coluna de leitura não mistura dois visuais."
-        codigo={`<Input cartao rotulo="Quantos colaboradores" value={n} onChange={…} acoes={…} />
+        codigo={`<Input
+  cartao
+  rotulo="Quantos colaboradores"
+  inputMode="numeric"
+  value={colaboradores}
+  onChange={(e) => setColaboradores(e.target.value.replace(/\D/g, ""))}
+  acoes={
+    <>
+      <AcaoCampo icone={Minus} rotulo="Diminuir" onClick={diminuir} />
+      <AcaoCampo icone={Plus} rotulo="Aumentar" onClick={aumentar} />
+    </>
+  }
+/>
 
-<CartaoDeCampo rotulo="Reclamações">      {/* quem traz a própria caixa */}
-  <Select size="field" rotulo="Reclamações" textoVazio="Selecione uma opção" … />
+{/* quem traz a própria caixa entra no cartão por fora */}
+<CartaoDeCampo rotulo="Reclamações">
+  <Select size="field" rotulo="Reclamações" textoVazio="Selecione uma opção" opcoes={motivos} valor={motivo} aoEscolher={setMotivo} className="block w-full" />
 </CartaoDeCampo>`}
         nota={
           <>

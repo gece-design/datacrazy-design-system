@@ -206,7 +206,7 @@ const [ativa, setAtiva] = useState("Pipelines");
     <SidebarGrupo recuo>
       <SidebarItem icone={House} selecionado={ativa === "Início"}>Início</SidebarItem>
       <SidebarItem icone={Kanban} selecionado={ativa === "Pipelines"}>Pipelines</SidebarItem>
-      {/* … */}
+      <SidebarItem icone={UsersThree} selecionado={ativa === "Leads"}>Leads</SidebarItem>
     </SidebarGrupo>
   </SidebarTopo>
 

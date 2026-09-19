@@ -76,7 +76,15 @@ export default function TimePickerPage() {
 />
 
 {/* com segundos e minuto a minuto */}
-<TimePicker segundos passoMinutos={1} … />`}
+<TimePicker
+  rotulo="Disparo da automação"
+  valor={horaComSegundos}
+  aoMudar={setHoraComSegundos}
+  segundos
+  passoMinutos={1}
+  locale="pt-BR"
+  rotulos={rotulos}
+/>`}
         nota={
           <>
             O valor é texto no formato 24h. Quem lê e escreve no back não precisa saber de fuso — e o

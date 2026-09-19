@@ -19,6 +19,8 @@ import { DateRangePicker, type IntervaloDeDatas, type RotulosDoDatePicker } from
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 
 import { foco, focoInterno } from "@/lib/estados";
+import { useSaida } from "@/lib/use-saida";
+import { PainelFlutuante } from "@/components/ui/popover";
 /* Na doc os textos são literais porque a doc é escrita em português. No CRM
    cada um vem do next-intl — nenhum componente do Header tem texto embutido. */
 
@@ -90,6 +92,7 @@ const notificacoes: Notificacao[] = [
  */
 function Sino() {
   const [aberto, setAberto] = React.useState(false);
+  const { saindo, visivel } = useSaida(aberto);
   const [itens, setItens] = React.useState(notificacoes);
   const [pos, setPos] = React.useState<{ top: number; right: number } | null>(null);
   const gatilho = React.useRef<HTMLButtonElement>(null);
@@ -136,10 +139,12 @@ function Sino() {
         aria-expanded={aberto}
         onClick={() => (aberto ? fechar() : setAberto(true))}
       />
-      {aberto && pos
+      {visivel && pos
         ? createPortal(
-            <div
+            <PainelFlutuante
               ref={painel}
+              fixo
+              saindo={saindo}
               role="dialog"
               aria-label="Notificações"
               tabIndex={-1}
@@ -149,7 +154,7 @@ function Sino() {
                 fechar();
               }}
               style={{ top: pos.top, right: pos.right }}
-              className="fixed z-popover flex w-[360px] max-w-[calc(100vw-32px)] flex-col overflow-hidden rounded-lg border border-overlay-border bg-overlay-bg shadow-lg outline-none motion-safe:animate-fade-in-fast"
+              className="flex w-[360px] max-w-[calc(100vw-32px)] flex-col overflow-hidden outline-none"
             >
               <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-2.5">
                 <p className="text-h4 text-foreground">Notificações</p>
@@ -205,7 +210,7 @@ function Sino() {
                   Ver todas
                 </Button>
               </div>
-            </div>,
+            </PainelFlutuante>,
             document.body,
           )
         : null}
@@ -314,10 +319,10 @@ const codigoDefault = `<Header
 
 const codigoData = `acoes={
   <>
-    …
+    <Button variant="tertiary"><MagnifyingGlass size={16} weight="regular" />Pesquisar</Button>
     <DateRangePicker valor={periodo} onValorChange={setPeriodo} rotulos={rotulos} locale={locale} />
     <HeaderDivisor />
-    …
+    <Button><Plus size={16} weight="regular" />Novo lead</Button>
   </>
 }`;
 
@@ -329,6 +334,7 @@ const codigoBusca = `<Header
 />`;
 
 const codigoSino = `const [aberto, setAberto] = useState(false);
+  const { saindo, visivel } = useSaida(aberto);
 
 <HeaderNotificacoes
   ref={gatilho}
@@ -342,12 +348,17 @@ const codigoSino = `const [aberto, setAberto] = useState(false);
 // o painel é da tela, não do DS: portal no body, ancorado no sino,
 // em overlay/bg com shadow-lg — o mesmo caminho da lista do Select`;
 
-const codigoControles = `<ViewSwitcher rotulo="Visualização" itens={visoes} atual={visao} aoEscolher={setVisao} />
-
-<SegmentedControl rotulo="Período" itens={periodos} atual={periodo} aoEscolher={setPeriodo} />
-
-// visoes: { valor, rotulo, icone }[] — o rótulo vira nome acessível e tooltip
-// periodos: { valor, rotulo, disabled? }[] — de 2 a 4; acima disso, Select`;
+const codigoControles = `// visoes: { valor, rotulo, icone }[] — o rótulo vira nome acessível e tooltip
+// periodos: { valor, rotulo, disabled? }[] — de 2 a 4; acima disso, Select
+<Header
+  titulo="Dashboard"
+  acoes={
+    <>
+      <ViewSwitcher rotulo="Visualização" itens={visoes} atual={visao} aoEscolher={setVisao} />
+      <SegmentedControl rotulo="Período" itens={periodos} atual={periodo} aoEscolher={setPeriodo} />
+    </>
+  }
+/>`;
 
 export default function HeaderPage() {
   return (

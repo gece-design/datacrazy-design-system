@@ -32,7 +32,8 @@ if (fs.existsSync(pastaR)) {
     const item = JSON.parse(fs.readFileSync(path.join(pastaR, f), "utf8"));
     const m = typeof item.docs === "string" && item.docs.match(/https?:\/\/[^/\s]+(\/[^\s]*)$/);
     if (!m) continue;
-    const rota = m[1].replace(/\/$/, "") || "/";
+    // `docs:` pode apontar para a seção de uma página (#ancora): a rota é o que vem antes
+    const rota = m[1].replace(/#.*$/, "").replace(/\/$/, "") || "/";
     if (!paginas.has(rota)) marca("docs-para-rota-inexistente", `public/r/${f}`, `docs: ${rota} → 404 (gerado por scripts/gerar-registry.mjs)`);
   }
 } else if (!flags().json) {

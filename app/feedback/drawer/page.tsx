@@ -51,7 +51,7 @@ export default function DrawerPage() {
         codigo={`<DrawerPainel className="h-[760px]">
   <DrawerPerfil nome="Joel Jota" tipo="empresa" rotuloTipo="Empresa"
     telefone="+55 (11) 98765-4321" email="contact@datawave.com"
-    tags={<>{tags}<SeletorTags grupos={catalogo} selecionadas={ids} aoAlternar={…} aoCriar={…} rotulos={…} /></>}
+    tags={<>{tags}<SeletorTags grupos={catalogo} selecionadas={ids} aoAlternar={alternar} aoCriar={criar} rotulos={rotulosDoSeletor} /></>}
     acoes={<><Button>Automação</Button><Button variant="soft">Atendimento</Button></>}
     aoFechar={fechar} aoRecolher={recolher}>
     <DrawerBloco titulo="Métricas"><DrawerMetricas itens={metricas} /></DrawerBloco>
@@ -60,7 +60,11 @@ export default function DrawerPage() {
       <DrawerMenu rotulo="Seções do lead" itens={menu} atual={secao} aoEscolher={setSecao} />
     </DrawerBloco>
   </DrawerPerfil>
-  <DrawerConteudo titulo="Histórico" descricao="Veja o histórico do seu lead" acoes={…}>
+  <DrawerConteudo
+    titulo="Histórico"
+    descricao="Veja o histórico do seu lead"
+    acoes={<><Button variant="tertiary" size="icon" aria-label="Filtrar"><FunnelSimple size={16} weight="regular" /></Button><Button variant="tertiary" size="icon" aria-label="Comentar"><ChatText size={16} weight="regular" /></Button></>}
+  >
     <LinhaDoTempo eventos={eventos} />
   </DrawerConteudo>
 </DrawerPainel>`}

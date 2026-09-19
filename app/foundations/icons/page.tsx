@@ -6,39 +6,29 @@ import {
 import type { IconWeight } from "@phosphor-icons/react";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 import { IconBrowser } from "@/components/ds/icon-browser";
+import { Button } from "@/components/ui/button";
 
-import { foco } from "@/lib/estados";
 /* ------------------------------------------------------------------------- */
 
 /** Os seis do pacote, na ordem em que o Phosphor os declara. */
 const PESOS: IconWeight[] = ["thin", "light", "regular", "bold", "fill", "duotone"];
 
 const CODIGO_IMPORT = `import { Funnel, Export, Lightning } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
 
 <div className="flex flex-wrap items-center gap-2">
-  <button type="button" className="inline-flex items-center gap-1.5 rounded-md border border-border
-                     px-2.5 py-1.5 text-button text-foreground
-                     transition-colors hover:border-primary
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+  <Button variant="secondary">
     <Funnel size={16} weight="regular" />
     Filtrar
-  </button>
-
-  <button type="button" className="inline-flex items-center gap-1.5 rounded-md border border-border
-                     px-2.5 py-1.5 text-button text-foreground
-                     transition-colors hover:border-primary
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+  </Button>
+  <Button variant="secondary">
     <Export size={16} weight="regular" />
     Exportar
-  </button>
-
-  <button type="button" className="inline-flex items-center gap-1.5 rounded-md bg-primary
-                     px-2.5 py-1.5 text-button text-primary-foreground
-                     transition-colors hover:bg-primary-hover
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+  </Button>
+  <Button>
     <Lightning size={16} weight="regular" />
     Automação
-  </button>
+  </Button>
 </div>`;
 
 /* ------------------------------------------------------------------------- */
@@ -105,45 +95,26 @@ export default function Icones() {
           <>
             Nenhum dos três passa <Chip>color</Chip>: o <Chip>currentColor</Chip> herda de{" "}
             <Chip>text-foreground</Chip> e de <Chip>text-primary-foreground</Chip>, então o ícone
-            troca de tema junto com o texto, sem ramificação de código. Passe o mouse nos três: a
-            borda e o fundo são <Chip>transition-colors</Chip> em cima de token, e o ícone não muda —
-            é o texto ao lado dele que carrega a cor.
+            troca de tema junto com o texto, sem ramificação de código. Passe o mouse nos três: o
+            fundo é <Chip>transition-colors</Chip> em cima de token, e o ícone não muda — é o texto ao
+            lado dele que carrega a cor. Os três são o <Chip>Button</Chip> do DS.
           </>
         }
       >
+        {/* o Button do DS — antes eram três <button> à mão, e a aba Código ensinava a copiá-los (AUD-054) */}
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            className={`inline-flex items-center gap-1.5 rounded-md border border-border
-                       px-2.5 py-1.5 text-button text-foreground
-                       transition-colors hover:border-primary
-                       ${foco}`}
-          >
+          <Button variant="secondary">
             <Funnel size={16} weight="regular" />
             Filtrar
-          </button>
-
-          <button
-            type="button"
-            className={`inline-flex items-center gap-1.5 rounded-md border border-border
-                       px-2.5 py-1.5 text-button text-foreground
-                       transition-colors hover:border-primary
-                       ${foco}`}
-          >
+          </Button>
+          <Button variant="secondary">
             <Export size={16} weight="regular" />
             Exportar
-          </button>
-
-          <button
-            type="button"
-            className={`inline-flex items-center gap-1.5 rounded-md bg-primary
-                       px-2.5 py-1.5 text-button text-primary-foreground
-                       transition-colors hover:bg-primary-hover
-                       ${foco}`}
-          >
+          </Button>
+          <Button>
             <Lightning size={16} weight="regular" />
             Automação
-          </button>
+          </Button>
         </div>
       </Secao>
 

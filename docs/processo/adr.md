@@ -118,3 +118,8 @@ Aprovado por: humano, gate B5.
 Desvio: a auditoria apontou Avatar, Badge, Card, KpiCard, Logo, Telefone e Header "sem movimento nenhum".
 Motivo: nenhum deles tem estado de interação próprio — as regras de movimento (I10) animam mudança de estado. Ausência é decisão (fw-ui, camada 2), não buraco.
 Aprovado por: humano, gate B7.
+
+## ADR-024 · Telas de exemplo e propostas mantêm peças próprias · 2026-09-19
+Desvio: a página de propostas do Drawer (botões de 38px) e a tela Pipeline (botão tracejado "Nova etapa", seta do trilho, radiogroup de cor) não usam o Button do DS onde o degrau não existe.
+Motivo: são mocks que o cliente vê como estão; trocar por um degrau da escala muda o que foi aprovado no print. Mudam com o Figma, não com a auditoria.
+Aprovado por: humano, gate B7.

@@ -9,9 +9,9 @@ import { foco } from "@/lib/estados";
 const posicoes: TooltipPosition[] = ["top", "bottom", "left", "right"];
 
 const codigoPosicoes = `<TooltipContent position="top">Copiar para a área de transferência</TooltipContent>
-<TooltipContent position="bottom">…</TooltipContent>
-<TooltipContent position="left">…</TooltipContent>
-<TooltipContent position="right">…</TooltipContent>`;
+<TooltipContent position="bottom">Copiar para a área de transferência</TooltipContent>
+<TooltipContent position="left">Copiar para a área de transferência</TooltipContent>
+<TooltipContent position="right">Copiar para a área de transferência</TooltipContent>`;
 
 const codigoAoVivo = `<Tooltip content="Copiar para a área de transferência">
   <Button variant="secondary" aria-label="Copiar">

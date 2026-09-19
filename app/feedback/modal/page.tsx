@@ -27,7 +27,7 @@ const codigoVariantes = `<ModalPainel
   {conteudo}
 </ModalPainel>
 
-<ModalPainel variant="destructive" titulo="…" descricao="…" aoFechar={fechar}
+<ModalPainel variant="destructive" titulo="Excluir negócio?" descricao="Ele sai do funil e do histórico. Não dá para desfazer." aoFechar={fechar}
   acoes={<><Button variant="outline">Cancelar</Button><Button variant="destructive"><Trash size={16} />Excluir</Button></>}
 />`;
 
@@ -135,9 +135,19 @@ export default function ModalPage() {
         titulo="Tamanhos"
         spec="3 · size"
         descricao="Só a largura muda. sm para confirmar, md para um formulário curto, lg quando o corpo tem mais de uma coluna."
-        codigo={`<ModalPainel size="sm" … />  // 400px
-<ModalPainel size="md" … />  // 520px
-<ModalPainel size="lg" … />  // 720px`}
+        codigo={`{/* 400, 520 e 720px de largura; o corpo rola quando não cabe */}
+{(["sm", "md", "lg"] as const).map((size) => (
+  <ModalPainel
+    key={size}
+    size={size}
+    titulo={"Título do modal · " + size}
+    descricao="Descrição curta do que esta ação faz."
+    aoFechar={fechar}
+    acoes={<><Button variant="outline">Cancelar</Button><Button>Aplicar</Button></>}
+  >
+    {conteudo}
+  </ModalPainel>
+))}`}
       >
         <div className="flex flex-col items-center gap-5">
           {(["sm", "md", "lg"] as ModalSize[]).map((size) => (

@@ -675,9 +675,9 @@
       "gravidade": "media",
       "lote": "B8",
       "verificacao": "check:tokens#botao-cru",
-      "status": "aberto",
-      "nota": "página de proposta (mock): 38px e 36px não são degraus do Button; trocar muda o repouso do mock — decidir em B8 com o humano (Button icon-lg 36 ou manter)",
-      "fechadoEm": null
+      "status": "aceito",
+      "nota": "ADR-024: mock de proposta mantém as peças (decisão do humano)",
+      "fechadoEm": "B8"
     },
     {
       "id": "AUD-039",
@@ -951,9 +951,9 @@
       "gravidade": "alta",
       "lote": "B8",
       "verificacao": "check:tokens#botao-cru",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "os três são o Button (secondary, secondary, primary); o snippet publicado idem",
+      "fechadoEm": "B8"
     },
     {
       "id": "AUD-056",
@@ -966,9 +966,9 @@
       "gravidade": "media",
       "lote": "B8",
       "verificacao": "check:tokens#botao-cru",
-      "status": "aberto",
-      "nota": "usa o Popover de B5",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "PainelFlutuante fixo + useSaida; os itens continuam <button> da tela com focoInterno (lista mora na página, não no DS)",
+      "fechadoEm": "B8"
     },
     {
       "id": "AUD-057",
@@ -983,9 +983,9 @@
       "gravidade": "media",
       "lote": "B8",
       "verificacao": "check:tokens#botao-cru",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "aceito",
+      "nota": "ADR-024: tela de exemplo mantém as peças (mock)",
+      "fechadoEm": "B8"
     },
     {
       "id": "AUD-058",
@@ -999,9 +999,9 @@
       "gravidade": "alta",
       "lote": "B8",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "página nova no padrão (tamanhos, formulário, gatilho, teclado); nav pronto; registry docs: válido",
+      "fechadoEm": "B8"
     },
     {
       "id": "AUD-059",
@@ -1014,9 +1014,9 @@
       "gravidade": "media",
       "lote": "B8",
       "verificacao": "check:rotas#pagina-fora-do-nav",
-      "status": "aberto",
-      "nota": "entra no nav ou sai — decisão do humano",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "entrou em Telas de exemplo como \"Tags coloridas\" (decisão do humano)",
+      "fechadoEm": "B8"
     },
     {
       "id": "AUD-060",
@@ -1033,9 +1033,9 @@
       "gravidade": "baixa",
       "lote": "B8",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "Badge fora por decisão (2026-09-15); os outros ganham seção âncora onde já vivem",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "decisão do humano: seção com âncora basta — registry publica docs: /forms/input#rating, #telefone e /navigation/header#segmented-control-e-view-switcher; Badge sem página (ADR-012); Logo é peça da Sidebar",
+      "fechadoEm": "B8"
     },
     {
       "id": "AUD-061",
@@ -1050,9 +1050,9 @@
       "gravidade": "baixa",
       "lote": "B8",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "Icon Button nasce da família de B4; os outros ficam no roadmap",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "/actions/icon-button criada (quatro tamanhos, BotaoFechar, AcaoCampo); Progress e Empty State seguem no roadmap com pronto:false",
+      "fechadoEm": "B8"
     },
     {
       "id": "AUD-062",
@@ -1070,9 +1070,9 @@
       "gravidade": "alta",
       "lote": "B8",
       "verificacao": "check:exemplos#pseudocodigo",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "os 12 trechos com \"…\" viraram o JSX real do exemplo ao lado; check:exemplos compila todos",
+      "fechadoEm": "B8"
     },
     {
       "id": "AUD-063",
@@ -1085,9 +1085,9 @@
       "gravidade": "media",
       "lote": "B8",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "título · descrição com números · Como funciona · seções com spec · índice",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "todas as páginas de componente e fundação têm título, descrição com número, Como funciona, seções com spec e índice (auditadas por script); as telas de exemplo e a tela de senha não seguem o padrão por serem telas, não catálogo",
+      "fechadoEm": "B8"
     },
     {
       "id": "AUD-064",
@@ -1230,10 +1230,10 @@
       ],
       "regra": "04-navegacao (código de verdade)",
       "gravidade": "media",
-      "lote": "B8",
+      "lote": "depois",
       "verificacao": "manual",
       "status": "aberto",
-      "nota": "mínimo feito em B1: check:exemplos compila os 89 trechos publicados e confere o Exige:. Derivar o snippet do JSX real fica para B8, junto com os 12 trechos em pseudocódigo",
+      "nota": "check:exemplos compila os 93 trechos publicados e confere o Exige:; derivar o snippet do JSX real fica para uma rodada futura",
       "fechadoEm": null
     },
     {
