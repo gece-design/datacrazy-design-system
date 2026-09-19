@@ -27,6 +27,7 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Spacing", href: "/foundations/spacing", icone: "espaco", pronto: true , descricao: "Catorze degraus, de 0 a 80"},
       { titulo: "Radius", href: "/foundations/radius", icone: "raio", pronto: true , descricao: "Sete degraus, todos de --radius"},
       { titulo: "Elevation", href: "/foundations/elevation", icone: "elevacao", pronto: true , descricao: "Quatro alturas de flutuação"},
+      { titulo: "Motion", href: "/foundations/motion", icone: "movimento", pronto: true, descricao: "Três durações, quatro curvas"},
     ],
   },
   {

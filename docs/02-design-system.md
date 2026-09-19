@@ -259,8 +259,37 @@ estimativa.
 
 ### Motion
 
-Não tokenizado ainda. Quando existir, `prefers-reduced-motion` é obrigatório
-(regra I12 do banco global do kit).
+Dono único: `lib/movimento.ts` (regra D20). O `tailwind.config` importa de lá;
+o JavaScript que espera uma animação acabar também. Valores aprovados nos
+gates (ADR-010, ADR-019, ADR-021), não desenhados no Figma.
+
+| Token | Valor | Uso |
+|---|---|---|
+| `duration-fast` / `delay-fast` | 150ms | Cor e opacidade: todo `transition-colors`, `fade-in-fast` (Tooltip, Modal, painéis) |
+| `duration-base` / `delay-base` | 200ms | Tamanho e posição; toda saída (`fade-out`, `drawer-sai`, Toast) |
+| `duration-slow` / `delay-slow` | 280ms | Entrada de painel (`drawer-entra`, `fade-in` do Toast) |
+| `ease-enter` | `cubic-bezier(0, 0, 0.2, 1)` | Entrada: desacelera no fim |
+| `ease-exit` | `cubic-bezier(0.4, 0, 1, 1)` | Saída: acelera |
+| `ease-settle` | `cubic-bezier(0.32, 0.72, 0, 1)` | Painel que desliza e assenta (Drawer) |
+| `ease-pop` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Overshoot (estrela do Rating) |
+
+Animações nomeadas (`animate-*`): `fade-in` · `fade-in-fast` · `fade-out` ·
+`drawer-entra` · `drawer-sai` · `toast-open` · `estrela-pop` (420ms) ·
+`estrela-brilho` (480ms). Os nomes são públicos no registry: só se acrescenta.
+
+**Redução de movimento é global** (`globals.css`, regra I12): toda animação e
+transição cai para 0 quando o sistema pede menos movimento; o JS pergunta
+`reduzido()`. Página: [/foundations/motion](../app/foundations/motion/page.tsx).
+
+### Escalas de dimensão
+
+| Escala | Degraus | Onde |
+|---|---|---|
+| Ícone (`size` do Phosphor) | 12 · 14 · 16 · 20 | 12 dentro de tag e chevron pequeno · 14 em célula · 16 em botão e campo · 20 na navegação. Fora disso é divergência (`check:tokens`) |
+| Altura de controle | 28 (`sm`) · 32 (`md`) · 36 (`lg` e campo de formulário) | Button, Segmented, Select `md`/`field`, Input. O Select `sm` de 29px é medida do arquivo: só a remedição decide |
+| Traço interno | `ring-1.5 ring-inset` | Checkbox, Radio, selo do sino (D18) |
+| Opacidade | `opacity-disabled` (50%) · `/scrim` (40%) | Controle apagado (I5) · fundo de Modal e Drawer |
+| Foco | 2px na cor `ring`, offset 2 (D6) · `ring-inset` onde o contêiner corta (D19) | Constante `foco` em `lib/estados.ts` a partir do lote B3 |
 
 ## Famílias de componente
 
@@ -296,7 +325,7 @@ Divergência visual é bug do código — ver
 | 1 | Rampa neutra ainda curta — só `base/neutral/800` e `900` | Falta degrau claro para superfícies e bordas intermediárias |
 | 2 | Valores soltos no design: `#09090B` (1.764 usos), `#71717A` (1.538), gradientes dos gráficos | Não acompanham o tema; religar muda cor levemente e precisa de decisão |
 | 3 | Gráficos com gradiente solto que clareia até quase branco | Some no tema escuro |
-| 4 | Motion não tokenizado | Duração, curva e `prefers-reduced-motion` sem dono (I12) |
+| 4 | ~~Motion não tokenizado~~ | **Resolvido em 2026-09-19** (lote B2): `lib/movimento.ts`, escalas no config, redução global |
 | 5 | Tons do perfil (roxo, rosa, laranja) sem variável no Figma | Resolvido no código por `[data-tom]` (decisão do humano, 2026-09-15); falta levar ao arquivo como coleção com modos |
 | 6 | Button redesenhado no Figma (269:32): texto 12px, gap 6, sombra interna | O código segue 13px e gap 8; só a sombra e as variantes `soft`/`outline`/`tertiary` entraram. É o que deixa as ações do Header a 5,18% do arquivo (o resto fecha em ~1%) |
-| 7 | Scrim sem opacidade definida | `overlay/scrim` existe, mas a camada nunca foi desenhada; Drawer e Modal usam 40% |
+| 7 | Scrim sem opacidade definida | `overlay/scrim` existe, mas a camada nunca foi desenhada; Drawer e Modal usam 40% — agora `opacity.scrim` no config (`bg-overlay-scrim/scrim`), aplicado no lote B5 |

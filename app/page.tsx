@@ -85,6 +85,17 @@ const negociosDoPreview = [
 
 // Preview ao vivo de cada item, por rota. Item sem página ainda cai no esqueleto.
 const previews: Record<string, React.ReactNode> = {
+  "/foundations/motion": (
+    <div className="flex w-56 max-w-full flex-col gap-2">
+      {[["fast", 150], ["base", 200], ["slow", 280]].map(([nome, ms]) => (
+        <div key={nome} className="flex items-center gap-2">
+          <span className="w-9 font-mono text-caption text-subtle-foreground">{nome}</span>
+          <div className="h-2 rounded-full bg-primary" style={{ width: `${(Number(ms) / 280) * 100}%` }} />
+          <span className="font-mono text-caption text-muted-foreground">{ms}ms</span>
+        </div>
+      ))}
+    </div>
+  ),
   "/": (
     <div className="w-56 max-w-full">
       <p className="text-display text-foreground">

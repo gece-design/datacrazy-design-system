@@ -109,7 +109,7 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
           className={cn(
             // Traço em `ring-inset`, não `border` — mesma razão do Checkbox
             // (regra D18). De quebra, a espessura 1.5 → 5 anima como sombra.
-            "size-[18px] shrink-0 rounded-full bg-input-bg ring-[1.5px] ring-inset ring-input-border transition-[background-color,box-shadow]",
+            "size-[18px] shrink-0 rounded-full bg-input-bg ring-1.5 ring-inset ring-input-border transition-[background-color,box-shadow]",
             "group-hover:ring-input-border-hover",
             "peer-checked:ring-[5px] peer-checked:ring-primary",
             "peer-checked:group-hover:ring-primary-hover",

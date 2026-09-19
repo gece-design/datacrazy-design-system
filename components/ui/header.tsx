@@ -102,7 +102,7 @@ export const HeaderNotificacoes = React.forwardRef<HTMLButtonElement, HeaderNoti
           <span
             aria-hidden="true"
             // D18: traço de 1,5 é ring, não border — o Chrome arredonda border para 1px em tela 1×
-            className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-label-sm tabular-nums text-primary-foreground ring-[1.5px] ring-inset ring-card"
+            className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-label-sm tabular-nums text-primary-foreground ring-1.5 ring-inset ring-card"
           >
             {contagem > 99 ? "99+" : contagem}
           </span>

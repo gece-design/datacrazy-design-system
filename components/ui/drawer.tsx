@@ -21,6 +21,7 @@ import {
 import { Avatar } from "@/components/ui/avatar";
 import { Tag } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
+import { DURACAO, reduzido } from "@/lib/movimento";
 
 /**
  * Drawer do lead — canvas "↳ Drawer" do Figma (node 533:3809).
@@ -90,7 +91,7 @@ export function Drawer({ aberto, aoFechar, rotulo, children }: DrawerProps) {
       return;
     }
     if (!jaAbriu.current) return;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    if (reduzido()) return;
     setSaindo(true);
     const fim = setTimeout(() => setSaindo(false), DURACAO_SAIDA);
     return () => clearTimeout(fim);
@@ -247,8 +248,8 @@ function usarRolagem(alvo: React.RefObject<HTMLElement | null>) {
   return estado;
 }
 
-/** Tem que bater com `drawer-sai` no tailwind.config: é o tempo do desmonte. */
-const DURACAO_SAIDA = 200;
+/** O mesmo número de `drawer-sai` no tailwind.config: é o tempo do desmonte (D20). */
+const DURACAO_SAIDA = DURACAO.base;
 
 export type RotulosDeRolagem = { subir: string; descer: string };
 

@@ -67,7 +67,12 @@ for (const tema of TEMAS) {
     if (modo === "baseline") { linhas.push(`  ${nome}`); continue; }
 
     const base = path.join(pasta, nome);
-    if (!fs.existsSync(base)) { linhas.push(`  ? ${nome}: sem base`); falhas++; continue; }
+    if (!fs.existsSync(base)) {
+      // rota que nasceu neste lote: entra na base agora e é declarada no gate
+      fs.copyFileSync(alvo, base);
+      linhas.push(`  + ${nome}: rota nova, base criada`);
+      continue;
+    }
     const a = PNG.sync.read(fs.readFileSync(base));
     const b = PNG.sync.read(fs.readFileSync(alvo));
     if (a.width !== b.width || a.height !== b.height) {

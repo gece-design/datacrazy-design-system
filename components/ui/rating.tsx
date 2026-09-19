@@ -137,7 +137,7 @@ export function Rating({ rotulo, valor, max: MAX = 10, aoMudar, className }: Rat
                 }
               }}
               className={cn(
-                "relative inline-flex rounded-sm transition-transform duration-150 ease-out",
+                "relative inline-flex rounded-sm transition-transform duration-fast ease-enter",
                 "motion-safe:hover:-translate-y-px motion-safe:hover:scale-125 motion-safe:active:scale-90",
                 "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring",
               )}

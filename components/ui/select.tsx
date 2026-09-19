@@ -25,7 +25,7 @@ const triggerVariants = cva(
     variants: {
       size: {
         /** Card: 32px de altura, com o realce interno que o arquivo aplica. */
-        md: "px-3 py-2 shadow-[inset_0_4px_5px_0_rgb(106_117_129_/_0.06)]",
+        md: "px-3 py-2 shadow-select-inner",
         /** Tabela: 29px, sem realce. */
         sm: "h-[29px] px-3 py-1.5",
         /** Formulário (node 544:129): a caixa de 36px do Input, com o caret à

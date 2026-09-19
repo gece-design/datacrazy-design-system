@@ -114,6 +114,9 @@ function temaV4(ext) {
   for (const [k, v] of Object.entries(ext.borderRadius)) tema[`radius-${k}`] = v;
   for (const [k, v] of Object.entries(ext.zIndex)) tema[`z-index-${k}`] = v;
   for (const [k, v] of Object.entries(ext.animation)) tema[`animate-${k}`] = v;
+  // movimento (lote B2): o v4 tem namespace para duração e curva
+  for (const [k, v] of Object.entries(ext.transitionDuration ?? {})) tema[`duration-${k}`] = v;
+  for (const [k, v] of Object.entries(ext.transitionTimingFunction ?? {})) tema[`ease-${k}`] = v;
   return tema;
 }
 
@@ -155,8 +158,12 @@ function itemTokens(ext, versao) {
     for (const [nome, imagem] of Object.entries(ext.backgroundImage)) {
       item.css[`@utility bg-${nome}`] = { "background-image": corInteira(imagem) };
     }
+    // nem para opacidade com nome, nem para delay
+    for (const [nome, valor] of Object.entries(ext.opacity ?? {})) item.css[`@utility opacity-${nome}`] = { opacity: valor };
+    for (const [nome, valor] of Object.entries(ext.transitionDelay ?? {})) item.css[`@utility delay-${nome}`] = { "transition-delay": valor };
   } else {
-    const chaves = ["colors", "fontFamily", "fontSize", "boxShadow", "backgroundImage", "borderRadius", "zIndex", "keyframes", "animation"];
+    const chaves = ["colors", "fontFamily", "fontSize", "boxShadow", "backgroundImage", "borderRadius", "zIndex", "keyframes", "animation",
+      "transitionDuration", "transitionDelay", "transitionTimingFunction", "opacity", "ringWidth"];
     item.tailwind = { config: { theme: { extend: Object.fromEntries(chaves.map((k) => [k, ext[k]])) } } };
   }
   return item;
@@ -245,7 +252,9 @@ padrão (\`bg-blue-500\`, \`text-gray-600\`) estão fora.
 - **Raio** (\`rounded-\`): ${lista(Object.keys(ext.borderRadius))}
 - **Sombra** (\`shadow-\`): ${lista(Object.keys(ext.boxShadow))}
 - **Camadas** (\`z-\`, de baixo para cima): ${lista(Object.keys(ext.zIndex))}
-- **Movimento** (\`animate-\`, sempre com \`motion-safe:\`): ${lista(Object.keys(ext.animation))}
+- **Movimento** — duração (\`duration-\`, \`delay-\`): ${lista(Object.keys(ext.transitionDuration))} · curva (\`ease-\`): ${lista(Object.keys(ext.transitionTimingFunction))} · animação (\`animate-\`): ${lista(Object.keys(ext.animation))}. Nunca \`duration-200\`, \`ease-out\` ou \`setTimeout(…, 200)\` soltos; o JS lê \`DURACAO\` de \`@/lib/movimento\`. A redução de movimento é global no CSS.
+- **Opacidade** (\`opacity-\` e modificador \`/\`): ${lista(Object.keys(ext.opacity))} — \`opacity-disabled\` no controle apagado, \`bg-overlay-scrim/scrim\` no fundo de camada.
+- **Traço interno** de 1.5px: \`ring-1.5 ring-inset\` (regra D18), nunca \`border-[1.5px]\`.
 - **Cor em SVG:** \`fill="currentColor"\` / \`stopColor="currentColor"\` mais a classe
   de texto do token (\`text-primary\`).
 - **Ícones:** \`@phosphor-icons/react\`, \`weight="regular"\` na interface inteira

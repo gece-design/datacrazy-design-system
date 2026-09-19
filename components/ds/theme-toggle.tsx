@@ -57,7 +57,7 @@ export function ThemeToggleFlutuante() {
       className={cn(
         "fixed bottom-6 right-6 z-toast inline-flex h-10 w-10 items-center justify-center rounded-full",
         "border border-border bg-card text-muted-foreground shadow-[0_1px_2px_rgba(0,0,0,0.06),0_8px_24px_rgba(0,0,0,0.08)]",
-        "transition-all duration-200 hover:text-foreground",
+        "transition-[color,transform,opacity] duration-base hover:text-foreground",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         visivel ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"
       )}

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Check, Copy, PencilSimple, type Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { PERMANENCIA } from "@/lib/movimento";
 
 /**
  * Input — campo de uma linha com rótulo (node 535:48, "Field").
@@ -142,7 +143,7 @@ export function AcaoCopiar({
 
   React.useEffect(() => {
     if (!copiado) return;
-    const t = window.setTimeout(() => setCopiado(false), 1500);
+    const t = window.setTimeout(() => setCopiado(false), PERMANENCIA.copiado);
     return () => window.clearTimeout(t);
   }, [copiado]);
 

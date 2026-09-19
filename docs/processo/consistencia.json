@@ -35,9 +35,9 @@
       "gravidade": "alta",
       "lote": "B2",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "nasce lib/movimento.ts; keyframes reescritos a partir dele",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "lib/movimento.ts (DURACAO, CURVA, PERMANENCIA, reduzido); config importa; duration/delay/ease no tema; 8 animações reescritas a partir da escala",
+      "fechadoEm": "B2"
     },
     {
       "id": "AUD-002",
@@ -53,9 +53,9 @@
       "gravidade": "alta",
       "lote": "B2",
       "verificacao": "check:tokens#duracao-literal",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "duration-base/delay-base (Toast), duration-fast (Rating), duration-base (theme-toggle)",
+      "fechadoEm": "B2"
     },
     {
       "id": "AUD-003",
@@ -70,9 +70,9 @@
       "gravidade": "alta",
       "lote": "B2",
       "verificacao": "check:tokens#curva-literal",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "ease-enter/ease-exit",
+      "fechadoEm": "B2"
     },
     {
       "id": "AUD-004",
@@ -87,9 +87,9 @@
       "gravidade": "alta",
       "lote": "B2",
       "verificacao": "check:tokens#timeout-literal",
-      "status": "aberto",
-      "nota": "JS e CSS precisam ler o mesmo número (lib/movimento.ts)",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "SAIDA_MS/COLAPSO_MS = DURACAO.base; DURACAO_SAIDA = DURACAO.base; 8000 e 1500 viraram PERMANENCIA",
+      "fechadoEm": "B2"
     },
     {
       "id": "AUD-005",
@@ -105,9 +105,9 @@
       "gravidade": "alta",
       "lote": "B2",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "redução global no globals.css + useSaida/reduzido() no JS",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "regra global no globals.css (@layer base); Drawer e Toast leem reduzido()",
+      "fechadoEm": "B2"
     },
     {
       "id": "AUD-006",
@@ -121,9 +121,9 @@
       "gravidade": "media",
       "lote": "B2",
       "verificacao": "check:tokens#transition-all",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "theme-toggle: transition-[color,transform,opacity]; ds/codigo.tsx fica sob D3 (B9)",
+      "fechadoEm": "B2"
     },
     {
       "id": "AUD-007",
@@ -267,9 +267,9 @@
       "gravidade": "media",
       "lote": "B2",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "definir {12,14,16,20}; ds fica sob D3; ui fora da escala vai à remedição",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "documentada em 02-design-system § Escalas de dimensão (12/14/16/20); check:tokens reprova fora dela; ds sob D3 e ui fora da escala adiados",
+      "fechadoEm": "B2"
     },
     {
       "id": "AUD-016",
@@ -344,7 +344,7 @@
       "lote": "B5",
       "verificacao": "check:tokens#scrim-literal",
       "status": "aberto",
-      "nota": "Scrim único exportado pelo Modal",
+      "nota": "Scrim único exportado pelo Modal · token opacity.scrim (/scrim) existe desde B2; aplicação no Scrim único em B5",
       "fechadoEm": null
     },
     {
@@ -358,9 +358,9 @@
       "gravidade": "media",
       "lote": "B2",
       "verificacao": "check:tokens#sombra-arbitraria",
-      "status": "aberto",
-      "nota": "provável duplicata de shadow-button-inner",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "não era shadow-button-inner (valores diferentes): virou token shadow-select-inner, medido no arquivo",
+      "fechadoEm": "B2"
     },
     {
       "id": "AUD-021",
@@ -515,9 +515,9 @@
       "gravidade": "media",
       "lote": "B2",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "documentar a escala; o h-[29px] só muda com o Figma",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "documentada (28/32/36 + campo 36); h-[29px] do Select sm fica para a remedição",
+      "fechadoEm": "B2"
     },
     {
       "id": "AUD-030",
@@ -532,9 +532,9 @@
       "gravidade": "baixa",
       "lote": "B2",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "ringWidth 1.5 no config",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "ringWidth 1.5 no config; ring-1.5 em Checkbox, Radio e selo do sino",
+      "fechadoEm": "B2"
     },
     {
       "id": "AUD-031",
@@ -545,10 +545,10 @@
       ],
       "regra": "I4 · D6",
       "gravidade": "baixa",
-      "lote": "B2",
+      "lote": "B3",
       "verificacao": "manual",
       "status": "aberto",
-      "nota": "vira a constante `foco` de lib/estados.ts",
+      "nota": "largura e offset documentados em 02-design-system; a constante `foco` nasce em B3 (lib/estados.ts)",
       "fechadoEm": null
     },
     {
@@ -599,10 +599,10 @@
       ],
       "regra": "A8 · escala de ícone",
       "gravidade": "baixa",
-      "lote": "B2",
+      "lote": "figma",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "",
+      "status": "adiado",
+      "nota": "escala de ícone documentada em B2; unificar 12 bold/14 bold/16 regular muda o repouso — só com o arquivo",
       "fechadoEm": null
     },
     {

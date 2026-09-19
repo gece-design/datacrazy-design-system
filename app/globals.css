@@ -441,3 +441,22 @@
   width: fit-content;
   min-width: 100%;
 }
+
+/* Redução de movimento é global (regra I12 · calibração D20 · interactions L9).
+   Quem pediu menos movimento ao sistema não vê animação nem transição
+   nenhuma — de nenhum componente, inclusive os que ainda vão ser escritos.
+   `motion-safe:` por classe segurava 5 de 40 arquivos; isto segura todos.
+   O JavaScript que espera uma animação acabar pergunta `reduzido()` em
+   lib/movimento.ts e desmonta na hora. */
+@layer base {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

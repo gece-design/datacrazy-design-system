@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { cva } from "class-variance-authority";
 import { ChatText, Check, Warning, X, type Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { DURACAO, PERMANENCIA, reduzido } from "@/lib/movimento";
 
 /**
  * Toast — confirmação que não bloqueia (node 548:52, canvas `↳ Feedback`).
@@ -141,11 +142,10 @@ export type NovoToast = Omit<ItemDaFila, "id" | "duracao" | "variant" | "saindo"
 
 // Saída em dois tempos: o cartão desliza para a direita e, só depois, o vão
 // que ele deixou fecha. Os dois juntos fariam a pilha andar por baixo de um
-// cartão que ainda está visível. Motion não tem token (pendência 4 de
-// docs/02-design-system.md): os tempos ficam nomeados aqui e batem com as
-// classes `duration-200` e `delay-200` do `ItemDoToaster`.
-const SAIDA_MS = 200;
-const COLAPSO_MS = 200;
+// cartão que ainda está visível. Os tempos vêm de lib/movimento.ts (D20) e
+// batem com as classes `duration-base` e `delay-base` do `ItemDoToaster`.
+const SAIDA_MS = DURACAO.base;
+const COLAPSO_MS = DURACAO.base;
 
 let fila: ItemDaFila[] = [];
 let proximoId = 0;
@@ -169,11 +169,11 @@ function remover(id: number) {
 // Quem pediu menos movimento ao sistema não espera animação nenhuma: o toast
 // some na hora (regra I12).
 function semMovimento() {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return reduzido();
 }
 
 /** Mostra um toast. Devolve o id, para fechar antes do tempo com `fecharToast`. */
-export function toast({ variant = "success", duracao = 8000, ...resto }: NovoToast) {
+export function toast({ variant = "success", duracao = PERMANENCIA.toast, ...resto }: NovoToast) {
   const id = ++proximoId;
   fila = [...fila, { id, variant, duracao, ...resto }];
   avisar();
@@ -261,7 +261,7 @@ function ItemDoToaster({ item, rotuloFechar }: { item: ItemDaFila; rotuloFechar?
         // animar "abrir espaço" sem medir o cartão. A margem negativa leva junto
         // os 8px do gap do container, que senão pulariam no fim.
         "grid grid-rows-[1fr] motion-safe:animate-toast-open",
-        "motion-safe:transition-[grid-template-rows,margin-top] motion-safe:delay-200 motion-safe:duration-200 motion-safe:ease-out",
+        "motion-safe:transition-[grid-template-rows,margin-top] motion-safe:delay-base motion-safe:duration-base motion-safe:ease-enter",
         item.saindo && "pointer-events-none -mt-2 grid-rows-[0fr]",
       )}
     >
@@ -276,7 +276,7 @@ function ItemDoToaster({ item, rotuloFechar }: { item: ItemDaFila; rotuloFechar?
             "w-full motion-safe:animate-fade-in",
             // Sai pela direita, por onde fica a borda da tela: 100% da largura
             // mais os 16px do recuo do container, para sumir inteiro.
-            "motion-safe:transition-[transform,opacity] motion-safe:duration-200 motion-safe:ease-in",
+            "motion-safe:transition-[transform,opacity] motion-safe:duration-base motion-safe:ease-exit",
             item.saindo && "translate-x-[calc(100%+1rem)] opacity-0",
           )}
         />

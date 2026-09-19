@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { DURACAO, CURVA } from "./lib/movimento";
 
 // Espelho do Figma. Regras G1 e G2 do kit aplicadas: line-height em px vira
 // valor px literal; tracking em px vira em (px ÷ tamanho da fonte).
@@ -106,6 +107,8 @@ const config: Config = {
         "metric": ["16px", { lineHeight: "21px", letterSpacing: "-0.0125em", fontWeight: "600" }],
       },
       boxShadow: {
+        // Realce interno do gatilho md do Select (261:333). Era valor arbitrário em select.tsx.
+        "select-inner": "inset 0 4px 5px 0 rgb(106 117 129 / 0.06)",
         // elevation/* do Figma, com TODAS as camadas (G4). Os nomes sm/md/lg/xl
         // sobrescrevem os do Tailwind DE PROPÓSITO: assim `shadow-md` é a nossa
         // sombra, e a da biblioteca deixa de ser alcançável por engano.
@@ -148,9 +151,20 @@ const config: Config = {
         base: "0", dropdown: "10", sticky: "20", overlay: "30",
         modal: "40", popover: "50", toast: "60",
       },
-      // Motion — ainda não é token do Figma (pendência 4 de docs/02-design-system.md).
-      // Nomeado aqui para não virar valor solto em componente. Use sempre com
-      // `motion-safe:`: quem pede menos movimento ao sistema não vê nenhuma (I12).
+      // Escalas de dimensão (auditoria de consistência, lote B2)
+      // 1.5px de traço interno (D18): era `ring-[1.5px]` em três controles.
+      ringWidth: { "1.5": "1.5px" },
+      // Opacidade com nome: `opacity-disabled` no controle apagado (I5) e
+      // `bg-overlay-scrim/scrim` no fundo de Modal e Drawer (pendência 7).
+      opacity: { disabled: ".5", scrim: ".4" },
+
+      // Motion — dono único em lib/movimento.ts (D20). Não há token do Figma:
+      // os valores foram aprovados nos gates (ADR-010, ADR-019, ADR-021).
+      // Redução de movimento é GLOBAL no globals.css (I12); `motion-safe:`
+      // continua válido, mas não é mais o que segura a regra.
+      transitionDuration: { fast: `${DURACAO.fast}ms`, base: `${DURACAO.base}ms`, slow: `${DURACAO.slow}ms` },
+      transitionDelay: { fast: `${DURACAO.fast}ms`, base: `${DURACAO.base}ms`, slow: `${DURACAO.slow}ms` },
+      transitionTimingFunction: { enter: CURVA.enter, exit: CURVA.exit, settle: CURVA.settle, pop: CURVA.pop },
       keyframes: {
         "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
         "fade-out": { from: { opacity: "1" }, to: { opacity: "0" } },
@@ -178,17 +192,20 @@ const config: Config = {
         },
       },
       animation: {
-        "fade-in": "fade-in 250ms ease-out",
-        "fade-in-fast": "fade-in 150ms ease-out",
-        "fade-out": "fade-out 180ms ease-in forwards",
+        // fade-in é a entrada do Toast: 250 → 280 (slow) no gate B0
+        "fade-in": `fade-in ${DURACAO.slow}ms ${CURVA.enter}`,
+        "fade-in-fast": `fade-in ${DURACAO.fast}ms ${CURVA.enter}`,
+        // 180 → 200 (base): a saída ganha o mesmo tempo das outras saídas
+        "fade-out": `fade-out ${DURACAO.base}ms ${CURVA.exit} forwards`,
         // A curva de entrada desacelera bem no fim: o painel "assenta" em vez
         // de parar seco. A saída é mais curta e acelera — sair não é evento.
-        "drawer-entra": "drawer-entra 280ms cubic-bezier(0.32, 0.72, 0, 1)",
-        "drawer-sai": "drawer-sai 200ms cubic-bezier(0.4, 0, 1, 1) forwards",
-        "toast-open": "toast-open 200ms ease-out",
-        // a curva com overshoot é o que dá o "pulo"; o brilho sai em ease-out
-        "estrela-pop": "estrela-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both",
-        "estrela-brilho": "estrela-brilho 480ms ease-out forwards",
+        "drawer-entra": `drawer-entra ${DURACAO.slow}ms ${CURVA.settle}`,
+        "drawer-sai": `drawer-sai ${DURACAO.base}ms ${CURVA.exit} forwards`,
+        "toast-open": `toast-open ${DURACAO.base}ms ${CURVA.enter}`,
+        // Os dois da estrela ficam com tempo próprio: são coreografia, não
+        // transição de estado. Literal no config é token; literal em componente não.
+        "estrela-pop": `estrela-pop 420ms ${CURVA.pop} both`,
+        "estrela-brilho": `estrela-brilho 480ms ${CURVA.enter} forwards`,
       },
     },
   },
