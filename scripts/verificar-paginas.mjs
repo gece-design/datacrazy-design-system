@@ -1,15 +1,10 @@
 import { chromium } from "playwright";
 
-const ROTAS = [
-  "/", "/getting-started/installation",
-  "/foundations/color", "/foundations/typography", "/foundations/icons",
-  "/foundations/spacing", "/foundations/radius", "/foundations/elevation",
-  "/actions/button", "/forms/checkbox", "/forms/radio-group", "/forms/switch", "/forms/date-picker", "/forms/time-picker", "/forms/input",
-  "/data-display/card", "/data-display/kpi-card", "/data-display/tag", "/data-display/avatar", "/data-display/table", "/feedback/drawer", "/feedback/drawer-variacoes",
-  "/navigation/sidebar", "/navigation/header", "/navigation/breadcrumb", "/navigation/pagination", "/navigation/tabs",
-  "/feedback/tooltip", "/feedback/toast", "/feedback/modal",
-  "/exemplos/pipeline",
-];
+import { lerNavegacao } from "./lib/fonte.mjs";
+
+// As rotas vêm do nav: ele é o dono (docs/04-navegacao.md). Uma lista aqui
+// era uma segunda verdade, e ficou para trás em /exemplos/tags-proposta.
+const ROTAS = lerNavegacao().filter((p) => p.pronto).map((p) => p.href);
 
 const browser = await chromium.launch();
 // O site tem portão por senha (middleware.ts). O cookie de acesso vale o login:
@@ -47,9 +42,11 @@ for (const rota of ROTAS) {
       .map((a) => a.textContent.trim());
     const abas = document.querySelectorAll("main section button[aria-pressed]").length / 2;
     const fonte = getComputedStyle(document.body).fontFamily.split(",")[0];
-    // valores soltos: cor inline que não venha de var()
+    // valores soltos: cor inline que não venha de var(). As variáveis
+    // `--shiki-*` do realce de código (tema duplo do Shiki) são o mecanismo
+    // do highlighter, não estilo do DS — ficam de fora.
     const inline = [...document.querySelectorAll("main [style]")]
-      .map((e) => e.getAttribute("style"))
+      .map((e) => e.getAttribute("style").replace(/--shiki-[\w-]+:[^;]+;?/g, ""))
       .filter((s) => /#[0-9a-f]{3,8}|rgb\(/i.test(s) && !/var\(/.test(s));
     return { titulo: h1?.textContent.trim(), secoes, indice, abas, fonte, inline: inline.length };
   });

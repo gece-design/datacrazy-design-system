@@ -55,5 +55,11 @@ tabela "pra fazer X, leia Y". A estrutura é verificada por script:
 ```bash
 npm run check:docs    # reprova link quebrado, órfão de índice e arquivo fora do template
 npm run docs:index    # regenera os índices lendo os arquivos reais
-npm run check         # tipos + temas + páginas + docs
+npm run check         # rápido, sem servidor: tipos + temas + tokens + rotas + doc↔código + docs
+npm run check:completo # com o site no ar: + páginas + exemplos publicados (compilam?)
 ```
+
+Os checks novos têm **catraca**: guardam a contagem de hoje em `scripts/baseline/`
+e reprovam só o que piora. `--estrito` reprova tudo; `--atualizar-base` abaixa a
+base ao fim de um lote. O backlog da auditoria de consistência está em
+`docs/processo/consistencia.md` (vista) e `consistencia.json` (dono).

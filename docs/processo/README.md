@@ -39,6 +39,8 @@ mora na raiz do `docs/`.
 | [tokens-migracao.md](tokens-migracao.md) | Método da medição e as correções aplicadas na coleção `Cor` do Figma | `fw-onboard` |
 | [tokens-estados-escuro.md](tokens-estados-escuro.md) | Diagnóstico dos 8 tokens de estado sem versão escura — RESOLVIDO em 2026-09-04 pelo Figma | `fw-ui` · encerrado |
 | [referencias.md](referencias.md) | Índice das fontes: Figma, FigJam, PDF, repositórios, acessos | orquestrador |
+| [consistencia.json](consistencia.json) | Backlog da auditoria de consistência entre componentes (tokens, movimento, composição, páginas, instalação, docs): um achado por objeto, id estável, lote e status | sessão do lote (só `status`/`fechadoEm`) |
+| [consistencia.md](consistencia.md) | Vista legível do backlog — gerada por `node scripts/consistencia.mjs render`, nunca à mão | script |
 
 ## Regra da pasta
 

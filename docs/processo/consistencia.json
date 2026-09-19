@@ -1,0 +1,3155 @@
+{
+  "_doc": "Backlog da auditoria de consistência entre componentes. Um objeto por achado; id nunca se reusa. Lotes só mudam status/fechadoEm/nota. Vista: consistencia.md (node scripts/consistencia.mjs render).",
+  "varredura": "2026-09-19",
+  "plano": "~/.claude/plans/como-podemos-iniciar-uma-hazy-shamir.md",
+  "eixos": [
+    "tokens",
+    "movimento",
+    "composicao",
+    "paginas",
+    "instalacao",
+    "docs",
+    "fidelidade"
+  ],
+  "gravidades": {
+    "bloqueia": "erro garantido para quem instala",
+    "alta": "regra escrita descumprida",
+    "media": "duplicação sem bug visível",
+    "baixa": "cosmético"
+  },
+  "status": [
+    "aberto",
+    "corrigido",
+    "aceito",
+    "adiado"
+  ],
+  "achados": [
+    {
+      "id": "AUD-001",
+      "eixo": "movimento",
+      "titulo": "Sem escala de duração e curva: 8 durações e 4 curvas literais nos keyframes",
+      "onde": [
+        "tailwind.config.ts:181-191"
+      ],
+      "regra": "D20 · I10",
+      "gravidade": "alta",
+      "lote": "B2",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "nasce lib/movimento.ts; keyframes reescritos a partir dele",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-002",
+      "eixo": "movimento",
+      "titulo": "duration-*/delay-* literais em componente",
+      "onde": [
+        "components/ui/toast.tsx:264",
+        "components/ui/toast.tsx:279",
+        "components/ui/rating.tsx:140",
+        "components/ds/theme-toggle.tsx:60"
+      ],
+      "regra": "D20",
+      "gravidade": "alta",
+      "lote": "B2",
+      "verificacao": "check:tokens#duracao-literal",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-003",
+      "eixo": "movimento",
+      "titulo": "Curva de transição literal em componente",
+      "onde": [
+        "components/ui/toast.tsx:264",
+        "components/ui/toast.tsx:279",
+        "components/ui/rating.tsx:140"
+      ],
+      "regra": "D20",
+      "gravidade": "alta",
+      "lote": "B2",
+      "verificacao": "check:tokens#curva-literal",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-004",
+      "eixo": "movimento",
+      "titulo": "Tempo de animação em número solto no JS (setTimeout, *_MS)",
+      "onde": [
+        "components/ui/toast.tsx:147-148",
+        "components/ui/drawer.tsx:251",
+        "components/ui/input.tsx:145"
+      ],
+      "regra": "D20",
+      "gravidade": "alta",
+      "lote": "B2",
+      "verificacao": "check:tokens#timeout-literal",
+      "status": "aberto",
+      "nota": "JS e CSS precisam ler o mesmo número (lib/movimento.ts)",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-005",
+      "eixo": "movimento",
+      "titulo": "I12 não é sistêmico: motion-safe em 5 de 40 arquivos, motion-reduce em 1",
+      "onde": [
+        "app/globals.css",
+        "components/ui/checkbox.tsx:64",
+        "components/ui/radio-group.tsx:112",
+        "components/ui/select.tsx:71"
+      ],
+      "regra": "I12",
+      "gravidade": "alta",
+      "lote": "B2",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "redução global no globals.css + useSaida/reduzido() no JS",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-006",
+      "eixo": "movimento",
+      "titulo": "transition-all anima tudo, inclusive layout",
+      "onde": [
+        "components/ds/codigo.tsx:52",
+        "components/ds/theme-toggle.tsx:60"
+      ],
+      "regra": "I11",
+      "gravidade": "media",
+      "lote": "B2",
+      "verificacao": "check:tokens#transition-all",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-007",
+      "eixo": "movimento",
+      "titulo": "Select abre e fecha seco",
+      "onde": [
+        "components/ui/select.tsx:204"
+      ],
+      "regra": "precedente Modal/Tooltip (fade-in-fast)",
+      "gravidade": "media",
+      "lote": "B7",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-008",
+      "eixo": "movimento",
+      "titulo": "TimePicker: os dois painéis abrem e fecham secos",
+      "onde": [
+        "components/ui/time-picker.tsx:294",
+        "components/ui/time-picker.tsx:433"
+      ],
+      "regra": "precedente Modal/Tooltip",
+      "gravidade": "media",
+      "lote": "B7",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-009",
+      "eixo": "movimento",
+      "titulo": "DatePicker: painel abre e fecha seco",
+      "onde": [
+        "components/ui/date-picker.tsx:559"
+      ],
+      "regra": "precedente Modal/Tooltip",
+      "gravidade": "media",
+      "lote": "B7",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-010",
+      "eixo": "movimento",
+      "titulo": "Seletor de tags: painel abre e fecha seco",
+      "onde": [
+        "components/ui/tag.tsx:296"
+      ],
+      "regra": "precedente Modal/Tooltip",
+      "gravidade": "media",
+      "lote": "B7",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-011",
+      "eixo": "movimento",
+      "titulo": "Sidebar: colapso 282→88 salta sem transição",
+      "onde": [
+        "components/ui/sidebar.tsx:77"
+      ],
+      "regra": "I10 · I11 (não animar width)",
+      "gravidade": "media",
+      "lote": "B7",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "rótulos somem por opacidade; animar largura só com ADR",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-012",
+      "eixo": "movimento",
+      "titulo": "Modal e Tooltip entram com fade e saem secos",
+      "onde": [
+        "components/ui/modal.tsx:154",
+        "components/ui/modal.tsx:163",
+        "components/ui/tooltip.tsx:237"
+      ],
+      "regra": "I10 (ease-in na saída)",
+      "gravidade": "media",
+      "lote": "B7",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "fade-out + useSaida",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-013",
+      "eixo": "movimento",
+      "titulo": "Tabs: indicador troca de cor, não desliza",
+      "onde": [
+        "components/ui/tabs.tsx:96"
+      ],
+      "regra": "I10 base",
+      "gravidade": "baixa",
+      "lote": "B7",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "decisão do humano no gate: desliza ou fica",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-014",
+      "eixo": "movimento",
+      "titulo": "Avatar, Card, KpiCard, Logo, Telefone e Header sem movimento nenhum",
+      "onde": [
+        "components/ui/avatar.tsx",
+        "components/ui/card.tsx",
+        "components/ui/kpi-card.tsx",
+        "components/ui/logo-datacrazy.tsx",
+        "components/ui/telefone.tsx",
+        "components/ui/header.tsx"
+      ],
+      "regra": "ausência é decisão (fw-ui camada 2)",
+      "gravidade": "baixa",
+      "lote": "B7",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "sem estado interativo: esperado virar aceito com ADR",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-015",
+      "eixo": "tokens",
+      "titulo": "Escala de ícone não existe: 16, 14, 12, 15, 20, 18, 13 e 19.33 soltos",
+      "onde": [
+        "components/ui/drawer.tsx:405",
+        "components/ui/drawer.tsx:430",
+        "components/ds/sidebar.tsx:121",
+        "components/ds/sidebar.tsx:281"
+      ],
+      "regra": "escala de ícone",
+      "gravidade": "media",
+      "lote": "B2",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "definir {12,14,16,20}; ds fica sob D3; ui fora da escala vai à remedição",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-016",
+      "eixo": "tokens",
+      "titulo": "Ícones fora da escala em componente de produto (15 e 19.33)",
+      "onde": [
+        "components/ui/drawer.tsx:405",
+        "components/ui/drawer.tsx:411",
+        "components/ui/drawer.tsx:430",
+        "components/ui/drawer.tsx:591"
+      ],
+      "regra": "escala de ícone",
+      "gravidade": "baixa",
+      "lote": "figma",
+      "verificacao": "check:tokens#icone-fora-da-escala",
+      "status": "adiado",
+      "nota": "mudar o tamanho é visual: só com o Figma",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-017",
+      "eixo": "tokens",
+      "titulo": "Ícones 18 e 13 na moldura do site",
+      "onde": [
+        "components/ds/sidebar.tsx:121",
+        "components/ds/sidebar.tsx:143",
+        "components/ds/sidebar.tsx:165",
+        "components/ds/sidebar.tsx:281",
+        "components/ds/theme-toggle.tsx:65"
+      ],
+      "regra": "D3 (moldura ≠ produto)",
+      "gravidade": "baixa",
+      "lote": "B9",
+      "verificacao": "check:tokens#icone-fora-da-escala",
+      "status": "aberto",
+      "nota": "esperado: aceito com nota D3",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-018",
+      "eixo": "tokens",
+      "titulo": "disabled por opacity-50 literal em 14 lugares; não há token de opacidade",
+      "onde": [
+        "components/ui/button.tsx:14",
+        "components/ui/input.tsx:108",
+        "components/ui/pagination.tsx:17",
+        "components/ui/tabs.tsx:85",
+        "components/ui/segmented-control.tsx:62",
+        "components/ui/date-picker.tsx:237",
+        "components/ui/sidebar.tsx:189"
+      ],
+      "regra": "I5 · tokens",
+      "gravidade": "alta",
+      "lote": "B3",
+      "verificacao": "check:tokens#opacidade-literal",
+      "status": "aberto",
+      "nota": "token opacity.disabled nasce em B2; a troca é em B3 com `desabilitado`",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-019",
+      "eixo": "tokens",
+      "titulo": "Scrim com alfa literal (/40) e um scrim em cor crua (neutral-900/50)",
+      "onde": [
+        "components/ui/modal.tsx:154",
+        "components/ui/drawer.tsx:143",
+        "app/entrar/page.tsx:43",
+        "components/ds/sidebar.tsx:360"
+      ],
+      "regra": "pendência 7 de 02-design-system.md",
+      "gravidade": "alta",
+      "lote": "B5",
+      "verificacao": "check:tokens#scrim-literal",
+      "status": "aberto",
+      "nota": "Scrim único exportado pelo Modal",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-020",
+      "eixo": "tokens",
+      "titulo": "Sombra fora da escala de elevação no gatilho do Select",
+      "onde": [
+        "components/ui/select.tsx:28"
+      ],
+      "regra": "G4",
+      "gravidade": "media",
+      "lote": "B2",
+      "verificacao": "check:tokens#sombra-arbitraria",
+      "status": "aberto",
+      "nota": "provável duplicata de shadow-button-inner",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-021",
+      "eixo": "tokens",
+      "titulo": "Sombras arbitrárias na moldura do site e na página de elevação",
+      "onde": [
+        "components/ds/sidebar.tsx:365",
+        "components/ds/theme-toggle.tsx:59",
+        "app/foundations/elevation/page.tsx:106"
+      ],
+      "regra": "G4 · D3",
+      "gravidade": "baixa",
+      "lote": "B9",
+      "verificacao": "check:tokens#sombra-arbitraria",
+      "status": "aberto",
+      "nota": "conferir se a da página de elevação é exemplo de 'não faça'",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-022",
+      "eixo": "tokens",
+      "titulo": "Tipografia fora da escala no Avatar lg (29.25px / -0.675px)",
+      "onde": [
+        "components/ui/avatar.tsx:23"
+      ],
+      "regra": "tokens text/*",
+      "gravidade": "baixa",
+      "lote": "figma",
+      "verificacao": "check:tokens#tipografia-arbitraria",
+      "status": "adiado",
+      "nota": "valor medido no arquivo; só muda com remedição",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-023",
+      "eixo": "tokens",
+      "titulo": "Tipografia arbitrária na moldura do site",
+      "onde": [
+        "components/ds/codigo.tsx:62",
+        "components/ds/indice.tsx:70"
+      ],
+      "regra": "D3",
+      "gravidade": "baixa",
+      "lote": "B9",
+      "verificacao": "check:tokens#tipografia-arbitraria",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-024",
+      "eixo": "tokens",
+      "titulo": "z-index cru no Drawer",
+      "onde": [
+        "components/ui/drawer.tsx:300"
+      ],
+      "regra": "E2",
+      "gravidade": "alta",
+      "lote": "B5",
+      "verificacao": "check:tokens#z-cru",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-025",
+      "eixo": "tokens",
+      "titulo": "Foco em dois dialetos: outline (D6, 26×) e ring (20×, todo components/ds + páginas)",
+      "onde": [
+        "components/ds/shell.tsx:58",
+        "components/ds/preview.tsx:148",
+        "components/ds/sidebar.tsx:109",
+        "components/ds/theme-toggle.tsx:30",
+        "app/foundations/icons/page.tsx:21",
+        "app/exemplos/pipeline/tela.tsx:582"
+      ],
+      "regra": "D6",
+      "gravidade": "alta",
+      "lote": "B3",
+      "verificacao": "check:tokens#foco-ring",
+      "status": "aberto",
+      "nota": "Tabs (ring-inset) é a exceção D19",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-026",
+      "eixo": "tokens",
+      "titulo": "ring-offset pintado com cor sólida",
+      "onde": [
+        "app/exemplos/pipeline/tela.tsx:582",
+        "app/actions/button/page.tsx:97"
+      ],
+      "regra": "D6",
+      "gravidade": "media",
+      "lote": "B3",
+      "verificacao": "check:tokens#ring-offset",
+      "status": "aberto",
+      "nota": "na página do Button é texto de documentação: exceção inline",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-027",
+      "eixo": "tokens",
+      "titulo": "A constante `foco` copiada em 4 arquivos",
+      "onde": [
+        "components/ui/drawer.tsx:50",
+        "components/ui/breadcrumb.tsx:46",
+        "components/ui/time-picker.tsx:48",
+        "app/feedback/drawer-variacoes/propostas.tsx:39"
+      ],
+      "regra": "D21",
+      "gravidade": "alta",
+      "lote": "B3",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "lib/estados.ts",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-028",
+      "eixo": "tokens",
+      "titulo": "`disabled:pointer-events-none disabled:opacity-50` copiado em 8 arquivos",
+      "onde": [
+        "components/ui/button.tsx:14",
+        "components/ui/input.tsx:108",
+        "components/ui/tabs.tsx:85",
+        "components/ui/segmented-control.tsx:62",
+        "components/ui/pagination.tsx:17",
+        "components/ui/date-picker.tsx:237",
+        "components/ui/date-picker.tsx:532",
+        "components/ui/sidebar.tsx:189"
+      ],
+      "regra": "D21 · I5",
+      "gravidade": "media",
+      "lote": "B3",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "gate B0 (2026-09-19): trocar para I5 em B3 — opacity-disabled + cursor-not-allowed, eventos mantidos",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-029",
+      "eixo": "tokens",
+      "titulo": "Escala de altura de controle não existe (Button 28/32/36, Input 36, Select 29/36, Segmented 28/32)",
+      "onde": [
+        "components/ui/button.tsx:35-39",
+        "components/ui/input.tsx:22",
+        "components/ui/select.tsx:30",
+        "components/ui/segmented-control.tsx:73"
+      ],
+      "regra": "escala de dimensão",
+      "gravidade": "media",
+      "lote": "B2",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "documentar a escala; o h-[29px] só muda com o Figma",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-030",
+      "eixo": "tokens",
+      "titulo": "Traço de 1.5px como valor arbitrário (D18) em 3 lugares",
+      "onde": [
+        "components/ui/checkbox.tsx:64",
+        "components/ui/radio-group.tsx:112",
+        "components/ui/header.tsx:105"
+      ],
+      "regra": "D18",
+      "gravidade": "baixa",
+      "lote": "B2",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "ringWidth 1.5 no config",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-031",
+      "eixo": "tokens",
+      "titulo": "Foco só tem token de cor; largura e offset são literais",
+      "onde": [
+        "components/ui/button.tsx:13"
+      ],
+      "regra": "I4 · D6",
+      "gravidade": "baixa",
+      "lote": "B2",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "vira a constante `foco` de lib/estados.ts",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-032",
+      "eixo": "tokens",
+      "titulo": "~100 valores arbitrários em components (kpi-card 13, card 12, drawer 12, sidebar 7, select 6)",
+      "onde": [
+        "components/ui/kpi-card.tsx",
+        "components/ui/card.tsx",
+        "components/ui/drawer.tsx",
+        "components/ui/sidebar.tsx",
+        "components/ui/select.tsx"
+      ],
+      "regra": "inventário",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "nota": "medidas do arquivo (D14); só a remedição decide o que vira token",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-033",
+      "eixo": "tokens",
+      "titulo": "Spacing documentado mas não estendido no config: nada segura p-7 ou gap-9",
+      "onde": [
+        "tailwind.config.ts",
+        "docs/02-design-system.md:202-211"
+      ],
+      "regra": "tokens",
+      "gravidade": "baixa",
+      "lote": "B0",
+      "verificacao": "manual",
+      "status": "corrigido",
+      "nota": "ADR-005 registra a decisão; revisar em B2",
+      "fechadoEm": "B0"
+    },
+    {
+      "id": "AUD-034",
+      "eixo": "tokens",
+      "titulo": "Chevrons Phosphor em 5 combinações size/weight; Breadcrumb desenha o próprio separador",
+      "onde": [
+        "components/ui/select.tsx:66",
+        "components/ui/date-picker.tsx:290",
+        "components/ui/pagination.tsx:68",
+        "components/ui/sidebar.tsx:130",
+        "components/ui/breadcrumb.tsx:50-60"
+      ],
+      "regra": "A8 · escala de ícone",
+      "gravidade": "baixa",
+      "lote": "B2",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-035",
+      "eixo": "composicao",
+      "titulo": "Pagination copia byte a byte a base do Button",
+      "onde": [
+        "components/ui/pagination.tsx:16-24"
+      ],
+      "regra": "lista negativa · componente que duplica outro",
+      "gravidade": "alta",
+      "lote": "B3",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "não vira Button (text-label-lg 12px ≠ text-button 13px); consome foco/desabilitado",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-036",
+      "eixo": "composicao",
+      "titulo": "Botão X de fechar em 4 cópias, 3 tamanhos de glifo, 2 tokens de hover",
+      "onde": [
+        "components/ui/modal.tsx:90",
+        "components/ui/toast.tsx:103",
+        "components/ui/drawer.tsx:183",
+        "components/ds/sidebar.tsx:201"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "alta",
+      "lote": "B4",
+      "verificacao": "check:tokens#botao-cru",
+      "status": "aberto",
+      "nota": "BotaoFechar em button.tsx — única mudança visual da rodada (1–2px de glifo)",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-037",
+      "eixo": "composicao",
+      "titulo": "Button size=icon cobre só 32px; 11 tamanhos de botão de ícone crus",
+      "onde": [
+        "components/ui/drawer.tsx:183",
+        "components/ui/drawer.tsx:305",
+        "components/ui/drawer.tsx:474",
+        "components/ui/drawer.tsx:724",
+        "components/ui/drawer.tsx:990",
+        "components/ui/sidebar.tsx:112",
+        "components/ui/sidebar.tsx:295",
+        "components/ui/sidebar.tsx:341",
+        "components/ui/sidebar.tsx:358"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "alta",
+      "lote": "B4",
+      "verificacao": "check:tokens#botao-cru",
+      "status": "aberto",
+      "nota": "size icon-sm 28 · icon 32 · icon-lg 36",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-038",
+      "eixo": "composicao",
+      "titulo": "Botões crus nas propostas do Drawer (38px, 36px)",
+      "onde": [
+        "app/feedback/drawer-variacoes/propostas.tsx:125",
+        "app/feedback/drawer-variacoes/propostas.tsx:139",
+        "app/feedback/drawer-variacoes/propostas.tsx:192",
+        "app/feedback/drawer-variacoes/propostas.tsx:282"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "media",
+      "lote": "B4",
+      "verificacao": "check:tokens#botao-cru",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-039",
+      "eixo": "composicao",
+      "titulo": "HeaderBusca reimplementa a caixa de campo com outro dialeto de foco",
+      "onde": [
+        "components/ui/header.tsx:126-143"
+      ],
+      "regra": "lista negativa · D6",
+      "gravidade": "baixa",
+      "lote": "B3",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "a caixa fica (h-8 tertiary ≠ Input h-9): só o foco migra para `foco`",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-040",
+      "eixo": "composicao",
+      "titulo": "Selo do sino duplica Badge destructive",
+      "onde": [
+        "components/ui/header.tsx:102-106"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "baixa",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "nota": "16px de altura vs Badge py-0.5: unificar muda repouso",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-041",
+      "eixo": "composicao",
+      "titulo": "KpiCard e Card têm duas cascas que diferem só no padding",
+      "onde": [
+        "components/ui/kpi-card.tsx:70-81",
+        "components/ui/card.tsx:19-31"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "media",
+      "lote": "B6",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "<Card className=\"p-[15px] gap-3\">",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-042",
+      "eixo": "composicao",
+      "titulo": "KpiCard tem 3 pílulas próprias onde existe Badge",
+      "onde": [
+        "components/ui/kpi-card.tsx:89",
+        "components/ui/kpi-card.tsx:148",
+        "components/ui/kpi-card.tsx:166"
+      ],
+      "regra": "lista negativa · A2",
+      "gravidade": "baixa",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "nota": "bg-background ≠ Badge borda+texto: unificar muda repouso",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-043",
+      "eixo": "composicao",
+      "titulo": "Popover em 5 painéis, 4 posicionamentos e 3 click-fora",
+      "onde": [
+        "components/ui/select.tsx:204",
+        "components/ui/time-picker.tsx:294",
+        "components/ui/time-picker.tsx:433",
+        "components/ui/tag.tsx:296",
+        "components/ui/date-picker.tsx:559"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "alta",
+      "lote": "B5",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "components/ui/popover.tsx + lib/use-clique-fora.ts; adoção Tag → TimePicker → Select → DatePicker",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-044",
+      "eixo": "composicao",
+      "titulo": "Painel do DatePicker usa border/card/shadow-float em vez de overlay-*",
+      "onde": [
+        "components/ui/date-picker.tsx:559"
+      ],
+      "regra": "D22",
+      "gravidade": "media",
+      "lote": "B5",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "zero diff: overlay-bg/border são alias de card/border",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-045",
+      "eixo": "composicao",
+      "titulo": "Select size=field reescreve caixaDeCampo() em literal",
+      "onde": [
+        "components/ui/select.tsx:33-34"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "media",
+      "lote": "B6",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "Telefone e TimePicker chamam a função",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-046",
+      "eixo": "composicao",
+      "titulo": "Drawer reimplementa a camada que vive em lib/use-camada.ts",
+      "onde": [
+        "components/ui/drawer.tsx:83-132"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "alta",
+      "lote": "B5",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "conferir se há sessão editando o Drawer antes de abrir",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-047",
+      "eixo": "composicao",
+      "titulo": "Scrim do Modal copiado na tela de entrar e scrim cru na moldura",
+      "onde": [
+        "app/entrar/page.tsx:42-43",
+        "components/ds/sidebar.tsx:356-361"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "media",
+      "lote": "B5",
+      "verificacao": "check:tokens#scrim-literal",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-048",
+      "eixo": "composicao",
+      "titulo": "SeletorDeVisao do Drawer duplica o Switch (de propósito, sem ADR)",
+      "onde": [
+        "components/ui/drawer.tsx:621-657",
+        "components/ui/switch.tsx"
+      ],
+      "regra": "lista negativa · ADR",
+      "gravidade": "media",
+      "lote": "B0",
+      "verificacao": "manual",
+      "status": "corrigido",
+      "nota": "ADR-018 registra o desvio; variante neutra do Switch fica para lote futuro",
+      "fechadoEm": "B0"
+    },
+    {
+      "id": "AUD-049",
+      "eixo": "composicao",
+      "titulo": "ItemDoMenu do Drawer duplica SidebarItem com os mesmos tokens nav-item-*",
+      "onde": [
+        "components/ui/drawer.tsx:633-720",
+        "components/ui/sidebar.tsx:183-259"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "media",
+      "lote": "depois",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "fora desta rodada: o Drawer só recebe constantes e camada (risco)",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-050",
+      "eixo": "composicao",
+      "titulo": "Avatar reimplementado na Sidebar (sem role=img) e no Breadcrumb (size-5 fora do cva)",
+      "onde": [
+        "components/ui/sidebar.tsx:334-336",
+        "components/ui/breadcrumb.tsx:68-81"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "media",
+      "lote": "B6",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "Avatar ganha size xs (aditivo); Sidebar usa token próprio, avaliar",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-051",
+      "eixo": "composicao",
+      "titulo": "Botão de ação da tabela é o AcaoCampo do Input não extraído",
+      "onde": [
+        "components/ui/data-table.tsx:275-281",
+        "components/ui/input.tsx:99-116"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "media",
+      "lote": "B4",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-052",
+      "eixo": "composicao",
+      "titulo": "Rótulo de campo literal no TimePicker; erro do Input copiado no Telefone",
+      "onde": [
+        "components/ui/time-picker.tsx:266",
+        "components/ui/time-picker.tsx:401",
+        "components/ui/telefone.tsx:129-133"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "media",
+      "lote": "B6",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "lib/campo.ts",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-053",
+      "eixo": "composicao",
+      "titulo": "Moldura do site duplica AcaoCopiar, SidebarThemeSwitch, SegmentedControl e o radiogroup de cor",
+      "onde": [
+        "components/ds/codigo.tsx:48",
+        "components/ds/theme-toggle.tsx:24",
+        "components/ds/preview.tsx:142",
+        "components/ds/fundo-preview.tsx:165"
+      ],
+      "regra": "D3",
+      "gravidade": "baixa",
+      "lote": "B9",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "esperado: aceito com nota D3",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-054",
+      "eixo": "composicao",
+      "titulo": "Path do logo em 4 lugares",
+      "onde": [
+        "components/ds/logo.tsx:6",
+        "components/ds/logo.tsx:29",
+        "components/ui/logo-datacrazy.tsx:20",
+        "components/ui/sidebar.tsx:46"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "baixa",
+      "lote": "B9",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-055",
+      "eixo": "paginas",
+      "titulo": "Página de ícones inlina 3 botões e publica o snippet: ensina o antipadrão",
+      "onde": [
+        "app/foundations/icons/page.tsx:16-40",
+        "app/foundations/icons/page.tsx:113-146"
+      ],
+      "regra": "lista negativa · 04-navegacao",
+      "gravidade": "alta",
+      "lote": "B8",
+      "verificacao": "check:tokens#botao-cru",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-056",
+      "eixo": "paginas",
+      "titulo": "Popover de notificações da página do Header em markup cru",
+      "onde": [
+        "app/navigation/header/page.tsx:130-200"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "media",
+      "lote": "B8",
+      "verificacao": "check:tokens#botao-cru",
+      "status": "aberto",
+      "nota": "usa o Popover de B5",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-057",
+      "eixo": "paginas",
+      "titulo": "Tela de exemplo Pipeline com botões crus (Nova etapa, seta do trilho, radiogroup de cor)",
+      "onde": [
+        "app/exemplos/pipeline/quadro.tsx:359-370",
+        "app/exemplos/pipeline/quadro.tsx:393-408",
+        "app/exemplos/pipeline/tela.tsx:569-586"
+      ],
+      "regra": "lista negativa",
+      "gravidade": "media",
+      "lote": "B8",
+      "verificacao": "check:tokens#botao-cru",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-058",
+      "eixo": "paginas",
+      "titulo": "/forms/select não existe: 6 consumidores e nav com pronto:false",
+      "onde": [
+        "components/ds/nav.ts:45",
+        "components/ui/select.tsx"
+      ],
+      "regra": "04-navegacao",
+      "gravidade": "alta",
+      "lote": "B8",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-059",
+      "eixo": "paginas",
+      "titulo": "/exemplos/tags-proposta existe e está fora do nav",
+      "onde": [
+        "app/exemplos/tags-proposta/page.tsx"
+      ],
+      "regra": "04-navegacao (nav é o dono)",
+      "gravidade": "media",
+      "lote": "B8",
+      "verificacao": "check:rotas#pagina-fora-do-nav",
+      "status": "aberto",
+      "nota": "entra no nav ou sai — decisão do humano",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-060",
+      "eixo": "paginas",
+      "titulo": "Badge, Rating, Telefone, SegmentedControl e Logo sem página própria",
+      "onde": [
+        "components/ui/badge.tsx",
+        "components/ui/rating.tsx",
+        "components/ui/telefone.tsx",
+        "components/ui/segmented-control.tsx",
+        "components/ui/logo-datacrazy.tsx"
+      ],
+      "regra": "04-navegacao",
+      "gravidade": "baixa",
+      "lote": "B8",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "Badge fora por decisão (2026-09-15); os outros ganham seção âncora onde já vivem",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-061",
+      "eixo": "paginas",
+      "titulo": "Icon Button, Progress e Empty State no nav sem página (pronto:false)",
+      "onde": [
+        "components/ds/nav.ts:37",
+        "components/ds/nav.ts:77",
+        "components/ds/nav.ts:86"
+      ],
+      "regra": "roadmap",
+      "gravidade": "baixa",
+      "lote": "B8",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "Icon Button nasce da família de B4; os outros ficam no roadmap",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-062",
+      "eixo": "paginas",
+      "titulo": "Pseudocódigo (…) em 6 trechos publicados na aba Código",
+      "onde": [
+        "app/forms/date-picker/page.tsx",
+        "app/navigation/sidebar/page.tsx",
+        "app/navigation/tabs/page.tsx",
+        "app/forms/time-picker/page.tsx",
+        "app/feedback/toast/page.tsx",
+        "docs/componentes/Tabs.md"
+      ],
+      "regra": "04-navegacao (JSX real, não pseudocódigo)",
+      "gravidade": "alta",
+      "lote": "B8",
+      "verificacao": "check:exemplos#pseudocodigo",
+      "status": "aberto",
+      "nota": "",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-063",
+      "eixo": "paginas",
+      "titulo": "Os 5 itens do padrão de página conferidos página a página",
+      "onde": [
+        "docs/04-navegacao.md"
+      ],
+      "regra": "04-navegacao § A ordem",
+      "gravidade": "media",
+      "lote": "B8",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "título · descrição com números · Como funciona · seções com spec · índice",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-064",
+      "eixo": "paginas",
+      "titulo": "Lista de rotas duplicada no verificar-paginas (faltava tags-proposta)",
+      "onde": [
+        "scripts/verificar-paginas.mjs:3-12"
+      ],
+      "regra": "um fato, um dono",
+      "gravidade": "media",
+      "lote": "A",
+      "verificacao": "manual",
+      "status": "corrigido",
+      "nota": "passou a ler o nav",
+      "fechadoEm": "fase-A"
+    },
+    {
+      "id": "AUD-065",
+      "eixo": "instalacao",
+      "titulo": "Exemplos citam componente que o item não instala (21 ocorrências)",
+      "onde": [
+        "app/navigation/header/page.tsx",
+        "docs/componentes/Header.md",
+        "app/forms/input/page.tsx",
+        "docs/componentes/Input.md",
+        "app/data-display/card/page.tsx",
+        "app/feedback/drawer/page.tsx",
+        "app/feedback/modal/page.tsx",
+        "docs/componentes/Modal.md",
+        "docs/componentes/Tooltip.md"
+      ],
+      "regra": "registry",
+      "gravidade": "bloqueia",
+      "lote": "B1",
+      "verificacao": "check:exemplos#fora-das-dependencias",
+      "status": "corrigido",
+      "nota": "o gerador escreve \"// Exige: @datacrazy/…\" em cada exemplo publicado; check:exemplos confere a skill em public/r/setup.json",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-066",
+      "eixo": "instalacao",
+      "titulo": "Componente fantasma <CardSelect> no exemplo do Card",
+      "onde": [
+        "docs/componentes/Card.md"
+      ],
+      "regra": "registry",
+      "gravidade": "bloqueia",
+      "lote": "B1",
+      "verificacao": "check:doc-codigo#exemplo-fantasma",
+      "status": "corrigido",
+      "nota": "Card.md usa <Select size=\"md\">",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-067",
+      "eixo": "instalacao",
+      "titulo": "Setup não instala a Geist: tokens citam --font-geist-sans e nada traz o pacote",
+      "onde": [
+        "scripts/gerar-registry.mjs",
+        "app/layout.tsx:2-3"
+      ],
+      "regra": "registry",
+      "gravidade": "bloqueia",
+      "lote": "B1",
+      "verificacao": "manual",
+      "status": "corrigido",
+      "nota": "dependencies: [\"geist\"] no setup + trecho do layout na SKILL.md",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-068",
+      "eixo": "instalacao",
+      "titulo": "SKILL.md gerada lista 6 famílias de token; bg-metrica e bg-drawer-perfil ficam fora",
+      "onde": [
+        "scripts/gerar-registry.mjs:314-334"
+      ],
+      "regra": "registry",
+      "gravidade": "alta",
+      "lote": "B1",
+      "verificacao": "manual",
+      "status": "corrigido",
+      "nota": "gradientes (bg-metrica, bg-drawer-perfil) entraram; as famílias de B2 entram em B2",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-069",
+      "eixo": "instalacao",
+      "titulo": "URL do site com dois donos",
+      "onde": [
+        "app/getting-started/installation/page.tsx:5",
+        "scripts/gerar-registry.mjs:18"
+      ],
+      "regra": "um fato, um dono",
+      "gravidade": "media",
+      "lote": "B1",
+      "verificacao": "check:rotas#url-com-mais-de-um-dono",
+      "status": "corrigido",
+      "nota": "lib/site.ts é o dono; a página importa e o gerador lê o arquivo",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-070",
+      "eixo": "instalacao",
+      "titulo": "registry publica docs: para rota que não existe (select → 404)",
+      "onde": [
+        "public/r/select.json",
+        "scripts/gerar-registry.mjs"
+      ],
+      "regra": "registry",
+      "gravidade": "bloqueia",
+      "lote": "B1",
+      "verificacao": "check:rotas#docs-para-rota-inexistente",
+      "status": "corrigido",
+      "nota": "docs: só quando o item do nav tem pronto: true",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-071",
+      "eixo": "instalacao",
+      "titulo": "Trechos publicados não compilam (rotulos.cor obrigatório faltando, shorthand sem valor)",
+      "onde": [
+        "app/data-display/tag/page.tsx"
+      ],
+      "regra": "registry",
+      "gravidade": "bloqueia",
+      "lote": "B1",
+      "verificacao": "check:exemplos#nao-compila",
+      "status": "corrigido",
+      "nota": "rotulos.cor entrou no exemplo da Tag; check:exemplos compila os 89 trechos — sobram os 12 com \"…\" (B8)",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-072",
+      "eixo": "instalacao",
+      "titulo": "Código do preview é string à mão, desacoplada do JSX renderizado",
+      "onde": [
+        "app/navigation/header/page.tsx:286-352",
+        "scripts/gerar-registry.mjs"
+      ],
+      "regra": "04-navegacao (código de verdade)",
+      "gravidade": "media",
+      "lote": "B8",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "mínimo feito em B1: check:exemplos compila os 89 trechos publicados e confere o Exige:. Derivar o snippet do JSX real fica para B8, junto com os 12 trechos em pseudocódigo",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-073",
+      "eixo": "instalacao",
+      "titulo": "kfe-docs audit não lê components/ui: 6 componentes sem doc passavam",
+      "onde": [
+        ".kfe-kit/scripts/kfe-docs.mjs"
+      ],
+      "regra": "processo",
+      "gravidade": "alta",
+      "lote": "A",
+      "verificacao": "manual",
+      "status": "corrigido",
+      "nota": "scripts/check-doc-codigo.mjs cobre",
+      "fechadoEm": "fase-A"
+    },
+    {
+      "id": "AUD-074",
+      "eixo": "instalacao",
+      "titulo": "Sem lint no repo; a definição de pronto exige lint verde",
+      "onde": [
+        "package.json",
+        ".claude/skills/datacrazy-frontend/SKILL.md:148"
+      ],
+      "regra": "definição de pronto",
+      "gravidade": "baixa",
+      "lote": "B9",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "decidir next lint + no-restricted-syntax espelhando os checks",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-075",
+      "eixo": "instalacao",
+      "titulo": "Sem golden por estado (tests/golden/) — só o repouso tem regressão",
+      "onde": [
+        "scripts/regressao-visual.mjs"
+      ],
+      "regra": "fw-ui § Verificação da camada 2",
+      "gravidade": "baixa",
+      "lote": "B9",
+      "verificacao": "manual",
+      "status": "aberto",
+      "nota": "repouso coberto na Fase A; hover/foco ficam por roteiro Playwright",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-076",
+      "eixo": "docs",
+      "titulo": "6 componentes sem doc: button, sidebar, date-picker, rating, badge, logo-datacrazy",
+      "onde": [
+        "components/ui/button.tsx",
+        "components/ui/sidebar.tsx",
+        "components/ui/date-picker.tsx",
+        "components/ui/rating.tsx",
+        "components/ui/badge.tsx",
+        "components/ui/logo-datacrazy.tsx"
+      ],
+      "regra": "fw-doc",
+      "gravidade": "bloqueia",
+      "lote": "B1",
+      "verificacao": "check:doc-codigo#sem-doc",
+      "status": "corrigido",
+      "nota": "Button.md, Badge.md, Sidebar.md, DatePicker.md, Rating.md, LogoDatacrazy.md escritos lendo o código (--rascunho)",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-077",
+      "eixo": "docs",
+      "titulo": "Os mesmos 6 fora do components-registry.json",
+      "onde": [
+        "docs/processo/components-registry.json",
+        "components/ui/button.tsx",
+        "components/ui/sidebar.tsx",
+        "components/ui/date-picker.tsx",
+        "components/ui/rating.tsx",
+        "components/ui/badge.tsx",
+        "components/ui/logo-datacrazy.tsx"
+      ],
+      "regra": "fw-doc",
+      "gravidade": "alta",
+      "lote": "B1",
+      "verificacao": "check:doc-codigo#fora-do-registro",
+      "status": "corrigido",
+      "nota": "entradas lidas do código; kfe-interactions audit 0 divergências",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-078",
+      "eixo": "docs",
+      "titulo": "Props reais fora da doc (Tag tom/icone, GrupoTags.corLivre, Drawer rotuloFechar/rotulosRolagem/visualizacao, CampoEditavel, células da tabela, Telefone.Pais)",
+      "onde": [
+        "docs/componentes/Tag.md",
+        "docs/componentes/Drawer.md",
+        "docs/componentes/Input.md",
+        "docs/componentes/DataTable.md",
+        "docs/componentes/Telefone.md"
+      ],
+      "regra": "fw-doc (doc lê o código)",
+      "gravidade": "bloqueia",
+      "lote": "B1",
+      "verificacao": "check:doc-codigo#prop-fora-da-doc",
+      "status": "corrigido",
+      "nota": "check:doc-codigo 0 erros",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-079",
+      "eixo": "docs",
+      "titulo": "Obrigatoriedade divergente: Modal.aoFechar, Select.valor, TimePicker segundos/fuso",
+      "onde": [
+        "docs/componentes/Modal.md",
+        "docs/componentes/Select.md",
+        "docs/componentes/TimePicker.md"
+      ],
+      "regra": "fw-doc",
+      "gravidade": "bloqueia",
+      "lote": "B1",
+      "verificacao": "check:doc-codigo#obrigatoriedade",
+      "status": "corrigido",
+      "nota": "Modal.aoFechar opcional, Select.valor obrigatória, TimePicker rótulos obrigatórios; o check passou a tolerar nome repetido em declarações diferentes",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-080",
+      "eixo": "docs",
+      "titulo": "Exports não citados na doc (inicialDe, DrawerBotaoCanto, TONS, tomDe, caixaDeCampo, ModalSize…)",
+      "onde": [
+        "docs/componentes/Avatar.md",
+        "docs/componentes/Drawer.md",
+        "docs/componentes/Tag.md",
+        "docs/componentes/Input.md",
+        "docs/componentes/Modal.md"
+      ],
+      "regra": "fw-doc",
+      "gravidade": "media",
+      "lote": "B1",
+      "verificacao": "check:doc-codigo#export-fora-da-doc",
+      "status": "corrigido",
+      "nota": "inicialDe, DrawerBotaoCanto, TONS, tomDe, caixaDeCampo, blocoDeCampo, rotuloDeCampo, caixaNoCartao citados. Restam 9 tipos exportados (TomPerfil, ModalSize, ToastVariant…) como aviso do check, não erro.",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-081",
+      "eixo": "docs",
+      "titulo": "README de componentes ainda diz que a pasta está vazia (2026-09-02)",
+      "onde": [
+        "docs/componentes/README.md:13-17"
+      ],
+      "regra": "fw-doc",
+      "gravidade": "baixa",
+      "lote": "B1",
+      "verificacao": "manual",
+      "status": "corrigido",
+      "nota": "nota de 2026-09-19: completo",
+      "fechadoEm": "B1"
+    },
+    {
+      "id": "AUD-082",
+      "eixo": "docs",
+      "titulo": "adr.md não existe; 9 blocos \"Divergências abertas\" espalhados nas docs são ADRs órfãos",
+      "onde": [
+        "docs/componentes/Header.md",
+        "docs/componentes/Drawer.md",
+        "docs/componentes/Input.md",
+        "docs/componentes/Tag.md"
+      ],
+      "regra": "fw-doc C5",
+      "gravidade": "alta",
+      "lote": "B0",
+      "verificacao": "manual",
+      "status": "corrigido",
+      "nota": "adr.md criado com ADR-001…020; os blocos 'Divergências abertas' migram em B1",
+      "fechadoEm": "B0"
+    },
+    {
+      "id": "AUD-083",
+      "eixo": "docs",
+      "titulo": "interactions.md é rascunho de 2026-09-01 com D1–D7 sem decidir; 27 componentes decidiram no código",
+      "onde": [
+        "docs/processo/interactions.md"
+      ],
+      "regra": "fw-ui pré-voo",
+      "gravidade": "alta",
+      "lote": "B0",
+      "verificacao": "manual",
+      "status": "corrigido",
+      "nota": "reescrito no formato v3.2: 27 declarações, L1–L14, 11 inferências para o gate, 23 estados do Figma",
+      "fechadoEm": "B0"
+    },
+    {
+      "id": "AUD-084",
+      "eixo": "docs",
+      "titulo": "Select Menu/Item do arquivo (544:81) não reconciliados com o painel do Select",
+      "onde": [
+        "components/ui/select.tsx:204"
+      ],
+      "regra": "fidelidade",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "nota": "registrado em kfe-state 2026-09-15",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-085",
+      "eixo": "docs",
+      "titulo": "Button 13px/gap 8 contra 12px/gap 6 do redesenho (pendência 6)",
+      "onde": [
+        "components/ui/button.tsx:11"
+      ],
+      "regra": "fidelidade",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "nota": "diff do Header 5,18% nas ações vem daqui",
+      "fechadoEm": null
+    },
+    {
+      "id": "AUD-086",
+      "eixo": "fidelidade",
+      "titulo": "Avatar: Letra do `lg` fora da escala",
+      "onde": [
+        "components/ui/avatar.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Letra do `lg` fora da escala.** 29,25/36 semibold, com tracking de -0,675px, é o valor do arquivo — não bate com nenhum degrau tipográfico."
+    },
+    {
+      "id": "AUD-087",
+      "eixo": "fidelidade",
+      "titulo": "Avatar: O `md` troca papéis entre os temas",
+      "onde": [
+        "components/ui/avatar.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**O `md` troca papéis entre os temas.** Resolvido com dois tokens de componente (`--avatar-md-fundo`, `--avatar-md-anel`); no Figma são duas variáveis diferentes por variante de tema, não um token."
+    },
+    {
+      "id": "AUD-088",
+      "eixo": "fidelidade",
+      "titulo": "Avatar: Sem cor por pessoa",
+      "onde": [
+        "components/ui/avatar.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Sem cor por pessoa.** Todas as iniciais saem no mesmo azul. Se o CRM quiser distinguir pessoas pela cor, é paleta categórica — o bloqueio B8."
+    },
+    {
+      "id": "AUD-089",
+      "eixo": "fidelidade",
+      "titulo": "Breadcrumb: Contraste dos ancestrais abaixo de AA",
+      "onde": [
+        "components/ui/breadcrumb.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Contraste dos ancestrais abaixo de AA.** Está como o arquivo desenha; subir para `muted-foreground` apaga a diferença para o nível atual. Pede decisão de token."
+    },
+    {
+      "id": "AUD-090",
+      "eixo": "fidelidade",
+      "titulo": "Breadcrumb: Nota × desenho",
+      "onde": [
+        "components/ui/breadcrumb.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Nota × desenho**: dois ou três níveis à vista. Código segue o desenho."
+    },
+    {
+      "id": "AUD-091",
+      "eixo": "fidelidade",
+      "titulo": "Breadcrumb: Reticências e hover não estão no arquivo",
+      "onde": [
+        "components/ui/breadcrumb.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Reticências e hover não estão no arquivo.**"
+    },
+    {
+      "id": "AUD-092",
+      "eixo": "fidelidade",
+      "titulo": "Breadcrumb: Ícone do nível atual",
+      "onde": [
+        "components/ui/breadcrumb.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Ícone do nível atual**: o arquivo usa um sino que não é Phosphor; o ícone é dado do item, e a doc usa `BellSimple`."
+    },
+    {
+      "id": "AUD-093",
+      "eixo": "fidelidade",
+      "titulo": "Breadcrumb: Separador é o vetor do arquivo",
+      "onde": [
+        "components/ui/breadcrumb.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Separador é o vetor do arquivo** (traço de 1,5), não `CaretRight`."
+    },
+    {
+      "id": "AUD-094",
+      "eixo": "fidelidade",
+      "titulo": "Card: A lista não tem separador visível",
+      "onde": [
+        "components/ui/card.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**A lista não tem separador visível.** O traço entre linhas está ligado ao token `card` — a mesma cor do fundo. O que separa é o respiro de 13px. Pode ser intenção ou pode ser um `border` que ficou apontando para o token errado; o arquivo não diz."
+    },
+    {
+      "id": "AUD-095",
+      "eixo": "fidelidade",
+      "titulo": "Card: Rosca sem paleta categórica",
+      "onde": [
+        "components/ui/card.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Rosca sem paleta categórica.** O gradiente vale para o anel inteiro, então duas fatias com valor saem da mesma cor e ficam indistinguíveis. Com uma fatia em 100% — o caso desenhado — bate exato. É o bloqueio **B8** do roadmap, e ele agora tem um segundo dono."
+    },
+    {
+      "id": "AUD-096",
+      "eixo": "fidelidade",
+      "titulo": "Card: Alvo de toque do seletor",
+      "onde": [
+        "components/ui/card.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Alvo de toque do seletor.** 32px de altura contra os 44 que a regra I15 pede. O arquivo desenha 32. Ver [Select](Select.md)."
+    },
+    {
+      "id": "AUD-097",
+      "eixo": "fidelidade",
+      "titulo": "Card: Altura mínima, não fixa",
+      "onde": [
+        "components/ui/card.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Altura mínima, não fixa.** O arquivo fixa 382 e 452 com corte; o código usa `min-h`. Na largura de desenho a medida é a mesma, mas um nome longo faz o card crescer em vez de esconder conteúdo."
+    },
+    {
+      "id": "AUD-098",
+      "eixo": "fidelidade",
+      "titulo": "Checkbox: Desmarcado com contorno fraco",
+      "onde": [
+        "components/ui/checkbox.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Desmarcado com contorno fraco.** `input/border` sobre `card` dá ~1,2:1 no claro (`#E1E7EF` sobre branco) e no escuro. A WCAG 1.4.11 pede 3:1 para o limite de um controle. O código segue o arquivo. A decisão é do token `input/border`, não deste componente: vale igual para Radio, Switch e Input."
+    },
+    {
+      "id": "AUD-099",
+      "eixo": "fidelidade",
+      "titulo": "Checkbox: Glifo do marcado no escuro",
+      "onde": [
+        "components/ui/checkbox.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Glifo do marcado no escuro.** O arquivo exporta o check com `fill=\"white\"` fixo, sem variável. Em código ele é `primary-foreground`, que no escuro é `#10131A`. Branco sobre `#599CFF` dá ~2,5:1, e foi por isso que o `primary-foreground` escuro mudou em 2026-09-04."
+    },
+    {
+      "id": "AUD-100",
+      "eixo": "fidelidade",
+      "titulo": "Checkbox: Indeterminado sem desenho",
+      "onde": [
+        "components/ui/checkbox.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Indeterminado sem desenho.** Derivado: fundo do marcado + `Minus` a 12px."
+    },
+    {
+      "id": "AUD-101",
+      "eixo": "fidelidade",
+      "titulo": "Checkbox: Alvo de toque",
+      "onde": [
+        "components/ui/checkbox.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Alvo de toque.** 18px contra os 44 da I15, mesma pendência de Card, Data Table e Pagination."
+    },
+    {
+      "id": "AUD-102",
+      "eixo": "fidelidade",
+      "titulo": "Checkbox: Hover derivado",
+      "onde": [
+        "components/ui/checkbox.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Hover derivado** (E-01): `input/border` → `input/border-hover` e `primary` → `primary-hover`. A mesma regra nos três controles de formulário."
+    },
+    {
+      "id": "AUD-103",
+      "eixo": "fidelidade",
+      "titulo": "DataTable: Linhas sem separador visível",
+      "onde": [
+        "components/ui/data-table.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Linhas sem separador visível.** O traço superior está ligado ao token `card` — a mesma cor do fundo. É o mesmo caso da lista do [Card](Card.md), e agora aparece duas vezes: ou é intenção do sistema, ou é um `border` apontando para o token errado nos dois lugares."
+    },
+    {
+      "id": "AUD-104",
+      "eixo": "fidelidade",
+      "titulo": "DataTable: Etiqueta com raio fora da escala",
+      "onde": [
+        "components/ui/data-table.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Etiqueta com raio fora da escala.** O arquivo desenha 3px; a escala tem 2 (`xs`) e 4 (`sm`). O código usa `sm`. Um pixel, mas é escala."
+    },
+    {
+      "id": "AUD-105",
+      "eixo": "fidelidade",
+      "titulo": "DataTable: Alvo de toque da paginação",
+      "onde": [
+        "components/ui/data-table.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Alvo de toque da paginação.** 28px contra os 44 da regra I15. O arquivo desenha 28."
+    },
+    {
+      "id": "AUD-106",
+      "eixo": "fidelidade",
+      "titulo": "DataTable: ~~Sem hover de linha",
+      "onde": [
+        "components/ui/data-table.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "~~Sem hover de linha.~~ **Resolvido em 2026-09-04** por decisão do humano: a linha usa `overlay/item-hover`. Não está no arquivo."
+    },
+    {
+      "id": "AUD-107",
+      "eixo": "fidelidade",
+      "titulo": "DataTable: A tabela pede 1160px",
+      "onde": [
+        "components/ui/data-table.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**A tabela pede 1160px.** Abaixo disso ela rola na horizontal em vez de espremer coluna. O showcase mostra isso porque a coluna de leitura tem 820."
+    },
+    {
+      "id": "AUD-108",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: Tons do perfil sem variável no Figma",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Tons do perfil sem variável no Figma.** Os quatro roxos do arquivo (`#F2E8FF`, `#6C12E2`, `#8B33FF`, `#EEE0FF`) são o azul do sistema com o matiz em 266°. Entraram como `[data-tom]` no CSS por decisão do humano (2026-09-15), com rosa e laranja pela mesma conta. Os escuros são derivados. Em 2026-09-18 entraram mais quatro — verde 142°, ciano 190°, âmbar 45° e vermelho 356° —, também por decisão do humano. Verde, ciano e âmbar não copiam o L do azul: no mesmo 60% o texto da tag dá 1,4:1 sobre o fundo claro, que foi o motivo da recusa de 2026-09-15. O L de cada um desce até o contraste empatar "
+    },
+    {
+      "id": "AUD-109",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: Brilho do topo no escuro é derivado",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Brilho do topo no escuro é derivado.** O gradiente vai a `base/blue/100`, primitivo sem modo; no escuro aponta para `accent`."
+    },
+    {
+      "id": "AUD-110",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: A camada não está no arquivo",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**A camada não está no arquivo.** Scrim a 40%, foco preso, Escape e o movimento são derivação — o Figma desenha só o painel. O painel entra deslizando da direita em 280ms com `cubic-bezier(0.32, 0.72, 0, 1)` (desacelera no fim, \"assenta\") e sai em 200ms com `cubic-bezier(0.4, 0, 1, 1)` (acelera; sair não é evento); o scrim faz fade junto. Motion ainda não é token do Figma (pendência 4 de 02-design-system.md) — os nomes vivem no tailwind.config. Pedido do humano em 2026-09-18: \"ta muito seco\"."
+    },
+    {
+      "id": "AUD-111",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: Button do arquivo mudou",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Button do arquivo mudou.** Os botões do drawer no Figma têm texto 12px e gap 6; o `Button` do código segue 13px e gap 8."
+    },
+    {
+      "id": "AUD-112",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: Botão do canto direito sem função no arquivo",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Botão do canto direito sem função no arquivo.** Aqui ele recolhe o perfil e o conteúdo ganha um botão para reabrir. Raio 9,67 (instância escalada) virou o degrau `lg`."
+    },
+    {
+      "id": "AUD-113",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: Hover invisível no `fill` claro",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Hover invisível no `fill` claro.** `nav/item/bg-hover` é `background`, a mesma cor do fundo do menu nesse estilo."
+    },
+    {
+      "id": "AUD-114",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: Cartão de métrica saiu do arquivo",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Cartão de métrica saiu do arquivo.** O Figma desenha traço de 2px em `background` (outline) ou fundo chapado (fill), sem ícone. O que está no código é o pedido do humano: sem traço, com gradiente e ícone por tom."
+    },
+    {
+      "id": "AUD-115",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: Título do bloco mistura estilos",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Título do bloco mistura estilos.** Tamanho do `body-sm` com peso e entrelinha do `heading-4`, como no arquivo. O traço por baixo do título saiu (decisão do humano, 2026-09-18): com os campos em cartão ele virava um segundo separador do mesmo grupo."
+    },
+    {
+      "id": "AUD-116",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: Hierarquia",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Hierarquia.** O pontilhado do canvas aparece só na imagem, não no contexto, e ficou de fora. Zoom e recolher são derivados. O \"–\" do nó não atual fica 7px acima no arquivo; aqui está em linha."
+    },
+    {
+      "id": "AUD-117",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: Sete seções do menu sem desenho",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Sete seções do menu sem desenho** (Atividades, Atendimentos, Pessoas, Empresas, Endereços, Arquivos, Notas)."
+    },
+    {
+      "id": "AUD-118",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: Tab e Accordion Header",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Tab e Accordion Header** não aparecem no drawer e não foram construídos."
+    },
+    {
+      "id": "AUD-119",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: Indicador de rolagem, alfinete e o modo cards não estão no arquivo",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Indicador de rolagem, alfinete e o modo cards não estão no arquivo.** Pedidos do humano (2026-09-18). A seta usa `border`, `card` e `muted-foreground`, e a faixa é um degradê do próprio `card`; o alfinete e o cartão reusam as cores do item do menu; o interruptor usa `input/border` e `muted-foreground`. Falta desenhar os três."
+    },
+    {
+      "id": "AUD-120",
+      "eixo": "fidelidade",
+      "titulo": "Header: Set do Figma com erro",
+      "onde": [
+        "components/ui/header.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Set do Figma com erro**: seis variantes com o mesmo nome. Renomear `Actions` (ex.: Default, Date, Analytics, Compact, Minimal, Search) destrava leitura e a criação da variante escura no arquivo."
+    },
+    {
+      "id": "AUD-121",
+      "eixo": "fidelidade",
+      "titulo": "Header: Button do código ≠ Button do Header no arquivo",
+      "onde": [
+        "components/ui/header.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Button do código ≠ Button do Header no arquivo**: 13px e vão 8 contra 12px e vão 6 — pendência nº 6 de [02-design-system.md](../02-design-system.md)."
+    },
+    {
+      "id": "AUD-122",
+      "eixo": "fidelidade",
+      "titulo": "Header: Gatilho do Date Picker com 29px",
+      "onde": [
+        "components/ui/header.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Gatilho do Date Picker com 29px**, o arquivo desenha 32 no Header."
+    },
+    {
+      "id": "AUD-123",
+      "eixo": "fidelidade",
+      "titulo": "Header: Número do selo em `primary-foreground`",
+      "onde": [
+        "components/ui/header.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Número do selo em `primary-foreground`**: o `destructive-foreground` do arquivo é branco nos dois modos (reprova a D8; 2,6:1 no escuro)."
+    },
+    {
+      "id": "AUD-124",
+      "eixo": "fidelidade",
+      "titulo": "Header: `tertiary` escuro",
+      "onde": [
+        "components/ui/header.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**`tertiary` escuro**: o arquivo pinta o texto de `base/blue/600`, cópia do Secondary; o código mantém `muted-foreground`."
+    },
+    {
+      "id": "AUD-125",
+      "eixo": "fidelidade",
+      "titulo": "Header: Quebra de linha das ações e truncamento",
+      "onde": [
+        "components/ui/header.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Quebra de linha das ações e truncamento** não estão no arquivo."
+    },
+    {
+      "id": "AUD-126",
+      "eixo": "fidelidade",
+      "titulo": "Header: Escuro do Header não desenhado",
+      "onde": [
+        "components/ui/header.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Escuro do Header não desenhado**: saiu dos tokens; as peças (Button, Segmented, View Switcher, Breadcrumb) têm variante escura e batem."
+    },
+    {
+      "id": "AUD-127",
+      "eixo": "fidelidade",
+      "titulo": "Header: Sombra interna só no Claro",
+      "onde": [
+        "components/ui/header.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Sombra interna só no Claro** (2026-09-18): `--shadow-button-inner` vira `none` no Escuro em tudo menos no Button `primary`. O arquivo mantém o brilho nas variantes escuras — ali ele lava a superfície."
+    },
+    {
+      "id": "AUD-128",
+      "eixo": "fidelidade",
+      "titulo": "Header: Painel de notificações não existe no arquivo",
+      "onde": [
+        "components/ui/header.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Painel de notificações não existe no arquivo.** O sino e o selo existem; a lista que abre é cenário da tela, derivada de `overlay/*` + `shadow-lg`, e mora na página do DS, não no componente."
+    },
+    {
+      "id": "AUD-129",
+      "eixo": "fidelidade",
+      "titulo": "Input: Cor das estrelas",
+      "onde": [
+        "components/ui/input.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Cor das estrelas.** O arquivo pinta cheia em `primary` e vazia em `base/blue/300`; a descrição do Rating no Figma promete `foreground` e `subtle-foreground`. O código segue a pintura."
+    },
+    {
+      "id": "AUD-130",
+      "eixo": "fidelidade",
+      "titulo": "Input: Foco com 2px de outro jeito",
+      "onde": [
+        "components/ui/input.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Foco com 2px de outro jeito.** O arquivo troca a borda para 2px; aqui é borda de 1 + anel interno de 1, para o texto não pular."
+    },
+    {
+      "id": "AUD-131",
+      "eixo": "fidelidade",
+      "titulo": "Input: Hover não desenhado",
+      "onde": [
+        "components/ui/input.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Hover não desenhado.** Vem da regra I1, apoiado no token `input/border-hover`, que já existia."
+    },
+    {
+      "id": "AUD-132",
+      "eixo": "fidelidade",
+      "titulo": "Input: Rating com hover de pré-visualização e animação de clique",
+      "onde": [
+        "components/ui/input.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Rating com hover de pré-visualização e animação de clique.** O arquivo não desenha nenhum dos dois; entraram por pedido do humano (2026-09-18), sob a exceção E-01."
+    },
+    {
+      "id": "AUD-133",
+      "eixo": "fidelidade",
+      "titulo": "Input: Rating de 0 a 10",
+      "onde": [
+        "components/ui/input.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Rating de 0 a 10.** O arquivo desenha cinco estrelas; o padrão do código é dez, por decisão do humano. `max={5}` volta ao desenho."
+    },
+    {
+      "id": "AUD-134",
+      "eixo": "fidelidade",
+      "titulo": "Input: `CampoEditavel` não está no arquivo",
+      "onde": [
+        "components/ui/input.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**`CampoEditavel` não está no arquivo.** Clicar para editar é pedido do humano (2026-09-17): em tela de leitura o campo é texto até o clique. Desde 2026-09-18 o bloco é cartão: superfície própria em repouso (`background/50`), realce `accent` sob o cursor, 12px de respiro, rótulo em bold e valor na mesma margem do rótulo. A caixa do Input só aparece no clique, por dentro do cartão. Tela de leitura não tem cara de formulário."
+    },
+    {
+      "id": "AUD-135",
+      "eixo": "fidelidade",
+      "titulo": "Input: Lista aberta do Select de formulário",
+      "onde": [
+        "components/ui/input.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Lista aberta do Select de formulário** é a mesma derivação do [Select](Select.md)."
+    },
+    {
+      "id": "AUD-136",
+      "eixo": "fidelidade",
+      "titulo": "KpiCard: Cor do trend",
+      "onde": [
+        "components/ui/kpi-card.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Cor do trend.** A descrição do componente no Figma promete `success` para up e `destructive` para down; os glifos do arquivo estão os dois em `primary`. O código segue o arquivo — decisão do humano em 2026-09-03. Ou o arquivo se corrige, ou a descrição."
+    },
+    {
+      "id": "AUD-137",
+      "eixo": "fidelidade",
+      "titulo": "KpiCard: Outline desenhado para uma tendência só",
+      "onde": [
+        "components/ui/kpi-card.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Outline desenhado para uma tendência só.** O arquivo tem `Up`; antes tinha `Down`. As outras funcionam — o glifo troca e o resto fica igual —, mas não têm desenho. O redesenho em si foi implementado em 2026-09-04, por decisão do humano."
+    },
+    {
+      "id": "AUD-138",
+      "eixo": "fidelidade",
+      "titulo": "KpiCard: ~~Outline some no tema escuro",
+      "onde": [
+        "components/ui/kpi-card.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "~~Outline some no tema escuro.~~ **Resolvido em 2026-09-04** pela mudança de token: `card` no escuro passou de `#1E1E24` para `#25252D` e `background` de `#1C1C25` para `#16161D`. O contraste entre os dois deixou de ser nulo e a borda do Outline aparece."
+    },
+    {
+      "id": "AUD-139",
+      "eixo": "fidelidade",
+      "titulo": "Modal: Alerta no escuro",
+      "onde": [
+        "components/ui/modal.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Alerta no escuro.** O arquivo pinta círculo e glifo com o `destructive` **claro** (`#C6323C`) nas variantes `theme=Dark`, e o botão com o escuro (`#EB7076`). Mesmo erro de modo da camada `Icon` do Toast. Aqui os dois seguem o token."
+    },
+    {
+      "id": "AUD-140",
+      "eixo": "fidelidade",
+      "titulo": "Modal: 12% medido, não lido",
+      "onde": [
+        "components/ui/modal.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**12% medido, não lido.** O Figma não exporta a opacidade do círculo; o pixel fecha em 0,12 nos três canais do claro. Ponte do Figma desktop desligada."
+    },
+    {
+      "id": "AUD-141",
+      "eixo": "fidelidade",
+      "titulo": "Modal: Cancelar no escuro",
+      "onde": [
+        "components/ui/modal.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Cancelar no escuro.** No arquivo é o Ghost escuro (331:762): sem traço, texto `muted-foreground`. O `outline` do código mantém traço `background` e texto `surface-inverse` nos dois temas — resolver pede token por tema no Button, não no Modal."
+    },
+    {
+      "id": "AUD-142",
+      "eixo": "fidelidade",
+      "titulo": "Modal: Lixeira do escuro",
+      "onde": [
+        "components/ui/modal.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Lixeira do escuro** sai `#1C1C25` no arquivo, e o texto do mesmo botão `primary-foreground` (`#10131A`). O código usa a cor do texto nos dois."
+    },
+    {
+      "id": "AUD-143",
+      "eixo": "fidelidade",
+      "titulo": "Modal: Texto e vão dos botões",
+      "onde": [
+        "components/ui/modal.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Texto e vão dos botões.** Arquivo: 12px e 6px entre ícone e texto; Button do código: 13px e 8px. Divergência já aberta no Button."
+    },
+    {
+      "id": "AUD-144",
+      "eixo": "fidelidade",
+      "titulo": "Modal: Não está no arquivo",
+      "onde": [
+        "components/ui/modal.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Não está no arquivo:** fundo (40%, derivado do Drawer), foco preso, Escape, clique fora, movimento, quebra de linha do título e vão de 12 entre título e X."
+    },
+    {
+      "id": "AUD-145",
+      "eixo": "fidelidade",
+      "titulo": "Pagination: Accent no ativo é decisão do humano, não do arquivo",
+      "onde": [
+        "components/ui/pagination.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Accent no ativo é decisão do humano, não do arquivo.** O Figma marca a página atual só com a borda; no tema escuro ela quase some contra o fundo do próprio botão. Aqui entram fundo `accent` e texto `primary` — dois sinais. Decisão de 2026-09-04."
+    },
+    {
+      "id": "AUD-146",
+      "eixo": "fidelidade",
+      "titulo": "Pagination: Hover não está no arquivo",
+      "onde": [
+        "components/ui/pagination.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Hover não está no arquivo.** Usa `overlay/item-hover`, o token de \"item sob o cursor\", que clareia nos dois temas."
+    },
+    {
+      "id": "AUD-147",
+      "eixo": "fidelidade",
+      "titulo": "Pagination: Setas nos extremos",
+      "onde": [
+        "components/ui/pagination.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Setas nos extremos.** O arquivo escreve só \"Anterior\" e \"Próxima\"; aqui entram os carets do Phosphor, pela mesma decisão que padronizou o ícone."
+    },
+    {
+      "id": "AUD-148",
+      "eixo": "fidelidade",
+      "titulo": "Pagination: Alvo de toque",
+      "onde": [
+        "components/ui/pagination.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Alvo de toque.** 28px contra os 44 da regra I15. É o que o arquivo desenha."
+    },
+    {
+      "id": "AUD-149",
+      "eixo": "fidelidade",
+      "titulo": "Pagination: Sem reticências",
+      "onde": [
+        "components/ui/pagination.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Sem reticências.** Com muitas páginas a lista cresce sem cortar. O arquivo desenha 4 páginas e não diz o que fazer com 40."
+    },
+    {
+      "id": "AUD-150",
+      "eixo": "fidelidade",
+      "titulo": "RadioGroup: Desmarcado com contorno fraco",
+      "onde": [
+        "components/ui/radio-group.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Desmarcado com contorno fraco** — mesma do Checkbox: é o token `input/border` sobre `card`, abaixo dos 3:1 da WCAG 1.4.11."
+    },
+    {
+      "id": "AUD-151",
+      "eixo": "fidelidade",
+      "titulo": "RadioGroup: Gap de 20 entre itens",
+      "onde": [
+        "components/ui/radio-group.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Gap de 20 entre itens** vem do espaçamento do component set no arquivo, não de uma spec de grupo. Se o grupo tiver desenho próprio, ele manda."
+    },
+    {
+      "id": "AUD-152",
+      "eixo": "fidelidade",
+      "titulo": "RadioGroup: Alvo de toque",
+      "onde": [
+        "components/ui/radio-group.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Alvo de toque** 18px contra os 44 da I15."
+    },
+    {
+      "id": "AUD-153",
+      "eixo": "fidelidade",
+      "titulo": "RadioGroup: Hover derivado",
+      "onde": [
+        "components/ui/radio-group.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Hover derivado** (E-01), a mesma regra do Checkbox e do Switch."
+    },
+    {
+      "id": "AUD-154",
+      "eixo": "fidelidade",
+      "titulo": "SegmentedControl: \"Semana\" em `label-lg`",
+      "onde": [
+        "components/ui/segmented-control.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**\"Semana\" em `label-lg`** no arquivo, as outras em `body-md`. Código usa `body-md` em todas: peso por opção muda a largura quando a seleção troca."
+    },
+    {
+      "id": "AUD-155",
+      "eixo": "fidelidade",
+      "titulo": "SegmentedControl: Descrição do set diz \"ativa recebe superfície card\"",
+      "onde": [
+        "components/ui/segmented-control.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Descrição do set diz \"ativa recebe superfície card\"**; o desenho usa `accent`. Código segue o desenho."
+    },
+    {
+      "id": "AUD-156",
+      "eixo": "fidelidade",
+      "titulo": "SegmentedControl: Resolvido (2026-09-18)",
+      "onde": [
+        "components/ui/segmented-control.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Resolvido (2026-09-18)**: a sombra interna agora vale só no Claro, em todo o DS menos no Button `primary` — era o que o arquivo já fazia no View Switcher escuro."
+    },
+    {
+      "id": "AUD-157",
+      "eixo": "fidelidade",
+      "titulo": "SegmentedControl: Superfície da escolhida é token próprio",
+      "onde": [
+        "components/ui/segmented-control.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Superfície da escolhida é token próprio**: `accent` no Claro (o do arquivo) e `background` no Escuro, porque lá `accent` é quase o `card` da trilha e a seleção sumia."
+    },
+    {
+      "id": "AUD-158",
+      "eixo": "fidelidade",
+      "titulo": "SegmentedControl: Hover não está desenhado",
+      "onde": [
+        "components/ui/segmented-control.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Hover não está desenhado.**"
+    },
+    {
+      "id": "AUD-159",
+      "eixo": "fidelidade",
+      "titulo": "Select: Caret do Phosphor, não o do arquivo",
+      "onde": [
+        "components/ui/select.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Caret do Phosphor, não o do arquivo.** O Figma desenha um triângulo cheio de 8×5; aqui vai o `CaretDown` da biblioteca. Decisão do humano em 2026-09-04, valendo para todos os componentes — a fonte de ícone do DS é o Phosphor, e um triângulo desenhado à mão é um ícone fora dela."
+    },
+    {
+      "id": "AUD-160",
+      "eixo": "fidelidade",
+      "titulo": "Select: A lista aberta é derivação, não desenho",
+      "onde": [
+        "components/ui/select.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**A lista aberta é derivação, não desenho.** Espaçamento, elevação e realce saíram dos tokens, não do arquivo. Vale desenhar para confirmar."
+    },
+    {
+      "id": "AUD-161",
+      "eixo": "fidelidade",
+      "titulo": "Select: Alvo de toque",
+      "onde": [
+        "components/ui/select.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Alvo de toque.** 29px no `sm` e 32 no `md`, contra os 44 da regra I15."
+    },
+    {
+      "id": "AUD-162",
+      "eixo": "fidelidade",
+      "titulo": "Select: Não é um `<select>` nativo nem Radix",
+      "onde": [
+        "components/ui/select.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Não é um `<select>` nativo nem Radix.** Foi feito à mão porque a base do projeto só tem `react-slot` e trazer pacote é decisão de stack. Se o Radix entrar, este componente é o primeiro a migrar."
+    },
+    {
+      "id": "AUD-163",
+      "eixo": "fidelidade",
+      "titulo": "Switch: Desligado com trilho fraco",
+      "onde": [
+        "components/ui/switch.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Desligado com trilho fraco** — `input/border` sobre `card`, ~1,2:1. Mesma causa do Checkbox e do Radio."
+    },
+    {
+      "id": "AUD-164",
+      "eixo": "fidelidade",
+      "titulo": "Switch: Botão some no escuro desligado",
+      "onde": [
+        "components/ui/switch.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Botão some no escuro desligado.** Botão `card` (`#25252D`) sobre trilho `input/border` (`#2E2E38`). O arquivo desenha assim. A posição continua dizendo o estado, mas o botão quase não se vê."
+    },
+    {
+      "id": "AUD-165",
+      "eixo": "fidelidade",
+      "titulo": "Switch: Hover do desligado pesa mais que nos outros dois",
+      "onde": [
+        "components/ui/switch.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Hover do desligado pesa mais que nos outros dois.** A regra é a mesma (`input/border` → `input/border-hover`), mas aqui ela pinta o trilho inteiro de `muted-foreground`, não um traço de 1.5px. Vale revisar."
+    },
+    {
+      "id": "AUD-166",
+      "eixo": "fidelidade",
+      "titulo": "Switch: Retorno do efeito",
+      "onde": [
+        "components/ui/switch.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Retorno do efeito** não é do componente: quem usa precisa mostrar o resultado e desfazer a posição se o back recusar. O Toast já existe (outra frente) e é o candidato."
+    },
+    {
+      "id": "AUD-167",
+      "eixo": "fidelidade",
+      "titulo": "Switch: Alvo de toque",
+      "onde": [
+        "components/ui/switch.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Alvo de toque** 20px contra os 44 da I15."
+    },
+    {
+      "id": "AUD-168",
+      "eixo": "fidelidade",
+      "titulo": "Tabs: A fileira não está no arquivo",
+      "onde": [
+        "components/ui/tabs.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**A fileira não está no arquivo.** O vão de 12px entre abas (`gap-md`), a ausência de linha de base embaixo da fileira e a rolagem horizontal são derivação."
+    },
+    {
+      "id": "AUD-169",
+      "eixo": "fidelidade",
+      "titulo": "Tabs: Hover não está desenhado",
+      "onde": [
+        "components/ui/tabs.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Hover não está desenhado.** O rótulo sobe para `foreground` (E-01), sem traço."
+    },
+    {
+      "id": "AUD-170",
+      "eixo": "fidelidade",
+      "titulo": "Tabs: Foco por anel interno",
+      "onde": [
+        "components/ui/tabs.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Foco por anel interno** em vez da D6, pelo motivo acima."
+    },
+    {
+      "id": "AUD-171",
+      "eixo": "fidelidade",
+      "titulo": "Tabs: Barra de rolagem escondida",
+      "onde": [
+        "components/ui/tabs.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Barra de rolagem escondida.** Rola por trackpad, arrasto e teclado; com mouse de roda vertical, a pessoa pode não perceber que há mais abas."
+    },
+    {
+      "id": "AUD-172",
+      "eixo": "fidelidade",
+      "titulo": "Tabs: Escopo negativo do roadmap",
+      "onde": [
+        "components/ui/tabs.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Escopo negativo do roadmap.** A linha \"Tabs como navegação\" em `processo/roadmap-componentes.md` continua dizendo que fica fora; a decisão do humano de 2026-09-15 está no log do ciclo."
+    },
+    {
+      "id": "AUD-173",
+      "eixo": "fidelidade",
+      "titulo": "Tabs: Diff acima de 1% é do texto",
+      "onde": [
+        "components/ui/tabs.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Diff acima de 1% é do texto.** Nenhum pixel diferente fora da linha do rótulo. \"Histórico\" mede 50,1px no navegador contra 51 no arquivo, a mesma diferença de métrica da Geist vista no Tooltip; a aba fecha em 58,1 contra 59."
+    },
+    {
+      "id": "AUD-174",
+      "eixo": "fidelidade",
+      "titulo": "Tag: Tag de tipo no perfil tem override do arquivo",
+      "onde": [
+        "components/ui/tag.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Tag de tipo no perfil tem override do arquivo.** O componente usa fundo `input/bg-disabled` e recuo 6px; a instância sobre o avatar usa `background` e 4px em volta. O Drawer repete o override por `className`."
+    },
+    {
+      "id": "AUD-175",
+      "eixo": "fidelidade",
+      "titulo": "Tag: Ícone do \"+\" em `background`",
+      "onde": [
+        "components/ui/tag.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Ícone do \"+\" em `background`.** O SVG vem em `#EBEDEF`. No escuro, `background` é quase preto sobre o azul claro — confere com o `primary-foreground` escuro, mas não é o mesmo token."
+    },
+    {
+      "id": "AUD-176",
+      "eixo": "fidelidade",
+      "titulo": "Tag: Empresa roxa",
+      "onde": [
+        "components/ui/tag.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Empresa roxa.** No perfil, a cor da tag de tipo vem do tom (`--tom-tag`) — ver [Drawer](Drawer.md). A Tag solta segue em `primary`."
+    },
+    {
+      "id": "AUD-177",
+      "eixo": "fidelidade",
+      "titulo": "Tag: Abas e busca do seletor não estão no arquivo",
+      "onde": [
+        "components/ui/tag.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Abas e busca do seletor não estão no arquivo.** Pedido do humano (2026-09-15), montado com a Tab (535:21) e a caixa do Input sobre o Select Menu. A contagem por aba vai no rótulo da aba."
+    },
+    {
+      "id": "AUD-178",
+      "eixo": "fidelidade",
+      "titulo": "Tag: Painel em portal com posição fixa",
+      "onde": [
+        "components/ui/tag.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Painel em portal com posição fixa.** Necessário porque o perfil do drawer rola; o painel vira para cima quando não cabe embaixo."
+    },
+    {
+      "id": "AUD-179",
+      "eixo": "fidelidade",
+      "titulo": "Telefone: Não está no Figma",
+      "onde": [
+        "components/ui/telefone.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Não está no Figma.** Decisão do humano; o arquivo ainda mostra o telefone como campo de texto."
+    },
+    {
+      "id": "AUD-180",
+      "eixo": "fidelidade",
+      "titulo": "Telefone: Bandeira é emoji",
+      "onde": [
+        "components/ui/telefone.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Bandeira é emoji.** O Windows não desenha bandeira: lá aparece o código do país. Por isso o DDI fica escrito ao lado, e não só a bandeira."
+    },
+    {
+      "id": "AUD-181",
+      "eixo": "fidelidade",
+      "titulo": "Telefone: Sem máscara",
+      "onde": [
+        "components/ui/telefone.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Sem máscara.** O número entra como a pessoa digita. Máscara por país é decisão de produto, e muda a cada país da lista."
+    },
+    {
+      "id": "AUD-182",
+      "eixo": "fidelidade",
+      "titulo": "TimePicker: Não está no Figma",
+      "onde": [
+        "components/ui/time-picker.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Não está no Figma.** Tudo aqui é derivação de tokens e de componentes que já existiam. Vale desenhar para confirmar."
+    },
+    {
+      "id": "AUD-183",
+      "eixo": "fidelidade",
+      "titulo": "TimePicker: Lista, não roleta",
+      "onde": [
+        "components/ui/time-picker.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Lista, não roleta.** Em celular o padrão do sistema é roleta; aqui são colunas roláveis, iguais nos dois."
+    },
+    {
+      "id": "AUD-184",
+      "eixo": "fidelidade",
+      "titulo": "TimePicker: `passoMinutos` some com valores fora do passo",
+      "onde": [
+        "components/ui/time-picker.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**`passoMinutos` some com valores fora do passo.** Uma hora vinda do back com `09:07` aparece no gatilho, mas não fica marcada na coluna de 5 em 5."
+    },
+    {
+      "id": "AUD-185",
+      "eixo": "fidelidade",
+      "titulo": "TimePicker: Sem intervalo de hora",
+      "onde": [
+        "components/ui/time-picker.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Sem intervalo de hora.** \"Das 9 às 18\" são dois componentes hoje."
+    },
+    {
+      "id": "AUD-186",
+      "eixo": "fidelidade",
+      "titulo": "Toast: Tema escuro do círculo e do glifo",
+      "onde": [
+        "components/ui/toast.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Tema escuro do círculo e do glifo.** No arquivo, as variantes `theme=Dark` pintam o círculo e o glifo com o valor **claro** do token (`success` `#267952` a 12% sobre `#25252D`), enquanto a barra usa o escuro (`#64CEA2`). É o modo da variável errado na camada `Icon`. Aqui os três seguem o token, então no escuro o círculo e o glifo saem mais claros que no arquivo."
+    },
+    {
+      "id": "AUD-187",
+      "eixo": "fidelidade",
+      "titulo": "Toast: 12% medido, não lido",
+      "onde": [
+        "components/ui/toast.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**12% medido, não lido.** O Figma não exporta a opacidade do preenchimento do círculo. As quatro variantes do claro fecham em 0,12 nos três canais do pixel. A ponte do Figma desktop estava desconectada para ler o valor direto."
+    },
+    {
+      "id": "AUD-188",
+      "eixo": "fidelidade",
+      "titulo": "Toast: Fila, posição e tempo não estão no arquivo",
+      "onde": [
+        "components/ui/toast.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Fila, posição e tempo não estão no arquivo.** Canto inferior direito a 16px, 8px entre cartões, três visíveis e 8s são derivação. O humano pediu mais tempo que os 5s de antes (2026-09-15); os 8s são o valor escolhido."
+    },
+    {
+      "id": "AUD-189",
+      "eixo": "fidelidade",
+      "titulo": "Toast: Texto quebra linha",
+      "onde": [
+        "components/ui/toast.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Texto quebra linha.** O arquivo usa texto numa linha só; aqui quebra, para não truncar mudo (E1) em `es` e `pt-br`."
+    },
+    {
+      "id": "AUD-190",
+      "eixo": "fidelidade",
+      "titulo": "Toast: Hover do X",
+      "onde": [
+        "components/ui/toast.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Hover do X** usa `overlay/item-hover` (E-01). Não está desenhado."
+    },
+    {
+      "id": "AUD-191",
+      "eixo": "fidelidade",
+      "titulo": "Toast: Movimento não está no arquivo nem tem token",
+      "onde": [
+        "components/ui/toast.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Movimento não está no arquivo nem tem token.** Durações e curvas vivem nomeadas em `tailwind.config.ts` (`fade-in`, `toast-open`) até a pendência 4 de `02-design-system.md` fechar. Pedido do humano em 2026-09-15: dissolver na entrada, deslizar para o lado na saída."
+    },
+    {
+      "id": "AUD-192",
+      "eixo": "fidelidade",
+      "titulo": "Tooltip: Left e Right do arquivo não seguem Top e Bottom",
+      "onde": [
+        "components/ui/tooltip.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Left e Right do arquivo não seguem Top e Bottom.** Top e Bottom nomeiam o lado onde o balão fica, com a seta apontando para o gatilho. No claro, Left e Right têm a seta do lado do nome — o contrário. No escuro, a seta está do lado certo mas gira para dentro do balão. Aqui os quatro seguem Top e Bottom."
+    },
+    {
+      "id": "AUD-193",
+      "eixo": "fidelidade",
+      "titulo": "Tooltip: Distância até o gatilho (4px), margem até a janela (8px) e espera de 400ms",
+      "onde": [
+        "components/ui/tooltip.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Distância até o gatilho (4px), margem até a janela (8px) e espera de 400ms** não estão no arquivo, que desenha o balão solto."
+    },
+    {
+      "id": "AUD-194",
+      "eixo": "fidelidade",
+      "titulo": "Tooltip: Largura máxima de 320px",
+      "onde": [
+        "components/ui/tooltip.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Largura máxima de 320px** (`max-w-xs`). O arquivo usa uma linha só; acima disso o texto quebra em vez de atravessar a janela."
+    },
+    {
+      "id": "AUD-195",
+      "eixo": "fidelidade",
+      "titulo": "Tooltip: Com a posição ajustada na borda, a seta continua no centro do balão",
+      "onde": [
+        "components/ui/tooltip.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Com a posição ajustada na borda, a seta continua no centro do balão** e pode não apontar para o meio do gatilho."
+    },
+    {
+      "id": "AUD-196",
+      "eixo": "fidelidade",
+      "titulo": "Tooltip: Sem equivalente de toque",
+      "onde": [
+        "components/ui/tooltip.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Sem equivalente de toque** (G7). Falta decidir se toque longo abre."
+    },
+    {
+      "id": "AUD-197",
+      "eixo": "fidelidade",
+      "titulo": "Tooltip: Ligado sempre, não só quando o texto corta",
+      "onde": [
+        "components/ui/tooltip.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Ligado sempre, não só quando o texto corta.** Isso é o primitivo `Truncate` do roadmap, que ainda não existe."
+    },
+    {
+      "id": "AUD-198",
+      "eixo": "fidelidade",
+      "titulo": "Tooltip: Diff de 9,5% é do texto",
+      "onde": [
+        "components/ui/tooltip.tsx"
+      ],
+      "regra": "fidelidade · divergência aberta no gate do lote",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Diff de 9,5% é do texto.** Das 516 diferenças, 3 ficam fora da linha de texto: o balão tem 26 de altura, a seta 10×6 no lugar certo. O texto mede 160,3 no navegador contra 161 no arquivo, e esse ajuste abaixo de 1px desloca todos os glifos. Numa peça de 181×30 o texto é metade da área, então o limite de 1% não fecha só com antialias."
+    }
+  ]
+}
