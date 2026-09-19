@@ -7,6 +7,7 @@ import { ChatText, Check, Warning, X, type Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { DURACAO, PERMANENCIA, reduzido } from "@/lib/movimento";
 
+import { foco } from "@/lib/estados";
 /**
  * Toast — confirmação que não bloqueia (node 548:52, canvas `↳ Feedback`).
  *
@@ -109,7 +110,7 @@ export function Toast({
             "flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors",
             // hover derivado (E-01): o token de "item sob o cursor" do overlay.
             "hover:bg-overlay-item-hover hover:text-foreground",
-            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+            `${foco}`,
           )}
         >
           <X size={14} weight="regular" />

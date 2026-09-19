@@ -3,6 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
+import { foco, focoAnel, desabilitado } from "@/lib/estados";
 /**
  * Tabs — alterna entre seções do mesmo registro (node 535:21, set "Tab").
  *
@@ -81,13 +82,13 @@ export function Tabs({ itens, atual, aoEscolher, rotulo, id, className }: TabsPr
               "flex w-fit shrink-0 flex-col items-center gap-2 whitespace-nowrap rounded-sm px-1 pt-2 text-label-lg transition-colors",
               // Anel por dentro, não `outline` com offset (D6): a fileira rola, e
               // quem rola corta o que passa da borda — o contorno sumiria.
-              "outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
-              "disabled:pointer-events-none disabled:opacity-50",
+              `${focoAnel}`,
+              `${desabilitado}`,
               selecionada
                 ? "text-primary"
                 // hover derivado (E-01): o rótulo sobe para `foreground`, sem traço —
                 // o traço continua sendo só de quem está selecionada.
-                : "text-muted-foreground hover:text-foreground",
+                : "text-muted-foreground enabled:hover:text-foreground",
             )}
           >
             {item.rotulo}
@@ -121,7 +122,7 @@ export function TabPanel({ id, valor, atual, className, children, ...props }: Ta
       // tela direto ao conteúdo que acabou de trocar.
       tabIndex={0}
       className={cn(
-        "rounded-sm outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        `rounded-sm outline-none ${foco}`,
         className,
       )}
       {...props}

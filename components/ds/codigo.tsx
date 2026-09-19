@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Check, Copy } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
+import { foco } from "@/lib/estados";
 // Realce com Shiki, que usa as MESMAS gramáticas TextMate e os mesmos temas do
 // VS Code — light-plus e dark-plus são os temas padrão dele. O carregamento é
 // tardio: a gramática só desce quando alguém abre a aba de código.
@@ -48,10 +49,9 @@ export function Codigo({
       <button
         onClick={copiar}
         aria-label={copiado ? "Copiado" : "Copiar código"}
-        className="absolute right-3 top-3 z-dropdown inline-flex h-7 w-7 items-center justify-center rounded-md
+        className={`absolute right-3 top-3 z-dropdown inline-flex h-7 w-7 items-center justify-center rounded-md
                    border border-border bg-card text-muted-foreground opacity-0 transition-all
-                   hover:text-foreground focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2
-                   focus-visible:outline-offset-2 focus-visible:outline-ring group-hover:opacity-100"
+                   hover:text-foreground focus-visible:opacity-100 ${foco} group-hover:opacity-100`}
       >
         {copiado ? <Check size={14} weight="bold" className="text-success" /> : <Copy size={14} weight="regular" />}
       </button>

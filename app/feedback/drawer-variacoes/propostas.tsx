@@ -33,11 +33,8 @@ import { Tag } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
 import { CATALOGO_TAGS, LEADS, MENU_LEAD, tagsEscolhidas } from "../drawer/drawer-lead";
 
+import { foco } from "@/lib/estados";
 const LEAD = LEADS.joel;
-
-/** O foco do DS: outline de 2px com vão transparente, como no Button. */
-const foco =
-  "outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 function TagsDoLead({ limite }: { limite?: number }) {
   const escolhidas = tagsEscolhidas(CATALOGO_TAGS, LEAD.tags);

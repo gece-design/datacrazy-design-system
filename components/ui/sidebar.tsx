@@ -7,6 +7,7 @@ import type { Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { LogoDataCrazy } from "./logo-datacrazy";
 
+import { foco, desabilitado, desabilitadoLink } from "@/lib/estados";
 /* ---------------------------------------------------------------------------
    Contexto — `colapsada` desce sozinha. É o único estado compartilhado: cada
    peça precisa saber se mostra rótulo ou só ícone, e passar a prop à mão em
@@ -31,6 +32,7 @@ function MarcaDagua({ colapsada }: { colapsada: boolean }) {
       viewBox="0 0 32 32"
       aria-hidden="true"
       className={cn(
+        // check-tokens:ignore opacidade-literal — marca d'água a 7%, medida do arquivo (270:15429); só a remedição mexe
         "pointer-events-none absolute -bottom-[156px] size-[362px] opacity-[0.07]",
         colapsada ? "-left-[153px]" : "-left-14"
       )}
@@ -122,7 +124,7 @@ export function SidebarToggle({
         // mais escuro passa nos dois temas sem mudar a leitura do desenho.
         "rounded-full bg-card text-muted-foreground shadow-float transition-colors",
         "hover:text-foreground",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        `${foco}`,
         className
       )}
       {...props}
@@ -185,9 +187,9 @@ const itemVariants = cva(
   // o texto por padrão do navegador — o rótulo saía do eixo dos outros itens.
   "group relative flex h-9 w-full items-center overflow-hidden rounded-md p-2 " +
     "text-left text-button transition-colors " +
-    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring " +
-    "aria-disabled:pointer-events-none aria-disabled:opacity-50 " +
-    "disabled:pointer-events-none disabled:opacity-50",
+    `${foco} ` +
+    `${desabilitadoLink} ` +
+    `${desabilitado}`,
   {
     variants: {
       selecionado: {
@@ -302,7 +304,7 @@ export function SidebarThemeSwitch({ tema, onTemaChange, className }: SidebarThe
             onClick={() => onTemaChange(colapsada ? (tema === "claro" ? "escuro" : "claro") : id)}
             className={cn(
               "grid size-8 place-items-center rounded-md transition-colors",
-              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+              `${foco}`,
               ativo
                 ? "bg-nav-item-selected text-nav-item-selected-icon"
                 : "text-muted-foreground hover:bg-nav-item-hover"
@@ -344,7 +346,7 @@ export function SidebarUser({ nome, email, avatar, className, ...props }: Sideba
         title={`${nome} · ${email}`}
         className={cn(
           "flex h-8 w-full items-center justify-center rounded-xl transition-colors",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          `${foco}`,
           className
         )}
         {...props}
@@ -360,7 +362,7 @@ export function SidebarUser({ nome, email, avatar, className, ...props }: Sideba
       className={cn(
         "flex h-10 w-full items-center justify-between gap-2 rounded-xl pl-2.5 pr-2 transition-colors",
         "hover:bg-nav-item-hover",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        `${foco}`,
         className
       )}
       {...props}

@@ -16,6 +16,7 @@ import {
 } from "@/lib/fusos";
 import { cn } from "@/lib/utils";
 
+import { foco } from "@/lib/estados";
 /**
  * TimePicker e DateTimePicker — hora, e data com hora.
  *
@@ -44,9 +45,6 @@ export type RotulosDeHora = {
 
 const dois = (n: number) => String(n).padStart(2, "0");
 const lista = (fim: number, passo: number) => Array.from({ length: Math.ceil(fim / passo) }, (_, i) => i * passo);
-
-const foco =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 /** Abre para cima quando não cabe embaixo, e alinha à direita quando vaza. */
 function usarPosicao(aberto: boolean) {

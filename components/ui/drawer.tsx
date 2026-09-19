@@ -23,6 +23,7 @@ import { Tag } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
 import { DURACAO, reduzido } from "@/lib/movimento";
 
+import { foco } from "@/lib/estados";
 /**
  * Drawer do lead — canvas "↳ Drawer" do Figma (node 533:3809).
  *
@@ -47,9 +48,6 @@ import { DURACAO, reduzido } from "@/lib/movimento";
  * O estilo do perfil (`outline` ou `fill`) é um só para a coluna inteira, então
  * desce por contexto em vez de ser repetido em cada bloco.
  */
-
-const foco =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 type EstiloPerfil = "outline" | "fill";
 const EstiloDoPerfil = React.createContext<EstiloPerfil>("outline");

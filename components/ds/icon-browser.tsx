@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { MagnifyingGlass, Check, Copy, X } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
+import { foco } from "@/lib/estados";
 type Ico = { n: string; p: string; c: string[]; t: string[]; d: string };
 type Catalogo = { versao: string; peso: string; total: number; icones: Ico[] };
 
@@ -27,9 +28,9 @@ function BotaoCopiar({ rotulo, valor }: { rotulo: string; valor: string }) {
           setTimeout(() => setOk(false), 1600);
         } catch {}
       }}
-      className="flex w-full items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 py-2
+      className={`flex w-full items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 py-2
                  text-left transition-colors hover:border-primary
-                 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                 ${foco}`}
     >
       <span className="min-w-0">
         <span className="block text-caption text-subtle-foreground">{rotulo}</span>
@@ -93,17 +94,16 @@ export function IconBrowser() {
             onChange={(e) => setBusca(e.target.value)}
             placeholder="Buscar por nome ou tag"
             aria-label="Buscar ícone"
-            className="h-9 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-body-lg text-foreground
-                       placeholder:text-subtle-foreground focus-visible:outline focus-visible:outline-2
-                       focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className={`h-9 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-body-lg text-foreground
+                       placeholder:text-subtle-foreground ${foco}`}
           />
         </div>
         <select
           value={categoria}
           onChange={(e) => setCategoria(e.target.value)}
           aria-label="Filtrar por categoria"
-          className="h-9 rounded-lg border border-border bg-card px-2.5 text-body-lg text-foreground
-                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          className={`h-9 rounded-lg border border-border bg-card px-2.5 text-body-lg text-foreground
+                     ${foco}`}
         >
           <option value="todas">Todas as categorias</option>
           {categorias.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -116,7 +116,7 @@ export function IconBrowser() {
               aria-pressed={peso === w}
               className={cn(
                 "rounded-md px-2 py-1 text-label-md transition-colors",
-                "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                `${foco}`,
                 peso === w ? "bg-card text-foreground" : "text-muted-foreground hover:text-foreground"
               )}
             >
@@ -140,7 +140,7 @@ export function IconBrowser() {
             className={cn(
               "flex aspect-square flex-col items-center justify-center gap-1 rounded-lg border border-transparent",
               "text-foreground transition-colors hover:border-border hover:bg-background",
-              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+              `${foco}`,
               aberto?.n === i.n && "border-primary bg-accent"
             )}
           >
@@ -158,9 +158,8 @@ export function IconBrowser() {
         <div className="mt-4 text-center">
           <button
             onClick={() => setQuantos((q) => q + LOTE * 3)}
-            className="rounded-md border border-border bg-card px-3 py-1.5 text-label-lg text-foreground transition-colors
-                       hover:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                       focus-visible:outline-ring"
+            className={`rounded-md border border-border bg-card px-3 py-1.5 text-label-lg text-foreground transition-colors
+                       hover:border-primary ${foco}`}
           >
             Mostrar mais ({filtrados.length - quantos} restantes)
           </button>
@@ -185,8 +184,8 @@ export function IconBrowser() {
             <button
               onClick={() => setAberto(null)}
               aria-label="Fechar"
-              className="shrink-0 rounded-md p-1 text-muted-foreground transition-colors hover:text-foreground
-                         focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              className={`shrink-0 rounded-md p-1 text-muted-foreground transition-colors hover:text-foreground
+                         ${foco}`}
             >
               <X size={16} weight="regular" />
             </button>

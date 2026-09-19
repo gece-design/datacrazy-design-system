@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
+import { focoDentro } from "@/lib/estados";
 /**
  * Header — o topo de uma página do CRM (set 601:464).
  *
@@ -127,7 +128,7 @@ export const HeaderBusca = React.forwardRef<HTMLInputElement, HeaderBuscaProps>(
   <label
     className={cn(
       "flex h-8 w-[184px] max-w-full cursor-text items-center gap-0.5 rounded-md bg-card p-2 text-muted-foreground shadow-button-inner",
-      "focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring",
+      `${focoDentro}`,
       className,
     )}
   >

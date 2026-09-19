@@ -5,6 +5,7 @@ import { CalendarBlank, CaretDown, CaretLeft, CaretRight } from "@phosphor-icons
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+import { foco, focoInterno, desabilitado } from "@/lib/estados";
 /* ---------------------------------------------------------------------------
    Date Range Picker — seleção de período com dois meses e atalhos.
 
@@ -233,13 +234,13 @@ function GradeDoMes({
                     onPointerEnter={() => onPrevia(data)}
                     className={cn(
                       "grid h-8 w-8 place-items-center rounded-md text-body-lg tabular-nums outline-none transition-colors",
-                      "focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
-                      "disabled:pointer-events-none disabled:opacity-50",
+                      `${focoInterno}`,
+                      `${desabilitado}`,
                       extremo
-                        ? "bg-primary text-primary-foreground hover:bg-primary-hover"
+                        ? "bg-primary text-primary-foreground enabled:hover:bg-primary-hover"
                         : dentro
                           ? "text-accent-foreground"
-                          : "text-foreground hover:bg-accent",
+                          : "text-foreground enabled:hover:bg-accent",
                       // "hoje" não está desenhado no rascunho: é estado derivado
                       // por regra (exceção E-01), e o sinal é cor, não moldura.
                       ehHoje && !extremo && "text-primary"
@@ -271,7 +272,7 @@ type CabecalhoProps = {
 function CabecalhoDoMes({ mes, nomesDosMeses, anos, rotulos, onMudarMes }: CabecalhoProps) {
   const seletor =
     "appearance-none rounded-md bg-transparent py-0.5 pl-1.5 pr-5 text-h4 text-foreground outline-none " +
-    "transition-colors hover:bg-accent " +
+    "transition-colors enabled:hover:bg-accent " +
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring";
 
   return (
@@ -528,14 +529,14 @@ export function DateRangePicker({
         className={cn(
           "inline-flex max-w-full items-center gap-1 rounded-md px-2 py-1.5 text-body-md",
           "outline-none transition-colors",
-          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-          "disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0",
+          `${foco}`,
+          `${desabilitado} [&_svg]:shrink-0`,
           aberto
             ? "bg-accent text-primary"
             // hover derivado (E-01): empresta a superfície do Active, que é
             // token que já existe, e mantém o texto em `muted-foreground` —
             // é o azul do rótulo que continua separando os dois estados.
-            : "bg-card text-muted-foreground hover:bg-accent"
+            : "bg-card text-muted-foreground enabled:hover:bg-accent"
         )}
       >
         <CalendarBlank size={16} weight="regular" />
@@ -573,10 +574,10 @@ export function DateRangePicker({
                       onClick={() => aplicarAtalho(atalho)}
                       className={cn(
                         "w-full rounded-md px-2 py-1.5 text-left text-body-lg outline-none transition-colors",
-                        "focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
+                        `${focoInterno}`,
                         atalhoAtivo?.id === atalho.id
                           ? "bg-accent text-accent-foreground"
-                          : "text-foreground hover:bg-accent"
+                          : "text-foreground enabled:hover:bg-accent"
                       )}
                     >
                       {atalho.rotulo}

@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 import { vizinhos, type ItemNav } from "./nav";
 import { cn } from "@/lib/utils";
 
+import { foco } from "@/lib/estados";
 function Cartao({ item, lado }: { item: ItemNav; lado: "anterior" | "proxima" }) {
   const paraFrente = lado === "proxima";
   return (
@@ -17,7 +18,7 @@ function Cartao({ item, lado }: { item: ItemNav; lado: "anterior" | "proxima" })
         // `truncate` de dentro nunca dispara — os dois cartões vazavam a tela
         // no celular em vez de cortar o título.
         "group flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 transition-colors",
-        "hover:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        `hover:border-primary ${foco}`,
         paraFrente ? "flex-row-reverse text-right" : "text-left"
       )}
     >

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
+import { foco } from "@/lib/estados";
 /**
  * O fundo da caixa de preview — o palco, não o componente.
  *
@@ -172,7 +173,7 @@ export function SeletorDeFundo({
             onClick={() => aoEscolher(f.id)}
             className={cn(
               "size-5 rounded-md transition-colors",
-              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+              `${foco}`,
               f.classe,
               // seleção por traço, não por halo: halo pinta uma cor sólida em
               // volta e mentiria sobre o neutro que a amostra está mostrando

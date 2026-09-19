@@ -18,6 +18,7 @@ import {
   type Fundo,
 } from "./fundo-preview";
 
+import { foco } from "@/lib/estados";
 export { FUNDOS, type Fundo } from "./fundo-preview";
 
 // slug e o índice moram em ./indice — quem monta o link e quem lê a âncora
@@ -145,7 +146,7 @@ export function Secao({
                   aria-pressed={aba === id}
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 chrome-label transition-colors",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    `${foco}`,
                     aba === id ? "bg-card text-foreground" : "text-muted-foreground hover:text-foreground"
                   )}
                 >
@@ -227,7 +228,7 @@ export function CardComponente({
       <div
         aria-disabled="true"
         title="Ainda não implementado"
-        className="cursor-not-allowed overflow-hidden rounded-2xl border border-border bg-card opacity-50"
+        className="cursor-not-allowed overflow-hidden rounded-2xl border border-border bg-card opacity-disabled"
       >
         {conteudo}
       </div>
@@ -237,8 +238,8 @@ export function CardComponente({
   return (
     <a
       href={href}
-      className="block overflow-hidden rounded-2xl border border-border bg-card transition-colors
-                 hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className={`block overflow-hidden rounded-2xl border border-border bg-card transition-colors
+                 hover:border-primary ${foco}`}
     >
       {conteudo}
     </a>

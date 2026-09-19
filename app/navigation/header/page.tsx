@@ -18,6 +18,7 @@ import {
 import { DateRangePicker, type IntervaloDeDatas, type RotulosDoDatePicker } from "@/components/ui/date-picker";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 
+import { foco, focoInterno } from "@/lib/estados";
 /* Na doc os textos são literais porque a doc é escrita em português. No CRM
    cada um vem do next-intl — nenhum componente do Header tem texto embutido. */
 
@@ -170,8 +171,8 @@ function Sino() {
                       <button
                         type="button"
                         onClick={() => setItens((l) => l.map((x) => (x.id === n.id ? { ...x, lida: true } : x)))}
-                        className="flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-overlay-item-hover
-                                   outline-none focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
+                        className={`flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-overlay-item-hover
+                                   outline-none ${focoInterno}`}
                       >
                         <span
                           aria-hidden="true"

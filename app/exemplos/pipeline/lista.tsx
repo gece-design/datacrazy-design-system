@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { GRUPOS_TAGS, etapaPor, moeda, tagsDe, type Etapa, type Lead } from "./dados";
 
+import { foco } from "@/lib/estados";
 /* A mesma carteira do quadro, na Table do design system. É o argumento de que
    a visão não é a tela: o dado é um só, a leitura é que muda. */
 
@@ -54,7 +55,7 @@ export function Lista({
                   <button
                     type="button"
                     onClick={() => aoAbrir(lead)}
-                    className="w-full rounded-sm text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                    className={`w-full rounded-sm text-left ${foco}`}
                   >
                     <CelulaLead nome={lead.nome} etiquetas={tagsDe(GRUPOS_TAGS, lead.tags).map((t) => t.rotulo)} />
                   </button>

@@ -7,6 +7,7 @@ import type { IconWeight } from "@phosphor-icons/react";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 import { IconBrowser } from "@/components/ds/icon-browser";
 
+import { foco } from "@/lib/estados";
 /* ------------------------------------------------------------------------- */
 
 /** Os seis do pacote, na ordem em que o Phosphor os declara. */
@@ -113,10 +114,10 @@ export default function Icones() {
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 rounded-md border border-border
+            className={`inline-flex items-center gap-1.5 rounded-md border border-border
                        px-2.5 py-1.5 text-button text-foreground
                        transition-colors hover:border-primary
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                       ${foco}`}
           >
             <Funnel size={16} weight="regular" />
             Filtrar
@@ -124,10 +125,10 @@ export default function Icones() {
 
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 rounded-md border border-border
+            className={`inline-flex items-center gap-1.5 rounded-md border border-border
                        px-2.5 py-1.5 text-button text-foreground
                        transition-colors hover:border-primary
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                       ${foco}`}
           >
             <Export size={16} weight="regular" />
             Exportar
@@ -135,10 +136,10 @@ export default function Icones() {
 
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 rounded-md bg-primary
+            className={`inline-flex items-center gap-1.5 rounded-md bg-primary
                        px-2.5 py-1.5 text-button text-primary-foreground
                        transition-colors hover:bg-primary-hover
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                       ${foco}`}
           >
             <Lightning size={16} weight="regular" />
             Automação

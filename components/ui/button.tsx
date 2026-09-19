@@ -3,6 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
+import { foco, desabilitado } from "@/lib/estados";
 const buttonVariants = cva(
   // Base: foco sempre visível (E7) · estados de interação por regra, não por desenho (E-01)
   // Foco por outline, não por ring com offset: o offset do ring é pintado com uma
@@ -10,26 +11,26 @@ const buttonVariants = cva(
   // da cor errada. O vão do outline é transparente e mostra a superfície real.
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-button " +
     "outline-none transition-colors " +
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring " +
-    "disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0",
+    `${foco} ` +
+    `${desabilitado} [&_svg]:shrink-0`,
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground shadow-button-inner-primary hover:bg-primary-hover",
-        secondary: "border border-border bg-card text-foreground hover:bg-accent",
-        ghost: "text-muted-foreground hover:bg-accent hover:text-foreground",
+        primary: "bg-primary text-primary-foreground shadow-button-inner-primary enabled:hover:bg-primary-hover",
+        secondary: "border border-border bg-card text-foreground enabled:hover:bg-accent",
+        ghost: "text-muted-foreground enabled:hover:bg-accent enabled:hover:text-foreground",
         // Sombra interna conferida no botão "Excluir" do Modal (545:168).
-        destructive: "bg-destructive text-primary-foreground shadow-button-inner hover:bg-destructive-hover",
+        destructive: "bg-destructive text-primary-foreground shadow-button-inner enabled:hover:bg-destructive-hover",
         // Os dois abaixo vêm do redesenho do Button no Figma (269:32), onde se
         // chamam "Secondary" e "Ghost". Entraram com nome próprio para não mudar
         // o que `secondary` e `ghost` já significam nas telas prontas.
-        soft: "bg-button-soft text-button-soft-foreground shadow-button-inner hover:bg-button-soft-hover",
-        outline: "border border-background text-surface-inverse hover:bg-background",
+        soft: "bg-button-soft text-button-soft-foreground shadow-button-inner enabled:hover:bg-button-soft-hover",
+        outline: "border border-background text-surface-inverse enabled:hover:bg-background",
         // "Treecondary" no arquivo (563:4287): card sem traço, texto apagado e a
         // sombra interna. É o botão de apoio das barras de ferramenta — Pesquisar
         // e Filtros no Header (601:464). Hover derivado (E-01), o mesmo do
         // gatilho do Date Picker.
-        tertiary: "bg-card text-muted-foreground shadow-button-inner hover:bg-accent",
+        tertiary: "bg-card text-muted-foreground shadow-button-inner enabled:hover:bg-accent",
       },
       size: {
         sm: "h-7 px-2.5",

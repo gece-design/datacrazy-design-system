@@ -49,9 +49,19 @@ const REGRAS = [
     teste: (l) => [...l.matchAll(/\bsize=\{(\d+(?:\.\d+)?)\}/g)].filter((m) => !ICONES.has(Number(m[1]))).map((m) => m[0]),
   },
   { regra: "botao-cru", origem: "lista negativa · duplica o Button", onde: PAGINAS, teste: (l) => l.match(/<button\b/g) },
-  // Ativa a partir do lote B3, quando existir `foco` em lib/estados.ts: um
-  // <button> em componente sem a constante é o sinal de que copiou o anel.
-  { regra: "botao-cru", origem: "lista negativa · sem `foco` compartilhado", onde: COMPONENTES, ativa: false, teste: (l) => l.match(/<button\b/g) },
+  // Desde o lote B3 (lib/estados.ts existe): um <button> em componente cuja tag
+  // não usa a constante `foco` (nem `buttonVariants`) copiou o anel — ou não tem.
+  // A tag pode ocupar várias linhas: a regra recebe o resto do arquivo.
+  { regra: "botao-cru", origem: "lista negativa · sem `foco` compartilhado (D21)", onde: COMPONENTES, multilinha: true,
+    teste: (l, f, resto, arquivoInteiro) => {
+      if (!/<button\b/.test(l)) return null;
+      // a tag até o primeiro ">" que não seja de arrow function
+      const tag = (resto ?? l).slice(0, 1200).split(/(?<!=)>/)[0];
+      // constantes do arquivo que carregam o foco (`const botao = \`…${foco}…\``, cva com a base)
+      const portadores = [...(arquivoInteiro ?? "").matchAll(/const\s+(\w+)\s*=[^;]*?\$\{foco\w*\}/gs)].map((m) => m[1]);
+      const ok = /\bfoco\w*\b|buttonVariants/.test(tag) || portadores.some((n) => new RegExp("\\b" + n + "\\b").test(tag));
+      return ok ? null : ["<button sem foco"];
+    } },
   {
     // Informativa: conta os valores arbitrários (a maioria vem de medida do
     // Figma e só se resolve com a remedição). Nunca reprova.
@@ -90,7 +100,7 @@ for (const rel of [...arquivos("components"), ...arquivos("app")]) {
     for (const r of REGRAS) {
       if (!r.onde(rel) || (r.ativa === false && !tudo)) continue;
       if (EXCECOES[rel]?.includes(r.regra) || ignora(r.regra)) continue;
-      const m = r.teste(linha, rel);
+      const m = r.teste(linha, rel, r.multilinha ? linhas.slice(i).join("\n") : undefined, r.multilinha ? linhas.join("\n") : undefined);
       if (!m || !m.length) continue;
       if (r.informativa) {
         informativos[rel] = (informativos[rel] ?? 0) + m.length;

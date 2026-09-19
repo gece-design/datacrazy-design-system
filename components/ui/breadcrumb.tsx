@@ -5,6 +5,7 @@ import type { Icon } from "@phosphor-icons/react";
 import { inicialDe } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
+import { foco } from "@/lib/estados";
 /**
  * Breadcrumb — a trilha até a página atual (node 261:269).
  *
@@ -42,9 +43,6 @@ export interface BreadcrumbProps {
   link?: React.ElementType;
   className?: string;
 }
-
-const foco =
-  "outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 /** Vetor exportado do arquivo (node 261:256), em currentColor. Não é o
  *  CaretRight do Phosphor: aqui o traço é de 1,5px com ponta arredondada. */

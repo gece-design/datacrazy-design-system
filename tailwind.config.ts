@@ -5,7 +5,8 @@ import { DURACAO, CURVA } from "./lib/movimento";
 // valor px literal; tracking em px vira em (px ÷ tamanho da fonte).
 const config: Config = {
   darkMode: ["class"],
-  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  // lib/ entra por causa de lib/estados.ts: as classes de foco e disabled moram lá (D21)
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { List } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
+import { foco } from "@/lib/estados";
 export function slug(s: string) {
   return s
     .toLowerCase()
@@ -79,7 +80,7 @@ export function Indice({ secoes }: { secoes: string[] }) {
                 aria-current={atual ? "location" : undefined}
                 className={cn(
                   "-ml-px block border-l py-1.5 pl-3 chrome-meta transition-colors",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  `${foco}`,
                   atual
                     ? "border-primary font-medium text-foreground"
                     : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
@@ -110,9 +111,9 @@ export function IndiceCompacto({ secoes }: { secoes: string[] }) {
       className="mt-6 overflow-hidden rounded-xl border border-border bg-background xl:hidden"
     >
       <summary
-        className="flex cursor-pointer list-none items-center gap-2 px-3.5 py-2.5 chrome-label text-foreground
-                   marker:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-                   [&::-webkit-details-marker]:hidden"
+        className={`flex cursor-pointer list-none items-center gap-2 px-3.5 py-2.5 chrome-label text-foreground
+                   marker:hidden ${foco}
+                   [&::-webkit-details-marker]:hidden`}
       >
         <List size={16} weight="regular" className="text-muted-foreground" />
         Nesta página
@@ -124,8 +125,8 @@ export function IndiceCompacto({ secoes }: { secoes: string[] }) {
             <a
               href={`#${slug(s)}`}
               onClick={() => setAberto(false)}
-              className="block py-1.5 chrome-meta text-muted-foreground transition-colors hover:text-foreground
-                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className={`block py-1.5 chrome-meta text-muted-foreground transition-colors hover:text-foreground
+                         ${foco}`}
             >
               {s}
             </a>

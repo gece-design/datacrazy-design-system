@@ -5,6 +5,7 @@ import { Tooltip, TooltipContent, type TooltipPosition } from "@/components/ui/t
 import { Button } from "@/components/ui/button";
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
 
+import { foco } from "@/lib/estados";
 const posicoes: TooltipPosition[] = ["top", "bottom", "left", "right"];
 
 const codigoPosicoes = `<TooltipContent position="top">Copiar para a área de transferência</TooltipContent>
@@ -114,7 +115,7 @@ export default function TooltipPage() {
           <Tooltip content={empresa}>
             <span
               tabIndex={0}
-              className="block truncate rounded-sm text-body-lg text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              className={`block truncate rounded-sm text-body-lg text-foreground ${foco}`}
             >
               {empresa}
             </span>

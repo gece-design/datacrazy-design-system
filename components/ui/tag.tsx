@@ -7,6 +7,7 @@ import { caixaDeCampo } from "@/components/ui/input";
 import { Tabs } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
+import { foco } from "@/lib/estados";
 /**
  * Tag — rótulo em pílula do perfil do lead (node 538:197).
  *
@@ -102,7 +103,7 @@ export const TagAdicionar = React.forwardRef<HTMLButtonElement, TagAdicionarProp
       title={rotulo}
       className={cn(
         "inline-flex size-[22px] shrink-0 items-center justify-center rounded-full bg-primary text-background shadow-button-inner-primary transition-colors hover:bg-primary-hover",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        `${foco}`,
         className,
       )}
       {...props}
@@ -420,7 +421,7 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                           // o pastel do fundo e a letra por dentro do anel
                           className={cn(
                             "size-4 shrink-0 rounded-full bg-tom-brilho ring-2 ring-inset ring-tom-texto transition-transform",
-                            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                            `${foco}`,
                             marcada ? "scale-110 outline outline-2 outline-offset-2 outline-foreground" : "hover:scale-110",
                           )}
                         />

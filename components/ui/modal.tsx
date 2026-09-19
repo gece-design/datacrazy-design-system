@@ -7,6 +7,7 @@ import { Warning, X } from "@phosphor-icons/react";
 import { useCamada } from "@/lib/use-camada";
 import { cn } from "@/lib/utils";
 
+import { foco } from "@/lib/estados";
 /**
  * Modal — camada que exige decisão (node 545:168, 12 variantes: Type × Size × theme).
  *
@@ -95,7 +96,7 @@ export const ModalPainel = React.forwardRef<HTMLDivElement, ModalPainelProps>(fu
               "flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors",
               // hover derivado (E-01): o mesmo do X do Toast.
               "hover:bg-overlay-item-hover hover:text-foreground",
-              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+              `${foco}`,
             )}
           >
             <X size={16} weight="regular" />

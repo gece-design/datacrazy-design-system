@@ -5,6 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { CaretDown } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
+import { foco } from "@/lib/estados";
 /**
  * Select — gatilho e lista de opções.
  *
@@ -20,7 +21,7 @@ import { cn } from "@/lib/utils";
  */
 
 const triggerVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-1 rounded-md border border-card bg-background text-label-lg text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring data-[aberto=true]:text-foreground",
+  `inline-flex shrink-0 items-center justify-center gap-1 rounded-md border border-card bg-background text-label-lg text-muted-foreground transition-colors hover:text-foreground ${foco} data-[aberto=true]:text-foreground`,
   {
     variants: {
       size: {

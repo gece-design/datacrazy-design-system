@@ -2,6 +2,7 @@ import * as React from "react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
+import { foco, desabilitado } from "@/lib/estados";
 /**
  * Pagination — os controles de página, com o resumo do que está sendo mostrado.
  *
@@ -10,17 +11,17 @@ import { cn } from "@/lib/utils";
  * roadmap já reservava um slot próprio.
  */
 
-/* Base dos botões. `disabled:opacity-50` com `pointer-events-none` é o par que
- * o DS usa para desabilitado — some o cursor junto com o contraste, senão a
- * pessoa clica num alvo que não responde. */
+/* Base dos botões. Foco e desabilitado vêm de lib/estados (D21): opacidade por
+ * token e cursor de "não dá", com os eventos mantidos (I5, gate B0). A base
+ * não é o Button: a fonte aqui é `text-label-lg` (12px), não `text-button`. */
 const botao =
-  "inline-flex h-7 min-w-7 items-center justify-center rounded-md border px-2.5 text-label-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50";
+  `inline-flex h-7 min-w-7 items-center justify-center rounded-md border px-2.5 text-label-lg transition-colors ${foco} ${desabilitado}`;
 
 /* Inativo e ativo se distinguem por DOIS sinais, não um: o ativo tem fundo
  * `accent` e texto `primary`; o hover do inativo tem o mesmo fundo mas texto
  * `foreground`. Só a borda não bastava — no escuro ela quase some. */
 const inativo =
-  "border-card bg-background text-muted-foreground hover:bg-overlay-item-hover hover:text-foreground";
+  "border-card bg-background text-muted-foreground enabled:hover:bg-overlay-item-hover enabled:hover:text-foreground";
 const ativo = "border-accent bg-accent text-primary";
 
 export interface PaginationProps extends React.HTMLAttributes<HTMLElement> {

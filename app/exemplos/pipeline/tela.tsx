@@ -58,6 +58,7 @@ import { Lista } from "./lista";
 import { PainelLead } from "./painel-lead";
 import { Quadro, agrupar, type Colunas } from "./quadro";
 
+import { foco } from "@/lib/estados";
 /* ---------------------------------------------------------------------------
    Tela de exemplo — NÃO é componente do design system.
 
@@ -577,7 +578,7 @@ export function Tela() {
                       onClick={() => setEtapaEmEdicao({ ...etapaEmEdicao, cor: c.valor })}
                       className={cn(
                         "size-8 rounded-full border border-border transition-shadow",
-                        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                        `${foco}`,
                         c.valor === "neutro" ? "bg-card" : "bg-tom-anel",
                         escolhida && "ring-2 ring-primary ring-offset-2 ring-offset-overlay-bg",
                       )}

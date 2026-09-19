@@ -5,6 +5,7 @@ import { Check, Copy, PencilSimple, type Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { PERMANENCIA } from "@/lib/movimento";
 
+import { foco, desabilitado } from "@/lib/estados";
 /**
  * Input — campo de uma linha com rótulo (node 535:48, "Field").
  *
@@ -105,8 +106,8 @@ export function AcaoCampo({ icone: Icone, rotulo, className, ...props }: AcaoCam
       title={rotulo}
       className={cn(
         "inline-flex shrink-0 rounded-sm text-muted-foreground transition-colors hover:text-foreground",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        "disabled:pointer-events-none disabled:opacity-50",
+        `${foco}`,
+        `${desabilitado}`,
         className,
       )}
       {...props}
@@ -370,7 +371,7 @@ export function CampoEditavel({
               aria-description={rotuloEditar}
               title={rotuloEditar}
               onClick={() => setEditando(true)}
-              className="min-w-0 flex-1 truncate rounded-sm text-left text-body-md text-input-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              className={`min-w-0 flex-1 truncate rounded-sm text-left text-body-md text-input-text ${foco}`}
             >
               <span id={`valor-${id}`} className={cn(!valor && "text-input-placeholder")}>
                 {valor || textoVazio}

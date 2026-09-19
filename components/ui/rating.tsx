@@ -115,7 +115,7 @@ export function Rating({ rotulo, valor, max: MAX = 10, aoMudar, className }: Rat
           if (!editavel) return <span key={n} className="inline-flex">{estrela}</span>;
 
           return (
-            <button
+            <button // check-tokens:ignore botao-cru — anel com respiro de 1px: estrelas a 4px uma da outra; respiro de 2 pisaria na vizinha (registro: focus D6, offset 1)
               key={n}
               ref={(el) => {
                 botoes.current[i] = el;

@@ -5,6 +5,7 @@ import type { Icon } from "@phosphor-icons/react";
 import { Tooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
+import { foco, desabilitado } from "@/lib/estados";
 /**
  * Segmented Control e View Switcher — escolha exclusiva à vista, numa trilha
  * de `card` (nodes 269:68 e 471:2947).
@@ -58,8 +59,8 @@ function useGrupoPorSetas(itens: OpcaoSegmentada[], atual: string, aoEscolher: (
 
 const opcaoBase =
   "flex min-w-0 items-center justify-center whitespace-nowrap transition-colors " +
-  "outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring " +
-  "disabled:pointer-events-none disabled:opacity-50";
+  `outline-none ${foco} ` +
+  `${desabilitado}`;
 
 export function SegmentedControl({ itens, atual, aoEscolher, rotulo, className }: GrupoProps<OpcaoSegmentada>) {
   const { grupo, teclado, focavel } = useGrupoPorSetas(itens, atual, aoEscolher);
@@ -93,7 +94,7 @@ export function SegmentedControl({ itens, atual, aoEscolher, rotulo, className }
               selecionada
                 ? "bg-segmented-item-selected text-overlay-item-text-selected"
                 // hover derivado (E-01), o mesmo do Tabs
-                : "text-muted-foreground hover:text-foreground",
+                : "text-muted-foreground enabled:hover:text-foreground",
             )}
           >
             <span className="truncate" title={item.rotulo}>
@@ -138,7 +139,7 @@ export function ViewSwitcher({ itens, atual, aoEscolher, rotulo, className }: Gr
                 "h-full flex-1 rounded-sm px-2.5",
                 selecionada
                   ? "bg-segmented-item-selected text-primary shadow-button-inner"
-                  : "text-muted-foreground hover:text-foreground",
+                  : "text-muted-foreground enabled:hover:text-foreground",
               )}
             >
               <Icone size={16} weight="regular" aria-hidden="true" />

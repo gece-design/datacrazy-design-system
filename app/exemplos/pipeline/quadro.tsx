@@ -20,6 +20,7 @@ import { Tag } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
 import { GRUPOS_TAGS, etapaPor, moeda, tagsDe, type Canal, type Etapa, type EtapaId, type Lead } from "./dados";
 
+import { foco } from "@/lib/estados";
 /* O quadro do funil. Arrastar é HTML5 puro — `draggable` + os eventos de drag
    — porque a lista negativa do projeto não deixa entrar biblioteca nova por
    causa de uma tela de exemplo.
@@ -315,7 +316,7 @@ export function Quadro({
                     title={`${etapa.descricao} — clique para renomear ou trocar a cor`}
                     className={cn(
                       "block w-full truncate rounded-sm text-left text-h4 uppercase transition-colors hover:text-primary",
-                      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                      `${foco}`,
                       cor.texto,
                     )}
                   >
@@ -363,7 +364,7 @@ export function Quadro({
             "flex h-full w-[300px] shrink-0 flex-col items-center justify-center gap-2 rounded-xl",
             "border border-dashed border-border bg-card/30 text-muted-foreground transition-colors",
             "hover:border-primary hover:text-foreground",
-            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+            `${foco}`,
           )}
         >
           <Plus size={20} weight="regular" aria-hidden="true" />
@@ -399,7 +400,7 @@ function SetaDoTrilho({
       className={cn(
         "absolute top-1/2 z-sticky grid size-9 -translate-y-1/2 place-items-center rounded-full",
         "bg-card text-muted-foreground shadow-float transition-opacity hover:text-foreground",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        `${foco}`,
         lado === "esquerda" ? "left-2" : "right-2",
         visivel ? "opacity-100" : "pointer-events-none opacity-0",
       )}
@@ -456,7 +457,7 @@ function Cartao({
       className={cn(
         "shrink-0 cursor-grab select-none rounded-lg bg-card p-3 shadow-sm transition-shadow",
         "hover:shadow-md active:cursor-grabbing",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        `${foco}`,
         emMovimento && !pegoPeloTeclado && "opacity-40",
         pegoPeloTeclado && "shadow-lg outline outline-2 outline-offset-2 outline-primary",
       )}

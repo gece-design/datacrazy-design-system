@@ -285,6 +285,7 @@ export default function Botao() {
                 <Chip>ring</Chip> é alias de <Chip>primary</Chip> · regra E7
               </Item>
               <Item mono="disabled">
+                {/* check-tokens:ignore opacidade-literal — texto da doc */}
                 a fileira de baixo tem a prop <Chip>disabled</Chip> de verdade: <Chip>opacity-50</Chip>, opacidade
                 única no componente inteiro, mais <Chip>pointer-events-none</Chip>
               </Item>

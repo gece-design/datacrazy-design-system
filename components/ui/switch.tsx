@@ -3,6 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
+import { foco, focoPeer } from "@/lib/estados";
 /**
  * Switch — liga e desliga com efeito imediato.
  *
@@ -44,7 +45,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
           "group-hover:bg-input-border-hover",
           "peer-checked:bg-primary peer-checked:group-hover:bg-primary-hover",
           "peer-disabled:bg-input-bg-disabled peer-disabled:peer-checked:bg-subtle-foreground",
-          "peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring"
+          `${focoPeer}`
         )}
       >
         {/* 36 − 2×2 de recuo − 16 do botão = 16 de curso: `translate-x-4`. */}

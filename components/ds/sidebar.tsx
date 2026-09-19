@@ -20,6 +20,7 @@ import { Tree } from "./tree";
 import { SidebarToggle } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
+import { foco } from "@/lib/estados";
 // Medidas do Figma (node 255:6493): sidebar 260 · padding 13 · conteúdo 234
 // busca h36 p8 · categoria h28 px10 · item h32 passo 34 · ícone x32 · texto x56
 
@@ -108,7 +109,7 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
             href="/"
             onClick={aoNavegar}
             aria-label="Início"
-            className="flex h-[30px] w-full shrink-0 items-center justify-center text-foreground rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className={`flex h-[30px] w-full shrink-0 items-center justify-center text-foreground rounded ${foco}`}
           >
             <LogoSimbolo className="h-[26px] w-auto" />
           </Link>
@@ -117,8 +118,8 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
             onClick={() => onColapsarChange?.(false)}
             aria-label="Buscar componente"
             title="Buscar"
-            className="chrome-busca grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground
-                       transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className={`chrome-busca grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground
+                       transition-colors hover:text-foreground ${foco}`}
           >
             <MagnifyingGlass size={18} weight="regular" />
           </button>
@@ -157,7 +158,7 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
                       aria-current={ativo ? "page" : undefined}
                       className={cn(
                         base,
-                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                        `${foco}`,
                         // recolhido o glifo é o ÚNICO portador do significado,
                         // então ele sobe de tom: aqui vale a WCAG 1.4.11 (3:1),
                         // que `subtle-foreground` não entrega (regra D13).
@@ -195,7 +196,7 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
           <Link
             href="/"
             onClick={aoNavegar}
-            className="flex flex-1 items-center justify-center text-foreground rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className={`flex flex-1 items-center justify-center text-foreground rounded ${foco}`}
           >
             <Logo className="h-[28px] w-auto" />
           </Link>
@@ -203,9 +204,9 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
             <button
               onClick={onFechar}
               aria-label="Fechar menu"
-              className="-mr-1 grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground
+              className={`-mr-1 grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground
                          transition-colors hover:bg-card hover:text-foreground
-                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                         ${foco}`}
             >
               <X size={16} weight="regular" />
             </button>
@@ -223,9 +224,8 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
             onChange={(e) => setBusca(e.target.value)}
             placeholder="Buscar"
             aria-label="Buscar componente"
-            className="chrome-item h-9 w-full chrome-busca rounded-full border-0 pl-[36px] pr-[44px] text-foreground
-                       placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2
-                       focus-visible:ring-ring"
+            className={`chrome-item h-9 w-full chrome-busca rounded-full border-0 pl-[36px] pr-[44px] text-foreground
+                       placeholder:text-muted-foreground ${foco}`}
           />
           <kbd className="chrome-kbd pointer-events-none absolute right-2 top-1/2 flex h-5 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-subtle-foreground/25 text-muted-foreground">
             ⌘K
@@ -249,9 +249,9 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
                       f.includes(cat.titulo) ? f.filter((x) => x !== cat.titulo) : [...f, cat.titulo]
                     )
                   }
-                  className="chrome-categoria flex h-7 w-full items-start justify-between rounded-md px-2.5 pb-1 pt-2
+                  className={`chrome-categoria flex h-7 w-full items-start justify-between rounded-md px-2.5 pb-1 pt-2
                              text-muted-foreground transition-colors hover:text-foreground
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                             ${foco}`}
                 >
                   <span className="truncate">{cat.titulo}</span>
                   <Chevron size={16} weight="regular" className="shrink-0" />
@@ -294,7 +294,7 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
                             aria-current={ativo ? "page" : undefined}
                             className={cn(
                               base,
-                              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                              `${foco}`,
                               ativo ? "bg-card text-foreground" : "text-foreground hover:bg-card"
                             )}
                           >

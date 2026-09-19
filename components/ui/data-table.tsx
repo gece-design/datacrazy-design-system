@@ -3,6 +3,7 @@ import { DotsThree } from "@phosphor-icons/react/dist/ssr";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
+import { foco } from "@/lib/estados";
 /**
  * Data Table — espelho do component set "Data Table" do Figma (node 331:1354).
  *
@@ -276,7 +277,7 @@ export function CelulaAcoes({ rotulo = "Ações da linha" }: { rotulo?: string }
         type="button"
         aria-label={rotulo}
         title={rotulo}
-        className="rounded-sm p-0.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        className={`rounded-sm p-0.5 text-muted-foreground transition-colors hover:text-foreground ${foco}`}
       >
         <DotsThree size={16} weight="regular" aria-hidden="true" />
       </button>

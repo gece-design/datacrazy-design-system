@@ -164,7 +164,8 @@ function itemTokens(ext, versao) {
   } else {
     const chaves = ["colors", "fontFamily", "fontSize", "boxShadow", "backgroundImage", "borderRadius", "zIndex", "keyframes", "animation",
       "transitionDuration", "transitionDelay", "transitionTimingFunction", "opacity", "ringWidth"];
-    item.tailwind = { config: { theme: { extend: Object.fromEntries(chaves.map((k) => [k, ext[k]])) } } };
+    // lib/estados.ts carrega classes: sem o content, o Tailwind de quem instala as descarta
+    item.tailwind = { config: { content: ["./lib/**/*.{ts,tsx}"], theme: { extend: Object.fromEntries(chaves.map((k) => [k, ext[k]])) } } };
   }
   return item;
 }
@@ -254,6 +255,7 @@ padrão (\`bg-blue-500\`, \`text-gray-600\`) estão fora.
 - **Camadas** (\`z-\`, de baixo para cima): ${lista(Object.keys(ext.zIndex))}
 - **Movimento** — duração (\`duration-\`, \`delay-\`): ${lista(Object.keys(ext.transitionDuration))} · curva (\`ease-\`): ${lista(Object.keys(ext.transitionTimingFunction))} · animação (\`animate-\`): ${lista(Object.keys(ext.animation))}. Nunca \`duration-200\`, \`ease-out\` ou \`setTimeout(…, 200)\` soltos; o JS lê \`DURACAO\` de \`@/lib/movimento\`. A redução de movimento é global no CSS.
 - **Opacidade** (\`opacity-\` e modificador \`/\`): ${lista(Object.keys(ext.opacity))} — \`opacity-disabled\` no controle apagado, \`bg-overlay-scrim/scrim\` no fundo de camada.
+- **Estados** (\`@/lib/estados\`): \`foco\` (outline 2px com respiro transparente — nunca ring com offset), \`focoAnel\` (contêiner que rola), \`focoInterno\` (célula colada), \`focoPeer\` (controle nativo escondido), \`focoDentro\` (campo composto), \`desabilitado\` (opacidade por token + cursor, eventos mantidos; hover sob \`enabled:\`), \`desabilitadoLink\`. Todo \`<button>\` e link interativo usa \`foco\` — nunca escreva o anel à mão. O \`content\` do tailwind precisa incluir \`./lib/**/*.{ts,tsx}\`.
 - **Traço interno** de 1.5px: \`ring-1.5 ring-inset\` (regra D18), nunca \`border-[1.5px]\`.
 - **Cor em SVG:** \`fill="currentColor"\` / \`stopColor="currentColor"\` mais a classe
   de texto do token (\`text-primary\`).

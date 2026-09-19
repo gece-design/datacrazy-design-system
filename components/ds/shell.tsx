@@ -9,6 +9,7 @@ import { ThemeToggle, ThemeToggleFlutuante } from "./theme-toggle";
 import { Colunas } from "./colunas";
 import { tituloDaRota } from "./nav";
 
+import { foco } from "@/lib/estados";
 // Três larguras, três layouts:
 //
 //   < lg   sidebar vira drawer por cima do conteúdo; sem trilho.
@@ -53,9 +54,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <button
                   onClick={() => setDrawer(true)}
                   aria-label="Abrir menu"
-                  className="-ml-1.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md
+                  className={`-ml-1.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md
                              text-muted-foreground transition-colors hover:bg-background hover:text-foreground
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
+                             ${foco} lg:hidden`}
                 >
                   <List size={20} weight="regular" />
                 </button>

@@ -325,9 +325,9 @@
       "gravidade": "alta",
       "lote": "B3",
       "verificacao": "check:tokens#opacidade-literal",
-      "status": "aberto",
-      "nota": "token opacity.disabled nasce em B2; a troca é em B3 com `desabilitado`",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "opacity-disabled em tudo; marca d'água da Sidebar (7%, medida) e texto da doc do Button são exceções declaradas",
+      "fechadoEm": "B3"
     },
     {
       "id": "AUD-019",
@@ -441,9 +441,9 @@
       "gravidade": "alta",
       "lote": "B3",
       "verificacao": "check:tokens#foco-ring",
-      "status": "aberto",
-      "nota": "Tabs (ring-inset) é a exceção D19",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "lib/estados.ts: foco (D6), focoAnel (D19, Tabs), focoInterno (célula colada), focoPeer, focoDentro. 34 arquivos migraram, inclusive components/ds e as páginas; o snippet da página de ícones fica para B8",
+      "fechadoEm": "B3"
     },
     {
       "id": "AUD-026",
@@ -457,9 +457,9 @@
       "gravidade": "media",
       "lote": "B3",
       "verificacao": "check:tokens#ring-offset",
-      "status": "aberto",
-      "nota": "na página do Button é texto de documentação: exceção inline",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "pipeline/tela.tsx migrou para foco; na página do Button é texto de doc",
+      "fechadoEm": "B3"
     },
     {
       "id": "AUD-027",
@@ -475,9 +475,9 @@
       "gravidade": "alta",
       "lote": "B3",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "lib/estados.ts",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "as quatro somem: importam de lib/estados",
+      "fechadoEm": "B3"
     },
     {
       "id": "AUD-028",
@@ -497,9 +497,9 @@
       "gravidade": "media",
       "lote": "B3",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "gate B0 (2026-09-19): trocar para I5 em B3 — opacity-disabled + cursor-not-allowed, eventos mantidos",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "desabilitado = cursor-not-allowed + opacity-disabled, eventos mantidos (I5, gate B0); hover sob enabled: em Button, Pagination, Tabs, Segmented e DatePicker; link com aria-disabled mantém pointer-events-none (desabilitadoLink)",
+      "fechadoEm": "B3"
     },
     {
       "id": "AUD-029",
@@ -547,9 +547,9 @@
       "gravidade": "baixa",
       "lote": "B3",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "largura e offset documentados em 02-design-system; a constante `foco` nasce em B3 (lib/estados.ts)",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "largura e offset vivem na constante foco de lib/estados.ts",
+      "fechadoEm": "B3"
     },
     {
       "id": "AUD-032",
@@ -616,9 +616,9 @@
       "gravidade": "alta",
       "lote": "B3",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "não vira Button (text-label-lg 12px ≠ text-button 13px); consome foco/desabilitado",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "consome foco e desabilitado de lib/estados; a base própria fica porque a fonte é text-label-lg (12px), não text-button — comentário no arquivo",
+      "fechadoEm": "B3"
     },
     {
       "id": "AUD-036",
@@ -690,9 +690,9 @@
       "gravidade": "baixa",
       "lote": "B3",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "a caixa fica (h-8 tertiary ≠ Input h-9): só o foco migra para `foco`",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "o foco veio de focoDentro; a caixa fica (h-8 tertiary ≠ Input h-9) — a duplicação da caixa segue adiada para a remedição",
+      "fechadoEm": "B3"
     },
     {
       "id": "AUD-040",

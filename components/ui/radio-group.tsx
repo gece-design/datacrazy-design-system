@@ -3,6 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
+import { foco, focoPeer } from "@/lib/estados";
 /**
  * Radio Group — escolha exclusiva.
  *
@@ -115,7 +116,7 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
             "peer-checked:group-hover:ring-primary-hover",
             "peer-disabled:bg-input-bg-disabled",
             "peer-disabled:peer-checked:ring-subtle-foreground",
-            "peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring"
+            `${focoPeer}`
           )}
         />
         {children != null && <span className="min-w-0">{children}</span>}

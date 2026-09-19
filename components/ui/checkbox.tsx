@@ -4,6 +4,7 @@ import * as React from "react";
 import { Check, Minus } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
+import { foco, focoPeer, desabilitado } from "@/lib/estados";
 /**
  * Checkbox — caixa de marcação, com estado indeterminado.
  *
@@ -68,7 +69,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             "peer-checked:group-hover:bg-primary-hover peer-indeterminate:group-hover:bg-primary-hover",
             "peer-disabled:bg-input-bg-disabled",
             "peer-disabled:peer-checked:bg-subtle-foreground peer-disabled:peer-indeterminate:bg-subtle-foreground",
-            "peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring"
+            `${focoPeer}`
           )}
         >
           <Glifo size={12} weight="regular" />
