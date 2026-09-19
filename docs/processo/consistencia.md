@@ -2,7 +2,7 @@
 
 <!-- GERADO por scripts/consistencia.mjs render a partir de consistencia.json. Não edite à mão. -->
 
-Varredura de 2026-09-19 · 198 achados · 27 abertos · atualizado em 2026-09-19.
+Varredura de 2026-09-19 · 198 achados · 19 abertos · atualizado em 2026-09-19.
 Dono: [consistencia.json](consistencia.json). Método e lotes: plano da rodada (~/.claude/plans/como-podemos-iniciar-uma-hazy-shamir.md).
 
 ## O que é
@@ -18,15 +18,14 @@ Status: `aberto` · `corrigido` (commit em fechadoEm) · `aceito` (exige ADR) ·
 | eixo | A | B0 | B1 | B2 | B3 | B4 | B5 | B6 | B7 | B8 | B9 | figma | depois | total |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | tokens | · | · | · | · | · | · | · | · | · | · | 3 | · | · | 3 |
-| movimento | · | · | · | · | · | · | · | · | 8 | · | · | · | · | 8 |
 | composicao | · | · | · | · | · | · | · | · | · | 1 | 2 | · | 1 | 4 |
 | paginas | · | · | · | · | · | · | · | · | · | 9 | · | · | · | 9 |
 | instalacao | · | · | · | · | · | · | · | · | · | 1 | 2 | · | · | 3 |
-| **total** | · | · | · | · | · | · | · | · | 8 | 11 | 7 | · | 1 | 27 |
+| **total** | · | · | · | · | · | · | · | · | · | 11 | 7 | · | 1 | 19 |
 
 ## Por status
 
-aberto 27 · corrigido 50 · aceito 0 · adiado 121
+aberto 19 · corrigido 57 · aceito 1 · adiado 121
 
 ## Abertos que bloqueiam ou descumprem regra
 
@@ -36,5 +35,5 @@ aberto 27 · corrigido 50 · aceito 0 · adiado 121
 | AUD-058 | /forms/select não existe: 6 consumidores e nav com pronto:false | components/ds/nav.ts:45 (+1) | alta | B8 |
 | AUD-062 | Pseudocódigo (…) em 6 trechos publicados na aba Código | app/forms/date-picker/page.tsx (+5) | alta | B8 |
 
-Mais 24 abertos de gravidade média/baixa, listados no JSON. `node scripts/consistencia.mjs lote <B>` imprime o checklist de um lote.
+Mais 16 abertos de gravidade média/baixa, listados no JSON. `node scripts/consistencia.mjs lote <B>` imprime o checklist de um lote.
 

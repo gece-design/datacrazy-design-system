@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { cva } from "class-variance-authority";
 import { Warning } from "@phosphor-icons/react";
 import { useCamada } from "@/lib/use-camada";
-import { useMontado } from "@/lib/use-saida";
+import { useMontado, useSaida } from "@/lib/use-saida";
 import { cn } from "@/lib/utils";
 
 import { foco } from "@/lib/estados";
@@ -149,21 +149,25 @@ export function Scrim({ saindo, className, ...props }: React.HTMLAttributes<HTML
 export function Modal({ aberto, aoFechar, fecharNoFundo, variant = "default", className, ...props }: ModalProps) {
   const painel = React.useRef<HTMLDivElement>(null);
   const montado = useMontado();
+  // Sai dissolvendo (lote B7): fica montado durante o fade-out, sem clique e
+  // escondido do leitor de tela; a camada já devolveu o foco.
+  const { saindo, visivel } = useSaida(aberto);
   useCamada(montado && aberto, painel, aoFechar);
 
-  if (!montado || !aberto) return null;
+  if (!montado || !visivel) return null;
   const fundoFecha = fecharNoFundo ?? variant !== "destructive";
   return createPortal(
-    <div className="fixed inset-0 z-modal flex items-center justify-center p-4">
-      <Scrim onClick={fundoFecha ? aoFechar : undefined} />
+    <div className={cn("fixed inset-0 z-modal flex items-center justify-center p-4", saindo && "pointer-events-none")}>
+      <Scrim saindo={saindo} onClick={fundoFecha ? aoFechar : undefined} />
       <ModalPainel
         ref={painel}
         role="dialog"
         aria-modal="true"
+        aria-hidden={saindo || undefined}
         tabIndex={-1}
         variant={variant}
         aoFechar={aoFechar}
-        className={cn("focus:outline-none motion-safe:animate-fade-in-fast", className)}
+        className={cn("focus:outline-none", saindo ? "motion-safe:animate-fade-out" : "motion-safe:animate-fade-in-fast", className)}
         {...props}
       />
     </div>,

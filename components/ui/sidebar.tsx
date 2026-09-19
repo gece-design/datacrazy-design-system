@@ -76,7 +76,10 @@ export function Sidebar({
   return (
     <SidebarContexto.Provider value={{ colapsada }}>
       {/* wrapper sem recorte: o botão de colapsar precisa vazar a borda do painel */}
-      <div className={cn("relative shrink-0", colapsada ? "w-[88px]" : "w-[282px]")}>
+      {/* A largura anima em `base` — exceção declarada à I11 (ADR-022), com o
+          precedente do Toast. Colapsar esconde os rótulos na hora; expandir
+          traz cada um dissolvendo depois que a largura abriu. */}
+      <div className={cn("relative shrink-0 transition-[width] duration-base ease-enter", colapsada ? "w-[88px]" : "w-[282px]")}>
         <nav
           aria-label={rotulo}
           className={cn(
@@ -253,7 +256,7 @@ export function SidebarItem({
             weight="regular"
             className={cn("shrink-0", selecionado && "text-nav-item-selected-icon")}
           />
-          {!colapsada && <span className="min-w-0 max-w-[160px] flex-1 truncate">{children}</span>}
+          {!colapsada && <span className="min-w-0 max-w-[160px] flex-1 truncate motion-safe:animate-fade-in-fast">{children}</span>}
         </span>
       </Comp>
     </li>

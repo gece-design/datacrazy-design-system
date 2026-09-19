@@ -108,3 +108,13 @@ Aprovado por: humano.
 Desvio: a I10 do kit diz 120 / 200 / 320.
 Motivo: 150 é o Tooltip aprovado e o valor de fato de todo hover (default do Tailwind); 280 é o Drawer aprovado. O fade do Toast sobe de 250 para 280 para caber na escala. Mudar o hover para 120 seria alterar o produto sem aprovação.
 Aprovado por: humano, gate B0.
+
+## ADR-022 · A Sidebar anima a largura ao colapsar · 2026-09-19
+Desvio: a I11 proíbe animar `width` (custa layout); o painel vai de 282 para 88px em `base` (200ms).
+Motivo: sem transição o menu inteiro saltava ("muito seco"). Precedente: o Toast anima `grid-template-rows` (ADR-010). Os rótulos somem na hora ao colapsar e dissolvem ao voltar — o texto não participa da animação de largura.
+Aprovado por: humano, gate B5.
+
+## ADR-023 · Componente de leitura não tem movimento · 2026-09-19
+Desvio: a auditoria apontou Avatar, Badge, Card, KpiCard, Logo, Telefone e Header "sem movimento nenhum".
+Motivo: nenhum deles tem estado de interação próprio — as regras de movimento (I10) animam mudança de estado. Ausência é decisão (fw-ui, camada 2), não buraco.
+Aprovado por: humano, gate B7.

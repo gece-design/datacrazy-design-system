@@ -17,6 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import { usePosicao } from "@/lib/use-posicao";
 import { useCliqueFora } from "@/lib/use-clique-fora";
+import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
 
 import { foco } from "@/lib/estados";
@@ -214,6 +215,7 @@ export function TimePicker({
   const [aberto, setAberto] = React.useState(false);
   const raiz = React.useRef<HTMLDivElement>(null);
   const { gatilho, painel, acima, aDireita } = usePosicao(aberto);
+  const { saindo, visivel } = useSaida(aberto);
   const id = React.useId().replace(/:/g, "");
   const zona = fuso ?? fusoLocal();
 
@@ -253,8 +255,9 @@ export function TimePicker({
         </span>
       </button>
 
-      {aberto ? (
+      {visivel ? (
         <PainelFlutuante
+          saindo={saindo}
           ref={painel}
           role="dialog"
           aria-label={rotulo}
@@ -338,6 +341,7 @@ export function DateTimePicker({
   const [aberto, setAberto] = React.useState(false);
   const raiz = React.useRef<HTMLDivElement>(null);
   const { gatilho, painel, acima, aDireita } = usePosicao(aberto);
+  const { saindo, visivel } = useSaida(aberto);
   const id = React.useId().replace(/:/g, "");
   const zona = fuso ?? fusoLocal();
 
@@ -390,8 +394,9 @@ export function DateTimePicker({
         </span>
       </button>
 
-      {aberto ? (
+      {visivel ? (
         <PainelFlutuante
+          saindo={saindo}
           ref={painel}
           role="dialog"
           aria-label={rotulo}

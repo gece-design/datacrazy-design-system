@@ -108,7 +108,7 @@ botões internos não são Button (AUD-035, lote B4).
 | Chevrons | `muted-foreground`, não `subtle-foreground`: 2,4:1 reprova a WCAG 1.4.11 (D13) |
 | Item sem destino | `span`, não `a` — um `a` dentro de outro é HTML inválido |
 | Texto longo | 160px de rótulo, `truncate` + `title` (D12) |
-| Movimento | Colapso sem transição — AUD-011, lote B7 |
+| Movimento | A largura desliza em `base` (ADR-022, exceção declarada à I11); os rótulos somem na hora ao colapsar e dissolvem ao voltar. Com redução de movimento, nada anima |
 
 ## Divergências abertas (para o gate)
 

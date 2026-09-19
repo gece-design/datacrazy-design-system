@@ -27,6 +27,7 @@ reconciliado — está no backlog, lote `figma`.
 | `acima` | `boolean` | `false` | não | Abre para cima do gatilho. Vem de `usePosicao`. |
 | `aDireita` | `boolean` | `false` | não | Alinha pela borda direita do gatilho. Vem de `usePosicao`. |
 | `fixo` | `boolean` | `false` | não | `fixed` em portal com coordenadas em `style` (seletor de tags, que vive numa coluna que rola). Ignora `acima`/`aDireita`. |
+| `saindo` | `boolean` | `false` | não | Fechando: `fade-out`, sem clique, `aria-hidden`. Vem de `useSaida(aberto)`. |
 | demais | `HTMLAttributes<HTMLDivElement>` | — | não | `role`, `aria-label`, `onKeyDown`, `className`… |
 
 Hooks que andam com ele, em `lib/`:
@@ -49,8 +50,10 @@ Hooks que andam com ele, em `lib/`:
 _Sem estado registrado — o componente não tem estados de interação._
 <!-- kfe:estados:end -->
 
-O painel não tem estado próprio: abre e fecha por quem o usa. Movimento de
-entrada e saída entra no lote B7.
+O painel não tem estado próprio: abre e fecha por quem o usa. Entra em
+`fade-in-fast` e, com `saindo`, sai em `fade-out` sem clique e escondido do
+leitor de tela — quem usa mantém o painel montado com `useSaida` (lote B7,
+precedente Modal/Tooltip).
 
 ## Tokens consumidos
 

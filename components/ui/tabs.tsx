@@ -54,6 +54,30 @@ export function Tabs({ itens, atual, aoEscolher, rotulo, id, className }: TabsPr
     fileira.current?.querySelector<HTMLElement>(`#${CSS.escape(idDaAba(id, alvo.valor))}`)?.focus();
   }
 
+  // O traço da selecionada é UM só, que desliza por transform (I11: nada de
+  // animar width/left — a largura muda de uma vez, só a posição anima),
+  // medido no traço da própria aba atual: mesma caixa, mesmos pixels. Antes
+  // de medir — no servidor e no primeiro quadro — cada aba desenha o próprio,
+  // como antes; medido, o compartilhado assume e o da aba fica transparente.
+  // Só ganha transição depois da primeira medida, senão desliza do zero ao montar.
+  const [traco, setTraco] = React.useState<{ x: number; w: number } | null>(null);
+  const useEfeitoDeLayout = typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
+  useEfeitoDeLayout(() => {
+    const medir = () => {
+      const aba = fileira.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]');
+      const proprio = aba?.querySelector<HTMLElement>(":scope > span[aria-hidden]");
+      if (!aba || !proprio) return setTraco(null);
+      setTraco({ x: aba.offsetLeft + proprio.offsetLeft, w: proprio.getBoundingClientRect().width });
+    };
+    medir();
+    window.addEventListener("resize", medir);
+    return () => window.removeEventListener("resize", medir);
+  }, [atual, itens]);
+  const [animado, setAnimado] = React.useState(false);
+  React.useEffect(() => {
+    if (traco && !animado) setAnimado(true);
+  }, [traco, animado]);
+
   return (
     <div
       ref={fileira}
@@ -62,8 +86,15 @@ export function Tabs({ itens, atual, aoEscolher, rotulo, id, className }: TabsPr
       aria-orientation="horizontal"
       onKeyDown={teclado}
       // gap-3: o arquivo desenha a aba solta, sem fileira. É o `gap-md` da escala.
-      className={cn("flex gap-3 overflow-x-auto [scrollbar-width:none]", className)}
+      className={cn("relative flex gap-3 overflow-x-auto [scrollbar-width:none]", className)}
     >
+      {traco ? (
+        <span
+          aria-hidden="true"
+          className={cn("absolute bottom-0 left-0 h-0.5 bg-primary", animado && "transition-transform duration-base ease-enter")}
+          style={{ width: traco.w, transform: `translateX(${traco.x}px)` }}
+        />
+      ) : null}
       {itens.map((item) => {
         const selecionada = item.valor === atual;
         return (
@@ -94,7 +125,7 @@ export function Tabs({ itens, atual, aoEscolher, rotulo, id, className }: TabsPr
             {item.rotulo}
             <span
               aria-hidden="true"
-              className={cn("h-0.5 w-full transition-colors", selecionada ? "bg-primary" : "bg-transparent")}
+              className={cn("h-0.5 w-full", selecionada && !traco ? "bg-primary" : "bg-transparent")}
             />
           </button>
         );

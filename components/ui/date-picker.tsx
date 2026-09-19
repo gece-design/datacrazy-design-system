@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { usePosicao } from "@/lib/use-posicao";
 import { useCliqueFora } from "@/lib/use-clique-fora";
+import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
 
 import { foco, focoInterno, desabilitado } from "@/lib/estados";
@@ -317,6 +318,7 @@ export function DateRangePicker({
   const [previa, setPrevia] = React.useState<Date | null>(null);
   // lado e alinhamento medidos (lib/use-posicao.ts), com os refs do gatilho e do painel
   const { gatilho, painel, acima, aDireita } = usePosicao(aberto);
+  const { saindo, visivel } = useSaida(aberto);
 
   const hoje = React.useMemo(() => {
     const d = new Date();
@@ -522,8 +524,8 @@ export function DateRangePicker({
       </button>
 
       {/* casca de painel flutuante (D22): overlay-* e shadow-lg, como os outros — decisão do humano, gate B4 */}
-      {aberto && (
-        <PainelFlutuante ref={painel} role="dialog" aria-label={rotuloDoGatilho} acima={acima} aDireita={aDireita} className="flex w-max">
+      {visivel && (
+        <PainelFlutuante ref={painel} role="dialog" aria-label={rotuloDoGatilho} acima={acima} aDireita={aDireita} saindo={saindo} className="flex w-max">
           {atalhos.length > 0 && (
             <div className="hidden w-40 shrink-0 border-r border-border p-3 sm:block">
               <p className="px-2 pb-1 text-h4 text-foreground">{rotulos.atalhos}</p>

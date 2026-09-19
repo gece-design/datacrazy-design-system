@@ -7,6 +7,7 @@ import { caixaDeCampo } from "@/lib/campo";
 import { Tabs } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useCliqueFora } from "@/lib/use-clique-fora";
+import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
 
 import { foco } from "@/lib/estados";
@@ -222,6 +223,7 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
   }
 
   useCliqueFora(aberto, [painel, gatilho], () => setAberto(false));
+  const { saindo, visivel } = useSaida(aberto);
   React.useEffect(() => {
     if (!aberto) return;
     campo.current?.focus();
@@ -282,10 +284,11 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
         onClick={() => (aberto ? fechar(false) : abrir())}
         className={className}
       />
-      {aberto && pos
+      {visivel && pos
         ? createPortal(
             <PainelFlutuante
               ref={painel}
+              saindo={saindo}
               id={`seletor-${id}`}
               role="dialog"
               aria-label={rotulos.gatilho}

@@ -84,7 +84,7 @@ Usa: — · Usado por: —
 | Cor não é o único sinal | Selecionada tem cor **e** traço de 2px |
 | Texto longo | Rótulo não trunca nem quebra; a aba cresce e a fileira rola |
 | Alvo de toque | 34px de altura — **abaixo dos 44 da regra I15** |
-| Movimento | Só troca de cor (`transition-colors`) |
+| Movimento | Um traço só, medido no traço da aba selecionada, que desliza até ela em `base` por `transform` (I11: a largura muda de uma vez, só a posição anima); antes de medir, cada aba desenha o próprio |
 
 ## Divergências abertas (para o gate)
 

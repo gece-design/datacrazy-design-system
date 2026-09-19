@@ -91,7 +91,7 @@ Usado por: [TimePicker](TimePicker.md) (`CalendarioDeDia`), [Header](Header.md) 
 | Lado do painel | Medido, não presumido: com zoom acima de 100% o painel de ~660px vira para o lado que cabe (E3) |
 | Dia de outro mês | Visível para fechar a grade, nunca clicável: o mesmo dia em dois lugares é ambiguidade |
 | Intervalo | Primeiro clique abre, segundo fecha; clicar antes do início recomeça em vez de inverter |
-| Movimento | Painel abre seco — AUD-009, lote B7 |
+| Movimento | Painel entra em `fade-in-fast` e sai em `fade-out`, montado até o fim (`useSaida`) |
 
 ## Divergências abertas (para o gate)
 

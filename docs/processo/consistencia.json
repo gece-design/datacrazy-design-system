@@ -136,9 +136,9 @@
       "gravidade": "media",
       "lote": "B7",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "casca do Popover: fade-in-fast na entrada, fade-out na saída (useSaida)",
+      "fechadoEm": "B7"
     },
     {
       "id": "AUD-008",
@@ -152,9 +152,9 @@
       "gravidade": "media",
       "lote": "B7",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "casca do Popover + useSaida nos dois",
+      "fechadoEm": "B7"
     },
     {
       "id": "AUD-009",
@@ -167,9 +167,9 @@
       "gravidade": "media",
       "lote": "B7",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "casca do Popover + useSaida",
+      "fechadoEm": "B7"
     },
     {
       "id": "AUD-010",
@@ -182,9 +182,9 @@
       "gravidade": "media",
       "lote": "B7",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "casca do Popover (fixo) + useSaida",
+      "fechadoEm": "B7"
     },
     {
       "id": "AUD-011",
@@ -197,9 +197,9 @@
       "gravidade": "media",
       "lote": "B7",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "rótulos somem por opacidade; animar largura só com ADR",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "largura em base com ADR-022 (decisão do humano, gate B5); rótulos dissolvem ao expandir",
+      "fechadoEm": "B7"
     },
     {
       "id": "AUD-012",
@@ -214,9 +214,9 @@
       "gravidade": "media",
       "lote": "B7",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "fade-out + useSaida",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "Modal: fade-out em base com useSaida (camada devolve o foco no início). Tooltip: fade-out-fast (150) — um balão que demora fica por cima do próximo gatilho",
+      "fechadoEm": "B7"
     },
     {
       "id": "AUD-013",
@@ -229,9 +229,9 @@
       "gravidade": "baixa",
       "lote": "B7",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "decisão do humano no gate: desliza ou fica",
-      "fechadoEm": null
+      "status": "corrigido",
+      "nota": "um traço só, por transform (I11), em base — decisão do humano, gate B5",
+      "fechadoEm": "B7"
     },
     {
       "id": "AUD-014",
@@ -249,9 +249,9 @@
       "gravidade": "baixa",
       "lote": "B7",
       "verificacao": "manual",
-      "status": "aberto",
-      "nota": "sem estado interativo: esperado virar aceito com ADR",
-      "fechadoEm": null
+      "status": "aceito",
+      "nota": "ADR-023: componente de leitura não tem estado, logo não tem movimento",
+      "fechadoEm": "B7"
     },
     {
       "id": "AUD-015",

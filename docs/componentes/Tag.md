@@ -105,6 +105,7 @@ Usado por: [Drawer](Drawer.md) (perfil, tabela de negócios, nó da hierarquia)
 | Seletor | Painel `role="dialog"`; abas do `Tabs`; busca `role="combobox"` com `aria-activedescendant` numa `listbox` multisseleção |
 | Teclado | Setas andam na lista, Enter põe/tira ou cria, Escape fecha só o painel e devolve o foco ao + |
 | Alvo de toque | `TagAdicionar` tem 22px — **abaixo dos 44 da regra I15** |
+| Movimento | O seletor entra em `fade-in-fast` e sai em `fade-out` (casca do Popover + `useSaida`) |
 
 ## Divergências abertas (para o gate)
 

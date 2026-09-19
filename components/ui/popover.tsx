@@ -22,17 +22,23 @@ export interface PainelFlutuanteProps extends React.HTMLAttributes<HTMLDivElemen
   /** `fixed` em portal, com as coordenadas em `style` — o seletor de tags,
    *  que vive dentro de uma coluna que rola. Sem `acima`/`aDireita`. */
   fixo?: boolean;
+  /** Fechando: fica montado durante o `fade-out` (`useSaida`), sem clique e
+   *  escondido do leitor de tela. Sem isto o painel entra dissolvendo e sai
+   *  seco. Precedente: Modal e Tooltip (lote B7). */
+  saindo?: boolean;
 }
 
 export const PainelFlutuante = React.forwardRef<HTMLDivElement, PainelFlutuanteProps>(
-  ({ acima, aDireita, fixo, className, ...props }, ref) => (
+  ({ acima, aDireita, fixo, saindo, className, ...props }, ref) => (
     <div
       ref={ref}
+      aria-hidden={saindo || undefined}
       className={cn(
         "z-popover rounded-lg border border-overlay-border bg-overlay-bg shadow-lg",
         fixo ? "fixed" : "absolute",
         !fixo && (acima ? "bottom-full mb-1" : "top-full mt-1"),
         !fixo && (aDireita ? "right-0" : "left-0"),
+        saindo ? "pointer-events-none motion-safe:animate-fade-out" : "motion-safe:animate-fade-in-fast",
         className,
       )}
       {...props}

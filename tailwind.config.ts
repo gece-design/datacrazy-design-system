@@ -198,6 +198,8 @@ const config: Config = {
         "fade-in-fast": `fade-in ${DURACAO.fast}ms ${CURVA.enter}`,
         // 180 → 200 (base): a saída ganha o mesmo tempo das outras saídas
         "fade-out": `fade-out ${DURACAO.base}ms ${CURVA.exit} forwards`,
+        // o balão do Tooltip: some rápido, senão fica por cima do próximo gatilho
+        "fade-out-fast": `fade-out ${DURACAO.fast}ms ${CURVA.exit} forwards`,
         // A curva de entrada desacelera bem no fim: o painel "assenta" em vez
         // de parar seco. A saída é mais curta e acelera — sair não é evento.
         "drawer-entra": `drawer-entra ${DURACAO.slow}ms ${CURVA.settle}`,

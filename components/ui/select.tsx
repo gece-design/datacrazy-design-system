@@ -6,6 +6,7 @@ import { CaretDown } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { caixaDeCampo } from "@/lib/campo";
 import { useCliqueFora } from "@/lib/use-clique-fora";
+import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
 
 import { foco } from "@/lib/estados";
@@ -138,6 +139,8 @@ export function Select({
 
   /* Clique fora fecha — é o que a pessoa espera de um menu (lib/use-clique-fora.ts). */
   useCliqueFora(aberto, [caixa], () => setAberto(false));
+  // fica montado durante o fade-out (lote B7)
+  const { saindo, visivel } = useSaida(aberto);
 
   /* O foco entra na lista assim que ela abre: sem isso o teclado continua no
      gatilho e as setas não movem nada. */
@@ -191,9 +194,10 @@ export function Select({
         {escolhido?.rotulo ?? textoVazio}
       </SelectTrigger>
 
-      {aberto ? (
+      {visivel ? (
         <PainelFlutuante
           ref={lista}
+          saindo={saindo}
           id={`lista-${id}`}
           role="listbox"
           aria-label={rotulo}

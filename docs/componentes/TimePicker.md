@@ -105,6 +105,7 @@ Usado por: agenda de atendimento (tela ainda não construída)
 | Abertura | A coluna rola até o valor atual ao abrir, em vez de começar na meia-noite |
 | Fuso | Escrito no gatilho e no rodapé (`GMT-3`), não só implícito |
 | Hidratação | O texto que depende de fuso sai com `suppressHydrationWarning`: servidor e navegador formatam diferente |
+| Movimento | Os dois painéis entram em `fade-in-fast` e saem em `fade-out` (casca do Popover + `useSaida`) |
 
 ## Divergências abertas (para o gate)
 

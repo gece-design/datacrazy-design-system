@@ -3,6 +3,8 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
+import { DURACAO } from "@/lib/movimento";
+import { useSaida } from "@/lib/use-saida";
 
 /**
  * Tooltip — dica ancorada, só texto (node 548:73, canvas `↳ Feedback`).
@@ -152,9 +154,12 @@ export function Tooltip({ content, position = "top", delay = 400, children }: To
   };
   const fechar = React.useCallback(() => {
     clearTimeout(espera.current);
+    // `pos` fica: o balão dissolve no lugar onde estava (lote B7). Reabrir
+    // remede antes de pintar (useLayoutEffect), então não há quadro errado.
     setAncora(null);
-    setPos(null);
   }, []);
+  // Saída em `fast`: um balão que demora a sumir fica por cima do próximo gatilho.
+  const { saindo, visivel } = useSaida(Boolean(ancora), DURACAO.fast);
 
   // Medido depois de montar e antes de pintar: o balão nasce invisível, mede,
   // escolhe o lado e só então aparece. Com zoom acima de 100% a janela encolhe
@@ -224,7 +229,7 @@ export function Tooltip({ content, position = "top", delay = 400, children }: To
       {gatilho}
       {montado
         ? createPortal(
-            ancora ? (
+            visivel ? (
               <TooltipContent
                 ref={balao}
                 id={id}
@@ -232,9 +237,13 @@ export function Tooltip({ content, position = "top", delay = 400, children }: To
                 position={lado}
                 style={pos ? { left: pos.left, top: pos.top } : undefined}
                 // Dissolve ao abrir, e rápido: quem passa o cursor quer ler, não
-                // esperar. Fecha seco — um balão que demora a sumir fica por cima
-                // do próximo gatilho.
-                className={cn("pointer-events-none fixed left-0 top-0 z-popover motion-safe:animate-fade-in-fast", !pos && "invisible")}
+                // esperar. Sai também em `fast` (fade-out-fast).
+                aria-hidden={saindo || undefined}
+                className={cn(
+                  "pointer-events-none fixed left-0 top-0 z-popover",
+                  saindo ? "motion-safe:animate-fade-out-fast" : "motion-safe:animate-fade-in-fast",
+                  !pos && "invisible",
+                )}
               >
                 {content}
               </TooltipContent>

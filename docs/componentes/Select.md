@@ -93,6 +93,7 @@ Usado por: [Card](Card.md) e [DataTable](DataTable.md)
 | Realce | O item sob o cursor e o item sob o teclado usam o MESMO destaque: quem navega por seta vê o que quem usa mouse vê |
 | Clique fora | Fecha sem devolver o foco, que é o que a pessoa espera de quem clicou noutro lugar |
 | Alvo de toque | 29–32px de altura — **abaixo dos 44 da regra I15** |
+| Movimento | Lista entra em `fade-in-fast` e sai em `fade-out` (casca do Popover + `useSaida`); com redução de movimento, nada anima |
 
 ## Divergências abertas (para o gate)
 

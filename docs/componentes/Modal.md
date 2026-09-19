@@ -110,7 +110,7 @@ Usado por: —
 | Rolagem | Página de trás travada, com a largura da barra compensada; o corpo rola, cabeçalho e rodapé ficam |
 | Zoom | Caixa limitada à janela menos 16px de cada lado |
 | Alvo de toque | X de 28px — **abaixo dos 44 da regra I15** |
-| Movimento | Fundo e caixa dissolvem em 150ms na entrada, sob `motion-safe:` (I12). Saída seca |
+| Movimento | Fundo e caixa entram em `fade-in-fast` e saem em `fade-out`, montados até o fim (`useSaida`); a camada devolve o foco no início da saída |
 | Cor não é o único sinal | Destrutivo tem glifo de alerta, e o botão de confirmar diz o que faz ("Excluir") |
 
 ## Divergências abertas (para o gate)
