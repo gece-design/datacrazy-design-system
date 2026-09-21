@@ -47,11 +47,14 @@ function Amostra({ classe, rotulo, spec }: { classe: string; rotulo: string; spe
           Reproduzir
         </Button>
       </div>
-      <div className="h-8 w-full rounded-sm bg-background">
+      {/* A pista é um container (`cqw`): o bloco anda a largura dela menos a
+          própria, por transform — sem medir nada no JavaScript. Percentual em
+          translateX é da caixa do próprio bloco, por isso não servia. */}
+      <div className="h-8 w-full rounded-sm bg-background [container-type:inline-size]">
         <div
           aria-hidden="true"
-          className={cn("size-8 rounded-sm bg-primary transition-transform", classe, ido && "translate-x-[calc(100%*5)]")}
-          style={{ transform: ido ? "translateX(calc(var(--pista, 100%) - 100%))" : undefined }}
+          className={cn("size-8 rounded-sm bg-primary transition-transform", classe)}
+          style={{ transform: ido ? "translateX(calc(100cqw - 100%))" : undefined }}
         />
       </div>
     </div>
@@ -73,7 +76,7 @@ export default function Pagina() {
 <div className="transition-transform duration-base ease-enter" />
 <div className="motion-safe:animate-drawer-entra" />  {/* slow + settle */}`}
       >
-        <div className="grid grid-cols-1 gap-4 [--pista:100%] sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {duracoes.map((d) => (
             <Amostra key={d.nome} classe={`${d.classe} ease-enter`} rotulo={d.nome} spec={`${d.ms}ms · ${d.classe}`} />
           ))}
@@ -91,7 +94,7 @@ export default function Pagina() {
         descricao="A mesma pista e a mesma duração (slow) para as quatro; só a aceleração muda. Entrada desacelera, saída acelera, settle assenta, pop passa do ponto."
         codigo={`<div className="transition-transform duration-slow ease-settle" />`}
       >
-        <div className="grid grid-cols-1 gap-4 [--pista:100%] sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {curvas.map((c) => (
             <Amostra key={c.nome} classe={`duration-slow ${c.classe}`} rotulo={c.nome} spec={c.valor} />
           ))}
