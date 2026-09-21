@@ -3,13 +3,14 @@
 import { Tag, TagAdicionar } from "@/components/ui/tag";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 import { TagsDoLead } from "@/app/feedback/drawer/drawer-lead";
+import { FileiraDeTags, PRODUTOS, ROTULOS_PRODUTOS, RESPONSAVEIS, ROTULOS_RESPONSAVEIS, ORIGEM, ROTULOS_ORIGEM } from "./cenarios";
 
 export default function TagPage() {
   return (
     <PaginaDS
       titulo="Tag"
       descricao="A etiqueta que o usuário põe no lead: pílula de 22px em caixa alta, com bolinha de status, ícone de tipo ou foto do atendente. O + no fim da fileira abre o seletor, com uma aba por tipo de tag e busca que também cria."
-      secoes={["Como funciona", "Variantes", "No perfil", "Seletor de tags", "Quando usar"]}
+      secoes={["Como funciona", "Variantes", "No perfil", "Seletor de tags", "Outros cenários", "Quando usar"]}
     >
       <ComoFunciona>
         <p>
@@ -113,6 +114,53 @@ export default function TagPage() {
         <div className="flex flex-wrap items-center justify-center gap-1 py-6">
           <span className="mr-2 chrome-caption text-subtle-foreground">Tags do lead:</span>
           <TagsDoLead iniciais={["liam", "premium", "passou"]} />
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Outros cenários"
+        spec="3 conteúdos"
+        descricao="O seletor não sabe o que é tag: as abas, as opções e os rótulos são conteúdo. O mesmo componente escolhe os produtos de uma proposta, os responsáveis por um negócio e a origem de um lead."
+        codigo={`{/* Produtos da proposta: cor por degrau nos planos; serviços e add-ons com cor livre e criar */}
+<SeletorTags
+  grupos={[
+    { id: "planos", rotulo: "Planos", tags: [{ id: "pro", rotulo: "Pro", tom: "azul", icone: Package }] },
+    { id: "servicos", rotulo: "Serviços", corLivre: true, tags: [{ id: "onboarding", rotulo: "Onboarding", tom: "verde" }] },
+  ]}
+  selecionadas={ids}
+  aoAlternar={(tag) => alternar(tag.id)}
+  aoCriar={(rotulo, grupoId, tom) => criar(rotulo, grupoId, tom)}
+  rotulos={{ gatilho: "Adicionar produto", busca: "Buscar ou criar produto", vazio: "Nenhum produto nesta aba", criar: (t, g) => \`Criar "\${t}" em \${g}\`, cor: "Cor" }}
+/>
+
+{/* Responsáveis: foto no lugar da cor, e sem aoCriar — a busca só filtra */}
+<SeletorTags
+  grupos={[{ id: "vendas", rotulo: "Vendas", tags: [{ id: "esther", rotulo: "Esther", foto: "/fotos/esther.png" }] }]}
+  selecionadas={ids}
+  aoAlternar={(tag) => alternar(tag.id)}
+  rotulos={{ gatilho: "Adicionar responsável", busca: "Buscar pessoa", vazio: "Ninguém neste time", criar: (t) => \`Convidar "\${t}"\`, cor: "Cor" }}
+/>`}
+        nota={
+          <>
+            Três decisões por conteúdo, não por componente: onde a cor é <span className="text-foreground">regra</span>{" "}
+            (plano, canal), onde é <span className="text-foreground">escolha</span> (<Chip>corLivre</Chip>: serviço,
+            add-on, campanha) e onde <span className="text-foreground">não existe criar</span> (pessoa não nasce num
+            campo de busca: sem <Chip>aoCriar</Chip>, a busca só filtra). O ícone entra quando a cor sozinha não
+            distingue — os canais têm o logo, os produtos a caixa.
+          </>
+        }
+      >
+        <div className="flex flex-col gap-5 py-2">
+          {[
+            { rotulo: "Produtos da proposta:", grupos: PRODUTOS, iniciais: ["pro", "onboarding"], rotulos: ROTULOS_PRODUTOS, criar: true },
+            { rotulo: "Responsáveis:", grupos: RESPONSAVEIS, iniciais: ["esther", "diego"], rotulos: ROTULOS_RESPONSAVEIS, criar: false },
+            { rotulo: "Origem do lead:", grupos: ORIGEM, iniciais: ["instagram", "black-friday-2026"], rotulos: ROTULOS_ORIGEM, criar: true },
+          ].map((c) => (
+            <div key={c.rotulo} className="flex flex-wrap items-center justify-center gap-1">
+              <span className="mr-2 chrome-caption text-subtle-foreground">{c.rotulo}</span>
+              <FileiraDeTags grupos={c.grupos} iniciais={c.iniciais} rotulos={c.rotulos} criar={c.criar} />
+            </div>
+          ))}
         </div>
       </Secao>
 

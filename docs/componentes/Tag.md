@@ -95,6 +95,12 @@ Usado por: [Drawer](Drawer.md) (perfil, tabela de negócios, nó da hierarquia)
 </div>
 ```
 
+O `SeletorTags` não sabe o que é tag: `grupos`, opções e `rotulos` são conteúdo.
+A página monta três outros cenários com o mesmo componente — produtos de uma
+proposta (planos com cor por degrau; serviços e add-ons com `corLivre` e criar),
+responsáveis por um negócio (foto no lugar da cor, sem `aoCriar`: a busca só
+filtra) e origem do lead (canal com logo e cor fixa; campanha com cor livre).
+
 ## Acessibilidade
 
 | Item | Como está resolvido |

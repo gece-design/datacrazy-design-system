@@ -15,13 +15,14 @@ export default function AvatarPage() {
     <PaginaDS
       titulo="Avatar"
       descricao="A inicial num disco com anel, em três tamanhos: 32, 48 e 90px. Com foto, a foto ocupa o disco. A cor da letra é a do item selecionado da navegação."
-      secoes={["Como funciona", "Tamanhos", "Com foto", "Em contexto", "Quando usar"]}
+      secoes={["Como funciona", "Tamanhos", "Iniciais", "Com foto", "Em contexto", "Quando usar"]}
     >
       <ComoFunciona>
         <p>
           O componente recebe o <Chip>nome</Chip>, não a letra. A inicial sai dele — a primeira letra, ignorando o que
           não é letra, então <Chip>[ENV] Ana</Chip> vira <Chip>A</Chip> — e o nome inteiro vira o rótulo do leitor de
-          tela. Quando o nome já está escrito ao lado, passe <Chip>aria-hidden</Chip> para não ser lido duas vezes.
+          tela. Com <Chip>iniciais=&quot;duas&quot;</Chip> entram a do primeiro nome e a do último:{" "}
+          <Chip>Joel Jota</Chip> vira <Chip>JJ</Chip>. Quando o nome já está escrito ao lado, passe <Chip>aria-hidden</Chip> para não ser lido duas vezes.
         </p>
         <p>
           O anel é <Chip>border</Chip>. Como o <Chip>size-*</Chip> já inclui a borda, o disco fecha no tamanho do
@@ -57,6 +58,34 @@ export default function AvatarPage() {
         <div className="flex flex-wrap items-center justify-center gap-6 py-4">
           {tamanhos.map((t) => (
             <Avatar key={t.size} nome="Rafael Pinto Pinheiro" size={t.size} />
+          ))}
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Iniciais"
+        spec="uma · duas"
+        descricao="Sem foto, o disco mostra uma letra (o primeiro nome) ou duas (primeiro e último nome). As duas versões existem à escolha da tela; o padrão é uma."
+        codigo={`<Avatar nome="Joel Jota" size="md" />
+<Avatar nome="Joel Jota" size="md" iniciais="duas" />`}
+        nota={
+          <>
+            A segunda letra é do <span className="text-foreground">último</span> nome, não do segundo:{" "}
+            <Chip>Maria da Silva</Chip> vira <Chip>MS</Chip>. Nome de uma palavra só tem uma letra nas duas versões.
+            Pedido do cliente (2026-09-21).
+          </>
+        }
+      >
+        <div className="flex flex-wrap items-center justify-center gap-8 py-4">
+          {(["uma", "duas"] as const).map((iniciais) => (
+            <div key={iniciais} className="flex flex-col items-center gap-3">
+              <div className="flex items-center gap-4">
+                <Avatar nome="Joel Jota" size="sm" iniciais={iniciais} />
+                <Avatar nome="Joel Jota" size="md" iniciais={iniciais} />
+                <Avatar nome="Joel Jota" size="lg" iniciais={iniciais} />
+              </div>
+              <span className="font-mono chrome-caption text-subtle-foreground">iniciais=&quot;{iniciais}&quot;</span>
+            </div>
           ))}
         </div>
       </Secao>

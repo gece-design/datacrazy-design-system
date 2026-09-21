@@ -19,6 +19,10 @@ título em (72,20), X de 28 a 20 da direita, traço do rodapé em 176, botões e
 
 Tema não virou prop: é token, e um componente atende os dois temas.
 
+Decisão do cliente (2026-09-21), por cima do arquivo: recuo lateral 20 → 16 em
+cabeçalho, corpo e rodapé; rodapé com fundo `background` e 12 em cima e embaixo
+(era 12/20 sem fundo). O Figma acompanha o código (AUD-199, `aceito`).
+
 ## Props
 
 `ModalPainel` — a caixa.

@@ -22,6 +22,7 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 |------|------|--------|-------------|-----------|
 | `nome` | `string` | — | sim | Dá a inicial (primeira letra) e o `aria-label`. |
 | `src` | `string` | — | não | Foto. Sem ela, a inicial. |
+| `iniciais` | `"uma" \| "duas"` | `"uma"` | não | Sem foto: só a letra do primeiro nome, ou primeiro + último ("Joel Jota" → "JJ"). |
 | `size` | `"xs" \| "sm" \| "md" \| "lg"` | `"sm"` | não | 32, 48 ou 90px. |
 
 ## Variantes
@@ -57,6 +58,7 @@ Usado por: [Drawer](Drawer.md) (perfil, empresa mãe, nó da hierarquia) e [Brea
 
 ```tsx
 <Avatar nome="Rafael Pinto Pinheiro" size="lg" />
+<Avatar nome="Joel Jota" size="md" iniciais="duas" />
 
 <div className="flex items-center gap-2">
   <Avatar nome="Jojota Podcast LTDA." size="md" aria-hidden="true" />

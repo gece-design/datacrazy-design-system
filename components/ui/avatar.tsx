@@ -34,6 +34,24 @@ export function inicialDe(nome: string) {
   return (nome.match(/\p{L}/u)?.[0] ?? "?").toUpperCase();
 }
 
+export type Iniciais = "uma" | "duas";
+
+/**
+ * "uma": a primeira letra. "duas": primeira do primeiro nome + primeira do
+ * último ("Joel Jota" → "JJ", "Maria da Silva" → "MS"). Nome de uma palavra
+ * só tem uma. Pedido do cliente (2026-09-21): as duas versões, à escolha.
+ */
+export function iniciaisDe(nome: string, iniciais: Iniciais = "uma") {
+  if (iniciais === "uma") return inicialDe(nome);
+  const letras = nome
+    .split(/\s+/)
+    .map((palavra) => palavra.match(/\p{L}/u)?.[0])
+    .filter((l): l is string => Boolean(l));
+  if (letras.length === 0) return "?";
+  if (letras.length === 1) return letras[0].toUpperCase();
+  return (letras[0] + letras[letras.length - 1]).toUpperCase();
+}
+
 export interface AvatarProps
   extends React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof avatarVariants> {
@@ -41,16 +59,18 @@ export interface AvatarProps
   nome: string;
   /** Foto. Sem ela, a inicial. */
   src?: string;
+  /** Quantas letras sem foto: só a do primeiro nome, ou primeiro + último ("Joel Jota" → "JJ"). */
+  iniciais?: Iniciais;
 }
 
-export function Avatar({ nome, src, size, className, ...props }: AvatarProps) {
+export function Avatar({ nome, src, size, iniciais = "uma", className, ...props }: AvatarProps) {
   return (
     <span role="img" aria-label={nome} className={cn(avatarVariants({ size }), className)} {...props}>
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={src} alt="" className="size-full rounded-full object-cover" />
       ) : (
-        <span aria-hidden="true">{inicialDe(nome)}</span>
+        <span aria-hidden="true">{iniciaisDe(nome, iniciais)}</span>
       )}
     </span>
   );

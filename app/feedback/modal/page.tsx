@@ -56,7 +56,7 @@ export default function ModalPage() {
   return (
     <PaginaDS
       titulo="Modal"
-      descricao="Caixa de 400, 520 ou 720px com raio de 8px e elevation/xl, sobre um fundo escurecido. Cabeçalho com título e descrição, corpo livre e rodapé com os botões separados por um traço. O destrutivo põe um alerta ao lado do título e não fecha com clique fora."
+      descricao="Caixa de 400, 520 ou 720px com raio de 8px e elevation/xl, sobre um fundo escurecido. Cabeçalho com título e descrição, corpo livre e rodapé com os botões numa faixa clara, separada por um traço. O destrutivo põe um alerta ao lado do título e não fecha com clique fora."
       secoes={["Como funciona", "Variantes", "Tamanhos", "Na tela"]}
     >
       <ComoFunciona>
@@ -80,7 +80,9 @@ export default function ModalPage() {
         <p>
           Com zoom alto ou conteúdo longo, a caixa nunca passa da janela: só o corpo rola, e cabeçalho e rodapé ficam
           presos. Título e descrição quebram linha em vez de cortar. O contorno e o traço do rodapé são desenhados por
-          cima, como no Toast — no arquivo não ocupam espaço, e a caixa fecha em 240 de altura.
+          cima, como no Toast — não ocupam espaço. O recuo lateral é 16 e o rodapé tem o fundo{" "}
+          <Chip>background</Chip>, uma faixa mais clara que o corpo: decisão do cliente (2026-09-21) por cima dos 20
+          sem fundo do arquivo.
         </p>
       </ComoFunciona>
 

@@ -17,9 +17,11 @@ import { BotaoFechar } from "@/components/ui/button";
  * `Modal` é a camada — portal, scrim, foco preso, Escape.
  *
  * Medidas do arquivo: largura 400 · 520 · 720 · raio 8 (`radius/lg`) ·
- * `elevation/xl` · cabeçalho com recuo 20 e 12 embaixo · corpo com 20 dos lados
- * e 4 em cima e embaixo · rodapé com traço, 12 em cima e 20 embaixo, botões a 8
- * um do outro · fechar de 28 com X de 16. No destrutivo, círculo de 40 com
+ * `elevation/xl` · cabeçalho com 16 em cima e 12 embaixo · corpo com 4 em cima
+ * e embaixo · rodapé com traço e 12 em cima e embaixo, botões a 8 um do outro ·
+ * fechar de 28 com X de 16. Recuo lateral de 16 e rodapé com fundo
+ * `background`: decisão do cliente (2026-09-21) por cima dos 20 sem fundo do
+ * arquivo — o Figma acompanha (AUD-199). No destrutivo, círculo de 40 com
  * `Warning` de 20, a cor a 12% — medido no pixel, como no Toast. Os glifos são
  * os do Phosphor regular. Tema não virou prop: é token.
  */
@@ -66,7 +68,7 @@ export const ModalPainel = React.forwardRef<HTMLDivElement, ModalPainelProps>(fu
       className={cn(painelVariants({ size }), className)}
       {...props}
     >
-      <div className="flex shrink-0 items-start gap-3 px-5 pb-3 pt-5">
+      <div className="flex shrink-0 items-start gap-3 px-4 pb-3 pt-4">
         <div className="flex min-w-0 flex-1 items-start gap-3">
           {variant === "destructive" ? (
             <span
@@ -94,12 +96,12 @@ export const ModalPainel = React.forwardRef<HTMLDivElement, ModalPainelProps>(fu
 
       {/* O corpo é o que rola: com zoom alto ou conteúdo longo, cabeçalho e
           rodapé ficam presos e os botões nunca saem da tela. */}
-      {children ? <div className="min-h-0 flex-1 overflow-y-auto px-5 py-1">{children}</div> : null}
+      {children ? <div className="min-h-0 flex-1 overflow-y-auto px-4 py-1">{children}</div> : null}
 
       {acoes ? (
-        <div className="relative flex shrink-0 flex-wrap items-center justify-end gap-2 px-5 pb-5 pt-3">
-          {/* Traço por cima, não `border`: no arquivo ele não ocupa espaço (o
-              modal fecha em 240 de altura). */}
+        <div className="relative flex shrink-0 flex-wrap items-center justify-end gap-2 bg-background px-4 py-3">
+          {/* Traço por cima, não `border`: não ocupa espaço. O fundo é o
+              `background` da página — a faixa clara que o cliente pediu. */}
           <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-border" />
           {acoes}
         </div>
