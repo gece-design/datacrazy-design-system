@@ -80,7 +80,6 @@ export default function ToastPage() {
       <Secao
         titulo="Variantes"
         spec="4 · variant"
-        className="bg-background"
         descricao="Sucesso, erro, atenção e informação. Erro e atenção usam o mesmo glifo; o que separa os dois é a cor — por isso o título precisa dizer o que aconteceu."
         codigo={codigoVariantes}
         nota={

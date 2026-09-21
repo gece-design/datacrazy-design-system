@@ -257,6 +257,7 @@ export default function Cor() {
         // não há componente a demonstrar aqui: são quatro decisões em aberto.
         // Texto dentro de caixa de preview viraria anotação — a caixa sai.
         semCaixa
+        semSeletorDeFundo
         className="border-0 bg-transparent"
       >
         <div className="divide-y divide-border">

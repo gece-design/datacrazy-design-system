@@ -46,7 +46,6 @@ export default function Pagina() {
     >
       <Secao
         titulo="Padrão"
-        className="bg-background"
         spec="4 páginas"
         descricao="Resumo à esquerda, controles à direita. Clique nos números: a página atual muda de verdade."
         codigo={`<Pagination
@@ -68,7 +67,6 @@ export default function Pagina() {
 
       <Secao
         titulo="Nas pontas"
-        className="bg-background"
         spec="1 e última"
         descricao="Na primeira página, Anterior desabilita. Na última, Próxima. O botão perde contraste e perde o cursor junto — não adianta parecer clicável e não responder."
       >
@@ -84,7 +82,6 @@ export default function Pagina() {
 
       <Secao
         titulo="Sem resumo"
-        className="bg-background"
         spec="só controles"
         descricao="Numa lista curta o resumo só ocupa espaço. Sem ele os controles vão para a direita sozinhos."
         codigo={`<Pagination paginas={3} atual={pagina} onIr={setPagina} />`}

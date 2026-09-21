@@ -479,6 +479,7 @@ export default function Home() {
             descricao={cat.descricao}
             // a galeria são cards; a caixa de preview padrão viraria card sobre card
             semCaixa
+            semSeletorDeFundo
             className="border-0 bg-transparent"
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

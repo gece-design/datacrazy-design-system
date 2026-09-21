@@ -163,6 +163,9 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   `PainelFlutuante` do Popover (`overlay-*` + `shadow-lg`, D22) com `usePosicao` e
   `useCliqueFora`. Botão de ícone: `Button size="icon-xs|icon-sm|icon|icon-lg"`;
   X de fechar: `BotaoFechar`. Ação de 16px em campo/célula: `AcaoCampo`.
+- **Caixa de preview**: nunca `bg-*` no `className` da `Secao` — a cor é do seletor
+  de amostras e a classe venceria (check `fundo-da-caixa`). Fundo inicial: `fundo=`.
+  Conteúdo que cobre a caixa inteira: `semSeletorDeFundo`.
 - **Antes de commitar**: `npm run check` (rápido) — e `npm run check:completo` com o
   site no ar antes de fechar um lote (páginas, exemplos compilando, regressão a 0%).
   Mudança visual só entra declarada no gate (D24). Os checks têm catraca em

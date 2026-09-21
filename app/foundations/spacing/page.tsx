@@ -40,7 +40,6 @@ export default function Pagina() {
       <Secao
         titulo="Escala"
         spec="14 degraus"
-        className="bg-background"
         codigo={`<div className="flex flex-col gap-3 p-5" />`}
       >
         <div className="flex flex-col gap-2">

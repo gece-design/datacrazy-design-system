@@ -44,7 +44,6 @@ export default function Pagina() {
       <Secao
         titulo="Níveis"
         spec="4 níveis"
-        className="bg-background"
         codigo={`<div className="rounded-md bg-card shadow-md" />`}
       >
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">

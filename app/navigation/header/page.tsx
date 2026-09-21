@@ -424,6 +424,7 @@ export default function HeaderPage() {
         descricao="O conjunto completo do arquivo: busca, filtros, visualização, período, divisor, as duas ações e o sino. Tudo vivo — troque a visualização e o período, clique no sino."
         codigo={codigoDefault}
         semCaixa
+        semSeletorDeFundo
       >
         <HeaderDefault />
       </Secao>
@@ -434,6 +435,7 @@ export default function HeaderPage() {
         descricao="O período por data em vez do segmentado. É o DateRangePicker inteiro: clique e o painel de dois meses abre por cima da página."
         codigo={codigoData}
         semCaixa
+        semSeletorDeFundo
         nota={
           <>
             O gatilho do Date Picker fecha em 29px de altura, e o arquivo o desenha com 32 dentro do Header. A fileira
@@ -464,6 +466,7 @@ export default function HeaderPage() {
         spec="610:13838 · 13915 · 13982"
         descricao="Três recortes do arquivo, do mais cheio ao mais enxuto. Nenhum é variante: é o mesmo Header com menos filhos em acoes."
         semCaixa
+        semSeletorDeFundo
       >
         <Header
           titulo="Dashboard"
@@ -516,6 +519,7 @@ export default function HeaderPage() {
         descricao="A variante Search: a caixa do Button tertiary virada campo de verdade. Digite — o foco ganha o anel com folga, igual ao do botão."
         codigo={codigoBusca}
         semCaixa
+        semSeletorDeFundo
       >
         <Header
           titulo="Dashboard"
@@ -532,6 +536,7 @@ export default function HeaderPage() {
         descricao="Clique no sino: a lista abre ancorada nele. Clicar numa notificação marca como lida e o selo desconta na hora; Escape fecha e devolve o foco ao sino."
         codigo={codigoSino}
         semCaixa
+        semSeletorDeFundo
         nota={
           <>
             O arquivo desenha o sino e o selo, não o painel. Ele é derivado dos tokens <Chip>overlay/*</Chip> e do
@@ -560,6 +565,7 @@ export default function HeaderPage() {
         spec="7 níveis · 3 à vista"
         descricao="Sete níveis do CRM real. Passando de três, os do meio recolhem em reticências; clique nelas para abrir a trilha inteira no lugar."
         semCaixa
+        semSeletorDeFundo
       >
         <Header
           titulo="Construtora Horizonte Ltda."

@@ -42,6 +42,7 @@ export default function Installation() {
         spec="passo 1"
         descricao="Na raiz do projeto. Grava o endereço do catálogo no components.json com o nome @datacrazy — o nome que você usa nos comandos e nos pedidos ao Claude."
         semCaixa
+        semSeletorDeFundo
         className={semMoldura}
       >
         <Codigo lang="bash" codigo={`npx shadcn@latest registry add @datacrazy=${URL_DS}/r/{name}.json`} />
@@ -62,6 +63,7 @@ export default function Installation() {
         spec="passo 2"
         descricao="Traz os tokens de cor, tipografia, raio, sombra e camadas; o cn() estendido; e a skill com as regras para o Claude. Os componentes o Claude instala conforme a tela pede — ou use @datacrazy/all para trazer todos de uma vez."
         semCaixa
+        semSeletorDeFundo
         className={semMoldura}
       >
         <Codigo lang="bash" codigo={`npx shadcn@latest add @datacrazy/setup`} />
@@ -81,6 +83,7 @@ export default function Installation() {
         spec="passo 3"
         descricao="Cria o .mcp.json do projeto com o servidor do shadcn. Depois, reinicie o Claude Code — no VS Code, recarregue a janela — e rode /mcp: o shadcn deve aparecer conectado."
         semCaixa
+        semSeletorDeFundo
         className={semMoldura}
       >
         <Codigo lang="bash" codigo={`npx shadcn@latest mcp init --client claude`} />
@@ -108,6 +111,7 @@ export default function Installation() {
         spec="--overwrite"
         descricao="Componente instalado é código seu e não muda sozinho. Quando o DS mudar, rode o add de novo nos itens que quiser trazer e confira o diff antes de commitar."
         semCaixa
+        semSeletorDeFundo
         className={semMoldura}
       >
         <Codigo lang="bash" codigo={`npx shadcn@latest add @datacrazy/setup @datacrazy/button --overwrite`} />

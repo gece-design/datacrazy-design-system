@@ -119,7 +119,6 @@ export default function Pagina() {
     >
       <Secao
         titulo="Completa"
-        className="bg-background"
         spec="7 colunas"
         descricao="Barra de filtros, cabeçalho, linhas e paginação — a unidade inteira, como o arquivo desenha."
         codigo={`<DataTable colunas={colunas}>

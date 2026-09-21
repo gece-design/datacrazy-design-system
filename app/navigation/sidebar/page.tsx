@@ -196,7 +196,6 @@ export default function PaginaSidebar() {
         titulo="A sidebar inteira"
         spec="282 → 88px"
         descricao="Viva: clique no botão da borda para colapsar, no sol e na lua para trocar o tema da página inteira, e em qualquer destino para movê-lo. É o node 124:2114 do Figma, com as quatro variantes cobertas por dois estados."
-        className="bg-background"
         codigo={`const [colapsada, setColapsada] = useState(false);
 const [ativa, setAtiva] = useState("Pipelines");
 
@@ -418,7 +417,6 @@ const [ativa, setAtiva] = useState("Pipelines");
         titulo="Colapsada"
         spec="88px · 36×36"
         descricao="O mesmo item, sem rótulo: 36 por 36, ícone centrado e o texto inteiro no title. Devolve 194px para a tela — a largura de duas colunas de tabela no pipeline."
-        className="bg-background"
         codigo={`<Sidebar colapsada>
   {/* nada muda aqui dentro: o contexto avisa cada filho */}
 </Sidebar>`}

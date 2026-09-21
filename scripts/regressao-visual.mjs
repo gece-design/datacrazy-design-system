@@ -29,7 +29,12 @@ const nomeDe = (rota, tema) => `${rota === "/" ? "home" : rota.slice(1).replace(
 
 // Rotas que ainda oscilam entre capturas mesmo com relógio fixo. Entram aqui
 // COM motivo; o limiar não afrouxa para elas — são reportadas, não reprovadas.
-const INSTAVEL = {};
+const INSTAVEL = {
+  // O período inicial ("últimos 7 dias") é calculado no build, no servidor: o
+  // relógio fixo do Playwright só vale no navegador, e a hidratação mantém o
+  // texto do servidor. Muda a cada dia em que o site é construído (2026-09-21).
+  "/forms/date-picker": "período inicial vem do build, não do relógio fixo",
+};
 
 try {
   await fetch(SITE);

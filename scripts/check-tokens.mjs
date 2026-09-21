@@ -49,6 +49,21 @@ const REGRAS = [
     teste: (l) => [...l.matchAll(/\bsize=\{(\d+(?:\.\d+)?)\}/g)].filter((m) => !ICONES.has(Number(m[1]))).map((m) => m[0]),
   },
   { regra: "botao-cru", origem: "lista negativa · duplica o Button", onde: PAGINAS, teste: (l) => l.match(/<button\b/g) },
+  // O fundo da caixa de preview é do seletor de fundo (components/ds/fundo-preview):
+  // um `bg-*` no className da <Secao> vence pelo tailwind-merge e a amostra
+  // deixa de trocar a cor (2026-09-21). Quem quer outro fundo inicial passa `fundo=`.
+  { regra: "fundo-da-caixa", origem: "seletor de fundo do preview", onde: PAGINAS, multilinha: true,
+    teste: (l, f, resto) => {
+      if (!/<Secao\b/.test(l)) return null;
+      // só o atributo da tag: o `codigo={`…`}` traz className e ">" de exemplo,
+      // então os template literals saem antes de procurar o fim da tag
+      const tag = (resto ?? l).slice(0, 8000).replace(/`[\s\S]*?`/g, "").split(/(?<!=)>/)[0];
+      // sem seletor não há amostra a vencer: a caixa pode ser transparente
+      if (/\bsemSeletorDeFundo\b/.test(tag)) return null;
+      const m = tag.match(/className=\{?"[^"]*\bbg-[\w-]+[^"]*"\}?/);
+      return m ? [m[0]] : null;
+    },
+  },
   // Desde o lote B3 (lib/estados.ts existe): um <button> em componente cuja tag
   // não usa a constante `foco` (nem `buttonVariants`) copiou o anel — ou não tem.
   // A tag pode ocupar várias linhas: a regra recebe o resto do arquivo.

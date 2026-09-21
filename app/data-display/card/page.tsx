@@ -145,7 +145,6 @@ export default function Pagina() {
     >
       <Secao
         titulo="Lista"
-        className="bg-background"
         spec="ranking"
         descricao="Cada linha traz avatar, identificação e métricas alinhadas à direita. É o formato para comparar pessoas ou categorias por mais de um número ao mesmo tempo."
         codigo={`<Card className="min-h-[382px] gap-4">
@@ -165,7 +164,6 @@ export default function Pagina() {
 
       <Secao
         titulo="Rosca"
-        className="bg-background"
         spec="distribuição"
         descricao="Um número no centro, o anel em volta e a legenda embaixo. Serve para distribuição percentual entre poucas categorias — com muitas, a legenda vira uma lista e o anel para de informar."
         codigo={`<Card className="min-h-[452px] justify-between">
@@ -200,7 +198,6 @@ export default function Pagina() {
 
       <Secao
         titulo="Barras"
-        className="bg-background"
         spec="por período"
         descricao="Uma barra por dia, com eixo Y à esquerda e datas embaixo. O gradiente desce de primary para accent, o que dá peso à base sem precisar de linha de grade."
         codigo={`<Card className="min-h-[452px] gap-5">

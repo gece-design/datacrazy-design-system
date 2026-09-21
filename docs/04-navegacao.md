@@ -75,6 +75,14 @@ sobre `card` (Tag, Pagination, contextos do drawer) entra num bloco
 `rounded-md bg-card p-5` dentro da caixa. Chip de código dentro da caixa inverte
 para `card` sozinho.
 
+**Nunca passe `bg-*` no `className` da `Secao`.** A cor da caixa é do seletor de
+amostras (Página · Card · Realce · Invertido): uma classe de fundo na `Secao`
+vence pelo tailwind-merge e as amostras param de trocar a cor — foi o caso de 16
+seções (2026-09-21); o check `fundo-da-caixa` reprova. Fundo inicial diferente:
+`fundo="card"`. Seção de chrome cujo conteúdo cobre a caixa inteira (cards da
+home, passos da instalação, o Header que pinta o próprio fundo) esconde as
+amostras com `semSeletorDeFundo` — amostra que não muda nada é ruído.
+
 Por quê: quem abre a página quer ver o componente como ele é. Anotação dentro do
 preview transforma a demonstração em diagrama, e o leitor deixa de conseguir
 julgar se aquilo é bonito, denso ou legível — que é exatamente o que ele veio

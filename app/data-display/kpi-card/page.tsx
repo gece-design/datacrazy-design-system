@@ -59,7 +59,6 @@ export default function Pagina() {
     >
       <Secao
         titulo="Tendência"
-        className="bg-background"
         spec="3 variantes"
         descricao="O glifo do slot muda; a cor, não. Os três são primary, exatamente como estão pintados no Figma."
         codigo={`<KpiCard title="Total ganhos" value="R$ 0,00" caption="0 negócios" trend="up" />`}
@@ -80,7 +79,6 @@ export default function Pagina() {
 
       <Secao
         titulo="Fill e Outline"
-        className="bg-background"
         spec="2 leituras"
         descricao="Não é o mesmo card com e sem fundo. Fill mostra um número e uma contagem. Outline mostra o número, a variação dele e o que a variação significa — por isso tem divisória, rodapé e 33px a mais de altura."
         codigo={`<KpiCard
@@ -119,7 +117,6 @@ export default function Pagina() {
 
       <Secao
         titulo="Em grade"
-        className="bg-background"
         spec="piso de 164px"
         descricao="É para isso que ele existe: a faixa de métricas no topo do dashboard. O card ocupa a largura da coluna — não tem largura própria, e por isso a fileira conta em piso, não em número de colunas."
         nota={

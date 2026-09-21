@@ -33,7 +33,6 @@ export default function Pagina() {
       <Secao
         titulo="Escala"
         spec="7 degraus"
-        className="bg-background"
         codigo={`<div className="rounded-md" />`}
       >
         <div className="grid grid-cols-3 gap-6 sm:grid-cols-4 lg:grid-cols-7">
