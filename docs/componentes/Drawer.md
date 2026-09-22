@@ -52,21 +52,20 @@ conteúdo da coluna direita.
 | `tags`, `acoes` | `ReactNode` | não | Fileira de tags e os dois botões. |
 | `aoFechar`, `aoRecolher` | `() => void` | não | Sem eles, o botão do canto não aparece. |
 | `rotuloFechar`, `rotuloRecolher` | `string` | não | Nome acessível de cada botão do canto (i18n). |
-| `rotulosRolagem` | `RotulosDeRolagem` | não | `{ subir, descer }`. Com eles as setas de rolagem viram botões nomeados; sem, usam `ROTULOS_DE_ROLAGEM`. |
+| `rotulosRolagem` | `RotulosDeRolagem` | não | `{ subir, descer }` das setas da coluna — só o plano B, quando nem o mínimo cabe; no uso normal quem rola é o bloco do menu (`DrawerBloco rolagem`). Sem eles, `ROTULOS_DE_ROLAGEM`. |
 | `className` | `string` | não | — |
 
 ### Peças do perfil e do conteúdo
 
-`DrawerBloco` (`titulo`, `inicialAberto`, `acoes`) · `DrawerMetricas` (`itens` com
+`DrawerBloco` (`titulo`, `inicialAberto`, `acoes`, `rolagem`) · `DrawerMetricas` (`itens` com
 `rotulo`, `valor`, `icone` e `tom`; `colunas` 2 ou 4; `estilo`) · `DrawerContato` (`linhas` com `texto`, `icone`,
-`rotulo`) · `DrawerMenu` (`itens` de `ItemMenuDrawer` — `id`, `rotulo`, `icone`; `atual`, `aoEscolher`, `rotulo`, `estilo`, `fixacao`, `visao`, `visualizacao`) ·
-`SeletorDeVisao` (`modo`, `aoMudar`, `rotulo`) ·
+`rotulo`) · `DrawerMenu` (`itens` de `ItemMenuDrawer` — `id`, `rotulo`, `icone`; `atual`, `aoEscolher`, `rotulo`, `estilo`, `fixacao`) ·
 `DrawerConteudo` (`titulo`, `descricao`, `acoes`, `antesDoTitulo`, `rotulosRolagem`) ·
 `DrawerSecao` (`titulo`) · `LinhaDoTempo` (`eventos` de `EventoLinhaDoTempo` — `id`, `titulo`, `detalhes[]`, `icone`) · `HierarquiaNo`
 (`nome`, `subtitulo`, `tipo`, `atual`, `recolher`) · `HierarquiaCanvas`
 (`rotulos` do zoom). Todas aceitam `className`.
 
-`fixacao` é `FixacaoDoMenu`: `fixados` (ids, na ordem do topo), `aoAlternar(id)`, `rotuloFixar(item)` e `rotuloDesafixar(item)` — os dois últimos devolvem o nome do alfinete. `visualizacao` é `VisualizacaoDoMenu`: `modo`, `aoMudar`, `rotulo`, e põe o interruptor lista/cards dentro da caixa do menu (só para menu sem bloco).
+`fixacao` é `FixacaoDoMenu`: `fixados` (ids, na ordem do topo), `aoAlternar(id)`, `rotuloFixar(item)` e `rotuloDesafixar(item)` — os dois últimos devolvem o nome do alfinete. `rolagem` do `DrawerBloco` é `RotulosDeRolagem` (`subir`, `descer`): o bloco ocupa o que sobra da coluna e o conteúdo rola por dentro, com as setas na borda — é o bloco do menu.
 
 ## Variantes
 
@@ -78,10 +77,17 @@ conteúdo da coluna direita.
 
 O cartão de métrica **não tem traço** (decisão do humano, 2026-09-17): o que o
 separa do fundo é o gradiente `bg-metrica`, a mesma ideia do topo do perfil, e
-cada cartão pode ter o próprio `tom` e um ícone de 16px na cor dele.
+cada cartão pode ter o próprio `tom` e um ícone de 16px na cor dele — mas o
+lead do CRM **não usa**: cliente (reunião de 2026-09-18) tirou a variação
+colorida de métricas e tags ("vibe code"); sem `tom`, o ícone herda a cor do
+perfil e a tag fica cinza com a bolinha do status.
 
-Com altura definida (a tela inteira, na camada), perfil e conteúdo **rolam
-cada um por conta própria**, e cada coluna mostra uma seta na borda enquanto
+Com altura definida (a tela inteira, na camada), **quem rola no perfil é o
+bloco do menu**, não a coluna: nome, telefone, métricas e contato ficam sempre
+à vista e a lista de seções ocupa o que sobra (`DrawerBloco rolagem`, cliente
+2026-09-18 — em notebook de tela baixa o nome não pode sumir). O conteúdo rola
+por conta própria. O menu nunca fica com menos de 80px (dois itens); se nem
+isso couber, rola a área dos blocos (métricas e contato), nunca o cabeçalho. Cada área que rola mostra uma seta na borda enquanto
 houver conteúdo além dela. A seta sai da própria superfície: uma faixa de 48px
 da cor do `card` atravessa a coluna inteira e some em degradê na direção do
 conteúdo, para a seta nunca encostar no texto que passa por baixo. A faixa é
@@ -91,18 +97,14 @@ da altura visível: seta que parece clicável e não é vira reclamação. O nom
 de `ROTULOS_DE_ROLAGEM` ("Subir"/"Descer") e `rotulosRolagem` troca pelo texto
 do contexto — botão sem nome não entra (regra E7).
 
-`SeletorDeVisao` troca a lista (uma coluna, ícone ao lado) por cards (duas
-colunas, ícone acima do nome); o `DrawerMenu` recebe só o modo, em `visao`. O
-lugar dele é a **linha do título do bloco** (`DrawerBloco acoes={…}`), que é
-onde o olho procura o controle da seção — dentro da caixa do menu ninguém acha
-(2026-09-18, depois de o humano não encontrar). Não é o `Switch` do DS: aquele
-fica azul quando ligado, e azul ali competiria com o item selecionado. De cada
-lado ficam dois ícones de 12px (`Rows` e `SquaresFour`), acesos no modo ativo,
-que dizem o que ele faz sem texto para traduzir. Quem guarda o modo é a tela.
+O menu é **só lista**, uma coluna com o ícone ao lado. A grade de cards de
+duas colunas e o interruptor lista/cards (`SeletorDeVisao`, ADR-018) saíram em
+2026-09-22 a pedido do cliente: "parecia mobile, não ornou" (reunião de
+2026-09-18).
 
-`DrawerMenu` ainda aceita `visualizacao` (modo + `aoMudar` + rótulo) para
-desenhar o interruptor dentro da própria caixa — é para menu que não vive num
-bloco. Com bloco, prefira `acoes`.
+O bloco "Contato principal" **só existe em lead empresa**: é a pessoa por trás
+dela (nome, cargo, telefone, e-mail). Lead pessoa é o próprio contato e não tem
+o bloco — nem no perfil da coluna nem na seção do conteúdo (cliente, 2026-09-18).
 
 `fixacao` liga o alfinete do menu: `fixados` (ids, na ordem em que sobem),
 `aoAlternar` e os dois rótulos (`rotuloFixar`, `rotuloDesafixar`). Quem guarda
@@ -169,7 +171,6 @@ Usado por: tela de leads (ainda não construída)
 | Ícones | Todos `aria-hidden`; os do contato ganham o nome do dado em texto só para leitor de tela |
 | Botões só de ícone | Fechar, recolher, zoom e recolher nó têm `aria-label` e `title` |
 | Indicador de rolagem | Botão com nome, no Tab só enquanto visível (`tabIndex -1` quando some) |
-| Lista ou cards | `role="switch"` com `aria-checked` e rótulo que diz para onde vai ("Ver o menu em cards") |
 | Fixar | Botão irmão do item (botão dentro de botão é inválido), com `aria-pressed` e rótulo que diz a ação — "Fixar Negócios no topo" |
 | Alvo de toque | Botão do canto 29px, item do menu 36px, alfinete 22px — **abaixo dos 44 da regra I15** |
 

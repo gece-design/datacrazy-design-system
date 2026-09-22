@@ -835,7 +835,7 @@
       "lote": "B0",
       "verificacao": "manual",
       "status": "corrigido",
-      "nota": "ADR-018 registra o desvio; variante neutra do Switch fica para lote futuro",
+      "nota": "ADR-018 registra o desvio; variante neutra do Switch fica para lote futuro · 2026-09-22: `SeletorDeVisao` removido — o cliente tirou o modo cards do menu (reunião de 2026-09-18); ADR-018 revogada.",
       "fechadoEm": "B0"
     },
     {
@@ -1954,7 +1954,7 @@
     {
       "id": "AUD-119",
       "eixo": "fidelidade",
-      "titulo": "Drawer: Indicador de rolagem, alfinete e o modo cards não estão no arquivo",
+      "titulo": "Drawer: Indicador de rolagem e alfinete não estão no arquivo",
       "onde": [
         "components/ui/drawer.tsx"
       ],
@@ -1964,7 +1964,7 @@
       "verificacao": "manual",
       "status": "adiado",
       "fechadoEm": null,
-      "nota": "**Indicador de rolagem, alfinete e o modo cards não estão no arquivo.** Pedidos do humano (2026-09-18). A seta usa `border`, `card` e `muted-foreground`, e a faixa é um degradê do próprio `card`; o alfinete e o cartão reusam as cores do item do menu; o interruptor usa `input/border` e `muted-foreground`. Falta desenhar os três."
+      "nota": "**Indicador de rolagem e alfinete não estão no arquivo.** Pedidos do humano (2026-09-18). A seta usa `border`, `card` e `muted-foreground`, e a faixa é um degradê do próprio `card`; o alfinete e o cartão reusam as cores do item do menu. O modo cards saiu em 2026-09-22 (cliente). Falta desenhar os dois — e a rolagem agora é do bloco do menu, não da coluna."
     },
     {
       "id": "AUD-120",
@@ -3165,6 +3165,52 @@
       "status": "aceito",
       "fechadoEm": "2026-09-21",
       "nota": "**Cliente pediu menos recuo e uma faixa clara no rodapé** (WhatsApp, 2026-09-21, prints do modal com marcação nas laterais do corpo). Recuo lateral 20 → 16 em cabeçalho, corpo e rodapé; rodapé com fundo `background` e 12/12 (era 12/20 sem fundo). Não é erro de medição: o arquivo (545:168) é que passa a acompanhar o código na remedição."
+    },
+    {
+      "id": "AUD-200",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: contato principal só em lead empresa",
+      "onde": [
+        "app/feedback/drawer/drawer-lead.tsx",
+        "app/exemplos/pipeline/painel-lead.tsx"
+      ],
+      "regra": "fidelidade · humano > arquivo (Figma é rascunho)",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "aceito",
+      "fechadoEm": "2026-09-22",
+      "nota": "**Contato principal é a pessoa por trás de um lead empresa** (Davi, reunião de 2026-09-18). O arquivo desenha o bloco nos dois leads, inclusive no Rafael (pessoa, com cargo \"Guitarrista\"). Regra do produto: pessoa não tem contato principal — ela é o próprio contato; empresa tem uma pessoa (nome, cargo, telefone, e-mail). O bloco da coluna e a seção do Perfil só existem em `tipo=\"empresa\"`. O arquivo acompanha na remedição."
+    },
+    {
+      "id": "AUD-201",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: botão Automação com raio, não Play",
+      "onde": [
+        "app/feedback/drawer/drawer-lead.tsx"
+      ],
+      "regra": "fidelidade · humano > arquivo (Figma é rascunho)",
+      "gravidade": "baixa",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "aceito",
+      "fechadoEm": "2026-09-22",
+      "nota": "**O Play \"parecia uma seta\"** (Ryan, reunião de 2026-09-18). Trocado por `Lightning` do Phosphor, o glifo comum de automação; o cliente pode indicar outro. O arquivo acompanha."
+    },
+    {
+      "id": "AUD-202",
+      "eixo": "fidelidade",
+      "titulo": "Drawer: só o menu rola; perfil fixo — e sem o modo cards",
+      "onde": [
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · humano > arquivo (Figma é rascunho)",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "aceito",
+      "fechadoEm": "2026-09-22",
+      "nota": "**Quem rola é o menu, não a coluna do perfil** (Davi, 2026-09-18): com a coluna inteira rolando, o nome e o telefone do lead somem em notebook de tela baixa. `DrawerBloco rolagem` ocupa o que sobra e rola por dentro, com mínimo de 80px; se nem isso cabe, rola a área dos blocos, nunca o cabeçalho. O modo cards do menu saiu na mesma reunião (\"parecia mobile\"). O arquivo não desenha rolagem nenhuma; acompanha na remedição."
     }
   ]
 }

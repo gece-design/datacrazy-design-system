@@ -8,8 +8,6 @@ import {
   CaretRight,
   CaretUp,
   PushPin,
-  Rows,
-  SquaresFour,
   EnvelopeSimple,
   Minus,
   Phone,
@@ -162,7 +160,7 @@ export type TomPerfil =
   | "vermelho";
 
 /** Rolagem de coluna: barra fina e sem arrastar a página junto no fim. */
-const rolagem = "min-h-0 overflow-y-auto overscroll-contain [scrollbar-width:thin]";
+const rolagemDeColuna = "min-h-0 overflow-y-auto overscroll-contain [scrollbar-width:thin]";
 
 /** Tem conteúdo acima? E abaixo? Reage à rolagem e a mudança de tamanho —
  *  recolher um bloco do perfil muda o que sobra para rolar. */
@@ -321,8 +319,10 @@ export function DrawerPerfil({
 
   return (
     <EstiloDoPerfil.Provider value={estilo}>
-      {/* A casca não rola: é ela que segura o indicador parado na borda,
-          enquanto o conteúdo passa por baixo. */}
+      {/* A casca não rola: é ela que segura o indicador parado na borda.
+          No uso normal a coluna nem rola — quem rola é o menu (DrawerBloco
+          rolagem), depois a área dos blocos; a coluna só rolaria se nem o
+          cabeçalho coubesse. */}
       <div
         data-tom={tom ?? (tipo === "empresa" ? "roxo" : "azul")}
         className={cn("relative flex w-[320px] shrink-0 border-r border-border bg-drawer-perfil bg-local", className)}
@@ -333,7 +333,7 @@ export function DrawerPerfil({
         className={cn(
           // D14: 20px de recuo com o traço direito por dentro — 19 + 1 aqui.
           "flex w-full flex-col py-5 pl-5 pr-[19px]",
-          rolagem,
+          rolagemDeColuna,
         )}
       >
         <div className="relative flex shrink-0 flex-col items-center">
@@ -382,7 +382,12 @@ export function DrawerPerfil({
           ) : null}
         </div>
 
-        {children ? <div className="flex shrink-0 flex-col gap-4 pt-4">{children}</div> : null}
+        {/* Os blocos ocupam o que sobra da coluna; o que tem `rolagem` (o menu)
+            cresce e rola por dentro. Se nem o mínimo do menu couber, é esta
+            área dos blocos que rola — o cabeçalho com nome e telefone fica. */}
+        {children ? (
+          <div className={cn("flex min-h-0 flex-1 flex-col gap-4 pt-4", rolagemDeColuna)}>{children}</div>
+        ) : null}
       </aside>
       <IndicadorDeRolagem acima={acima} abaixo={abaixo} alvo={coluna} rotulos={rotulosRolagem} />
       </div>
@@ -395,6 +400,7 @@ export function DrawerBloco({
   titulo,
   inicialAberto = true,
   acoes,
+  rolagem,
   children,
 }: {
   titulo: string;
@@ -404,13 +410,21 @@ export function DrawerBloco({
    * Fica FORA do botão de abrir/fechar: botão dentro de botão é inválido.
    */
   acoes?: React.ReactNode;
+  /**
+   * Com eles, o bloco ocupa o que sobra da coluna e o conteúdo rola POR
+   * DENTRO, com as setas na borda — é o menu. Cliente (2026-09-18): quem
+   * rola é o menu, não o perfil; nome e telefone ficam sempre à vista.
+   */
+  rolagem?: RotulosDeRolagem;
   children: React.ReactNode;
 }) {
   const [aberto, setAberto] = React.useState(inicialAberto);
   const id = React.useId().replace(/:/g, "");
+  const conteudo = React.useRef<HTMLDivElement>(null);
+  const { acima, abaixo } = usarRolagem(conteudo);
   return (
-    <section className="flex flex-col gap-0.5">
-      <div className="flex items-center gap-2">
+    <section className={cn("flex flex-col gap-0.5", rolagem ? "min-h-0 flex-1" : "shrink-0")}>
+      <div className="flex shrink-0 items-center gap-2">
         <h3 className="min-w-0 flex-1">
           <button
             type="button"
@@ -455,9 +469,21 @@ export function DrawerBloco({
           </>
         ) : null}
       </div>
-      <div id={`bloco-${id}`} hidden={!aberto}>
-        {children}
-      </div>
+      {rolagem ? (
+        // min-h-20: dois itens à vista no mínimo — "um scroll pequenininho" que
+        // o cliente aceitou em troca do nome sempre visível. Se nem isso couber,
+        // a área dos blocos do perfil rola, não o cabeçalho.
+        <div className="relative min-h-20 flex-1" hidden={!aberto}>
+          <div id={`bloco-${id}`} ref={conteudo} className={cn("h-full", rolagemDeColuna)}>
+            {children}
+          </div>
+          <IndicadorDeRolagem acima={acima} abaixo={abaixo} alvo={conteudo} rotulos={rolagem} />
+        </div>
+      ) : (
+        <div id={`bloco-${id}`} hidden={!aberto}>
+          {children}
+        </div>
+      )}
     </section>
   );
 }
@@ -539,66 +565,6 @@ export function DrawerContato({ linhas, estilo }: { linhas: LinhaContato[]; esti
 
 export type ItemMenuDrawer = { id: string; rotulo: string; icone: Icon };
 
-/** Lista (uma coluna, ícone ao lado) ou cards (duas colunas, ícone em cima). */
-export type VisaoDoMenu = "lista" | "cards";
-
-export interface VisualizacaoDoMenu {
-  modo: VisaoDoMenu;
-  aoMudar: (modo: VisaoDoMenu) => void;
-  /** Nome do interruptor. Ex.: "Ver o menu em cards". */
-  rotulo: string;
-}
-
-/**
- * Interruptor pequeno e cinza: lista ↔ cards.
- *
- * O lugar dele é a linha do título do bloco (`DrawerBloco acoes=…`), que é onde
- * o olho procura o controle da seção; dentro da caixa do menu ninguém acha.
- *
- * Não é o `Switch` do DS de propósito — aquele é azul quando ligado, e azul
- * aqui competiria com o item selecionado, que é o que a pessoa precisa achar.
- * Este fica em cinza nos dois estados: quem diz o modo é o botão que anda.
- */
-export function SeletorDeVisao({ modo, aoMudar, rotulo }: VisualizacaoDoMenu) {
-  const cards = modo === "cards";
-  return (
-    // Os dois ícones ficam de fora do botão: eles dizem o que o interruptor
-    // faz sem texto para traduzir, e é por eles que a pessoa acha o controle.
-    <span className="flex items-center gap-1.5">
-      <Rows
-        size={12}
-        weight="fill"
-        aria-hidden="true"
-        className={cards ? "text-input-border" : "text-muted-foreground"}
-      />
-      <button
-        type="button"
-        role="switch"
-        aria-checked={cards}
-        aria-label={rotulo}
-        title={rotulo}
-        onClick={() => aoMudar(cards ? "lista" : "cards")}
-        className={cn(
-          "flex h-4 w-7 shrink-0 items-center rounded-full px-0.5 transition-colors",
-          foco,
-          cards ? "bg-muted-foreground" : "bg-input-border",
-        )}
-      >
-        <span
-          aria-hidden="true"
-          className={cn("size-3 rounded-full bg-card shadow-sm transition-transform", cards && "translate-x-3")}
-        />
-      </button>
-      <SquaresFour
-        size={12}
-        weight="fill"
-        aria-hidden="true"
-        className={cards ? "text-muted-foreground" : "text-input-border"}
-      />
-    </span>
-  );
-}
-
 export interface FixacaoDoMenu {
   /** Ids fixados, na ordem em que aparecem no topo. */
   fixados: string[];
@@ -614,17 +580,14 @@ function ItemDoMenu({
   fixado,
   aoEscolher,
   fixacao,
-  visao = "lista",
 }: {
   item: ItemMenuDrawer;
   selecionado: boolean;
   fixado: boolean;
   aoEscolher?: (id: string) => void;
   fixacao?: FixacaoDoMenu;
-  visao?: VisaoDoMenu;
 }) {
   const Icone = item.icone;
-  const cartao = visao === "cards";
   return (
     <li className="group/item relative">
       <button
@@ -632,30 +595,26 @@ function ItemDoMenu({
         aria-current={selecionado ? "true" : undefined}
         onClick={() => aoEscolher?.(item.id)}
         className={cn(
-          "w-full rounded-md text-label-lg transition-colors",
+          // 36px = 9 + 18 + 9. O recuo de 8 à esquerda é o gap do arquivo.
+          "flex w-full items-center justify-between rounded-md py-[9px] pl-2 pr-2.5 text-left text-label-lg transition-colors",
           foco,
-          cartao
-            // cartão: ícone em cima do rótulo, duas colunas na grade de fora
-            ? "flex flex-col items-center gap-1.5 px-2 py-3 text-center"
-            // 36px = 9 + 18 + 9. O recuo de 8 à esquerda é o gap do arquivo.
-            : "flex items-center justify-between py-[9px] pl-2 pr-2.5 text-left",
           // com o alfinete à direita, o caret recua para não ficar embaixo dele
-          fixacao && !cartao && "pr-9",
+          fixacao && "pr-9",
           selecionado
             ? "bg-nav-item-selected text-nav-item-selected-foreground"
             : "text-foreground hover:bg-nav-item-hover",
         )}
       >
-        <span className={cn("flex min-w-0", cartao ? "flex-col items-center gap-1.5" : "items-center gap-2")}>
+        <span className="flex min-w-0 items-center gap-2">
           <Icone
-            size={cartao ? 20 : 18}
+            size={18} // check-tokens:ignore icone-fora-da-escala — 18 é a medida do item do arquivo (556:428)
             weight="regular"
             aria-hidden="true"
             className={cn("shrink-0", selecionado ? "text-nav-item-selected-icon" : "text-nav-item")}
           />
-          <span className={cn("truncate", cartao && "w-full")}>{item.rotulo}</span>
+          <span className="truncate">{item.rotulo}</span>
         </span>
-        {selecionado && !cartao ? (
+        {selecionado ? (
           <CaretRight size={14} weight="regular" aria-hidden="true" className="shrink-0 text-nav-item-selected-icon" />
         ) : null}
       </button>
@@ -669,9 +628,7 @@ function ItemDoMenu({
           title={fixado ? fixacao.rotuloDesafixar(item) : fixacao.rotuloFixar(item)}
           onClick={() => fixacao.aoAlternar(item.id)}
           className={cn(
-            "absolute rounded-sm p-0.5 transition-opacity",
-            // no cartão ele sobe para o canto; na lista fica no meio da linha
-            cartao ? "right-1 top-1" : "right-2 top-1/2 -translate-y-1/2",
+            "absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-0.5 transition-opacity",
             foco,
             // fixado fica sempre à vista; o resto só sob o cursor ou no foco
             fixado
@@ -694,8 +651,6 @@ export function DrawerMenu({
   rotulo,
   estilo,
   fixacao,
-  visao,
-  visualizacao,
 }: {
   itens: ItemMenuDrawer[];
   atual: string;
@@ -705,13 +660,8 @@ export function DrawerMenu({
   estilo?: EstiloPerfil;
   /** Liga o alfinete de cada item. Sem ela, o menu é só a lista do arquivo. */
   fixacao?: FixacaoDoMenu;
-  /** Layout da lista quando o interruptor está fora (no título do bloco). */
-  visao?: VisaoDoMenu;
-  /** Põe o interruptor DENTRO da caixa do menu — só para menu sem bloco. */
-  visualizacao?: VisualizacaoDoMenu;
 }) {
   const e = useEstilo(estilo);
-  const modo = visualizacao?.modo ?? visao ?? "lista";
 
   // Fixados sobem na ordem em que foram fixados; o resto segue a ordem original.
   const fixados = fixacao ? (fixacao.fixados.map((id) => itens.find((i) => i.id === id)).filter(Boolean) as ItemMenuDrawer[]) : [];
@@ -725,12 +675,11 @@ export function DrawerMenu({
       fixado={fixado}
       aoEscolher={aoEscolher}
       fixacao={fixacao}
-      visao={modo}
     />
   );
 
-  const grade = modo === "cards" ? "grid grid-cols-2 gap-1" : "flex flex-col";
-
+  // Só lista, uma coluna (cliente, reunião de 2026-09-18): a grade de cards
+  // de duas colunas "parecia mobile" e saiu.
   return (
     <nav
       aria-label={rotulo}
@@ -741,15 +690,9 @@ export function DrawerMenu({
         e === "outline" ? "px-1 ring-2 ring-inset ring-background" : "bg-background p-2",
       )}
     >
-      {visualizacao ? (
-        <div className="flex items-center justify-end py-1.5">
-          <SeletorDeVisao {...visualizacao} />
-        </div>
-      ) : null}
-
       {fixados.length > 0 ? (
         <>
-          <ul className={grade}>{fixados.map((item) => linha(item, true))}</ul>
+          <ul className="flex flex-col">{fixados.map((item) => linha(item, true))}</ul>
           {resto.length > 0 ? (
             // Separa sem título: o alfinete cheio já diz por que aqueles estão em cima.
             <div aria-hidden="true" className="my-1 h-0.5 bg-background" />
@@ -757,7 +700,7 @@ export function DrawerMenu({
         </>
       ) : null}
 
-      <ul className={grade}>{resto.map((item) => linha(item, false))}</ul>
+      <ul className="flex flex-col">{resto.map((item) => linha(item, false))}</ul>
     </nav>
   );
 }
@@ -793,7 +736,7 @@ export function DrawerConteudo({
     <section
       ref={coluna}
       aria-labelledby={`titulo-${id}`}
-      className={cn("flex w-full flex-col gap-4 py-5", rolagem)}
+      className={cn("flex w-full flex-col gap-4 py-5", rolagemDeColuna)}
     >
       <div className="flex shrink-0 flex-col gap-5">
         <div className="flex items-center justify-between gap-4 px-5">

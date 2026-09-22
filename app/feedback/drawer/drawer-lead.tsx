@@ -4,6 +4,7 @@ import * as React from "react";
 import {
   ArrowsClockwise,
   ArrowSquareOut,
+  Briefcase,
   Buildings,
   CalendarBlank,
   CalendarCheck,
@@ -22,7 +23,7 @@ import {
   Minus,
   Note,
   Phone,
-  Play,
+  Lightning,
   Plus,
   Pulse,
   SidebarSimple,
@@ -37,7 +38,7 @@ import {
   Wallet,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-import { Tag, SeletorTags, tomDe, type GrupoTags, type OpcaoTag } from "@/components/ui/tag";
+import { Tag, SeletorTags, type GrupoTags, type OpcaoTag } from "@/components/ui/tag";
 import { Avatar } from "@/components/ui/avatar";
 import { Input, AcaoCampo, AcaoCopiar, CampoEditavel, CartaoDeCampo } from "@/components/ui/input";
 import { InputTelefone, telefoneCompleto } from "@/components/ui/telefone";
@@ -60,7 +61,6 @@ import {
   DrawerMetricas,
   DrawerContato,
   DrawerMenu,
-  SeletorDeVisao,
   DrawerConteudo,
   DrawerSecao,
   DrawerBotaoCanto,
@@ -71,7 +71,6 @@ import {
   type LinhaContato,
   type MetricaDrawer,
   type TomPerfil,
-  type VisaoDoMenu,
 } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
 
@@ -84,24 +83,21 @@ export const CATALOGO_TAGS: GrupoTags[] = [
     id: "status",
     rotulo: "Status",
     tags: [
-      // A cor do status não é escolha: vem do significado.
-      { id: "abandonou", rotulo: "Abandonou", status: "destructive", tom: "vermelho" },
-      { id: "agendado", rotulo: "Agendado", status: "success", tom: "verde" },
-      { id: "passou", rotulo: "Passou", status: "info", tom: "ciano" },
-      { id: "em-aberto", rotulo: "Em aberto", status: "info", tom: "azul" },
+      // A bolinha do status vem do significado; a pílula fica cinza (cliente, 2026-09-18).
+      { id: "abandonou", rotulo: "Abandonou", status: "destructive" },
+      { id: "agendado", rotulo: "Agendado", status: "success" },
+      { id: "passou", rotulo: "Passou", status: "info" },
+      { id: "em-aberto", rotulo: "Em aberto", status: "info" },
     ],
   },
   {
     id: "listas",
     rotulo: "Listas",
-    // a única aba em que a cor é escolha de quem cria
-    corLivre: true,
     tags: [
-      // Cor livre. Sem escolha, `tomDe` dá uma — a lista nunca nasce cinza.
-      { id: "lista-de-leads", rotulo: "Lista de leads", tom: tomDe("lista-de-leads") },
-      { id: "isaias-123", rotulo: "Isaias 123", tom: tomDe("isaias-123") },
-      { id: "prospect-list", rotulo: "Prospect list", tom: tomDe("prospect-list") },
-      { id: "premium", rotulo: "Premium", tom: "ambar" },
+      { id: "lista-de-leads", rotulo: "Lista de leads" },
+      { id: "isaias-123", rotulo: "Isaias 123" },
+      { id: "prospect-list", rotulo: "Prospect list" },
+      { id: "premium", rotulo: "Premium" },
     ],
   },
   {
@@ -121,10 +117,10 @@ export const CATALOGO_TAGS: GrupoTags[] = [
     id: "temperatura",
     rotulo: "Temperatura",
     tags: [
-      // Escala, não categoria: o tom sobe junto com o ícone.
-      { id: "frio", rotulo: "Frio", tom: "ciano", icone: Snowflake },
-      { id: "morno", rotulo: "Morno", tom: "ambar", icone: ThermometerSimple },
-      { id: "quente", rotulo: "Quente", tom: "vermelho", icone: Fire },
+      // Escala, não categoria: o ícone diz o degrau.
+      { id: "frio", rotulo: "Frio", icone: Snowflake },
+      { id: "morno", rotulo: "Morno", icone: ThermometerSimple },
+      { id: "quente", rotulo: "Quente", icone: Fire },
     ],
   },
 ];
@@ -136,6 +132,9 @@ export function tagsEscolhidas(grupos: GrupoTags[], ids: string[]): OpcaoTag[] {
   return ORDEM_NO_PERFIL.flatMap((g) => grupos.find((x) => x.id === g)?.tags ?? []).filter((t) => ids.includes(t.id));
 }
 
+/** A pessoa por trás de um lead empresa. Lead pessoa não tem (cliente, 2026-09-18). */
+export type ContatoPrincipal = { nome: string; cargo?: string; telefone?: string; email?: string };
+
 export type LeadDoDrawer = {
   nome: string;
   tipo: "pessoa" | "empresa";
@@ -143,8 +142,19 @@ export type LeadDoDrawer = {
   email: string;
   tags: string[];
   metricas: MetricaDrawer[];
-  contato: LinhaContato[];
+  /** Só faz sentido quando `tipo` é `empresa`; em pessoa é ignorado. */
+  contatoPrincipal?: ContatoPrincipal;
 };
+
+/** As linhas do bloco "Contato principal" do perfil, a partir da pessoa. */
+export function linhasDoContato(c: ContatoPrincipal): LinhaContato[] {
+  return [
+    { texto: c.nome, icone: User, rotulo: "Nome" },
+    c.cargo ? { texto: c.cargo, icone: Briefcase, rotulo: "Cargo" } : null,
+    c.telefone ? { texto: c.telefone, icone: Phone, rotulo: "Telefone" } : null,
+    c.email ? { texto: c.email, icone: EnvelopeSimple, rotulo: "E-mail" } : null,
+  ].filter((l): l is LinhaContato => Boolean(l));
+}
 
 export const LEADS: Record<"rafael" | "joel", LeadDoDrawer> = {
   rafael: {
@@ -154,15 +164,10 @@ export const LEADS: Record<"rafael" | "joel", LeadDoDrawer> = {
     email: "contato@datacrazy.com",
     tags: ["esther", "lista-de-leads", "isaias-123", "abandonou", "agendado", "frio"],
     metricas: [
-      { rotulo: "Ticket médio", valor: "R$ 0,00", icone: CurrencyCircleDollar, tom: "azul" },
-      { rotulo: "Total", valor: "R$ 0,00", icone: Wallet, tom: "roxo" },
-      { rotulo: "Ciclo de compra", valor: "0d", icone: ArrowsClockwise, tom: "rosa" },
-      { rotulo: "Última compra", valor: "0d", icone: CalendarCheck, tom: "laranja" },
-    ],
-    contato: [
-      { texto: "Guitarrista", icone: User, rotulo: "Cargo" },
-      { texto: "5+52 (34) 52345-3425", icone: Phone, rotulo: "Telefone" },
-      { texto: "gui@queen.com", icone: EnvelopeSimple, rotulo: "E-mail" },
+      { rotulo: "Ticket médio", valor: "R$ 0,00", icone: CurrencyCircleDollar },
+      { rotulo: "Total", valor: "R$ 0,00", icone: Wallet },
+      { rotulo: "Ciclo de compra", valor: "0d", icone: ArrowsClockwise },
+      { rotulo: "Última compra", valor: "0d", icone: CalendarCheck },
     ],
   },
   joel: {
@@ -172,16 +177,13 @@ export const LEADS: Record<"rafael" | "joel", LeadDoDrawer> = {
     email: "contact@datawave.com",
     tags: ["liam", "prospect-list", "premium", "passou", "agendado", "warm"],
     metricas: [
-      { rotulo: "Ticket médio", valor: "R$ 150,00", icone: CurrencyCircleDollar, tom: "azul" },
-      { rotulo: "Total", valor: "R$ 9.877,00", icone: Wallet, tom: "roxo" },
-      { rotulo: "Ciclo de compra", valor: "89d", icone: ArrowsClockwise, tom: "rosa" },
-      { rotulo: "Última compra", valor: "3d", icone: CalendarCheck, tom: "laranja" },
+      { rotulo: "Ticket médio", valor: "R$ 150,00", icone: CurrencyCircleDollar },
+      { rotulo: "Total", valor: "R$ 9.877,00", icone: Wallet },
+      { rotulo: "Ciclo de compra", valor: "89d", icone: ArrowsClockwise },
+      { rotulo: "Última compra", valor: "3d", icone: CalendarCheck },
     ],
-    contato: [
-      { texto: "Drummer", icone: User, rotulo: "Cargo" },
-      { texto: "+55 (21) 99876-5432", icone: Phone, rotulo: "Telefone" },
-      { texto: "alex@music.com", icone: EnvelopeSimple, rotulo: "E-mail" },
-    ],
+    // Empresa tem uma pessoa por trás; é ela que atende o telefone.
+    contatoPrincipal: { nome: "Alex Ferreira", cargo: "Diretor comercial", telefone: "+55 (21) 99876-5432", email: "alex@joeljota.com.br" },
   },
 };
 
@@ -203,6 +205,10 @@ export const MENU_LEAD: ItemMenuDrawer[] = [
 const abrir = (url: string) => window.open(url, "_blank", "noopener,noreferrer");
 
 /* -------------------------------------------------------------- Conteúdos -- */
+
+/** O lead aberto, para os conteúdos que dependem do tipo (o Perfil só mostra
+ *  "Contato principal" quando o lead é empresa). */
+const LeadAtual = React.createContext<LeadDoDrawer | null>(null);
 
 function ConteudoHistorico() {
   return (
@@ -249,6 +255,9 @@ function CampoSelect({ rotulo, valor, aoEscolher }: { rotulo: string; valor?: st
 }
 
 function ConteudoPerfil() {
+  const lead = React.useContext(LeadAtual);
+  const pessoa = lead?.tipo === "empresa" ? lead.contatoPrincipal : undefined;
+  const [contato, setContato] = React.useState({ telefone: pessoa?.telefone ?? "", email: pessoa?.email ?? "" });
   const [prosseguir, setProsseguir] = React.useState(false);
   const [reclamacao, setReclamacao] = React.useState<string>();
   const [pais, setPais] = React.useState("BR");
@@ -371,14 +380,58 @@ function ConteudoPerfil() {
         </div>
       </DrawerSecao>
 
-      <DrawerSecao titulo="Contato principal">
-        <div className="flex justify-center">
-          <Button variant="soft">
-            <Plus size={16} weight="regular" />
-            Vincular pessoa
-          </Button>
-        </div>
-      </DrawerSecao>
+      {/* Só lead empresa tem contato principal — a pessoa que atende por ela.
+          Lead pessoa não tem: ele é o próprio contato (cliente, 2026-09-18). */}
+      {lead?.tipo === "empresa" ? (
+        <DrawerSecao titulo="Contato principal">
+          {pessoa ? (
+            <>
+              <div className="flex items-center gap-2">
+                <Avatar nome={pessoa.nome} size="md" iniciais="duas" aria-hidden="true" />
+                <div className="flex min-w-0 flex-col">
+                  <p className="truncate text-label-lg text-foreground">{pessoa.nome}</p>
+                  {pessoa.cargo ? <p className="truncate text-caption text-muted-foreground">{pessoa.cargo}</p> : null}
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <CampoEditavel
+                  rotulo="Telefone"
+                  valor={contato.telefone}
+                  aoSalvar={(v) => setContato((c) => ({ ...c, telefone: v }))}
+                  rotuloEditar="Editar telefone do contato principal"
+                  textoVazio="Adicionar"
+                  acoes={
+                    <>
+                      <AcaoCopiar rotulo="Copiar telefone" rotuloCopiado="Telefone copiado" valor={contato.telefone} />
+                      <AcaoCampo icone={Phone} rotulo="Ligar" onClick={() => abrir(`tel:${contato.telefone.replace(/\D/g, "")}`)} />
+                    </>
+                  }
+                />
+                <CampoEditavel
+                  rotulo="E-mail"
+                  valor={contato.email}
+                  aoSalvar={(v) => setContato((c) => ({ ...c, email: v }))}
+                  rotuloEditar="Editar e-mail do contato principal"
+                  textoVazio="Adicionar"
+                  acoes={
+                    <>
+                      <AcaoCopiar rotulo="Copiar e-mail" rotuloCopiado="E-mail copiado" valor={contato.email} />
+                      <AcaoCampo icone={EnvelopeSimple} rotulo="Enviar e-mail" onClick={() => abrir(`mailto:${contato.email}`)} />
+                    </>
+                  }
+                />
+              </div>
+            </>
+          ) : (
+            <div className="flex justify-center">
+              <Button variant="soft">
+                <Plus size={16} weight="regular" />
+                Vincular pessoa
+              </Button>
+            </div>
+          )}
+        </DrawerSecao>
+      ) : null}
 
       <DrawerSecao titulo="Empresa mãe">
         <div className="flex items-center gap-2">
@@ -550,10 +603,10 @@ function ConteudoNegocios() {
       <DrawerMetricas
         colunas={4}
         itens={[
-          { rotulo: "Ticket médio", valor: "R$ 3.290,00", icone: CurrencyCircleDollar, tom: "azul" },
-          { rotulo: "Total", valor: "R$ 9.877,00", icone: Wallet, tom: "roxo" },
-          { rotulo: "Ciclo de compra", valor: "89d", icone: ArrowsClockwise, tom: "rosa" },
-          { rotulo: "Última compra", valor: "3d", icone: CalendarCheck, tom: "laranja" },
+          { rotulo: "Ticket médio", valor: "R$ 3.290,00", icone: CurrencyCircleDollar },
+          { rotulo: "Total", valor: "R$ 9.877,00", icone: Wallet },
+          { rotulo: "Ciclo de compra", valor: "89d", icone: ArrowsClockwise },
+          { rotulo: "Última compra", valor: "3d", icone: CalendarCheck },
         ]}
       />
       <DataTableToolbar layout="compacta" rotulo="Total de negócios" total="3 negócios">
@@ -746,13 +799,13 @@ export function DrawerLead({
   const [perfilAberto, setPerfilAberto] = React.useState(true);
   // Quem fixa é a pessoa, e cada lead guarda a própria lista no CRM.
   const [fixados, setFixados] = React.useState<string[]>(["negocios"]);
-  const [visaoMenu, setVisaoMenu] = React.useState<VisaoDoMenu>("lista");
 
   const item = MENU_LEAD.find((m) => m.id === menu) ?? MENU_LEAD[0];
   const desenhado = secoes?.[menu] ?? cabecalhos[menu];
   const Corpo = desenhado?.Corpo;
 
   return (
+    <LeadAtual.Provider value={dados}>
     <DrawerPainel className={className}>
       {perfilAberto ? (
         <DrawerPerfil
@@ -769,8 +822,9 @@ export function DrawerLead({
           tags={tags ?? <TagsDoLead iniciais={dados.tags} />}
           acoes={
             <>
+              {/* Raio, não Play: o triângulo "parecia uma seta" (Ryan, 2026-09-18). */}
               <Button>
-                <Play size={16} weight="regular" />
+                <Lightning size={16} weight="regular" />
                 Automação
               </Button>
               <Button variant="soft">
@@ -783,25 +837,30 @@ export function DrawerLead({
           <DrawerBloco titulo="Métricas">
             <DrawerMetricas itens={dados.metricas} />
           </DrawerBloco>
-          <DrawerBloco titulo="Contato principal">
-            <DrawerContato linhas={dados.contato} />
-          </DrawerBloco>
-          <DrawerBloco
-            titulo="Menu"
-            acoes={
-              <SeletorDeVisao
-                modo={visaoMenu}
-                aoMudar={setVisaoMenu}
-                rotulo={visaoMenu === "cards" ? "Ver o menu em lista" : "Ver o menu em cards"}
-              />
-            }
-          >
+          {/* Só empresa tem contato principal (a pessoa por trás); lead pessoa
+              é o próprio contato e o bloco não existe (cliente, 2026-09-18). */}
+          {dados.tipo === "empresa" ? (
+            <DrawerBloco titulo="Contato principal">
+              {dados.contatoPrincipal ? (
+                <DrawerContato linhas={linhasDoContato(dados.contatoPrincipal)} />
+              ) : (
+                <div className="flex justify-center py-1">
+                  <Button variant="soft" size="sm">
+                    <Plus size={16} weight="regular" />
+                    Vincular pessoa
+                  </Button>
+                </div>
+              )}
+            </DrawerBloco>
+          ) : null}
+          {/* O menu é o bloco que rola: ocupa o que sobra e nome, telefone,
+              métricas e contato ficam sempre à vista (cliente, 2026-09-18). */}
+          <DrawerBloco titulo="Menu" rolagem={{ subir: "Subir no menu", descer: "Descer no menu" }}>
             <DrawerMenu
               rotulo="Seções do lead"
               itens={MENU_LEAD}
               atual={menu}
               aoEscolher={setMenu}
-              visao={visaoMenu}
               fixacao={{
                 fixados,
                 aoAlternar: (id) => setFixados((f) => (f.includes(id) ? f.filter((x) => x !== id) : [...f, id])),
@@ -846,5 +905,6 @@ export function DrawerLead({
         )}
       </DrawerConteudo>
     </DrawerPainel>
+    </LeadAtual.Provider>
   );
 }

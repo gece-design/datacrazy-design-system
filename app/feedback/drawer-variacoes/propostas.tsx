@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/drawer";
 import { Tag } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
-import { CATALOGO_TAGS, LEADS, MENU_LEAD, tagsEscolhidas } from "../drawer/drawer-lead";
+import { CATALOGO_TAGS, LEADS, MENU_LEAD, tagsEscolhidas, linhasDoContato } from "../drawer/drawer-lead";
 
 import { foco } from "@/lib/estados";
 const LEAD = LEADS.joel;
@@ -154,9 +154,11 @@ export function PropostaBarraDeIcones({ className }: { className?: string }) {
         <DrawerBloco titulo="Métricas">
           <DrawerMetricas itens={LEAD.metricas} />
         </DrawerBloco>
-        <DrawerBloco titulo="Contato principal">
-          <DrawerContato linhas={LEAD.contato} />
-        </DrawerBloco>
+        {LEAD.tipo === "empresa" && LEAD.contatoPrincipal ? (
+          <DrawerBloco titulo="Contato principal">
+            <DrawerContato linhas={linhasDoContato(LEAD.contatoPrincipal)} />
+          </DrawerBloco>
+        ) : null}
         <DrawerBloco titulo="Menu">
           <DrawerMenu rotulo="Seções do lead" itens={MENU_LEAD} atual={menu} aoEscolher={setMenu} />
         </DrawerBloco>
@@ -304,9 +306,11 @@ export function PropostaGrade({ className }: { className?: string }) {
             </ul>
           </nav>
         </DrawerBloco>
-        <DrawerBloco titulo="Contato principal">
-          <DrawerContato linhas={LEAD.contato} />
-        </DrawerBloco>
+        {LEAD.tipo === "empresa" && LEAD.contatoPrincipal ? (
+          <DrawerBloco titulo="Contato principal">
+            <DrawerContato linhas={linhasDoContato(LEAD.contatoPrincipal)} />
+          </DrawerBloco>
+        ) : null}
       </DrawerPerfil>
       <ConteudoHistoricos />
     </DrawerPainel>

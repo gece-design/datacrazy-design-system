@@ -93,6 +93,7 @@ Aprovado por: humano.
 Desvio: `SeletorDeVisao` é um `role="switch"` próprio, cinza (AUD-045).
 Motivo: o Switch fica azul quando ligado e competiria com o item selecionado, que é o que a pessoa procura. Alternativa para um lote futuro: variante neutra do Switch.
 Aprovado por: humano.
+**Revogada em 2026-09-22**: o cliente tirou o modo cards do menu (reunião de 2026-09-18, "parecia mobile"); `SeletorDeVisao` saiu do código. Sem interruptor, sem desvio.
 
 ## ADR-019 · Drawer entra em 280ms com curva própria · 2026-09-18
 Desvio: I10 pede 320ms; o Drawer usa 280 com `cubic-bezier(0.32,0.72,0,1)` e sai em 200 `ease-in`.

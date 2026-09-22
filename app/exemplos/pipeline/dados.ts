@@ -123,6 +123,8 @@ export type Lead = {
   tags: string[];
   /** Cor do perfil no drawer. Os oito tons do DS giram entre os leads. */
   tom: TomPerfil;
+  /** A pessoa por trás de um lead empresa. Lead pessoa não tem (cliente, 2026-09-18). */
+  contatoPrincipal?: { nome: string; cargo?: string; telefone?: string; email?: string };
   historico: { id: string; tipo: TipoEvento; titulo: string; detalhes: string[] }[];
 };
 
@@ -161,6 +163,7 @@ export const LEADS: Lead[] = [
     nome: "Construtora Horizonte",
     empresa: "Horizonte Engenharia",
     tipo: "empresa",
+    contatoPrincipal: { nome: "Paulo Nogueira", cargo: "Gerente de obras", telefone: "+55 (41) 99711-2030", email: "paulo@horizonte.eng.br" },
     telefone: "+55 (41) 3322-7788",
     email: "comercial@horizonte.eng.br",
     cidade: "Curitiba · PR",
@@ -226,6 +229,7 @@ export const LEADS: Lead[] = [
     nome: "Supermercados Bom Dia",
     empresa: "Rede Bom Dia",
     tipo: "empresa",
+    contatoPrincipal: { nome: "Carla Menezes", cargo: "Coordenadora de TI", telefone: "+55 (31) 98822-4455", email: "carla@redebomdia.com.br" },
     telefone: "+55 (31) 3555-9090",
     email: "ti@redebomdia.com.br",
     cidade: "Belo Horizonte · MG",
@@ -269,6 +273,7 @@ export const LEADS: Lead[] = [
     nome: "Escola Raízes",
     empresa: "Instituto Raízes",
     tipo: "empresa",
+    contatoPrincipal: { nome: "Renata Sales", cargo: "Diretora pedagógica", telefone: "+55 (85) 99640-7788", email: "renata@raizes.edu.br" },
     telefone: "+55 (85) 3232-4141",
     email: "diretoria@raizes.edu.br",
     cidade: "Fortaleza · CE",

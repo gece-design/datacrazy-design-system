@@ -6,12 +6,10 @@ import {
   CalendarCheck,
   ChatCircleDots,
   CurrencyCircleDollar,
-  EnvelopeSimple,
   FileText,
   MapPin,
   Note,
   Phone,
-  User,
   Wallet,
 } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
@@ -136,16 +134,14 @@ export function PainelLead({
     email: lead.email,
     tags: lead.tags,
     metricas: [
-      { rotulo: "Ticket médio", valor: moeda(lead.valor), icone: CurrencyCircleDollar, tom: "azul" },
-      { rotulo: "Total", valor: moeda(lead.totalCompras), icone: Wallet, tom: "roxo" },
-      { rotulo: "Ciclo de compra", valor: `${lead.cicloDias}d`, icone: ArrowsClockwise, tom: "rosa" },
-      { rotulo: "Última compra", valor: `${lead.dias}d`, icone: CalendarCheck, tom: "laranja" },
+      { rotulo: "Ticket médio", valor: moeda(lead.valor), icone: CurrencyCircleDollar },
+      { rotulo: "Total", valor: moeda(lead.totalCompras), icone: Wallet },
+      { rotulo: "Ciclo de compra", valor: `${lead.cicloDias}d`, icone: ArrowsClockwise },
+      { rotulo: "Última compra", valor: `${lead.dias}d`, icone: CalendarCheck },
     ],
-    contato: [
-      { texto: lead.empresa, icone: User, rotulo: "Empresa" },
-      { texto: lead.telefone, icone: Phone, rotulo: "Telefone" },
-      { texto: lead.email, icone: EnvelopeSimple, rotulo: "E-mail" },
-    ].filter((l) => l.texto.trim() !== ""),
+    // Só lead empresa tem contato principal; nos leads pessoa fica vazio e o
+    // bloco não aparece (cliente, 2026-09-18).
+    contatoPrincipal: lead.contatoPrincipal,
   };
 
   return (

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ArrowLineLeft, ChatCircleDots, Handshake, UsersThree } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerMenu, DrawerPerfil, HierarquiaNo, LinhaDoTempo, type TomPerfil, type VisaoDoMenu } from "@/components/ui/drawer";
+import { Drawer, DrawerMenu, DrawerPerfil, HierarquiaNo, LinhaDoTempo, type TomPerfil } from "@/components/ui/drawer";
 import { Tag } from "@/components/ui/tag";
 import { PaginaDS, Secao, Chip } from "@/components/ds/preview";
 import { DrawerLead, MENU_LEAD } from "../drawer/drawer-lead";
@@ -29,12 +29,11 @@ export default function DrawerVariacoesPage() {
   const [camada, setCamada] = useState(false);
   const [menuSolto, setMenuSolto] = useState("historicos");
   const [fixadosSoltos, setFixadosSoltos] = useState<string[]>(["negocios", "hierarquia"]);
-  const [visaoSolta, setVisaoSolta] = useState<VisaoDoMenu>("lista");
 
   return (
     <PaginaDS
       titulo="Drawer variações"
-      descricao="Tudo o que o Drawer faz além do lead inteiro: as cores do perfil, o menu com alfinete e cards, a linha do tempo, o nó da hierarquia e a camada. No fim, as três propostas de navegação do lead refeitas com os componentes do sistema, para comparar com o drawer principal."
+      descricao="Tudo o que o Drawer faz além do lead inteiro: as cores do perfil, o menu com alfinete, a linha do tempo, o nó da hierarquia e a camada. No fim, as três propostas de navegação do lead refeitas com os componentes do sistema, para comparar com o drawer principal."
       secoes={["Cores do perfil", "Menu", "Linha do tempo", "Hierarquia", "Camada", "Barra de ícones", "Trilho de ícones", "Grade de duas colunas"]}
     >
       <Secao
@@ -90,8 +89,8 @@ export default function DrawerVariacoesPage() {
 
       <Secao
         titulo="Menu"
-        spec="36px · fixar · lista ou cards"
-        descricao="Repouso, hover e selecionado — os três desenhados no arquivo, nos dois temas. O selecionado ganha fundo, texto e ícone azuis e o caret à direita. Passe o cursor num item para ver o alfinete: o que é fixado sobe para o topo e fica com o alfinete cheio. O interruptor cinza no topo troca a lista por cards de duas colunas, com o ícone acima do nome."
+        spec="36px · fixar"
+        descricao="Repouso, hover e selecionado — os três desenhados no arquivo, nos dois temas. O selecionado ganha fundo, texto e ícone azuis e o caret à direita. Passe o cursor num item para ver o alfinete: o que é fixado sobe para o topo e fica com o alfinete cheio. Só lista, uma coluna: a grade de cards saiu a pedido do cliente (2026-09-18)."
         codigo={`<DrawerMenu
   rotulo="Seções do lead"
   itens={[{ id: "perfil", rotulo: "Perfil", icone: User }, …]}
@@ -129,11 +128,6 @@ export default function DrawerVariacoesPage() {
               aoAlternar: (id) => setFixadosSoltos((f) => (f.includes(id) ? f.filter((x) => x !== id) : [...f, id])),
               rotuloFixar: (item) => `Fixar ${item.rotulo} no topo`,
               rotuloDesafixar: (item) => `Desafixar ${item.rotulo}`,
-            }}
-            visualizacao={{
-              modo: visaoSolta,
-              aoMudar: setVisaoSolta,
-              rotulo: visaoSolta === "cards" ? "Ver o menu em lista" : "Ver o menu em cards",
             }}
           />
         </div>

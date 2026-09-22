@@ -37,10 +37,11 @@ export default function DrawerPage() {
           uma vez no <Chip>DrawerPerfil</Chip> e desce por contexto.
         </p>
         <p>
-          Com altura definida — a tela inteira, na camada — <span className="text-foreground">perfil e conteúdo rolam
-          cada um por conta própria</span>: descer no menu não tira o título da seção de vista, e ler a linha do tempo
-          não esconde de quem é o lead. Cada coluna mostra uma seta na borda quando continua além dela, e a seta some
-          quando chega ao fim — é decoração, fora do caminho do Tab. A cor do topo do perfil é o <Chip>tom</Chip>: anel e letra do avatar, texto da
+          Com altura definida — a tela inteira, na camada — <span className="text-foreground">quem rola no perfil é o
+          menu, não a coluna</span>: nome, telefone, métricas e contato ficam sempre à vista, e a lista de seções
+          ocupa o que sobra e rola por dentro (cliente, 2026-09-18: em notebook de tela baixa, o nome não pode sumir).
+          O conteúdo rola por conta própria. Cada área que rola mostra uma seta na borda enquanto continua além dela,
+          e a seta some quando chega ao fim. A cor do topo do perfil é o <Chip>tom</Chip>: anel e letra do avatar, texto da
           tag de tipo e brilho do degradê. Azul e roxo são do arquivo; rosa e laranja seguem a mesma regra.
         </p>
       </ComoFunciona>
@@ -55,8 +56,10 @@ export default function DrawerPage() {
     acoes={<><Button>Automação</Button><Button variant="soft">Atendimento</Button></>}
     aoFechar={fechar} aoRecolher={recolher}>
     <DrawerBloco titulo="Métricas"><DrawerMetricas itens={metricas} /></DrawerBloco>
-    <DrawerBloco titulo="Contato principal"><DrawerContato linhas={contato} /></DrawerBloco>
-    <DrawerBloco titulo="Menu">
+    {/* só lead empresa: a pessoa por trás dele */}
+    {tipo === "empresa" ? <DrawerBloco titulo="Contato principal"><DrawerContato linhas={contato} /></DrawerBloco> : null}
+    {/* rolagem: o menu ocupa o que sobra da coluna e rola por dentro */}
+    <DrawerBloco titulo="Menu" rolagem={{ subir: "Subir no menu", descer: "Descer no menu" }}>
       <DrawerMenu rotulo="Seções do lead" itens={menu} atual={secao} aoEscolher={setSecao} />
     </DrawerBloco>
   </DrawerPerfil>
@@ -70,7 +73,7 @@ export default function DrawerPage() {
 </DrawerPainel>`}
         nota={
           <>
-            O preview fixa o painel em 760px de altura para mostrar as duas colunas rolando. Na{" "}
+            O preview fixa o painel em 760px de altura para mostrar o menu e o conteúdo rolando. Na{" "}
             <span className="text-foreground">Camada</span> ele ocupa a tela inteira. Abaixo de 1080px de largura, a
             caixa rola na horizontal.
           </>
