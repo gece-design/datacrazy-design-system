@@ -27,7 +27,7 @@ Diff de pixels **não medido**: depende da ponte de escrita do Figma
 
 | Prop | Tipo | Descrição |
 |------|------|-----------|
-| `colunas` | `ColunaTabela[]` | `chave`, `rotulo`, `peso`, `alinharFim`, `ordenavel?`, `ocultavel?`, `minimo?`. |
+| `colunas` | `ColunaTabela[]` | `chave`, `rotulo`, `peso`, `alinharFim`, `ordenavel?`, `ocultavel?`, `minimo?`, `agrupavel?`. |
 | `layout` | `"padrao" \| "compacta"` | `compacta` é o Compact do drawer. |
 | `ajustes` | `AjustesDaTabela` | Liga os comportamentos. Vem de `useAjustesDaTabela`. |
 | `ordem`, `aoOrdenar` | `OrdemTabela`, `(ordem) => void` | Só ordenar, sem o resto; `ajustes` já traz os dois. |
@@ -64,12 +64,16 @@ Todo texto dos controles vem de fora (E1); `ROTULOS_DA_TABELA` é a fábrica em 
 | `colunas` | `string` | O botão da barra e o título do menu. |
 | `restaurar` | `string` | "Restaurar colunas". |
 | `redimensionar` | `(coluna) => string` | Nome da alça. "Redimensionar coluna Lead". |
+| `agrupar`, `semGrupos` | `string` | O seletor da barra: "Agrupar por" e a opção vazia. |
+| `agruparPor`, `desagrupar` | `(coluna) => string`, `string` | Item do menu da coluna e a opção do seletor. |
+| `recolherGrupo`, `expandirGrupo` | `(grupo) => string` | Nome do caret da linha do grupo. |
 
-### `useAjustesDaTabela(colunas, { memoria?, ordemInicial?, rotulos? })`
+### `useAjustesDaTabela(colunas, { memoria?, ordemInicial?, grupoInicial?, rotulos? })`
 
 Devolve `AjustesDaTabela`: `naTela` (colunas visíveis na ordem atual),
 `ordem` + `ordenar`, `escondidas` + `alternarColuna`, `sequencia` + `mover` /
-`deslocar`, `larguras` + `redimensionar`, `restaurar`, `mexido`, `rotulos`.
+`deslocar`, `larguras` + `redimensionar`, `grupo` + `agrupar`, `recolhidos` +
+`alternarGrupo`, `restaurar`, `mexido`, `rotulos`.
 Com `memoria`, tudo fica salvo no navegador por essa chave (uma por tela),
 lido depois de montar. A tabela só **emite** a ordenação — as linhas chegam
 como filhos, então quem ordena os dados é a tela: `ordenarPor(itens, ordem,
@@ -80,6 +84,28 @@ valorDe)` compara número como número e texto em pt-BR.
 | Prop | Tipo | Descrição |
 |------|------|-----------|
 | `ajustes` | `AjustesDaTabela` | Os mesmos da tabela. Abre a lista de colunas com check e "Restaurar colunas". |
+
+### `SelectAgrupar`
+
+| Prop | Tipo | Descrição |
+|------|------|-----------|
+| `ajustes` | `AjustesDaTabela` | O [Select](Select.md) "Agrupar por": "Sem grupos" e as colunas `agrupavel`. |
+
+### `DataTableGrupo`
+
+| Prop | Tipo | Descrição |
+|------|------|-----------|
+| `rotulo` | `string` | O nome do grupo. |
+| `quantidade` | `number` | Quantas linhas ele tem. |
+| `resumo` | `string` | O total à direita, que a tela calcula. Ex.: "R$ 45.200,00". |
+| `aberto`, `aoAlternar` | `boolean`, `() => void` | O caret recolhe; recolhido, a tela não desenha as linhas dele. |
+| `rotulos` | `Partial<RotulosDaTabela>` | `recolherGrupo` / `expandirGrupo` (nome do caret). |
+
+A linha ocupa todas as colunas visíveis. `agruparPor(itens, grupoDe,
+ordemDosGrupos?)` monta os grupos (`GrupoTabela`: `id`, `rotulo`, `itens`) na
+ordem em que aparecem — ordene as linhas antes — ou na ordem dada (a do funil).
+Agrupar segue a regra da ordenação: os ajustes guardam a coluna do grupo e os
+grupos recolhidos; quem monta e desenha é a tela.
 
 ### `DataTableToolbar`
 
@@ -115,6 +141,7 @@ Os cinco comportamentos, com a referência do cliente (grid do ExtJS):
 | Reordenar | Arrastar o cabeçalho (ghost segue o ponteiro, traço azul mostra onde cai); passou de 6px é arrasto, antes é clique | Menu: Mover para a esquerda / direita |
 | Redimensionar | A alça na borda direita do cabeçalho, com o cursor `col-resize`; mínimo 64px | Alça focável: setas ±16px, Shift ±64 |
 | Selecionar | Clique na linha (fora de botão e campo); `aria-selected`; a tela liga ao detalhe — no CRM, o Drawer | Enter/Espaço escolhe, setas andam |
+| Agrupar (T2) | Seletor "Agrupar por" na barra ou item do menu da coluna; linha de grupo com caret, contagem e total; ordenar vale dentro do grupo | Caret é botão com `aria-expanded`; as setas da seleção pulam a linha do grupo |
 
 ## Estados
 
@@ -127,6 +154,7 @@ Os cinco comportamentos, com a referência do cliente (grid do ExtJS):
 | ordenada | `caret primary ao lado do rótulo + aria-sort no th` | humano | — |
 | arrastando | `th em opacity-disabled + etiqueta fixed seguindo o ponteiro + traço primary no destino` | humano | Kanban do pipeline |
 | alça | `traço border sob o cursor da coluna; primary sob a alça e no foco` | humano | — |
+| grupo recolhido | `caret -90° + linhas do grupo fora da tabela` | humano | Drawer (bloco recolhido) |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -154,7 +182,7 @@ linha errada. Token: `overlay/item-hover`, que clareia nos dois temas.
 ## Composição
 
 Usa: [Badge](Badge.md) nas etiquetas, `AcaoCampo` do [Input](Input.md) no botão de ações da linha e no gatilho do menu da coluna (a mesma ação de 16px do campo), `PainelFlutuante` do [Popover](Popover.md) no menu (`useCliqueFora`, `useSaida`), [Button](Button.md) `tertiary` no botão Colunas.
-[Select](Select.md) nos filtros · [Pagination](Pagination.md) no rodapé ·
+[Select](Select.md) nos filtros e no "Agrupar por" · [Pagination](Pagination.md) no rodapé ·
 Usado por: tela de leads (`/exemplos/pipeline`, visão em lista) · [Drawer](Drawer.md) (Negócios, layout compacto)
 
 ## Exemplo de uso
@@ -198,6 +226,7 @@ const linhas = ordenarPor(negocios, ajustes.ordem, valorDe);
 | Alça | `role="separator"` vertical, focável, com `aria-valuenow` e nome "Redimensionar coluna X" |
 | Reordenar sem ponteiro | Menu: Mover para a esquerda / direita |
 | Seleção | `aria-selected` na linha; uma linha sempre no Tab (a selecionada, senão a primeira); setas andam, Enter e Espaço escolhem |
+| Grupo | Caret é botão com `aria-expanded` e nome "Recolher Proposta"; a linha ocupa todas as colunas (`colSpan`) |
 | Alvo de toque | Botões de paginação medem 28px de altura — **abaixo dos 44 da regra I15** |
 | Movimento | Transição de cor; o menu entra e sai com `fade` (fast) |
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { Fragment } from "react";
+
 import {
   CelulaDupla,
   CelulaLead,
@@ -10,6 +12,9 @@ import {
   DataTableRow,
   DataTableToolbar,
   BotaoColunas,
+  DataTableGrupo,
+  SelectAgrupar,
+  agruparPor,
   ordenarPor,
   useAjustesDaTabela,
   type ColunaTabela,
@@ -24,8 +29,8 @@ import { foco } from "@/lib/estados";
 const COLUNAS: ColunaTabela[] = [
   { chave: "lead", rotulo: "Lead", peso: 3 },
   { chave: "empresa", rotulo: "Empresa", peso: 2.5 },
-  { chave: "etapa", rotulo: "Etapa", peso: 2 },
-  { chave: "responsavel", rotulo: "Atendente", peso: 1.5 },
+  { chave: "etapa", rotulo: "Etapa", peso: 2, agrupavel: true },
+  { chave: "responsavel", rotulo: "Atendente", peso: 1.5, agrupavel: true },
   { chave: "valor", rotulo: "Valor", peso: 1.5, alinharFim: true },
   { chave: "dias", rotulo: "Parado", peso: 1, alinharFim: true },
 ];
@@ -61,14 +66,15 @@ export function Lista({
   // Ordem, colunas e larguras ficam salvas por tela (T1, 2026-09-23).
   const ajustes = useAjustesDaTabela(COLUNAS, { memoria: "pipeline-lista" });
   const linhas = ordenarPor(leads, ajustes.ordem, valorDe(etapas));
-  return (
-    <div className="min-h-0 flex-1 overflow-y-auto px-8 pb-6 [scrollbar-width:thin]">
-      <div className="w-full overflow-hidden rounded-md bg-card">
-        <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`}>
-          <BotaoColunas ajustes={ajustes} />
-        </DataTableToolbar>
-        <DataTable colunas={COLUNAS} ajustes={ajustes} className="rounded-none">
-          {linhas.map((lead) => {
+  // Grupos por etapa seguem o funil; por atendente, a ordem em que aparecem.
+  const grupos = ajustes.grupo
+    ? agruparPor(
+        linhas,
+        (l) => (ajustes.grupo === "etapa" ? { id: l.etapa, rotulo: etapaPor(etapas, l.etapa).rotulo } : { id: l.responsavel, rotulo: l.responsavel }),
+        ajustes.grupo === "etapa" ? etapas.map((e) => e.id) : undefined,
+      )
+    : null;
+  const linha = (lead: Lead) => {
             const etapa = etapaPor(etapas, lead.etapa);
             const parado = lead.dias >= 7;
             return (
@@ -107,7 +113,29 @@ export function Lista({
                 </DataTableCell>
               </DataTableRow>
             );
-          })}
+  };
+  return (
+    <div className="min-h-0 flex-1 overflow-y-auto px-8 pb-6 [scrollbar-width:thin]">
+      <div className="w-full overflow-hidden rounded-md bg-card">
+        <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`}>
+          <SelectAgrupar ajustes={ajustes} />
+          <BotaoColunas ajustes={ajustes} />
+        </DataTableToolbar>
+        <DataTable colunas={COLUNAS} ajustes={ajustes} className="rounded-none">
+          {grupos
+            ? grupos.map((g) => (
+                <Fragment key={g.id}>
+                  <DataTableGrupo
+                    rotulo={g.rotulo}
+                    quantidade={g.itens.length}
+                    resumo={moeda(g.itens.reduce((t, l) => t + l.valor, 0))}
+                    aberto={!ajustes.recolhidos.includes(g.id)}
+                    aoAlternar={() => ajustes.alternarGrupo(g.id)}
+                  />
+                  {ajustes.recolhidos.includes(g.id) ? null : g.itens.map(linha)}
+                </Fragment>
+              ))
+            : linhas.map(linha)}
         </DataTable>
       </div>
     </div>

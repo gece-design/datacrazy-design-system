@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   DataTable,
   DataTableRow,
@@ -13,6 +13,9 @@ import {
   CelulaEstatisticas,
   CelulaAcoes,
   BotaoColunas,
+  DataTableGrupo,
+  SelectAgrupar,
+  agruparPor,
   ordenarPor,
   useAjustesDaTabela,
   type ColunaTabela,
@@ -176,6 +179,109 @@ function TabelaAjustavel() {
   );
 }
 
+/* Etapa e Atendente podem agrupar; o funil dá a ordem dos grupos de etapa. */
+const colunasAgrupaveis: ColunaTabela[] = colunas.map((c) =>
+  c.chave === "etapa" || c.chave === "atendente" ? { ...c, agrupavel: true } : c,
+);
+const FUNIL = ["Qualificação", "Proposta", "Negociação", "Fechamento"];
+
+const codigoAgrupada = `const ajustes = useAjustesDaTabela(colunas, { memoria: "negocios", grupoInicial: "etapa" });
+const linhas = ordenarPor(negocios, ajustes.ordem, valorDe);
+const grupos = ajustes.grupo
+  ? agruparPor(linhas, (n) => ({ id: n[ajustes.grupo], rotulo: n[ajustes.grupo] }), FUNIL)
+  : null;
+
+<>
+  <DataTableToolbar rotulo="Total de resultados" total="10 negócios">
+    <SelectAgrupar ajustes={ajustes} />
+    <BotaoColunas ajustes={ajustes} />
+  </DataTableToolbar>
+  <DataTable colunas={colunas} ajustes={ajustes}>
+    {grupos
+      ? grupos.map((g) => (
+          <Fragment key={g.id}>
+            <DataTableGrupo
+              rotulo={g.rotulo}
+              quantidade={g.itens.length}
+              resumo={moeda(g.itens.reduce((t, n) => t + n.valor, 0))}
+              aberto={!ajustes.recolhidos.includes(g.id)}
+              aoAlternar={() => ajustes.alternarGrupo(g.id)}
+            />
+            {ajustes.recolhidos.includes(g.id) ? null : g.itens.map(linha)}
+          </Fragment>
+        ))
+      : linhas.map(linha)}
+  </DataTable>
+</>`;
+
+/** A seção agrupada: os mesmos dez negócios, por etapa (ordem do funil) ou por atendente. */
+function TabelaAgrupada() {
+  const ajustes = useAjustesDaTabela(colunasAgrupaveis, { memoria: "showcase-grupos", grupoInicial: "etapa" });
+  const linhas = ordenarPor(carteira, ajustes.ordem, valorDe);
+  const grupo = ajustes.grupo;
+  const grupos = grupo
+    ? agruparPor(
+        linhas,
+        (n) => (grupo === "etapa" ? { id: n.etapa, rotulo: n.etapa } : { id: n.atendente, rotulo: n.atendente }),
+        grupo === "etapa" ? FUNIL : undefined,
+      )
+    : null;
+  const linha = (n: Negocio) => (
+    <DataTableRow key={n.id}>
+      <DataTableCell coluna="lead">
+        <CelulaLead nome={n.nome} etiquetas={n.etiquetas} />
+      </DataTableCell>
+      <DataTableCell coluna="produto">
+        <CelulaDupla principal={n.produto} apoio={moeda(n.valor)} />
+      </DataTableCell>
+      <DataTableCell coluna="atividades">
+        <CelulaTexto>{n.atividades}</CelulaTexto>
+      </DataTableCell>
+      <DataTableCell coluna="atendente">
+        <CelulaTexto enfase>{n.atendente}</CelulaTexto>
+      </DataTableCell>
+      <DataTableCell coluna="etapa">
+        <CelulaProgresso etapa={n.etapa} percentual={n.percentual} />
+      </DataTableCell>
+      <DataTableCell coluna="dados">
+        <CelulaEstatisticas
+          itens={[
+            { valor: `${n.aberto}d`, rotulo: "Em aberto" },
+            { valor: `${n.naEtapa}d`, rotulo: "Tempo na etapa" },
+          ]}
+        />
+      </DataTableCell>
+      <DataTableCell coluna="acoes">
+        <CelulaAcoes />
+      </DataTableCell>
+    </DataTableRow>
+  );
+  return (
+    <div className="w-full overflow-hidden rounded-md bg-card">
+      <DataTableToolbar rotulo="Total de resultados" total="10 negócios">
+        <SelectAgrupar ajustes={ajustes} />
+        <BotaoColunas ajustes={ajustes} />
+      </DataTableToolbar>
+      <DataTable colunas={colunasAgrupaveis} ajustes={ajustes} className="rounded-none">
+        {grupos
+          ? grupos.map((g) => (
+              <Fragment key={g.id}>
+                <DataTableGrupo
+                  rotulo={g.rotulo}
+                  quantidade={g.itens.length}
+                  resumo={moeda(g.itens.reduce((t, n) => t + n.valor, 0))}
+                  aberto={!ajustes.recolhidos.includes(g.id)}
+                  aoAlternar={() => ajustes.alternarGrupo(g.id)}
+                />
+                {ajustes.recolhidos.includes(g.id) ? null : g.itens.map(linha)}
+              </Fragment>
+            ))
+          : linhas.map(linha)}
+      </DataTable>
+    </div>
+  );
+}
+
 type Parte = { nome: string; medida: string; papel: string };
 
 const anatomia: Parte[] = [
@@ -227,7 +333,7 @@ export default function Pagina() {
     <PaginaDS
       titulo="Table"
       descricao="A tabela de negócios do CRM: barra de filtros, sete colunas, dez linhas e paginação. É o componente mais denso do sistema, e o único onde a estrutura importa tanto quanto a aparência."
-      secoes={["Completa", "Ajustável", "Anatomia", "Como funciona"]}
+      secoes={["Completa", "Ajustável", "Agrupada", "Anatomia", "Como funciona"]}
     >
       <Secao
         titulo="Completa"
@@ -358,6 +464,24 @@ export default function Pagina() {
         }
       >
         <TabelaAjustavel />
+      </Secao>
+
+      <Secao
+        titulo="Agrupada"
+        spec="por etapa · por atendente"
+        descricao="A mesma tabela em grupos. O seletor da barra escolhe a coluna que agrupa (ou o menu da coluna, em Agrupar por); cada grupo tem o caret que recolhe, quantas linhas tem e o total à direita. Ordenar continua valendo dentro de cada grupo."
+        codigo={codigoAgrupada}
+        nota={
+          <>
+            Agrupar segue a regra da ordenação: os ajustes guardam só a coluna do grupo e os grupos recolhidos;
+            a tela monta os grupos com <Chip>agruparPor</Chip> — que aceita a ordem do funil — e desenha um{" "}
+            <Chip>DataTableGrupo</Chip> antes das linhas de cada um. Só as colunas com{" "}
+            <Chip>agrupavel</Chip> entram no seletor. Recolher um grupo tira as linhas dele da tabela; as setas
+            da seleção pulam a linha do grupo.
+          </>
+        }
+      >
+        <TabelaAgrupada />
       </Secao>
 
       <Secao titulo="Anatomia" spec="6 partes" semCaixa>

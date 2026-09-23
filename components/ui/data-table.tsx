@@ -12,6 +12,7 @@ import {
   Columns,
   DotsThree,
   DotsThreeVertical,
+  Rows,
   SortAscending,
   SortDescending,
   type Icon,
@@ -20,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PainelFlutuante } from "@/components/ui/popover";
+import { Select } from "@/components/ui/select";
 import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 
@@ -43,8 +45,10 @@ import { AcaoCampo } from "@/components/ui/input";
  * cabeçalho, e selecionar linha. Tudo isso mora em `useAjustesDaTabela`: a
  * tela cria os ajustes uma vez e passa para a tabela e para o botão da barra.
  * A tabela só EMITE a ordenação — as linhas chegam como filhos, então quem
- * ordena os dados é a tela (`ordenarPor` ajuda). Sem `ajustes`, a tabela é a
- * do arquivo: nada muda.
+ * ordena os dados é a tela (`ordenarPor` ajuda). Agrupar (T2) segue a mesma
+ * regra: os ajustes guardam a coluna do grupo e os grupos recolhidos; a tela
+ * monta os grupos (`agruparPor`) e desenha um `DataTableGrupo` antes das
+ * linhas de cada um. Sem `ajustes`, a tabela é a do arquivo: nada muda.
  *
  * `layout="compacta"` é o `Layout=Compact` que o drawer usa (node 597:5983):
  * traço `border` em volta e entre linhas, recuo de 12px e sem largura mínima.
@@ -63,6 +67,8 @@ export type ColunaTabela = {
   ocultavel?: boolean;
   /** Largura mínima ao redimensionar, em px. Padrão 64. */
   minimo?: number;
+  /** Entra no "Agrupar por" (barra e menu da coluna). Padrão: não. */
+  agrupavel?: boolean;
 };
 
 export type OrdemTabela = { chave: string; direcao: "asc" | "desc" } | null;
@@ -79,6 +85,13 @@ export type RotulosDaTabela = {
   colunas: string;
   restaurar: string;
   redimensionar: (coluna: string) => string;
+  /** O seletor da barra. Ex.: "Agrupar por". */
+  agrupar: string;
+  semGrupos: string;
+  agruparPor: (coluna: string) => string;
+  desagrupar: string;
+  recolherGrupo: (grupo: string) => string;
+  expandirGrupo: (grupo: string) => string;
 };
 
 export const ROTULOS_DA_TABELA: RotulosDaTabela = {
@@ -92,6 +105,12 @@ export const ROTULOS_DA_TABELA: RotulosDaTabela = {
   colunas: "Colunas",
   restaurar: "Restaurar colunas",
   redimensionar: (c) => `Redimensionar coluna ${c}`,
+  agrupar: "Agrupar por",
+  semGrupos: "Sem grupos",
+  agruparPor: (c) => `Agrupar por ${c}`,
+  desagrupar: "Desagrupar",
+  recolherGrupo: (g) => `Recolher ${g}`,
+  expandirGrupo: (g) => `Expandir ${g}`,
 };
 
 const LARGURA_MINIMA = 64;
@@ -104,7 +123,16 @@ const ocultavel = (c: ColunaTabela, i: number) => c.ocultavel ?? !(i === 0 || (c
 
 /* -------------------------------------------------------------- Ajustes -- */
 
-type Guardado = { ordem: OrdemTabela; escondidas: string[]; sequencia: string[]; larguras: Record<string, number> };
+type Guardado = {
+  ordem: OrdemTabela;
+  escondidas: string[];
+  sequencia: string[];
+  larguras: Record<string, number>;
+  /** A coluna que agrupa, ou nada. */
+  grupo: string | null;
+  /** Ids dos grupos recolhidos. */
+  recolhidos: string[];
+};
 
 const CHAVE_DA_MEMORIA = "ds:tabela";
 
@@ -120,6 +148,8 @@ function lerMemoria(memoria: string, chaves: string[]): Guardado | null {
       // coluna nova no código entra no fim; coluna que sumiu do código sai
       sequencia: Array.isArray(g.sequencia) ? [...g.sequencia.filter(valida), ...chaves.filter((k) => !g.sequencia!.includes(k))] : chaves,
       larguras: Object.fromEntries(Object.entries(g.larguras ?? {}).filter(([k, v]) => valida(k) && typeof v === "number")),
+      grupo: valida(g.grupo) ? g.grupo : null,
+      recolhidos: Array.isArray(g.recolhidos) ? g.recolhidos.filter((x): x is string => typeof x === "string") : [],
     };
   } catch {
     // navegação anônima, storage bloqueado ou JSON estragado: sem memória
@@ -157,6 +187,12 @@ export interface AjustesDaTabela {
    *  primeira vez, quando ainda eram proporcionais). */
   redimensionar: (chave: string, largura: number, atuais?: Record<string, number>) => void;
   restaurar: () => void;
+  /** A coluna que agrupa as linhas, ou `null`. A tela monta os grupos com `agruparPor`. */
+  grupo: string | null;
+  agrupar: (chave: string | null) => void;
+  /** Ids dos grupos recolhidos. */
+  recolhidos: string[];
+  alternarGrupo: (id: string) => void;
   /** Algo saiu do padrão da tela. */
   mexido: boolean;
   rotulos: RotulosDaTabela;
@@ -170,12 +206,17 @@ export interface AjustesDaTabela {
  */
 export function useAjustesDaTabela(
   colunas: ColunaTabela[],
-  { memoria, ordemInicial = null, rotulos }: { memoria?: string; ordemInicial?: OrdemTabela; rotulos?: Partial<RotulosDaTabela> } = {},
+  {
+    memoria,
+    ordemInicial = null,
+    grupoInicial = null,
+    rotulos,
+  }: { memoria?: string; ordemInicial?: OrdemTabela; grupoInicial?: string | null; rotulos?: Partial<RotulosDaTabela> } = {},
 ): AjustesDaTabela {
   const chaves = React.useMemo(() => colunas.map((c) => c.chave), [colunas]);
   const padrao = React.useMemo<Guardado>(
-    () => ({ ordem: ordemInicial, escondidas: [], sequencia: chaves, larguras: {} }),
-    [chaves, ordemInicial],
+    () => ({ ordem: ordemInicial, escondidas: [], sequencia: chaves, larguras: {}, grupo: grupoInicial, recolhidos: [] }),
+    [chaves, ordemInicial, grupoInicial],
   );
   const [estado, setEstado] = React.useState<Guardado>(padrao);
   const [lido, setLido] = React.useState(!memoria);
@@ -227,7 +268,9 @@ export function useAjustesDaTabela(
     estado.ordem?.direcao !== padrao.ordem?.direcao ||
     estado.escondidas.length > 0 ||
     estado.sequencia.join() !== chaves.join() ||
-    Object.keys(estado.larguras).length > 0;
+    Object.keys(estado.larguras).length > 0 ||
+    estado.grupo !== padrao.grupo ||
+    estado.recolhidos.length > 0;
 
   return {
     colunas,
@@ -247,6 +290,12 @@ export function useAjustesDaTabela(
     redimensionar: (chave, largura, atuais) =>
       setEstado((e) => ({ ...e, larguras: { ...(atuais ?? {}), ...e.larguras, [chave]: Math.round(largura) } })),
     restaurar: () => setEstado(padrao),
+    grupo: estado.grupo,
+    // trocar o grupo abre todos: os ids recolhidos eram do agrupamento anterior
+    agrupar: (chave) => setEstado((e) => ({ ...e, grupo: chave, recolhidos: [] })),
+    recolhidos: estado.recolhidos,
+    alternarGrupo: (id) =>
+      setEstado((e) => ({ ...e, recolhidos: e.recolhidos.includes(id) ? e.recolhidos.filter((x) => x !== id) : [...e.recolhidos, id] })),
     mexido,
     rotulos: { ...ROTULOS_DA_TABELA, ...rotulos },
   };
@@ -270,6 +319,31 @@ export function ordenarPor<T>(
     if (typeof va === "number" && typeof vb === "number") return (va - vb) * sentido;
     return String(va).localeCompare(String(vb), "pt-BR", { numeric: true, sensitivity: "base" }) * sentido;
   });
+}
+
+export type GrupoTabela<T> = { id: string; rotulo: string; itens: T[] };
+
+/** Monta os grupos na ordem em que aparecem (ordene as linhas antes), ou na
+ *  `ordemDosGrupos` dada — a do funil, por exemplo. */
+export function agruparPor<T>(
+  itens: T[],
+  grupoDe: (item: T) => { id: string; rotulo: string },
+  ordemDosGrupos?: string[],
+): GrupoTabela<T>[] {
+  const grupos = new Map<string, GrupoTabela<T>>();
+  for (const item of itens) {
+    const g = grupoDe(item);
+    const atual = grupos.get(g.id) ?? { id: g.id, rotulo: g.rotulo, itens: [] };
+    atual.itens.push(item);
+    grupos.set(g.id, atual);
+  }
+  const lista = [...grupos.values()];
+  if (!ordemDosGrupos) return lista;
+  const posicao = (id: string) => {
+    const i = ordemDosGrupos.indexOf(id);
+    return i < 0 ? ordemDosGrupos.length : i;
+  };
+  return lista.sort((a, b) => posicao(a.id) - posicao(b.id));
 }
 
 /* ----------------------------------------------------------------- Menu -- */
@@ -498,6 +572,28 @@ export function BotaoColunas({ ajustes, className }: { ajustes: AjustesDaTabela;
   );
 }
 
+/**
+ * O "Agrupar por" da barra: o Select do DS com "Sem grupos" e as colunas
+ * `agrupavel`. O menu da coluna também agrupa — o seletor é o caminho visível.
+ */
+export function SelectAgrupar({ ajustes, className }: { ajustes: AjustesDaTabela; className?: string }) {
+  const r = ajustes.rotulos;
+  const opcoes = [
+    { valor: "", rotulo: r.semGrupos },
+    ...ajustes.colunas.filter((c) => c.agrupavel).map((c) => ({ valor: c.chave, rotulo: r.agruparPor(c.rotulo) })),
+  ];
+  return (
+    <Select
+      size="sm"
+      rotulo={r.agrupar}
+      opcoes={opcoes}
+      valor={ajustes.grupo ?? ""}
+      aoEscolher={(v) => ajustes.agrupar(v || null)}
+      className={className}
+    />
+  );
+}
+
 /* --------------------------------------------------------------- Tabela -- */
 
 type Layout = "padrao" | "compacta";
@@ -653,8 +749,18 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
           { id: "desc", rotulo: r.decrescente, icone: SortDescending, marcado: ordem?.chave === c.chave && ordem.direcao === "desc", aoAtivar: () => aoOrdenar!({ chave: c.chave, direcao: "desc" }) },
         );
       }
+      if (c.agrupavel) {
+        const agrupada = a.grupo === c.chave;
+        itens.push({
+          id: "grupo",
+          rotulo: agrupada ? r.desagrupar : r.agruparPor(c.rotulo),
+          icone: Rows,
+          separadorAntes: podeOrdenar,
+          aoAtivar: () => a.agrupar(agrupada ? null : c.chave),
+        });
+      }
       itens.push(
-        { id: "esq", rotulo: r.moverEsquerda, icone: ArrowLeft, separadorAntes: podeOrdenar, desabilitado: i <= 0, aoAtivar: () => a.deslocar(c.chave, -1) },
+        { id: "esq", rotulo: r.moverEsquerda, icone: ArrowLeft, separadorAntes: podeOrdenar || Boolean(c.agrupavel), desabilitado: i <= 0, aoAtivar: () => a.deslocar(c.chave, -1) },
         { id: "dir", rotulo: r.moverDireita, icone: ArrowRight, desabilitado: i >= visiveis.length - 1, aoAtivar: () => a.deslocar(c.chave, 1) },
         ...itensDeColunas(a, true),
       );
@@ -954,6 +1060,62 @@ export const DataTableCell = React.forwardRef<HTMLTableCellElement, DataTableCel
   },
 );
 DataTableCell.displayName = "DataTableCell";
+
+/* ---------------------------------------------------------------- Grupo -- */
+
+/**
+ * A linha de um grupo: ocupa todas as colunas, com o caret que recolhe, o
+ * nome, quantas linhas tem e um resumo à direita (o total do grupo, que a
+ * tela calcula). Recolhido, a tela deixa de desenhar as linhas dele. As setas
+ * da seleção pulam esta linha: ela não é `data-selecionavel`.
+ */
+export function DataTableGrupo({
+  rotulo,
+  quantidade,
+  resumo,
+  aberto,
+  aoAlternar,
+  rotulos,
+  className,
+}: {
+  rotulo: string;
+  quantidade: number;
+  /** O total do grupo, à direita. Ex.: "R$ 45.200,00". */
+  resumo?: string;
+  aberto: boolean;
+  aoAlternar: () => void;
+  rotulos?: Partial<Pick<RotulosDaTabela, "recolherGrupo" | "expandirGrupo">>;
+  className?: string;
+}) {
+  const { layout, chaves, naTela } = React.useContext(Contexto);
+  const compacta = layout === "compacta";
+  const r = { ...ROTULOS_DA_TABELA, ...rotulos };
+  return (
+    <tr className={cn("border-t bg-background", compacta ? "border-border" : "border-card", className)}>
+      <td colSpan={(naTela ?? chaves).length} className={cn("py-2", compacta ? "px-3" : "px-5")}>
+        <div className="flex items-center justify-between gap-3">
+          <button
+            type="button"
+            aria-expanded={aberto}
+            aria-label={aberto ? r.recolherGrupo(rotulo) : r.expandirGrupo(rotulo)}
+            onClick={aoAlternar}
+            className={cn("flex min-w-0 items-center gap-2 rounded-sm text-label-lg text-foreground", focoInterno)}
+          >
+            <CaretDown
+              size={14}
+              weight="bold"
+              aria-hidden="true"
+              className={cn("shrink-0 text-muted-foreground transition-transform", !aberto && "-rotate-90")}
+            />
+            <span className="truncate">{rotulo}</span>
+            <span className="tabular-nums text-muted-foreground">{quantidade}</span>
+          </button>
+          {resumo ? <span className="shrink-0 text-body-sm tabular-nums text-muted-foreground">{resumo}</span> : null}
+        </div>
+      </td>
+    </tr>
+  );
+}
 
 /* ------------------------------------------------------------- Toolbar -- */
 

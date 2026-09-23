@@ -169,6 +169,7 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
 - **Tabela com comportamentos**: `useAjustesDaTabela(colunas, { memoria })` → `DataTable ajustes=` +
   `BotaoColunas` na barra; a tabela só emite a ordenação, a tela ordena os dados
   (`ordenarPor`); cada célula leva `coluna="chave"`; linha com `aoSelecionar` (ADR-025/026).
+  Grupos: `agrupavel` na coluna, `SelectAgrupar`, `agruparPor` + `DataTableGrupo` na tela.
 - **Antes de commitar**: `npm run check` (rápido) — e `npm run check:completo` com o
   site no ar antes de fechar um lote (páginas, exemplos compilando, regressão a 0%).
   Mudança visual só entra declarada no gate (D24). Os checks têm catraca em
