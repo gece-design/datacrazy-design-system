@@ -60,9 +60,14 @@ function pintura(cor: Etapa["cor"]) {
 
 type Alvo = { etapa: EtapaId; indice: number };
 
+/** Os três presets do cartão (T3, protótipo do cliente): o que cada um mostra
+ *  está no `Cartao`. Compacto cabe mais na coluna; Detalhado dispensa abrir. */
+export type DensidadeDoCartao = "compacto" | "padrao" | "detalhado";
+
 export function Quadro({
   etapas,
   colunas,
+  densidade = "padrao",
   aoMover,
   aoAbrir,
   aoAdicionar,
@@ -71,6 +76,7 @@ export function Quadro({
 }: {
   etapas: Etapa[];
   colunas: Colunas;
+  densidade?: DensidadeDoCartao;
   /** Move o lead para `etapa`, na posição `indice` da lista sem ele. */
   aoMover: (id: string, etapa: EtapaId, indice: number) => void;
   aoAbrir: (lead: Lead) => void;
@@ -261,6 +267,7 @@ export function Quadro({
               <Cartao
                 key={lead.id}
                 lead={lead}
+                densidade={densidade}
                 emMovimento={emMovimento}
                 pegoPeloTeclado={emMovimento && porTeclado}
                 descrito={instrucoes}
@@ -417,6 +424,7 @@ function Linha() {
 
 function Cartao({
   lead,
+  densidade,
   emMovimento,
   pegoPeloTeclado,
   descrito,
@@ -426,6 +434,7 @@ function Cartao({
   aoTerminar,
 }: {
   lead: Lead;
+  densidade: DensidadeDoCartao;
   emMovimento: boolean;
   pegoPeloTeclado: boolean;
   descrito: string;
@@ -438,8 +447,14 @@ function Cartao({
   const CanalIcone = canais[lead.canal];
   const parado = lead.dias >= 7;
   const tags = tagsDe(GRUPOS_TAGS, lead.tags);
-  const visiveis = tags.slice(0, 2);
+  // Compacto: só o essencial (nome, valor, quem atende, há quanto tempo).
+  // Padrão: + empresa e duas tags. Detalhado: tudo, sem "+N" — a cidade e o
+  // canal por extenso, a próxima ação e o contato principal da empresa.
+  const compacto = densidade === "compacto";
+  const detalhado = densidade === "detalhado";
+  const visiveis = detalhado ? tags : tags.slice(0, 2);
   const resto = lead.tags.length - visiveis.length;
+  const proximaAcao = lead.proximaAcao ? lead.proximaAcao.split("-").reverse().slice(0, 2).join("/") : null;
 
   return (
     <article
@@ -471,12 +486,39 @@ function Cartao({
         <span className="shrink-0 text-label-lg tabular-nums text-foreground">{moeda(lead.valor)}</span>
       </div>
 
-      <p title={lead.empresa} className="mt-1 flex items-center gap-1 text-body-sm text-muted-foreground">
-        <Tipo size={13} weight="regular" aria-hidden="true" className="shrink-0" />
-        <span className="min-w-0 truncate">{lead.empresa}</span>
-      </p>
+      {compacto ? null : (
+        <p title={lead.empresa} className="mt-1 flex items-center gap-1 text-body-sm text-muted-foreground">
+          <Tipo size={13} weight="regular" aria-hidden="true" className="shrink-0" />
+          <span className="min-w-0 truncate">{lead.empresa}</span>
+          {detalhado ? <span className="shrink-0 text-subtle-foreground">· {lead.cidade}</span> : null}
+        </p>
+      )}
 
-      {tags.length > 0 ? (
+      {detalhado ? (
+        <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 text-caption">
+          <dt className="text-subtle-foreground">Origem</dt>
+          <dd className="truncate text-muted-foreground">{lead.canal}</dd>
+          {proximaAcao ? (
+            <>
+              <dt className="text-subtle-foreground">Próxima ação</dt>
+              <dd className="tabular-nums text-muted-foreground">{proximaAcao}</dd>
+            </>
+          ) : null}
+          {lead.contatoPrincipal ? (
+            <>
+              <dt className="text-subtle-foreground">Contato</dt>
+              <dd className="truncate text-muted-foreground">
+                {lead.contatoPrincipal.nome}
+                {lead.contatoPrincipal.cargo ? ` · ${lead.contatoPrincipal.cargo}` : ""}
+              </dd>
+            </>
+          ) : null}
+          <dt className="text-subtle-foreground">E-mail</dt>
+          <dd className="truncate text-muted-foreground">{lead.email}</dd>
+        </dl>
+      ) : null}
+
+      {!compacto && tags.length > 0 ? (
         <div className="mt-2.5 flex flex-wrap items-center gap-1">
           {visiveis.map((t) => (
             <Tag key={t.id} status={t.status}>
@@ -487,7 +529,7 @@ function Cartao({
         </div>
       ) : null}
 
-      <div className="mt-3 flex items-center justify-between gap-2 border-t border-background pt-2.5">
+      <div className={cn("flex items-center justify-between gap-2 border-t border-background pt-2.5", compacto ? "mt-2" : "mt-3")}>
         <Tag foto="/ds/atendente.png">{lead.responsavel}</Tag>
         <div className="flex shrink-0 items-center gap-2.5 text-muted-foreground">
           <span title={`Origem: ${lead.canal}`} className="flex items-center">

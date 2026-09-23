@@ -25,7 +25,7 @@ import { Drawer } from "@/components/ui/drawer";
 import { Header, HeaderBusca, HeaderDivisor, HeaderNotificacoes } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { ViewSwitcher } from "@/components/ui/segmented-control";
+import { SegmentedControl, ViewSwitcher } from "@/components/ui/segmented-control";
 import { Select } from "@/components/ui/select";
 import {
   Sidebar,
@@ -58,7 +58,7 @@ import { Lista } from "./lista";
 import { Calendario } from "@/components/ui/calendario";
 import { TelaBase } from "@/components/ui/tela-base";
 import { PainelLead } from "./painel-lead";
-import { Quadro, agrupar, type Colunas } from "./quadro";
+import { Quadro, agrupar, type Colunas, type DensidadeDoCartao } from "./quadro";
 
 import { foco } from "@/lib/estados";
 /* ---------------------------------------------------------------------------
@@ -135,6 +135,24 @@ export function Tela() {
   // O mês do calendário: começa em setembro de 2026, o mês da carteira de exemplo.
   const [referencia, setReferencia] = React.useState(() => new Date(2026, 8, 1));
   const [visaoDoCalendario, setVisaoDoCalendario] = React.useState<"mes" | "semana">("mes");
+  // O layout do cartão (T3): três presets, a escolha fica no navegador.
+  const [densidade, setDensidade] = React.useState<DensidadeDoCartao>("padrao");
+  React.useEffect(() => {
+    try {
+      const salva = window.localStorage.getItem("ds:pipeline:densidade");
+      if (salva === "compacto" || salva === "padrao" || salva === "detalhado") setDensidade(salva);
+    } catch {
+      /* sem memória */
+    }
+  }, []);
+  function mudarDensidade(d: string) {
+    setDensidade(d as DensidadeDoCartao);
+    try {
+      window.localStorage.setItem("ds:pipeline:densidade", d);
+    } catch {
+      /* não poder salvar não quebra */
+    }
+  }
   const [abertoId, setAbertoId] = React.useState<string | null>(null);
   const [rota, setRota] = React.useState("Pipelines");
   const [novo, setNovo] = React.useState<typeof leadVazio | null>(null);
@@ -416,12 +434,30 @@ export function Tela() {
             </>
         ),
       }}
+      subcabecalho={
+        visao === "quadro" ? (
+          <>
+            <span className="text-label-md text-muted-foreground">Layout do card</span>
+            <SegmentedControl
+              rotulo="Layout do card"
+              atual={densidade}
+              aoEscolher={mudarDensidade}
+              itens={[
+                { valor: "compacto", rotulo: "Compacto" },
+                { valor: "padrao", rotulo: "Padrão" },
+                { valor: "detalhado", rotulo: "Detalhado" },
+              ]}
+            />
+          </>
+        ) : undefined
+      }
     >
 
         {visao === "quadro" ? (
           <Quadro
             etapas={etapas}
             colunas={visiveis}
+            densidade={densidade}
             aoMover={mover}
             aoAbrir={(l) => setAbertoId(l.id)}
             aoAdicionar={(etapa) => setNovo({ ...leadVazio, etapa })}
