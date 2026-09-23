@@ -170,6 +170,9 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   `BotaoColunas` na barra; a tabela só emite a ordenação, a tela ordena os dados
   (`ordenarPor`); cada célula leva `coluna="chave"`; linha com `aoSelecionar` (ADR-025/026).
   Grupos: `agrupavel` na coluna, `SelectAgrupar`, `agruparPor` + `DataTableGrupo` na tela.
+- **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, subcabecalho, children;
+  breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
+  o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.
 - **Calendário**: `Calendario` (eventos `{ id, data, rotulo }`, `referencia` e `visao` são estado da
   tela, `locale` do next-intl). Contas de data em `lib/datas.ts` — nunca copiar do DatePicker.
 - **Antes de commitar**: `npm run check` (rápido) — e `npm run check:completo` com o

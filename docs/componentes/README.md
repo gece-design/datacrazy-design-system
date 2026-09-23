@@ -46,6 +46,7 @@ markdown é a vista dele.
 | [Switch.md](Switch.md) | Ligar ou desligar algo que passa a valer na hora, sem botão de salvar. |
 | [Tabs.md](Tabs.md) | Alternar entre as seções de um mesmo registro. |
 | [Tag.md](Tag.md) | Mostrar uma etiqueta que o usuário pôs no lead. |
+| [TelaBase.md](TelaBase.md) | A casca de toda tela do CRM: Sidebar, Header, subcabeçalho e conteúdo já |
 | [Telefone.md](Telefone.md) | Receber um telefone com o país separado do número. |
 | [TimePicker.md](TimePicker.md) | Escolher uma hora, e uma data com hora, sabendo de fuso. |
 | [Toast.md](Toast.md) | Confirmar o resultado de uma ação sem bloquear a tela. |

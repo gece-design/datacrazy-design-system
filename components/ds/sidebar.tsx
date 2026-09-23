@@ -58,6 +58,7 @@ const icones: Record<string, Glifo> = {
   etiqueta: Tag,
   pessoa: UserCircle,
   tabela: Table,
+  tela: Browsers,
   agenda: CalendarDots,
   progresso: ChartBar,
   balao: ChatTeardropText,

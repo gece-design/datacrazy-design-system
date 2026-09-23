@@ -1623,6 +1623,52 @@
         }
       },
       "_states_doc": "Sem par no Figma: nasceu do pedido do cliente (2026-09-18) e das peças do DatePicker (lib/datas.ts). AUD-203."
+    },
+    {
+      "name": "TelaBase",
+      "family": "superficie",
+      "figmaNode": null,
+      "batch": "T-casca",
+      "variants": [
+        "xl aberta",
+        "lg recolhida",
+        "menu por cima"
+      ],
+      "tokens": [
+        "background",
+        "border",
+        "overlay/scrim",
+        "opacity/scrim",
+        "elevation/xl",
+        "z/modal",
+        "duration/fast",
+        "duration/base"
+      ],
+      "motion": "fast",
+      "states": {
+        "sidebar recolhida": {
+          "impl": "88px, só ícones — memória por tela (localStorage)",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "Sidebar (colapsada)",
+          "approvedIn": "T-casca"
+        },
+        "menu aberto (< 1024)": {
+          "impl": "painel fixo com Scrim, role=dialog, foco preso, fade-in-fast; sai com fade-out",
+          "source": "humano",
+          "rule": "L10",
+          "precedent": "Modal · Drawer",
+          "approvedIn": "T-casca"
+        },
+        "focus": {
+          "impl": "outline 2px (foco) nos botões da casca",
+          "source": "banco",
+          "rule": "D6",
+          "precedent": "Button",
+          "approvedIn": "T-casca"
+        }
+      },
+      "_states_doc": "A casca de toda tela (pedido do humano, 2026-09-23): Sidebar + Header + subcabeçalho + conteúdo com breakpoints. Publicada como bloco @datacrazy/tela (registry:page)."
     }
   ]
 }

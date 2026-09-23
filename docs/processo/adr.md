@@ -134,3 +134,9 @@ Aprovado por: humano ("Manda bala", 2026-09-23).
 Desvio: a referência só tem o menu do cabeçalho (submenu Columns).
 Motivo: menu escondido no cabeçalho ninguém acha — o mesmo aprendizado do interruptor do Drawer (2026-09-18, "dentro da caixa do menu ninguém acha"). O botão na barra é o caminho visível; o menu fica para quem já está com o cursor na coluna. Os dois mexem no mesmo estado (`useAjustesDaTabela`).
 Aprovado por: humano.
+
+## ADR-027 · Breakpoints moram na casca da tela, não em cada tela · 2026-09-23
+Desvio: o arquivo é desktop (1440) e o cliente disse "um problema por vez" sobre mobile (2026-09-18); a `TelaBase` já traz os três degraus (sidebar aberta ≥ 1280, recolhida em 1024–1279, menu por cima abaixo de 1024) e os recuos 16 · 24 · 32.
+Motivo: pedido do humano (2026-09-23): toda tela nova nasce da mesma casca, responsiva, sem repetir Sidebar e Header nem pedir por prompt. Os degraus usam só o que existe (Sidebar colapsada, Scrim, camada); nada de pixel novo nos componentes. O menu por cima é a única decisão visual nova e vai ao cliente como tal.
+Aprovado por: humano ("Pode aprovar essa… manda bala").
+

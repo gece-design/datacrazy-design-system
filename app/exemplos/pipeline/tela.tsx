@@ -56,6 +56,7 @@ import {
 } from "./dados";
 import { Lista } from "./lista";
 import { Calendario } from "@/components/ui/calendario";
+import { TelaBase } from "@/components/ui/tela-base";
 import { PainelLead } from "./painel-lead";
 import { Quadro, agrupar, type Colunas } from "./quadro";
 
@@ -135,7 +136,6 @@ export function Tela() {
   const [referencia, setReferencia] = React.useState(() => new Date(2026, 8, 1));
   const [visaoDoCalendario, setVisaoDoCalendario] = React.useState<"mes" | "semana">("mes");
   const [abertoId, setAbertoId] = React.useState<string | null>(null);
-  const [recolhida, setRecolhida] = React.useState(false);
   const [rota, setRota] = React.useState("Pipelines");
   const [novo, setNovo] = React.useState<typeof leadVazio | null>(null);
   const [filtros, setFiltros] = React.useState(false);
@@ -298,8 +298,11 @@ export function Tela() {
     etapaEmEdicao?.modo === "editar" ? (colunas[etapaEmEdicao.id] ?? []).length : 0;
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar colapsada={recolhida} onColapsarChange={setRecolhida} className="h-screen">
+    <TelaBase
+      memoria="pipeline"
+      recuo={false}
+      navegacao={
+        <>
         <SidebarTopo>
           <SidebarBrand />
           <SidebarGrupo recuo>
@@ -346,22 +349,20 @@ export function Tela() {
           </SidebarGrupo>
           <SidebarUser nome="Gabriel Correa" email="gece@datacrazy.com" />
         </SidebarRodape>
-      </Sidebar>
-
-      <main className="flex min-w-0 flex-1 flex-col">
-        <Header
-          className="shrink-0"
-          titulo="Pipeline comercial"
-          trilha={
+        </>
+      }
+      cabecalho={{
+        titulo: "Pipeline comercial",
+        trilha: (
             <Breadcrumb
               rotulo="Trilha"
               rotuloRecolhidos={(n) => `Mostrar mais ${n} níveis`}
               itens={[{ rotulo: "Início" }, { rotulo: "Pipelines" }, { rotulo: "Comercial" }]}
             />
-          }
+        ),
           // A ordem é a do arquivo (601:464): busca, filtros, visualização,
           // divisor e a ação principal. `utilitarios` é só o sino.
-          utilitarios={
+        utilitarios: (
             <HeaderNotificacoes
               rotulo="Notificações: 3 não lidas"
               contagem={3}
@@ -373,8 +374,8 @@ export function Tela() {
                 })
               }
             />
-          }
-          acoes={
+        ),
+        acoes: (
             <>
               <HeaderBusca
                 rotulo="Pesquisar leads"
@@ -413,8 +414,9 @@ export function Tela() {
                 Novo lead
               </Button>
             </>
-          }
-        />
+        ),
+      }}
+    >
 
         {visao === "quadro" ? (
           <Quadro
@@ -447,8 +449,6 @@ export function Tela() {
             />
           </div>
         )}
-      </main>
-
       <Drawer aberto={Boolean(aberto)} aoFechar={() => setAbertoId(null)} rotulo={`Lead ${aberto?.nome ?? ""}`}>
         {aberto ? (
           <PainelLead
@@ -696,7 +696,7 @@ export function Tela() {
       </Modal>
 
       <Toaster />
-    </div>
+    </TelaBase>
   );
 }
 

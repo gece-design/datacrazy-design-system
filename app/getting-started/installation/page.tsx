@@ -16,7 +16,7 @@ export default function Installation() {
     <PaginaDS
       titulo="SystemCrazy"
       descricao="O design system entra no seu projeto pelo shadcn CLI e no Claude Code por MCP. São três comandos — registrar o catálogo, instalar a base e conectar o Claude — e depois é só pedir a tela."
-      secoes={["Como funciona", "Registrar o catálogo", "Instalar a base", "Conectar o Claude Code", "Pedir a tela", "Atualizar"]}
+      secoes={["Como funciona", "Registrar o catálogo", "Instalar a base", "Conectar o Claude Code", "Criar uma tela", "Pedir a tela", "Atualizar"]}
     >
       <ComoFunciona>
         <p>
@@ -90,8 +90,24 @@ export default function Installation() {
       </Secao>
 
       <Secao
-        titulo="Pedir a tela"
+        titulo="Criar uma tela"
         spec="passo 4"
+        descricao="Toda tela nova começa pela tela base: um comando cria a página com Sidebar, Header, subcabeçalho e conteúdo já ligados e responsivos. Renomeie a pasta app/nova-tela e preencha os encaixes. O Claude sabe disso pela skill — não precisa pedir."
+        semCaixa
+        semSeletorDeFundo
+        className={semMoldura}
+      >
+        <Codigo lang="bash" codigo={`npx shadcn@latest add @datacrazy/tela`} />
+        <Legenda>
+          A casca é a <Chip>TelaBase</Chip>: acima de 1280px a sidebar aberta, entre 1024 e 1279 recolhida em ícones,
+          abaixo de 1024 vira um menu por cima com o botão no Header. Veja a tela em branco em{" "}
+          <Chip>/exemplos/tela-base</Chip>.
+        </Legenda>
+      </Secao>
+
+      <Secao
+        titulo="Pedir a tela"
+        spec="passo 5"
         descricao="Peça em linguagem normal e cite @datacrazy. O Claude procura no catálogo, lê a referência do componente na skill, instala o que falta e monta a tela só com tokens do DS."
       >
         <ul className="space-y-3">

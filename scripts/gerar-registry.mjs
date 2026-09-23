@@ -234,6 +234,10 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
 
 ## Como trabalhar
 
+0. **Tela nova começa pela tela base.** \`npx shadcn@latest add ${NAMESPACE}/tela\`
+   cria \`app/nova-tela/page.tsx\` com Sidebar, Header, subcabeçalho e conteúdo
+   já ligados e responsivos (\`TelaBase\`). Renomeie a pasta e preencha os
+   encaixes. Nunca monte Sidebar e Header à mão numa tela.
 1. **Procure antes de criar.** O catálogo no fim deste arquivo lista tudo o que
    existe. Se o componente existe e não está em \`components/ui/\`, instale:
    \`npx shadcn@latest add ${NAMESPACE}/<nome>\` (ou pela ferramenta MCP do shadcn).
@@ -459,7 +463,26 @@ const todos = {
   registryDependencies: componentes.map((c) => urlDoItem(c.name)),
 };
 
-const base = [itemSetup("v4"), itemSetup("v3"), todos, itemTokens(ext, "v4"), itemTokens(ext, "v3"), ...itensDeLib];
+// O bloco da tela: a página de exemplo /exemplos/tela-base publicada como
+// `registry:page` — `shadcn add @datacrazy/tela` escreve app/nova-tela/page.tsx
+// pronta no projeto de quem instala (pedido do humano, 2026-09-23).
+const TELA_REL = "app/exemplos/tela-base/page.tsx";
+const fonteDaTela = ler(TELA_REL);
+const depsDaTela = dependenciasDe(fonteDaTela, TELA_REL);
+const itemTela = {
+  $schema: SCHEMA_ITEM,
+  name: "tela",
+  type: "registry:block",
+  title: "Tela",
+  description: "Uma tela nova, pronta: Sidebar, Header, subcabeçalho e conteúdo já ligados e responsivos (TelaBase). Toda tela começa por aqui.",
+  dependencies: depsDaTela.pacotes,
+  registryDependencies: depsDaTela.itens.map(urlDoItem),
+  files: [{ path: "app/nova-tela/page.tsx", type: "registry:page", target: "app/nova-tela/page.tsx", content: fonteDaTela }],
+  categories: ["telas"],
+  docs: `Tela base: ${URL_DS}/exemplos/tela-base — renomeie a pasta app/nova-tela e preencha os encaixes.`,
+};
+
+const base = [itemSetup("v4"), itemSetup("v3"), itemTela, todos, itemTokens(ext, "v4"), itemTokens(ext, "v3"), ...itensDeLib];
 const itens = [...base, ...itensDeComponente];
 
 fs.rmSync(SAIDA, { recursive: true, force: true });
@@ -499,6 +522,7 @@ fs.writeFileSync(
 1. \`npx shadcn@latest registry add ${NAMESPACE}=${URL_DS}/r/{name}.json\`
 2. \`npx shadcn@latest add ${NAMESPACE}/setup\` — tokens, cn() e a skill datacrazy-ds para o Claude Code (Tailwind v3: \`${NAMESPACE}/setup-v3\`)
 3. \`npx shadcn@latest mcp init --client claude\`
+4. \`npx shadcn@latest add ${NAMESPACE}/tela\` — a tela base: toda tela nova começa por ela
 
 ## Base
 
