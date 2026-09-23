@@ -3211,6 +3211,22 @@
       "status": "aceito",
       "fechadoEm": "2026-09-22",
       "nota": "**Quem rola é o menu, não a coluna do perfil** (Davi, 2026-09-18): com a coluna inteira rolando, o nome e o telefone do lead somem em notebook de tela baixa. `DrawerBloco rolagem` ocupa o que sobra e rola por dentro, com mínimo de 80px; se nem isso cabe, rola a área dos blocos, nunca o cabeçalho. O modo cards do menu saiu na mesma reunião (\"parecia mobile\"). O arquivo não desenha rolagem nenhuma; acompanha na remedição."
+    },
+    {
+      "id": "AUD-203",
+      "eixo": "fidelidade",
+      "titulo": "Calendário e comportamentos da Table não têm par no arquivo",
+      "onde": [
+        "components/ui/calendario.tsx",
+        "components/ui/data-table.tsx"
+      ],
+      "regra": "fidelidade · código antes do arquivo (Figma é rascunho)",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Nasceram do pedido do cliente (reunião de 2026-09-18), sem desenho.** O Calendário (mês, semana, dia cheio) e os comportamentos da Table (menu da coluna, alça, arrasto, seleção, grupos) foram construídos com as peças existentes — DatePicker, SegmentedControl, Button, PainelFlutuante. Na remedição, o arquivo é desenhado a partir do código, não o contrário."
     }
   ]
 }

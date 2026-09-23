@@ -75,6 +75,7 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Tag", href: "/data-display/tag", icone: "etiqueta", pronto: true, descricao: "Etiqueta do lead e seletor"},
       { titulo: "Avatar", href: "/data-display/avatar", icone: "pessoa", pronto: true , descricao: "Identificação de pessoa"},
       { titulo: "Table", href: "/data-display/table", icone: "tabela", pronto: true , descricao: "A tabela de negócios do CRM"},
+      { titulo: "Calendário", href: "/data-display/calendario", icone: "agenda", pronto: true, descricao: "Os negócios no mês ou na semana, pela próxima ação" },
       { titulo: "Progress", href: "/data-display/progress", icone: "progresso" , descricao: "Andamento de etapa"},
     ],
   },

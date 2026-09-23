@@ -1542,6 +1542,87 @@
       "motion": "entrada fade-in-fast (150) · saída fade-out (200) com useSaida",
       "states": {},
       "_states_doc": "Sem estado próprio: abre e fecha por quem usa (Select, TimePicker, DatePicker, Tag). Movimento de entrada/saída entra em B7 com precedente Modal/Tooltip."
+    },
+    {
+      "name": "Calendario",
+      "family": "superficie",
+      "figmaNode": null,
+      "batch": "T4",
+      "variants": [
+        "mes",
+        "semana",
+        "dia cheio"
+      ],
+      "tokens": [
+        "card",
+        "background",
+        "border",
+        "primary",
+        "primary-foreground",
+        "foreground",
+        "muted-foreground",
+        "subtle-foreground",
+        "overlay/item-hover",
+        "overlay/bg",
+        "overlay/border",
+        "elevation/lg",
+        "z/popover",
+        "--tom-tag",
+        "radius/md",
+        "radius/sm",
+        "radius/full",
+        "text/heading-3",
+        "text/label-md",
+        "text/label-sm",
+        "text/caption",
+        "duration/fast"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "bg-overlay-item-hover no evento e no número do dia",
+          "source": "humano",
+          "rule": "L2",
+          "precedent": "Table (linha)",
+          "approvedIn": "T4"
+        },
+        "focus": {
+          "impl": "outline 2px por dentro (focoInterno)",
+          "source": "banco",
+          "rule": "D6 · D19",
+          "precedent": "DatePicker",
+          "approvedIn": "T4"
+        },
+        "hoje": {
+          "impl": "disco primary + aria-current=date",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "DatePicker",
+          "approvedIn": "T4"
+        },
+        "outro mês": {
+          "impl": "subtle-foreground + background/50",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "DatePicker (dia vizinho)",
+          "approvedIn": "T4"
+        },
+        "dia cheio": {
+          "impl": "+N mais em primary abre o painel do dia",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "T4"
+        },
+        "mês trocando": {
+          "impl": "tbody entra com fade-in-fast",
+          "source": "humano",
+          "rule": "I12",
+          "precedent": "Tabs",
+          "approvedIn": "T4"
+        }
+      },
+      "_states_doc": "Sem par no Figma: nasceu do pedido do cliente (2026-09-18) e das peças do DatePicker (lib/datas.ts). AUD-203."
     }
   ]
 }

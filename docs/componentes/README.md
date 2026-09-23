@@ -25,9 +25,10 @@ markdown é a vista dele.
 | [Badge.md](Badge.md) | Selo curto de status — a cor fica na borda e no texto, nunca preenchendo a |
 | [Breadcrumb.md](Breadcrumb.md) | Mostrar o caminho até a página atual e levar de volta a qualquer nível dele. |
 | [Button.md](Button.md) | Ação do usuário: sete variantes de peso visual e quatro tamanhos, com o mesmo |
+| [Calendario.md](Calendario.md) | Mostrar os negócios (ou qualquer evento datado) no mês ou na semana, pela |
 | [Card.md](Card.md) | Superfície que carrega um bloco de dados do dashboard. |
 | [Checkbox.md](Checkbox.md) | Marcar ou desmarcar uma opção independente, inclusive o "parte marcada" de |
-| [DataTable.md](DataTable.md) | Lista os negócios do CRM em colunas, com filtros e paginação. |
+| [DataTable.md](DataTable.md) | Lista os negócios do CRM em colunas, com filtros e paginação — e, com |
 | [DatePicker.md](DatePicker.md) | Período em dois meses, com atalhos: um gatilho no estilo do Button `tertiary` |
 | [Drawer.md](Drawer.md) | Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida. |
 | [Header.md](Header.md) | O topo de uma página do CRM: onde a pessoa está, que página é e o que dá para |

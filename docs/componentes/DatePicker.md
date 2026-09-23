@@ -68,6 +68,7 @@ Diff de pixels não medido.
 
 Usa: [Button](Button.md) (gatilho `tertiary`, setas `ghost`, rodapé), `<select>` nativo para mês e ano (mesma escolha do [Telefone](Telefone.md)), `PainelFlutuante` do [Popover](Popover.md) no painel — `overlay-*` e `shadow-lg` (D22, decisão do humano em 2026-09-19; antes era `border`/`card`/`shadow-float`), `usePosicao` e `useCliqueFora` (lib) ·
 Usado por: [TimePicker](TimePicker.md) (`CalendarioDeDia`), [Header](Header.md) pelos exemplos
+As contas de data (chave do dia, grade do mês, primeiro dia da semana por locale) moram em `lib/datas.ts` desde T4 (2026-09-23), compartilhadas com o [Calendario](Calendario.md) — regra D21.
 
 ## Exemplo de uso
 

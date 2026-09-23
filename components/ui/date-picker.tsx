@@ -4,6 +4,16 @@ import * as React from "react";
 import { CalendarBlank, CaretDown, CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  chaveDoDia,
+  inicioDoMes,
+  somarMeses,
+  somarDias,
+  mesmoMes,
+  primeiroDiaDaSemana,
+  maiuscula,
+  celulasDoMes,
+} from "@/lib/datas";
 import { usePosicao } from "@/lib/use-posicao";
 import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
@@ -63,52 +73,9 @@ export interface DateRangePickerProps {
   className?: string;
 }
 
-/* --- datas: comparação por dia, sem hora e sem fuso ----------------------- */
-
-/** Chave numérica AAAAMMDD. Comparar por ela evita o clássico "mesmo dia,
- *  horas diferentes" — a origem do bug quando a data vem do back com hora. */
-function chaveDoDia(d: Date) {
-  return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
-}
-
-function inicioDoMes(d: Date) {
-  return new Date(d.getFullYear(), d.getMonth(), 1);
-}
-
-function somarMeses(d: Date, n: number) {
-  return new Date(d.getFullYear(), d.getMonth() + n, 1);
-}
-
-function somarDias(d: Date, n: number) {
-  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
-  return x;
-}
-
-function mesmoMes(a: Date, b: Date) {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
-}
+/* --- datas: comparação por dia, sem hora e sem fuso — lib/datas.ts (D21) --- */
 
 /* --- Intl: tudo que é palavra ou ordem sai daqui --------------------------- */
-
-/** Domingo = 0. O CLDR devolve 1 = segunda … 7 = domingo. pt-br e en começam
- *  no domingo, es começa na segunda: é por isso que isto não é constante. */
-function primeiroDiaDaSemana(locale: string) {
-  try {
-    const l = new Intl.Locale(locale) as Intl.Locale & {
-      getWeekInfo?: () => { firstDay: number };
-      weekInfo?: { firstDay: number };
-    };
-    const info = typeof l.getWeekInfo === "function" ? l.getWeekInfo() : l.weekInfo;
-    if (info?.firstDay) return info.firstDay % 7;
-  } catch {
-    /* navegador sem weekInfo cai no domingo, que é o padrão de pt-br */
-  }
-  return 0;
-}
-
-function maiuscula(s: string, locale: string) {
-  return s.charAt(0).toLocaleUpperCase(locale) + s.slice(1);
-}
 
 /** Rótulo do gatilho. `formatRange` é quem sabe encurtar "27 de ago. – 3 de
  *  set. de 2026" sem repetir o ano; concatenar duas datas à mão devolveria a
@@ -125,20 +92,6 @@ function formatarIntervalo(v: IntervaloDeDatas, locale: string, vazio: string) {
 }
 
 /* --- grade de um mês ------------------------------------------------------ */
-
-type Celula = { data: Date; doMes: boolean };
-
-function celulasDoMes(mes: Date, primeiroDia: number): Celula[] {
-  const primeiro = inicioDoMes(mes);
-  const anteriores = (primeiro.getDay() - primeiroDia + 7) % 7;
-  const diasNoMes = new Date(mes.getFullYear(), mes.getMonth() + 1, 0).getDate();
-  const total = Math.ceil((anteriores + diasNoMes) / 7) * 7;
-
-  return Array.from({ length: total }, (_, i) => {
-    const data = somarDias(primeiro, i - anteriores);
-    return { data, doMes: mesmoMes(data, mes) };
-  });
-}
 
 type GradeProps = {
   mes: Date;

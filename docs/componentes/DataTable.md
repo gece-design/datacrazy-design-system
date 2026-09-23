@@ -150,11 +150,6 @@ Os cinco comportamentos, com a referência do cliente (grid do ExtJS):
 |--------|---------------|--------|--------------------|
 | hover | `bg-overlay-item-hover na linha` | humano | L2 |
 | focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
-| selecionada | `bg-overlay-item-selected + aria-selected na linha` | humano | Select (opção escolhida) |
-| ordenada | `caret primary ao lado do rótulo + aria-sort no th` | humano | — |
-| arrastando | `th em opacity-disabled + etiqueta fixed seguindo o ponteiro + traço primary no destino` | humano | Kanban do pipeline |
-| alça | `traço border sob o cursor da coluna; primary sob a alça e no foco` | humano | — |
-| grupo recolhido | `caret -90° + linhas do grupo fora da tabela` | humano | Drawer (bloco recolhido) |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é

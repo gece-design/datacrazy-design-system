@@ -12,7 +12,7 @@ import {
   CheckSquare, CalendarBlank, Clock, SidebarSimple, Path, ListNumbers, ChartLineUp,
   Tag, UserCircle, Table, ChartBar, ChatTeardropText, Tray, Browsers, ArrowLineLeft,
   Cards, RadioButton, ToggleRight, Bell, Tabs, Browser, Flask, Kanban,
-  Waveform
+  Waveform, CalendarDots
 } from "@phosphor-icons/react";
 import { navegacao } from "./nav";
 import { Logo, LogoSimbolo } from "./logo";
@@ -58,6 +58,7 @@ const icones: Record<string, Glifo> = {
   etiqueta: Tag,
   pessoa: UserCircle,
   tabela: Table,
+  agenda: CalendarDots,
   progresso: ChartBar,
   balao: ChatTeardropText,
   sino: Bell,

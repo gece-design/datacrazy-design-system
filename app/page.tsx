@@ -31,6 +31,7 @@ import { Breadcrumb, type ItemBreadcrumb } from "@/components/ui/breadcrumb";
 import { Pagination } from "@/components/ui/pagination";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
+import { Calendario } from "@/components/ui/calendario";
 import { DataTable, DataTableRow, DataTableCell, CelulaLead, CelulaProgresso } from "@/components/ui/data-table";
 import { ModalPainel } from "@/components/ui/modal";
 
@@ -317,6 +318,24 @@ const previews: Record<string, React.ReactNode> = {
         </DataTableRow>
       ))}
     </DataTable>
+  ),
+  "/data-display/calendario": (
+    // a semana inteira mede mais que a caixa de 176: reduzida, sem a barra
+    <div className="pointer-events-none w-[420px] origin-center scale-[0.6]">
+      <Calendario
+        locale="pt-BR"
+        visao="semana"
+        referencia={new Date(2026, 8, 15)}
+        aoMudarReferencia={() => {}}
+        hoje={new Date(2026, 8, 17)}
+        eventos={[
+          { id: "a", data: "2026-09-15", rotulo: "Instituto Raízes" },
+          { id: "b", data: "2026-09-17", rotulo: "Marina Alvarenga", tom: "rosa" },
+          { id: "c", data: "2026-09-17", rotulo: "Oficina Farol", tom: "ambar" },
+          { id: "d", data: "2026-09-18", rotulo: "Campo Vivo Agro", tom: "verde" },
+        ]}
+      />
+    </div>
   ),
   "/feedback/modal": (
     // o painel mede 400 × 240; reduzido para caber na caixa de 176

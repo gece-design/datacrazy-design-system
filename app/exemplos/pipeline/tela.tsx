@@ -55,6 +55,7 @@ import {
   type Lead,
 } from "./dados";
 import { Lista } from "./lista";
+import { Calendario } from "@/components/ui/calendario";
 import { PainelLead } from "./painel-lead";
 import { Quadro, agrupar, type Colunas } from "./quadro";
 
@@ -130,6 +131,9 @@ export function Tela() {
   const [busca, setBusca] = React.useState("");
   const [filtro, setFiltro] = React.useState<Filtro>(SEM_FILTRO);
   const [visao, setVisao] = React.useState("quadro");
+  // O mês do calendário: começa em setembro de 2026, o mês da carteira de exemplo.
+  const [referencia, setReferencia] = React.useState(() => new Date(2026, 8, 1));
+  const [visaoDoCalendario, setVisaoDoCalendario] = React.useState<"mes" | "semana">("mes");
   const [abertoId, setAbertoId] = React.useState<string | null>(null);
   const [recolhida, setRecolhida] = React.useState(false);
   const [rota, setRota] = React.useState("Pipelines");
@@ -233,6 +237,7 @@ export function Tela() {
       responsavel: novo.atendente,
       valor,
       dias: 0,
+      proximaAcao: "",
       totalCompras: 0,
       cicloDias: 0,
       etapa: novo.etapa,
@@ -399,6 +404,7 @@ export function Tela() {
                 itens={[
                   { valor: "quadro", rotulo: "Quadro", icone: Kanban },
                   { valor: "lista", rotulo: "Lista", icone: Rows },
+                  { valor: "calendario", rotulo: "Calendário", icone: CalendarBlank },
                 ]}
               />
               <HeaderDivisor />
@@ -420,13 +426,26 @@ export function Tela() {
             aoEditarEtapa={(e) => setEtapaEmEdicao({ modo: "editar", id: e.id, rotulo: e.rotulo, cor: e.cor })}
             aoCriarEtapa={() => setEtapaEmEdicao({ ...etapaVazia })}
           />
-        ) : (
+        ) : visao === "lista" ? (
           <Lista
             etapas={etapas}
             leads={etapas.flatMap((e) => visiveis[e.id] ?? [])}
             aberto={abertoId}
               aoAbrir={(l) => setAbertoId(l.id)}
           />
+        ) : (
+          // Calendário: os leads pela próxima ação; clicar abre o mesmo drawer.
+          <div className="min-h-0 flex-1 overflow-y-auto px-8 pb-6 [scrollbar-width:thin]">
+            <Calendario
+              locale="pt-BR"
+              eventos={todos.filter((l) => l.proximaAcao).map((l) => ({ id: l.id, data: l.proximaAcao, rotulo: l.nome, detalhe: l.empresa, tom: l.tom }))}
+              referencia={referencia}
+              aoMudarReferencia={setReferencia}
+              visao={visaoDoCalendario}
+              aoMudarVisao={setVisaoDoCalendario}
+              aoAbrir={(e) => setAbertoId(e.id)}
+            />
+          </div>
         )}
       </main>
 

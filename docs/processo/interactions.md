@@ -31,6 +31,7 @@ Vocabulário: estados `hover` `active` `focus` `disabled` `loading` `selected`
 | KpiCard | superficie | fill, outline, trend:neutral, trend:up, trend:down | — (só leitura) | none | set 269:53 |
 | Card | superficie | shell, list, donut, chart, select | hover, focus | fast | set 304:5313 |
 | DataTable | superficie | tabela, toolbar, paginacao, celulas, ajustes (menu da coluna, alça, arrasto, botão Colunas, Agrupar por, linha de grupo) | hover, focus, selecionada, ordenada, arrastando, alça, grupo recolhido | fast | set 331:1354 · comportamentos T1 (cliente, 2026-09-18) |
+| Calendario | superficie | mes, semana, dia cheio, painel do dia | hover, focus, hoje, outro mês, dia cheio, mês trocando | fast | sem par (T4, cliente 2026-09-18) |
 | Select | entrada | md, sm, aberto | hover, focus, aberto | fast | set 261:333 / 261:463 |
 | Pagination | navegacao | com resumo, sem resumo | hover, focus, disabled, atual | fast | set 261:790 |
 | Toast | feedback | success, destructive, warning, info | hover, focus, pausado, saindo | entrada: toast-open 200ms + fade-in 250ms · saída: desliza 200ms e fecha o vão 200ms · reduce: nenhuma | set 548:52 |
