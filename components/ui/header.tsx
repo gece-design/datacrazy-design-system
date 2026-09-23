@@ -1,12 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { Bell, MagnifyingGlass } from "@phosphor-icons/react";
+import { createPortal } from "react-dom";
+import { Bell, MagnifyingGlass, type Icon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { PainelFlutuante } from "@/components/ui/popover";
 import { Tooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { useCliqueFora } from "@/lib/use-clique-fora";
+import { useSaida } from "@/lib/use-saida";
 
-import { focoDentro } from "@/lib/estados";
+import { focoDentro, focoInterno } from "@/lib/estados";
 /**
  * Header — o topo de uma página do CRM (set 601:464).
  *
@@ -143,3 +147,192 @@ export const HeaderBusca = React.forwardRef<HTMLInputElement, HeaderBuscaProps>(
   </label>
 ));
 HeaderBusca.displayName = "HeaderBusca";
+
+/* --------------------------------------------------------- Notificações -- */
+
+export type Notificacao = {
+  id: string;
+  icone: Icon;
+  titulo: string;
+  detalhe: string;
+  /** Quando aconteceu, já em texto. Ex.: "há 20 min". */
+  quando: string;
+  lida: boolean;
+};
+
+export type RotulosDasNotificacoes = {
+  titulo: string;
+  /** Nome do sino. Ex.: (n) => `Notificações: ${n} não lidas`. */
+  naoLidas: (n: number) => string;
+  marcarTodas: string;
+  verTodas: string;
+};
+
+export const ROTULOS_DAS_NOTIFICACOES: RotulosDasNotificacoes = {
+  titulo: "Notificações",
+  naoLidas: (n) => (n ? `Notificações: ${n} não lida${n === 1 ? "" : "s"}` : "Notificações: nenhuma não lida"),
+  marcarTodas: "Marcar todas como lidas",
+  verTodas: "Ver todas",
+};
+
+export interface NotificacoesProps {
+  itens: Notificacao[];
+  /** Clique num item. A tela marca como lida e abre o que for. */
+  aoMarcarLida: (id: string) => void;
+  aoMarcarTodas: () => void;
+  /** Sem ele, o rodapé "Ver todas" não aparece. */
+  aoVerTodas?: () => void;
+  rotulos?: Partial<RotulosDasNotificacoes>;
+  className?: string;
+}
+
+/**
+ * O sino com o painel: a lista de notificações, não lidas em destaque,
+ * "marcar todas" no topo e "ver todas" no pé. Era o cenário da página do
+ * Header; virou peça porque toda tela do CRM tem o sino e ele precisa abrir
+ * alguma coisa (humano, 2026-09-23). O arquivo desenha só o sino e o selo; o
+ * painel é derivado dos tokens `overlay/*`, o mesmo caminho da lista do
+ * Select. O que é uma notificação continua sendo da tela: ela manda os
+ * itens e recebe os cliques.
+ *
+ * Abre em portal fixo abaixo do sino, alinhado pela direita; acompanha a
+ * rolagem e a janela; clique fora e Escape fecham; o foco volta ao sino.
+ */
+export function Notificacoes({ itens, aoMarcarLida, aoMarcarTodas, aoVerTodas, rotulos, className }: NotificacoesProps) {
+  const r = { ...ROTULOS_DAS_NOTIFICACOES, ...rotulos };
+  const [aberto, setAberto] = React.useState(false);
+  const { saindo, visivel } = useSaida(aberto);
+  const [pos, setPos] = React.useState<{ top: number; right: number } | null>(null);
+  const gatilho = React.useRef<HTMLButtonElement>(null);
+  const painel = React.useRef<HTMLDivElement>(null);
+  const naoLidas = itens.filter((n) => !n.lida).length;
+
+  const posicionar = React.useCallback(() => {
+    const g = gatilho.current?.getBoundingClientRect();
+    if (!g) return;
+    setPos({ top: g.bottom + 8, right: Math.max(16, window.innerWidth - g.right) });
+  }, []);
+
+  useCliqueFora(aberto, [painel, gatilho], () => setAberto(false));
+
+  function fechar(devolverFoco = true) {
+    setAberto(false);
+    if (devolverFoco) gatilho.current?.focus();
+  }
+
+  React.useEffect(() => {
+    if (!aberto) return;
+    posicionar();
+    // Escape fecha de onde o foco estiver — inclusive depois que "marcar todas"
+    // desabilita o próprio botão e o foco cai no body.
+    const teclado = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.preventDefault();
+      setAberto(false);
+      gatilho.current?.focus();
+    };
+    document.addEventListener("keydown", teclado);
+    window.addEventListener("resize", posicionar);
+    // `true`: a página rola atrás do painel, e o painel acompanha o sino
+    window.addEventListener("scroll", posicionar, true);
+    return () => {
+      document.removeEventListener("keydown", teclado);
+      window.removeEventListener("resize", posicionar);
+      window.removeEventListener("scroll", posicionar, true);
+    };
+  }, [aberto, posicionar]);
+
+  // O foco entra no painel depois que ele existe (o portal só monta com `pos`).
+  React.useEffect(() => {
+    if (aberto && pos) painel.current?.focus();
+  }, [aberto, pos]);
+
+  return (
+    <>
+      <HeaderNotificacoes
+        ref={gatilho}
+        rotulo={r.naoLidas(naoLidas)}
+        contagem={naoLidas}
+        aria-haspopup="dialog"
+        aria-expanded={aberto}
+        onClick={() => (aberto ? fechar() : setAberto(true))}
+        className={className}
+      />
+      {visivel && pos && typeof document !== "undefined"
+        ? createPortal(
+            <PainelFlutuante
+              ref={painel}
+              fixo
+              saindo={saindo}
+              role="dialog"
+              aria-label={r.titulo}
+              tabIndex={-1}
+              style={{ top: pos.top, right: pos.right }}
+              className="flex w-[360px] max-w-[calc(100vw-32px)] flex-col overflow-hidden outline-none"
+            >
+              <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-2.5">
+                <p className="text-h4 text-foreground">{r.titulo}</p>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={!naoLidas}
+                  onClick={() => {
+                    aoMarcarTodas();
+                    // o botão vai desabilitar: o foco fica no painel, não cai no body
+                    painel.current?.focus();
+                  }}
+                >
+                  {r.marcarTodas}
+                </Button>
+              </div>
+
+              <ul className="flex max-h-[320px] flex-col overflow-y-auto overscroll-contain [scrollbar-width:thin]">
+                {itens.map((n) => {
+                  const Icone = n.icone;
+                  return (
+                    <li key={n.id}>
+                      <button
+                        type="button"
+                        onClick={() => aoMarcarLida(n.id)}
+                        className={cn(
+                          "flex w-full items-start gap-3 px-4 py-3 text-left outline-none transition-colors hover:bg-overlay-item-hover",
+                          focoInterno,
+                        )}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={cn(
+                            "grid size-8 shrink-0 place-items-center rounded-full",
+                            n.lida ? "bg-background text-subtle-foreground" : "bg-accent text-primary",
+                          )}
+                        >
+                          <Icone size={16} weight="regular" />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="flex items-baseline gap-2">
+                            <span className={cn("truncate text-label-lg", n.lida ? "text-muted-foreground" : "text-foreground")}>{n.titulo}</span>
+                            <span className="ml-auto shrink-0 text-caption text-subtle-foreground">{n.quando}</span>
+                          </span>
+                          <span className="mt-0.5 line-clamp-2 block text-body-sm text-muted-foreground">{n.detalhe}</span>
+                        </span>
+                        {n.lida ? null : <span aria-hidden="true" className="mt-1.5 size-2 shrink-0 rounded-full bg-primary" />}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              {aoVerTodas ? (
+                <div className="border-t border-border p-1.5">
+                  <Button variant="ghost" size="sm" className="w-full" onClick={() => { fechar(); aoVerTodas(); }}>
+                    {r.verTodas}
+                  </Button>
+                </div>
+              ) : null}
+            </PainelFlutuante>,
+            document.body,
+          )
+        : null}
+    </>
+  );
+}

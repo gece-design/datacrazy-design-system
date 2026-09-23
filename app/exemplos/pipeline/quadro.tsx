@@ -480,7 +480,9 @@ function Cartao({
       <div className="flex items-start justify-between gap-2">
         {/* +3px no nome, a pedido do humano: 13 (`text-h4`) → 16. `text-metric`
             é o único degrau de 16 da escala do Figma. */}
-        <p title={lead.nome} className="min-w-0 truncate text-metric text-foreground">
+        {/* No detalhado o nome desce para h4: com cinco linhas embaixo, os 16px
+            do padrão pesavam (humano, 2026-09-23). */}
+        <p title={lead.nome} className={cn("min-w-0 truncate text-foreground", detalhado ? "text-h4" : "text-metric")}>
           {lead.nome}
         </p>
         <span className="shrink-0 text-label-lg tabular-nums text-foreground">{moeda(lead.valor)}</span>
@@ -495,26 +497,28 @@ function Cartao({
       )}
 
       {detalhado ? (
-        <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 text-caption">
-          <dt className="text-subtle-foreground">Origem</dt>
-          <dd className="truncate text-muted-foreground">{lead.canal}</dd>
-          {proximaAcao ? (
-            <>
-              <dt className="text-subtle-foreground">Próxima ação</dt>
-              <dd className="tabular-nums text-muted-foreground">{proximaAcao}</dd>
-            </>
-          ) : null}
-          {lead.contatoPrincipal ? (
-            <>
-              <dt className="text-subtle-foreground">Contato</dt>
-              <dd className="truncate text-muted-foreground">
-                {lead.contatoPrincipal.nome}
-                {lead.contatoPrincipal.cargo ? ` · ${lead.contatoPrincipal.cargo}` : ""}
-              </dd>
-            </>
-          ) : null}
-          <dt className="text-subtle-foreground">E-mail</dt>
-          <dd className="truncate text-muted-foreground">{lead.email}</dd>
+        // Duas colunas: rótulo à esquerda em muted, valor à direita em
+        // foreground, label-lg (12px) — legível sem abrir o lead.
+        <dl className="mt-2.5 flex flex-col gap-1 text-label-lg">
+          {(
+            [
+              ["Origem", lead.canal],
+              ["Próxima ação", proximaAcao],
+              lead.contatoPrincipal
+                ? ["Contato", `${lead.contatoPrincipal.nome}${lead.contatoPrincipal.cargo ? ` · ${lead.contatoPrincipal.cargo}` : ""}`]
+                : null,
+              ["E-mail", lead.email],
+            ] as ([string, string | null] | null)[]
+          )
+            .filter((par): par is [string, string] => Boolean(par && par[1]))
+            .map(([rotulo, valor]) => (
+              <div key={rotulo} className="flex items-baseline justify-between gap-3">
+                <dt className="shrink-0 text-muted-foreground">{rotulo}</dt>
+                <dd title={valor} className="min-w-0 truncate text-right tabular-nums text-foreground">
+                  {valor}
+                </dd>
+              </div>
+            ))}
         </dl>
       ) : null}
 

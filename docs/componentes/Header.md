@@ -45,6 +45,25 @@ Peças do mesmo arquivo:
 Controles que entram em `acoes` e têm doc própria: [Button](Button.md)
 (`tertiary`), [SegmentedControl](SegmentedControl.md), [Breadcrumb](Breadcrumb.md), Date Picker.
 
+### `Notificacoes`
+
+O sino com o painel (virou peça em 2026-09-23: toda tela tem o sino e ele
+precisa abrir alguma coisa). O conteúdo continua da tela.
+
+| Prop | Tipo | Obrigatória | Descrição |
+|------|------|-------------|-----------|
+| `itens` | `Notificacao[]` | sim | `id`, `icone`, `titulo`, `detalhe`, `quando` (texto), `lida`. |
+| `aoMarcarLida` | `(id) => void` | sim | Clique num item. A tela marca como lida e abre o que for. |
+| `aoMarcarTodas` | `() => void` | sim | O botão do topo do painel. |
+| `aoVerTodas` | `() => void` | não | Sem ele, o rodapé "Ver todas" não aparece. |
+| `rotulos` | `Partial<RotulosDasNotificacoes>` | não | `titulo`, `naoLidas(n)` (nome do sino), `marcarTodas`, `verTodas`. Fábrica: `ROTULOS_DAS_NOTIFICACOES`. |
+| `className` | `string` | não | — |
+
+O painel abre em portal fixo abaixo do sino, alinhado pela direita, acompanha
+a rolagem e a janela; clique fora e Escape fecham e o foco volta ao sino. Não
+lidas em `accent` + `primary` com o ponto azul; lidas em `background` +
+`subtle-foreground`. Usa o `PainelFlutuante` do [Popover](Popover.md).
+
 ## Variantes
 
 Não tem. Ver "Par no Figma".
@@ -60,6 +79,7 @@ Não tem. Ver "Par no Figma".
 | hover (sino) | `hover:bg-accent do Button tertiary` | inferido | gatilho do Date Picker |
 | focus (busca) | `focus-within:outline-2 outline-offset-2 outline-ring` | declarado | D6 |
 | notificações | `sino abre painel da tela (portal, overlay/*, shadow-lg); Escape devolve o foco` | declarado | L11 |
+| painel de notificações | `sino com aria-expanded + PainelFlutuante role=dialog abaixo dele, fade-in-fast; sai com fade-out` | humano | L10 |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é

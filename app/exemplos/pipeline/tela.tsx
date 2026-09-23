@@ -11,6 +11,8 @@ import {
   Gear,
   House,
   Kanban,
+  Handshake,
+  Clock,
   Lightning,
   Plus,
   Question,
@@ -22,7 +24,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Drawer } from "@/components/ui/drawer";
-import { Header, HeaderBusca, HeaderDivisor, HeaderNotificacoes } from "@/components/ui/header";
+import { Header, HeaderBusca, HeaderDivisor, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { SegmentedControl, ViewSwitcher } from "@/components/ui/segmented-control";
@@ -137,6 +139,11 @@ export function Tela() {
   const [visaoDoCalendario, setVisaoDoCalendario] = React.useState<"mes" | "semana">("mes");
   // O layout do cartão (T3): três presets, a escolha fica no navegador.
   const [densidade, setDensidade] = React.useState<DensidadeDoCartao>("padrao");
+  const [notificacoes, setNotificacoes] = React.useState<Notificacao[]>([
+    { id: "1", icone: UsersThree, titulo: "Novo lead atribuído", detalhe: "Construtora Horizonte entrou no seu funil pela campanha de setembro.", quando: "agora", lida: false },
+    { id: "2", icone: Clock, titulo: "Lead parado há 9 dias", detalhe: "Pedro Nakamura segue em Qualificação sem interação registrada.", quando: "há 2 h", lida: false },
+    { id: "3", icone: Handshake, titulo: "Negócio ganho", detalhe: "Rede Bom Dia assinou o plano anual — R$ 145.000.", quando: "ontem", lida: false },
+  ]);
   React.useEffect(() => {
     try {
       const salva = window.localStorage.getItem("ds:pipeline:densidade");
@@ -381,16 +388,11 @@ export function Tela() {
           // A ordem é a do arquivo (601:464): busca, filtros, visualização,
           // divisor e a ação principal. `utilitarios` é só o sino.
         utilitarios: (
-            <HeaderNotificacoes
-              rotulo="Notificações: 3 não lidas"
-              contagem={3}
-              onClick={() =>
-                toast({
-                  variant: "info",
-                  titulo: "3 notificações",
-                  descricao: `${moeda(total)} em aberto · 2 leads parados há mais de uma semana.`,
-                })
-              }
+            <Notificacoes
+              itens={notificacoes}
+              aoMarcarLida={(id) => setNotificacoes((l) => l.map((n) => (n.id === id ? { ...n, lida: true } : n)))}
+              aoMarcarTodas={() => setNotificacoes((l) => l.map((n) => ({ ...n, lida: true })))}
+              aoVerTodas={() => toast({ variant: "info", titulo: "Todas as notificações", descricao: `${moeda(total)} em aberto · 2 leads parados há mais de uma semana.` })}
             />
         ),
         acoes: (

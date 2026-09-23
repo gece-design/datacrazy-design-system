@@ -1,14 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { createPortal } from "react-dom";
 import {
   BellSimple, ChartBar, ChartPieSlice, ClipboardText, FunnelSimple, Handshake,
   MagnifyingGlass, Plus, Table, UserPlus, WarningCircle, type Icon,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Breadcrumb, type ItemBreadcrumb } from "@/components/ui/breadcrumb";
-import { Header, HeaderBusca, HeaderDivisor, HeaderNotificacoes } from "@/components/ui/header";
+import { Header, HeaderBusca, HeaderDivisor, HeaderNotificacoes, Notificacoes, type Notificacao } from "@/components/ui/header";
 import {
   SegmentedControl,
   ViewSwitcher,
@@ -18,9 +17,8 @@ import {
 import { DateRangePicker, type IntervaloDeDatas, type RotulosDoDatePicker } from "@/components/ui/date-picker";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 
-import { foco, focoInterno } from "@/lib/estados";
+import { foco } from "@/lib/estados";
 import { useSaida } from "@/lib/use-saida";
-import { PainelFlutuante } from "@/components/ui/popover";
 /* Na doc os textos são literais porque a doc é escrita em português. No CRM
    cada um vem do next-intl — nenhum componente do Header tem texto embutido. */
 
@@ -71,8 +69,6 @@ const rotulosData: RotulosDoDatePicker = {
 
 /* --- o painel de notificações -------------------------------------------- */
 
-type Notificacao = { id: string; icone: Icon; titulo: string; detalhe: string; quando: string; lida: boolean };
-
 const notificacoes: Notificacao[] = [
   { id: "1", icone: UserPlus, titulo: "Novo lead atribuído", detalhe: "Construtora Horizonte entrou no seu funil pela campanha de setembro.", quando: "agora", lida: false },
   { id: "2", icone: ClipboardText, titulo: "Tarefa vence hoje", detalhe: "Ligar para Marina Albuquerque sobre a proposta enviada na sexta.", quando: "há 20 min", lida: false },
@@ -85,136 +81,20 @@ const notificacoes: Notificacao[] = [
 /**
  * Cenário do sino: clicar abre a lista de não lidas.
  *
- * O arquivo desenha o sino e o selo, não o painel — este é derivado dos tokens
- * `overlay/*` e do degrau `shadow-lg`, o mesmo caminho da lista aberta do
- * Select. Mora na página porque é cenário do produto, não peça do DS: quem
- * decide o que é uma notificação é a tela, não o Header.
+ * O arquivo desenha o sino e o selo, não o painel. O painel virou peça do DS
+ * em 2026-09-23 (`Notificacoes`): toda tela tem o sino e ele precisa abrir.
+ * O que continua da página é o conteúdo — quem decide o que é uma
+ * notificação é a tela, não o Header.
  */
 function Sino() {
-  const [aberto, setAberto] = React.useState(false);
-  const { saindo, visivel } = useSaida(aberto);
   const [itens, setItens] = React.useState(notificacoes);
-  const [pos, setPos] = React.useState<{ top: number; right: number } | null>(null);
-  const gatilho = React.useRef<HTMLButtonElement>(null);
-  const painel = React.useRef<HTMLDivElement>(null);
-  const naoLidas = itens.filter((n) => !n.lida).length;
-
-  const posicionar = React.useCallback(() => {
-    const r = gatilho.current?.getBoundingClientRect();
-    if (!r) return;
-    setPos({ top: r.bottom + 8, right: Math.max(16, window.innerWidth - r.right) });
-  }, []);
-
-  React.useEffect(() => {
-    if (!aberto) return;
-    posicionar();
-    painel.current?.focus();
-    const fora = (e: MouseEvent) => {
-      const alvo = e.target as Node;
-      if (!painel.current?.contains(alvo) && !gatilho.current?.contains(alvo)) setAberto(false);
-    };
-    document.addEventListener("mousedown", fora);
-    window.addEventListener("resize", posicionar);
-    // `true`: a página rola atrás do painel, e o painel acompanha o sino
-    window.addEventListener("scroll", posicionar, true);
-    return () => {
-      document.removeEventListener("mousedown", fora);
-      window.removeEventListener("resize", posicionar);
-      window.removeEventListener("scroll", posicionar, true);
-    };
-  }, [aberto, posicionar]);
-
-  function fechar(devolverFoco = true) {
-    setAberto(false);
-    if (devolverFoco) gatilho.current?.focus();
-  }
-
   return (
-    <>
-      <HeaderNotificacoes
-        ref={gatilho}
-        rotulo={naoLidas ? `Notificações: ${naoLidas} não lidas` : "Notificações: nenhuma não lida"}
-        contagem={naoLidas}
-        aria-haspopup="dialog"
-        aria-expanded={aberto}
-        onClick={() => (aberto ? fechar() : setAberto(true))}
-      />
-      {visivel && pos
-        ? createPortal(
-            <PainelFlutuante
-              ref={painel}
-              fixo
-              saindo={saindo}
-              role="dialog"
-              aria-label="Notificações"
-              tabIndex={-1}
-              onKeyDown={(e) => {
-                if (e.key !== "Escape") return;
-                e.preventDefault();
-                fechar();
-              }}
-              style={{ top: pos.top, right: pos.right }}
-              className="flex w-[360px] max-w-[calc(100vw-32px)] flex-col overflow-hidden outline-none"
-            >
-              <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-2.5">
-                <p className="text-h4 text-foreground">Notificações</p>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  disabled={!naoLidas}
-                  onClick={() => setItens((l) => l.map((n) => ({ ...n, lida: true })))}
-                >
-                  Marcar todas como lidas
-                </Button>
-              </div>
-
-              <ul className="flex max-h-[320px] flex-col overflow-y-auto overscroll-contain [scrollbar-width:thin]">
-                {itens.map((n) => {
-                  const Icone = n.icone;
-                  return (
-                    <li key={n.id}>
-                      <button
-                        type="button"
-                        onClick={() => setItens((l) => l.map((x) => (x.id === n.id ? { ...x, lida: true } : x)))}
-                        className={`flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-overlay-item-hover
-                                   outline-none ${focoInterno}`}
-                      >
-                        <span
-                          aria-hidden="true"
-                          className={
-                            n.lida
-                              ? "grid size-8 shrink-0 place-items-center rounded-full bg-background text-subtle-foreground"
-                              : "grid size-8 shrink-0 place-items-center rounded-full bg-accent text-primary"
-                          }
-                        >
-                          <Icone size={16} weight="regular" />
-                        </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="flex items-baseline gap-2">
-                            <span className={n.lida ? "truncate text-label-lg text-muted-foreground" : "truncate text-label-lg text-foreground"}>
-                              {n.titulo}
-                            </span>
-                            <span className="ml-auto shrink-0 text-caption text-subtle-foreground">{n.quando}</span>
-                          </span>
-                          <span className="mt-0.5 line-clamp-2 block text-body-sm text-muted-foreground">{n.detalhe}</span>
-                        </span>
-                        {n.lida ? null : <span aria-hidden="true" className="mt-1.5 size-2 shrink-0 rounded-full bg-primary" />}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-
-              <div className="border-t border-border p-1.5">
-                <Button variant="ghost" size="sm" className="w-full">
-                  Ver todas
-                </Button>
-              </div>
-            </PainelFlutuante>,
-            document.body,
-          )
-        : null}
-    </>
+    <Notificacoes
+      itens={itens}
+      aoMarcarLida={(id) => setItens((l) => l.map((n) => (n.id === id ? { ...n, lida: true } : n)))}
+      aoMarcarTodas={() => setItens((l) => l.map((n) => ({ ...n, lida: true })))}
+      aoVerTodas={() => {}}
+    />
   );
 }
 
