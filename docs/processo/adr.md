@@ -124,3 +124,13 @@ Aprovado por: humano, gate B7.
 Desvio: a página de propostas do Drawer (botões de 38px) e a tela Pipeline (botão tracejado "Nova etapa", seta do trilho, radiogroup de cor) não usam o Button do DS onde o degrau não existe.
 Motivo: são mocks que o cliente vê como estão; trocar por um degrau da escala muda o que foi aprovado no print. Mudam com o Figma, não com a auditoria.
 Aprovado por: humano, gate B7.
+
+## ADR-025 · A tabela emite a ordenação; quem ordena os dados é a tela · 2026-09-23
+Desvio: `DataTable` recebe as linhas como filhos e não conhece os dados; a referência do cliente (grid do ExtJS) ordena a store por dentro.
+Motivo: ordenar dentro do componente exigiria que ele soubesse ler cada célula (texto, número, data, etapa do funil). A tela sabe; a tabela só marca a coluna (`aria-sort`, caret) e chama `aoOrdenar`. `ordenarPor` cobre o caso comum. Mesmo princípio para esconder e reordenar: a linha reencaixa as células pela `chave` (`coluna=`), sem a tabela conhecer o conteúdo.
+Aprovado por: humano ("Manda bala", 2026-09-23).
+
+## ADR-026 · Esconder coluna tem dois caminhos: menu do cabeçalho e botão Colunas · 2026-09-23
+Desvio: a referência só tem o menu do cabeçalho (submenu Columns).
+Motivo: menu escondido no cabeçalho ninguém acha — o mesmo aprendizado do interruptor do Drawer (2026-09-18, "dentro da caixa do menu ninguém acha"). O botão na barra é o caminho visível; o menu fica para quem já está com o cursor na coluna. Os dois mexem no mesmo estado (`useAjustesDaTabela`).
+Aprovado por: humano.

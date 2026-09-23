@@ -12,6 +12,9 @@ import {
   CelulaProgresso,
   CelulaEstatisticas,
   CelulaAcoes,
+  BotaoColunas,
+  ordenarPor,
+  useAjustesDaTabela,
   type ColunaTabela,
 } from "@/components/ui/data-table";
 import { Pagination } from "@/components/ui/pagination";
@@ -64,6 +67,115 @@ const negocios = Array.from({ length: 10 }, (_, i) => ({
   percentual: 44,
 }));
 
+/* Dez negócios diferentes entre si, para a ordenação ter o que mostrar. */
+const carteira = [
+  { id: "n1", nome: "Giovanna Alves", etiquetas: ["Quente", "Indicação"], produto: "Plano Pro", valor: 4800, atividades: "3 atividades", atendente: "Breno Ramos", etapa: "Proposta", percentual: 60, aberto: 12, naEtapa: 3 },
+  { id: "n2", nome: "Clínica Vitalis", etiquetas: ["Frio"], produto: "Plano Starter", valor: 1200, atividades: "Sem atividades", atendente: "Millena Aragão", etapa: "Qualificação", percentual: 20, aberto: 2, naEtapa: 2 },
+  { id: "n3", nome: "Horizonte Engenharia", etiquetas: ["Morno", "Evento"], produto: "Enterprise", valor: 18400, atividades: "1 atividade", atendente: "Junior Santos", etapa: "Negociação", percentual: 80, aberto: 27, naEtapa: 9 },
+  { id: "n4", nome: "Rede Bom Dia", etiquetas: ["Quente"], produto: "Plano Pro", valor: 9600, atividades: "5 atividades", atendente: "Breno Ramos", etapa: "Fechamento", percentual: 95, aberto: 41, naEtapa: 1 },
+  { id: "n5", nome: "Instituto Raízes", etiquetas: ["Frio", "Site"], produto: "Sem produto", valor: 0, atividades: "Sem atividades", atendente: "Sem atendente", etapa: "Qualificação", percentual: 20, aberto: 1, naEtapa: 1 },
+  { id: "n6", nome: "Marina Alvarenga", etiquetas: ["Morno"], produto: "Plano Starter", valor: 1500, atividades: "2 atividades", atendente: "Millena Aragão", etapa: "Proposta", percentual: 60, aberto: 8, naEtapa: 5 },
+  { id: "n7", nome: "Oficina Farol", etiquetas: ["Quente", "WhatsApp"], produto: "Plano Pro", valor: 5200, atividades: "4 atividades", atendente: "Junior Santos", etapa: "Negociação", percentual: 80, aberto: 19, naEtapa: 4 },
+  { id: "n8", nome: "Campo Vivo Agro", etiquetas: ["Frio"], produto: "Enterprise", valor: 22000, atividades: "1 atividade", atendente: "Breno Ramos", etapa: "Qualificação", percentual: 20, aberto: 5, naEtapa: 5 },
+  { id: "n9", nome: "Helena Moraes", etiquetas: ["Morno", "Indicação"], produto: "Plano Starter", valor: 900, atividades: "Sem atividades", atendente: "Millena Aragão", etapa: "Fechamento", percentual: 95, aberto: 33, naEtapa: 2 },
+  { id: "n10", nome: "Tomás Vilela", etiquetas: ["Quente"], produto: "Plano Pro", valor: 6100, atividades: "6 atividades", atendente: "Junior Santos", etapa: "Proposta", percentual: 60, aberto: 15, naEtapa: 6 },
+];
+type Negocio = (typeof carteira)[number];
+
+const moeda = (v: number) => `R$ ${v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")},00`;
+
+/* O que cada coluna lê do negócio, para ordenar: número compara como número. */
+function valorDe(n: Negocio, chave: string): string | number {
+  switch (chave) {
+    case "lead": return n.nome;
+    case "produto": return n.valor;
+    case "atividades": return n.atividades;
+    case "atendente": return n.atendente;
+    case "etapa": return n.percentual;
+    case "dados": return n.aberto;
+    default: return "";
+  }
+}
+
+const codigoAjustavel = `const ajustes = useAjustesDaTabela(colunas, { memoria: "negocios" });
+const linhas = ordenarPor(negocios, ajustes.ordem, valorDe);
+const [selecionado, setSelecionado] = useState<string | null>(null);
+
+<>
+  <DataTableToolbar rotulo="Total de resultados" total="10 negócios">
+    <BotaoColunas ajustes={ajustes} />
+  </DataTableToolbar>
+  <DataTable colunas={colunas} ajustes={ajustes}>
+    {linhas.map((n) => (
+      <DataTableRow key={n.id} selecionada={n.id === selecionado} aoSelecionar={() => setSelecionado(n.id)}>
+        <DataTableCell coluna="lead"><CelulaLead nome={n.nome} etiquetas={n.etiquetas} /></DataTableCell>
+        <DataTableCell coluna="produto"><CelulaDupla principal={n.produto} apoio={n.valor} /></DataTableCell>
+        <DataTableCell coluna="etapa"><CelulaProgresso etapa={n.etapa} percentual={n.percentual} /></DataTableCell>
+        <DataTableCell coluna="acoes"><CelulaAcoes /></DataTableCell>
+      </DataTableRow>
+    ))}
+  </DataTable>
+</>`;
+
+/** A seção ajustável: os cinco comportamentos numa tabela só, com o detalhe embaixo. */
+function TabelaAjustavel() {
+  const ajustes = useAjustesDaTabela(colunas, { memoria: "showcase-negocios" });
+  const [selecionado, setSelecionado] = useState<string | null>(null);
+  const linhas = ordenarPor(carteira, ajustes.ordem, valorDe);
+  const escolhido = carteira.find((n) => n.id === selecionado);
+  return (
+    <div className="w-full overflow-hidden rounded-md bg-card">
+      <DataTableToolbar rotulo="Total de resultados" total="10 negócios">
+        <BotaoColunas ajustes={ajustes} />
+      </DataTableToolbar>
+      <DataTable colunas={colunas} ajustes={ajustes} className="rounded-none">
+        {linhas.map((n) => (
+          <DataTableRow key={n.id} selecionada={n.id === selecionado} aoSelecionar={() => setSelecionado(n.id)}>
+            <DataTableCell coluna="lead">
+              <CelulaLead nome={n.nome} etiquetas={n.etiquetas} />
+            </DataTableCell>
+            <DataTableCell coluna="produto">
+              <CelulaDupla principal={n.produto} apoio={moeda(n.valor)} />
+            </DataTableCell>
+            <DataTableCell coluna="atividades">
+              <CelulaTexto>{n.atividades}</CelulaTexto>
+            </DataTableCell>
+            <DataTableCell coluna="atendente">
+              <CelulaTexto enfase>{n.atendente}</CelulaTexto>
+            </DataTableCell>
+            <DataTableCell coluna="etapa">
+              <CelulaProgresso etapa={n.etapa} percentual={n.percentual} />
+            </DataTableCell>
+            <DataTableCell coluna="dados">
+              <CelulaEstatisticas
+                itens={[
+                  { valor: `${n.aberto}d`, rotulo: "Em aberto" },
+                  { valor: `${n.naEtapa}d`, rotulo: "Tempo na etapa" },
+                ]}
+              />
+            </DataTableCell>
+            <DataTableCell coluna="acoes">
+              <CelulaAcoes />
+            </DataTableCell>
+          </DataTableRow>
+        ))}
+      </DataTable>
+      {/* O detalhe da linha escolhida — a referência põe um painel embaixo;
+          no CRM esse painel é o Drawer do lead. */}
+      <div aria-live="polite" className="border-t border-border px-5 py-4 text-body-md text-muted-foreground">
+        {escolhido ? (
+          <>
+            <span className="text-h4 text-foreground">{escolhido.nome}</span> · {escolhido.produto} · {moeda(escolhido.valor)} ·{" "}
+            {escolhido.atendente} · {escolhido.etapa}, {escolhido.aberto} dias em aberto. No CRM, este painel é o Drawer.
+          </>
+        ) : (
+          "Selecione um negócio para ver o detalhe aqui."
+        )}
+      </div>
+    </div>
+  );
+}
+
 type Parte = { nome: string; medida: string; papel: string };
 
 const anatomia: Parte[] = [
@@ -115,7 +227,7 @@ export default function Pagina() {
     <PaginaDS
       titulo="Table"
       descricao="A tabela de negócios do CRM: barra de filtros, sete colunas, dez linhas e paginação. É o componente mais denso do sistema, e o único onde a estrutura importa tanto quanto a aparência."
-      secoes={["Completa", "Anatomia", "Como funciona"]}
+      secoes={["Completa", "Ajustável", "Anatomia", "Como funciona"]}
     >
       <Secao
         titulo="Completa"
@@ -228,6 +340,26 @@ export default function Pagina() {
         </Legenda>
       </Secao>
 
+      <Secao
+        titulo="Ajustável"
+        spec="ordenar · colunas · redimensionar · reordenar · selecionar"
+        descricao="Os cinco comportamentos da referência (grid do ExtJS) numa tabela só. Clique no cabeçalho para ordenar; o ⋮ que aparece nele abre o menu da coluna; a borda do cabeçalho redimensiona; arrastar o cabeçalho reordena; clicar na linha seleciona, e o painel embaixo mostra o registro. O botão Colunas da barra esconde, mostra e restaura."
+        codigo={codigoAjustavel}
+        nota={
+          <>
+            Tudo mora em <Chip>useAjustesDaTabela</Chip>: a tela cria os ajustes uma vez e passa para a tabela e para
+            o <Chip>BotaoColunas</Chip>. Com <Chip>memoria</Chip>, ordem, larguras e colunas ficam salvas no
+            navegador por tela — recarregue e a tabela volta como você deixou. A tabela só{" "}
+            <span className="text-foreground">emite</span> a ordenação: as linhas chegam como filhos, então quem
+            ordena os dados é a tela (<Chip>ordenarPor</Chip> ajuda). Cada célula diz de que coluna é
+            (<Chip>coluna=&quot;lead&quot;</Chip>) para seguir a ordem e a visibilidade. Teclado: setas na alça
+            redimensionam, o menu move a coluna, Enter ou Espaço seleciona a linha e as setas andam entre elas.
+          </>
+        }
+      >
+        <TabelaAjustavel />
+      </Secao>
+
       <Secao titulo="Anatomia" spec="6 partes" semCaixa>
         <div className="divide-y divide-border rounded-lg border border-border">
           {anatomia.map((p) => (
@@ -266,8 +398,17 @@ export default function Pagina() {
         <p>
           Três controles desta página são o mesmo componente do Card: o{" "}
           <Chip>SelectTrigger</Chip>. Ele apareceu duas vezes no Figma com a mesma cara — recorte do
-          Card e filtro da tabela — e por isso virou peça única, com dois tamanhos. Continua sem
-          abrir menu: o Select do DS não existe, e o arquivo desenha só o estado fechado.
+          Card e filtro da tabela — e por isso virou peça única, com dois tamanhos. Hoje é o gatilho do{" "}
+          <Chip>Select</Chip> do DS.
+        </p>
+        <p>
+          Os comportamentos (ordenar, colunas, redimensionar, reordenar, selecionar) vieram de um pedido do
+          cliente em 2026-09-18, com o grid do ExtJS como referência. Pixel só entra quando a{" "}
+          <span className="text-foreground">pessoa</span> redimensiona: a partir daí as larguras são dela e
+          ficam salvas. Esconder coluna tem dois caminhos de propósito — o menu do cabeçalho, para quem já
+          está com o cursor lá, e o botão <Chip>Colunas</Chip> na barra, porque menu escondido no cabeçalho
+          ninguém acha. O menu é o mesmo painel flutuante do Select, com <Chip>role=&quot;menu&quot;</Chip>{" "}
+          e o foco andando por <Chip>aria-activedescendant</Chip>.
         </p>
       </ComoFunciona>
     </PaginaDS>

@@ -1,20 +1,50 @@
+"use client";
+
 import * as React from "react";
-import { DotsThree } from "@phosphor-icons/react/dist/ssr";
+import { createPortal } from "react-dom";
+import {
+  ArrowCounterClockwise,
+  ArrowLeft,
+  ArrowRight,
+  CaretDown,
+  CaretUp,
+  Check,
+  Columns,
+  DotsThree,
+  DotsThreeVertical,
+  SortAscending,
+  SortDescending,
+  type Icon,
+} from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { PainelFlutuante } from "@/components/ui/popover";
+import { useCliqueFora } from "@/lib/use-clique-fora";
+import { useSaida } from "@/lib/use-saida";
 
+import { foco, focoInterno } from "@/lib/estados";
 import { AcaoCampo } from "@/components/ui/input";
 /**
  * Data Table — espelho do component set "Data Table" do Figma (node 331:1354).
  *
  * O arquivo desenha com caixas empilhadas. Aqui é `<table>` de verdade: numa
  * tabela de CRM o leitor de tela precisa anunciar linha e coluna, e ordenação,
- * seleção e navegação por teclado se apoiam nessa estrutura depois. A aparência
- * é a mesma; o que muda é o que a máquina entende.
+ * seleção e navegação por teclado se apoiam nessa estrutura depois.
  *
  * As larguras do arquivo (230 · 170 · 160 · 150 · 200 · 180 · 42) viram
  * proporção, não pixel: a tabela do CRM vive em telas de largura variável, e
- * coluna fixa em px é o bug #83285 esperando acontecer.
+ * coluna fixa em px é o bug #83285 esperando acontecer. Pixel só entra quando
+ * a PESSOA redimensiona uma coluna — aí a medida é dela, e fica guardada.
+ *
+ * Os comportamentos (T1, reunião de 2026-09-18 · referência: grid do ExtJS):
+ * ordenar pelo cabeçalho, esconder e reordenar colunas pelo menu do cabeçalho
+ * ou pelo botão Colunas da barra, redimensionar pela alça, arrastar o
+ * cabeçalho, e selecionar linha. Tudo isso mora em `useAjustesDaTabela`: a
+ * tela cria os ajustes uma vez e passa para a tabela e para o botão da barra.
+ * A tabela só EMITE a ordenação — as linhas chegam como filhos, então quem
+ * ordena os dados é a tela (`ordenarPor` ajuda). Sem `ajustes`, a tabela é a
+ * do arquivo: nada muda.
  *
  * `layout="compacta"` é o `Layout=Compact` que o drawer usa (node 597:5983):
  * traço `border` em volta e entre linhas, recuo de 12px e sem largura mínima.
@@ -27,64 +57,797 @@ export type ColunaTabela = {
   peso: number;
   /** Coluna de ações fica à direita e não tem rótulo visível. */
   alinharFim?: boolean;
+  /** Clique no cabeçalho ordena por ela. Padrão: sim, com `ajustes` ou `aoOrdenar`; a de ações, não. */
+  ordenavel?: boolean;
+  /** Pode sair da tela pelo menu Colunas. Padrão: sim; a de ações e a primeira, não. */
+  ocultavel?: boolean;
+  /** Largura mínima ao redimensionar, em px. Padrão 64. */
+  minimo?: number;
 };
 
-type Layout = "padrao" | "compacta";
-const LayoutTabela = React.createContext<Layout>("padrao");
+export type OrdemTabela = { chave: string; direcao: "asc" | "desc" } | null;
 
-export const DataTable = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { colunas: ColunaTabela[]; layout?: Layout }
->(({ className, colunas, layout = "padrao", children, ...props }, ref) => {
-  const total = colunas.reduce((n, c) => n + c.peso, 0);
-  const compacta = layout === "compacta";
-  return (
-    <LayoutTabela.Provider value={layout}>
-      <div
-        ref={ref}
-        className={cn(
-          "w-full overflow-hidden rounded-md bg-card",
-          compacta && "border border-border",
-          className,
-        )}
-        {...props}
-      >
-        {/* O scroll horizontal vive aqui: numa tela estreita a tabela rola,
-            em vez de espremer coluna até o texto virar uma letra por linha. */}
-        <div className="w-full overflow-x-auto">
-          <table className={cn("w-full table-fixed border-collapse", !compacta && "min-w-[1160px]")}>
-            <colgroup>
-              {colunas.map((c) => (
-                <col key={c.chave} style={{ width: `${(c.peso / total) * 100}%` }} />
-              ))}
-            </colgroup>
-            <thead>
-              <tr className="bg-background">
-                {colunas.map((c, i) => (
-                  <th
-                    key={c.chave}
-                    scope="col"
-                    className={cn(
-                      "px-2 py-2.5 text-left align-middle text-label-md font-medium text-muted-foreground",
-                      c.alinharFim && "text-right",
-                      i === 0 && (compacta ? "pl-3" : "pl-5"),
-                      i === colunas.length - 1 && (compacta ? "pr-3" : "pr-5"),
-                    )}
-                  >
-                    {/* A coluna de ações tem rótulo vazio no arquivo. Vazio para
-                        quem vê, nomeado para quem ouve. */}
-                    {c.rotulo || <span className="sr-only">Ações</span>}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>{children}</tbody>
-          </table>
-        </div>
-      </div>
-    </LayoutTabela.Provider>
+/** Todo texto dos controles vem de fora (a UI é multi-idioma); estes são os de fábrica. */
+export type RotulosDaTabela = {
+  menuDaColuna: (coluna: string) => string;
+  ordenar: (coluna: string) => string;
+  crescente: string;
+  decrescente: string;
+  semOrdem: string;
+  moverEsquerda: string;
+  moverDireita: string;
+  colunas: string;
+  restaurar: string;
+  redimensionar: (coluna: string) => string;
+};
+
+export const ROTULOS_DA_TABELA: RotulosDaTabela = {
+  menuDaColuna: (c) => `Opções da coluna ${c}`,
+  ordenar: (c) => `Ordenar por ${c}`,
+  crescente: "Crescente",
+  decrescente: "Decrescente",
+  semOrdem: "Sem ordenação",
+  moverEsquerda: "Mover para a esquerda",
+  moverDireita: "Mover para a direita",
+  colunas: "Colunas",
+  restaurar: "Restaurar colunas",
+  redimensionar: (c) => `Redimensionar coluna ${c}`,
+};
+
+const LARGURA_MINIMA = 64;
+const PASSO_DO_TECLADO = 16;
+/** Arrasto começa depois disto: antes, é clique (ordenar). */
+const LIMIAR_DE_ARRASTO = 6;
+
+const ordenavel = (c: ColunaTabela) => c.ordenavel ?? !(c.alinharFim && !c.rotulo);
+const ocultavel = (c: ColunaTabela, i: number) => c.ocultavel ?? !(i === 0 || (c.alinharFim && !c.rotulo));
+
+/* -------------------------------------------------------------- Ajustes -- */
+
+type Guardado = { ordem: OrdemTabela; escondidas: string[]; sequencia: string[]; larguras: Record<string, number> };
+
+const CHAVE_DA_MEMORIA = "ds:tabela";
+
+function lerMemoria(memoria: string, chaves: string[]): Guardado | null {
+  try {
+    const bruto = window.localStorage.getItem(`${CHAVE_DA_MEMORIA}:${memoria}`);
+    if (!bruto) return null;
+    const g = JSON.parse(bruto) as Partial<Guardado>;
+    const valida = (k: unknown): k is string => typeof k === "string" && chaves.includes(k);
+    return {
+      ordem: g.ordem && valida(g.ordem.chave) && (g.ordem.direcao === "asc" || g.ordem.direcao === "desc") ? g.ordem : null,
+      escondidas: Array.isArray(g.escondidas) ? g.escondidas.filter(valida) : [],
+      // coluna nova no código entra no fim; coluna que sumiu do código sai
+      sequencia: Array.isArray(g.sequencia) ? [...g.sequencia.filter(valida), ...chaves.filter((k) => !g.sequencia!.includes(k))] : chaves,
+      larguras: Object.fromEntries(Object.entries(g.larguras ?? {}).filter(([k, v]) => valida(k) && typeof v === "number")),
+    };
+  } catch {
+    // navegação anônima, storage bloqueado ou JSON estragado: sem memória
+    return null;
+  }
+}
+
+function salvarMemoria(memoria: string, g: Guardado) {
+  try {
+    window.localStorage.setItem(`${CHAVE_DA_MEMORIA}:${memoria}`, JSON.stringify(g));
+  } catch {
+    // não poder salvar não pode quebrar a tabela
+  }
+}
+
+export interface AjustesDaTabela {
+  /** As colunas como a tela declarou. */
+  colunas: ColunaTabela[];
+  /** As que estão na tela, na ordem atual. */
+  naTela: ColunaTabela[];
+  /** Todas as chaves, na ordem atual (as escondidas também). */
+  sequencia: string[];
+  escondidas: string[];
+  /** Larguras em px, só depois que a pessoa redimensionou. Vazio = proporcional. */
+  larguras: Record<string, number>;
+  ordem: OrdemTabela;
+  ordenar: (ordem: OrdemTabela) => void;
+  /** Esconde ou mostra uma coluna. */
+  alternarColuna: (chave: string) => void;
+  /** Põe `chave` antes ou depois de `destino`. */
+  mover: (chave: string, destino: string, lado: "antes" | "depois") => void;
+  /** Uma posição para o lado, entre as visíveis (menu e teclado). */
+  deslocar: (chave: string, passo: -1 | 1) => void;
+  /** `atuais`: a foto das larguras no momento em que o arrasto começa (a
+   *  primeira vez, quando ainda eram proporcionais). */
+  redimensionar: (chave: string, largura: number, atuais?: Record<string, number>) => void;
+  restaurar: () => void;
+  /** Algo saiu do padrão da tela. */
+  mexido: boolean;
+  rotulos: RotulosDaTabela;
+}
+
+/**
+ * O estado de uma tabela ajustável: ordenação, colunas escondidas, ordem das
+ * colunas e larguras. Com `memoria`, fica salvo no navegador por essa chave
+ * (uma por tela) — quem volta encontra a tabela como deixou, como o fundo do
+ * preview. Lido só depois de montar: no servidor não há storage.
+ */
+export function useAjustesDaTabela(
+  colunas: ColunaTabela[],
+  { memoria, ordemInicial = null, rotulos }: { memoria?: string; ordemInicial?: OrdemTabela; rotulos?: Partial<RotulosDaTabela> } = {},
+): AjustesDaTabela {
+  const chaves = React.useMemo(() => colunas.map((c) => c.chave), [colunas]);
+  const padrao = React.useMemo<Guardado>(
+    () => ({ ordem: ordemInicial, escondidas: [], sequencia: chaves, larguras: {} }),
+    [chaves, ordemInicial],
   );
-});
+  const [estado, setEstado] = React.useState<Guardado>(padrao);
+  const [lido, setLido] = React.useState(!memoria);
+
+  React.useEffect(() => {
+    if (!memoria) return;
+    const salvo = lerMemoria(memoria, chaves);
+    if (salvo) setEstado(salvo);
+    setLido(true);
+  }, [memoria, chaves]);
+
+  React.useEffect(() => {
+    if (memoria && lido) salvarMemoria(memoria, estado);
+  }, [memoria, lido, estado]);
+
+  const naTela = React.useMemo(
+    () =>
+      estado.sequencia
+        .map((k) => colunas.find((c) => c.chave === k))
+        .filter((c): c is ColunaTabela => Boolean(c) && !estado.escondidas.includes(c!.chave)),
+    [colunas, estado.sequencia, estado.escondidas],
+  );
+
+  const mover = React.useCallback((chave: string, destino: string, lado: "antes" | "depois") => {
+    setEstado((e) => {
+      if (chave === destino) return e;
+      const sem = e.sequencia.filter((k) => k !== chave);
+      const i = sem.indexOf(destino);
+      if (i < 0) return e;
+      sem.splice(lado === "antes" ? i : i + 1, 0, chave);
+      return { ...e, sequencia: sem };
+    });
+  }, []);
+
+  const deslocar = React.useCallback(
+    (chave: string, passo: -1 | 1) => {
+      const visiveis = naTela.map((c) => c.chave);
+      const i = visiveis.indexOf(chave);
+      const vizinho = visiveis[i + passo];
+      if (i < 0 || !vizinho) return;
+      mover(chave, vizinho, passo > 0 ? "depois" : "antes");
+    },
+    [naTela, mover],
+  );
+
+  const mexido =
+    Boolean(estado.ordem) !== Boolean(padrao.ordem) ||
+    estado.ordem?.chave !== padrao.ordem?.chave ||
+    estado.ordem?.direcao !== padrao.ordem?.direcao ||
+    estado.escondidas.length > 0 ||
+    estado.sequencia.join() !== chaves.join() ||
+    Object.keys(estado.larguras).length > 0;
+
+  return {
+    colunas,
+    naTela,
+    sequencia: estado.sequencia,
+    escondidas: estado.escondidas,
+    larguras: estado.larguras,
+    ordem: estado.ordem,
+    ordenar: (ordem) => setEstado((e) => ({ ...e, ordem })),
+    alternarColuna: (chave) =>
+      setEstado((e) => ({
+        ...e,
+        escondidas: e.escondidas.includes(chave) ? e.escondidas.filter((k) => k !== chave) : [...e.escondidas, chave],
+      })),
+    mover,
+    deslocar,
+    redimensionar: (chave, largura, atuais) =>
+      setEstado((e) => ({ ...e, larguras: { ...(atuais ?? {}), ...e.larguras, [chave]: Math.round(largura) } })),
+    restaurar: () => setEstado(padrao),
+    mexido,
+    rotulos: { ...ROTULOS_DA_TABELA, ...rotulos },
+  };
+}
+
+/** Ordena a lista pela ordem que a tabela emitiu. `valor` diz o que cada
+ *  coluna lê do item — número compara como número, texto como texto em pt-BR. */
+export function ordenarPor<T>(
+  itens: T[],
+  ordem: OrdemTabela,
+  valor: (item: T, chave: string) => string | number | null | undefined,
+): T[] {
+  if (!ordem) return itens;
+  const sentido = ordem.direcao === "asc" ? 1 : -1;
+  return [...itens].sort((a, b) => {
+    const va = valor(a, ordem.chave);
+    const vb = valor(b, ordem.chave);
+    if (va == null && vb == null) return 0;
+    if (va == null) return 1;
+    if (vb == null) return -1;
+    if (typeof va === "number" && typeof vb === "number") return (va - vb) * sentido;
+    return String(va).localeCompare(String(vb), "pt-BR", { numeric: true, sensitivity: "base" }) * sentido;
+  });
+}
+
+/* ----------------------------------------------------------------- Menu -- */
+
+type ItemDoMenu = {
+  id: string;
+  rotulo: string;
+  icone?: Icon;
+  /** `check` alterna e mantém o menu aberto; ação fecha. */
+  tipo?: "acao" | "check";
+  marcado?: boolean;
+  desabilitado?: boolean;
+  separadorAntes?: boolean;
+  aoAtivar: () => void;
+};
+
+/** Onde o menu abre: abaixo do gatilho, em `fixed` num portal — o cabeçalho
+ *  vive dentro da caixa que rola na horizontal, e ela cortaria um painel
+ *  absoluto. Vira para cima quando não cabe embaixo. */
+function posicaoDoMenu(gatilho: DOMRect, itens: number) {
+  const largura = 240;
+  const altura = itens * 32 + 12;
+  const left = Math.max(8, Math.min(gatilho.left, window.innerWidth - largura - 8));
+  const cabeEmbaixo = gatilho.bottom + altura + 8 <= window.innerHeight;
+  return cabeEmbaixo ? { top: gatilho.bottom + 4, left } : { top: Math.max(8, gatilho.top - altura - 4), left };
+}
+
+/**
+ * O menu do cabeçalho e o do botão Colunas são o mesmo painel: `role="menu"`
+ * com o foco no painel e `aria-activedescendant` andando pelos itens, como a
+ * lista do Select. Setas andam, Enter e Espaço ativam, Escape fecha e devolve
+ * o foco ao gatilho, Tab fecha. Rolagem da página fecha — o painel é `fixed`
+ * e não acompanharia o gatilho.
+ */
+function MenuFlutuante({
+  aberto,
+  aoFechar,
+  gatilho,
+  rotulo,
+  itens,
+}: {
+  aberto: boolean;
+  aoFechar: (devolverFoco?: boolean) => void;
+  gatilho: React.RefObject<HTMLElement | null>;
+  rotulo: string;
+  itens: ItemDoMenu[];
+}) {
+  const painel = React.useRef<HTMLDivElement>(null);
+  const [emFoco, setEmFoco] = React.useState(0);
+  const [pos, setPos] = React.useState<{ top: number; left: number } | null>(null);
+  const id = React.useId().replace(/:/g, "");
+  const { saindo, visivel } = useSaida(aberto);
+  const ativos = itens.filter((i) => !i.desabilitado);
+
+  useCliqueFora(aberto, [gatilho, painel], () => aoFechar(false));
+
+  React.useEffect(() => {
+    if (!aberto) return;
+    const g = gatilho.current?.getBoundingClientRect();
+    if (g) setPos(posicaoDoMenu(g, itens.length));
+    setEmFoco(0);
+    // o foco entra no painel assim que ele abre: sem isso as setas não movem nada
+    const foco = requestAnimationFrame(() => painel.current?.focus());
+    const fechar = () => aoFechar(false);
+    window.addEventListener("scroll", fechar, true);
+    window.addEventListener("resize", fechar);
+    return () => {
+      cancelAnimationFrame(foco);
+      window.removeEventListener("scroll", fechar, true);
+      window.removeEventListener("resize", fechar);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aberto]);
+
+  function ativar(item: ItemDoMenu) {
+    if (item.desabilitado) return;
+    item.aoAtivar();
+    if (item.tipo !== "check") aoFechar();
+  }
+
+  function teclado(e: React.KeyboardEvent) {
+    const i = ativos.findIndex((x) => x.id === itens[emFoco]?.id);
+    const ir = (j: number) => setEmFoco(itens.indexOf(ativos[(j + ativos.length) % ativos.length]));
+    if (e.key === "Escape") {
+      e.preventDefault();
+      aoFechar();
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      ir(i + 1);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      ir(i - 1);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      ir(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      ir(ativos.length - 1);
+    } else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (itens[emFoco]) ativar(itens[emFoco]);
+    } else if (e.key === "Tab") {
+      aoFechar(false);
+    }
+  }
+
+  if (!visivel || !pos || typeof document === "undefined") return null;
+  return createPortal(
+    <PainelFlutuante
+      ref={painel}
+      fixo
+      saindo={saindo}
+      role="menu"
+      aria-label={rotulo}
+      aria-activedescendant={`${id}-${emFoco}`}
+      tabIndex={-1}
+      onKeyDown={teclado}
+      style={pos}
+      className="w-60 p-1.5 focus:outline-none"
+    >
+      {itens.map((item, i) => {
+        const Icone = item.icone;
+        return (
+          <React.Fragment key={item.id}>
+            {item.separadorAntes ? <div role="separator" aria-hidden="true" className="my-1 h-px bg-overlay-border" /> : null}
+            <div
+              id={`${id}-${i}`}
+              role={item.tipo === "check" ? "menuitemcheckbox" : "menuitem"}
+              aria-checked={item.tipo === "check" ? Boolean(item.marcado) : undefined}
+              aria-disabled={item.desabilitado || undefined}
+              onMouseEnter={() => !item.desabilitado && setEmFoco(i)}
+              onClick={() => ativar(item)}
+              className={cn(
+                "flex h-8 cursor-pointer items-center gap-2 rounded-sm px-2 text-label-lg transition-colors",
+                item.desabilitado ? "cursor-not-allowed text-subtle-foreground" : "text-foreground",
+                // o realce do teclado e o do mouse são o mesmo (Select)
+                i === emFoco && !item.desabilitado && "bg-overlay-item-hover",
+              )}
+            >
+              {item.tipo === "check" ? (
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "flex size-4 shrink-0 items-center justify-center rounded-sm border",
+                    item.marcado ? "border-primary bg-primary text-primary-foreground" : "border-input-border bg-card",
+                  )}
+                >
+                  {item.marcado ? <Check size={12} weight="bold" /> : null}
+                </span>
+              ) : Icone ? (
+                <Icone size={16} weight="regular" aria-hidden="true" className="shrink-0 text-muted-foreground" />
+              ) : null}
+              <span className="min-w-0 truncate">{item.rotulo}</span>
+            </div>
+          </React.Fragment>
+        );
+      })}
+    </PainelFlutuante>,
+    document.body,
+  );
+}
+
+/** Os itens de esconder/mostrar coluna — os mesmos no menu do cabeçalho e no botão da barra. */
+function itensDeColunas(a: AjustesDaTabela, separadorAntes: boolean): ItemDoMenu[] {
+  return a.colunas
+    .map((c, i) => ({ c, i }))
+    .filter(({ c, i }) => ocultavel(c, i))
+    .map(({ c }, j) => ({
+      id: `coluna-${c.chave}`,
+      rotulo: c.rotulo,
+      tipo: "check" as const,
+      marcado: !a.escondidas.includes(c.chave),
+      separadorAntes: separadorAntes && j === 0,
+      aoAtivar: () => a.alternarColuna(c.chave),
+    }));
+}
+
+/**
+ * O botão "Colunas" da barra: abre a lista de colunas com um check por
+ * coluna e "Restaurar colunas". O menu do cabeçalho também esconde coluna,
+ * mas menu escondido no cabeçalho ninguém acha — o botão é o caminho visível.
+ */
+export function BotaoColunas({ ajustes, className }: { ajustes: AjustesDaTabela; className?: string }) {
+  const [aberto, setAberto] = React.useState(false);
+  const gatilho = React.useRef<HTMLButtonElement>(null);
+  const r = ajustes.rotulos;
+  const itens: ItemDoMenu[] = [
+    ...itensDeColunas(ajustes, false),
+    {
+      id: "restaurar",
+      rotulo: r.restaurar,
+      icone: ArrowCounterClockwise,
+      separadorAntes: true,
+      desabilitado: !ajustes.mexido,
+      aoAtivar: ajustes.restaurar,
+    },
+  ];
+  return (
+    <>
+      <Button
+        ref={gatilho}
+        variant="tertiary"
+        size="sm"
+        aria-haspopup="menu"
+        aria-expanded={aberto}
+        onClick={() => setAberto((a) => !a)}
+        className={className}
+      >
+        <Columns size={16} weight="regular" aria-hidden="true" />
+        {r.colunas}
+        {ajustes.escondidas.length > 0 ? (
+          <span className="text-muted-foreground">{ajustes.colunas.length - ajustes.escondidas.length}/{ajustes.colunas.length}</span>
+        ) : null}
+      </Button>
+      <MenuFlutuante
+        aberto={aberto}
+        gatilho={gatilho}
+        rotulo={r.colunas}
+        itens={itens}
+        aoFechar={(devolver = true) => {
+          setAberto(false);
+          if (devolver) gatilho.current?.focus();
+        }}
+      />
+    </>
+  );
+}
+
+/* --------------------------------------------------------------- Tabela -- */
+
+type Layout = "padrao" | "compacta";
+
+type ContextoDaTabela = {
+  layout: Layout;
+  /** As chaves como a tela declarou — é por elas que a célula sem `coluna` se acha, pela posição. */
+  chaves: string[];
+  /** As que estão na tela, na ordem atual. `null` = tabela sem ajustes: a linha desenha as células como vieram. */
+  naTela: string[] | null;
+};
+const Contexto = React.createContext<ContextoDaTabela>({ layout: "padrao", chaves: [], naTela: null });
+
+type Arrasto = { chave: string; x: number; y: number; alvo: { chave: string; lado: "antes" | "depois" } | null; ativo: boolean };
+
+export interface DataTableProps extends React.HTMLAttributes<HTMLDivElement> {
+  colunas: ColunaTabela[];
+  layout?: Layout;
+  /** Liga os comportamentos: menu do cabeçalho, colunas, mover, redimensionar. Vem de `useAjustesDaTabela`. */
+  ajustes?: AjustesDaTabela;
+  /** Só ordenar, sem o resto: a ordem atual e o que fazer quando a pessoa clica no cabeçalho. `ajustes` já traz os dois. */
+  ordem?: OrdemTabela;
+  aoOrdenar?: (ordem: OrdemTabela) => void;
+  rotulos?: Partial<RotulosDaTabela>;
+}
+
+export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
+  ({ className, colunas, layout = "padrao", ajustes, ordem: ordemDeFora, aoOrdenar: aoOrdenarDeFora, rotulos, children, ...props }, ref) => {
+    const compacta = layout === "compacta";
+    const r = { ...ROTULOS_DA_TABELA, ...ajustes?.rotulos, ...rotulos };
+    const naTela = ajustes ? ajustes.naTela : colunas;
+    const ordem = ajustes ? ajustes.ordem : (ordemDeFora ?? null);
+    const aoOrdenar = ajustes ? ajustes.ordenar : aoOrdenarDeFora;
+    const chaves = React.useMemo(() => colunas.map((c) => c.chave), [colunas]);
+    const contexto = React.useMemo<ContextoDaTabela>(
+      () => ({ layout, chaves, naTela: ajustes ? naTela.map((c) => c.chave) : null }),
+      [layout, chaves, ajustes, naTela],
+    );
+
+    const total = naTela.reduce((n, c) => n + c.peso, 0);
+    const emPixel = Boolean(ajustes && Object.keys(ajustes.larguras).length);
+    const larguraDe = (c: ColunaTabela) => (emPixel ? ajustes!.larguras[c.chave] ?? Math.round((c.peso / total) * 960) : 0);
+    const soma = emPixel ? naTela.reduce((n, c) => n + larguraDe(c), 0) : 0;
+
+    const cabecalhos = React.useRef<Record<string, HTMLTableCellElement | null>>({});
+    const corpo = React.useRef<HTMLTableSectionElement>(null);
+    const [menuAberto, setMenuAberto] = React.useState<string | null>(null);
+    const gatilhoDoMenu = React.useRef<HTMLButtonElement | null>(null);
+    const [arrasto, setArrasto] = React.useState<Arrasto | null>(null);
+    const arrastou = React.useRef(false);
+
+    /* Ordenar: clique no cabeçalho gira crescente → decrescente → nada. */
+    function alternarOrdem(c: ColunaTabela) {
+      if (!aoOrdenar) return;
+      if (ordem?.chave !== c.chave) aoOrdenar({ chave: c.chave, direcao: "asc" });
+      else if (ordem.direcao === "asc") aoOrdenar({ chave: c.chave, direcao: "desc" });
+      else aoOrdenar(null);
+    }
+
+    /* A foto das larguras atuais: a primeira vez que alguém redimensiona, as
+       colunas ainda são proporcionais e precisam virar px todas de uma vez,
+       senão só a mexida teria medida e as outras encolheriam para o mínimo. */
+    function larguras() {
+      return Object.fromEntries(naTela.map((c) => [c.chave, Math.round(cabecalhos.current[c.chave]?.getBoundingClientRect().width ?? larguraDe(c))]));
+    }
+
+    function alcaPonteiro(c: ColunaTabela) {
+      return (e: React.PointerEvent<HTMLSpanElement>) => {
+        if (!ajustes || e.button !== 0) return;
+        e.preventDefault();
+        const inicio = e.clientX;
+        const foto = larguras();
+        const base = foto[c.chave];
+        const minimo = c.minimo ?? LARGURA_MINIMA;
+        const alca = e.currentTarget;
+        alca.setPointerCapture(e.pointerId);
+        const mover = (ev: PointerEvent) => ajustes.redimensionar(c.chave, Math.max(minimo, base + ev.clientX - inicio), foto);
+        const soltar = () => {
+          alca.removeEventListener("pointermove", mover);
+          alca.removeEventListener("pointerup", soltar);
+          alca.removeEventListener("pointercancel", soltar);
+        };
+        alca.addEventListener("pointermove", mover);
+        alca.addEventListener("pointerup", soltar);
+        alca.addEventListener("pointercancel", soltar);
+      };
+    }
+
+    function alcaTeclado(c: ColunaTabela) {
+      return (e: React.KeyboardEvent) => {
+        if (!ajustes || (e.key !== "ArrowLeft" && e.key !== "ArrowRight")) return;
+        e.preventDefault();
+        const foto = larguras();
+        const passo = (e.shiftKey ? 4 : 1) * PASSO_DO_TECLADO * (e.key === "ArrowRight" ? 1 : -1);
+        ajustes.redimensionar(c.chave, Math.max(c.minimo ?? LARGURA_MINIMA, foto[c.chave] + passo), foto);
+      };
+    }
+
+    /* Arrastar o cabeçalho reordena. O mesmo botão que ordena: até 6px é
+       clique; passou disso, vira arrasto e o clique no fim é engolido. */
+    function cabecalhoPonteiro(c: ColunaTabela) {
+      return (e: React.PointerEvent<HTMLButtonElement>) => {
+        if (!ajustes || e.button !== 0) return;
+        const origem = { x: e.clientX, y: e.clientY };
+        const botao = e.currentTarget;
+        arrastou.current = false;
+        let ativo = false;
+        // captura já no pointerdown: um movimento rápido sai do botão antes do
+        // limiar e, sem captura, o pointermove nunca chegaria. O clique continua
+        // chegando normalmente quando não há arrasto.
+        botao.setPointerCapture(e.pointerId);
+        const alvoEm = (x: number): Arrasto["alvo"] => {
+          for (const col of naTela) {
+            const el = cabecalhos.current[col.chave];
+            if (!el) continue;
+            const b = el.getBoundingClientRect();
+            if (x >= b.left && x <= b.right) return col.chave === c.chave ? null : { chave: col.chave, lado: x < b.left + b.width / 2 ? "antes" : "depois" };
+          }
+          return null;
+        };
+        const mover = (ev: PointerEvent) => {
+          if (!ativo) {
+            if (Math.hypot(ev.clientX - origem.x, ev.clientY - origem.y) < LIMIAR_DE_ARRASTO) return;
+            ativo = true;
+            arrastou.current = true;
+          }
+          setArrasto({ chave: c.chave, x: ev.clientX, y: ev.clientY, alvo: alvoEm(ev.clientX), ativo: true });
+        };
+        const soltar = (ev: PointerEvent) => {
+          botao.removeEventListener("pointermove", mover);
+          botao.removeEventListener("pointerup", soltar);
+          botao.removeEventListener("pointercancel", soltar);
+          if (!ativo) return;
+          const alvo = alvoEm(ev.clientX);
+          if (alvo && ev.type === "pointerup") ajustes.mover(c.chave, alvo.chave, alvo.lado);
+          setArrasto(null);
+        };
+        botao.addEventListener("pointermove", mover);
+        botao.addEventListener("pointerup", soltar);
+        botao.addEventListener("pointercancel", soltar);
+      };
+    }
+
+    function itensDoMenu(c: ColunaTabela): ItemDoMenu[] {
+      const a = ajustes!;
+      const visiveis = naTela.map((x) => x.chave);
+      const i = visiveis.indexOf(c.chave);
+      const podeOrdenar = ordenavel(c) && Boolean(aoOrdenar);
+      const itens: ItemDoMenu[] = [];
+      if (podeOrdenar) {
+        itens.push(
+          { id: "asc", rotulo: r.crescente, icone: SortAscending, marcado: ordem?.chave === c.chave && ordem.direcao === "asc", aoAtivar: () => aoOrdenar!({ chave: c.chave, direcao: "asc" }) },
+          { id: "desc", rotulo: r.decrescente, icone: SortDescending, marcado: ordem?.chave === c.chave && ordem.direcao === "desc", aoAtivar: () => aoOrdenar!({ chave: c.chave, direcao: "desc" }) },
+        );
+      }
+      itens.push(
+        { id: "esq", rotulo: r.moverEsquerda, icone: ArrowLeft, separadorAntes: podeOrdenar, desabilitado: i <= 0, aoAtivar: () => a.deslocar(c.chave, -1) },
+        { id: "dir", rotulo: r.moverDireita, icone: ArrowRight, desabilitado: i >= visiveis.length - 1, aoAtivar: () => a.deslocar(c.chave, 1) },
+        ...itensDeColunas(a, true),
+      );
+      return itens;
+    }
+
+    /* Setas entre as linhas selecionáveis, e sempre uma delas no Tab. */
+    React.useEffect(() => {
+      const tbody = corpo.current;
+      if (!tbody) return;
+      const linhas = Array.from(tbody.querySelectorAll<HTMLTableRowElement>("tr[data-selecionavel]"));
+      if (!linhas.length) return;
+      const selecionada = linhas.find((l) => l.getAttribute("aria-selected") === "true");
+      for (const l of linhas) l.tabIndex = l === (selecionada ?? linhas[0]) ? 0 : -1;
+    });
+
+    function tecladoDoCorpo(e: React.KeyboardEvent<HTMLTableSectionElement>) {
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+      const linhas = Array.from(e.currentTarget.querySelectorAll<HTMLTableRowElement>("tr[data-selecionavel]"));
+      const i = linhas.indexOf(e.target as HTMLTableRowElement);
+      if (i < 0) return;
+      e.preventDefault();
+      linhas[Math.min(linhas.length - 1, Math.max(0, i + (e.key === "ArrowDown" ? 1 : -1)))]?.focus();
+    }
+
+    const colunaDoMenu = menuAberto ? naTela.find((c) => c.chave === menuAberto) : undefined;
+    const emArrasto = arrasto?.ativo ? naTela.find((c) => c.chave === arrasto.chave) : undefined;
+
+    return (
+      <Contexto.Provider value={contexto}>
+        <div
+          ref={ref}
+          className={cn("w-full overflow-hidden rounded-md bg-card", compacta && "border border-border", className)}
+          {...props}
+        >
+          {/* O scroll horizontal vive aqui: numa tela estreita a tabela rola,
+              em vez de espremer coluna até o texto virar uma letra por linha. */}
+          <div className={cn("w-full overflow-x-auto", arrasto?.ativo && "select-none")}>
+            <table
+              className={cn("w-full table-fixed border-collapse", !compacta && !emPixel && "min-w-[1160px]")}
+              // com larguras em px a tabela mede a soma delas: passou da caixa, rola
+              style={emPixel ? { minWidth: soma } : undefined}
+            >
+              <colgroup>
+                {naTela.map((c) => (
+                  <col key={c.chave} style={{ width: emPixel ? `${larguraDe(c)}px` : `${(c.peso / total) * 100}%` }} />
+                ))}
+              </colgroup>
+              <thead>
+                <tr className="bg-background">
+                  {naTela.map((c, i) => {
+                    const ordenada = ordem?.chave === c.chave ? ordem.direcao : null;
+                    const podeOrdenar = Boolean(aoOrdenar) && ordenavel(c);
+                    const Seta = ordenada === "asc" ? CaretUp : CaretDown;
+                    return (
+                      <th
+                        key={c.chave}
+                        ref={(el) => {
+                          cabecalhos.current[c.chave] = el;
+                        }}
+                        scope="col"
+                        aria-sort={podeOrdenar ? (ordenada === "asc" ? "ascending" : ordenada === "desc" ? "descending" : "none") : undefined}
+                        className={cn(
+                          "group/coluna relative px-2 py-2.5 text-left align-middle text-label-md font-medium text-muted-foreground",
+                          c.alinharFim && "text-right",
+                          i === 0 && (compacta ? "pl-3" : "pl-5"),
+                          i === naTela.length - 1 && (compacta ? "pr-3" : "pr-5"),
+                          arrasto?.ativo && arrasto.chave === c.chave && "opacity-disabled",
+                        )}
+                      >
+                        <div className={cn("flex min-w-0 items-center gap-1", c.alinharFim && "justify-end")}>
+                          {podeOrdenar || ajustes ? (
+                            <button
+                              type="button"
+                              aria-label={podeOrdenar ? r.ordenar(c.rotulo) : undefined}
+                              title={podeOrdenar ? r.ordenar(c.rotulo) : undefined}
+                              onClick={() => {
+                                // o clique que fecha um arrasto não ordena
+                                if (arrastou.current || !podeOrdenar) return;
+                                alternarOrdem(c);
+                              }}
+                              onPointerDown={cabecalhoPonteiro(c)}
+                              className={cn(
+                                "flex min-w-0 items-center gap-1 rounded-sm text-left font-medium transition-colors hover:text-foreground",
+                                focoInterno,
+                                // arrastar precisa do ponteiro inteiro, inclusive no toque
+                                ajustes && "cursor-grab touch-none active:cursor-grabbing",
+                                ordenada && "text-foreground",
+                              )}
+                            >
+                              <span className="min-w-0 truncate">{c.rotulo || <span className="sr-only">Ações</span>}</span>
+                              {ordenada ? <Seta size={12} weight="bold" aria-hidden="true" className="shrink-0 text-primary" /> : null}
+                            </button>
+                          ) : (
+                            /* A coluna de ações tem rótulo vazio no arquivo. Vazio para
+                               quem vê, nomeado para quem ouve. */
+                            <span className="min-w-0 truncate">{c.rotulo || <span className="sr-only">Ações</span>}</span>
+                          )}
+
+                          {ajustes && c.rotulo ? (
+                            // só aparece sob o cursor ou no foco: sete gatilhos fixos
+                            // no cabeçalho seriam ruído (regra da tabela do arquivo)
+                            <AcaoCampo
+                              icone={DotsThreeVertical}
+                              rotulo={r.menuDaColuna(c.rotulo)}
+                              aria-haspopup="menu"
+                              aria-expanded={menuAberto === c.chave}
+                              onClick={(e) => {
+                                gatilhoDoMenu.current = e.currentTarget;
+                                setMenuAberto((m) => (m === c.chave ? null : c.chave));
+                              }}
+                              className={cn(
+                                "opacity-0 group-hover/coluna:opacity-100 focus-visible:opacity-100",
+                                menuAberto === c.chave && "opacity-100 text-foreground",
+                              )}
+                            />
+                          ) : null}
+                        </div>
+
+                        {ajustes ? (
+                          // A alça: um separador vertical focável na borda direita. Setas
+                          // mudam 16px (64 com Shift); o ponteiro arrasta.
+                          <span
+                            role="separator"
+                            aria-orientation="vertical"
+                            aria-label={r.redimensionar(c.rotulo || "Ações")}
+                            aria-valuenow={emPixel ? larguraDe(c) : undefined}
+                            aria-valuemin={c.minimo ?? LARGURA_MINIMA}
+                            tabIndex={0}
+                            onPointerDown={alcaPonteiro(c)}
+                            onKeyDown={alcaTeclado(c)}
+                            className={cn(
+                              // a linha da alça é um pseudo-elemento: aparece sob o cursor da
+                              // coluna, acende em primary sob a própria alça e no foco
+                              "absolute inset-y-0 z-dropdown w-2 cursor-col-resize touch-none rounded-sm",
+                              "after:absolute after:inset-y-0 after:left-1/2 after:w-0.5 after:-translate-x-1/2 after:bg-transparent after:transition-colors",
+                              "group-hover/coluna:after:bg-border hover:after:bg-primary focus-visible:after:bg-primary",
+                              // na última coluna a alça não vaza da caixa que rola
+                              i === naTela.length - 1 ? "right-0" : "-right-1",
+                              foco,
+                            )}
+                          />
+                        ) : null}
+
+                        {arrasto?.ativo && arrasto.alvo?.chave === c.chave ? (
+                          // onde a coluna arrastada vai cair
+                          <span
+                            aria-hidden="true"
+                            className={cn("pointer-events-none absolute inset-y-0 w-0.5 bg-primary", arrasto.alvo.lado === "antes" ? "left-0" : "right-0")}
+                          />
+                        ) : null}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody ref={corpo} onKeyDown={tecladoDoCorpo}>
+                {children}
+              </tbody>
+            </table>
+          </div>
+
+          {ajustes && colunaDoMenu ? (
+            <MenuFlutuante
+              aberto={menuAberto === colunaDoMenu.chave}
+              gatilho={gatilhoDoMenu}
+              rotulo={r.menuDaColuna(colunaDoMenu.rotulo)}
+              itens={itensDoMenu(colunaDoMenu)}
+              aoFechar={(devolver = true) => {
+                setMenuAberto(null);
+                if (devolver) gatilhoDoMenu.current?.focus();
+              }}
+            />
+          ) : null}
+
+          {emArrasto && typeof document !== "undefined"
+            ? createPortal(
+                // a etiqueta que segue o ponteiro durante o arrasto
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none fixed z-popover -translate-x-1/2 -translate-y-1/2 rounded-md border border-overlay-border bg-overlay-bg px-2 py-1 text-label-md text-foreground shadow-lg"
+                  style={{ top: arrasto!.y, left: arrasto!.x }}
+                >
+                  {emArrasto.rotulo}
+                </span>,
+                document.body,
+              )
+            : null}
+        </div>
+      </Contexto.Provider>
+    );
+  },
+);
 DataTable.displayName = "DataTable";
 
 /**
@@ -95,44 +858,101 @@ DataTable.displayName = "DataTable";
  * de 37 linhas o realce sob o cursor é o que evita ler o dado da linha errada.
  * O token é `overlay/item-hover`, que existe para exatamente isto e clareia nos
  * dois temas.
+ *
+ * Com `aoSelecionar`, a linha é selecionável: clique (fora de botão e campo),
+ * Enter ou Espaço escolhem; setas andam entre as linhas; `aria-selected` diz
+ * qual está escolhida e o fundo é `overlay/item-selected`. É o mestre-detalhe
+ * da referência: a tela liga a linha escolhida ao painel (o Drawer, no CRM).
+ *
+ * Numa tabela com `ajustes`, as células seguem a ordem e a visibilidade das
+ * colunas: cada uma se acha pela prop `coluna`, ou pela posição em que veio.
  */
-export const DataTableRow = React.forwardRef<
-  HTMLTableRowElement,
-  React.HTMLAttributes<HTMLTableRowElement>
->(({ className, ...props }, ref) => {
-  const layout = React.useContext(LayoutTabela);
+export type DataTableRowProps = React.HTMLAttributes<HTMLTableRowElement> & {
+  /** A linha escolhida: `aria-selected` e fundo `overlay/item-selected`. */
+  selecionada?: boolean;
+  /** Liga a seleção: clique fora de botão e campo, Enter ou Espaço. */
+  aoSelecionar?: () => void;
+};
+
+export const DataTableRow = React.forwardRef<HTMLTableRowElement, DataTableRowProps>(
+  ({ className, selecionada, aoSelecionar, onClick, onKeyDown, children, ...props }, ref) => {
+  const { layout, chaves, naTela } = React.useContext(Contexto);
+  const selecionavel = Boolean(aoSelecionar);
+
+  let celulas: React.ReactNode = children;
+  if (naTela) {
+    const vindas = React.Children.toArray(children).filter(React.isValidElement) as React.ReactElement<DataTableCellProps>[];
+    const porChave = new Map<string, React.ReactElement<DataTableCellProps>>();
+    vindas.forEach((el, i) => {
+      const chave = el.props.coluna ?? chaves[i];
+      if (chave) porChave.set(chave, el);
+    });
+    celulas = naTela.map((chave, i) => {
+      const el = porChave.get(chave);
+      return el ? React.cloneElement(el, { key: chave, primeira: i === 0, ultima: i === naTela.length - 1 }) : null;
+    });
+  }
+
   return (
     <tr
       ref={ref}
+      data-selecionavel={selecionavel || undefined}
+      aria-selected={selecionavel ? Boolean(selecionada) : undefined}
+      onClick={(e) => {
+        onClick?.(e);
+        if (!aoSelecionar || e.defaultPrevented) return;
+        // clique num botão, link ou campo da linha é dele, não da seleção
+        if ((e.target as HTMLElement).closest("button, a, input, select, textarea, [role='button'], [role='separator']")) return;
+        aoSelecionar();
+      }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (!aoSelecionar || e.target !== e.currentTarget) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          aoSelecionar();
+        }
+      }}
       className={cn(
         "border-t transition-colors hover:bg-overlay-item-hover",
         layout === "compacta" ? "border-border" : "border-card",
+        selecionavel && `cursor-pointer ${focoInterno}`,
+        selecionada && "bg-overlay-item-selected hover:bg-overlay-item-selected",
         className,
       )}
       {...props}
-    />
+    >
+      {celulas}
+    </tr>
   );
-});
+  },
+);
 DataTableRow.displayName = "DataTableRow";
 
-export const DataTableCell = React.forwardRef<
-  HTMLTableCellElement,
-  React.TdHTMLAttributes<HTMLTableCellElement> & { primeira?: boolean; ultima?: boolean }
->(({ className, primeira, ultima, ...props }, ref) => {
-  const compacta = React.useContext(LayoutTabela) === "compacta";
-  return (
-    <td
-      ref={ref}
-      className={cn(
-        "px-2 py-3 align-middle",
-        primeira && (compacta ? "pl-3" : "pl-5"),
-        ultima && (compacta ? "pr-3" : "pr-5"),
-        className,
-      )}
-      {...props}
-    />
-  );
-});
+export type DataTableCellProps = React.TdHTMLAttributes<HTMLTableCellElement> & {
+  primeira?: boolean;
+  ultima?: boolean;
+  /** A coluna desta célula (`chave`). Sem ela, vale a posição em que a célula veio. */
+  coluna?: string;
+};
+
+export const DataTableCell = React.forwardRef<HTMLTableCellElement, DataTableCellProps>(
+  ({ className, primeira, ultima, coluna: _coluna, ...props }, ref) => {
+    const compacta = React.useContext(Contexto).layout === "compacta";
+    return (
+      <td
+        ref={ref}
+        className={cn(
+          "px-2 py-3 align-middle",
+          primeira && (compacta ? "pl-3" : "pl-5"),
+          ultima && (compacta ? "pr-3" : "pr-5"),
+          className,
+        )}
+        {...props}
+      />
+    );
+  },
+);
 DataTableCell.displayName = "DataTableCell";
 
 /* ------------------------------------------------------------- Toolbar -- */

@@ -424,7 +424,8 @@ export function Tela() {
           <Lista
             etapas={etapas}
             leads={etapas.flatMap((e) => visiveis[e.id] ?? [])}
-            aoAbrir={(l) => setAbertoId(l.id)}
+            aberto={abertoId}
+              aoAbrir={(l) => setAbertoId(l.id)}
           />
         )}
       </main>
