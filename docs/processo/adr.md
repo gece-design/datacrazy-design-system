@@ -140,3 +140,8 @@ Desvio: o arquivo é desktop (1440) e o cliente disse "um problema por vez" sobr
 Motivo: pedido do humano (2026-09-23): toda tela nova nasce da mesma casca, responsiva, sem repetir Sidebar e Header nem pedir por prompt. Os degraus usam só o que existe (Sidebar colapsada, Scrim, camada); nada de pixel novo nos componentes. O menu por cima é a única decisão visual nova e vai ao cliente como tal.
 Aprovado por: humano ("Pode aprovar essa… manda bala").
 
+## ADR-028 · Na tela, recuo de 24 e busca que abre da lupa · 2026-09-23
+Desvio: o arquivo desenha o Header com 32 de recuo e a busca sempre aberta (184px); a `TelaBase` usa 24 (16 abaixo de 768) e a `HeaderBusca recolhida` anima a largura de 32 para 184 (I11 proíbe animar largura).
+Motivo: humano (2026-09-23): "tá sobrando muito espaço cinza na tela" e o header do pipeline não cabia com todas as ações. A largura anima com o precedente da Sidebar (ADR-022), em `base` · `enter`; com `prefers-reduced-motion` não anima. A página do Header no DS continua com os 32 e a busca aberta do arquivo.
+Aprovado por: humano.
+

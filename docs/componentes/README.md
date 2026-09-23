@@ -35,6 +35,7 @@ markdown é a vista dele.
 | [Input.md](Input.md) | Receber um valor curto digitado, com rótulo visível e erro inline. |
 | [KpiCard.md](KpiCard.md) | Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma |
 | [LogoDatacrazy.md](LogoDatacrazy.md) | Símbolo e logotipo do DataCrazy (`LogoDataCrazy` no código), em `currentColor` para acompanhar o tema. É a |
+| [Menu.md](Menu.md) | A lista de ações e opções que abre de um botão: o menu da coluna e o botão |
 | [Modal.md](Modal.md) | Pedir uma decisão bloqueando a tela até ela ser tomada. |
 | [Pagination.md](Pagination.md) | Navegar entre as páginas de uma lista longa. |
 | [Popover.md](Popover.md) | A casca de todo painel flutuante do DS — lista do Select, calendário, hora, |
@@ -46,7 +47,7 @@ markdown é a vista dele.
 | [Switch.md](Switch.md) | Ligar ou desligar algo que passa a valer na hora, sem botão de salvar. |
 | [Tabs.md](Tabs.md) | Alternar entre as seções de um mesmo registro. |
 | [Tag.md](Tag.md) | Mostrar uma etiqueta que o usuário pôs no lead. |
-| [TelaBase.md](TelaBase.md) | A casca de toda tela do CRM: Sidebar, Header, subcabeçalho e conteúdo já |
+| [TelaBase.md](TelaBase.md) | A casca de toda tela do CRM: Sidebar, Header e conteúdo já ligados, com os |
 | [Telefone.md](Telefone.md) | Receber um telefone com o país separado do número. |
 | [TimePicker.md](TimePicker.md) | Escolher uma hora, e uma data com hora, sabendo de fuso. |
 | [Toast.md](Toast.md) | Confirmar o resultado de uma ação sem bloquear a tela. |

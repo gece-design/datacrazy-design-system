@@ -22,6 +22,8 @@ Tema não virou prop: é token, e um componente atende os dois temas.
 Decisão do cliente (2026-09-21), por cima do arquivo: recuo lateral 20 → 16 em
 cabeçalho, corpo e rodapé; rodapé com fundo `background` e 12 em cima e embaixo
 (era 12/20 sem fundo). O Figma acompanha o código (AUD-199, `aceito`).
+O corpo tem 4 em cima e 16 embaixo (era 4/4): o conteúdo encostava na faixa
+do rodapé (humano, 2026-09-23).
 
 ## Props
 

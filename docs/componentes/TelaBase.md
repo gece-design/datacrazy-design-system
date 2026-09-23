@@ -2,8 +2,8 @@
 
 ## Responsabilidade
 
-A casca de toda tela do CRM: Sidebar, Header, subcabeçalho e conteúdo já
-ligados, com os breakpoints e a memória da sidebar. A tela só preenche os
+A casca de toda tela do CRM: Sidebar, Header e conteúdo já ligados, com os
+breakpoints e a memória da sidebar. A tela só preenche os
 encaixes. Instala-se como bloco (`@datacrazy/tela`), que cria a página pronta.
 
 ## Família
@@ -26,11 +26,10 @@ arquivo acompanha na remedição (AUD-203).
 | Prop | Tipo | Obrigatória | Descrição |
 |------|------|-------------|-----------|
 | `navegacao` | `ReactNode` | sim | O miolo da Sidebar: `SidebarTopo` (marca e itens) e `SidebarRodape` (tema, atalhos, usuário). |
-| `cabecalho` | `HeaderProps` | sim | As props do [Header](Header.md): `titulo`, `subtitulo`, `trilha`, `utilitarios`, `acoes`. O botão de menu entra sozinho antes da trilha. |
-| `subcabecalho` | `ReactNode` | não | A segunda linha: filtros, abas, `SegmentedControl`, troca-visão. |
+| `cabecalho` | `HeaderProps` | sim | As props do [Header](Header.md): `titulo`, `subtitulo`, `trilha`, `utilitarios`, `acoes`. O botão de menu entra sozinho antes da trilha; a segunda linha de controles é `acoes`. |
 | `children` | `ReactNode` | sim | O conteúdo. Rola por dentro; o cabeçalho fica. |
 | `memoria` | `string` | não | Chave da memória da sidebar (aberta ou recolhida) no navegador, uma por tela. Sem ela, começa pelo breakpoint. |
-| `recuo` | `boolean` | não | Padrão `true`: 16 · 24 · 32px no conteúdo. Desligue quando o conteúdo traz o próprio (o quadro do pipeline). |
+| `recuo` | `boolean` | não | Padrão `true`: 16px abaixo de 768, 24 daí em diante. Desligue quando o conteúdo traz o próprio (o quadro do pipeline). |
 | `rotulos` | `Partial<RotulosDaTela>` | não | `abrirMenu`, `fecharMenu`, `navegacao`, `conteudo` (i18n). Fábrica: `ROTULOS_DA_TELA`. |
 | `className` | `string` | não | — |
 
@@ -42,8 +41,10 @@ arquivo acompanha na remedição (AUD-203).
 | 1024–1279px (`lg`) | Sidebar nasce recolhida em ícones, 88px. A pessoa pode abrir. |
 | < 1024px | A sidebar some. O botão de menu no Header abre a mesma Sidebar num painel por cima, com o `Scrim` do Modal, foco preso, Escape e o foco de volta ao botão. |
 
-Os recuos do Header e do conteúdo acompanham: 16px abaixo de 768, 24 até 1023,
-32 de 1024 em diante. A memória é lida antes da primeira pintura, para a
+Os recuos do Header e do conteúdo: 16px abaixo de 768, 24 daí em diante — o
+arquivo desenha 32 no Header, mas na tela sobrava cinza (humano, 2026-09-23,
+ADR-028). Não há segunda linha de controles: filtros, abas e troca-visão vão
+na fileira de ações do Header ("não ficou legal"). A memória é lida antes da primeira pintura, para a
 sidebar não abrir e recolher na frente da pessoa.
 
 ## Estados
@@ -75,8 +76,7 @@ A tela base publicada (`/exemplos/tela-base`, bloco `@datacrazy/tela`) vem
 com tudo ligado: o tema troca de verdade (classe `dark` no `<html>` e
 `localStorage`, para trocar por quem cuida do tema no CRM), o sino abre o
 painel (`Notificacoes`), a busca filtra, o troca-visão e o período respondem,
-as abas do subcabeçalho trocam o conteúdo (`Tabs` + `TabPanel`) e as ações
-respondem com um `Toast`. Placeholder que não faz nada não entra (humano,
+a lupa abre a busca e ela filtra, e as ações respondem com um `Toast`. Placeholder que não faz nada não entra (humano,
 2026-09-23).
 
 ## Exemplo de uso
@@ -103,7 +103,6 @@ respondem com um `Toast`. Placeholder que não faz nada não entra (humano,
     utilitarios: <HeaderNotificacoes rotulo="Notificações" contagem={3} />,
     acoes: <Button>Novo lead</Button>,
   }}
-  subcabecalho={<SegmentedControl rotulo="Recorte" atual={visao} aoEscolher={setVisao} itens={recortes} />}
 >
   <DataTable colunas={colunas}>{linhas}</DataTable>
 </TelaBase>
@@ -115,7 +114,7 @@ respondem com um `Toast`. Placeholder que não faz nada não entra (humano,
 |------|---------------------|
 | Regiões | `<nav>` nomeado (a Sidebar), `<header>`, `<main>` nomeado por `rotulos.conteudo` |
 | Menu (< 1024) | Botão com `aria-haspopup="dialog"` e `aria-expanded`; o painel é `role="dialog"` com `aria-modal`, foco preso, Escape fecha, foco volta ao botão; clique num item fecha |
-| Teclado | Tab: menu → trilha → utilitários → ações → subcabeçalho → conteúdo. A Sidebar recolhida mantém os itens no Tab, com o nome no `aria-label` |
+| Teclado | Tab: menu → trilha → utilitários → ações → conteúdo. A Sidebar recolhida mantém os itens no Tab, com o nome no `aria-label` |
 | Rolagem | Só o conteúdo rola; cabeçalho e navegação ficam |
 | Movimento | Painel entra e sai com fade (fast · base); largura da sidebar em `base` (ADR-022); com `prefers-reduced-motion` não há |
 

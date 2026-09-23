@@ -13,18 +13,20 @@ import { useMontado, useSaida } from "@/lib/use-saida";
 /**
  * TelaBase — a casca de toda tela do CRM (pedido do humano, 2026-09-23).
  *
- * Sidebar, Header e o subcabeçalho já ligados, com o que era decisão repetida
- * por tela: a sidebar aberta ou recolhida com memória, o conteúdo rolando por
- * dentro, os recuos, o `main` nomeado. A tela só preenche os encaixes —
- * `navegacao` (o miolo da Sidebar), `cabecalho` (as props do Header),
- * `subcabecalho` (a segunda linha: filtros, abas, troca-visão) e `children`.
+ * Sidebar e Header já ligados, com o que era decisão repetida por tela: a
+ * sidebar aberta ou recolhida com memória, o conteúdo rolando por dentro, os
+ * recuos, o `main` nomeado. A tela só preenche os encaixes — `navegacao` (o
+ * miolo da Sidebar), `cabecalho` (as props do Header) e `children`. Não há
+ * subcabeçalho: a segunda linha de controles é a fileira de ações do Header
+ * (humano, 2026-09-23 — "não ficou legal").
  *
  * Os breakpoints moram aqui, não na tela (ADR-027):
  *   ≥ 1280 (xl)  sidebar aberta, 282px
  *   1024–1279    sidebar recolhida em ícones, 88px — a pessoa pode abrir
  *   < 1024 (lg)  sidebar some; o botão de menu no Header abre o painel por
  *                cima, com o Scrim do Modal e a camada (foco preso, Escape)
- * Os recuos do conteúdo: 16 · 24 · 32px (sm · md · lg), os do Header também.
+ * Os recuos do conteúdo e do Header: 16px abaixo de 768, 24 daí em diante —
+ * o arquivo desenha 32 no Header, mas na tela sobrava cinza (humano, 2026-09-23).
  *
  * Instala-se como bloco: `npx shadcn add @datacrazy/tela` cria a página
  * pronta com estes encaixes preenchidos por placeholders.
@@ -52,13 +54,11 @@ export interface TelaBaseProps {
   navegacao: React.ReactNode;
   /** As props do Header: `titulo`, `trilha`, `utilitarios`, `acoes`, `subtitulo`. */
   cabecalho: HeaderProps;
-  /** A segunda linha, opcional: filtros, abas, troca-visão. */
-  subcabecalho?: React.ReactNode;
   /** O conteúdo. Rola por dentro; o cabeçalho fica. */
   children: React.ReactNode;
   /** Chave da memória da sidebar (aberta ou recolhida) no navegador. Sem ela, começa pelo breakpoint. */
   memoria?: string;
-  /** Recuo do conteúdo (16 · 24 · 32). Desligue quando o conteúdo traz o próprio, como o quadro do pipeline. */
+  /** Recuo do conteúdo (16 · 24). Desligue quando o conteúdo traz o próprio, como o quadro do pipeline. */
   recuo?: boolean;
   rotulos?: Partial<RotulosDaTela>;
   className?: string;
@@ -73,7 +73,6 @@ const useEfeitoDeLayout = typeof window === "undefined" ? React.useEffect : Reac
 export function TelaBase({
   navegacao,
   cabecalho,
-  subcabecalho,
   children,
   memoria,
   recuo = true,
@@ -146,7 +145,7 @@ export function TelaBase({
       <div className="flex min-w-0 flex-1 flex-col">
         <Header
           {...cabecalho}
-          className={cn("shrink-0 px-4 md:px-6 lg:px-8", cabecalho.className)}
+          className={cn("shrink-0 px-4 md:px-6", cabecalho.className)}
           trilha={
             <div className="flex min-w-0 items-center gap-2">
               {botaoMenu}
@@ -154,14 +153,9 @@ export function TelaBase({
             </div>
           }
         />
-        {subcabecalho ? (
-          <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-border bg-background px-4 py-2 md:px-6 lg:px-8">
-            {subcabecalho}
-          </div>
-        ) : null}
         <main
           aria-label={r.conteudo}
-          className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:thin]", recuo && "p-4 md:p-6 lg:p-8")}
+          className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:thin]", recuo && "p-4 md:p-6")}
         >
           {children}
         </main>

@@ -93,7 +93,6 @@ function Sino() {
       itens={itens}
       aoMarcarLida={(id) => setItens((l) => l.map((n) => (n.id === id ? { ...n, lida: true } : n)))}
       aoMarcarTodas={() => setItens((l) => l.map((n) => ({ ...n, lida: true })))}
-      aoVerTodas={() => {}}
     />
   );
 }

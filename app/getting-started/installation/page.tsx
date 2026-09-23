@@ -92,7 +92,7 @@ export default function Installation() {
       <Secao
         titulo="Criar uma tela"
         spec="passo 4"
-        descricao="Toda tela nova começa pela tela base: um comando cria a página com Sidebar, Header, subcabeçalho e conteúdo já ligados e responsivos. Renomeie a pasta app/nova-tela e preencha os encaixes. O Claude sabe disso pela skill — não precisa pedir."
+        descricao="Toda tela nova começa pela tela base: um comando cria a página com Sidebar, Header e conteúdo já ligados e responsivos. Renomeie a pasta app/nova-tela e preencha os encaixes. O Claude sabe disso pela skill — não precisa pedir."
         semCaixa
         semSeletorDeFundo
         className={semMoldura}

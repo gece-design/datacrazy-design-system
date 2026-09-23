@@ -60,14 +60,28 @@ function pintura(cor: Etapa["cor"]) {
 
 type Alvo = { etapa: EtapaId; indice: number };
 
-/** Os três presets do cartão (T3, protótipo do cliente): o que cada um mostra
- *  está no `Cartao`. Compacto cabe mais na coluna; Detalhado dispensa abrir. */
-export type DensidadeDoCartao = "compacto" | "padrao" | "detalhado";
+/**
+ * O que o cartão mostra além de nome e valor — a pessoa escolhe campo a
+ * campo, como as propriedades de um card do Notion (humano, 2026-09-23; os
+ * três presets do protótipo saíram). Tudo ligado é o estado de fábrica.
+ */
+export const CAMPOS_DO_CARTAO = ["empresa", "origem", "proximaAcao", "contato", "email", "tags", "atendente", "dias"] as const;
+export type CampoDoCartao = (typeof CAMPOS_DO_CARTAO)[number];
+export const ROTULOS_DOS_CAMPOS: Record<CampoDoCartao, string> = {
+  empresa: "Empresa e cidade",
+  origem: "Origem",
+  proximaAcao: "Próxima ação",
+  contato: "Contato principal",
+  email: "E-mail",
+  tags: "Tags",
+  atendente: "Atendente",
+  dias: "Dias na etapa",
+};
 
 export function Quadro({
   etapas,
   colunas,
-  densidade = "padrao",
+  campos = CAMPOS_DO_CARTAO,
   aoMover,
   aoAbrir,
   aoAdicionar,
@@ -76,7 +90,8 @@ export function Quadro({
 }: {
   etapas: Etapa[];
   colunas: Colunas;
-  densidade?: DensidadeDoCartao;
+  /** Os campos visíveis no cartão. Padrão: todos. */
+  campos?: readonly CampoDoCartao[];
   /** Move o lead para `etapa`, na posição `indice` da lista sem ele. */
   aoMover: (id: string, etapa: EtapaId, indice: number) => void;
   aoAbrir: (lead: Lead) => void;
@@ -245,7 +260,7 @@ export function Quadro({
         onPointerUp={soltarPan}
         onPointerCancel={soltarPan}
         className={cn(
-          "flex min-h-0 flex-1 gap-4 overflow-x-auto px-8 pb-6 pt-1 [scrollbar-width:thin]",
+          "flex min-h-0 flex-1 gap-4 overflow-x-auto px-6 pb-6 pt-1 [scrollbar-width:thin]",
           arrastandoTrilho ? "cursor-grabbing select-none" : "cursor-grab",
         )}
       >
@@ -267,7 +282,7 @@ export function Quadro({
               <Cartao
                 key={lead.id}
                 lead={lead}
-                densidade={densidade}
+                campos={campos}
                 emMovimento={emMovimento}
                 pegoPeloTeclado={emMovimento && porTeclado}
                 descrito={instrucoes}
@@ -424,7 +439,7 @@ function Linha() {
 
 function Cartao({
   lead,
-  densidade,
+  campos,
   emMovimento,
   pegoPeloTeclado,
   descrito,
@@ -434,7 +449,7 @@ function Cartao({
   aoTerminar,
 }: {
   lead: Lead;
-  densidade: DensidadeDoCartao;
+  campos: readonly CampoDoCartao[];
   emMovimento: boolean;
   pegoPeloTeclado: boolean;
   descrito: string;
@@ -447,14 +462,21 @@ function Cartao({
   const CanalIcone = canais[lead.canal];
   const parado = lead.dias >= 7;
   const tags = tagsDe(GRUPOS_TAGS, lead.tags);
-  // Compacto: só o essencial (nome, valor, quem atende, há quanto tempo).
-  // Padrão: + empresa e duas tags. Detalhado: tudo, sem "+N" — a cidade e o
-  // canal por extenso, a próxima ação e o contato principal da empresa.
-  const compacto = densidade === "compacto";
-  const detalhado = densidade === "detalhado";
-  const visiveis = detalhado ? tags : tags.slice(0, 2);
-  const resto = lead.tags.length - visiveis.length;
+  const mostra = (c: CampoDoCartao) => campos.includes(c);
   const proximaAcao = lead.proximaAcao ? lead.proximaAcao.split("-").reverse().slice(0, 2).join("/") : null;
+  // As linhas de detalhe: rótulo à esquerda em muted, valor à direita em
+  // foreground (humano, 2026-09-23). Só as que a pessoa ligou e que têm valor.
+  const detalhes = (
+    [
+      mostra("origem") ? ["Origem", lead.canal] : null,
+      mostra("proximaAcao") ? ["Próxima ação", proximaAcao] : null,
+      mostra("contato") && lead.contatoPrincipal
+        ? ["Contato", `${lead.contatoPrincipal.nome}${lead.contatoPrincipal.cargo ? ` · ${lead.contatoPrincipal.cargo}` : ""}`]
+        : null,
+      mostra("email") ? ["E-mail", lead.email] : null,
+    ] as ([string, string | null] | null)[]
+  ).filter((par): par is [string, string] => Boolean(par && par[1]));
+  const rodape = mostra("atendente") || mostra("dias");
 
   return (
     <article
@@ -478,81 +500,69 @@ function Cartao({
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        {/* +3px no nome, a pedido do humano: 13 (`text-h4`) → 16. `text-metric`
-            é o único degrau de 16 da escala do Figma. */}
-        {/* No detalhado o nome desce para h4: com cinco linhas embaixo, os 16px
-            do padrão pesavam (humano, 2026-09-23). */}
-        <p title={lead.nome} className={cn("min-w-0 truncate text-foreground", detalhado ? "text-h4" : "text-metric")}>
+        {/* h3 (15px): entre os 16 que o humano pediu antes e os 13 do cartão
+            cheio — um tamanho só, em todo estado (humano, 2026-09-23). */}
+        <p title={lead.nome} className="min-w-0 truncate text-h3 text-foreground">
           {lead.nome}
         </p>
         <span className="shrink-0 text-label-lg tabular-nums text-foreground">{moeda(lead.valor)}</span>
       </div>
 
-      {compacto ? null : (
-        <p title={lead.empresa} className="mt-1 flex items-center gap-1 text-body-sm text-muted-foreground">
+      {mostra("empresa") ? (
+        <p title={`${lead.empresa} · ${lead.cidade}`} className="mt-1 flex items-center gap-1 text-body-sm text-muted-foreground">
           <Tipo size={13} weight="regular" aria-hidden="true" className="shrink-0" />
           <span className="min-w-0 truncate">{lead.empresa}</span>
-          {detalhado ? <span className="shrink-0 text-subtle-foreground">· {lead.cidade}</span> : null}
+          <span className="shrink-0 text-subtle-foreground">· {lead.cidade}</span>
         </p>
-      )}
+      ) : null}
 
-      {detalhado ? (
-        // Duas colunas: rótulo à esquerda em muted, valor à direita em
-        // foreground, label-lg (12px) — legível sem abrir o lead.
+      {detalhes.length > 0 ? (
         <dl className="mt-2.5 flex flex-col gap-1 text-label-lg">
-          {(
-            [
-              ["Origem", lead.canal],
-              ["Próxima ação", proximaAcao],
-              lead.contatoPrincipal
-                ? ["Contato", `${lead.contatoPrincipal.nome}${lead.contatoPrincipal.cargo ? ` · ${lead.contatoPrincipal.cargo}` : ""}`]
-                : null,
-              ["E-mail", lead.email],
-            ] as ([string, string | null] | null)[]
-          )
-            .filter((par): par is [string, string] => Boolean(par && par[1]))
-            .map(([rotulo, valor]) => (
-              <div key={rotulo} className="flex items-baseline justify-between gap-3">
-                <dt className="shrink-0 text-muted-foreground">{rotulo}</dt>
-                <dd title={valor} className="min-w-0 truncate text-right tabular-nums text-foreground">
-                  {valor}
-                </dd>
-              </div>
-            ))}
+          {detalhes.map(([rotulo, valor]) => (
+            <div key={rotulo} className="flex items-baseline justify-between gap-3">
+              <dt className="shrink-0 text-muted-foreground">{rotulo}</dt>
+              <dd title={valor} className="min-w-0 truncate text-right tabular-nums text-foreground">
+                {valor}
+              </dd>
+            </div>
+          ))}
         </dl>
       ) : null}
 
-      {!compacto && tags.length > 0 ? (
+      {mostra("tags") && tags.length > 0 ? (
         <div className="mt-2.5 flex flex-wrap items-center gap-1">
-          {visiveis.map((t) => (
+          {tags.map((t) => (
             <Tag key={t.id} status={t.status}>
               {t.rotulo}
             </Tag>
           ))}
-          {resto > 0 ? <Tag title={tags.map((t) => t.rotulo).join(", ")}>+{resto}</Tag> : null}
         </div>
       ) : null}
 
-      <div className={cn("flex items-center justify-between gap-2 border-t border-background pt-2.5", compacto ? "mt-2" : "mt-3")}>
-        <Tag foto="/ds/atendente.png">{lead.responsavel}</Tag>
-        <div className="flex shrink-0 items-center gap-2.5 text-muted-foreground">
-          <span title={`Origem: ${lead.canal}`} className="flex items-center">
-            <CanalIcone size={14} weight="regular" aria-hidden="true" />
-            <span className="sr-only">{lead.canal}</span>
-          </span>
-          <span
-            title={parado ? `Parado há ${lead.dias} dias nesta etapa` : `${lead.dias} dia(s) nesta etapa`}
-            className={cn("flex items-center gap-1 text-caption tabular-nums", parado && "text-warning")}
-          >
-            {parado ? (
-              <WarningCircle size={14} weight="regular" aria-hidden="true" />
-            ) : (
-              <Clock size={14} weight="regular" aria-hidden="true" />
-            )}
-            {lead.dias}d
-          </span>
+      {rodape ? (
+        <div className="mt-3 flex items-center justify-between gap-2 border-t border-background pt-2.5">
+          {mostra("atendente") ? <Tag foto="/ds/atendente.png">{lead.responsavel}</Tag> : <span />}
+          {mostra("dias") ? (
+            <div className="flex shrink-0 items-center gap-2.5 text-muted-foreground">
+              <span title={`Origem: ${lead.canal}`} className="flex items-center">
+                <CanalIcone size={14} weight="regular" aria-hidden="true" />
+                <span className="sr-only">{lead.canal}</span>
+              </span>
+              <span
+                title={parado ? `Parado há ${lead.dias} dias nesta etapa` : `${lead.dias} dia(s) nesta etapa`}
+                className={cn("flex items-center gap-1 text-caption tabular-nums", parado && "text-warning")}
+              >
+                {parado ? (
+                  <WarningCircle size={14} weight="regular" aria-hidden="true" />
+                ) : (
+                  <Clock size={14} weight="regular" aria-hidden="true" />
+                )}
+                {lead.dias}d
+              </span>
+            </div>
+          ) : null}
         </div>
-      </div>
+      ) : null}
     </article>
   );
 }

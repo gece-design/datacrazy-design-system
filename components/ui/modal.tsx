@@ -18,7 +18,7 @@ import { BotaoFechar } from "@/components/ui/button";
  *
  * Medidas do arquivo: largura 400 · 520 · 720 · raio 8 (`radius/lg`) ·
  * `elevation/xl` · cabeçalho com 16 em cima e 12 embaixo · corpo com 4 em cima
- * e embaixo · rodapé com traço e 12 em cima e embaixo, botões a 8 um do outro ·
+ * e 16 embaixo · rodapé com traço e 12 em cima e embaixo, botões a 8 um do outro ·
  * fechar de 28 com X de 16. Recuo lateral de 16 e rodapé com fundo
  * `background`: decisão do cliente (2026-09-21) por cima dos 20 sem fundo do
  * arquivo — o Figma acompanha (AUD-199). No destrutivo, círculo de 40 com
@@ -96,7 +96,9 @@ export const ModalPainel = React.forwardRef<HTMLDivElement, ModalPainelProps>(fu
 
       {/* O corpo é o que rola: com zoom alto ou conteúdo longo, cabeçalho e
           rodapé ficam presos e os botões nunca saem da tela. */}
-      {children ? <div className="min-h-0 flex-1 overflow-y-auto px-4 py-1">{children}</div> : null}
+      {/* 4 em cima (o cabeçalho já deu os 12) e 16 embaixo: a faixa do rodapé
+          precisa de respiro, o conteúdo encostava nela (humano, 2026-09-23). */}
+      {children ? <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 pt-1">{children}</div> : null}
 
       {acoes ? (
         <div className="relative flex shrink-0 flex-wrap items-center justify-end gap-2 bg-background px-4 py-3">

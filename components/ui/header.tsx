@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 
-import { focoDentro, focoInterno } from "@/lib/estados";
+import { foco, focoDentro, focoInterno } from "@/lib/estados";
 /**
  * Header — o topo de uma página do CRM (set 601:464).
  *
@@ -121,31 +121,83 @@ HeaderNotificacoes.displayName = "HeaderNotificacoes";
 export interface HeaderBuscaProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
   /** Nome do campo para leitor de tela. Ex.: "Pesquisar leads". */
   rotulo: string;
+  /**
+   * Começa como só a lupa (a caixa de 32px do botão tertiary). Clicar abre a
+   * caixa de 184px com movimento e o foco entra; sem texto, fecha ao sair.
+   * Pedido do humano (2026-09-23) para o header caber; ADR-028.
+   */
+  recolhida?: boolean;
 }
 
 /**
  * Busca inline (variante Search, 610:14049): a caixa do Button `tertiary` com
  * 184px, virada campo. Sem rótulo visível — o placeholder é a pista e
- * `rotulo` é o nome acessível.
+ * `rotulo` é o nome acessível. Com `recolhida`, a caixa nasce com 32px e a
+ * largura anima até 184 quando abre (`base` · `enter`).
  */
-export const HeaderBusca = React.forwardRef<HTMLInputElement, HeaderBuscaProps>(({ rotulo, className, ...props }, ref) => (
-  <label
-    className={cn(
-      "flex h-8 w-[184px] max-w-full cursor-text items-center gap-0.5 rounded-md bg-card p-2 text-muted-foreground shadow-button-inner",
-      `${focoDentro}`,
-      className,
-    )}
-  >
-    <MagnifyingGlass size={16} weight="regular" aria-hidden="true" className="shrink-0" />
-    <input
-      ref={ref}
-      type="search"
-      aria-label={rotulo}
-      className="h-full min-w-0 flex-1 bg-transparent px-1 text-label-lg text-foreground outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:appearance-none"
-      {...props}
-    />
-  </label>
-));
+export const HeaderBusca = React.forwardRef<HTMLInputElement, HeaderBuscaProps>(
+  ({ rotulo, recolhida = false, className, onBlur, onKeyDown, ...props }, ref) => {
+    const [aberta, setAberta] = React.useState(!recolhida);
+    const campo = React.useRef<HTMLInputElement | null>(null);
+    const ligar = (el: HTMLInputElement | null) => {
+      campo.current = el;
+      if (typeof ref === "function") ref(el);
+      else if (ref) ref.current = el;
+    };
+    // abriu pela lupa: o foco entra no campo assim que ele tem largura
+    React.useEffect(() => {
+      if (recolhida && aberta) campo.current?.focus();
+    }, [recolhida, aberta]);
+    const fechada = recolhida && !aberta;
+
+    return (
+      <label
+        className={cn(
+          "flex h-8 max-w-full items-center gap-0.5 rounded-md bg-card text-muted-foreground shadow-button-inner",
+          recolhida ? "transition-[width] duration-base ease-enter" : "w-[184px] cursor-text p-2",
+          recolhida && (fechada ? "w-8 cursor-pointer justify-center" : "w-[184px] cursor-text p-2"),
+          !fechada && `${focoDentro}`,
+          className,
+        )}
+      >
+        {fechada ? (
+          <button
+            type="button"
+            aria-label={rotulo}
+            title={rotulo}
+            onClick={() => setAberta(true)}
+            className={cn("flex size-8 shrink-0 items-center justify-center rounded-md transition-colors hover:text-foreground", foco)}
+          >
+            <MagnifyingGlass size={16} weight="regular" aria-hidden="true" />
+          </button>
+        ) : (
+          <MagnifyingGlass size={16} weight="regular" aria-hidden="true" className="shrink-0" />
+        )}
+        <input
+          ref={ligar}
+          type="search"
+          aria-label={rotulo}
+          aria-hidden={fechada || undefined}
+          tabIndex={fechada ? -1 : 0}
+          onBlur={(e) => {
+            onBlur?.(e);
+            // sem texto, a caixa volta a ser só a lupa
+            if (recolhida && !e.currentTarget.value) setAberta(false);
+          }}
+          onKeyDown={(e) => {
+            onKeyDown?.(e);
+            if (recolhida && e.key === "Escape" && !e.currentTarget.value) setAberta(false);
+          }}
+          className={cn(
+            "h-full min-w-0 bg-transparent text-label-lg text-foreground outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:appearance-none",
+            fechada ? "w-0 px-0 opacity-0" : "flex-1 px-1",
+          )}
+          {...props}
+        />
+      </label>
+    );
+  },
+);
 HeaderBusca.displayName = "HeaderBusca";
 
 /* --------------------------------------------------------- Notificações -- */
@@ -165,7 +217,9 @@ export type RotulosDasNotificacoes = {
   /** Nome do sino. Ex.: (n) => `Notificações: ${n} não lidas`. */
   naoLidas: (n: number) => string;
   marcarTodas: string;
+  /** O rodapé: abre a lista inteira na altura da janela, e volta. */
   verTodas: string;
+  verMenos: string;
 };
 
 export const ROTULOS_DAS_NOTIFICACOES: RotulosDasNotificacoes = {
@@ -173,6 +227,7 @@ export const ROTULOS_DAS_NOTIFICACOES: RotulosDasNotificacoes = {
   naoLidas: (n) => (n ? `Notificações: ${n} não lida${n === 1 ? "" : "s"}` : "Notificações: nenhuma não lida"),
   marcarTodas: "Marcar todas como lidas",
   verTodas: "Ver todas",
+  verMenos: "Ver menos",
 };
 
 export interface NotificacoesProps {
@@ -180,8 +235,6 @@ export interface NotificacoesProps {
   /** Clique num item. A tela marca como lida e abre o que for. */
   aoMarcarLida: (id: string) => void;
   aoMarcarTodas: () => void;
-  /** Sem ele, o rodapé "Ver todas" não aparece. */
-  aoVerTodas?: () => void;
   rotulos?: Partial<RotulosDasNotificacoes>;
   className?: string;
 }
@@ -198,9 +251,12 @@ export interface NotificacoesProps {
  * Abre em portal fixo abaixo do sino, alinhado pela direita; acompanha a
  * rolagem e a janela; clique fora e Escape fecham; o foco volta ao sino.
  */
-export function Notificacoes({ itens, aoMarcarLida, aoMarcarTodas, aoVerTodas, rotulos, className }: NotificacoesProps) {
+export function Notificacoes({ itens, aoMarcarLida, aoMarcarTodas, rotulos, className }: NotificacoesProps) {
   const r = { ...ROTULOS_DAS_NOTIFICACOES, ...rotulos };
   const [aberto, setAberto] = React.useState(false);
+  // "Ver todas" não sai do painel: ele cresce até a altura da janela e a
+  // lista rola — o que a pessoa espera de um sino (humano, 2026-09-23).
+  const [expandido, setExpandido] = React.useState(false);
   const { saindo, visivel } = useSaida(aberto);
   const [pos, setPos] = React.useState<{ top: number; right: number } | null>(null);
   const gatilho = React.useRef<HTMLButtonElement>(null);
@@ -286,7 +342,12 @@ export function Notificacoes({ itens, aoMarcarLida, aoMarcarTodas, aoVerTodas, r
                 </Button>
               </div>
 
-              <ul className="flex max-h-[320px] flex-col overflow-y-auto overscroll-contain [scrollbar-width:thin]">
+              <ul
+                className={cn(
+                  "flex flex-col overflow-y-auto overscroll-contain transition-[max-height] duration-base ease-enter [scrollbar-width:thin]",
+                  expandido ? "max-h-[calc(100vh-160px)]" : "max-h-[320px]",
+                )}
+              >
                 {itens.map((n) => {
                   const Icone = n.icone;
                   return (
@@ -322,13 +383,11 @@ export function Notificacoes({ itens, aoMarcarLida, aoMarcarTodas, aoVerTodas, r
                 })}
               </ul>
 
-              {aoVerTodas ? (
-                <div className="border-t border-border p-1.5">
-                  <Button variant="ghost" size="sm" className="w-full" onClick={() => { fechar(); aoVerTodas(); }}>
-                    {r.verTodas}
-                  </Button>
-                </div>
-              ) : null}
+              <div className="border-t border-border p-1.5">
+                <Button variant="ghost" size="sm" className="w-full" aria-expanded={expandido} onClick={() => setExpandido((v) => !v)}>
+                  {expandido ? r.verMenos : r.verTodas}
+                </Button>
+              </div>
             </PainelFlutuante>,
             document.body,
           )

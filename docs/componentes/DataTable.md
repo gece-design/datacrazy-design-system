@@ -176,7 +176,7 @@ linha errada. Token: `overlay/item-hover`, que clareia nos dois temas.
 
 ## Composição
 
-Usa: [Badge](Badge.md) nas etiquetas, `AcaoCampo` do [Input](Input.md) no botão de ações da linha e no gatilho do menu da coluna (a mesma ação de 16px do campo), `PainelFlutuante` do [Popover](Popover.md) no menu (`useCliqueFora`, `useSaida`), [Button](Button.md) `tertiary` no botão Colunas.
+Usa: [Badge](Badge.md) nas etiquetas, `AcaoCampo` do [Input](Input.md) no botão de ações da linha e no gatilho do menu da coluna (a mesma ação de 16px do campo), [Menu](Menu.md) no menu da coluna e no botão Colunas, [Button](Button.md) `tertiary` no botão Colunas.
 [Select](Select.md) nos filtros e no "Agrupar por" · [Pagination](Pagination.md) no rodapé ·
 Usado por: tela de leads (`/exemplos/pipeline`, visão em lista) · [Drawer](Drawer.md) (Negócios, layout compacto)
 

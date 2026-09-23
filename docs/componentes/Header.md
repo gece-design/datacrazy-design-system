@@ -45,6 +45,13 @@ Peças do mesmo arquivo:
 Controles que entram em `acoes` e têm doc própria: [Button](Button.md)
 (`tertiary`), [SegmentedControl](SegmentedControl.md), [Breadcrumb](Breadcrumb.md), Date Picker.
 
+### `HeaderBusca`
+
+| Prop | Tipo | Obrigatória | Descrição |
+|------|------|-------------|-----------|
+| `rotulo` | `string` | sim | Nome do campo para leitor de tela. |
+| `recolhida` | `boolean` | não | Começa como só a lupa (32px); clicar abre a caixa de 184 com movimento (`base` · `enter`) e o foco entra; sem texto, fecha ao sair ou no Escape. ADR-028. |
+
 ### `Notificacoes`
 
 O sino com o painel (virou peça em 2026-09-23: toda tela tem o sino e ele
@@ -55,12 +62,14 @@ precisa abrir alguma coisa). O conteúdo continua da tela.
 | `itens` | `Notificacao[]` | sim | `id`, `icone`, `titulo`, `detalhe`, `quando` (texto), `lida`. |
 | `aoMarcarLida` | `(id) => void` | sim | Clique num item. A tela marca como lida e abre o que for. |
 | `aoMarcarTodas` | `() => void` | sim | O botão do topo do painel. |
-| `aoVerTodas` | `() => void` | não | Sem ele, o rodapé "Ver todas" não aparece. |
-| `rotulos` | `Partial<RotulosDasNotificacoes>` | não | `titulo`, `naoLidas(n)` (nome do sino), `marcarTodas`, `verTodas`. Fábrica: `ROTULOS_DAS_NOTIFICACOES`. |
+| `rotulos` | `Partial<RotulosDasNotificacoes>` | não | `titulo`, `naoLidas(n)` (nome do sino), `marcarTodas`, `verTodas`, `verMenos`. Fábrica: `ROTULOS_DAS_NOTIFICACOES`. |
 | `className` | `string` | não | — |
 
 O painel abre em portal fixo abaixo do sino, alinhado pela direita, acompanha
-a rolagem e a janela; clique fora e Escape fecham e o foco volta ao sino. Não
+a rolagem e a janela; clique fora e Escape fecham (de onde o foco estiver) e o
+foco volta ao sino. "Ver todas" não sai do painel: a lista cresce até a altura
+da janela e rola, e o botão vira "Ver menos" (humano, 2026-09-23 — um toast ali
+era bug). Não
 lidas em `accent` + `primary` com o ponto azul; lidas em `background` +
 `subtle-foreground`. Usa o `PainelFlutuante` do [Popover](Popover.md).
 
@@ -80,6 +89,7 @@ Não tem. Ver "Par no Figma".
 | focus (busca) | `focus-within:outline-2 outline-offset-2 outline-ring` | declarado | D6 |
 | notificações | `sino abre painel da tela (portal, overlay/*, shadow-lg); Escape devolve o foco` | declarado | L11 |
 | painel de notificações | `sino com aria-expanded + PainelFlutuante role=dialog abaixo dele, fade-in-fast; sai com fade-out` | humano | L10 |
+| busca abrindo | `largura 32 → 184 em base · enter (transition-[width]); o foco entra` | humano | I11 (exceção, ADR-028) |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é

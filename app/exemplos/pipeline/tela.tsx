@@ -11,6 +11,7 @@ import {
   Gear,
   House,
   Kanban,
+  SlidersHorizontal,
   Handshake,
   Clock,
   Lightning,
@@ -27,7 +28,7 @@ import { Drawer } from "@/components/ui/drawer";
 import { Header, HeaderBusca, HeaderDivisor, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { SegmentedControl, ViewSwitcher } from "@/components/ui/segmented-control";
+import { ViewSwitcher } from "@/components/ui/segmented-control";
 import { Select } from "@/components/ui/select";
 import {
   Sidebar,
@@ -60,7 +61,8 @@ import { Lista } from "./lista";
 import { Calendario } from "@/components/ui/calendario";
 import { TelaBase } from "@/components/ui/tela-base";
 import { PainelLead } from "./painel-lead";
-import { Quadro, agrupar, type Colunas, type DensidadeDoCartao } from "./quadro";
+import { Quadro, agrupar, CAMPOS_DO_CARTAO, ROTULOS_DOS_CAMPOS, type CampoDoCartao, type Colunas } from "./quadro";
+import { Menu } from "@/components/ui/menu";
 
 import { foco } from "@/lib/estados";
 /* ---------------------------------------------------------------------------
@@ -137,29 +139,37 @@ export function Tela() {
   // O mês do calendário: começa em setembro de 2026, o mês da carteira de exemplo.
   const [referencia, setReferencia] = React.useState(() => new Date(2026, 8, 1));
   const [visaoDoCalendario, setVisaoDoCalendario] = React.useState<"mes" | "semana">("mes");
-  // O layout do cartão (T3): três presets, a escolha fica no navegador.
-  const [densidade, setDensidade] = React.useState<DensidadeDoCartao>("padrao");
+  // O que o cartão mostra, campo a campo (tipo Notion): a escolha fica no navegador.
+  const [campos, setCampos] = React.useState<CampoDoCartao[]>([...CAMPOS_DO_CARTAO]);
+  const [personalizando, setPersonalizando] = React.useState(false);
+  const botaoPersonalizar = React.useRef<HTMLButtonElement>(null);
+  React.useEffect(() => {
+    try {
+      const salvos = window.localStorage.getItem("ds:pipeline:cartao");
+      if (salvos) {
+        const lista = JSON.parse(salvos);
+        if (Array.isArray(lista)) setCampos(CAMPOS_DO_CARTAO.filter((c) => lista.includes(c)));
+      }
+    } catch {
+      /* sem memória */
+    }
+  }, []);
+  function alternarCampo(c: CampoDoCartao) {
+    setCampos((atual) => {
+      const novo = atual.includes(c) ? atual.filter((x) => x !== c) : CAMPOS_DO_CARTAO.filter((x) => x === c || atual.includes(x));
+      try {
+        window.localStorage.setItem("ds:pipeline:cartao", JSON.stringify(novo));
+      } catch {
+        /* não poder salvar não quebra */
+      }
+      return novo;
+    });
+  }
   const [notificacoes, setNotificacoes] = React.useState<Notificacao[]>([
     { id: "1", icone: UsersThree, titulo: "Novo lead atribuído", detalhe: "Construtora Horizonte entrou no seu funil pela campanha de setembro.", quando: "agora", lida: false },
     { id: "2", icone: Clock, titulo: "Lead parado há 9 dias", detalhe: "Pedro Nakamura segue em Qualificação sem interação registrada.", quando: "há 2 h", lida: false },
     { id: "3", icone: Handshake, titulo: "Negócio ganho", detalhe: "Rede Bom Dia assinou o plano anual — R$ 145.000.", quando: "ontem", lida: false },
   ]);
-  React.useEffect(() => {
-    try {
-      const salva = window.localStorage.getItem("ds:pipeline:densidade");
-      if (salva === "compacto" || salva === "padrao" || salva === "detalhado") setDensidade(salva);
-    } catch {
-      /* sem memória */
-    }
-  }, []);
-  function mudarDensidade(d: string) {
-    setDensidade(d as DensidadeDoCartao);
-    try {
-      window.localStorage.setItem("ds:pipeline:densidade", d);
-    } catch {
-      /* não poder salvar não quebra */
-    }
-  }
   const [abertoId, setAbertoId] = React.useState<string | null>(null);
   const [rota, setRota] = React.useState("Pipelines");
   const [novo, setNovo] = React.useState<typeof leadVazio | null>(null);
@@ -392,12 +402,14 @@ export function Tela() {
               itens={notificacoes}
               aoMarcarLida={(id) => setNotificacoes((l) => l.map((n) => (n.id === id ? { ...n, lida: true } : n)))}
               aoMarcarTodas={() => setNotificacoes((l) => l.map((n) => ({ ...n, lida: true })))}
-              aoVerTodas={() => toast({ variant: "info", titulo: "Todas as notificações", descricao: `${moeda(total)} em aberto · 2 leads parados há mais de uma semana.` })}
             />
         ),
         acoes: (
             <>
+              {/* Só a lupa: clicar abre a caixa (humano, 2026-09-23 — o header
+                  precisava de espaço). */}
               <HeaderBusca
+                recolhida
                 rotulo="Pesquisar leads"
                 placeholder="Pesquisar"
                 value={busca}
@@ -428,6 +440,39 @@ export function Tela() {
                   { valor: "calendario", rotulo: "Calendário", icone: CalendarBlank },
                 ]}
               />
+              {visao === "quadro" ? (
+                // O que o cartão mostra, campo a campo — o botão de propriedades do Notion.
+                <>
+                  <Button
+                    ref={botaoPersonalizar}
+                    variant="tertiary"
+                    size="icon"
+                    aria-label="Personalizar cartão"
+                    title="Personalizar cartão"
+                    aria-haspopup="menu"
+                    aria-expanded={personalizando}
+                    onClick={() => setPersonalizando((v) => !v)}
+                  >
+                    <SlidersHorizontal size={16} weight="regular" aria-hidden="true" />
+                  </Button>
+                  <Menu
+                    aberto={personalizando}
+                    gatilho={botaoPersonalizar}
+                    rotulo="Personalizar cartão"
+                    itens={CAMPOS_DO_CARTAO.map((c) => ({
+                      id: c,
+                      rotulo: ROTULOS_DOS_CAMPOS[c],
+                      tipo: "check" as const,
+                      marcado: campos.includes(c),
+                      aoAtivar: () => alternarCampo(c),
+                    }))}
+                    aoFechar={(devolver = true) => {
+                      setPersonalizando(false);
+                      if (devolver) botaoPersonalizar.current?.focus();
+                    }}
+                  />
+                </>
+              ) : null}
               <HeaderDivisor />
               <Button onClick={() => setNovo({ ...leadVazio })}>
                 <Plus size={16} weight="regular" />
@@ -436,30 +481,13 @@ export function Tela() {
             </>
         ),
       }}
-      subcabecalho={
-        visao === "quadro" ? (
-          <>
-            <span className="text-label-md text-muted-foreground">Layout do card</span>
-            <SegmentedControl
-              rotulo="Layout do card"
-              atual={densidade}
-              aoEscolher={mudarDensidade}
-              itens={[
-                { valor: "compacto", rotulo: "Compacto" },
-                { valor: "padrao", rotulo: "Padrão" },
-                { valor: "detalhado", rotulo: "Detalhado" },
-              ]}
-            />
-          </>
-        ) : undefined
-      }
     >
 
         {visao === "quadro" ? (
           <Quadro
             etapas={etapas}
             colunas={visiveis}
-            densidade={densidade}
+            campos={campos}
             aoMover={mover}
             aoAbrir={(l) => setAbertoId(l.id)}
             aoAdicionar={(etapa) => setNovo({ ...leadVazio, etapa })}
@@ -475,7 +503,7 @@ export function Tela() {
           />
         ) : (
           // Calendário: os leads pela próxima ação; clicar abre o mesmo drawer.
-          <div className="min-h-0 flex-1 overflow-y-auto px-8 pb-6 [scrollbar-width:thin]">
+          <div className="min-w-0 min-h-0 flex-1 overflow-y-auto px-6 pb-6 [scrollbar-width:thin]">
             <Calendario
               locale="pt-BR"
               eventos={todos.filter((l) => l.proximaAcao).map((l) => ({ id: l.id, data: l.proximaAcao, rotulo: l.nome, detalhe: l.empresa, tom: l.tom }))}

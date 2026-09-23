@@ -235,7 +235,7 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
 ## Como trabalhar
 
 0. **Tela nova começa pela tela base.** \`npx shadcn@latest add ${NAMESPACE}/tela\`
-   cria \`app/nova-tela/page.tsx\` com Sidebar, Header, subcabeçalho e conteúdo
+   cria \`app/nova-tela/page.tsx\` com Sidebar, Header e conteúdo
    já ligados e responsivos (\`TelaBase\`). Renomeie a pasta e preencha os
    encaixes. Nunca monte Sidebar e Header à mão numa tela.
 1. **Procure antes de criar.** O catálogo no fim deste arquivo lista tudo o que
@@ -474,7 +474,7 @@ const itemTela = {
   name: "tela",
   type: "registry:block",
   title: "Tela",
-  description: "Uma tela nova, pronta: Sidebar, Header, subcabeçalho e conteúdo já ligados e responsivos (TelaBase). Toda tela começa por aqui.",
+  description: "Uma tela nova, pronta: Sidebar, Header e conteúdo já ligados e responsivos (TelaBase). Toda tela começa por aqui.",
   dependencies: depsDaTela.pacotes,
   registryDependencies: depsDaTela.itens.map(urlDoItem),
   files: [{ path: "app/nova-tela/page.tsx", type: "registry:page", target: "app/nova-tela/page.tsx", content: fonteDaTela }],

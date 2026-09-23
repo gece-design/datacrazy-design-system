@@ -115,7 +115,7 @@ export function Lista({
             );
   };
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto px-8 pb-6 [scrollbar-width:thin]">
+    <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6 [scrollbar-width:thin]">
       <div className="w-full overflow-hidden rounded-md bg-card">
         <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`}>
           <SelectAgrupar ajustes={ajustes} />

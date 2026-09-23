@@ -8,7 +8,6 @@ import {
   ArrowRight,
   CaretDown,
   CaretUp,
-  Check,
   Columns,
   DotsThree,
   DotsThreeVertical,
@@ -20,10 +19,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PainelFlutuante } from "@/components/ui/popover";
+import { Menu, type ItemDoMenu } from "@/components/ui/menu";
 import { Select } from "@/components/ui/select";
-import { useCliqueFora } from "@/lib/use-clique-fora";
-import { useSaida } from "@/lib/use-saida";
 
 import { foco, focoInterno } from "@/lib/estados";
 import { AcaoCampo } from "@/components/ui/input";
@@ -347,164 +344,8 @@ export function agruparPor<T>(
 }
 
 /* ----------------------------------------------------------------- Menu -- */
-
-type ItemDoMenu = {
-  id: string;
-  rotulo: string;
-  icone?: Icon;
-  /** `check` alterna e mantém o menu aberto; ação fecha. */
-  tipo?: "acao" | "check";
-  marcado?: boolean;
-  desabilitado?: boolean;
-  separadorAntes?: boolean;
-  aoAtivar: () => void;
-};
-
-/** Onde o menu abre: abaixo do gatilho, em `fixed` num portal — o cabeçalho
- *  vive dentro da caixa que rola na horizontal, e ela cortaria um painel
- *  absoluto. Vira para cima quando não cabe embaixo. */
-function posicaoDoMenu(gatilho: DOMRect, itens: number) {
-  const largura = 240;
-  const altura = itens * 32 + 12;
-  const left = Math.max(8, Math.min(gatilho.left, window.innerWidth - largura - 8));
-  const cabeEmbaixo = gatilho.bottom + altura + 8 <= window.innerHeight;
-  return cabeEmbaixo ? { top: gatilho.bottom + 4, left } : { top: Math.max(8, gatilho.top - altura - 4), left };
-}
-
-/**
- * O menu do cabeçalho e o do botão Colunas são o mesmo painel: `role="menu"`
- * com o foco no painel e `aria-activedescendant` andando pelos itens, como a
- * lista do Select. Setas andam, Enter e Espaço ativam, Escape fecha e devolve
- * o foco ao gatilho, Tab fecha. Rolagem da página fecha — o painel é `fixed`
- * e não acompanharia o gatilho.
- */
-function MenuFlutuante({
-  aberto,
-  aoFechar,
-  gatilho,
-  rotulo,
-  itens,
-}: {
-  aberto: boolean;
-  aoFechar: (devolverFoco?: boolean) => void;
-  gatilho: React.RefObject<HTMLElement | null>;
-  rotulo: string;
-  itens: ItemDoMenu[];
-}) {
-  const painel = React.useRef<HTMLDivElement>(null);
-  const [emFoco, setEmFoco] = React.useState(0);
-  const [pos, setPos] = React.useState<{ top: number; left: number } | null>(null);
-  const id = React.useId().replace(/:/g, "");
-  const { saindo, visivel } = useSaida(aberto);
-  const ativos = itens.filter((i) => !i.desabilitado);
-
-  useCliqueFora(aberto, [gatilho, painel], () => aoFechar(false));
-
-  React.useEffect(() => {
-    if (!aberto) return;
-    const g = gatilho.current?.getBoundingClientRect();
-    if (g) setPos(posicaoDoMenu(g, itens.length));
-    setEmFoco(0);
-    // o foco entra no painel assim que ele abre: sem isso as setas não movem nada
-    const foco = requestAnimationFrame(() => painel.current?.focus());
-    const fechar = () => aoFechar(false);
-    window.addEventListener("scroll", fechar, true);
-    window.addEventListener("resize", fechar);
-    return () => {
-      cancelAnimationFrame(foco);
-      window.removeEventListener("scroll", fechar, true);
-      window.removeEventListener("resize", fechar);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [aberto]);
-
-  function ativar(item: ItemDoMenu) {
-    if (item.desabilitado) return;
-    item.aoAtivar();
-    if (item.tipo !== "check") aoFechar();
-  }
-
-  function teclado(e: React.KeyboardEvent) {
-    const i = ativos.findIndex((x) => x.id === itens[emFoco]?.id);
-    const ir = (j: number) => setEmFoco(itens.indexOf(ativos[(j + ativos.length) % ativos.length]));
-    if (e.key === "Escape") {
-      e.preventDefault();
-      aoFechar();
-    } else if (e.key === "ArrowDown") {
-      e.preventDefault();
-      ir(i + 1);
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      ir(i - 1);
-    } else if (e.key === "Home") {
-      e.preventDefault();
-      ir(0);
-    } else if (e.key === "End") {
-      e.preventDefault();
-      ir(ativos.length - 1);
-    } else if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      if (itens[emFoco]) ativar(itens[emFoco]);
-    } else if (e.key === "Tab") {
-      aoFechar(false);
-    }
-  }
-
-  if (!visivel || !pos || typeof document === "undefined") return null;
-  return createPortal(
-    <PainelFlutuante
-      ref={painel}
-      fixo
-      saindo={saindo}
-      role="menu"
-      aria-label={rotulo}
-      aria-activedescendant={`${id}-${emFoco}`}
-      tabIndex={-1}
-      onKeyDown={teclado}
-      style={pos}
-      className="w-60 p-1.5 focus:outline-none"
-    >
-      {itens.map((item, i) => {
-        const Icone = item.icone;
-        return (
-          <React.Fragment key={item.id}>
-            {item.separadorAntes ? <div role="separator" aria-hidden="true" className="my-1 h-px bg-overlay-border" /> : null}
-            <div
-              id={`${id}-${i}`}
-              role={item.tipo === "check" ? "menuitemcheckbox" : "menuitem"}
-              aria-checked={item.tipo === "check" ? Boolean(item.marcado) : undefined}
-              aria-disabled={item.desabilitado || undefined}
-              onMouseEnter={() => !item.desabilitado && setEmFoco(i)}
-              onClick={() => ativar(item)}
-              className={cn(
-                "flex h-8 cursor-pointer items-center gap-2 rounded-sm px-2 text-label-lg transition-colors",
-                item.desabilitado ? "cursor-not-allowed text-subtle-foreground" : "text-foreground",
-                // o realce do teclado e o do mouse são o mesmo (Select)
-                i === emFoco && !item.desabilitado && "bg-overlay-item-hover",
-              )}
-            >
-              {item.tipo === "check" ? (
-                <span
-                  aria-hidden="true"
-                  className={cn(
-                    "flex size-4 shrink-0 items-center justify-center rounded-sm border",
-                    item.marcado ? "border-primary bg-primary text-primary-foreground" : "border-input-border bg-card",
-                  )}
-                >
-                  {item.marcado ? <Check size={12} weight="bold" /> : null}
-                </span>
-              ) : Icone ? (
-                <Icone size={16} weight="regular" aria-hidden="true" className="shrink-0 text-muted-foreground" />
-              ) : null}
-              <span className="min-w-0 truncate">{item.rotulo}</span>
-            </div>
-          </React.Fragment>
-        );
-      })}
-    </PainelFlutuante>,
-    document.body,
-  );
-}
+// O menu (`role="menu"`, teclado, portal) mora em components/ui/menu.tsx desde
+// 2026-09-23 — o pipeline e outras telas usam o mesmo.
 
 /** Os itens de esconder/mostrar coluna — os mesmos no menu do cabeçalho e no botão da barra. */
 function itensDeColunas(a: AjustesDaTabela, separadorAntes: boolean): ItemDoMenu[] {
@@ -558,7 +399,7 @@ export function BotaoColunas({ ajustes, className }: { ajustes: AjustesDaTabela;
           <span className="text-muted-foreground">{ajustes.colunas.length - ajustes.escondidas.length}/{ajustes.colunas.length}</span>
         ) : null}
       </Button>
-      <MenuFlutuante
+      <Menu
         aberto={aberto}
         gatilho={gatilho}
         rotulo={r.colunas}
@@ -924,7 +765,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
           </div>
 
           {ajustes && colunaDoMenu ? (
-            <MenuFlutuante
+            <Menu
               aberto={menuAberto === colunaDoMenu.chave}
               gatilho={gatilhoDoMenu}
               rotulo={r.menuDaColuna(colunaDoMenu.rotulo)}

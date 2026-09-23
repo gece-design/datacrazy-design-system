@@ -893,7 +893,8 @@
       "figmaNode": "601:464",
       "batch": 3,
       "variants": [
-        "notificacoes"
+        "notificacoes",
+        "busca recolhida"
       ],
       "tokens": [
         "background",
@@ -965,6 +966,13 @@
           "source": "humano",
           "rule": "L10",
           "precedent": "Select (lista)",
+          "approvedIn": "2026-09-23"
+        },
+        "busca abrindo": {
+          "impl": "largura 32 → 184 em base · enter (transition-[width]); o foco entra",
+          "source": "humano",
+          "rule": "I11 (exceção, ADR-028)",
+          "precedent": "Sidebar (ADR-022)",
           "approvedIn": "2026-09-23"
         }
       },
@@ -1677,7 +1685,76 @@
           "approvedIn": "T-casca"
         }
       },
-      "_states_doc": "A casca de toda tela (pedido do humano, 2026-09-23): Sidebar + Header + subcabeçalho + conteúdo com breakpoints. Publicada como bloco @datacrazy/tela (registry:page)."
+      "_states_doc": "A casca de toda tela (pedido do humano, 2026-09-23): Sidebar + Header + conteúdo com breakpoints. Publicada como bloco @datacrazy/tela (registry:page)."
+    },
+    {
+      "name": "Menu",
+      "family": "overlay",
+      "figmaNode": "544:122",
+      "batch": "T1",
+      "variants": [
+        "acao",
+        "check",
+        "separador"
+      ],
+      "tokens": [
+        "overlay/bg",
+        "overlay/border",
+        "overlay/item-hover",
+        "elevation/lg",
+        "z/popover",
+        "primary",
+        "primary-foreground",
+        "input/border",
+        "card",
+        "foreground",
+        "muted-foreground",
+        "subtle-foreground",
+        "radius/lg",
+        "radius/sm",
+        "text/label-lg",
+        "duration/fast",
+        "duration/base"
+      ],
+      "motion": "fast",
+      "states": {
+        "hover": {
+          "impl": "bg-overlay-item-hover no item",
+          "source": "banco",
+          "rule": "L2",
+          "precedent": "Select",
+          "approvedIn": "T1"
+        },
+        "focus": {
+          "impl": "o mesmo realce do hover, por aria-activedescendant",
+          "source": "banco",
+          "rule": "—",
+          "precedent": "Select",
+          "approvedIn": "T1"
+        },
+        "marcado": {
+          "impl": "caixa 16px primary com Check 12",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "Checkbox",
+          "approvedIn": "T1"
+        },
+        "desabilitado": {
+          "impl": "subtle-foreground + cursor not-allowed, fora do teclado",
+          "source": "banco",
+          "rule": "I5",
+          "precedent": "—",
+          "approvedIn": "T1"
+        },
+        "abrindo": {
+          "impl": "fade-in-fast; sai com fade-out",
+          "source": "humano",
+          "rule": "L10",
+          "precedent": "Select",
+          "approvedIn": "T1"
+        }
+      },
+      "_states_doc": "Saiu da Table em 2026-09-23 (D21): o pipeline usa no personalizar cartão."
     }
   ]
 }
