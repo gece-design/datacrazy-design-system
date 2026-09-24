@@ -47,8 +47,10 @@ Tudo o que o `TimePicker` tem, mais:
 | `dataMinima` · `dataMaxima` | `Date` | não | Limites do calendário. |
 
 As rodas (reunião de 2026-09-18): cinco valores à vista, o do meio numa
-faixa é o escolhido; rola e para no valor (`scroll-snap`), os das pontas
-inclinam de leve e apagam sob um sombreado em cima e embaixo. Setas, PageUp e
+faixa é o escolhido e cresce ~2px; rola e para no valor (`scroll-snap`), os
+das pontas inclinam até 60° e apagam sob um sombreado em cima e embaixo. As
+rodas dividem a largura do painel; o botão do fuso mostra só o ícone e o
+deslocamento (a cidade vai no `title` e no painel). Setas, PageUp e
 PageDown, Home e End andam; clicar num valor escolhe. O valor só muda quando a
 rolagem para. O seletor de fuso é um painel do DS (`overlay/*`) com busca por
 cidade, no lugar do `<select>` nativo; Escape fecha só ele.

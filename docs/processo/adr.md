@@ -74,6 +74,7 @@ Aprovado por: humano.
 Desvio: `--shadow-button-inner` vira `none` no `.dark`; só `primary` mantém o brilho.
 Motivo: o brilho é claro e lava `tertiary`, `soft`, a busca do Header e o View Switcher sobre superfície escura.
 Aprovado por: humano.
+**Revogada em 2026-09-24**: "o botão do modo dark, o danger, o excluir e tudo mais, sem o inner shadow — bota de volta, não pedi pra tirar". O escuro volta a ter a sombra interna, com a mesma geometria do claro em branco a 8%.
 
 ## ADR-015 · Button `soft` com par escuro próprio · 2026-09-18
 Desvio: o arquivo repete `base/blue/50` + `blue-600` nos dois modos.

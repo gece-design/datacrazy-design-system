@@ -125,13 +125,14 @@ function Roda({
   itens,
   atual,
   aoEscolher,
-  largura = "w-14",
+  minimo = "min-w-14",
 }: {
   rotulo: string;
   itens: ItemDaRoda[];
   atual: number;
   aoEscolher: (v: number) => void;
-  largura?: string;
+  /** Largura mínima; a roda cresce para ocupar o painel. */
+  minimo?: string;
 }) {
   const caixa = React.useRef<HTMLDivElement>(null);
   const id = React.useId().replace(/:/g, "");
@@ -147,8 +148,10 @@ function Roda({
     for (const item of Array.from(el.querySelectorAll<HTMLElement>("[data-item]"))) {
       const d = (item.offsetTop + item.offsetHeight / 2 - centro) / ALTURA_DO_ITEM;
       const a = Math.min(Math.abs(d), 2.5);
-      item.style.opacity = String(Math.max(0.3, 1 - a * 0.28));
-      item.style.transform = `perspective(240px) rotateX(${(-d * 14).toFixed(1)}deg) scale(${(1 - a * 0.05).toFixed(3)})`;
+      // o do meio cresce ~2px (13 → 15); as pontas inclinam até 60° e apagam —
+      // "pode deixar o olho de peixe bem mais forte" (humano, 2026-09-24)
+      item.style.opacity = String(Math.max(0.2, 1 - a * 0.34));
+      item.style.transform = `perspective(180px) rotateX(${(-d * 30).toFixed(1)}deg) scale(${Math.max(0.6, 1.15 - a * 0.16).toFixed(3)})`;
     }
   }, []);
 
@@ -193,9 +196,9 @@ function Roda({
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className={cn("flex flex-1 flex-col items-center", minimo)}>
       <p className="pb-1 text-caption text-muted-foreground">{rotulo}</p>
-      <div className="relative" style={{ height: ALTURA_DO_ITEM * VISIVEIS }}>
+      <div className="relative w-full" style={{ height: ALTURA_DO_ITEM * VISIVEIS }}>
         {/* a faixa do meio: é onde o valor escolhido para */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-1/2 h-8 -translate-y-1/2 rounded-md bg-overlay-item-selected" />
         <div
@@ -207,8 +210,7 @@ function Roda({
           onScroll={aoRolar}
           onKeyDown={teclado}
           className={cn(
-            "relative h-full snap-y snap-mandatory overflow-y-auto overscroll-contain rounded-md [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-            largura,
+            "relative h-full w-full snap-y snap-mandatory overflow-y-auto overscroll-contain rounded-md [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
             focoInterno,
           )}
           style={{ paddingTop: RECUO_DA_RODA, paddingBottom: RECUO_DA_RODA }}
@@ -266,7 +268,8 @@ function Rodas({
   const am = rotulos.am ?? "AM";
   const pm = rotulos.pm ?? "PM";
   return (
-    <div className="flex items-end gap-1">
+    // as rodas dividem a largura do painel entre si: sem espaço morto ao lado
+    <div className="flex w-full items-end gap-1">
       <Roda
         rotulo={rotulos.horas}
         itens={horas}
@@ -296,7 +299,7 @@ function Rodas({
           ]}
           atual={tarde ? 1 : 0}
           aoEscolher={(p) => aoTrocar({ hora: (partes.hora % 12) + (p ? 12 : 0) })}
-          largura="w-16"
+          minimo="min-w-16"
         />
       ) : null}
     </div>
@@ -384,14 +387,16 @@ function SeletorDeFuso({
         size="sm"
         aria-haspopup="dialog"
         aria-expanded={aberto}
-        aria-label={rotulos.fuso}
-        title={rotulos.fuso}
+        aria-label={`${rotulos.fuso}: ${cidadeDoFuso(fuso)}`}
+        title={`${rotulos.fuso}: ${cidadeDoFuso(fuso)}`}
         onClick={() => (aberto ? fechar(false) : setAberto(true))}
         className="max-w-full gap-1 px-1.5 text-caption"
       >
+        {/* só o ícone e o deslocamento: a cidade fica no title e no painel — o
+            rodapé é o que dá a largura do painel, e ele estava sobrando */}
         <GlobeHemisphereWest size={14} weight="regular" aria-hidden="true" className="shrink-0" />
-        <span className="truncate" suppressHydrationWarning>
-          {rotuloDoFuso(agora, fuso, locale)} · {cidadeDoFuso(fuso)}
+        <span className="truncate tabular-nums" suppressHydrationWarning>
+          {rotuloDoFuso(agora, fuso, locale)}
         </span>
         <CaretDown size={12} weight="bold" aria-hidden="true" className="shrink-0" />
       </Button>
@@ -472,10 +477,10 @@ function Rodape({
       {aoMudarFuso && fusos ? (
         <SeletorDeFuso fuso={fuso} fusos={fusos} aoMudar={aoMudarFuso} locale={locale} rotulos={rotulos} />
       ) : (
-        <span className="flex min-w-0 items-center gap-1 px-1.5 text-caption text-muted-foreground">
+        <span className="flex min-w-0 items-center gap-1 px-1.5 text-caption text-muted-foreground" title={cidadeDoFuso(fuso)}>
           <GlobeHemisphereWest size={14} weight="regular" aria-hidden="true" className="shrink-0" />
-          <span className="truncate" suppressHydrationWarning>
-            {rotuloDoFuso(new Date(), fuso, locale)} · {cidadeDoFuso(fuso)}
+          <span className="truncate tabular-nums" suppressHydrationWarning>
+            {rotuloDoFuso(new Date(), fuso, locale)}
           </span>
         </span>
       )}
