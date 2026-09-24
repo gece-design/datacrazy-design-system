@@ -651,7 +651,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                 ))}
               </colgroup>
               <thead>
-                <tr className="bg-background">
+                <tr className="bg-muted">
                   {naTela.map((c, i) => {
                     const ordenada = ordem?.chave === c.chave ? ordem.direcao : null;
                     const podeOrdenar = Boolean(aoOrdenar) && ordenavel(c);
@@ -714,7 +714,9 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                                 setMenuAberto((m) => (m === c.chave ? null : c.chave));
                               }}
                               className={cn(
-                                "opacity-0 group-hover/coluna:opacity-100 focus-visible:opacity-100",
+                                // sobre o cinza do cabeçalho, o ícone precisa do muted-foreground cheio
+                                // (subtle sumia — humano, 2026-09-24)
+                                "opacity-0 text-muted-foreground group-hover/coluna:opacity-100 focus-visible:opacity-100",
                                 menuAberto === c.chave && "opacity-100 text-foreground",
                               )}
                             />
@@ -738,7 +740,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                               // coluna, acende em primary sob a própria alça e no foco
                               "absolute inset-y-0 z-dropdown w-2 cursor-col-resize touch-none rounded-sm",
                               "after:absolute after:inset-y-0 after:left-1/2 after:w-0.5 after:-translate-x-1/2 after:bg-transparent after:transition-colors",
-                              "group-hover/coluna:after:bg-border hover:after:bg-primary focus-visible:after:bg-primary",
+                              "group-hover/coluna:after:bg-divider hover:after:bg-primary focus-visible:after:bg-primary",
                               // na última coluna a alça não vaza da caixa que rola
                               i === naTela.length - 1 ? "right-0" : "-right-1",
                               foco,
@@ -932,7 +934,7 @@ export function DataTableGrupo({
   const compacta = layout === "compacta";
   const r = { ...ROTULOS_DA_TABELA, ...rotulos };
   return (
-    <tr className={cn("border-t bg-background", compacta ? "border-border" : "border-card", className)}>
+    <tr className={cn("border-t bg-muted", compacta ? "border-border" : "border-card", className)}>
       <td colSpan={(naTela ?? chaves).length} className={cn("py-2", compacta ? "px-3" : "px-5")}>
         <div className="flex items-center justify-between gap-3">
           <button

@@ -50,6 +50,7 @@ Lista completa com procedência e citações:
 | `muted-foreground` | `#6A7581` | `#A0A8B1` | texto secundário |
 | `subtle-foreground` | `#A0A8B1` | `#8B95A3` | texto terciário |
 | `background` | `#EBEDEF` | `#16161D` | fundo da página |
+| `muted` | `#F5F6F7` | `#1D1D25` | cinza entre o fundo e o card: cabeçalho e grupo da tabela, linha dos dias do calendário — o que sumia sobre o fundo |
 | `card` | `#FFFFFF` | `#25252D` | superfície elevada |
 | `accent` | `#E8F1FF` | `#232C3D` | realce de superfície |
 | `surface-inverse` | `#232C3D` | `#F4F5F6` | superfície invertida (logo) |

@@ -334,7 +334,7 @@ export function Calendario({
       <div className="overflow-hidden rounded-md border border-border bg-card">
         <table ref={grade} role="grid" aria-label={titulo} onKeyDown={teclado} className="w-full table-fixed border-collapse">
           <thead>
-            <tr className="bg-background">
+            <tr className="bg-muted">
               {dias.map((d) => (
                 <th key={d.longo} scope="col" abbr={d.longo} className="h-8 border-b border-border text-center text-label-md font-medium text-muted-foreground">
                   {d.curto}

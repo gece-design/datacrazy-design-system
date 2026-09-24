@@ -15,6 +15,7 @@ const semanticos: Semantico[] = [
   { token: "background",         amostra: "bg-background",         claro: "#F4F5F6",       escuro: "#1C1C25" },
   { token: "foreground",         amostra: "bg-foreground",         claro: "#1C1C25",       escuro: "#F4F5F6" },
   { token: "card",               amostra: "bg-card",               claro: "#FFFFFF",       escuro: "#1E1E24" },
+  { token: "muted",              amostra: "bg-muted",              claro: "#F5F6F7",       escuro: "#1D1D25" },
   { token: "muted-foreground",   amostra: "bg-muted-foreground",   claro: "#6A7581",       escuro: "#A0A8B1" },
   { token: "subtle-foreground",  amostra: "bg-subtle-foreground",  claro: "#A0A8B1",       escuro: "#6A7581" },
   { token: "border",             amostra: "bg-border",             claro: "#E1E7EF",       escuro: "#2E2E38" },

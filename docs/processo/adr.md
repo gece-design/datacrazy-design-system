@@ -153,3 +153,7 @@ Desvio: o arquivo desenha 14px entre a linha da trilha e a do título (a caixa d
 Motivo: humano (2026-09-23, print com medidas): "tem um espaço cinza me incomodando muito". A mudança entra no componente, não na tela: vale para toda tela de uma vez (regra do humano — o DS é o sistema; componente que muda, muda em todas as telas).
 Aprovado por: humano.
 
+## ADR-030 · Token `muted`: um cinza entre o fundo e o card · 2026-09-24
+Desvio: o arquivo pinta cabeçalho e grupos da tabela com `background`, o mesmo cinza da página — sobre a página, a tabela perdia a borda de cima e as linhas de grupo sumiam.
+Motivo: humano (2026-09-24, print): "precisamos de um cinza mais claro que o fundo pra aplicar nos componentes que perdem o contraste". `muted` (#F5F6F7 · #1D1D25) fica entre `background` e `card` nos dois temas. Entra onde a superfície cinza encosta na página: cabeçalho e grupo da Table, linha dos dias do Calendário. Onde o cinza está sobre um card branco (pílula do KPI, rodapé do Modal, Badge neutra) `background` segue.
+Aprovado por: humano.

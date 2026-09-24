@@ -167,7 +167,7 @@ linha errada. Token: `overlay/item-hover`, que clareia nos dois temas.
 
 ## Tokens consumidos
 
-`card` · `accent` · `background` · `primary` · `foreground` ·
+`card` · `accent` · `muted` · `background` · `divider` · `primary` · `foreground` ·
 `muted-foreground` · `radius/md` · `radius/sm` · `text/heading-3` ·
 `text/heading-4` · `text/body-lg` · `text/body-md` · `text/body-sm` ·
 `text/label-lg` · `text/label-md` · `text/label-sm` · `text/caption` ·

@@ -75,7 +75,7 @@ e devolve; escolher intervalo é o [DatePicker](DatePicker.md).
 
 ## Tokens consumidos
 
-`card` · `background` · `border` · `primary` · `primary-foreground` ·
+`card` · `muted` · `background` · `border` · `primary` · `primary-foreground` ·
 `foreground` · `muted-foreground` · `subtle-foreground` · `overlay/item-hover` ·
 `overlay/bg` · `overlay/border` · `elevation/lg` · `z/popover` · `--tom-tag` ·
 `radius/md` · `radius/sm` · `radius/full` · `text/heading-3` ·
