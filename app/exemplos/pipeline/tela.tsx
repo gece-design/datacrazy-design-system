@@ -7,7 +7,6 @@ import {
   CalendarBlank,
   ChatCircleDots,
   FlowArrow,
-  FunnelSimple,
   Gear,
   House,
   Kanban,
@@ -25,7 +24,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Drawer } from "@/components/ui/drawer";
-import { Header, HeaderBusca, HeaderDivisor, Notificacoes, type Notificacao } from "@/components/ui/header";
+import { Header, HeaderBusca, HeaderDivisor, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { ViewSwitcher } from "@/components/ui/segmented-control";
@@ -415,21 +414,15 @@ export function Tela() {
                 value={busca}
                 onChange={(e) => setBusca(e.target.value)}
               />
-              {/* Com filtro ativo o botão muda de variante e mostra a conta:
-                  é o único sinal na tela de que a lista está cortada. */}
-              <Button
-                variant={quantosFiltros ? "soft" : "tertiary"}
+              {/* Só o ícone, como a busca (a fileira tem o troca-visão). Com
+                  filtro ativo vira soft e mostra a conta. */}
+              <HeaderFiltros
+                recolhido
+                rotulo="Filtros"
+                contagem={quantosFiltros}
+                rotuloComContagem={(n) => `Filtros: ${n} ativos`}
                 onClick={() => setFiltros(true)}
-                aria-label={quantosFiltros ? `Filtros: ${quantosFiltros} ativos` : "Filtros"}
-              >
-                <FunnelSimple size={16} weight="regular" />
-                Filtros
-                {quantosFiltros ? (
-                  <span className="rounded-full bg-primary px-1.5 text-label-sm tabular-nums text-primary-foreground">
-                    {quantosFiltros}
-                  </span>
-                ) : null}
-              </Button>
+              />
               <ViewSwitcher
                 rotulo="Visualização"
                 atual={visao}

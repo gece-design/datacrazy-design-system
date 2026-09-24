@@ -146,12 +146,14 @@ Desvio: o arquivo desenha o Header com 32 de recuo e a busca sempre aberta (184p
 Motivo: humano (2026-09-23): "tá sobrando muito espaço cinza na tela" e o header do pipeline não cabia com todas as ações. A largura anima com o precedente da Sidebar (ADR-022), em `base` · `enter`; com `prefers-reduced-motion` não anima. A página do Header no DS continua com os 32.
 Ajuste no mesmo dia (print com medidas, "ainda tem muito espaço"): recuo 16 em toda largura, no Header e no conteúdo, e o Header sem recuo embaixo (`pb-0`) — as ações encostam no traço; o respiro é o do conteúdo. Em 2026-09-24: à esquerda, com a sidebar no lugar (≥ 1024), o recuo cai a 4 — a Sidebar já traz 16 de moldura na cor do fundo e "somava visualmente".
 Regra de quando recolher (humano, 2026-09-23, "em telas que têm espaço pode manter o campo; com muitos itens de filtro, só o ícone"): a fileira de ações só tem botões → busca aberta (184); tem troca-visão, período ou data → `recolhida`. Por tela, não por largura. A busca do Header é sempre `HeaderBusca`; o botão "Pesquisar" com texto do arquivo (601:12) não se usa. Vale para toda tela e para a página do Header no DS.
+Em 2026-09-24 a mesma regra vale para os filtros ("o botão de filtro deve se comportar igual o de pesquisar"): `HeaderFiltros` com rótulo ou `recolhido`. E o `HeaderDivisor` só entre o grupo de visão e a ação principal — fileira só com busca, filtros e a ação não leva ("em alguns casos não precisa").
 Aprovado por: humano.
 
 ## ADR-029 · Header: 6px entre as linhas e título no topo da fileira · 2026-09-23
 Desvio: o arquivo desenha 14px entre a linha da trilha e a do título (a caixa de 46 que o subtítulo ocupava) e fecha o Header em 111, com o título centrado com as ações. Agora: 6px (`gap-1.5`), título alinhado ao topo da fileira de ações (`items-start`), 103px sem subtítulo (com o traço).
 Motivo: humano (2026-09-23, print com medidas): "tem um espaço cinza me incomodando muito". A mudança entra no componente, não na tela: vale para toda tela de uma vez (regra do humano — o DS é o sistema; componente que muda, muda em todas as telas).
 Aprovado por: humano.
+**Complemento em 2026-09-24**: o traço de baixo do Header sai ("linha divisória que eu já pedi pra remover"); fecha em 102. Na `TelaBase`, 8 de recuo embaixo — o zero era para o subcabeçalho, que já não existe.
 
 ## ADR-030 · Token `muted`: um cinza entre o fundo e o card · 2026-09-24
 Desvio: o arquivo pinta cabeçalho e grupos da tabela com `background`, o mesmo cinza da página — sobre a página, a tabela perdia a borda de cima e as linhas de grupo sumiam.

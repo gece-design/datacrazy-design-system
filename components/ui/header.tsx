@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Bell, MagnifyingGlass, type Icon } from "@phosphor-icons/react";
+import { Bell, FunnelSimple, MagnifyingGlass, type Icon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { PainelFlutuante } from "@/components/ui/popover";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -23,10 +23,11 @@ import { foco, focoDentro, focoInterno } from "@/lib/estados";
  *   utilitarios  → em cima, à direita (notificações)
  *   acoes        → embaixo, à direita, alinhadas pelo topo com o título
  *
- * Medidas: recuo 32×16, traço de baixo em `border`, linha de cima com a
- * altura do botão (32), 6px abaixo o título `h1` alinhado ao topo da fileira
+ * Medidas: recuo 32×16, sem traço embaixo (o arquivo desenha um; "linha
+ * divisória que eu já pedi pra remover", humano, 2026-09-24), linha de cima
+ * com a altura do botão (32), 6px abaixo o título `h1` alinhado ao topo da fileira
  * de ações (32, vão 8) e, quando houver, subtítulo `body-sm` a 2px. Fecha em
- * 103px sem subtítulo (com o traço). O arquivo desenha 14 de vão e 111; o humano
+ * 102px sem subtítulo. O arquivo desenha 14 de vão, traço e 111; o humano
  * pediu 6 e o título no topo — "um espaço cinza me incomodando" (ADR-029).
  *
  * O subtítulo fica FORA por padrão (decisão do humano, 2026-09-18): título e
@@ -51,7 +52,7 @@ export interface HeaderProps extends Omit<React.HTMLAttributes<HTMLElement>, "ti
 
 export function Header({ titulo, subtitulo, trilha, utilitarios, acoes, className, ...props }: HeaderProps) {
   return (
-    <header className={cn("flex flex-col gap-1.5 border-b border-border bg-background px-8 py-4", className)} {...props}>
+    <header className={cn("flex flex-col gap-1.5 bg-background px-8 py-4", className)} {...props}>
       {trilha || utilitarios ? (
         <div className="flex min-h-8 items-center justify-between gap-4">
           <div className="min-w-0 flex-1">{trilha}</div>
@@ -79,7 +80,11 @@ export function Header({ titulo, subtitulo, trilha, utilitarios, acoes, classNam
   );
 }
 
-/** Traço vertical entre grupos de ação (node 601:55): 1×20 em `divider`. */
+/**
+ * Traço vertical entre grupos de ação (node 601:55): 1×20 em `divider`. Só
+ * entre o grupo de visão (troca-visão, período, data) e a ação principal;
+ * fileira só com busca, filtros e a ação não leva (humano, 2026-09-24).
+ */
 export function HeaderDivisor({ className }: { className?: string }) {
   return <div role="separator" aria-orientation="vertical" className={cn("h-5 w-px shrink-0 bg-divider", className)} />;
 }
@@ -104,20 +109,74 @@ export const HeaderNotificacoes = React.forwardRef<HTMLButtonElement, HeaderNoti
     <Tooltip content={rotulo} position="bottom">
       <Button ref={ref} variant="tertiary" size="icon" aria-label={rotulo} className={cn("relative", className)} {...props}>
         <Bell size={16} weight="regular" aria-hidden="true" />
-        {contagem > 0 ? (
-          <span
-            aria-hidden="true"
-            // D18: traço de 1,5 é ring, não border — o Chrome arredonda border para 1px em tela 1×
-            className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-label-sm tabular-nums text-primary-foreground ring-1.5 ring-inset ring-card"
-          >
-            {contagem > 99 ? "99+" : contagem}
-          </span>
-        ) : null}
+        {contagem > 0 ? <Selo tom="destructive">{contagem > 99 ? "99+" : contagem}</Selo> : null}
       </Button>
     </Tooltip>
   ),
 );
 HeaderNotificacoes.displayName = "HeaderNotificacoes";
+
+/** O selo no canto do botão de ícone (607:12957): 16px de altura, 4px para fora, anel de 1,5 em `card`. */
+function Selo({ tom, children }: { tom: "destructive" | "primary"; children: React.ReactNode }) {
+  return (
+    <span
+      aria-hidden="true"
+      // D18: traço de 1,5 é ring, não border — o Chrome arredonda border para 1px em tela 1×
+      className={cn(
+        "absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-label-sm tabular-nums text-primary-foreground ring-1.5 ring-inset ring-card",
+        tom === "destructive" ? "bg-destructive" : "bg-primary",
+      )}
+    >
+      {children}
+    </span>
+  );
+}
+
+export interface HeaderFiltrosProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Texto do botão. Com `recolhido`, vira o nome acessível e o tooltip. */
+  rotulo: string;
+  /** Filtros ativos. Zero: botão neutro; acima disso, `soft` com a conta. */
+  contagem?: number;
+  /** Nome acessível com a conta. Ex.: `(n) => \`Filtros: ${n} ativos\``. Padrão: "rotulo (n)". */
+  rotuloComContagem?: (n: number) => string;
+  /** Só o ícone. Mesma regra da busca: fileira com troca-visão, período ou data. */
+  recolhido?: boolean;
+}
+
+/**
+ * O botão de filtros do Header. Com rótulo quando a fileira só tem botões;
+ * só o ícone (`recolhido`) quando entra troca-visão, período ou data — a
+ * mesma regra da `HeaderBusca` (humano, 2026-09-24). Com filtro ativo vira
+ * `soft` e mostra a conta: é o único sinal na tela de que a lista está cortada.
+ */
+export const HeaderFiltros = React.forwardRef<HTMLButtonElement, HeaderFiltrosProps>(
+  ({ rotulo, contagem = 0, rotuloComContagem, recolhido = false, className, ...props }, ref) => {
+    const nome = contagem > 0 ? (rotuloComContagem ?? ((n: number) => `${rotulo} (${n})`))(contagem) : rotulo;
+    const variant = contagem > 0 ? "soft" : "tertiary";
+    if (recolhido) {
+      return (
+        <Tooltip content={nome} position="bottom">
+          <Button ref={ref} variant={variant} size="icon" aria-label={nome} className={cn("relative", className)} {...props}>
+            <FunnelSimple size={16} weight="regular" aria-hidden="true" />
+            {contagem > 0 ? <Selo tom="primary">{contagem > 99 ? "99+" : contagem}</Selo> : null}
+          </Button>
+        </Tooltip>
+      );
+    }
+    return (
+      <Button ref={ref} variant={variant} aria-label={contagem > 0 ? nome : undefined} className={className} {...props}>
+        <FunnelSimple size={16} weight="regular" aria-hidden="true" />
+        {rotulo}
+        {contagem > 0 ? (
+          <span aria-hidden="true" className="rounded-full bg-primary px-1.5 text-label-sm tabular-nums text-primary-foreground">
+            {contagem > 99 ? "99+" : contagem}
+          </span>
+        ) : null}
+      </Button>
+    );
+  },
+);
+HeaderFiltros.displayName = "HeaderFiltros";
 
 export interface HeaderBuscaProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
   /** Nome do campo para leitor de tela. Ex.: "Pesquisar leads". */

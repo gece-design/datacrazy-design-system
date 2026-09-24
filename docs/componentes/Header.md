@@ -12,7 +12,7 @@ fazer nela.
 
 ## Par no Figma
 
-Node: `601:464` (set "Header", 6 variantes) · Lote: `3` · 103px sem subtítulo, com o traço (o arquivo: 111, vão de 14 — ADR-029) ·
+Node: `601:464` (set "Header", 6 variantes) · Lote: `3` · 102px sem subtítulo, sem traço embaixo (o arquivo: 111, com traço e vão de 14 — ADR-029) ·
 Última verificação: ver [processo/kfe-state.md](../processo/kfe-state.md), entrada de 2026-09-15.
 
 **O set está com erro no arquivo.** As seis variantes se chamam
@@ -41,6 +41,7 @@ Peças do mesmo arquivo:
 | `HeaderDivisor` | `className?` | Traço 1×20 em `divider` (601:55), `role="separator"` |
 | `HeaderNotificacoes` | `rotulo`, `contagem?` + props de botão | Button `tertiary` `icon` com sino e selo; acima de 99, "99+" |
 | `HeaderBusca` | `rotulo`, `recolhida?` + props de input | A busca do Header: aberta (184px, variante Search 610:14049) ou só a lupa (32px) — regra abaixo |
+| `HeaderFiltros` | `rotulo`, `contagem?`, `rotuloComContagem?`, `recolhido?` + props de botão | O botão de filtros: com rótulo ou só o ícone (mesma regra da busca); com filtro ativo vira `soft` e mostra a conta |
 
 Controles que entram em `acoes` e têm doc própria: [Button](Button.md)
 (`tertiary`), [SegmentedControl](SegmentedControl.md), [Breadcrumb](Breadcrumb.md), Date Picker.
@@ -52,11 +53,22 @@ Controles que entram em `acoes` e têm doc própria: [Button](Button.md)
 | `rotulo` | `string` | sim | Nome do campo para leitor de tela. |
 | `recolhida` | `boolean` | não | Começa como só a lupa (32px); clicar abre a caixa de 184 com movimento (`base` · `enter`) e o foco entra; sem texto, fecha ao sair ou no Escape. ADR-028. |
 
-**Quando recolher** (humano, 2026-09-23): a fileira de ações só tem botões →
-busca aberta. Tem troca-visão, período ou seletor de data → `recolhida`. A
-escolha é por tela, não por largura: o estado não muda quando a janela
-encolhe. A busca do Header é sempre `HeaderBusca` — o botão "Pesquisar" com
-texto do arquivo (601:12) não se usa (AUD-204).
+### `HeaderFiltros`
+
+| Prop | Tipo | Obrigatória | Descrição |
+|------|------|-------------|-----------|
+| `rotulo` | `string` | sim | Texto do botão; com `recolhido`, nome acessível e tooltip. |
+| `contagem` | `number` | não | Filtros ativos. Acima de zero, `soft` com a conta (pílula no rótulo; selo no canto quando recolhido). |
+| `rotuloComContagem` | `(n: number) => string` | não | Nome acessível com a conta. Padrão: `"rotulo (n)"`. |
+| `recolhido` | `boolean` | não | Só o ícone (32px), com tooltip. Mesma regra da busca. |
+
+**Quando recolher** (humano, 2026-09-23 e 24): a fileira de ações só tem
+botões → busca aberta e filtros com rótulo. Tem troca-visão, período ou
+seletor de data → `recolhida` e `recolhido`. A escolha é por tela, não por
+largura: o estado não muda quando a janela encolhe. Busca e filtros são
+sempre `HeaderBusca` e `HeaderFiltros` — os botões com texto do arquivo
+(601:12) não se usam (AUD-204). O `HeaderDivisor` só entra entre o grupo de
+visão e a ação principal; fileira só com busca, filtros e a ação não leva.
 
 ### `Notificacoes`
 
@@ -87,7 +99,7 @@ Não tem. Ver "Par no Figma".
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| repouso | `px-8 py-4 border-b bg-background · linha de cima min-h-8 · 6 até o título (gap-1.5), h1 no topo da fileira (items-start) · ações gap-2` | humano | ADR-029 |
+| repouso | `px-8 py-4 bg-background, sem traço embaixo · linha de cima min-h-8 · 6 até o título (gap-1.5), h1 no topo da fileira (items-start) · ações gap-2` | humano | ADR-029 |
 | sem espaço | `ações descem para linha própria (flex-wrap + ml-auto) e quebram entre si` | banco | E3 |
 | texto longo | `título, subtítulo e níveis da trilha truncate + title` | declarado | D12 |
 | hover (sino) | `hover:bg-accent do Button tertiary` | inferido | gatilho do Date Picker |
@@ -102,7 +114,7 @@ decisão, não buraco a preencher.
 
 ## Tokens consumidos
 
-`background` · `border` · `foreground` · `muted-foreground` · `card` ·
+`background` · `foreground` · `muted-foreground` · `card` ·
 `divider` · `destructive` · `primary-foreground` · `ring` · `overlay/*` (painel
 de notificações da tela) · `text/heading-1` ·
 `text/body-sm` · `text/label-sm` · `text/label-lg` · `radius/md` ·
@@ -123,6 +135,7 @@ Usa: Button · Tooltip · (por encaixe) Breadcrumb, SegmentedControl, ViewSwitch
   acoes={
     <>
       <HeaderBusca recolhida rotulo={t("pesquisar")} placeholder={t("pesquisar")} value={busca} onChange={(e) => setBusca(e.target.value)} />
+      <HeaderFiltros recolhido rotulo={t("filtros")} contagem={filtrosAtivos} rotuloComContagem={(n) => t("filtrosAtivos", { n })} />
       <SegmentedControl rotulo={t("periodo")} itens={periodos} atual={periodo} aoEscolher={setPeriodo} />
       <HeaderDivisor />
       <Button variant="primary"><Plus size={16} weight="regular" />{t("novoLead")}</Button>
@@ -137,7 +150,7 @@ Usa: Button · Tooltip · (por encaixe) Breadcrumb, SegmentedControl, ViewSwitch
 |------|---------------------|
 | Papel | `<header>` com `h1`; trilha é `nav` com `aria-label`; divisor é `separator` vertical |
 | Teclado | Ordem natural: trilha, sino, ações. Controles segmentados entram por uma opção só e andam por setas |
-| Nome acessível | Sino e opções do View Switcher só têm ícone: `aria-label` obrigatório e tooltip com o mesmo texto; selo `aria-hidden` (a contagem vai no rótulo) |
+| Nome acessível | Sino, filtros recolhidos e opções do View Switcher só têm ícone: `aria-label` obrigatório e tooltip com o mesmo texto; selo e pílula `aria-hidden` (a contagem vai no rótulo) |
 | Foco visível | Outline com folga (D6) em todos os controles |
 | Texto longo | Trunca com `title`; ações quebram linha em vez de vazar |
 | Zoom | Nenhuma largura fixa além da busca (184, com `max-w-full`) |

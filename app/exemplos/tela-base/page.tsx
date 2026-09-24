@@ -6,7 +6,6 @@ import {
   ChatCircleDots,
   ClipboardText,
   FlowArrow,
-  FunnelSimple,
   Gear,
   Handshake,
   House,
@@ -22,7 +21,7 @@ import {
 } from "@phosphor-icons/react";
 import { TelaBase } from "@/components/ui/tela-base";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
-import { HeaderBusca, HeaderDivisor, Notificacoes, type Notificacao } from "@/components/ui/header";
+import { HeaderBusca, HeaderDivisor, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { SegmentedControl, ViewSwitcher } from "@/components/ui/segmented-control";
@@ -154,10 +153,7 @@ export default function NovaTela() {
             {/* `recolhida` porque a fileira tem troca-visão e período. Só
                 botões? Tire a prop: a busca nasce aberta (regra em Header.md). */}
             <HeaderBusca recolhida rotulo="Pesquisar" placeholder="Pesquisar" value={busca} onChange={(e) => setBusca(e.target.value)} />
-            <Button variant="tertiary" onClick={() => toast({ variant: "info", titulo: "Filtros", descricao: "No CRM: o painel de filtros da tela." })}>
-              <FunnelSimple size={16} weight="regular" />
-              Filtros
-            </Button>
+            <HeaderFiltros recolhido rotulo="Filtros" onClick={() => toast({ variant: "info", titulo: "Filtros", descricao: "No CRM: o painel de filtros da tela." })} />
             <ViewSwitcher
               rotulo="Visualização"
               atual={visao}

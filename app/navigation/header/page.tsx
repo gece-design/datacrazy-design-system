@@ -2,12 +2,12 @@
 
 import * as React from "react";
 import {
-  BellSimple, ChartBar, ChartPieSlice, ClipboardText, FunnelSimple, Handshake,
+  BellSimple, ChartBar, ChartPieSlice, ClipboardText, Handshake,
   Plus, Table, UserPlus, WarningCircle, type Icon,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Breadcrumb, type ItemBreadcrumb } from "@/components/ui/breadcrumb";
-import { Header, HeaderBusca, HeaderDivisor, HeaderNotificacoes, Notificacoes, type Notificacao } from "@/components/ui/header";
+import { Header, HeaderBusca, HeaderDivisor, HeaderFiltros, HeaderNotificacoes, Notificacoes, type Notificacao } from "@/components/ui/header";
 import {
   SegmentedControl,
   ViewSwitcher,
@@ -120,13 +120,10 @@ function Busca({ recolhida }: { recolhida?: boolean }) {
   );
 }
 
-function Filtros() {
-  return (
-    <Button variant="tertiary">
-      <FunnelSimple size={16} weight="regular" />
-      Filtros
-    </Button>
-  );
+/* Os filtros seguem a busca: com rótulo quando a fileira só tem botões,
+   `recolhido` (só o ícone) quando entra troca-visão, período ou data. */
+function Filtros({ recolhido }: { recolhido?: boolean }) {
+  return <HeaderFiltros recolhido={recolhido} rotulo="Filtros" />;
 }
 
 function NovoLead({ variant }: { variant: "soft" | "primary" }) {
@@ -162,7 +159,7 @@ function HeaderDefault() {
       acoes={
         <>
           <Busca recolhida />
-          <Filtros />
+          <Filtros recolhido />
           <Visao />
           <Periodo />
           <HeaderDivisor />
@@ -191,9 +188,9 @@ const codigoDefault = `<Header
   utilitarios={<HeaderNotificacoes rotulo="Notificações: 5 não lidas" contagem={5} onClick={abrirPainel} />}
   acoes={
     <>
-      {/* recolhida: a fileira tem troca-visão e período */}
+      {/* recolhidos: a fileira tem troca-visão e período */}
       <HeaderBusca recolhida rotulo="Pesquisar leads" placeholder="Pesquisar" value={busca} onChange={(e) => setBusca(e.target.value)} />
-      <Button variant="tertiary"><FunnelSimple size={16} weight="regular" />Filtros</Button>
+      <HeaderFiltros recolhido rotulo="Filtros" />
       <ViewSwitcher rotulo="Visualização" itens={visoes} atual={visao} aoEscolher={setVisao} />
       <SegmentedControl rotulo="Período" itens={periodos} atual={periodo} aoEscolher={setPeriodo} />
       <HeaderDivisor />
@@ -212,8 +209,8 @@ const codigoData = `acoes={
   </>
 }`;
 
-const codigoBusca = `// Só botões na fileira: sem \`recolhida\`, a busca nasce aberta (184px).
-// Com troca-visão, período ou data: \`recolhida\` — só a lupa; clicar abre.
+const codigoBusca = `// Só botões na fileira: busca aberta (184px), filtros com rótulo, sem divisor.
+// Com troca-visão, período ou data: \`recolhida\` e \`recolhido\` — só os ícones; a lupa abre ao clicar.
 <Header
   titulo="Dashboard"
   trilha={trilha}
@@ -221,7 +218,7 @@ const codigoBusca = `// Só botões na fileira: sem \`recolhida\`, a busca nasce
   acoes={
     <>
       <HeaderBusca recolhida rotulo="Pesquisar leads" placeholder="Pesquisar" value={busca} onChange={(e) => setBusca(e.target.value)} />
-      <Button variant="tertiary"><FunnelSimple size={16} weight="regular" />Filtros</Button>
+      <HeaderFiltros recolhido rotulo="Filtros" />
       <ViewSwitcher rotulo="Visualização" itens={visoes} atual={visao} aoEscolher={setVisao} />
       <HeaderDivisor />
       <Button><Plus size={16} weight="regular" />Novo lead</Button>
@@ -260,13 +257,13 @@ export default function HeaderPage() {
   return (
     <PaginaDS
       titulo="Header"
-      descricao="O topo de cada página: 103px, recuo 32×16, trilha e sino numa linha de 32, o título h1 6px abaixo, no topo da fileira de ações (vão de 8). Seis combinações no arquivo, nenhuma prop de variante — o conteúdo entra por três encaixes."
+      descricao="O topo de cada página: 102px, recuo 32×16, sem traço embaixo, trilha e sino numa linha de 32, o título h1 6px abaixo, no topo da fileira de ações (vão de 8). Seis combinações no arquivo, nenhuma prop de variante — o conteúdo entra por três encaixes."
       secoes={[
         "Como funciona",
         "Default",
         "Com data",
         "Menos ações",
-        "Busca",
+        "Busca e filtros",
         "Notificações",
         "Trilha longa",
         "Quando não cabe",
@@ -346,7 +343,7 @@ export default function HeaderPage() {
           acoes={
             <>
               <Busca recolhida />
-              <Filtros />
+              <Filtros recolhido />
               <Visao />
               <Data />
               <HeaderDivisor />
@@ -360,7 +357,7 @@ export default function HeaderPage() {
       <Secao
         titulo="Menos ações"
         spec="610:13838 · 13915 · 13982"
-        descricao="Três recortes do arquivo, do mais cheio ao mais enxuto. Nenhum é variante: é o mesmo Header com menos filhos em acoes. A busca segue a regra: com o troca-visão, só a lupa; só botões, aberta."
+        descricao="Três recortes do arquivo, do mais cheio ao mais enxuto. Nenhum é variante: é o mesmo Header com menos filhos em acoes. Busca e filtros seguem a regra: com o troca-visão, só os ícones; só botões, aberta e com rótulo, e sem divisor."
         semCaixa
         semSeletorDeFundo
       >
@@ -371,7 +368,7 @@ export default function HeaderPage() {
           acoes={
             <>
               <Busca recolhida />
-              <Filtros />
+              <Filtros recolhido />
               <Visao />
               <HeaderDivisor />
               <NovoLead variant="soft" />
@@ -387,7 +384,6 @@ export default function HeaderPage() {
             <>
               <Busca />
               <Filtros />
-              <HeaderDivisor />
               <NovoLead variant="soft" />
               <NovoLead variant="primary" />
             </>
@@ -401,25 +397,23 @@ export default function HeaderPage() {
             <>
               <Busca />
               <Filtros />
-              <HeaderDivisor />
               <NovoLead variant="primary" />
             </>
           }
-          className="border-b-0"
         />
       </Secao>
 
       <Secao
-        titulo="Busca"
+        titulo="Busca e filtros"
         spec="610:14049 · 184 ↔ 32px"
-        descricao="Sempre a HeaderBusca, nunca um botão Pesquisar com texto. Só botões na fileira: aberta, a caixa do Button tertiary virada campo. Com troca-visão, período ou data: só a lupa — clique e a caixa abre até 184 com o foco dentro; vazia, volta a ser lupa ao sair."
+        descricao="Sempre HeaderBusca e HeaderFiltros, nunca um botão com texto no lugar. Só botões na fileira: busca aberta e filtros com rótulo. Com troca-visão, período ou data: só os ícones — a lupa abre a caixa até 184 com o foco dentro e, vazia, volta ao sair; os filtros ganham tooltip. O divisor só entra antes da ação principal quando há grupo de visão."
         codigo={codigoBusca}
         semCaixa
         semSeletorDeFundo
         nota={
           <>
-            A escolha é por tela, não por largura: a busca não muda de estado quando a janela encolhe. Regra do
-            humano (2026-09-23), ADR-028.
+            A escolha é por tela, não por largura: busca e filtros não mudam de estado quando a janela encolhe.
+            Regra do humano (2026-09-23 e 24), ADR-028.
           </>
         }
       >
@@ -431,7 +425,6 @@ export default function HeaderPage() {
             <>
               <Busca />
               <Filtros />
-              <HeaderDivisor />
               <NovoLead variant="primary" />
             </>
           }
@@ -443,13 +436,12 @@ export default function HeaderPage() {
           acoes={
             <>
               <Busca recolhida />
-              <Filtros />
+              <Filtros recolhido />
               <Visao />
               <HeaderDivisor />
               <NovoLead variant="primary" />
             </>
           }
-          className="border-b-0"
         />
       </Secao>
 
@@ -475,11 +467,9 @@ export default function HeaderPage() {
           acoes={
             <>
               <Filtros />
-              <HeaderDivisor />
               <NovoLead variant="primary" />
             </>
           }
-          className="border-b-0"
         />
       </Secao>
 
@@ -497,11 +487,9 @@ export default function HeaderPage() {
           acoes={
             <>
               <Filtros />
-              <HeaderDivisor />
               <NovoLead variant="primary" />
             </>
           }
-          className="border-b-0"
         />
       </Secao>
 
@@ -518,18 +506,14 @@ export default function HeaderPage() {
             acoes={
               <>
                 <HeaderBusca rotulo="Buscar prospectos" placeholder="Buscar" />
-                <Button variant="tertiary">
-                  <FunnelSimple size={16} weight="regular" />
-                  Filtros
-                </Button>
-                <HeaderDivisor />
+                <HeaderFiltros rotulo="Filtros" />
                 <Button variant="primary">
                   <Plus size={16} weight="regular" />
                   Nuevo prospecto
                 </Button>
               </>
             }
-            className="border-b-0 px-4"
+            className="px-4"
           />
         </div>
       </Secao>

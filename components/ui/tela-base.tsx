@@ -27,8 +27,8 @@ import { useMontado, useSaida } from "@/lib/use-saida";
  *                cima, com o Scrim do Modal e a camada (foco preso, Escape)
  * Os recuos do conteúdo e do Header: 16 — o arquivo desenha 32 no Header;
  * foi 24 e "ainda tinha muito espaço" (humano, 2026-09-23, ADR-028). O Header
- * não tem recuo embaixo: as ações encostam no traço e os 16 do conteúdo dão
- * o respiro. À esquerda, com a sidebar no lugar (lg+), o recuo é 4: a
+ * tem 8 embaixo: zero era para o subcabeçalho, que saiu; sem ele, "tá muito
+ * colado com o conteúdo" (humano, 2026-09-24). À esquerda, com a sidebar no lugar (lg+), o recuo é 4: a
  * Sidebar já traz 16 de moldura na cor do fundo, e 16 + 16 "dava a impressão
  * de mais espaço do que deveria" (humano, 2026-09-24).
  *
@@ -149,7 +149,7 @@ export function TelaBase({
       <div className="flex min-w-0 flex-1 flex-col">
         <Header
           {...cabecalho}
-          className={cn("shrink-0 pl-4 pr-4 pb-0 lg:pl-1", cabecalho.className)}
+          className={cn("shrink-0 pl-4 pr-4 pb-2 lg:pl-1", cabecalho.className)}
           trilha={
             <div className="flex min-w-0 items-center gap-2">
               {botaoMenu}

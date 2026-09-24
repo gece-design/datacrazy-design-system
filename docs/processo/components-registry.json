@@ -920,7 +920,7 @@
       "motion": "transition-colors",
       "states": {
         "repouso": {
-          "impl": "px-8 py-4 border-b bg-background · linha de cima min-h-8 · 6 até o título (gap-1.5), h1 no topo da fileira (items-start) · ações gap-2",
+          "impl": "px-8 py-4 bg-background, sem traço embaixo · linha de cima min-h-8 · 6 até o título (gap-1.5), h1 no topo da fileira (items-start) · ações gap-2",
           "source": "humano",
           "rule": "ADR-029",
           "precedent": "Actions=Default (601:12): vão 14 → 6",
