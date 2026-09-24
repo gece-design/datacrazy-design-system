@@ -102,3 +102,9 @@ export function horaDeTexto(texto: string | null) {
   if (hora > 23 || minuto > 59 || segundo > 59) return null;
   return { hora, minuto, segundo };
 }
+
+/** "America/Sao_Paulo" → "Sao Paulo": o último pedaço do id, sem os sublinhados. */
+export function cidadeDoFuso(fuso: string) {
+  const pedaco = fuso.split("/").pop() ?? fuso;
+  return pedaco.replace(/_/g, " ");
+}

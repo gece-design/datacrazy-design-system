@@ -25,12 +25,15 @@ lista, a escala de elevação no painel e a grade do Date Picker no calendário
 | `rotulo` | `string` | sim | Rótulo visível. |
 | `valor` | `string \| null` | sim | `"HH:MM"` ou `"HH:MM:SS"`. |
 | `aoMudar` | `(v: string \| null) => void` | sim | Escolha, "Agora" e "Limpar". |
-| `segundos` | `boolean` | não | Liga a terceira coluna. |
+| `segundos` | `boolean` | não | Liga a roda de segundos. |
 | `passoMinutos` | `number` | não | Padrão 5. |
 | `passoSegundos` | `number` | não | Padrão 10. |
+| `formato` | `FormatoDeHora` | não | `"12h"` (com a roda de AM/PM) ou `"24h"`. Sem a prop, o costume do `locale`. O valor guardado é sempre 24h. |
 | `fuso` | `string` | não | IANA. Padrão: o do navegador. |
+| `aoMudarFuso` | `(f: string) => void` | não | Com ela e `fusos`, o rodapé ganha o seletor de fuso: um painel do DS com busca. |
+| `fusos` | `string[]` | não | A lista do seletor. |
 | `locale` | `string` | sim | BCP-47. |
-| `rotulos` | `RotulosDeHora` | sim | Os sete textos, **todos obrigatórios**: `vazio`, `horas`, `minutos`, `segundos`, `agora`, `limpar`, `fuso` (aria-label do seletor de fuso). |
+| `rotulos` | `RotulosDeHora` | sim | Os sete textos obrigatórios: `vazio`, `horas`, `minutos`, `segundos`, `agora`, `limpar`, `fuso` (aria-label do seletor de fuso). Opcionais: `am`, `pm` (padrão "AM"/"PM") e `buscarFuso` (placeholder da busca, padrão "Buscar"). |
 | `disabled`, `className` | — | não | — |
 
 ### `DateTimePicker`
@@ -40,10 +43,15 @@ Tudo o que o `TimePicker` tem, mais:
 | Prop | Tipo | Obrigatória | Descrição |
 |------|------|-------------|-----------|
 | `valor` | `Date \| null` | sim | O **instante**, não o texto. |
-| `aoMudarFuso` | `(f: string) => void` | não | Com ela e `fusos`, o rodapé ganha o seletor. |
-| `fusos` | `string[]` | não | A lista do seletor. |
 | `rotulos` | `RotulosDeHora & RotulosDoCalendario` | sim | Soma os rótulos de mês e ano. |
 | `dataMinima` · `dataMaxima` | `Date` | não | Limites do calendário. |
+
+As rodas (reunião de 2026-09-18): cinco valores à vista, o do meio numa
+faixa é o escolhido; rola e para no valor (`scroll-snap`), os das pontas
+inclinam de leve e apagam sob um sombreado em cima e embaixo. Setas, PageUp e
+PageDown, Home e End andam; clicar num valor escolhe. O valor só muda quando a
+rolagem para. O seletor de fuso é um painel do DS (`overlay/*`) com busca por
+cidade, no lugar do `<select>` nativo; Escape fecha só ele.
 
 ## Variantes
 

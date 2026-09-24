@@ -30,17 +30,38 @@ Diff de pixels não medido.
 | `locale` | `string` | sim | BCP-47. No CRM é o locale ativo do next-intl, nunca um literal: decide o primeiro dia da semana e o formato do intervalo. |
 | `atalhos` | `AtalhoDeIntervalo[]` | não | `{ id, rotulo, intervalo(hoje) }`. `criarAtalhos` em `lib/periodos.ts` traz 16 contas prontas. |
 | `dataMinima`, `dataMaxima` | `Date` | não | Fora delas o dia não clica. |
+| `meses` | `1 \| 2` | não | Quantos meses lado a lado. Padrão 2; 1 para um filtro curto ou um painel estreito (reunião de 2026-09-18). |
 | `disabled`, `className` | — | não | — |
 
 `CalendarioDeDia`: `valor: Date \| null`, `aoEscolher(dia)`, `locale`,
 `rotulos: RotulosDoCalendario` (`mes`, `ano`), `dataMinima`, `dataMaxima`,
 `className`.
 
+### `DatePicker`
+
+Uma data, um calendário (reunião de 2026-09-18): o mesmo gatilho do período,
+um mês só, e o dia escolhido fecha o painel na hora — sem Aplicar. Hoje e
+Limpar no rodapé.
+
+| Prop | Tipo | Obrigatória | Descrição |
+|------|------|-------------|-----------|
+| `valor` | `Date \| null` | sim | O dia. |
+| `aoMudar` | `(valor: Date \| null) => void` | sim | No clique do dia, em Hoje e em Limpar. |
+| `locale` | `string` | sim | BCP-47. |
+| `rotulos` | `RotulosDoDatePickerSimples` | sim | `vazio`, `mes`, `ano`, `mesAnterior`, `proximoMes`, `hoje`, `limpar`. |
+| `dataMinima`, `dataMaxima` | `Date` | não | Fora delas o dia não clica. |
+| `disabled`, `className` | — | não | — |
+
+O painel dos três tem recuo 16 e vão de 32 entre as grades ("melhorar o
+espaço do popup", reunião de 2026-09-18).
+
 ## Variantes
 
 | Variante | Quando |
 |----------|--------|
 | dois meses | Padrão do intervalo |
+| um mês | `meses={1}`: filtro curto ou painel estreito |
+| `DatePicker` | Uma data: vencimento, nascimento, dia da visita |
 | com atalhos | Coluna à esquerda com os períodos prontos |
 | `CalendarioDeDia` | Um mês, um dia — dentro do `DateTimePicker` |
 

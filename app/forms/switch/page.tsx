@@ -12,11 +12,16 @@ const codigoPadrao = `<Switch checked={ativa} onChange={(e) => alternarAutomacao
   {t("notificacoesPorEmail")}
 </Switch>`;
 
-const codigoSemRotulo = `<Switch
-  aria-label={t("ativarAutomacao", { nome: automacao.nome })}
-  checked={automacao.ativa}
-  onChange={(e) => alternar(automacao.id, e.target.checked)}
-/>`;
+const codigoSemRotulo = `{/* a linha inteira é o alvo do clique: texto à esquerda, Switch à direita */}
+<ul className="divide-y divide-border">
+  {automacoes.map((a) => (
+    <li key={a.id}>
+      <Switch linha descricao={a.descricao} checked={a.ativa} onChange={(e) => ativar(a.id, e.target.checked)}>
+        {a.nome}
+      </Switch>
+    </li>
+  ))}
+</ul>`;
 
 const regras: React.ReactNode[] = [
   <>
@@ -42,9 +47,9 @@ const regras: React.ReactNode[] = [
 export default function SwitchPage() {
   const [email, setEmail] = React.useState(true);
   const [automacoes, setAutomacoes] = React.useState([
-    { id: "boas-vindas", nome: "Boas-vindas", ativa: true },
-    { id: "follow-up", nome: "Follow-up de 3 dias", ativa: false },
-    { id: "reativacao", nome: "Reativação de lead frio", ativa: true },
+    { id: "boas-vindas", nome: "Boas-vindas", descricao: "Mensagem no WhatsApp assim que o lead entra", ativa: true },
+    { id: "follow-up", nome: "Follow-up de 3 dias", descricao: "Lembrete para o atendente se não houver resposta", ativa: false },
+    { id: "reativacao", nome: "Reativação de lead frio", descricao: "E-mail depois de 30 dias parado", ativa: true },
   ]);
 
   return (
@@ -107,29 +112,32 @@ export default function SwitchPage() {
 
       <Secao
         titulo="Em lista"
-        spec="aria-label"
-        descricao="Uma automação por linha, o nome à esquerda e o Switch sozinho à direita."
+        spec="linha"
+        descricao="Uma automação por linha, o nome à esquerda e o Switch à direita — e a linha inteira é o alvo do clique, não só o controle (reunião de 2026-09-18)."
         codigo={codigoSemRotulo}
         nota={
           <p>
-            Aqui o texto visível e o controle estão separados, então o <Chip>aria-label</Chip> repete o nome da
-            automação. Sem ele, o leitor de tela anunciaria três &ldquo;switch, ligado&rdquo; iguais.
+            Com <Chip>linha</Chip> o rótulo continua sendo o texto da linha: o leitor de tela anuncia o nome da
+            automação, e o clique em qualquer ponto da linha alterna. <Chip>descricao</Chip> é a segunda linha, em
+            muted.
           </p>
         }
       >
         <ul className="divide-y divide-border">
           {automacoes.map((a) => (
-            <li key={a.id} className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
-              <span className="min-w-0 text-body-lg text-foreground">{a.nome}</span>
+            <li key={a.id} className="first:[&>label]:pt-0 last:[&>label]:pb-0">
               <Switch
-                aria-label={`Ativar ${a.nome}`}
+                linha
+                descricao={a.descricao}
                 checked={a.ativa}
                 onChange={(e) =>
                   setAutomacoes((lista) =>
                     lista.map((x) => (x.id === a.id ? { ...x, ativa: e.target.checked } : x))
                   )
                 }
-              />
+              >
+                {a.nome}
+              </Switch>
             </li>
           ))}
         </ul>

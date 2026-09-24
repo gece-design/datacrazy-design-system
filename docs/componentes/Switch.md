@@ -26,6 +26,8 @@ acordado com a sessão do drawer em 2026-09-14.
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
 | `children` | `ReactNode` | — | não | Rótulo: **o que** liga. Sem ele, `aria-label`. |
+| `linha` | `boolean` | `false` | não | A linha inteira é o alvo do clique: texto à esquerda, Switch à direita, toda a largura. O Switch de lista (reunião de 2026-09-18). |
+| `descricao` | `ReactNode` | — | não | Segunda linha do rótulo, em `muted-foreground`. Só com `linha`. |
 | `checked` / `defaultChecked` | `boolean` | — | não | Controlado ou solto. |
 | `onChange` | `ChangeEventHandler` | — | não | Evento nativo: `e.target.checked`. |
 | `disabled`, `name`, `aria-*` | nativos | — | não | Repassados ao `<input>`. |

@@ -15,6 +15,17 @@ const rotulos: RotulosDeHora = {
   fuso: "Fuso horário",
 };
 
+const rotulosEmIngles: RotulosDeHora = {
+  vazio: "Pick a time",
+  horas: "Hour",
+  minutos: "Min",
+  segundos: "Sec",
+  agora: "Now",
+  limpar: "Clear",
+  fuso: "Time zone",
+  buscarFuso: "Search",
+};
+
 const rotulosCalendario = {
   mes: "Mês",
   ano: "Ano",
@@ -65,15 +76,21 @@ export default function TimePickerPage() {
       <Secao
         titulo="Hora"
         spec="HH:MM · HH:MM:SS"
-        descricao="Colunas de hora e minuto, com a de segundos ligada por prop. O passo dos minutos é seu: 5 em 5 por padrão, 1 em 1 quando a operação precisa."
+        descricao="Rodas de hora e minuto, como as do iPhone: role, ou clique, e o valor para no meio. A de segundos liga por prop; o passo dos minutos é seu, 5 em 5 por padrão. No formato de 12 horas entra a roda de AM/PM — sem a prop, vale o costume do idioma."
         codigo={`<TimePicker
   rotulo="Abre às"
   valor={hora}
   aoMudar={setHora}
+  fuso={fuso}
+  aoMudarFuso={setFuso}
+  fusos={["America/Sao_Paulo", "Europe/Lisbon", "UTC"]}
   locale="pt-BR"
   rotulos={{ vazio: "Escolher", horas: "Hora", minutos: "Min", segundos: "Seg",
              agora: "Agora", limpar: "Limpar", fuso: "Fuso horário" }}
 />
+
+{/* 12 horas, com a roda de AM/PM */}
+<TimePicker rotulo="Opens at" valor={hora} aoMudar={setHora} formato="12h" locale="en-US" rotulos={rotulosEmIngles} />
 
 {/* com segundos e minuto a minuto */}
 <TimePicker
@@ -87,13 +104,24 @@ export default function TimePickerPage() {
 />`}
         nota={
           <>
-            O valor é texto no formato 24h. Quem lê e escreve no back não precisa saber de fuso — e o
-            componente não inventa um. O botão <Chip>Agora</Chip> usa o fuso da prop; sem ela, o do navegador.
+            O valor é texto no formato 24h, sempre — <Chip>formato</Chip> muda só a vista. Quem lê e escreve no
+            back não precisa saber de fuso, e o componente não inventa um. O botão <Chip>Agora</Chip> usa o fuso
+            da prop; sem ela, o do navegador. Com <Chip>fusos</Chip> e <Chip>aoMudarFuso</Chip>, o rodapé abre o
+            painel de fuso com busca. Setas, PageUp e PageDown andam na roda.
           </>
         }
       >
         <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
-          <TimePicker rotulo="Abre às" valor={hora} aoMudar={setHora} locale="pt-BR" rotulos={rotulos} />
+          <TimePicker
+            rotulo="Abre às"
+            valor={hora}
+            aoMudar={setHora}
+            fuso={fuso}
+            aoMudarFuso={setFuso}
+            fusos={FUSOS}
+            locale="pt-BR"
+            rotulos={rotulos}
+          />
           <TimePicker
             rotulo="Disparo da automação"
             valor={horaComSegundos}
@@ -103,6 +131,7 @@ export default function TimePickerPage() {
             locale="pt-BR"
             rotulos={rotulos}
           />
+          <TimePicker rotulo="Opens at" valor={hora} aoMudar={setHora} formato="12h" locale="en-US" rotulos={rotulosEmIngles} />
         </div>
       </Secao>
 
@@ -155,7 +184,7 @@ export default function TimePickerPage() {
       <Secao
         titulo="Fuso horário"
         spec="Intl · sem biblioteca"
-        descricao="O mesmo instante, lido em cinco relógios. Troque o fuso no painel acima e veja a lista inteira mudar — o valor guardado é um só."
+        descricao="O mesmo instante, lido em cinco relógios. Troque o fuso no painel acima — o botão do rodapé abre o painel do DS com busca — e veja a lista inteira mudar: o valor guardado é um só."
         nota={
           <>
             <Chip>lib/fusos.ts</Chip> tem o que os dois componentes usam:{" "}

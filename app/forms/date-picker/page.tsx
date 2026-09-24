@@ -3,8 +3,10 @@
 import * as React from "react";
 import { X } from "@phosphor-icons/react";
 import {
+  DatePicker,
   DateRangePicker,
   type AtalhoDeIntervalo,
+  type RotulosDoDatePickerSimples,
   type IntervaloDeDatas,
   type RotulosDoDatePicker,
 } from "@/components/ui/date-picker";
@@ -23,6 +25,16 @@ const rotulos: RotulosDoDatePicker = {
   proximoMes: "Próximo mês",
   aplicar: "Aplicar",
   cancelar: "Cancelar",
+};
+
+const rotulosSimples: RotulosDoDatePickerSimples = {
+  vazio: "Selecione uma data",
+  mes: "Mês",
+  ano: "Ano",
+  mesAnterior: "Mês anterior",
+  proximoMes: "Próximo mês",
+  hoje: "Hoje",
+  limpar: "Limpar",
 };
 
 /* Os rótulos ficam na tela (i18n, regra 4); as contas moram em lib/periodos.ts. */
@@ -51,6 +63,16 @@ const atalhos = criarAtalhos(
   ["hoje", "ultimos7", "ultimos15", "ultimos30", "trimestreAnterior"],
   ROTULOS_DE_PERIODO,
 );
+
+const codigoUmMes = `<DateRangePicker meses={1} valor={periodo} onValorChange={setPeriodo} locale="pt-BR" rotulos={rotulos} />`;
+
+const codigoUmaData = `<DatePicker
+  valor={data}
+  aoMudar={setData}
+  locale="pt-BR"
+  rotulos={{ vazio: "Selecione uma data", mes: "Mês", ano: "Ano",
+             mesAnterior: "Mês anterior", proximoMes: "Próximo mês", hoje: "Hoje", limpar: "Limpar" }}
+/>`;
 
 type Parte = { nome: string; papel: string };
 
@@ -184,6 +206,8 @@ export default function DatePickerPage() {
 
   const [padrao, setPadrao] = React.useState<IntervaloDeDatas>(periodoInicial);
   const [simples, setSimples] = React.useState<IntervaloDeDatas>({ inicio: null, fim: null });
+  const [umMes, setUmMes] = React.useState<IntervaloDeDatas>({ inicio: null, fim: null });
+  const [data, setData] = React.useState<Date | null>(null);
   const [limitado, setLimitado] = React.useState<IntervaloDeDatas>({ inicio: null, fim: null });
   const [porIdioma, setPorIdioma] = React.useState<IntervaloDeDatas>(periodoInicial);
 
@@ -191,7 +215,7 @@ export default function DatePickerPage() {
     <PaginaDS
       titulo="Date Picker"
       descricao="Seleção de período em dois meses, com coluna de atalhos e confirmação explícita. É o componente mais exposto à regra de idioma do design system: nome de mês, nome de dia, ordem dd/mm e primeiro dia da semana são os quatro pontos onde en, es e pt-br discordam."
-      secoes={["Como funciona", "Anatomia", "Padrão", "Períodos prontos", "Sem atalhos", "Com limite de data", "Nos três idiomas", "Regras"]}
+      secoes={["Como funciona", "Anatomia", "Padrão", "Períodos prontos", "Sem atalhos", "Um mês", "Uma data", "Com limite de data", "Nos três idiomas", "Regras"]}
     >
       <ComoFunciona>
         <p>
@@ -362,6 +386,34 @@ const atalhos = criarAtalhos(
       >
         <div className="flex min-h-[120px] items-start justify-center">
           <DateRangePicker valor={simples} onValorChange={setSimples} locale="pt-BR" rotulos={rotulos} />
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Um mês"
+        spec="meses={1}"
+        descricao="O mesmo período com uma grade só: para um filtro curto ou um painel estreito. As setas e as teclas andam mês a mês, e o segundo clique fecha o intervalo do mesmo jeito."
+        codigo={codigoUmMes}
+      >
+        <div className="flex min-h-[120px] items-start justify-center">
+          <DateRangePicker meses={1} valor={umMes} onValorChange={setUmMes} locale="pt-BR" rotulos={rotulos} />
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Uma data"
+        spec="DatePicker"
+        descricao="Uma data, um calendário. O mesmo gatilho do período; clicar no dia escolhe e fecha — sem Aplicar, porque não há segundo clique. Hoje e Limpar no rodapé."
+        codigo={codigoUmaData}
+        nota={
+          <p>
+            É o <Chip>CalendarioDeDia</Chip> do <Chip>DateTimePicker</Chip>, com gatilho e rodapé. Vencimento, data de
+            nascimento, dia da visita: quando a pergunta é &ldquo;qual dia&rdquo; e não &ldquo;de quando a quando&rdquo;.
+          </p>
+        }
+      >
+        <div className="flex min-h-[120px] items-start justify-center">
+          <DatePicker valor={data} aoMudar={setData} locale="pt-BR" rotulos={rotulosSimples} />
         </div>
       </Secao>
 

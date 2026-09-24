@@ -13,6 +13,7 @@ import {
   primeiroDiaDaSemana,
   maiuscula,
   celulasDoMes,
+  textoDeIntl,
 } from "@/lib/datas";
 import { usePosicao } from "@/lib/use-posicao";
 import { useCliqueFora } from "@/lib/use-clique-fora";
@@ -70,7 +71,8 @@ export interface DateRangePickerProps {
   dataMinima?: Date;
   dataMaxima?: Date;
   disabled?: boolean;
-  className?: string;
+  className?: string;  /** Quantos meses o painel mostra lado a lado. Padrão 2; 1 para um filtro curto ou um painel estreito. */
+  meses?: 1 | 2;
 }
 
 /* --- datas: comparação por dia, sem hora e sem fuso — lib/datas.ts (D21) --- */
@@ -262,9 +264,48 @@ function CabecalhoDoMes({ mes, nomesDosMeses, anos, rotulos, onMudarMes }: Cabec
 
 /* --- componente ----------------------------------------------------------- */
 
+/**
+ * O gatilho — "Data button" do Figma (node 471:2809). Não é o Button
+ * secundário: o arquivo desenha um controle próprio, de 29px, sem traço, com
+ * `text/body-md` e DOIS estados de repouso — Default (`card` +
+ * `muted-foreground`) e Active (`accent` + `primary`). Active é o painel
+ * aberto, então quem manda nele é `aberto`. Medidas: px 8 · py 6 · gap 4 ·
+ * raio 6 (`radius/md`). O ícone sai em currentColor junto com o texto. É o
+ * mesmo do período e do `DatePicker` de uma data.
+ */
+const GatilhoDeData = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & { aberto: boolean }>(
+  ({ aberto, className, children, ...props }, ref) => (
+    <button
+      ref={ref}
+      type="button"
+      aria-haspopup="dialog"
+      aria-expanded={aberto}
+      className={cn(
+        "inline-flex max-w-full items-center gap-1 rounded-md px-2 py-1.5 text-body-md",
+        "outline-none transition-colors",
+        `${foco}`,
+        `${desabilitado} [&_svg]:shrink-0`,
+        aberto
+          ? "bg-accent text-primary"
+          // hover derivado (E-01): empresta a superfície do Active, que é
+          // token que já existe, e mantém o texto em `muted-foreground`.
+          : "bg-card text-muted-foreground enabled:hover:bg-accent",
+        className,
+      )}
+      {...props}
+    >
+      <CalendarBlank size={16} weight="regular" />
+      <span className="truncate" suppressHydrationWarning>
+        {children}
+      </span>
+    </button>
+  ),
+);
+GatilhoDeData.displayName = "GatilhoDeData";
+
 export function DateRangePicker({
   valor, onValorChange, rotulos, locale, atalhos = [],
-  dataMinima, dataMaxima, disabled, className,
+  dataMinima, dataMaxima, disabled, className, meses: quantosMeses = 2,
 }: DateRangePickerProps) {
   const [aberto, setAberto] = React.useState(false);
   const [rascunho, setRascunho] = React.useState<IntervaloDeDatas>(valor);
@@ -359,7 +400,7 @@ export function DateRangePicker({
   function mudarMesBase(m: Date) {
     const base = inicioDoMes(m);
     setMesBase(base);
-    const segundo = somarMeses(base, 1);
+    const segundo = quantosMeses === 2 ? somarMeses(base, 1) : base;
     if (!mesmoMes(foco, base) && !mesmoMes(foco, segundo)) {
       const ultimo = new Date(base.getFullYear(), base.getMonth() + 1, 0).getDate();
       setFoco(new Date(base.getFullYear(), base.getMonth(), Math.min(foco.getDate(), ultimo)));
@@ -369,9 +410,9 @@ export function DateRangePicker({
   function irPara(d: Date) {
     moverFoco.current = true;
     setFoco(d);
-    const segundo = somarMeses(mesBase, 1);
+    const segundo = quantosMeses === 2 ? somarMeses(mesBase, 1) : mesBase;
     if (!mesmoMes(d, mesBase) && !mesmoMes(d, segundo)) {
-      setMesBase(chaveDoDia(d) < chaveDoDia(mesBase) ? inicioDoMes(d) : somarMeses(inicioDoMes(d), -1));
+      setMesBase(quantosMeses === 1 || chaveDoDia(d) < chaveDoDia(mesBase) ? inicioDoMes(d) : somarMeses(inicioDoMes(d), -1));
     }
   }
 
@@ -431,7 +472,7 @@ export function DateRangePicker({
   // Só há prévia entre o primeiro e o segundo clique. Fora disso, passar o
   // ponteiro pela grade não pinta nada — e não redesenha nada.
   const escolhendoOFim = Boolean(rascunho.inicio) && !rascunho.fim;
-  const meses = [mesBase, somarMeses(mesBase, 1)];
+  const meses = quantosMeses === 2 ? [mesBase, somarMeses(mesBase, 1)] : [mesBase];
   const rotuloDoGatilho = formatarIntervalo(valor, locale, rotulos.vazio);
 
   return (
@@ -444,43 +485,20 @@ export function DateRangePicker({
           Medidas do arquivo: px 8 · py 6 · gap 4 · raio 6 (`radius/md`).
           O ícone não tem cor própria: sai em currentColor junto com o texto —
           no arquivo os dois viram `primary` juntos quando o painel abre. */}
-      <button
-        ref={gatilho}
-        type="button"
-        disabled={disabled}
-        aria-haspopup="dialog"
-        aria-expanded={aberto}
-        onClick={() => (aberto ? fechar() : abrir())}
-        className={cn(
-          "inline-flex max-w-full items-center gap-1 rounded-md px-2 py-1.5 text-body-md",
-          "outline-none transition-colors",
-          `${foco}`,
-          `${desabilitado} [&_svg]:shrink-0`,
-          aberto
-            ? "bg-accent text-primary"
-            // hover derivado (E-01): empresta a superfície do Active, que é
-            // token que já existe, e mantém o texto em `muted-foreground` —
-            // é o azul do rótulo que continua separando os dois estados.
-            : "bg-card text-muted-foreground enabled:hover:bg-accent"
-        )}
-      >
-        <CalendarBlank size={16} weight="regular" />
+      <GatilhoDeData ref={gatilho} aberto={aberto} disabled={disabled} onClick={() => (aberto ? fechar() : abrir())}>
         {/* O ICU do Node e o do navegador não separam o intervalo igual: um usa
             espaço fino (U+2009) em volta do travessão, o outro usa espaço
             comum. Mesma data, mesmo locale, dois bytes diferentes — e o React
             acusa erro de hidratação em toda página renderizada no servidor.
-            Corrigir isso montando a string à mão traria de volta o bug que o
-            formatRange resolve, então o que se suprime é o aviso. */}
-        <span className="truncate" suppressHydrationWarning>
-          {rotuloDoGatilho}
-        </span>
-      </button>
+            O gatilho suprime o aviso. */}
+        {rotuloDoGatilho}
+      </GatilhoDeData>
 
       {/* casca de painel flutuante (D22): overlay-* e shadow-lg, como os outros — decisão do humano, gate B4 */}
       {visivel && (
         <PainelFlutuante ref={painel} role="dialog" aria-label={rotuloDoGatilho} acima={acima} aDireita={aDireita} saindo={saindo} className="flex w-max">
           {atalhos.length > 0 && (
-            <div className="hidden w-40 shrink-0 border-r border-border p-3 sm:block">
+            <div className="hidden w-44 shrink-0 border-r border-border p-4 sm:block">
               <p className="px-2 pb-1 text-h4 text-foreground">{rotulos.atalhos}</p>
               <ul className="space-y-0.5">
                 {atalhos.map((atalho) => (
@@ -505,7 +523,8 @@ export function DateRangePicker({
             </div>
           )}
 
-          <div className="flex flex-col p-3">
+          {/* p-4 e vão de 8 entre as grades: o painel respira (reunião de 2026-09-18) */}
+          <div className="flex flex-col p-4">
             <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
@@ -524,15 +543,17 @@ export function DateRangePicker({
                 rotulos={rotulos}
                 onMudarMes={mudarMesBase}
               />
-              <div className="hidden flex-1 sm:flex">
-                <CabecalhoDoMes
-                  mes={meses[1]}
-                  nomesDosMeses={nomesDosMeses}
-                  anos={anos}
-                  rotulos={rotulos}
-                  onMudarMes={(m) => mudarMesBase(somarMeses(m, -1))}
-                />
-              </div>
+              {meses[1] ? (
+                <div className="hidden flex-1 sm:flex">
+                  <CabecalhoDoMes
+                    mes={meses[1]}
+                    nomesDosMeses={nomesDosMeses}
+                    anos={anos}
+                    rotulos={rotulos}
+                    onMudarMes={(m) => mudarMesBase(somarMeses(m, -1))}
+                  />
+                </div>
+              ) : null}
 
               <Button
                 variant="ghost"
@@ -549,7 +570,7 @@ export function DateRangePicker({
               ref={grades}
               onKeyDown={noTeclado}
               onPointerLeave={() => setPrevia(null)}
-              className="mt-2 flex gap-6"
+              className="mt-3 flex gap-8"
             >
               {meses.map((mes, i) => (
                 <div key={mes.toISOString()} className={cn(i === 1 && "hidden sm:block")}>
@@ -570,7 +591,7 @@ export function DateRangePicker({
               ))}
             </div>
 
-            <div className="-mx-3 mt-3 flex items-center justify-end gap-2 border-t border-border px-3 pt-3">
+            <div className="-mx-4 mt-4 flex items-center justify-end gap-2 border-t border-border px-4 pt-4">
               <Button variant="ghost" size="sm" onClick={() => fechar()}>
                 {rotulos.cancelar}
               </Button>
@@ -734,6 +755,107 @@ export function CalendarioDeDia({
           onPrevia={() => undefined}
         />
       </div>
+    </div>
+  );
+}
+
+/* --- uma data ------------------------------------------------------------ */
+
+export type RotulosDoDatePickerSimples = Pick<RotulosDoDatePicker, "vazio" | "mes" | "ano" | "mesAnterior" | "proximoMes"> & {
+  /** O botão que escolhe o dia de hoje. */
+  hoje: string;
+  limpar: string;
+};
+
+export interface DatePickerProps {
+  valor: Date | null;
+  aoMudar: (valor: Date | null) => void;
+  /** BCP-47, como no DateRangePicker. */
+  locale: string;
+  rotulos: RotulosDoDatePickerSimples;
+  dataMinima?: Date;
+  dataMaxima?: Date;
+  disabled?: boolean;
+  className?: string;
+}
+
+/**
+ * Uma data, um calendário: o mesmo gatilho do período, um mês só e o dia
+ * escolhido fecha o painel na hora — sem Aplicar, porque não há segundo
+ * clique (reunião de 2026-09-18: "cenário onde abre apenas uma data").
+ * Hoje e Limpar no rodapé.
+ */
+export function DatePicker({ valor, aoMudar, locale, rotulos, dataMinima, dataMaxima, disabled, className }: DatePickerProps) {
+  const [aberto, setAberto] = React.useState(false);
+  const raiz = React.useRef<HTMLDivElement>(null);
+  const { gatilho, painel, acima, aDireita } = usePosicao(aberto);
+  const { saindo, visivel } = useSaida(aberto);
+
+  const fechar = React.useCallback((devolverFoco = true) => {
+    setAberto(false);
+    if (devolverFoco) gatilho.current?.focus();
+  }, [gatilho]);
+  useCliqueFora(aberto, [raiz], () => fechar(false));
+  React.useEffect(() => {
+    if (!aberto) return;
+    function naTecla(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        fechar();
+      }
+    }
+    document.addEventListener("keydown", naTecla);
+    return () => document.removeEventListener("keydown", naTecla);
+  }, [aberto, fechar]);
+
+  const texto = valor ? textoDeIntl(new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(valor)) : rotulos.vazio;
+  const hoje = () => {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  };
+
+  return (
+    <div ref={raiz} className={cn("relative inline-block", className)}>
+      <GatilhoDeData ref={gatilho} aberto={aberto} disabled={disabled} onClick={() => (aberto ? fechar() : setAberto(true))}>
+        {texto}
+      </GatilhoDeData>
+      {visivel && (
+        <PainelFlutuante ref={painel} role="dialog" aria-label={texto} acima={acima} aDireita={aDireita} saindo={saindo} className="flex w-max flex-col p-4">
+          <CalendarioDeDia
+            valor={valor}
+            aoEscolher={(d) => {
+              aoMudar(d);
+              fechar();
+            }}
+            locale={locale}
+            rotulos={rotulos}
+            dataMinima={dataMinima}
+            dataMaxima={dataMaxima}
+          />
+          <div className="-mx-4 mt-4 flex items-center justify-end gap-2 border-t border-border px-4 pt-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                aoMudar(null);
+                fechar();
+              }}
+            >
+              {rotulos.limpar}
+            </Button>
+            <Button
+              variant="soft"
+              size="sm"
+              onClick={() => {
+                aoMudar(hoje());
+                fechar();
+              }}
+            >
+              {rotulos.hoje}
+            </Button>
+          </div>
+        </PainelFlutuante>
+      )}
     </div>
   );
 }

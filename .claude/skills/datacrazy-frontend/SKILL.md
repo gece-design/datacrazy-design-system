@@ -182,6 +182,9 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   principal; sem troca-visão, período ou data, sem divisor. O Header não tem traço embaixo.
 - **Componente que muda, muda em toda tela**: a mudança entra na peça (`components/ui`) e a
   página do DS mostra o estado novo. Nunca só na tela que motivou o pedido (humano, 2026-09-23).
+- **Hora e data**: `TimePicker`/`DateTimePicker` escolhem em rodas; `formato="12h"` liga AM/PM (padrão
+  pelo locale); fuso com `fusos` + `aoMudarFuso` abre o painel do DS. Uma data: `DatePicker`; período
+  curto: `DateRangePicker meses={1}`. Switch em lista: `linha` (+ `descricao`), a linha inteira clica.
 - **Calendário**: `Calendario` (eventos `{ id, data, rotulo }`, `referencia` e `visao` são estado da
   tela, `locale` do next-intl). Contas de data em `lib/datas.ts` — nunca copiar do DatePicker.
 - **Antes de commitar**: `npm run check` (rápido) — e `npm run check:completo` com o
