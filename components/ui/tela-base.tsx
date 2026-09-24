@@ -28,7 +28,9 @@ import { useMontado, useSaida } from "@/lib/use-saida";
  * Os recuos do conteúdo e do Header: 16 — o arquivo desenha 32 no Header;
  * foi 24 e "ainda tinha muito espaço" (humano, 2026-09-23, ADR-028). O Header
  * não tem recuo embaixo: as ações encostam no traço e os 16 do conteúdo dão
- * o respiro.
+ * o respiro. À esquerda, com a sidebar no lugar (lg+), o recuo é 4: a
+ * Sidebar já traz 16 de moldura na cor do fundo, e 16 + 16 "dava a impressão
+ * de mais espaço do que deveria" (humano, 2026-09-24).
  *
  * Instala-se como bloco: `npx shadcn add @datacrazy/tela` cria a página
  * pronta com estes encaixes preenchidos por placeholders.
@@ -147,7 +149,7 @@ export function TelaBase({
       <div className="flex min-w-0 flex-1 flex-col">
         <Header
           {...cabecalho}
-          className={cn("shrink-0 px-4 pb-0", cabecalho.className)}
+          className={cn("shrink-0 pl-4 pr-4 pb-0 lg:pl-1", cabecalho.className)}
           trilha={
             <div className="flex min-w-0 items-center gap-2">
               {botaoMenu}
@@ -157,7 +159,7 @@ export function TelaBase({
         />
         <main
           aria-label={r.conteudo}
-          className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:thin]", recuo && "p-4")}
+          className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:thin]", recuo && "p-4 lg:pl-1")}
         >
           {children}
         </main>

@@ -503,7 +503,7 @@ export function Tela() {
           />
         ) : (
           // Calendário: os leads pela próxima ação; clicar abre o mesmo drawer.
-          <div className="min-w-0 min-h-0 flex-1 overflow-y-auto px-4 pb-4 [scrollbar-width:thin]">
+          <div className="min-w-0 min-h-0 flex-1 overflow-y-auto pl-4 pr-4 pb-4 lg:pl-1 [scrollbar-width:thin]">
             <Calendario
               locale="pt-BR"
               eventos={todos.filter((l) => l.proximaAcao).map((l) => ({ id: l.id, data: l.proximaAcao, rotulo: l.nome, detalhe: l.empresa, tom: l.tom }))}
