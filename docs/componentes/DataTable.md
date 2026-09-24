@@ -32,6 +32,7 @@ Diff de pixels **não medido**: depende da ponte de escrita do Figma
 | `ajustes` | `AjustesDaTabela` | Liga os comportamentos. Vem de `useAjustesDaTabela`. |
 | `ordem`, `aoOrdenar` | `OrdemTabela`, `(ordem) => void` | Só ordenar, sem o resto; `ajustes` já traz os dois. |
 | `rotulos` | `Partial<RotulosDaTabela>` | Textos dos controles (i18n). Fábrica: `ROTULOS_DA_TABELA`. |
+| `selecao` | `SelecaoDaTabela` | Seleção em massa: a caixa no cabeçalho e nas linhas com `chave`. Vem de `useSelecaoDaTabela`. |
 
 `peso` é largura **relativa**. Os números do arquivo (230 · 170 · 160 · 150 ·
 200 · 180 · 42) entram direto como peso. Pixel só entra quando a pessoa
@@ -43,6 +44,8 @@ redimensiona: aí `larguras` guarda a medida dela.
 |------|------|-----------|
 | `selecionada` | `boolean` | A linha escolhida (`aria-selected`, fundo `overlay/item-selected`). |
 | `aoSelecionar` | `() => void` | Liga a seleção: clique fora de botão e campo, Enter, Espaço; setas andam entre as linhas. |
+| `chave` | `string` | O id da linha para a seleção em massa: com `selecao` na tabela, a caixa entra sozinha antes da primeira célula. |
+| `nome` | `string` | O nome do registro, para a caixa ter nome ("Selecionar Giovanna Alves"). |
 
 ### `DataTableCell`
 
@@ -64,9 +67,13 @@ Todo texto dos controles vem de fora (E1); `ROTULOS_DA_TABELA` é a fábrica em 
 | `colunas` | `string` | O botão da barra e o título do menu. |
 | `restaurar` | `string` | "Restaurar colunas". |
 | `redimensionar` | `(coluna) => string` | Nome da alça. "Redimensionar coluna Lead". |
-| `agrupar`, `semGrupos` | `string` | O seletor da barra: "Agrupar por" e a opção vazia. |
+| `agrupar`, `semGrupos` | `string` | O botão da barra: "Agrupar por" e a opção vazia. |
 | `agruparPor`, `desagrupar` | `(coluna) => string`, `string` | Item do menu da coluna e a opção do seletor. |
 | `recolherGrupo`, `expandirGrupo` | `(grupo) => string` | Nome do caret da linha do grupo. |
+| `selecionarTodos` | `string` | Nome da caixa do cabeçalho. |
+| `selecionarLinha` | `(nome) => string` | Nome da caixa da linha. "Selecionar Giovanna Alves". |
+| `selecionados` | `(n) => string` | A barra: "3 selecionados". |
+| `limparSelecao` | `string` | O X da barra. |
 
 ### `useAjustesDaTabela(colunas, { memoria?, ordemInicial?, grupoInicial?, rotulos? })`
 
@@ -85,7 +92,7 @@ valorDe)` compara número como número e texto em pt-BR.
 |------|------|-----------|
 | `ajustes` | `AjustesDaTabela` | Os mesmos da tabela. Abre a lista de colunas com check e "Restaurar colunas". |
 
-### `SelectAgrupar`
+### `BotaoAgrupar`
 
 | Prop | Tipo | Descrição |
 |------|------|-----------|
@@ -106,6 +113,21 @@ ordemDosGrupos?)` monta os grupos (`GrupoTabela`: `id`, `rotulo`, `itens`) na
 ordem em que aparecem — ordene as linhas antes — ou na ordem dada (a do funil).
 Agrupar segue a regra da ordenação: os ajustes guardam a coluna do grupo e os
 grupos recolhidos; quem monta e desenha é a tela.
+
+### `BarraDeSelecao`
+
+| Prop | Tipo | Descrição |
+|------|------|-----------|
+| `selecao` | `SelecaoDaTabela` | Os ids marcados e quem os guarda: `useSelecaoDaTabela` devolve `selecionados`, `aoMudar` e `limpar`. |
+| `rotulos` | `Partial<RotulosDaTabela>` | `selecionados(n)`, `limparSelecao`. |
+| `children` | `ReactNode` | As ações em massa da tela: Buttons `size="sm"`. |
+
+Sobe quando há linhas marcadas, em portal fixo embaixo e centrado, na
+superfície do Menu; sai com fade. Escape e o X limpam — com menu ou diálogo
+aberto, o Escape é deles. A caixa do cabeçalho marca as linhas que estão na
+tela (parte marcada no meio do caminho); Shift+clique marca a faixa entre a
+última caixa e esta, na ordem da tela. A tabela só sabe quais linhas estão na
+tela; os ids são da tela, como na ordenação (ADR-031).
 
 ### `DataTableToolbar`
 
@@ -148,6 +170,7 @@ Os cinco comportamentos, com a referência do cliente (grid do ExtJS):
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
+| marcada (seleção em massa) | `caixa (Checkbox) no cabeçalho e na linha com chave; linha marcada em bg-overlay-item-selected + aria-selected; barra fixa embaixo em overlay/bg + shadow-lg, fade-in-fast; sai com fade-out` | humano | ADR-031 |
 | hover | `bg-overlay-item-hover na linha` | humano | L2 |
 | focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
 <!-- kfe:estados:end -->
@@ -176,7 +199,7 @@ linha errada. Token: `overlay/item-hover`, que clareia nos dois temas.
 
 ## Composição
 
-Usa: [Tag](Tag.md) nas etiquetas, `AcaoCampo` do [Input](Input.md) no botão de ações da linha e no gatilho do menu da coluna (a mesma ação de 16px do campo), [Menu](Menu.md) no menu da coluna e no botão Colunas, [Button](Button.md) `tertiary` no botão Colunas.
+Usa: [Tag](Tag.md) nas etiquetas, [Checkbox](Checkbox.md) na seleção em massa, [Menu](Menu.md) no Agrupar e no menu da coluna, `AcaoCampo` do [Input](Input.md) no botão de ações da linha e no gatilho do menu da coluna (a mesma ação de 16px do campo), [Menu](Menu.md) no menu da coluna e no botão Colunas, [Button](Button.md) `tertiary` no botão Colunas.
 [Select](Select.md) nos filtros e no "Agrupar por" · [Pagination](Pagination.md) no rodapé ·
 Usado por: tela de leads (`/exemplos/pipeline`, visão em lista) · [Drawer](Drawer.md) (Negócios, layout compacto)
 

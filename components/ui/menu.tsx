@@ -17,7 +17,7 @@ import { useSaida } from "@/lib/use-saida";
  * `role="menu"` com o foco no painel e `aria-activedescendant` andando pelos
  * itens, como a lista do Select. Setas andam, Enter e Espaço ativam, Escape
  * fecha e devolve o foco ao gatilho, Tab fecha. Item `check` alterna e
- * mantém o menu aberto; ação fecha. Rolagem da página fecha — o painel é
+ * mantém o menu aberto; `radio` escolhe um entre vários e fecha; ação fecha. Rolagem da página fecha — o painel é
  * `fixed` num portal (o gatilho pode viver numa caixa que rola) e não
  * acompanharia. Vira para cima quando não cabe embaixo.
  */
@@ -26,8 +26,8 @@ export type ItemDoMenu = {
   id: string;
   rotulo: string;
   icone?: Icon;
-  /** `check` alterna e mantém o menu aberto; ação fecha. */
-  tipo?: "acao" | "check";
+  /** `check` alterna e mantém o menu aberto; `radio` escolhe um e fecha; ação fecha. */
+  tipo?: "acao" | "check" | "radio";
   marcado?: boolean;
   desabilitado?: boolean;
   separadorAntes?: boolean;
@@ -138,8 +138,8 @@ export function Menu({ aberto, aoFechar, gatilho, rotulo, itens }: MenuProps) {
             {item.separadorAntes ? <div role="separator" aria-hidden="true" className="my-1 h-px bg-overlay-border" /> : null}
             <div
               id={`${id}-${i}`}
-              role={item.tipo === "check" ? "menuitemcheckbox" : "menuitem"}
-              aria-checked={item.tipo === "check" ? Boolean(item.marcado) : undefined}
+              role={item.tipo === "check" ? "menuitemcheckbox" : item.tipo === "radio" ? "menuitemradio" : "menuitem"}
+              aria-checked={item.tipo === "check" || item.tipo === "radio" ? Boolean(item.marcado) : undefined}
               aria-disabled={item.desabilitado || undefined}
               onMouseEnter={() => !item.desabilitado && setEmFoco(i)}
               onClick={() => ativar(item)}
@@ -159,6 +159,16 @@ export function Menu({ aberto, aoFechar, gatilho, rotulo, itens }: MenuProps) {
                   )}
                 >
                   {item.marcado ? <Check size={12} weight="bold" /> : null}
+                </span>
+              ) : item.tipo === "radio" ? (
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "flex size-4 shrink-0 items-center justify-center rounded-full border",
+                    item.marcado ? "border-primary bg-primary" : "border-input-border bg-card",
+                  )}
+                >
+                  {item.marcado ? <span className="size-1.5 rounded-full bg-primary-foreground" /> : null}
                 </span>
               ) : Icone ? (
                 <Icone size={16} weight="regular" aria-hidden="true" className="shrink-0 text-muted-foreground" />

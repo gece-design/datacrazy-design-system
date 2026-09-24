@@ -169,7 +169,9 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
 - **Tabela com comportamentos**: `useAjustesDaTabela(colunas, { memoria })` → `DataTable ajustes=` +
   `BotaoColunas` na barra; a tabela só emite a ordenação, a tela ordena os dados
   (`ordenarPor`); cada célula leva `coluna="chave"`; linha com `aoSelecionar` (ADR-025/026).
-  Grupos: `agrupavel` na coluna, `SelectAgrupar`, `agruparPor` + `DataTableGrupo` na tela.
+  Grupos: `agrupavel` na coluna, `BotaoAgrupar`, `agruparPor` + `DataTableGrupo` na tela. Seleção em
+  massa: `useSelecaoDaTabela` → `DataTable selecao=` + `DataTableRow chave/nome` + `BarraDeSelecao`
+  com as ações da tela (ADR-031). Barra da tabela só com Button `tertiary` + Menu; nunca um Select ali.
 - **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, children; sem segunda linha;
   breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
   o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.

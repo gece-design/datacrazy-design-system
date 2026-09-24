@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import {
   DataTable,
   DataTableRow,
@@ -14,7 +14,9 @@ import {
   CelulaAcoes,
   BotaoColunas,
   DataTableGrupo,
-  SelectAgrupar,
+  BotaoAgrupar,
+  BarraDeSelecao,
+  useSelecaoDaTabela,
   agruparPor,
   ordenarPor,
   useAjustesDaTabela,
@@ -22,6 +24,9 @@ import {
 } from "@/components/ui/data-table";
 import { Pagination } from "@/components/ui/pagination";
 import { Select, type OpcaoSelect } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Menu } from "@/components/ui/menu";
+import { Toaster, toast } from "@/components/ui/toast";
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
 
 /* Larguras do arquivo (node 261:805) usadas como peso. */
@@ -193,7 +198,7 @@ const grupos = ajustes.grupo
 
 <>
   <DataTableToolbar rotulo="Total de resultados" total="10 negócios">
-    <SelectAgrupar ajustes={ajustes} />
+    <BotaoAgrupar ajustes={ajustes} />
     <BotaoColunas ajustes={ajustes} />
   </DataTableToolbar>
   <DataTable colunas={colunas} ajustes={ajustes}>
@@ -259,7 +264,7 @@ function TabelaAgrupada() {
   return (
     <div className="w-full overflow-hidden rounded-md bg-card">
       <DataTableToolbar rotulo="Total de resultados" total="10 negócios">
-        <SelectAgrupar ajustes={ajustes} />
+        <BotaoAgrupar ajustes={ajustes} />
         <BotaoColunas ajustes={ajustes} />
       </DataTableToolbar>
       <DataTable colunas={colunasAgrupaveis} ajustes={ajustes} className="rounded-none">
@@ -278,6 +283,116 @@ function TabelaAgrupada() {
             ))
           : linhas.map(linha)}
       </DataTable>
+    </div>
+  );
+}
+
+const codigoSelecao = `const ajustes = useAjustesDaTabela(colunas, { memoria: "negocios" });
+const selecao = useSelecaoDaTabela();
+const linhas = ordenarPor(negocios, ajustes.ordem, valorDe);
+
+<>
+  <DataTableToolbar rotulo="Total de resultados" total="10 negócios">
+    <BotaoColunas ajustes={ajustes} />
+  </DataTableToolbar>
+  <DataTable colunas={colunas} ajustes={ajustes} selecao={selecao}>
+    {linhas.map((n) => (
+      <DataTableRow key={n.id} chave={n.id} nome={n.nome}>
+        <DataTableCell coluna="lead"><CelulaLead nome={n.nome} etiquetas={n.etiquetas} /></DataTableCell>
+        <DataTableCell coluna="produto"><CelulaDupla principal={n.produto} apoio={n.valor} /></DataTableCell>
+        <DataTableCell coluna="etapa"><CelulaProgresso etapa={n.etapa} percentual={n.percentual} /></DataTableCell>
+      </DataTableRow>
+    ))}
+  </DataTable>
+  {/* as ações são da tela: no CRM, mover, atribuir, exportar, excluir */}
+  <BarraDeSelecao selecao={selecao}>
+    <Button variant="tertiary" size="sm" onClick={() => moverDeEtapa(selecao.selecionados)}>Mover de etapa</Button>
+    <Button variant="tertiary" size="sm" onClick={() => atribuir(selecao.selecionados)}>Atribuir atendente</Button>
+    <Button variant="destructive" size="sm" onClick={() => excluir(selecao.selecionados)}>Excluir</Button>
+  </BarraDeSelecao>
+</>`;
+
+/** A seção de seleção em massa: caixa no cabeçalho e nas linhas, Shift+clique e a barra com as ações. */
+function TabelaComSelecao() {
+  const ajustes = useAjustesDaTabela(colunas, { memoria: "showcase-selecao" });
+  const selecao = useSelecaoDaTabela();
+  const linhas = ordenarPor(carteira, ajustes.ordem, valorDe);
+  const [menuEtapa, setMenuEtapa] = useState(false);
+  const botaoEtapa = useRef<HTMLButtonElement>(null);
+  const quantos = selecao.selecionados.length;
+  // Na página a ação vira um Toast; no CRM, é a chamada de verdade.
+  const feito = (titulo: string, descricao: string) => {
+    toast({ variant: "success", titulo, descricao });
+    selecao.limpar();
+  };
+  return (
+    <div className="w-full overflow-hidden rounded-md bg-card">
+      <DataTableToolbar rotulo="Total de resultados" total="10 negócios">
+        <BotaoColunas ajustes={ajustes} />
+      </DataTableToolbar>
+      <DataTable colunas={colunas} ajustes={ajustes} selecao={selecao} className="rounded-none">
+        {linhas.map((n) => (
+          <DataTableRow key={n.id} chave={n.id} nome={n.nome}>
+            <DataTableCell coluna="lead">
+              <CelulaLead nome={n.nome} etiquetas={n.etiquetas} />
+            </DataTableCell>
+            <DataTableCell coluna="produto">
+              <CelulaDupla principal={n.produto} apoio={moeda(n.valor)} />
+            </DataTableCell>
+            <DataTableCell coluna="atividades">
+              <CelulaTexto>{n.atividades}</CelulaTexto>
+            </DataTableCell>
+            <DataTableCell coluna="atendente">
+              <CelulaTexto enfase>{n.atendente}</CelulaTexto>
+            </DataTableCell>
+            <DataTableCell coluna="etapa">
+              <CelulaProgresso etapa={n.etapa} percentual={n.percentual} />
+            </DataTableCell>
+            <DataTableCell coluna="dados">
+              <CelulaEstatisticas
+                itens={[
+                  { valor: `${n.aberto}d`, rotulo: "Em aberto" },
+                  { valor: `${n.naEtapa}d`, rotulo: "Tempo na etapa" },
+                ]}
+              />
+            </DataTableCell>
+            <DataTableCell coluna="acoes">
+              <CelulaAcoes />
+            </DataTableCell>
+          </DataTableRow>
+        ))}
+      </DataTable>
+      <BarraDeSelecao selecao={selecao}>
+        <Button
+          ref={botaoEtapa}
+          variant="tertiary"
+          size="sm"
+          aria-haspopup="menu"
+          aria-expanded={menuEtapa}
+          onClick={() => setMenuEtapa((a) => !a)}
+        >
+          Mover de etapa
+        </Button>
+        <Menu
+          aberto={menuEtapa}
+          gatilho={botaoEtapa}
+          rotulo="Mover de etapa"
+          itens={FUNIL.map((e) => ({ id: e, rotulo: e, aoAtivar: () => feito("Etapa alterada", `${quantos} negócio(s) agora em ${e}.`) }))}
+          aoFechar={(devolver = true) => {
+            setMenuEtapa(false);
+            if (devolver) botaoEtapa.current?.focus();
+          }}
+        />
+        <Button variant="tertiary" size="sm" onClick={() => feito("Atendente atribuído", `${quantos} negócio(s) passaram para Breno Ramos.`)}>
+          Atribuir atendente
+        </Button>
+        <Button variant="tertiary" size="sm" onClick={() => feito("Exportado", `${quantos} negócio(s) foram para o CSV.`)}>
+          Exportar
+        </Button>
+        <Button variant="destructive" size="sm" onClick={() => feito("Excluídos", `${quantos} negócio(s) saíram da lista.`)}>
+          Excluir
+        </Button>
+      </BarraDeSelecao>
     </div>
   );
 }
@@ -333,7 +448,7 @@ export default function Pagina() {
     <PaginaDS
       titulo="Table"
       descricao="A tabela de negócios do CRM: barra de filtros, sete colunas, dez linhas e paginação. É o componente mais denso do sistema, e o único onde a estrutura importa tanto quanto a aparência."
-      secoes={["Completa", "Ajustável", "Agrupada", "Anatomia", "Como funciona"]}
+      secoes={["Completa", "Ajustável", "Agrupada", "Seleção em massa", "Anatomia", "Como funciona"]}
     >
       <Secao
         titulo="Completa"
@@ -469,19 +584,38 @@ export default function Pagina() {
       <Secao
         titulo="Agrupada"
         spec="por etapa · por atendente"
-        descricao="A mesma tabela em grupos. O seletor da barra escolhe a coluna que agrupa (ou o menu da coluna, em Agrupar por); cada grupo tem o caret que recolhe, quantas linhas tem e o total à direita. Ordenar continua valendo dentro de cada grupo."
+        descricao="A mesma tabela em grupos. O botão Agrupar da barra escolhe a coluna que agrupa (ou o menu da coluna, em Agrupar por); cada grupo tem o caret que recolhe, quantas linhas tem e o total à direita. Ordenar continua valendo dentro de cada grupo."
         codigo={codigoAgrupada}
         nota={
           <>
             Agrupar segue a regra da ordenação: os ajustes guardam só a coluna do grupo e os grupos recolhidos;
             a tela monta os grupos com <Chip>agruparPor</Chip> — que aceita a ordem do funil — e desenha um{" "}
             <Chip>DataTableGrupo</Chip> antes das linhas de cada um. Só as colunas com{" "}
-            <Chip>agrupavel</Chip> entram no seletor. Recolher um grupo tira as linhas dele da tabela; as setas
-            da seleção pulam a linha do grupo.
+            <Chip>agrupavel</Chip> entram no menu do botão — que é o mesmo botão do Colunas, e fica{" "}
+            <Chip>soft</Chip> com o grupo ativo, como o Filtros do Header. Recolher um grupo tira as linhas dele da
+            tabela; as setas da seleção pulam a linha do grupo.
           </>
         }
       >
         <TabelaAgrupada />
+      </Secao>
+
+      <Secao
+        titulo="Seleção em massa"
+        spec="caixa · Shift+clique · barra de ações"
+        descricao="Marque linhas pela caixa; a do cabeçalho marca todas as que estão na tela e fica parte marcada no meio do caminho. Shift+clique marca a faixa entre a última caixa e esta. Com algo marcado, a barra sobe embaixo com as ações em massa; Escape ou o X limpam."
+        codigo={codigoSelecao}
+        nota={
+          <>
+            A tabela só sabe quais linhas estão na tela; quem guarda os ids escolhidos é a tela (
+            <Chip>useSelecaoDaTabela</Chip>), como na ordenação. A caixa entra sozinha nas linhas com{" "}
+            <Chip>chave</Chip>; <Chip>nome</Chip> dá o nome acessível. As ações da barra são da tela — aqui viram um
+            Toast; no CRM, mover de etapa, atribuir, exportar, excluir. A tela atual do CRM tem a caixa na linha e as
+            ações no ⋯ de cada uma; a barra é o que falta lá para agir em muitas de uma vez.
+          </>
+        }
+      >
+        <TabelaComSelecao />
       </Secao>
 
       <Secao titulo="Anatomia" spec="6 partes" semCaixa>
@@ -535,6 +669,7 @@ export default function Pagina() {
           e o foco andando por <Chip>aria-activedescendant</Chip>.
         </p>
       </ComoFunciona>
+      <Toaster />
     </PaginaDS>
   );
 }

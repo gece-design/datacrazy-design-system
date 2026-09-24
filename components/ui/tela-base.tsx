@@ -153,7 +153,7 @@ export function TelaBase({
           trilha={
             <div className="flex min-w-0 items-center gap-2">
               {botaoMenu}
-              {cabecalho.trilha ? <div className="min-w-0 flex-1">{cabecalho.trilha}</div> : null}
+              {cabecalho.trilha ? <div className="flex min-w-0 flex-1 justify-center [@container_(min-width:640px)]:justify-start">{cabecalho.trilha}</div> : null}
             </div>
           }
         />

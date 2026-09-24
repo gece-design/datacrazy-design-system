@@ -14,13 +14,15 @@ import {
   Rows,
   SortAscending,
   SortDescending,
+  Stack,
   type Icon,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Tag, type Tom } from "@/components/ui/tag";
-import { Button } from "@/components/ui/button";
+import { Button, BotaoFechar } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Menu, type ItemDoMenu } from "@/components/ui/menu";
-import { Select } from "@/components/ui/select";
+import { useSaida } from "@/lib/use-saida";
 
 import { foco, focoInterno } from "@/lib/estados";
 import { AcaoCampo } from "@/components/ui/input";
@@ -46,6 +48,9 @@ import { AcaoCampo } from "@/components/ui/input";
  * regra: os ajustes guardam a coluna do grupo e os grupos recolhidos; a tela
  * monta os grupos (`agruparPor`) e desenha um `DataTableGrupo` antes das
  * linhas de cada um. Sem `ajustes`, a tabela é a do arquivo: nada muda.
+ * Seleção em massa (2026-09-24): `selecao` na tabela põe a caixa no cabeçalho
+ * e nas linhas com `chave`; a tela guarda os ids (`useSelecaoDaTabela`) e
+ * desenha a `BarraDeSelecao` com as ações.
  *
  * `layout="compacta"` é o `Layout=Compact` que o drawer usa (node 597:5983):
  * traço `border` em volta e entre linhas, recuo de 12px e sem largura mínima.
@@ -89,6 +94,13 @@ export type RotulosDaTabela = {
   desagrupar: string;
   recolherGrupo: (grupo: string) => string;
   expandirGrupo: (grupo: string) => string;
+  /** Nome da caixa do cabeçalho (seleção em massa). */
+  selecionarTodos: string;
+  /** Nome da caixa da linha, com o nome do registro quando a linha o passa. */
+  selecionarLinha: (nome: string) => string;
+  /** A barra: "3 selecionados". */
+  selecionados: (n: number) => string;
+  limparSelecao: string;
 };
 
 export const ROTULOS_DA_TABELA: RotulosDaTabela = {
@@ -108,9 +120,15 @@ export const ROTULOS_DA_TABELA: RotulosDaTabela = {
   desagrupar: "Desagrupar",
   recolherGrupo: (g) => `Recolher ${g}`,
   expandirGrupo: (g) => `Expandir ${g}`,
+  selecionarTodos: "Selecionar todas as linhas",
+  selecionarLinha: (nome) => (nome ? `Selecionar ${nome}` : "Selecionar linha"),
+  selecionados: (n) => `${n} ${n === 1 ? "selecionado" : "selecionados"}`,
+  limparSelecao: "Limpar seleção",
 };
 
 const LARGURA_MINIMA = 64;
+/** A coluna da caixa de seleção. */
+const LARGURA_DA_CAIXA = 44;
 const PASSO_DO_TECLADO = 16;
 /** Arrasto começa depois disto: antes, é clique (ordenar). */
 const LIMIAR_DE_ARRASTO = 6;
@@ -414,24 +432,48 @@ export function BotaoColunas({ ajustes, className }: { ajustes: AjustesDaTabela;
 }
 
 /**
- * O "Agrupar por" da barra: o Select do DS com "Sem grupos" e as colunas
- * `agrupavel`. O menu da coluna também agrupa — o seletor é o caminho visível.
+ * O "Agrupar por" da barra: o mesmo botão `tertiary` do Colunas, abrindo um
+ * menu com "Sem grupos" e as colunas `agrupavel` (itens de rádio). Com grupo
+ * ativo vira `soft` e diz qual — o mesmo sinal do Filtros do Header. Era um
+ * Select: duas superfícies na mesma barra (humano, 2026-09-24, ADR-031). O
+ * menu da coluna também agrupa — o botão é o caminho visível.
  */
-export function SelectAgrupar({ ajustes, className }: { ajustes: AjustesDaTabela; className?: string }) {
+export function BotaoAgrupar({ ajustes, className }: { ajustes: AjustesDaTabela; className?: string }) {
+  const [aberto, setAberto] = React.useState(false);
+  const gatilho = React.useRef<HTMLButtonElement>(null);
   const r = ajustes.rotulos;
-  const opcoes = [
-    { valor: "", rotulo: r.semGrupos },
-    ...ajustes.colunas.filter((c) => c.agrupavel).map((c) => ({ valor: c.chave, rotulo: r.agruparPor(c.rotulo) })),
+  const atual = ajustes.colunas.find((c) => c.chave === ajustes.grupo);
+  const itens: ItemDoMenu[] = [
+    { id: "sem-grupos", rotulo: r.semGrupos, tipo: "radio", marcado: !ajustes.grupo, aoAtivar: () => ajustes.agrupar(null) },
+    ...ajustes.colunas
+      .filter((c) => c.agrupavel)
+      .map((c) => ({ id: `grupo-${c.chave}`, rotulo: c.rotulo, tipo: "radio" as const, marcado: ajustes.grupo === c.chave, aoAtivar: () => ajustes.agrupar(c.chave) })),
   ];
   return (
-    <Select
-      size="sm"
-      rotulo={r.agrupar}
-      opcoes={opcoes}
-      valor={ajustes.grupo ?? ""}
-      aoEscolher={(v) => ajustes.agrupar(v || null)}
-      className={className}
-    />
+    <>
+      <Button
+        ref={gatilho}
+        variant={atual ? "soft" : "tertiary"}
+        size="sm"
+        aria-haspopup="menu"
+        aria-expanded={aberto}
+        onClick={() => setAberto((a) => !a)}
+        className={className}
+      >
+        <Stack size={16} weight="regular" aria-hidden="true" />
+        {atual ? r.agruparPor(atual.rotulo) : r.agrupar}
+      </Button>
+      <Menu
+        aberto={aberto}
+        gatilho={gatilho}
+        rotulo={r.agrupar}
+        itens={itens}
+        aoFechar={(devolver = true) => {
+          setAberto(false);
+          if (devolver) gatilho.current?.focus();
+        }}
+      />
+    </>
   );
 }
 
@@ -439,14 +481,23 @@ export function SelectAgrupar({ ajustes, className }: { ajustes: AjustesDaTabela
 
 type Layout = "padrao" | "compacta";
 
+/** A seleção em massa por dentro: o que a linha precisa para desenhar a caixa. */
+type SelecaoInterna = {
+  selecionados: string[];
+  alternar: (chave: string, shift: boolean) => void;
+  rotulos: RotulosDaTabela;
+};
+
 type ContextoDaTabela = {
   layout: Layout;
   /** As chaves como a tela declarou — é por elas que a célula sem `coluna` se acha, pela posição. */
   chaves: string[];
   /** As que estão na tela, na ordem atual. `null` = tabela sem ajustes: a linha desenha as células como vieram. */
   naTela: string[] | null;
+  /** `null` = sem seleção em massa: a linha não desenha a caixa. */
+  selecao: SelecaoInterna | null;
 };
-const Contexto = React.createContext<ContextoDaTabela>({ layout: "padrao", chaves: [], naTela: null });
+const Contexto = React.createContext<ContextoDaTabela>({ layout: "padrao", chaves: [], naTela: null, selecao: null });
 
 type Arrasto = { chave: string; x: number; y: number; alvo: { chave: string; lado: "antes" | "depois" } | null; ativo: boolean };
 
@@ -459,19 +510,68 @@ export interface DataTableProps extends React.HTMLAttributes<HTMLDivElement> {
   ordem?: OrdemTabela;
   aoOrdenar?: (ordem: OrdemTabela) => void;
   rotulos?: Partial<RotulosDaTabela>;
+  /** Seleção em massa: a caixa no cabeçalho e em cada linha com `chave`. Vem de `useSelecaoDaTabela`. */
+  selecao?: SelecaoDaTabela;
 }
 
 export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
-  ({ className, colunas, layout = "padrao", ajustes, ordem: ordemDeFora, aoOrdenar: aoOrdenarDeFora, rotulos, children, ...props }, ref) => {
+  ({ className, colunas, layout = "padrao", ajustes, ordem: ordemDeFora, aoOrdenar: aoOrdenarDeFora, rotulos, selecao, children, ...props }, ref) => {
     const compacta = layout === "compacta";
     const r = { ...ROTULOS_DA_TABELA, ...ajustes?.rotulos, ...rotulos };
     const naTela = ajustes ? ajustes.naTela : colunas;
     const ordem = ajustes ? ajustes.ordem : (ordemDeFora ?? null);
     const aoOrdenar = ajustes ? ajustes.ordenar : aoOrdenarDeFora;
     const chaves = React.useMemo(() => colunas.map((c) => c.chave), [colunas]);
+
+    const cabecalhos = React.useRef<Record<string, HTMLTableCellElement | null>>({});
+    const corpo = React.useRef<HTMLTableSectionElement>(null);
+
+    /* Seleção em massa: a tabela só sabe quais linhas estão na tela, na ordem
+       em que aparecem — é o que a caixa do cabeçalho e o Shift+clique usam.
+       Quem guarda os ids escolhidos é a tela (`selecao`). */
+    const [visiveis, setVisiveis] = React.useState<string[]>([]);
+    React.useEffect(() => {
+      if (!selecao) return;
+      const ids = Array.from(corpo.current?.querySelectorAll<HTMLTableRowElement>("tr[data-chave]") ?? []).map((l) => l.dataset.chave ?? "");
+      setVisiveis((v) => (v.join("\u0000") === ids.join("\u0000") ? v : ids));
+    });
+    const ultimaCaixa = React.useRef<string | null>(null);
+    const alternarLinha = React.useCallback(
+      (chave: string, shift: boolean) => {
+        if (!selecao) return;
+        const atuais = selecao.selecionados;
+        const anterior = ultimaCaixa.current;
+        ultimaCaixa.current = chave;
+        // Shift+clique marca a faixa entre a última caixa e esta, na ordem da tela
+        if (shift && anterior && anterior !== chave) {
+          const a = visiveis.indexOf(anterior);
+          const b = visiveis.indexOf(chave);
+          if (a >= 0 && b >= 0) {
+            selecao.aoMudar(Array.from(new Set([...atuais, ...visiveis.slice(Math.min(a, b), Math.max(a, b) + 1)])));
+            return;
+          }
+        }
+        selecao.aoMudar(atuais.includes(chave) ? atuais.filter((c) => c !== chave) : [...atuais, chave]);
+      },
+      [selecao, visiveis],
+    );
+    const marcadas = selecao ? visiveis.filter((v) => selecao.selecionados.includes(v)).length : 0;
+    const todasMarcadas = Boolean(selecao) && visiveis.length > 0 && marcadas === visiveis.length;
+    function alternarTodas() {
+      if (!selecao) return;
+      if (todasMarcadas) selecao.aoMudar(selecao.selecionados.filter((s) => !visiveis.includes(s)));
+      else selecao.aoMudar(Array.from(new Set([...selecao.selecionados, ...visiveis])));
+    }
+
     const contexto = React.useMemo<ContextoDaTabela>(
-      () => ({ layout, chaves, naTela: ajustes ? naTela.map((c) => c.chave) : null }),
-      [layout, chaves, ajustes, naTela],
+      () => ({
+        layout,
+        chaves,
+        naTela: ajustes ? naTela.map((c) => c.chave) : null,
+        selecao: selecao ? { selecionados: selecao.selecionados, alternar: alternarLinha, rotulos: r } : null,
+      }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [layout, chaves, ajustes, naTela, selecao?.selecionados, alternarLinha],
     );
 
     const total = naTela.reduce((n, c) => n + c.peso, 0);
@@ -479,8 +579,6 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
     const larguraDe = (c: ColunaTabela) => (emPixel ? ajustes!.larguras[c.chave] ?? Math.round((c.peso / total) * 960) : 0);
     const soma = emPixel ? naTela.reduce((n, c) => n + larguraDe(c), 0) : 0;
 
-    const cabecalhos = React.useRef<Record<string, HTMLTableCellElement | null>>({});
-    const corpo = React.useRef<HTMLTableSectionElement>(null);
     const [menuAberto, setMenuAberto] = React.useState<string | null>(null);
     const gatilhoDoMenu = React.useRef<HTMLButtonElement | null>(null);
     const [arrasto, setArrasto] = React.useState<Arrasto | null>(null);
@@ -646,12 +744,33 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
               style={emPixel ? { minWidth: soma } : undefined}
             >
               <colgroup>
+                {selecao ? <col style={{ width: LARGURA_DA_CAIXA }} /> : null}
                 {naTela.map((c) => (
-                  <col key={c.chave} style={{ width: emPixel ? `${larguraDe(c)}px` : `${(c.peso / total) * 100}%` }} />
+                  <col
+                    key={c.chave}
+                    // com a caixa, as proporções descontam a coluna dela — senão a soma passa de 100% e a tabela rola
+                    style={{
+                      width: emPixel
+                        ? `${larguraDe(c)}px`
+                        : selecao
+                          ? `calc(${(c.peso / total) * 100}% - ${Math.round((LARGURA_DA_CAIXA * c.peso) / total)}px)`
+                          : `${(c.peso / total) * 100}%`,
+                    }}
+                  />
                 ))}
               </colgroup>
               <thead>
                 <tr className="bg-muted">
+                  {selecao ? (
+                    <th scope="col" className={cn("align-middle", compacta ? "pl-3 pr-1" : "pl-5 pr-1")}>
+                      <Checkbox
+                        aria-label={r.selecionarTodos}
+                        checked={todasMarcadas}
+                        indeterminado={marcadas > 0 && !todasMarcadas}
+                        onChange={alternarTodas}
+                      />
+                    </th>
+                  ) : null}
                   {naTela.map((c, i) => {
                     const ordenada = ordem?.chave === c.chave ? ordem.direcao : null;
                     const podeOrdenar = Boolean(aoOrdenar) && ordenavel(c);
@@ -667,7 +786,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                         className={cn(
                           "group/coluna relative px-2 py-2.5 text-left align-middle text-label-md font-medium text-muted-foreground",
                           c.alinharFim && "text-right",
-                          i === 0 && (compacta ? "pl-3" : "pl-5"),
+                          i === 0 && !selecao && (compacta ? "pl-3" : "pl-5"),
                           i === naTela.length - 1 && (compacta ? "pr-3" : "pr-5"),
                           arrasto?.ativo && arrasto.chave === c.chave && "opacity-disabled",
                         )}
@@ -821,12 +940,22 @@ export type DataTableRowProps = React.HTMLAttributes<HTMLTableRowElement> & {
   selecionada?: boolean;
   /** Liga a seleção: clique fora de botão e campo, Enter ou Espaço. */
   aoSelecionar?: () => void;
+  /** O id da linha para a seleção em massa (`selecao` na tabela): a caixa entra sozinha antes da primeira célula. */
+  chave?: string;
+  /** O nome do registro, para a caixa ter nome: "Selecionar Giovanna Alves". */
+  nome?: string;
 };
 
 export const DataTableRow = React.forwardRef<HTMLTableRowElement, DataTableRowProps>(
-  ({ className, selecionada, aoSelecionar, onClick, onKeyDown, children, ...props }, ref) => {
-  const { layout, chaves, naTela } = React.useContext(Contexto);
+  ({ className, selecionada, aoSelecionar, chave, nome, onClick, onKeyDown, children, ...props }, ref) => {
+  const { layout, chaves, naTela, selecao } = React.useContext(Contexto);
   const selecionavel = Boolean(aoSelecionar);
+  const comCaixa = Boolean(selecao && chave);
+  const marcada = comCaixa && selecao!.selecionados.includes(chave!);
+  // O Shift vem do pointerdown na célula: o clique que chega ao input é o que
+  // o label dispara, e ele não carrega as teclas. Teclado (Espaço) não passa
+  // por aqui, então a marca zera depois de usada.
+  const shift = React.useRef(false);
 
   let celulas: React.ReactNode = children;
   if (naTela) {
@@ -838,7 +967,7 @@ export const DataTableRow = React.forwardRef<HTMLTableRowElement, DataTableRowPr
     });
     celulas = naTela.map((chave, i) => {
       const el = porChave.get(chave);
-      return el ? React.cloneElement(el, { key: chave, primeira: i === 0, ultima: i === naTela.length - 1 }) : null;
+      return el ? React.cloneElement(el, { key: chave, primeira: i === 0 && !comCaixa, ultima: i === naTela.length - 1 }) : null;
     });
   }
 
@@ -846,12 +975,13 @@ export const DataTableRow = React.forwardRef<HTMLTableRowElement, DataTableRowPr
     <tr
       ref={ref}
       data-selecionavel={selecionavel || undefined}
-      aria-selected={selecionavel ? Boolean(selecionada) : undefined}
+      data-chave={comCaixa ? chave : undefined}
+      aria-selected={selecionavel ? Boolean(selecionada) || marcada : comCaixa ? marcada : undefined}
       onClick={(e) => {
         onClick?.(e);
         if (!aoSelecionar || e.defaultPrevented) return;
         // clique num botão, link ou campo da linha é dele, não da seleção
-        if ((e.target as HTMLElement).closest("button, a, input, select, textarea, [role='button'], [role='separator']")) return;
+        if ((e.target as HTMLElement).closest("button, a, input, label, select, textarea, [role='button'], [role='separator']")) return;
         aoSelecionar();
       }}
       onKeyDown={(e) => {
@@ -866,11 +996,29 @@ export const DataTableRow = React.forwardRef<HTMLTableRowElement, DataTableRowPr
         "border-t transition-colors hover:bg-overlay-item-hover",
         layout === "compacta" ? "border-border" : "border-card",
         selecionavel && `cursor-pointer ${focoInterno}`,
-        selecionada && "bg-overlay-item-selected hover:bg-overlay-item-selected",
+        (selecionada || marcada) && "bg-overlay-item-selected hover:bg-overlay-item-selected",
         className,
       )}
       {...props}
     >
+      {comCaixa ? (
+        <td
+          className={cn("select-none align-middle", layout === "compacta" ? "pl-3 pr-1" : "pl-5 pr-1")}
+          onPointerDown={(e) => {
+            shift.current = e.shiftKey;
+          }}
+        >
+          <Checkbox
+            aria-label={selecao!.rotulos.selecionarLinha(nome ?? "")}
+            checked={marcada}
+            onChange={() => {
+              const comShift = shift.current;
+              shift.current = false;
+              selecao!.alternar(chave!, comShift);
+            }}
+          />
+        </td>
+      ) : null}
       {celulas}
     </tr>
   );
@@ -930,12 +1078,12 @@ export function DataTableGrupo({
   rotulos?: Partial<Pick<RotulosDaTabela, "recolherGrupo" | "expandirGrupo">>;
   className?: string;
 }) {
-  const { layout, chaves, naTela } = React.useContext(Contexto);
+  const { layout, chaves, naTela, selecao } = React.useContext(Contexto);
   const compacta = layout === "compacta";
   const r = { ...ROTULOS_DA_TABELA, ...rotulos };
   return (
     <tr className={cn("border-t bg-muted", compacta ? "border-border" : "border-card", className)}>
-      <td colSpan={(naTela ?? chaves).length} className={cn("py-2", compacta ? "px-3" : "px-5")}>
+      <td colSpan={(naTela ?? chaves).length + (selecao ? 1 : 0)} className={cn("py-2", compacta ? "px-3" : "px-5")}>
         <div className="flex items-center justify-between gap-3">
           <button
             type="button"
@@ -986,6 +1134,75 @@ export function DataTableToolbar({
       </div>
       {children ? <div className="flex flex-wrap items-start gap-2">{children}</div> : null}
     </div>
+  );
+}
+
+/* -------------------------------------------------------------- Seleção -- */
+
+/** A seleção em massa: os ids escolhidos e quem os guarda (a tela). */
+export type SelecaoDaTabela = { selecionados: string[]; aoMudar: (ids: string[]) => void };
+
+/** O estado da seleção em massa, pronto para `DataTable selecao=` e `BarraDeSelecao`. */
+export function useSelecaoDaTabela(): SelecaoDaTabela & { limpar: () => void } {
+  const [selecionados, aoMudar] = React.useState<string[]>([]);
+  const limpar = React.useCallback(() => aoMudar([]), []);
+  return { selecionados, aoMudar, limpar };
+}
+
+/**
+ * A barra que sobe quando há linhas marcadas: quantas são, as ações em massa
+ * (os filhos, Buttons) e o X que limpa. Escape também limpa — salvo com um
+ * menu ou diálogo aberto, que têm o Escape para si. Portal fixo embaixo,
+ * centrado, na superfície do Menu (`overlay/*` + `elevation/lg`); entra e
+ * sai com fade (humano, 2026-09-24, ADR-031).
+ */
+export function BarraDeSelecao({
+  selecao,
+  rotulos,
+  children,
+  className,
+}: {
+  selecao: SelecaoDaTabela;
+  rotulos?: Partial<Pick<RotulosDaTabela, "selecionados" | "limparSelecao">>;
+  children?: React.ReactNode;
+  className?: string;
+}) {
+  const r = { ...ROTULOS_DA_TABELA, ...rotulos };
+  const n = selecao.selecionados.length;
+  const aberta = n > 0;
+  const { saindo, visivel } = useSaida(aberta);
+  // saindo, a barra ainda mostra a última conta (não "0 selecionados")
+  const ultimo = React.useRef(n);
+  if (n > 0) ultimo.current = n;
+  const { aoMudar } = selecao;
+
+  React.useEffect(() => {
+    if (!aberta) return;
+    const teclado = (e: KeyboardEvent) => {
+      if (e.key !== "Escape" || document.querySelector('[role="dialog"], [role="menu"]')) return;
+      aoMudar([]);
+    };
+    document.addEventListener("keydown", teclado);
+    return () => document.removeEventListener("keydown", teclado);
+  }, [aberta, aoMudar]);
+
+  if (!visivel || typeof document === "undefined") return null;
+  return createPortal(
+    <div
+      role="toolbar"
+      aria-label={r.selecionados(ultimo.current)}
+      className={cn(
+        "fixed bottom-6 left-1/2 z-popover flex max-w-[calc(100vw-32px)] -translate-x-1/2 flex-wrap items-center gap-2 rounded-lg border border-overlay-border bg-overlay-bg py-2 pl-4 pr-2 shadow-lg",
+        saindo ? "motion-safe:animate-fade-out" : "motion-safe:animate-fade-in-fast",
+        className,
+      )}
+    >
+      <span className="text-label-lg tabular-nums text-foreground">{r.selecionados(ultimo.current)}</span>
+      <span aria-hidden="true" className="mx-1 h-5 w-px bg-divider" />
+      {children}
+      <BotaoFechar rotulo={r.limparSelecao} onClick={() => aoMudar([])} className="ml-1" />
+    </div>,
+    document.body,
   );
 }
 

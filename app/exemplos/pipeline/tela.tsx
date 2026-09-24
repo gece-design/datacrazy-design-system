@@ -242,6 +242,28 @@ export function Tela() {
     }
   }
 
+  /* Ações em massa da lista (2026-09-24): mover várias de etapa e excluir
+     várias. A função do setColunas continua pura; o toast vem depois. */
+  function moverEmMassa(ids: string[], destino: EtapaId) {
+    setColunas((atual) => {
+      const movidos = etapas
+        .flatMap((e) => (atual[e.id] ?? []).filter((l) => ids.includes(l.id)))
+        .map((l) => (l.etapa === destino ? l : { ...l, etapa: destino, dias: 0 }));
+      const sem = Object.fromEntries(Object.entries(atual).map(([k, lista]) => [k, lista.filter((l) => !ids.includes(l.id))])) as Colunas;
+      return { ...sem, [destino]: [...movidos, ...(sem[destino] ?? [])] };
+    });
+    toast({
+      variant: "success",
+      titulo: "Leads movidos",
+      descricao: `${ids.length} lead(s) agora em ${etapaPor(etapas, destino).rotulo}.`,
+      duracao: 5000,
+    });
+  }
+  function excluirEmMassa(ids: string[]) {
+    setColunas((atual) => Object.fromEntries(Object.entries(atual).map(([k, lista]) => [k, lista.filter((l) => !ids.includes(l.id))])) as Colunas);
+    toast({ variant: "success", titulo: "Leads excluídos", descricao: `${ids.length} lead(s) saíram do funil.`, duracao: 5000 });
+  }
+
   /** Edição vinda do drawer. Toca só o lead alterado, na coluna onde ele está. */
   function editar(id: string, campos: Partial<Lead>) {
     setColunas((atual) => {
@@ -492,7 +514,9 @@ export function Tela() {
             etapas={etapas}
             leads={etapas.flatMap((e) => visiveis[e.id] ?? [])}
             aberto={abertoId}
-              aoAbrir={(l) => setAbertoId(l.id)}
+            aoAbrir={(l) => setAbertoId(l.id)}
+            aoMoverEmMassa={moverEmMassa}
+            aoExcluirEmMassa={excluirEmMassa}
           />
         ) : (
           // Calendário: os leads pela próxima ação; clicar abre o mesmo drawer.

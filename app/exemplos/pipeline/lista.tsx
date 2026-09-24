@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useRef, useState } from "react";
 
 import {
   CelulaDupla,
@@ -13,14 +13,18 @@ import {
   DataTableToolbar,
   BotaoColunas,
   DataTableGrupo,
-  SelectAgrupar,
+  BotaoAgrupar,
+  BarraDeSelecao,
+  useSelecaoDaTabela,
   agruparPor,
   ordenarPor,
   useAjustesDaTabela,
   type ColunaTabela,
 } from "@/components/ui/data-table";
+import { Button } from "@/components/ui/button";
+import { Menu } from "@/components/ui/menu";
 import { cn } from "@/lib/utils";
-import { GRUPOS_TAGS, etapaPor, moeda, tagsDe, type Etapa, type Lead } from "./dados";
+import { GRUPOS_TAGS, etapaPor, moeda, tagsDe, type Etapa, type EtapaId, type Lead } from "./dados";
 
 import { foco } from "@/lib/estados";
 /* A mesma carteira do quadro, na Table do design system. É o argumento de que
@@ -55,14 +59,23 @@ export function Lista({
   leads,
   aberto,
   aoAbrir,
+  aoMoverEmMassa,
+  aoExcluirEmMassa,
 }: {
   etapas: Etapa[];
   leads: Lead[];
   /** O lead aberto no drawer: é a linha selecionada. */
   aberto?: string | null;
   aoAbrir: (lead: Lead) => void;
+  /** Ações em massa da barra: mover as marcadas de etapa e excluir as marcadas. */
+  aoMoverEmMassa: (ids: string[], etapa: EtapaId) => void;
+  aoExcluirEmMassa: (ids: string[]) => void;
 }) {
   const total = leads.reduce((n, l) => n + l.valor, 0);
+  // Seleção em massa: a tela guarda os ids; a tabela desenha as caixas (2026-09-24).
+  const selecao = useSelecaoDaTabela();
+  const [menuEtapa, setMenuEtapa] = useState(false);
+  const botaoEtapa = useRef<HTMLButtonElement>(null);
   // Ordem, colunas e larguras ficam salvas por tela (T1, 2026-09-23).
   const ajustes = useAjustesDaTabela(COLUNAS, { memoria: "pipeline-lista" });
   const linhas = ordenarPor(leads, ajustes.ordem, valorDe(etapas));
@@ -79,7 +92,7 @@ export function Lista({
             const parado = lead.dias >= 7;
             return (
               // Selecionar a linha abre o lead: o Drawer é o detalhe (mestre-detalhe da referência).
-              <DataTableRow key={lead.id} selecionada={lead.id === aberto} aoSelecionar={() => aoAbrir(lead)}>
+              <DataTableRow key={lead.id} chave={lead.id} nome={lead.nome} selecionada={lead.id === aberto} aoSelecionar={() => aoAbrir(lead)}>
                 <DataTableCell coluna="lead">
                   {/* O nome é o que abre o lead: linha inteira clicável seria um
                       `tr` fingindo de botão, sem foco e sem nome acessível. */}
@@ -118,10 +131,10 @@ export function Lista({
     <div className="min-h-0 flex-1 overflow-y-auto pl-4 pr-4 pb-4 lg:pl-1 [scrollbar-width:thin]">
       <div className="w-full overflow-hidden rounded-md bg-card">
         <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`}>
-          <SelectAgrupar ajustes={ajustes} />
+          <BotaoAgrupar ajustes={ajustes} />
           <BotaoColunas ajustes={ajustes} />
         </DataTableToolbar>
-        <DataTable colunas={COLUNAS} ajustes={ajustes} className="rounded-none">
+        <DataTable colunas={COLUNAS} ajustes={ajustes} selecao={selecao} className="rounded-none">
           {grupos
             ? grupos.map((g) => (
                 <Fragment key={g.id}>
@@ -137,6 +150,45 @@ export function Lista({
               ))
             : linhas.map(linha)}
         </DataTable>
+        <BarraDeSelecao selecao={selecao}>
+          <Button
+            ref={botaoEtapa}
+            variant="tertiary"
+            size="sm"
+            aria-haspopup="menu"
+            aria-expanded={menuEtapa}
+            onClick={() => setMenuEtapa((a) => !a)}
+          >
+            Mover para etapa
+          </Button>
+          <Menu
+            aberto={menuEtapa}
+            gatilho={botaoEtapa}
+            rotulo="Mover para etapa"
+            itens={etapas.map((e) => ({
+              id: e.id,
+              rotulo: e.rotulo,
+              aoAtivar: () => {
+                aoMoverEmMassa(selecao.selecionados, e.id);
+                selecao.limpar();
+              },
+            }))}
+            aoFechar={(devolver = true) => {
+              setMenuEtapa(false);
+              if (devolver) botaoEtapa.current?.focus();
+            }}
+          />
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => {
+              aoExcluirEmMassa(selecao.selecionados);
+              selecao.limpar();
+            }}
+          >
+            Excluir
+          </Button>
+        </BarraDeSelecao>
       </div>
     </div>
   );

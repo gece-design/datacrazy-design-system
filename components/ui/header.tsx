@@ -35,7 +35,9 @@ import { foco, focoDentro, focoInterno } from "@/lib/estados";
  * diz onde a pessoa está.
  *
  * Quando não cabe, as ações descem para uma linha própria, à direita, e
- * quebram entre si; título e subtítulo truncam com `title` (D12).
+ * quebram entre si; título e subtítulo truncam com `title` (D12). Abaixo de
+ * 640 da própria largura (container query), trilha, título e ações ficam
+ * centrados, com as ações em linha própria (humano, 2026-09-24, ADR-032).
  */
 
 export interface HeaderProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
@@ -52,10 +54,15 @@ export interface HeaderProps extends Omit<React.HTMLAttributes<HTMLElement>, "ti
 
 export function Header({ titulo, subtitulo, trilha, utilitarios, acoes, className, ...props }: HeaderProps) {
   return (
-    <header className={cn("flex flex-col gap-1.5 bg-background px-8 py-4", className)} {...props}>
+    // O Header é container: abaixo de 640 da PRÓPRIA largura de conteúdo (a
+    // caixa sem o recuo — é o que o @container mede; não a janela), trilha,
+    // título e ações ficam centrados e as ações em linha própria —
+    // "gostei de centralizar no mobile" (humano, 2026-09-24, ADR-032). Medir a
+    // caixa e não a janela é o que faz o preview estreito da doc mostrar o mesmo.
+    <header className={cn("flex flex-col gap-1.5 bg-background px-8 py-4 [container-type:inline-size]", className)} {...props}>
       {trilha || utilitarios ? (
         <div className="flex min-h-8 items-center justify-between gap-4">
-          <div className="min-w-0 flex-1">{trilha}</div>
+          <div className="flex min-w-0 flex-1 justify-center [@container_(min-width:640px)]:justify-start">{trilha}</div>
           {utilitarios ? <div className="flex shrink-0 items-center gap-2">{utilitarios}</div> : null}
         </div>
       ) : null}
@@ -63,7 +70,7 @@ export function Header({ titulo, subtitulo, trilha, utilitarios, acoes, classNam
           (h1, 28) alinha pelo topo com a fileira de ações (32) — items-start,
           não center: é o que fecha o espaço cinza (humano, 2026-09-23). */}
       <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
-        <div className="flex min-w-0 flex-col gap-0.5">
+        <div className="flex w-full min-w-0 flex-col gap-0.5 text-center [@container_(min-width:640px)]:w-auto [@container_(min-width:640px)]:text-left">
           <h1 title={titulo} className="truncate text-h1 text-foreground">
             {titulo}
           </h1>
@@ -73,8 +80,8 @@ export function Header({ titulo, subtitulo, trilha, utilitarios, acoes, classNam
             </p>
           ) : null}
         </div>
-        {/* ml-auto: quando a fileira desce de linha, continua à direita */}
-        {acoes ? <div className="ml-auto flex max-w-full flex-wrap items-center justify-end gap-2">{acoes}</div> : null}
+        {/* largo: ml-auto mantém a fileira à direita quando desce de linha; estreito: centrada */}
+        {acoes ? <div className="mx-auto flex max-w-full flex-wrap items-center justify-center gap-2 [@container_(min-width:640px)]:ml-auto [@container_(min-width:640px)]:mr-0 [@container_(min-width:640px)]:justify-end">{acoes}</div> : null}
       </div>
     </header>
   );

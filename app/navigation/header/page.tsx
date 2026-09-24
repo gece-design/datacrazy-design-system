@@ -289,7 +289,7 @@ export default function HeaderPage() {
           <Chip>divider</Chip>, token que o arquivo tinha e o código não.
         </p>
         <p>
-          Quando não cabe, nada vaza. A fileira de ações desce para a linha de baixo, à direita, e quebra entre si;
+          Quando não cabe, nada vaza. A fileira de ações desce para a linha de baixo, à direita, e quebra entre si; abaixo de 640 da largura do Header, tudo centra (celular);
           título e cada nível da trilha truncam com o texto inteiro no <Chip>title</Chip> (D12). Nesta coluna de leitura
           as ações do Default já não cabem ao lado do título — é o comportamento real, não defeito do preview.
         </p>
@@ -496,7 +496,7 @@ export default function HeaderPage() {
       <Secao
         titulo="Quando não cabe"
         spec="360px · es"
-        descricao="Espanhol, que é 20–30% mais longo, numa coluna de celular. As ações descem e quebram; o título trunca. Passe o cursor num texto cortado para ler inteiro."
+        descricao="Espanhol, que é 20–30% mais longo, numa coluna de celular. Abaixo de 640 da largura do próprio Header, trilha, título e ações ficam centrados e as ações em linha própria; o título trunca. Passe o cursor num texto cortado para ler inteiro."
       >
         <div className="mx-auto w-full max-w-[360px] overflow-hidden rounded-md">
           <Header

@@ -160,3 +160,13 @@ Aprovado por: humano.
 Desvio: o arquivo pinta cabeçalho e grupos da tabela com `background`, o mesmo cinza da página — sobre a página, a tabela perdia a borda de cima e as linhas de grupo sumiam.
 Motivo: humano (2026-09-24, print): "precisamos de um cinza mais claro que o fundo pra aplicar nos componentes que perdem o contraste". `muted` (#F5F6F7 · #1D1D25) fica entre `background` e `card` nos dois temas. Entra onde a superfície cinza encosta na página: cabeçalho e grupo da Table, linha dos dias do Calendário. Onde o cinza está sobre um card branco (pílula do KPI, rodapé do Modal, Badge neutra) `background` segue.
 Aprovado por: humano.
+
+## ADR-031 · Agrupar como botão com menu; seleção em massa com barra · 2026-09-24
+Desvio: a referência (grid do ExtJS) agrupa pelo menu da coluna e o arquivo não desenha seleção em massa nem barra de ações; a tela atual do CRM tem a caixa na linha e as ações no ⋯ de cada uma.
+Motivo: humano (2026-09-24): "falta de padrão dos botões ali de select e de colunas" — o Agrupar era um Select ao lado de um Button; agora é o mesmo botão `tertiary` com menu de rádio, `soft` com grupo ativo (o sinal do Filtros do Header). E "ações em massa": caixa no cabeçalho e nas linhas (`chave`), Shift+clique por faixa, barra fixa embaixo com as ações da tela. A tabela só sabe quais linhas estão na tela; a tela guarda os ids (`useSelecaoDaTabela`), como na ordenação (ADR-025).
+Aprovado por: humano ("boa ideia, pode seguir").
+
+## ADR-032 · Header estreito centrado, medido pela própria largura · 2026-09-24
+Desvio: o arquivo é desktop; abaixo de 640 o Header não tem desenho. O código centra trilha, título e ações e põe as ações em linha própria.
+Motivo: humano (2026-09-24, print do pipeline no celular): "gostei desta ideia de centralizar no mobile". A medida é a largura de conteúdo do próprio Header (`container-type: inline-size` + `@container`, que mede a caixa sem o recuo), não a da janela: é o que faz o preview estreito da página do Header mostrar o mesmo que o celular, e o que vale dentro de um painel estreito.
+Aprovado por: humano.

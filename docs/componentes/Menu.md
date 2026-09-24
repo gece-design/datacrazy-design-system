@@ -27,7 +27,7 @@ separador não estão desenhados (AUD-203, lote `figma`).
 | `aoFechar` | `(devolverFoco?: boolean) => void` | sim | `devolverFoco` vem falso quando quem fechou foi um clique fora ou o Tab. |
 | `gatilho` | `RefObject<HTMLElement>` | sim | O botão que abriu: dá a posição e recebe o foco de volta. |
 | `rotulo` | `string` | sim | Nome do menu para leitor de tela. |
-| `itens` | `ItemDoMenu[]` | sim | `id`, `rotulo`, `icone?`, `tipo` (`acao` fecha; `check` alterna e mantém aberto), `marcado?`, `desabilitado?`, `separadorAntes?`, `aoAtivar`. |
+| `itens` | `ItemDoMenu[]` | sim | `id`, `rotulo`, `icone?`, `tipo` (`acao` fecha; `check` alterna e mantém aberto; `radio` escolhe um e fecha), `marcado?`, `desabilitado?`, `separadorAntes?`, `aoAtivar`. |
 
 O gatilho leva `aria-haspopup="menu"` e `aria-expanded`; o painel tem 240px,
 abre abaixo do gatilho em portal fixo e vira para cima quando não cabe.
@@ -38,6 +38,7 @@ abre abaixo do gatilho em portal fixo e vira para cima quando não cabe.
 |------|-------------|
 | `tipo="acao"` | Faz e fecha: ordenar, mover, restaurar. |
 | `tipo="check"` | Liga e desliga sem fechar: colunas visíveis, campos do cartão. |
+| `tipo="radio"` | Um entre vários, e fecha: agrupar por. Bolinha `primary` no marcado. |
 
 ## Estados
 
@@ -64,7 +65,7 @@ decisão, não buraco a preencher.
 ## Composição
 
 Usa: `PainelFlutuante` do [Popover](Popover.md) · `useCliqueFora` e `useSaida` (lib).
-Usado por: [Table](DataTable.md) (menu da coluna, botão Colunas) · tela de leads (`/exemplos/pipeline`, personalizar cartão)
+Usado por: [Table](DataTable.md) (menu da coluna, botões Colunas e Agrupar, ações da barra de seleção) · tela de leads (`/exemplos/pipeline`, personalizar cartão)
 
 ## Exemplo de uso
 
