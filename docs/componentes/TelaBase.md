@@ -29,7 +29,7 @@ arquivo acompanha na remedição (AUD-203).
 | `cabecalho` | `HeaderProps` | sim | As props do [Header](Header.md): `titulo`, `subtitulo`, `trilha`, `utilitarios`, `acoes`. O botão de menu entra sozinho antes da trilha; a segunda linha de controles é `acoes`. |
 | `children` | `ReactNode` | sim | O conteúdo. Rola por dentro; o cabeçalho fica. |
 | `memoria` | `string` | não | Chave da memória da sidebar (aberta ou recolhida) no navegador, uma por tela. Sem ela, começa pelo breakpoint. |
-| `recuo` | `boolean` | não | Padrão `true`: 16px abaixo de 768, 24 daí em diante. Desligue quando o conteúdo traz o próprio (o quadro do pipeline). |
+| `recuo` | `boolean` | não | Padrão `true`: 16px em toda largura. Desligue quando o conteúdo traz o próprio (o quadro do pipeline). |
 | `rotulos` | `Partial<RotulosDaTela>` | não | `abrirMenu`, `fecharMenu`, `navegacao`, `conteudo` (i18n). Fábrica: `ROTULOS_DA_TELA`. |
 | `className` | `string` | não | — |
 
@@ -41,9 +41,10 @@ arquivo acompanha na remedição (AUD-203).
 | 1024–1279px (`lg`) | Sidebar nasce recolhida em ícones, 88px. A pessoa pode abrir. |
 | < 1024px | A sidebar some. O botão de menu no Header abre a mesma Sidebar num painel por cima, com o `Scrim` do Modal, foco preso, Escape e o foco de volta ao botão. |
 
-Os recuos do Header e do conteúdo: 16px abaixo de 768, 24 daí em diante — o
-arquivo desenha 32 no Header, mas na tela sobrava cinza (humano, 2026-09-23,
-ADR-028). Não há segunda linha de controles: filtros, abas e troca-visão vão
+Os recuos do Header e do conteúdo: 16 — o arquivo desenha 32 no Header; foi
+24 e "ainda tinha muito espaço" (humano, 2026-09-23, ADR-028). O Header não
+tem recuo embaixo: as ações encostam no traço e os 16 do conteúdo dão o
+respiro. Não há segunda linha de controles: filtros, abas e troca-visão vão
 na fileira de ações do Header ("não ficou legal"). A memória é lida antes da primeira pintura, para a
 sidebar não abrir e recolher na frente da pessoa.
 

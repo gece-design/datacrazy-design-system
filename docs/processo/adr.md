@@ -144,6 +144,7 @@ Aprovado por: humano ("Pode aprovar essa… manda bala").
 ## ADR-028 · Na tela, recuo de 24 e busca que abre da lupa · 2026-09-23
 Desvio: o arquivo desenha o Header com 32 de recuo e a busca sempre aberta (184px); a `TelaBase` usa 24 (16 abaixo de 768) e a `HeaderBusca recolhida` anima a largura de 32 para 184 (I11 proíbe animar largura).
 Motivo: humano (2026-09-23): "tá sobrando muito espaço cinza na tela" e o header do pipeline não cabia com todas as ações. A largura anima com o precedente da Sidebar (ADR-022), em `base` · `enter`; com `prefers-reduced-motion` não anima. A página do Header no DS continua com os 32.
+Ajuste no mesmo dia (print com medidas, "ainda tem muito espaço"): recuo 16 em toda largura, no Header e no conteúdo, e o Header sem recuo embaixo (`pb-0`) — as ações encostam no traço; o respiro é o do conteúdo.
 Regra de quando recolher (humano, 2026-09-23, "em telas que têm espaço pode manter o campo; com muitos itens de filtro, só o ícone"): a fileira de ações só tem botões → busca aberta (184); tem troca-visão, período ou data → `recolhida`. Por tela, não por largura. A busca do Header é sempre `HeaderBusca`; o botão "Pesquisar" com texto do arquivo (601:12) não se usa. Vale para toda tela e para a página do Header no DS.
 Aprovado por: humano.
 
