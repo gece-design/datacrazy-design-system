@@ -21,7 +21,8 @@ const buttonVariants = cva(
         secondary: "border border-border bg-card text-foreground enabled:hover:bg-accent",
         ghost: "text-muted-foreground enabled:hover:bg-accent enabled:hover:text-foreground",
         // Sombra interna conferida no botão "Excluir" do Modal (545:168).
-        destructive: "bg-destructive text-primary-foreground shadow-button-inner enabled:hover:bg-destructive-hover",
+        // O relevo fica nos DOIS temas, como no primary: "só no botão de excluir" (humano, 2026-09-24).
+        destructive: "bg-destructive text-primary-foreground shadow-button-inner-primary enabled:hover:bg-destructive-hover",
         // Os dois abaixo vêm do redesenho do Button no Figma (269:32), onde se
         // chamam "Secondary" e "Ghost". Entraram com nome próprio para não mudar
         // o que `secondary` e `ghost` já significam nas telas prontas.

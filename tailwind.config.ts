@@ -127,8 +127,8 @@ const config: Config = {
         // variável porque no escuro ele SOME: o brilho é claro e lava a
         // superfície (decisão do humano, 2026-09-18).
         "button-inner": "var(--shadow-button-inner)",
-        // A exceção: sobre o azul cheio do `primary` o brilho continua relevo
-        // nos dois temas, então aqui o valor é literal.
+        // A exceção: sobre o cheio do `primary` e do `destructive` o brilho continua
+        // relevo nos dois temas (humano, 2026-09-24), então aqui o valor é literal.
         "button-inner-primary": "inset 2px 4px 8px 0 rgb(232 241 255 / 0.4)",
       },
       backgroundImage: {

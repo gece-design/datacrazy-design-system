@@ -782,7 +782,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
             <table
               className={cn("w-full table-fixed border-collapse", !compacta && !emPixel && "min-w-[1160px]")}
               // com larguras em px a tabela mede a soma delas: passou da caixa, rola
-              style={emPixel ? { minWidth: soma } : undefined}
+              style={emPixel ? { minWidth: soma + (selecao ? LARGURA_DA_CAIXA : 0) } : undefined}
             >
               <colgroup>
                 {selecao ? <col style={{ width: LARGURA_DA_CAIXA }} /> : null}
@@ -803,7 +803,9 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
               <thead>
                 <tr className="bg-muted">
                   {selecao ? (
-                    <th scope="col" className={cn("align-middle", compacta ? "pl-3 pr-1" : "pl-5 pr-1")}>
+                    // text-left: th centra por padrão e, com a coluna esticada, a caixa
+                    // do cabeçalho saía do alinhamento das linhas (humano, 2026-09-24)
+                    <th scope="col" className={cn("text-left align-middle", compacta ? "pl-3 pr-1" : "pl-5 pr-1")}>
                       <Checkbox
                         aria-label={r.selecionarTodos}
                         checked={todasMarcadas}
@@ -1045,7 +1047,7 @@ export const DataTableRow = React.forwardRef<HTMLTableRowElement, DataTableRowPr
     >
       {comCaixa ? (
         <td
-          className={cn("select-none align-middle", layout === "compacta" ? "pl-3 pr-1" : "pl-5 pr-1")}
+          className={cn("select-none text-left align-middle", layout === "compacta" ? "pl-3 pr-1" : "pl-5 pr-1")}
           onPointerDown={(e) => {
             shift.current = e.shiftKey;
           }}

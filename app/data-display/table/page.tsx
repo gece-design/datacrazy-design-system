@@ -25,6 +25,7 @@ import {
 import { Pagination } from "@/components/ui/pagination";
 import { Select, type OpcaoSelect } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Tag, type Tom } from "@/components/ui/tag";
 import { Menu } from "@/components/ui/menu";
 import { Toaster, toast } from "@/components/ui/toast";
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
@@ -90,6 +91,26 @@ const carteira = [
 ];
 type Negocio = (typeof carteira)[number];
 
+/* As células contam o que o cartão do pipeline conta, do mesmo jeito (humano,
+   2026-09-24: "por que não atualizou as tabelas aqui?"): a etiqueta com a
+   bolinha de status, a etapa na cor da coluna, o atendente na Tag com foto. */
+const STATUS_DA_ETIQUETA: Record<string, "destructive" | "info" | "success"> = {
+  Quente: "destructive",
+  Morno: "info",
+  Indicação: "success",
+};
+const comStatus = (rotulo: string) => ({ rotulo, status: STATUS_DA_ETIQUETA[rotulo] });
+const TOM_DA_ETAPA: Record<string, Tom | "neutro"> = {
+  Qualificação: "ciano",
+  Proposta: "azul",
+  Negociação: "ambar",
+  Fechamento: "verde",
+};
+const tomDaEtapa = (etapa: string) => TOM_DA_ETAPA[etapa] ?? "neutro";
+function Atendente({ nome }: { nome: string }) {
+  return nome === "Sem atendente" ? <CelulaTexto>{nome}</CelulaTexto> : <Tag foto="/ds/atendente.png">{nome}</Tag>;
+}
+
 const moeda = (v: number) => `R$ ${v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")},00`;
 
 /* O que cada coluna lê do negócio, para ordenar: número compara como número. */
@@ -116,9 +137,9 @@ const [selecionado, setSelecionado] = useState<string | null>(null);
   <DataTable colunas={colunas} ajustes={ajustes}>
     {linhas.map((n) => (
       <DataTableRow key={n.id} selecionada={n.id === selecionado} aoSelecionar={() => setSelecionado(n.id)}>
-        <DataTableCell coluna="lead"><CelulaLead nome={n.nome} etiquetas={n.etiquetas} /></DataTableCell>
+        <DataTableCell coluna="lead"><CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} /></DataTableCell>
         <DataTableCell coluna="produto"><CelulaDupla principal={n.produto} apoio={n.valor} /></DataTableCell>
-        <DataTableCell coluna="etapa"><CelulaProgresso etapa={n.etapa} percentual={n.percentual} /></DataTableCell>
+        <DataTableCell coluna="etapa"><CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} /></DataTableCell>
         <DataTableCell coluna="acoes"><CelulaAcoes /></DataTableCell>
       </DataTableRow>
     ))}
@@ -140,7 +161,7 @@ function TabelaAjustavel() {
         {linhas.map((n) => (
           <DataTableRow key={n.id} selecionada={n.id === selecionado} aoSelecionar={() => setSelecionado(n.id)}>
             <DataTableCell coluna="lead">
-              <CelulaLead nome={n.nome} etiquetas={n.etiquetas} />
+              <CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} />
             </DataTableCell>
             <DataTableCell coluna="produto">
               <CelulaDupla principal={n.produto} apoio={moeda(n.valor)} />
@@ -149,10 +170,10 @@ function TabelaAjustavel() {
               <CelulaTexto>{n.atividades}</CelulaTexto>
             </DataTableCell>
             <DataTableCell coluna="atendente">
-              <CelulaTexto enfase>{n.atendente}</CelulaTexto>
+              <Atendente nome={n.atendente} />
             </DataTableCell>
             <DataTableCell coluna="etapa">
-              <CelulaProgresso etapa={n.etapa} percentual={n.percentual} />
+              <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
             </DataTableCell>
             <DataTableCell coluna="dados">
               <CelulaEstatisticas
@@ -234,7 +255,7 @@ function TabelaAgrupada() {
   const linha = (n: Negocio) => (
     <DataTableRow key={n.id}>
       <DataTableCell coluna="lead">
-        <CelulaLead nome={n.nome} etiquetas={n.etiquetas} />
+        <CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} />
       </DataTableCell>
       <DataTableCell coluna="produto">
         <CelulaDupla principal={n.produto} apoio={moeda(n.valor)} />
@@ -243,10 +264,10 @@ function TabelaAgrupada() {
         <CelulaTexto>{n.atividades}</CelulaTexto>
       </DataTableCell>
       <DataTableCell coluna="atendente">
-        <CelulaTexto enfase>{n.atendente}</CelulaTexto>
+        <Atendente nome={n.atendente} />
       </DataTableCell>
       <DataTableCell coluna="etapa">
-        <CelulaProgresso etapa={n.etapa} percentual={n.percentual} />
+        <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
       </DataTableCell>
       <DataTableCell coluna="dados">
         <CelulaEstatisticas
@@ -298,9 +319,9 @@ const linhas = ordenarPor(negocios, ajustes.ordem, valorDe);
   <DataTable colunas={colunas} ajustes={ajustes} selecao={selecao}>
     {linhas.map((n) => (
       <DataTableRow key={n.id} chave={n.id} nome={n.nome}>
-        <DataTableCell coluna="lead"><CelulaLead nome={n.nome} etiquetas={n.etiquetas} /></DataTableCell>
+        <DataTableCell coluna="lead"><CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} /></DataTableCell>
         <DataTableCell coluna="produto"><CelulaDupla principal={n.produto} apoio={n.valor} /></DataTableCell>
-        <DataTableCell coluna="etapa"><CelulaProgresso etapa={n.etapa} percentual={n.percentual} /></DataTableCell>
+        <DataTableCell coluna="etapa"><CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} /></DataTableCell>
       </DataTableRow>
     ))}
   </DataTable>
@@ -334,7 +355,7 @@ function TabelaComSelecao() {
         {linhas.map((n) => (
           <DataTableRow key={n.id} chave={n.id} nome={n.nome}>
             <DataTableCell coluna="lead">
-              <CelulaLead nome={n.nome} etiquetas={n.etiquetas} />
+              <CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} />
             </DataTableCell>
             <DataTableCell coluna="produto">
               <CelulaDupla principal={n.produto} apoio={moeda(n.valor)} />
@@ -343,10 +364,10 @@ function TabelaComSelecao() {
               <CelulaTexto>{n.atividades}</CelulaTexto>
             </DataTableCell>
             <DataTableCell coluna="atendente">
-              <CelulaTexto enfase>{n.atendente}</CelulaTexto>
+              <Atendente nome={n.atendente} />
             </DataTableCell>
             <DataTableCell coluna="etapa">
-              <CelulaProgresso etapa={n.etapa} percentual={n.percentual} />
+              <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
             </DataTableCell>
             <DataTableCell coluna="dados">
               <CelulaEstatisticas
@@ -458,15 +479,15 @@ export default function Pagina() {
   {negocios.map((n) => (
     <DataTableRow key={n.id}>
       <DataTableCell primeira>
-        <CelulaLead nome={n.nome} etiquetas={n.etiquetas} />
+        <CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} />
       </DataTableCell>
       <DataTableCell>
         <CelulaDupla principal={n.produto} apoio={n.valor} />
       </DataTableCell>
       <DataTableCell><CelulaTexto>{n.atividades}</CelulaTexto></DataTableCell>
-      <DataTableCell><CelulaTexto enfase>{n.atendente}</CelulaTexto></DataTableCell>
+      <DataTableCell><Atendente nome={n.atendente} /></DataTableCell>
       <DataTableCell>
-        <CelulaProgresso etapa={n.etapa} percentual={n.percentual} />
+        <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
       </DataTableCell>
       <DataTableCell>
         <CelulaEstatisticas itens={[
@@ -515,7 +536,7 @@ export default function Pagina() {
             {negocios.map((n) => (
               <DataTableRow key={n.id}>
                 <DataTableCell primeira>
-                  <CelulaLead nome={n.nome} etiquetas={n.etiquetas} />
+                  <CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} />
                 </DataTableCell>
                 <DataTableCell>
                   <CelulaDupla principal={n.produto} apoio={n.valor} />
@@ -524,10 +545,10 @@ export default function Pagina() {
                   <CelulaTexto>{n.atividades}</CelulaTexto>
                 </DataTableCell>
                 <DataTableCell>
-                  <CelulaTexto enfase>{n.atendente}</CelulaTexto>
+                  <Atendente nome={n.atendente} />
                 </DataTableCell>
                 <DataTableCell>
-                  <CelulaProgresso etapa={n.etapa} percentual={n.percentual} />
+                  <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
                 </DataTableCell>
                 <DataTableCell>
                   <CelulaEstatisticas

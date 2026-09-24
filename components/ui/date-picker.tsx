@@ -281,7 +281,9 @@ const GatilhoDeData = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttrib
       aria-haspopup="dialog"
       aria-expanded={aberto}
       className={cn(
-        "inline-flex max-w-full items-center gap-1 rounded-md px-2 py-1.5 text-body-md",
+        // h-8: o arquivo desenha 29, mas na fileira do Header ele fica ao lado de
+        // botões de 32 — "no mesmo tamanho dos outros" (humano, 2026-09-24, AUD-122)
+        "inline-flex h-8 max-w-full items-center gap-1 rounded-md px-2 text-body-md",
         "outline-none transition-colors",
         `${foco}`,
         `${desabilitado} [&_svg]:shrink-0`,

@@ -331,8 +331,8 @@ export default function HeaderPage() {
         semSeletorDeFundo
         nota={
           <>
-            O gatilho do Date Picker fecha em 29px de altura, e o arquivo o desenha com 32 dentro do Header. A fileira
-            centraliza, então nada desalinha; os 3px ficam como divergência.
+            O gatilho do Date Picker tem 32px, como os outros botões da fileira — o arquivo o desenha com 29 fora
+            do Header e com 32 dentro; ficou com 32 (humano, 2026-09-24).
           </>
         }
       >

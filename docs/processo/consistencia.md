@@ -23,7 +23,7 @@ Status: `aberto` · `corrigido` (commit em fechadoEm) · `aceito` (exige ADR) ·
 
 ## Por status
 
-aberto 2 · corrigido 66 · aceito 12 · adiado 124
+aberto 2 · corrigido 67 · aceito 12 · adiado 123
 
 ## Abertos que bloqueiam ou descumprem regra
 

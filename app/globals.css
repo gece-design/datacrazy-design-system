@@ -189,8 +189,7 @@
     --avatar-md-fundo: var(--card);
     --avatar-md-anel: var(--accent);
 
-    /* Volta em 2026-09-24 ("não pedi pra tirar"): o mesmo relevo do claro, em branco a 8%. Revoga a ADR-014. */
-    --shadow-button-inner: inset 2px 4px 8px 0 rgb(255 255 255 / 0.08);
+    --shadow-button-inner: none;
 
     --button-soft-bg: var(--accent);
     --button-soft-foreground: var(--blue-300);

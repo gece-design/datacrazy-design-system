@@ -2007,9 +2007,9 @@
       "gravidade": "media",
       "lote": "figma",
       "verificacao": "manual",
-      "status": "adiado",
-      "fechadoEm": null,
-      "nota": "**Gatilho do Date Picker com 29px**, o arquivo desenha 32 no Header."
+      "status": "corrigido",
+      "fechadoEm": "2026-09-24",
+      "nota": "**Gatilho do Date Picker com 29px**, o arquivo desenha 32 no Header. Corrigido em 2026-09-24: o gatilho (`GatilhoDeData`) passa a 32, \"no mesmo tamanho dos outros botões\" (humano)."
     },
     {
       "id": "AUD-123",
