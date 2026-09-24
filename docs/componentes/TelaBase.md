@@ -75,9 +75,10 @@ Usado por: tela de leads (`/exemplos/pipeline`) · a tela base (`/exemplos/tela-
 A tela base publicada (`/exemplos/tela-base`, bloco `@datacrazy/tela`) vem
 com tudo ligado: o tema troca de verdade (classe `dark` no `<html>` e
 `localStorage`, para trocar por quem cuida do tema no CRM), o sino abre o
-painel (`Notificacoes`), a busca filtra, o troca-visão e o período respondem,
-a lupa abre a busca e ela filtra, e as ações respondem com um `Toast`. Placeholder que não faz nada não entra (humano,
-2026-09-23).
+painel (`Notificacoes`), a lupa abre a busca e ela filtra (`recolhida`: a
+fileira tem troca-visão e período — regra em [Header](Header.md)), o
+troca-visão e o período respondem, e as ações respondem com um `Toast`.
+Placeholder que não faz nada não entra (humano, 2026-09-23).
 
 ## Exemplo de uso
 

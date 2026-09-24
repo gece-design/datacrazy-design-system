@@ -21,11 +21,13 @@ import { foco, focoDentro, focoInterno } from "@/lib/estados";
  *
  *   trilha       → em cima, à esquerda (Breadcrumb)
  *   utilitarios  → em cima, à direita (notificações)
- *   acoes        → embaixo, à direita, alinhadas pela base do título
+ *   acoes        → embaixo, à direita, alinhadas pelo topo com o título
  *
- * Medidas do arquivo: recuo 32×16, traço de baixo em `border`, linha de cima
- * com a altura do botão (32), título `h1` e, quando houver, subtítulo `body-sm`
- * a 2px; ações com vão 8. Fecha em 111px, com ou sem subtítulo.
+ * Medidas: recuo 32×16, traço de baixo em `border`, linha de cima com a
+ * altura do botão (32), 6px abaixo o título `h1` alinhado ao topo da fileira
+ * de ações (32, vão 8) e, quando houver, subtítulo `body-sm` a 2px. Fecha em
+ * 103px sem subtítulo (com o traço). O arquivo desenha 14 de vão e 111; o humano
+ * pediu 6 e o título no topo — "um espaço cinza me incomodando" (ADR-029).
  *
  * O subtítulo fica FORA por padrão (decisão do humano, 2026-09-18): título e
  * descrição decorativos em toda tela são anti-referência, e a trilha acima já
@@ -49,18 +51,17 @@ export interface HeaderProps extends Omit<React.HTMLAttributes<HTMLElement>, "ti
 
 export function Header({ titulo, subtitulo, trilha, utilitarios, acoes, className, ...props }: HeaderProps) {
   return (
-    <header className={cn("flex flex-col border-b border-border bg-background px-8 py-4", className)} {...props}>
+    <header className={cn("flex flex-col gap-1.5 border-b border-border bg-background px-8 py-4", className)} {...props}>
       {trilha || utilitarios ? (
         <div className="flex min-h-8 items-center justify-between gap-4">
           <div className="min-w-0 flex-1">{trilha}</div>
           {utilitarios ? <div className="flex shrink-0 items-center gap-2">{utilitarios}</div> : null}
         </div>
       ) : null}
-      {/* min-h 46: é a altura que o título + subtítulo tinham no arquivo, e é o
-          que mantém as ações 14px abaixo do sino. Sem ela, um Header sem
-          subtítulo encolhe a linha para os 28 do h1 e a fileira de ações sobe
-          e encosta no sino — o header fecha em 111px com ou sem subtítulo. */}
-      <div className="flex min-h-[46px] flex-wrap items-end justify-between gap-x-6 gap-y-3">
+      {/* gap-1.5 do <header>: 6px entre a linha da trilha e esta. O título
+          (h1, 28) alinha pelo topo com a fileira de ações (32) — items-start,
+          não center: é o que fecha o espaço cinza (humano, 2026-09-23). */}
+      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
         <div className="flex min-w-0 flex-col gap-0.5">
           <h1 title={titulo} className="truncate text-h1 text-foreground">
             {titulo}
@@ -122,18 +123,23 @@ export interface HeaderBuscaProps extends Omit<React.InputHTMLAttributes<HTMLInp
   /** Nome do campo para leitor de tela. Ex.: "Pesquisar leads". */
   rotulo: string;
   /**
-   * Começa como só a lupa (a caixa de 32px do botão tertiary). Clicar abre a
-   * caixa de 184px com movimento e o foco entra; sem texto, fecha ao sair.
-   * Pedido do humano (2026-09-23) para o header caber; ADR-028.
+   * Só a lupa (a caixa de 32px do botão tertiary). Clicar abre a caixa de
+   * 184px com movimento e o foco entra; sem texto, fecha ao sair.
+   *
+   * A regra (humano, 2026-09-23, ADR-028): a fileira de ações só tem botões →
+   * busca aberta; tem troca-visão, período ou data → `recolhida`. A escolha é
+   * por tela, não por largura: o estado não muda quando a janela encolhe.
    */
   recolhida?: boolean;
 }
 
 /**
- * Busca inline (variante Search, 610:14049): a caixa do Button `tertiary` com
+ * A busca do Header — sempre esta peça, nunca um Button "Pesquisar" com texto.
+ * Aberta (variante Search, 610:14049): a caixa do Button `tertiary` com
  * 184px, virada campo. Sem rótulo visível — o placeholder é a pista e
  * `rotulo` é o nome acessível. Com `recolhida`, a caixa nasce com 32px e a
- * largura anima até 184 quando abre (`base` · `enter`).
+ * largura anima até 184 quando abre (`base` · `enter`). Quando usar cada uma:
+ * ver a prop.
  */
 export const HeaderBusca = React.forwardRef<HTMLInputElement, HeaderBuscaProps>(
   ({ rotulo, recolhida = false, className, onBlur, onKeyDown, ...props }, ref) => {

@@ -2,7 +2,7 @@
 
 <!-- GERADO por scripts/consistencia.mjs render a partir de consistencia.json. Não edite à mão. -->
 
-Varredura de 2026-09-19 · 203 achados · 2 abertos · atualizado em 2026-09-23.
+Varredura de 2026-09-19 · 204 achados · 2 abertos · atualizado em 2026-09-24.
 Dono: [consistencia.json](consistencia.json). Método e lotes: plano da rodada (~/.claude/plans/como-podemos-iniciar-uma-hazy-shamir.md).
 
 ## O que é
@@ -23,7 +23,7 @@ Status: `aberto` · `corrigido` (commit em fechadoEm) · `aceito` (exige ADR) ·
 
 ## Por status
 
-aberto 2 · corrigido 66 · aceito 12 · adiado 123
+aberto 2 · corrigido 66 · aceito 12 · adiado 124
 
 ## Abertos que bloqueiam ou descumprem regra
 

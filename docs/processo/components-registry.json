@@ -920,11 +920,11 @@
       "motion": "transition-colors",
       "states": {
         "repouso": {
-          "impl": "px-8 py-4 border-b bg-background · linha de cima min-h-8 · ações gap-2",
-          "source": "figma",
-          "rule": null,
-          "precedent": "Actions=Default (601:12)",
-          "approvedIn": null
+          "impl": "px-8 py-4 border-b bg-background · linha de cima min-h-8 · 6 até o título (gap-1.5), h1 no topo da fileira (items-start) · ações gap-2",
+          "source": "humano",
+          "rule": "ADR-029",
+          "precedent": "Actions=Default (601:12): vão 14 → 6",
+          "approvedIn": "2026-09-23"
         },
         "sem espaço": {
           "impl": "ações descem para linha própria (flex-wrap + ml-auto) e quebram entre si",

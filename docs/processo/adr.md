@@ -88,6 +88,7 @@ Aprovado por: humano.
 Desvio: o arquivo desenha subtítulo; o código guarda só o espaço (`min-h-[46px]`).
 Motivo: título e descrição decorativos em toda tela são anti-referência nº 12; o Header fecha em 111px com ou sem ele.
 Aprovado por: humano.
+**Complemento em 2026-09-23 (ADR-029)**: o espaço reservado (`min-h-[46px]`) saiu; sem subtítulo o Header fecha em 103.
 
 ## ADR-018 · Interruptor lista/cards do Drawer não é o Switch do DS · 2026-09-18
 Desvio: `SeletorDeVisao` é um `role="switch"` próprio, cinza (AUD-045).
@@ -142,6 +143,12 @@ Aprovado por: humano ("Pode aprovar essa… manda bala").
 
 ## ADR-028 · Na tela, recuo de 24 e busca que abre da lupa · 2026-09-23
 Desvio: o arquivo desenha o Header com 32 de recuo e a busca sempre aberta (184px); a `TelaBase` usa 24 (16 abaixo de 768) e a `HeaderBusca recolhida` anima a largura de 32 para 184 (I11 proíbe animar largura).
-Motivo: humano (2026-09-23): "tá sobrando muito espaço cinza na tela" e o header do pipeline não cabia com todas as ações. A largura anima com o precedente da Sidebar (ADR-022), em `base` · `enter`; com `prefers-reduced-motion` não anima. A página do Header no DS continua com os 32 e a busca aberta do arquivo.
+Motivo: humano (2026-09-23): "tá sobrando muito espaço cinza na tela" e o header do pipeline não cabia com todas as ações. A largura anima com o precedente da Sidebar (ADR-022), em `base` · `enter`; com `prefers-reduced-motion` não anima. A página do Header no DS continua com os 32.
+Regra de quando recolher (humano, 2026-09-23, "em telas que têm espaço pode manter o campo; com muitos itens de filtro, só o ícone"): a fileira de ações só tem botões → busca aberta (184); tem troca-visão, período ou data → `recolhida`. Por tela, não por largura. A busca do Header é sempre `HeaderBusca`; o botão "Pesquisar" com texto do arquivo (601:12) não se usa. Vale para toda tela e para a página do Header no DS.
+Aprovado por: humano.
+
+## ADR-029 · Header: 6px entre as linhas e título no topo da fileira · 2026-09-23
+Desvio: o arquivo desenha 14px entre a linha da trilha e a do título (a caixa de 46 que o subtítulo ocupava) e fecha o Header em 111, com o título centrado com as ações. Agora: 6px (`gap-1.5`), título alinhado ao topo da fileira de ações (`items-start`), 103px sem subtítulo (com o traço).
+Motivo: humano (2026-09-23, print com medidas): "tem um espaço cinza me incomodando muito". A mudança entra no componente, não na tela: vale para toda tela de uma vez (regra do humano — o DS é o sistema; componente que muda, muda em todas as telas).
 Aprovado por: humano.
 

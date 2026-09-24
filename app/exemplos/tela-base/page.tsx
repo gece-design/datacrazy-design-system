@@ -151,6 +151,8 @@ export default function NovaTela() {
         // A ordem do arquivo (601:464): busca, filtros, visualização, período, divisor e a ação principal.
         acoes: (
           <>
+            {/* `recolhida` porque a fileira tem troca-visão e período. Só
+                botões? Tire a prop: a busca nasce aberta (regra em Header.md). */}
             <HeaderBusca recolhida rotulo="Pesquisar" placeholder="Pesquisar" value={busca} onChange={(e) => setBusca(e.target.value)} />
             <Button variant="tertiary" onClick={() => toast({ variant: "info", titulo: "Filtros", descricao: "No CRM: o painel de filtros da tela." })}>
               <FunnelSimple size={16} weight="regular" />

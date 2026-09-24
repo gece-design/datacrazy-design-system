@@ -81,6 +81,12 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 10. `hover:` sempre sob `hoverOnlyWhenSupported`; o equivalente para toque é
     decidido explicitamente (G7).
 
+### Busca no Header
+- A busca do Header é sempre `HeaderBusca`, nunca um Button "Pesquisar" com
+  texto. Fileira de ações só com botões: aberta (184px). Com troca-visão,
+  período ou data: `recolhida` (só a lupa; clicar abre). Por tela, não por
+  largura (ADR-028).
+
 ### Fidelidade
 11. Pronto = diff ≤ 1% contra o Figma **e** geometria sem divergência.
 12. Divergência visual é bug do código até prova em contrário registrada como

@@ -173,6 +173,11 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
 - **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, children; sem segunda linha;
   breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
   o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.
+- **Busca no Header**: sempre `HeaderBusca`. Só botões na fileira de ações → aberta; com
+  `ViewSwitcher`, `SegmentedControl` ou `DateRangePicker` → `recolhida` (só a lupa). Por tela,
+  não por largura. Nunca um Button "Pesquisar" com texto (ADR-028).
+- **Componente que muda, muda em toda tela**: a mudança entra na peça (`components/ui`) e a
+  página do DS mostra o estado novo. Nunca só na tela que motivou o pedido (humano, 2026-09-23).
 - **Calendário**: `Calendario` (eventos `{ id, data, rotulo }`, `referencia` e `visao` são estado da
   tela, `locale` do next-intl). Contas de data em `lib/datas.ts` — nunca copiar do DatePicker.
 - **Antes de commitar**: `npm run check` (rápido) — e `npm run check:completo` com o

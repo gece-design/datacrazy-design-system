@@ -406,8 +406,8 @@ export function Tela() {
         ),
         acoes: (
             <>
-              {/* Só a lupa: clicar abre a caixa (humano, 2026-09-23 — o header
-                  precisava de espaço). */}
+              {/* Só a lupa: a fileira tem o troca-visão (regra da HeaderBusca,
+                  Header.md · ADR-028). Clicar abre a caixa. */}
               <HeaderBusca
                 recolhida
                 rotulo="Pesquisar leads"

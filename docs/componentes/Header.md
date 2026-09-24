@@ -12,7 +12,7 @@ fazer nela.
 
 ## Par no Figma
 
-Node: `601:464` (set "Header", 6 variantes) · Lote: `3` · 111px, com ou sem subtítulo ·
+Node: `601:464` (set "Header", 6 variantes) · Lote: `3` · 103px sem subtítulo, com o traço (o arquivo: 111, vão de 14 — ADR-029) ·
 Última verificação: ver [processo/kfe-state.md](../processo/kfe-state.md), entrada de 2026-09-15.
 
 **O set está com erro no arquivo.** As seis variantes se chamam
@@ -29,10 +29,10 @@ que o produto ainda vai ter — são composição dos encaixes.
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
 | `titulo` | `string` | — | sim | `h1`, trunca com `title`. |
-| `subtitulo` | `string` | — | não | `body-sm` a 2px do título. **Fora por padrão** (2026-09-18): título e descrição decorativos em toda tela são anti-referência. A linha guarda `min-h-[46px]` — o espaço que ele ocupava — para as ações não encostarem no sino. |
+| `subtitulo` | `string` | — | não | `body-sm` a 2px do título. **Fora por padrão** (2026-09-18): título e descrição decorativos em toda tela são anti-referência. Com ele, a linha cresce (50) e as ações continuam no topo. |
 | `trilha` | `ReactNode` | — | não | Em cima, à esquerda. Normalmente `Breadcrumb`. |
 | `utilitarios` | `ReactNode` | — | não | Em cima, à direita. Normalmente `HeaderNotificacoes`. |
-| `acoes` | `ReactNode` | — | não | Embaixo, à direita, alinhadas pela base do título. |
+| `acoes` | `ReactNode` | — | não | Embaixo, à direita, 6px abaixo da linha da trilha, alinhadas pelo topo com o título (ADR-029). |
 
 Peças do mesmo arquivo:
 
@@ -40,7 +40,7 @@ Peças do mesmo arquivo:
 |------|-------|---------|
 | `HeaderDivisor` | `className?` | Traço 1×20 em `divider` (601:55), `role="separator"` |
 | `HeaderNotificacoes` | `rotulo`, `contagem?` + props de botão | Button `tertiary` `icon` com sino e selo; acima de 99, "99+" |
-| `HeaderBusca` | `rotulo` + props de input | Busca inline de 184px (variante Search, 610:14049) |
+| `HeaderBusca` | `rotulo`, `recolhida?` + props de input | A busca do Header: aberta (184px, variante Search 610:14049) ou só a lupa (32px) — regra abaixo |
 
 Controles que entram em `acoes` e têm doc própria: [Button](Button.md)
 (`tertiary`), [SegmentedControl](SegmentedControl.md), [Breadcrumb](Breadcrumb.md), Date Picker.
@@ -51,6 +51,12 @@ Controles que entram em `acoes` e têm doc própria: [Button](Button.md)
 |------|------|-------------|-----------|
 | `rotulo` | `string` | sim | Nome do campo para leitor de tela. |
 | `recolhida` | `boolean` | não | Começa como só a lupa (32px); clicar abre a caixa de 184 com movimento (`base` · `enter`) e o foco entra; sem texto, fecha ao sair ou no Escape. ADR-028. |
+
+**Quando recolher** (humano, 2026-09-23): a fileira de ações só tem botões →
+busca aberta. Tem troca-visão, período ou seletor de data → `recolhida`. A
+escolha é por tela, não por largura: o estado não muda quando a janela
+encolhe. A busca do Header é sempre `HeaderBusca` — o botão "Pesquisar" com
+texto do arquivo (601:12) não se usa (AUD-204).
 
 ### `Notificacoes`
 
@@ -69,8 +75,7 @@ O painel abre em portal fixo abaixo do sino, alinhado pela direita, acompanha
 a rolagem e a janela; clique fora e Escape fecham (de onde o foco estiver) e o
 foco volta ao sino. "Ver todas" não sai do painel: a lista cresce até a altura
 da janela e rola, e o botão vira "Ver menos" (humano, 2026-09-23 — um toast ali
-era bug). Não
-lidas em `accent` + `primary` com o ponto azul; lidas em `background` +
+era bug). Não lidas em `accent` + `primary` com o ponto azul; lidas em `background` +
 `subtle-foreground`. Usa o `PainelFlutuante` do [Popover](Popover.md).
 
 ## Variantes
@@ -82,7 +87,7 @@ Não tem. Ver "Par no Figma".
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| repouso | `px-8 py-4 border-b bg-background · linha de cima min-h-8 · ações gap-2` | figma | Actions=Default (601:12) |
+| repouso | `px-8 py-4 border-b bg-background · linha de cima min-h-8 · 6 até o título (gap-1.5), h1 no topo da fileira (items-start) · ações gap-2` | humano | ADR-029 |
 | sem espaço | `ações descem para linha própria (flex-wrap + ml-auto) e quebram entre si` | banco | E3 |
 | texto longo | `título, subtítulo e níveis da trilha truncate + title` | declarado | D12 |
 | hover (sino) | `hover:bg-accent do Button tertiary` | inferido | gatilho do Date Picker |
@@ -117,7 +122,7 @@ Usa: Button · Tooltip · (por encaixe) Breadcrumb, SegmentedControl, ViewSwitch
   utilitarios={<HeaderNotificacoes rotulo={t("notificacoes", { n })} contagem={n} />}
   acoes={
     <>
-      <Button variant="tertiary"><MagnifyingGlass size={16} weight="regular" />{t("pesquisar")}</Button>
+      <HeaderBusca recolhida rotulo={t("pesquisar")} placeholder={t("pesquisar")} value={busca} onChange={(e) => setBusca(e.target.value)} />
       <SegmentedControl rotulo={t("periodo")} itens={periodos} atual={periodo} aoEscolher={setPeriodo} />
       <HeaderDivisor />
       <Button variant="primary"><Plus size={16} weight="regular" />{t("novoLead")}</Button>

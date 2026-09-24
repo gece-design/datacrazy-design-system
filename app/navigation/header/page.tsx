@@ -3,7 +3,7 @@
 import * as React from "react";
 import {
   BellSimple, ChartBar, ChartPieSlice, ClipboardText, FunnelSimple, Handshake,
-  MagnifyingGlass, Plus, Table, UserPlus, WarningCircle, type Icon,
+  Plus, Table, UserPlus, WarningCircle, type Icon,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Breadcrumb, type ItemBreadcrumb } from "@/components/ui/breadcrumb";
@@ -105,12 +105,18 @@ function Trilha({ itens = trilhaDoArquivo }: { itens?: ItemBreadcrumb[] }) {
   );
 }
 
-function Pesquisar() {
+/* A busca é sempre a HeaderBusca. Aberta quando a fileira só tem botões;
+   `recolhida` (só a lupa) quando entra troca-visão, período ou data. */
+function Busca({ recolhida }: { recolhida?: boolean }) {
+  const [valor, setValor] = React.useState("");
   return (
-    <Button variant="tertiary">
-      <MagnifyingGlass size={16} weight="regular" />
-      Pesquisar
-    </Button>
+    <HeaderBusca
+      recolhida={recolhida}
+      rotulo="Pesquisar leads"
+      placeholder="Pesquisar"
+      value={valor}
+      onChange={(e) => setValor(e.target.value)}
+    />
   );
 }
 
@@ -155,7 +161,7 @@ function HeaderDefault() {
       utilitarios={<Sino />}
       acoes={
         <>
-          <Pesquisar />
+          <Busca recolhida />
           <Filtros />
           <Visao />
           <Periodo />
@@ -185,7 +191,8 @@ const codigoDefault = `<Header
   utilitarios={<HeaderNotificacoes rotulo="Notificações: 5 não lidas" contagem={5} onClick={abrirPainel} />}
   acoes={
     <>
-      <Button variant="tertiary"><MagnifyingGlass size={16} weight="regular" />Pesquisar</Button>
+      {/* recolhida: a fileira tem troca-visão e período */}
+      <HeaderBusca recolhida rotulo="Pesquisar leads" placeholder="Pesquisar" value={busca} onChange={(e) => setBusca(e.target.value)} />
       <Button variant="tertiary"><FunnelSimple size={16} weight="regular" />Filtros</Button>
       <ViewSwitcher rotulo="Visualização" itens={visoes} atual={visao} aoEscolher={setVisao} />
       <SegmentedControl rotulo="Período" itens={periodos} atual={periodo} aoEscolher={setPeriodo} />
@@ -198,18 +205,28 @@ const codigoDefault = `<Header
 
 const codigoData = `acoes={
   <>
-    <Button variant="tertiary"><MagnifyingGlass size={16} weight="regular" />Pesquisar</Button>
+    <HeaderBusca recolhida rotulo="Pesquisar leads" placeholder="Pesquisar" value={busca} onChange={(e) => setBusca(e.target.value)} />
     <DateRangePicker valor={periodo} onValorChange={setPeriodo} rotulos={rotulos} locale={locale} />
     <HeaderDivisor />
     <Button><Plus size={16} weight="regular" />Novo lead</Button>
   </>
 }`;
 
-const codigoBusca = `<Header
+const codigoBusca = `// Só botões na fileira: sem \`recolhida\`, a busca nasce aberta (184px).
+// Com troca-visão, período ou data: \`recolhida\` — só a lupa; clicar abre.
+<Header
   titulo="Dashboard"
   trilha={trilha}
   utilitarios={sino}
-  acoes={<HeaderBusca rotulo="Pesquisar leads" placeholder="Pesquisar" />}
+  acoes={
+    <>
+      <HeaderBusca recolhida rotulo="Pesquisar leads" placeholder="Pesquisar" value={busca} onChange={(e) => setBusca(e.target.value)} />
+      <Button variant="tertiary"><FunnelSimple size={16} weight="regular" />Filtros</Button>
+      <ViewSwitcher rotulo="Visualização" itens={visoes} atual={visao} aoEscolher={setVisao} />
+      <HeaderDivisor />
+      <Button><Plus size={16} weight="regular" />Novo lead</Button>
+    </>
+  }
 />`;
 
 const codigoSino = `const [aberto, setAberto] = useState(false);
@@ -243,13 +260,13 @@ export default function HeaderPage() {
   return (
     <PaginaDS
       titulo="Header"
-      descricao="O topo de cada página: 111px, recuo 32×16, trilha e sino numa linha de 32px, título h1 e a fileira de ações com vão de 8. Seis combinações no arquivo, nenhuma prop de variante — o conteúdo entra por três encaixes."
+      descricao="O topo de cada página: 103px, recuo 32×16, trilha e sino numa linha de 32, o título h1 6px abaixo, no topo da fileira de ações (vão de 8). Seis combinações no arquivo, nenhuma prop de variante — o conteúdo entra por três encaixes."
       secoes={[
         "Como funciona",
         "Default",
         "Com data",
         "Menos ações",
-        "Busca inline",
+        "Busca",
         "Notificações",
         "Trilha longa",
         "Quando não cabe",
@@ -328,7 +345,7 @@ export default function HeaderPage() {
           utilitarios={<Sino />}
           acoes={
             <>
-              <Pesquisar />
+              <Busca recolhida />
               <Filtros />
               <Visao />
               <Data />
@@ -343,7 +360,7 @@ export default function HeaderPage() {
       <Secao
         titulo="Menos ações"
         spec="610:13838 · 13915 · 13982"
-        descricao="Três recortes do arquivo, do mais cheio ao mais enxuto. Nenhum é variante: é o mesmo Header com menos filhos em acoes."
+        descricao="Três recortes do arquivo, do mais cheio ao mais enxuto. Nenhum é variante: é o mesmo Header com menos filhos em acoes. A busca segue a regra: com o troca-visão, só a lupa; só botões, aberta."
         semCaixa
         semSeletorDeFundo
       >
@@ -353,7 +370,7 @@ export default function HeaderPage() {
           utilitarios={<Sino />}
           acoes={
             <>
-              <Pesquisar />
+              <Busca recolhida />
               <Filtros />
               <Visao />
               <HeaderDivisor />
@@ -368,7 +385,7 @@ export default function HeaderPage() {
           utilitarios={<Sino />}
           acoes={
             <>
-              <Pesquisar />
+              <Busca />
               <Filtros />
               <HeaderDivisor />
               <NovoLead variant="soft" />
@@ -382,7 +399,7 @@ export default function HeaderPage() {
           utilitarios={<Sino />}
           acoes={
             <>
-              <Pesquisar />
+              <Busca />
               <Filtros />
               <HeaderDivisor />
               <NovoLead variant="primary" />
@@ -393,18 +410,45 @@ export default function HeaderPage() {
       </Secao>
 
       <Secao
-        titulo="Busca inline"
-        spec="610:14049 · 184px"
-        descricao="A variante Search: a caixa do Button tertiary virada campo de verdade. Digite — o foco ganha o anel com folga, igual ao do botão."
+        titulo="Busca"
+        spec="610:14049 · 184 ↔ 32px"
+        descricao="Sempre a HeaderBusca, nunca um botão Pesquisar com texto. Só botões na fileira: aberta, a caixa do Button tertiary virada campo. Com troca-visão, período ou data: só a lupa — clique e a caixa abre até 184 com o foco dentro; vazia, volta a ser lupa ao sair."
         codigo={codigoBusca}
         semCaixa
         semSeletorDeFundo
+        nota={
+          <>
+            A escolha é por tela, não por largura: a busca não muda de estado quando a janela encolhe. Regra do
+            humano (2026-09-23), ADR-028.
+          </>
+        }
       >
         <Header
           titulo="Dashboard"
           trilha={<Trilha />}
           utilitarios={<Sino />}
-          acoes={<HeaderBusca rotulo="Pesquisar leads" placeholder="Pesquisar" />}
+          acoes={
+            <>
+              <Busca />
+              <Filtros />
+              <HeaderDivisor />
+              <NovoLead variant="primary" />
+            </>
+          }
+        />
+        <Header
+          titulo="Dashboard"
+          trilha={<Trilha />}
+          utilitarios={<Sino />}
+          acoes={
+            <>
+              <Busca recolhida />
+              <Filtros />
+              <Visao />
+              <HeaderDivisor />
+              <NovoLead variant="primary" />
+            </>
+          }
           className="border-b-0"
         />
       </Secao>
@@ -473,10 +517,7 @@ export default function HeaderPage() {
             utilitarios={<Sino />}
             acoes={
               <>
-                <Button variant="tertiary">
-                  <MagnifyingGlass size={16} weight="regular" />
-                  Buscar
-                </Button>
+                <HeaderBusca rotulo="Buscar prospectos" placeholder="Buscar" />
                 <Button variant="tertiary">
                   <FunnelSimple size={16} weight="regular" />
                   Filtros

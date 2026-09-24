@@ -3228,6 +3228,22 @@
       "status": "adiado",
       "fechadoEm": null,
       "nota": "**Nasceram do pedido do cliente (reunião de 2026-09-18), sem desenho.** O Calendário (mês, semana, dia cheio) e os comportamentos da Table (menu da coluna, alça, arrasto, seleção, grupos) foram construídos com as peças existentes — DatePicker, SegmentedControl, Button, PainelFlutuante. Na remedição, o arquivo é desenhado a partir do código, não o contrário. A `TelaBase` (2026-09-23) entra na mesma conta: o menu por cima abaixo de 1024px e os recuos por breakpoint não estão desenhados."
+    },
+    {
+      "id": "AUD-204",
+      "eixo": "fidelidade",
+      "titulo": "Header: busca só como campo (aberta ou lupa) e vão de 6 entre as linhas — o arquivo desenha botão Pesquisar com texto, vão de 14 e 111px",
+      "onde": [
+        "components/ui/header.tsx",
+        "app/navigation/header/page.tsx"
+      ],
+      "regra": "fidelidade · humano > arquivo (Figma é rascunho)",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Decisões do humano em 2026-09-23 (ADR-028, ADR-029).** A busca do Header é sempre `HeaderBusca`: aberta (184px) quando a fileira só tem botões, `recolhida` (só a lupa, abre em 32 → 184) quando entra troca-visão, período ou data — o botão \"Pesquisar\" com texto de 601:12 não se usa. Entre a linha da trilha e a do título, 6px em vez dos 14 do arquivo, com o título no topo da fileira de ações: o Header fecha em 103, não 111. Na remedição, o arquivo acompanha o código."
     }
   ]
 }
