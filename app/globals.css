@@ -91,6 +91,7 @@
        token semântico que já existe, nos DOIS modos: por isso vivem só aqui.
        O `var()` acompanha o tema sem uma linha no `.dark`. */
     --input-bg: var(--card);
+    /* o traço do campo e da caixa tem valor próprio no escuro: 3,2:1 sobre o card (ADR-033) */
     --input-border: var(--border);
     --input-border-hover: var(--muted-foreground);
     --input-border-focus: var(--primary);
@@ -148,16 +149,22 @@
     --accent-foreground: 210.0 10.0% 96.1%;
     --surface-inverse: 210.0 10.0% 96.1%;
     --surface-inverse-foreground: 240.0 13.8% 12.7%;
-    --primary: 215.8 100.0% 67.5%;
-    --primary-hover: 215.9 100.0% 75.1%;
-    --primary-foreground: 222.0 23.8% 8.2%;
-    --border: 240.0 9.8% 20.0%;
-    --divider: 240.0 9.4% 25.1%;
+    /* Escuro (humano, 2026-09-24, ADR-033): o primário desce de blue/400 para blue/500
+       para segurar o rótulo BRANCO — 3,5:1, o mesmo que o claro aceita. */
+    --primary: var(--blue-500);
+    --primary-hover: var(--blue-400);
+    --primary-foreground: 0.0 0.0% 100.0%;
+    /* traços do escuro (ADR-033): eram 20% sobre um card de 16% — "não tem contraste nenhum" */
+    --border: 240.0 9.8% 26.0%;
+    --divider: 240.0 9.4% 36.0%;
+    /* o traço do campo e da caixa tem valor próprio no escuro: 3,2:1 sobre o card (ADR-033) */
+    --input-border: 240.0 8.0% 45.0%;
     --ring: 215.8 100.0% 67.5%;
     --success: 155.1 52.0% 60.0%;
     --success-hover: 154.9 51.6% 70.0%;
-    --destructive: 357.1 75.5% 68.0%;
-    --destructive-hover: 356.7 75.4% 76.1%;
+    /* mesmo raciocínio: branco sobre o vermelho pede o vermelho mais cheio (4,4:1) */
+    --destructive: 357.1 70.0% 58.0%;
+    --destructive-hover: 357.1 70.0% 64.0%;
     --warning: 33.1 79.9% 64.9%;
     --warning-hover: 32.8 80.3% 74.1%;
     --info: 202.1 69.8% 64.9%;

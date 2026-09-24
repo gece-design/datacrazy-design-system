@@ -130,7 +130,9 @@ function Selo({ tom, children }: { tom: "destructive" | "primary"; children: Rea
       aria-hidden="true"
       // D18: traço de 1,5 é ring, não border — o Chrome arredonda border para 1px em tela 1×
       className={cn(
-        "absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-label-sm tabular-nums text-primary-foreground ring-1.5 ring-inset ring-card",
+        // texto em `card`: branco no claro, escuro no escuro — sobre o vermelho claro do
+        // escuro, branco dava 2,6:1 (o primary-foreground virou branco em 2026-09-24)
+        "absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-label-sm tabular-nums text-card ring-1.5 ring-inset ring-card",
         tom === "destructive" ? "bg-destructive" : "bg-primary",
       )}
     >

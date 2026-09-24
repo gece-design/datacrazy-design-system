@@ -30,7 +30,8 @@ import { foco } from "@/lib/estados";
    O trilho rola de três jeitos: roda do mouse, setas nas bordas e arrastando o
    fundo do quadro, como no Trello. */
 
-const canais: Record<Canal, Icon> = {
+/** O ícone de cada origem — o quadro e a lista usam o mesmo. */
+export const ICONES_DOS_CANAIS: Record<Canal, Icon> = {
   WhatsApp: WhatsappLogo,
   Instagram: InstagramLogo,
   Site: Globe,
@@ -459,7 +460,7 @@ function Cartao({
   aoTerminar: () => void;
 }) {
   const Tipo = lead.tipo === "empresa" ? Buildings : User;
-  const CanalIcone = canais[lead.canal];
+  const CanalIcone = ICONES_DOS_CANAIS[lead.canal];
   const parado = lead.dias >= 7;
   const tags = tagsDe(GRUPOS_TAGS, lead.tags);
   const mostra = (c: CampoDoCartao) => campos.includes(c);

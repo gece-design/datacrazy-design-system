@@ -91,12 +91,14 @@ valorDe)` compara número como número e texto em pt-BR.
 | Prop | Tipo | Descrição |
 |------|------|-----------|
 | `ajustes` | `AjustesDaTabela` | Os mesmos da tabela. Abre a lista de colunas com check e "Restaurar colunas". |
+| `recolhido` | `boolean` | Só o ícone (32px) com tooltip, `soft` com coluna escondida: é como o botão entra na fileira do Header, ao lado da lupa e do troca-visão (a tela do pipeline). |
 
 ### `BotaoAgrupar`
 
 | Prop | Tipo | Descrição |
 |------|------|-----------|
-| `ajustes` | `AjustesDaTabela` | O [Select](Select.md) "Agrupar por": "Sem grupos" e as colunas `agrupavel`. |
+| `ajustes` | `AjustesDaTabela` | O botão "Agrupar por": menu de rádio com "Sem grupos" e as colunas `agrupavel`; `soft` com grupo ativo. |
+| `recolhido` | `boolean` | Só o ícone (32px) com tooltip, para a fileira do Header. |
 
 ### `DataTableGrupo`
 
@@ -142,10 +144,10 @@ tela; os ids são da tela, como na ordenação (ADR-031).
 
 | Célula | Props | O que mostra |
 |--------|-------|--------------|
-| `CelulaLead` | `nome`, `etiquetas?` | Nome + etiquetas em `Tag` (`EtiquetaDaCelula`: texto ou `{ rotulo, tom }`); quebram linha quando a coluna estreita |
+| `CelulaLead` | `nome`, `etiquetas?` | Nome + etiquetas em `Tag` (`EtiquetaDaCelula`: texto ou `{ rotulo, tom, status }`); quebram linha quando a coluna estreita |
 | `CelulaDupla` | `principal`, `apoio?` | Valor com linha de apoio |
 | `CelulaTexto` | `children`, `enfase?` | Uma linha; `enfase` pinta em `primary` |
-| `CelulaProgresso` | `etapa`, `percentual` | Etapa + barra de 5px |
+| `CelulaProgresso` | `etapa`, `percentual`, `tom?` | Etapa + barra de 5px; com `tom` (um dos oito, ou `neutro`), bolinha e barra na cor da etapa — a mesma da coluna do quadro |
 | `CelulaEstatisticas` | `itens: { valor, rotulo }[]` | Pares número/rótulo |
 | `CelulaAcoes` | `rotulo?` | Botão `DotsThree` |
 

@@ -59,7 +59,7 @@ export const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentPro
             atravessar a janela. Tooltip existe para mostrar o texto inteiro (E1). */}
         <div
           className={cn(
-            "max-w-xs break-words rounded-md bg-surface-inverse px-2.5 py-1.5 text-caption text-primary-foreground shadow-md",
+            "max-w-xs break-words rounded-md bg-surface-inverse px-2.5 py-1.5 text-caption text-surface-inverse-foreground shadow-md",
             encaixe[position],
           )}
         >

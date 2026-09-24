@@ -54,11 +54,11 @@ Lista completa com procedência e citações:
 | `card` | `#FFFFFF` | `#25252D` | superfície elevada |
 | `accent` | `#E8F1FF` | `#232C3D` | realce de superfície |
 | `surface-inverse` | `#232C3D` | `#F4F5F6` | superfície invertida (logo) |
-| `primary` | →`base/blue/500` | →`base/blue/400` | ação primária |
-| `primary-hover` | →`base/blue/600` | →`base/blue/300` | hover da ação primária |
-| `primary-foreground` | `#FFFFFF` | `#10131A` | texto sobre o primário |
-| `border` | `#E1E7EF` | `#2E2E38` | traço |
-| `divider` | `#C3CCD8` | `#3A3A46` | separador entre grupos de ação sobre `background` (Header) |
+| `primary` | →`base/blue/500` | →`base/blue/500` | ação primária (escuro: era blue/400; desceu para o rótulo branco, ADR-033) |
+| `primary-hover` | →`base/blue/600` | →`base/blue/400` | hover da ação primária |
+| `primary-foreground` | `#FFFFFF` | `#FFFFFF` | texto sobre o primário |
+| `border` | `#E1E7EF` | `#3C3C49` | traço |
+| `divider` | `#C3CCD8` | `#535364` | separador entre grupos de ação sobre `background` (Header) |
 | `ring` | →`primary` | →`primary` | anel de foco |
 
 ### Cor — formulário
@@ -70,7 +70,7 @@ existe, nos dois modos — por isso vivem só no `:root` do `globals.css`: o
 | Token | Aponta para |
 |---|---|
 | `input/bg` | `card` |
-| `input/border` | `border` |
+| `input/border` | `border` no claro · `#6A6A7C` no escuro (3,2:1 sobre o card, ADR-033) |
 | `input/border-hover` | `muted-foreground` |
 | `input/border-focus` | `primary` |
 | `input/border-error` | `destructive` |
@@ -107,8 +107,8 @@ Os três do meio trocam de token entre os modos e por isso reaparecem no
 |---|---|---|
 | `success` | `#267952` | `#64CEA2` |
 | `success-hover` | `#294F3D` | `#8BDAB9` |
-| `destructive` | `#C6323C` | `#EB7076` |
-| `destructive-hover` | `#753237` | `#F09499` |
+| `destructive` | `#C6323C` | `#DF4950` |
+| `destructive-hover` | `#753237` | `#E36369` |
 | `warning` | `#975E1D` | `#EDAD5E` |
 | `warning-hover` | `#5E4221` | `#F2C288` |
 | `info` | `#25719D` | `#67B6E4` |

@@ -56,7 +56,8 @@ import {
   type EtapaId,
   type Lead,
 } from "./dados";
-import { Lista } from "./lista";
+import { Lista, COLUNAS_DA_LISTA } from "./lista";
+import { BotaoAgrupar, BotaoColunas, useAjustesDaTabela } from "@/components/ui/data-table";
 import { Calendario } from "@/components/ui/calendario";
 import { TelaBase } from "@/components/ui/tela-base";
 import { PainelLead } from "./painel-lead";
@@ -164,6 +165,8 @@ export function Tela() {
       return novo;
     });
   }
+  // Os ajustes da lista (ordem, colunas, grupo) vivem aqui: os botões ficam no Header.
+  const ajustesDaLista = useAjustesDaTabela(COLUNAS_DA_LISTA, { memoria: "pipeline-lista" });
   const [notificacoes, setNotificacoes] = React.useState<Notificacao[]>([
     { id: "1", icone: UsersThree, titulo: "Novo lead atribuído", detalhe: "Construtora Horizonte entrou no seu funil pela campanha de setembro.", quando: "agora", lida: false },
     { id: "2", icone: Clock, titulo: "Lead parado há 9 dias", detalhe: "Pedro Nakamura segue em Qualificação sem interação registrada.", quando: "há 2 h", lida: false },
@@ -488,6 +491,14 @@ export function Tela() {
                   />
                 </>
               ) : null}
+              {visao === "lista" ? (
+                // Agrupar e Colunas na fileira do Header, só com o ícone, como a
+                // busca e os filtros (humano, 2026-09-24: "e se eles ficarem no header?").
+                <>
+                  <BotaoAgrupar ajustes={ajustesDaLista} recolhido />
+                  <BotaoColunas ajustes={ajustesDaLista} recolhido />
+                </>
+              ) : null}
               <HeaderDivisor />
               <Button onClick={() => setNovo({ ...leadVazio })}>
                 <Plus size={16} weight="regular" />
@@ -517,6 +528,7 @@ export function Tela() {
             aoAbrir={(l) => setAbertoId(l.id)}
             aoMoverEmMassa={moverEmMassa}
             aoExcluirEmMassa={excluirEmMassa}
+            ajustes={ajustesDaLista}
           />
         ) : (
           // Calendário: os leads pela próxima ação; clicar abre o mesmo drawer.

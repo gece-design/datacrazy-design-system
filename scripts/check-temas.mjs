@@ -30,6 +30,10 @@ const INTENCIONAL = new Set([
   // No Figma este token é alias de `muted-foreground` nos DOIS modos. O alias
   // repete; o valor não — `muted-foreground` já inverte entre Claro e Escuro.
   "nav-item-text-default",
+  // Branco nos dois modos por decisão (2026-09-24, ADR-033): o primário e o
+  // destructive do escuro desceram de lightness para segurar o rótulo branco.
+  "primary-foreground",
+  "primary",
 ]);
 
 const semantico = Object.keys(escuro);

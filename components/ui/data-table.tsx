@@ -18,7 +18,8 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import { Tag, type Tom } from "@/components/ui/tag";
+import { Tag, type TagProps, type Tom } from "@/components/ui/tag";
+import { Tooltip } from "@/components/ui/tooltip";
 import { Button, BotaoFechar } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Menu, type ItemDoMenu } from "@/components/ui/menu";
@@ -127,6 +128,9 @@ export const ROTULOS_DA_TABELA: RotulosDaTabela = {
 };
 
 const LARGURA_MINIMA = 64;
+/** O ⋮ do cabeçalho com traço cheio: o regular sumia sobre o cinza do cabeçalho. */
+const DotsThreeVerticalCheio: Icon = React.forwardRef((props, ref) => <DotsThreeVertical ref={ref} weight="bold" {...props} />);
+DotsThreeVerticalCheio.displayName = "DotsThreeVerticalCheio";
 /** A coluna da caixa de seleção. */
 const LARGURA_DA_CAIXA = 44;
 const PASSO_DO_TECLADO = 16;
@@ -385,10 +389,11 @@ function itensDeColunas(a: AjustesDaTabela, separadorAntes: boolean): ItemDoMenu
  * coluna e "Restaurar colunas". O menu do cabeçalho também esconde coluna,
  * mas menu escondido no cabeçalho ninguém acha — o botão é o caminho visível.
  */
-export function BotaoColunas({ ajustes, className }: { ajustes: AjustesDaTabela; className?: string }) {
+export function BotaoColunas({ ajustes, recolhido = false, className }: { ajustes: AjustesDaTabela; recolhido?: boolean; className?: string }) {
   const [aberto, setAberto] = React.useState(false);
   const gatilho = React.useRef<HTMLButtonElement>(null);
   const r = ajustes.rotulos;
+  const conta = ajustes.escondidas.length > 0 ? `${ajustes.colunas.length - ajustes.escondidas.length}/${ajustes.colunas.length}` : null;
   const itens: ItemDoMenu[] = [
     ...itensDeColunas(ajustes, false),
     {
@@ -400,23 +405,41 @@ export function BotaoColunas({ ajustes, className }: { ajustes: AjustesDaTabela;
       aoAtivar: ajustes.restaurar,
     },
   ];
+  const nome = conta ? `${r.colunas} ${conta}` : r.colunas;
   return (
     <>
-      <Button
-        ref={gatilho}
-        variant="tertiary"
-        size="sm"
-        aria-haspopup="menu"
-        aria-expanded={aberto}
-        onClick={() => setAberto((a) => !a)}
-        className={className}
-      >
-        <Columns size={16} weight="regular" aria-hidden="true" />
-        {r.colunas}
-        {ajustes.escondidas.length > 0 ? (
-          <span className="text-muted-foreground">{ajustes.colunas.length - ajustes.escondidas.length}/{ajustes.colunas.length}</span>
-        ) : null}
-      </Button>
+      {recolhido ? (
+        // Só o ícone, com tooltip: é como o botão entra na fileira do Header
+        // (a tela do pipeline), ao lado da lupa e do troca-visão.
+        <Tooltip content={nome} position="bottom">
+          <Button
+            ref={gatilho}
+            variant={conta ? "soft" : "tertiary"}
+            size="icon"
+            aria-label={nome}
+            aria-haspopup="menu"
+            aria-expanded={aberto}
+            onClick={() => setAberto((a) => !a)}
+            className={className}
+          >
+            <Columns size={16} weight="regular" aria-hidden="true" />
+          </Button>
+        </Tooltip>
+      ) : (
+        <Button
+          ref={gatilho}
+          variant="tertiary"
+          size="sm"
+          aria-haspopup="menu"
+          aria-expanded={aberto}
+          onClick={() => setAberto((a) => !a)}
+          className={className}
+        >
+          <Columns size={16} weight="regular" aria-hidden="true" />
+          {r.colunas}
+          {conta ? <span className="text-muted-foreground">{conta}</span> : null}
+        </Button>
+      )}
       <Menu
         aberto={aberto}
         gatilho={gatilho}
@@ -438,7 +461,7 @@ export function BotaoColunas({ ajustes, className }: { ajustes: AjustesDaTabela;
  * Select: duas superfícies na mesma barra (humano, 2026-09-24, ADR-031). O
  * menu da coluna também agrupa — o botão é o caminho visível.
  */
-export function BotaoAgrupar({ ajustes, className }: { ajustes: AjustesDaTabela; className?: string }) {
+export function BotaoAgrupar({ ajustes, recolhido = false, className }: { ajustes: AjustesDaTabela; recolhido?: boolean; className?: string }) {
   const [aberto, setAberto] = React.useState(false);
   const gatilho = React.useRef<HTMLButtonElement>(null);
   const r = ajustes.rotulos;
@@ -449,20 +472,38 @@ export function BotaoAgrupar({ ajustes, className }: { ajustes: AjustesDaTabela;
       .filter((c) => c.agrupavel)
       .map((c) => ({ id: `grupo-${c.chave}`, rotulo: c.rotulo, tipo: "radio" as const, marcado: ajustes.grupo === c.chave, aoAtivar: () => ajustes.agrupar(c.chave) })),
   ];
+  const nome = atual ? r.agruparPor(atual.rotulo) : r.agrupar;
   return (
     <>
-      <Button
-        ref={gatilho}
-        variant={atual ? "soft" : "tertiary"}
-        size="sm"
-        aria-haspopup="menu"
-        aria-expanded={aberto}
-        onClick={() => setAberto((a) => !a)}
-        className={className}
-      >
-        <Stack size={16} weight="regular" aria-hidden="true" />
-        {atual ? r.agruparPor(atual.rotulo) : r.agrupar}
-      </Button>
+      {recolhido ? (
+        <Tooltip content={nome} position="bottom">
+          <Button
+            ref={gatilho}
+            variant={atual ? "soft" : "tertiary"}
+            size="icon"
+            aria-label={nome}
+            aria-haspopup="menu"
+            aria-expanded={aberto}
+            onClick={() => setAberto((a) => !a)}
+            className={className}
+          >
+            <Stack size={16} weight="regular" aria-hidden="true" />
+          </Button>
+        </Tooltip>
+      ) : (
+        <Button
+          ref={gatilho}
+          variant={atual ? "soft" : "tertiary"}
+          size="sm"
+          aria-haspopup="menu"
+          aria-expanded={aberto}
+          onClick={() => setAberto((a) => !a)}
+          className={className}
+        >
+          <Stack size={16} weight="regular" aria-hidden="true" />
+          {nome}
+        </Button>
+      )}
       <Menu
         aberto={aberto}
         gatilho={gatilho}
@@ -824,7 +865,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                             // só aparece sob o cursor ou no foco: sete gatilhos fixos
                             // no cabeçalho seriam ruído (regra da tabela do arquivo)
                             <AcaoCampo
-                              icone={DotsThreeVertical}
+                              icone={DotsThreeVerticalCheio}
                               rotulo={r.menuDaColuna(c.rotulo)}
                               aria-haspopup="menu"
                               aria-expanded={menuAberto === c.chave}
@@ -835,7 +876,8 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                               className={cn(
                                 // sobre o cinza do cabeçalho, o ícone precisa do muted-foreground cheio
                                 // (subtle sumia — humano, 2026-09-24)
-                                "opacity-0 text-muted-foreground group-hover/coluna:opacity-100 focus-visible:opacity-100",
+                                // foreground e traço cheio: em muted, regular, "ainda estava muito discreto" (humano, 2026-09-24)
+                                "opacity-0 text-foreground group-hover/coluna:opacity-100 focus-visible:opacity-100",
                                 menuAberto === c.chave && "opacity-100 text-foreground",
                               )}
                             />
@@ -1221,9 +1263,9 @@ export function CelulaLead({ nome, etiquetas = [] }: { nome: string; etiquetas?:
            estreita — antes vazavam por cima da coluna vizinha. */
         <div className="flex w-full min-w-0 flex-wrap items-start gap-1">
           {etiquetas.map((e) => {
-            const { rotulo, tom } = typeof e === "string" ? { rotulo: e, tom: undefined } : e;
+            const { rotulo, tom, status } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined } : e;
             return (
-              <Tag key={rotulo} tom={tom} className="max-w-full" title={rotulo}>
+              <Tag key={rotulo} tom={tom} status={status} className="max-w-full" title={rotulo}>
                 {rotulo}
               </Tag>
             );
@@ -1234,8 +1276,8 @@ export function CelulaLead({ nome, etiquetas = [] }: { nome: string; etiquetas?:
   );
 }
 
-/** Uma etiqueta da `CelulaLead`: só o texto (cinza) ou com um dos tons da Tag. */
-export type EtiquetaDaCelula = string | { rotulo: string; tom?: Tom };
+/** Uma etiqueta da `CelulaLead`: só o texto (cinza), com um dos tons da Tag ou com a bolinha de `status`. */
+export type EtiquetaDaCelula = string | { rotulo: string; tom?: Tom; status?: TagProps["status"] };
 
 /** Valor em cima, complemento embaixo. Ex.: produto e preço. */
 export function CelulaDupla({ principal, apoio }: { principal: string; apoio?: string }) {
@@ -1270,12 +1312,17 @@ export function CelulaTexto({ children, enfase }: { children: string; enfase?: b
 }
 
 /** Etapa com a barra de progresso embaixo. */
-export function CelulaProgresso({ etapa, percentual }: { etapa: string; percentual: number }) {
+export function CelulaProgresso({ etapa, percentual, tom }: { etapa: string; percentual: number; tom?: Tom | "neutro" }) {
   const preenchido = Math.min(100, Math.max(0, percentual));
+  // com `tom`, a etapa ganha a bolinha e a barra na cor da coluna do quadro —
+  // a lista e o quadro contam a mesma história (humano, 2026-09-24)
+  const comTom = tom !== undefined;
+  const cor = tom === "neutro" || !tom ? "bg-muted-foreground" : "bg-tom-texto";
   return (
-    <div className="flex min-w-0 flex-col items-start gap-[7px]">
-      <p className="w-full truncate text-label-lg text-foreground" title={etapa}>
-        {etapa}
+    <div data-tom={tom && tom !== "neutro" ? tom : undefined} className="flex min-w-0 flex-col items-start gap-[7px]">
+      <p className="flex w-full min-w-0 items-center gap-1.5 text-label-lg text-foreground" title={etapa}>
+        {comTom ? <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", cor)} /> : null}
+        <span className="min-w-0 truncate">{etapa}</span>
       </p>
       <div
         className="h-[5px] w-full overflow-hidden rounded-sm bg-background"
@@ -1285,7 +1332,7 @@ export function CelulaProgresso({ etapa, percentual }: { etapa: string; percentu
         aria-valuemax={100}
         aria-label={`${etapa}: ${preenchido}%`}
       >
-        <div className="h-full rounded-sm bg-primary" style={{ width: `${preenchido}%` }} />
+        <div className={cn("h-full rounded-sm", comTom ? cor : "bg-primary")} style={{ width: `${preenchido}%` }} />
       </div>
     </div>
   );

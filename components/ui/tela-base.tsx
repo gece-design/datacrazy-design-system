@@ -151,7 +151,9 @@ export function TelaBase({
           {...cabecalho}
           className={cn("shrink-0 pl-4 pr-4 pb-2 lg:pl-1", cabecalho.className)}
           trilha={
-            <div className="flex min-w-0 items-center gap-2">
+            // w-full: o botão de menu fica na ponta esquerda mesmo quando a trilha
+            // centra no estreito (humano, 2026-09-24)
+            <div className="flex w-full min-w-0 items-center gap-2">
               {botaoMenu}
               {cabecalho.trilha ? <div className="flex min-w-0 flex-1 justify-center [@container_(min-width:640px)]:justify-start">{cabecalho.trilha}</div> : null}
             </div>

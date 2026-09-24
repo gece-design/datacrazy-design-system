@@ -165,8 +165,14 @@ Aprovado por: humano.
 Desvio: a referência (grid do ExtJS) agrupa pelo menu da coluna e o arquivo não desenha seleção em massa nem barra de ações; a tela atual do CRM tem a caixa na linha e as ações no ⋯ de cada uma.
 Motivo: humano (2026-09-24): "falta de padrão dos botões ali de select e de colunas" — o Agrupar era um Select ao lado de um Button; agora é o mesmo botão `tertiary` com menu de rádio, `soft` com grupo ativo (o sinal do Filtros do Header). E "ações em massa": caixa no cabeçalho e nas linhas (`chave`), Shift+clique por faixa, barra fixa embaixo com as ações da tela. A tabela só sabe quais linhas estão na tela; a tela guarda os ids (`useSelecaoDaTabela`), como na ordenação (ADR-025).
 Aprovado por: humano ("boa ideia, pode seguir").
+**Complemento no mesmo dia**: na tela do pipeline os dois botões saem da barra da tabela e vão para a fileira do Header, só com o ícone (`recolhido`), ao lado da lupa e do troca-visão — "e se eles ficarem no header?". A barra da tabela fica só com o resumo. E a lista passa a mostrar o que o cartão mostra, do mesmo jeito: tags com a bolinha de status, etapa na cor da coluna (`CelulaProgresso tom`), atendente com foto, origem com ícone, dias com relógio ou aviso — "a tabela está super diferente do kanban".
 
 ## ADR-032 · Header estreito centrado, medido pela própria largura · 2026-09-24
 Desvio: o arquivo é desktop; abaixo de 640 o Header não tem desenho. O código centra trilha, título e ações e põe as ações em linha própria.
 Motivo: humano (2026-09-24, print do pipeline no celular): "gostei desta ideia de centralizar no mobile". A medida é a largura de conteúdo do próprio Header (`container-type: inline-size` + `@container`, que mede a caixa sem o recuo), não a da janela: é o que faz o preview estreito da página do Header mostrar o mesmo que o celular, e o que vale dentro de um painel estreito.
+Aprovado por: humano.
+
+## ADR-033 · Escuro: traços com contraste e rótulo branco no primário · 2026-09-24
+Desvio: o arquivo pinta o escuro com `border` a 20% sobre um card a 16% e o texto do primário em `#10131A`. Agora `border` 26%, `divider` 36%, `input/border` com valor próprio a 45% (3,2:1 sobre o card — a caixa do Checkbox aparece), `primary-foreground` branco nos dois modos, `primary` do escuro em `blue/500` (era `blue/400`; 3,5:1 com o branco, o que o claro já aceita) com hover em `blue/400`, e o `destructive` do escuro em 58% (4,4:1). O selo do sino e dos filtros usa `card` no texto (escuro sobre o vermelho claro); o Tooltip usa `surface-inverse-foreground`. Os valores de traço são estimados, não do arquivo: o arquivo não tem par que funcione, e a decisão é do humano.
+Motivo: humano (2026-09-24, print do modal de filtros no escuro): "as cores de stroke, linhas e etc como esta do checkbox não tem contraste nenhum! e os botões não ficariam melhor com a label branco?". Vale em todo componente: é token.
 Aprovado por: humano.
