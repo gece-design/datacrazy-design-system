@@ -120,7 +120,7 @@ grupos recolhidos; quem monta e desenha é a tela.
 
 | Célula | Props | O que mostra |
 |--------|-------|--------------|
-| `CelulaLead` | `nome`, `etiquetas?` | Nome + Badges |
+| `CelulaLead` | `nome`, `etiquetas?` | Nome + etiquetas em `Tag` (`EtiquetaDaCelula`: texto ou `{ rotulo, tom }`); quebram linha quando a coluna estreita |
 | `CelulaDupla` | `principal`, `apoio?` | Valor com linha de apoio |
 | `CelulaTexto` | `children`, `enfase?` | Uma linha; `enfase` pinta em `primary` |
 | `CelulaProgresso` | `etapa`, `percentual` | Etapa + barra de 5px |
@@ -176,7 +176,7 @@ linha errada. Token: `overlay/item-hover`, que clareia nos dois temas.
 
 ## Composição
 
-Usa: [Badge](Badge.md) nas etiquetas, `AcaoCampo` do [Input](Input.md) no botão de ações da linha e no gatilho do menu da coluna (a mesma ação de 16px do campo), [Menu](Menu.md) no menu da coluna e no botão Colunas, [Button](Button.md) `tertiary` no botão Colunas.
+Usa: [Tag](Tag.md) nas etiquetas, `AcaoCampo` do [Input](Input.md) no botão de ações da linha e no gatilho do menu da coluna (a mesma ação de 16px do campo), [Menu](Menu.md) no menu da coluna e no botão Colunas, [Button](Button.md) `tertiary` no botão Colunas.
 [Select](Select.md) nos filtros e no "Agrupar por" · [Pagination](Pagination.md) no rodapé ·
 Usado por: tela de leads (`/exemplos/pipeline`, visão em lista) · [Drawer](Drawer.md) (Negócios, layout compacto)
 

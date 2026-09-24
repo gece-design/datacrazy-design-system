@@ -17,7 +17,7 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { Tag, type Tom } from "@/components/ui/tag";
 import { Button } from "@/components/ui/button";
 import { Menu, type ItemDoMenu } from "@/components/ui/menu";
 import { Select } from "@/components/ui/select";
@@ -992,32 +992,33 @@ export function DataTableToolbar({
 /* -------------------------------------------------------------- Células -- */
 
 /** Nome com as etiquetas embaixo — a primeira coluna do arquivo. */
-export function CelulaLead({ nome, etiquetas = [] }: { nome: string; etiquetas?: string[] }) {
+export function CelulaLead({ nome, etiquetas = [] }: { nome: string; etiquetas?: EtiquetaDaCelula[] }) {
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
       <p className="w-full truncate text-h4 text-foreground" title={nome}>
         {nome}
       </p>
       {etiquetas.length > 0 ? (
-        <div className="flex min-w-0 items-start gap-1">
-          {etiquetas.map((e, i) => (
-            /* A primeira etiqueta é a que classifica; as outras são contexto.
-               O arquivo desenha raio 3, que não está na escala — aqui vai o
-               degrau mais próximo (sm, 4px). Divergência registrada na doc. */
-            <Badge
-              key={e}
-              variant={i === 0 ? "primary" : "neutral"}
-              className="max-w-full truncate rounded-sm border-transparent px-1.5 py-0.5"
-              title={e}
-            >
-              {e}
-            </Badge>
-          ))}
+        /* As etiquetas são a Tag do DS, a mesma do drawer e do cartão (humano,
+           2026-09-24: "outro padrão de tags?"). Quebram linha quando a coluna
+           estreita — antes vazavam por cima da coluna vizinha. */
+        <div className="flex w-full min-w-0 flex-wrap items-start gap-1">
+          {etiquetas.map((e) => {
+            const { rotulo, tom } = typeof e === "string" ? { rotulo: e, tom: undefined } : e;
+            return (
+              <Tag key={rotulo} tom={tom} className="max-w-full" title={rotulo}>
+                {rotulo}
+              </Tag>
+            );
+          })}
         </div>
       ) : null}
     </div>
   );
 }
+
+/** Uma etiqueta da `CelulaLead`: só o texto (cinza) ou com um dos tons da Tag. */
+export type EtiquetaDaCelula = string | { rotulo: string; tom?: Tom };
 
 /** Valor em cima, complemento embaixo. Ex.: produto e preço. */
 export function CelulaDupla({ principal, apoio }: { principal: string; apoio?: string }) {

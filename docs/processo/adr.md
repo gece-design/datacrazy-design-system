@@ -63,6 +63,7 @@ Aprovado por: humano.
 Desvio: componente sem página própria (`/data-display/tag` tomou o lugar).
 Motivo: o produto usa Tag; Badge continua servindo a DataTable.
 Aprovado por: humano.
+**Complemento em 2026-09-24**: a DataTable passou a usar a Tag nas etiquetas ("outro padrão de tags?"); Badge fica no código sem consumidor, candidata a sair na remedição.
 
 ## ADR-013 · Scrim a 40% · 2026-09-15
 Desvio: `overlay-scrim` tem cor e não alfa; Drawer e Modal usam `/40` derivado.
