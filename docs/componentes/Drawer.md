@@ -62,7 +62,7 @@ conteúdo da coluna direita.
 `rotulo`) · `DrawerMenu` (`itens` de `ItemMenuDrawer` — `id`, `rotulo`, `icone`; `atual`, `aoEscolher`, `rotulo`, `estilo`, `fixacao`) ·
 `DrawerConteudo` (`titulo`, `descricao`, `acoes`, `antesDoTitulo`, `rotulosRolagem`) ·
 `DrawerSecao` (`titulo`) · `LinhaDoTempo` (`eventos` de `EventoLinhaDoTempo` — `id`, `titulo`, `detalhes[]`, `icone`) · `HierarquiaNo`
-(`nome`, `subtitulo`, `tipo`, `atual`, `recolher`) · `HierarquiaCanvas`
+(`nome`, `subtitulo`, `tipo`, `atual`, `recolher`) · `HierarquiaCanvas` (`largura`/`altura` do desenho, padrão 656 × 540; abre no zoom que cabe na largura da caixa, re-mede quando o painel é arrastado e "ajustar" volta a ele)
 (`rotulos` do zoom). Todas aceitam `className`.
 
 `fixacao` é `FixacaoDoMenu`: `fixados` (ids, na ordem do topo), `aoAlternar(id)`, `rotuloFixar(item)` e `rotuloDesafixar(item)` — os dois últimos devolvem o nome do alfinete. `rolagem` do `DrawerBloco` é `RotulosDeRolagem` (`subir`, `descer`): o bloco ocupa o que sobra da coluna e o conteúdo rola por dentro, com as setas na borda — é o bloco do menu.

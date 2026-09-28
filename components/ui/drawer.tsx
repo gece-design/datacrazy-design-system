@@ -995,31 +995,64 @@ function BotaoZoom({ rotulo, children, ...props }: React.ButtonHTMLAttributes<HT
   );
 }
 
-/** A área da árvore. Os nós e as linhas vêm de fora, posicionados. */
+/** A área da árvore. Os nós e as linhas vêm de fora, posicionados num
+ *  desenho de `largura` × `altura` (656 × 540, o do arquivo). O zoom inicial
+ *  é o que faz o desenho caber na largura da caixa (nunca mais que 1) e é
+ *  medido de novo quando o painel muda de largura pela alça; a caixa encolhe
+ *  na mesma proporção. "Ajustar" volta a esse zoom. */
 export function HierarquiaCanvas({
   rotulos,
+  largura = 656,
+  altura = 540,
   children,
   className,
 }: {
   rotulos: { aproximar: string; afastar: string; ajustar: string };
+  /** Largura e altura do desenho, em px. */
+  largura?: number;
+  altura?: number;
   children: React.ReactNode;
   className?: string;
 }) {
-  const [zoom, setZoom] = React.useState(1);
-  const passo = (d: number) => setZoom((z) => Math.min(1.5, Math.max(0.5, Math.round((z + d) * 10) / 10)));
+  const caixa = React.useRef<HTMLDivElement>(null);
+  const [larguraDaCaixa, setLarguraDaCaixa] = React.useState(largura);
+  // null = no zoom de ajuste; um número = a pessoa mexeu no + ou no −
+  const [zoom, setZoom] = React.useState<number | null>(null);
+  const useEfeitoDeLayout = typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
+  useEfeitoDeLayout(() => {
+    const el = caixa.current;
+    if (!el) return;
+    const medir = () => setLarguraDaCaixa(el.clientWidth);
+    medir();
+    const observador = new ResizeObserver(medir);
+    observador.observe(el);
+    return () => observador.disconnect();
+  }, []);
+  const ajuste = Math.min(1, Math.round((larguraDaCaixa / largura) * 100) / 100);
+  const atual = zoom ?? ajuste;
+  const passo = (d: number) => setZoom(Math.min(1.5, Math.max(0.5, Math.round((atual + d) * 10) / 10)));
+  // o desenho fica centrado no que sobra da largura
+  const deslocamento = Math.max(0, Math.round((larguraDaCaixa - largura * atual) / 2));
   return (
-    <div className={cn("relative h-[540px] overflow-hidden rounded-md bg-background/40", className)}>
-      <div className="absolute inset-0 origin-center transition-transform" style={{ transform: `scale(${zoom})` }}>
+    <div
+      ref={caixa}
+      className={cn("relative overflow-hidden rounded-md bg-background/40", className)}
+      style={{ height: Math.round(altura * ajuste) }}
+    >
+      <div
+        className="absolute left-0 top-0 origin-top-left transition-transform"
+        style={{ width: largura, height: altura, transform: `translateX(${deslocamento}px) scale(${atual})` }}
+      >
         {children}
       </div>
-      <div className="absolute left-4 top-[426px] flex flex-col gap-1">
+      <div className="absolute bottom-4 left-4 flex flex-col gap-1">
         <BotaoZoom rotulo={rotulos.aproximar} onClick={() => passo(0.1)}>
           <Plus size={16} weight="regular" aria-hidden="true" />
         </BotaoZoom>
         <BotaoZoom rotulo={rotulos.afastar} onClick={() => passo(-0.1)}>
           <Minus size={16} weight="regular" aria-hidden="true" />
         </BotaoZoom>
-        <BotaoZoom rotulo={rotulos.ajustar} onClick={() => setZoom(1)}>
+        <BotaoZoom rotulo={rotulos.ajustar} onClick={() => setZoom(null)}>
           <ArrowsOut size={16} weight="regular" aria-hidden="true" />
         </BotaoZoom>
       </div>

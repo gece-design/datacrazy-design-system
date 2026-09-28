@@ -73,6 +73,7 @@ import {
   type TomPerfil,
 } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
+import { gradeDeCartoes } from "@/lib/campo";
 
 /* Composição do showcase: os dados do arquivo (Figma 565:5959) montados com os
    componentes do DS. Nada aqui é componente — é a tela de exemplo. */
@@ -289,7 +290,7 @@ function ConteudoPerfil() {
   return (
     <>
       <DrawerSecao titulo="Dados cadastrais">
-        <div className="grid grid-cols-3 gap-3">
+        <div className={gradeDeCartoes}>
           <CampoEditavel rotulo="Razão social" {...campo("razao")} rotuloEditar="Editar razão social" textoVazio="Adicionar" />
           <CampoEditavel rotulo="Nome fantasia" {...campo("fantasia")} rotuloEditar="Editar nome fantasia" textoVazio="Adicionar" />
           <CampoEditavel
@@ -347,7 +348,7 @@ function ConteudoPerfil() {
       </DrawerSecao>
 
       <DrawerSecao titulo="Contatos">
-        <div className="grid grid-cols-3 gap-3">
+        <div className={gradeDeCartoes}>
           <CampoEditavel
             rotulo="E-mail"
             {...campo("email")}
@@ -393,7 +394,7 @@ function ConteudoPerfil() {
                   {pessoa.cargo ? <p className="truncate text-caption text-muted-foreground">{pessoa.cargo}</p> : null}
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-3">
+              <div className={gradeDeCartoes}>
                 <CampoEditavel
                   rotulo="Telefone"
                   valor={contato.telefone}
@@ -438,7 +439,7 @@ function ConteudoPerfil() {
           <Avatar nome="Jojota Podcast LTDA." size="md" aria-hidden="true" />
           <p className="text-label-lg text-foreground">Jojota Podcast LTDA.</p>
         </div>
-        <div className="grid grid-cols-3 gap-3">
+        <div className={gradeDeCartoes}>
           <InputTelefone
             cartao
             rotulo="Telefone"
@@ -483,7 +484,7 @@ function ConteudoPerfil() {
       </DrawerSecao>
 
       <DrawerSecao titulo="Campos personalizados">
-        <div className="grid grid-cols-3 gap-3">
+        <div className={gradeDeCartoes}>
           {/* Contador segue campo aberto: o + e o − são a ação principal aqui. */}
           <Input
             cartao
@@ -532,7 +533,7 @@ function ConteudoCampos() {
   return (
     <>
       <DrawerSecao titulo="Campos gerais">
-        <div className="grid grid-cols-3 gap-3">
+        <div className={gradeDeCartoes}>
           <Rating rotulo="ScoreDavi" valor={score} aoMudar={setScore} />
           <CampoEditavel
             rotulo="Habilita empresa"
@@ -543,7 +544,7 @@ function ConteudoCampos() {
         </div>
       </DrawerSecao>
       <DrawerSecao titulo="Suporte">
-        <div className="grid grid-cols-3 gap-3">
+        <div className={gradeDeCartoes}>
           <CampoSelect rotulo="Reclamações" valor={reclamacao} aoEscolher={setReclamacao} />
           <CampoEditavel
             rotulo="Data de chegada"
@@ -562,7 +563,7 @@ function ConteudoCampos() {
         </div>
       </DrawerSecao>
       <DrawerSecao titulo="Empresa restrito">
-        <div className="grid grid-cols-3 gap-3">
+        <div className={gradeDeCartoes}>
           <Rating rotulo="Restrito 6" valor={restrito} aoMudar={setRestrito} />
           <CampoEditavel
             rotulo="Observação interna"
