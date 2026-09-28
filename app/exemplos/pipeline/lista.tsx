@@ -7,6 +7,7 @@ import {
   CelulaEditavel,
   CelulaLead,
   CelulaProgresso,
+  CelulaTags,
   DataTable,
   DataTableCell,
   DataTableRow,
@@ -37,7 +38,8 @@ import { foco } from "@/lib/estados";
 /** As colunas da lista. Ficam aqui, exportadas, porque os botões Agrupar e
  *  Colunas moram na fileira do Header da tela, não na barra da tabela. */
 export const COLUNAS_DA_LISTA: ColunaTabela[] = [
-  { chave: "lead", rotulo: "Lead", peso: 3 },
+  { chave: "lead", rotulo: "Lead", peso: 2.2 },
+  { chave: "tags", rotulo: "Tags", peso: 2 },
   { chave: "empresa", rotulo: "Empresa", peso: 2.5 },
   { chave: "etapa", rotulo: "Etapa", peso: 2, agrupavel: true },
   { chave: "origem", rotulo: "Origem", peso: 1.3, agrupavel: true },
@@ -51,6 +53,7 @@ function valorDe(etapas: Etapa[]) {
   return (lead: Lead, chave: string): string | number => {
     switch (chave) {
       case "lead": return lead.nome;
+      case "tags": return lead.tags.length;
       case "empresa": return lead.empresa;
       case "etapa": return etapaPor(etapas, lead.etapa).percentual;
       case "origem": return lead.canal;
@@ -120,8 +123,12 @@ export function Lista({
                     onClick={() => aoAbrir(lead)}
                     className={`w-full rounded-sm text-left ${foco}`}
                   >
-                    <CelulaLead nome={lead.nome} etiquetas={tagsDe(GRUPOS_TAGS, lead.tags).map((t) => ({ rotulo: t.rotulo, status: t.status }))} />
+                    <CelulaLead nome={lead.nome} />
                   </button>
+                </DataTableCell>
+                <DataTableCell coluna="tags">
+                  {/* na grade densa as tags têm coluna própria: o nome não briga com elas */}
+                  <CelulaTags etiquetas={tagsDe(GRUPOS_TAGS, lead.tags).map((t) => ({ rotulo: t.rotulo, status: t.status }))} />
                 </DataTableCell>
                 <DataTableCell coluna="empresa">
                   {/* o mesmo par do cartão, numa linha: ícone do tipo + empresa · cidade */}

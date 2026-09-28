@@ -1270,22 +1270,28 @@ export function BarraDeSelecao({
 
 /** Nome com as etiquetas embaixo — a primeira coluna do arquivo. */
 export function CelulaLead({ nome, etiquetas = [] }: { nome: string; etiquetas?: EtiquetaDaCelula[] }) {
-  // no denso, nome e etiquetas numa linha só: o nome trunca, entra a primeira
-  // etiqueta inteira e as outras viram "+N" (o title lista todas)
+  // no denso, nome e etiquetas numa linha só: o nome manda, as etiquetas
+  // entram inteiras enquanto cabem (o title lista todas)
   const densa = React.useContext(Contexto).layout === "densa";
   const rotuloDe = (e: EtiquetaDaCelula) => (typeof e === "string" ? e : e.rotulo);
   if (densa) {
-    const [primeira, ...resto] = etiquetas;
-    const p = primeira === undefined ? null : typeof primeira === "string" ? { rotulo: primeira, tom: undefined, status: undefined } : primeira;
     return (
-      <div className="flex min-w-0 items-center gap-1.5" title={etiquetas.length ? `${nome} · ${etiquetas.map(rotuloDe).join(", ")}` : nome}>
-        <p className="min-w-0 truncate text-label-lg text-foreground">{nome}</p>
-        {p ? (
-          <Tag tom={p.tom} status={p.status} className="max-w-32">
-            {p.rotulo}
-          </Tag>
-        ) : null}
-        {resto.length > 0 ? <Tag className="shrink-0">+{resto.length}</Tag> : null}
+      <div className="flex max-h-[22px] min-w-0 flex-wrap items-center gap-1.5 overflow-hidden" title={etiquetas.length ? `${nome} · ${etiquetas.map(rotuloDe).join(", ")}` : nome}>
+        {/* o nome manda (Twenty): trunca só quando nem ele cabe. As etiquetas
+            ficam com o que sobra, inteiras ou nada: a que não cabe quebra para
+            uma segunda linha que a altura da célula esconde (o title lista todas). */}
+        {/* a mesma altura da Tag (22): sem etiqueta na linha, o nome continua no centro da célula */}
+        <p className="flex h-[22px] max-w-full shrink-0 items-center text-label-lg text-foreground">
+          <span className="min-w-0 truncate">{nome}</span>
+        </p>
+        {etiquetas.map((e) => {
+          const { rotulo, tom, status } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined } : e;
+          return (
+            <Tag key={rotulo} tom={tom} status={status}>
+              {rotulo}
+            </Tag>
+          );
+        })}
       </div>
     );
   }
@@ -1309,6 +1315,25 @@ export function CelulaLead({ nome, etiquetas = [] }: { nome: string; etiquetas?:
           })}
         </div>
       ) : null}
+    </div>
+  );
+}
+
+/** Só as etiquetas, numa linha: a coluna "Tags" da grade densa. Inteiras ou
+ *  nada: a que não cabe quebra para uma segunda linha que a altura esconde;
+ *  o title lista todas. */
+export function CelulaTags({ etiquetas, className }: { etiquetas: EtiquetaDaCelula[]; className?: string }) {
+  const nomes = etiquetas.map((e) => (typeof e === "string" ? e : e.rotulo));
+  return (
+    <div className={cn("flex max-h-[22px] min-w-0 flex-wrap items-center gap-1 overflow-hidden", className)} title={nomes.join(", ")}>
+      {etiquetas.map((e) => {
+        const { rotulo, tom, status } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined } : e;
+        return (
+          <Tag key={rotulo} tom={tom} status={status} className="shrink-0">
+            {rotulo}
+          </Tag>
+        );
+      })}
     </div>
   );
 }
