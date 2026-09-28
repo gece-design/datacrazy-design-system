@@ -204,6 +204,6 @@ Motivo: cliente, 2026-09-24 (Angélica: "os selects estão cinza e as outras coi
 Aprovado por: humano.
 
 ## ADR-039 · Cabeçalho do Modal compacto · 2026-09-28
-Desvio: o arquivo (545:168) tem cabeçalho com 16 em cima e 12 embaixo, título `heading-3` e X de 28; no destrutivo, círculo de 40 com `Warning` de 20. O código fecha o cabeçalho em 44: 12 em cima, 8 embaixo, título `heading-4`, X de 24, círculo de 32 com ícone de 16.
+Desvio: o arquivo (545:168) tem cabeçalho com 16 em cima e 12 embaixo, título `heading-3` e X de 28; no destrutivo, círculo de 40 com `Warning` de 20. O código fecha o cabeçalho em 44: 12 em cima, 8 embaixo, título `heading-4` colado na descrição (o vão de 4 saiu em 2026-09-28), X de 24, círculo de 32 com ícone de 16.
 Motivo: cliente, 2026-09-24 (Angélica: "o header também parece ocupar mais", referência Attio); continua o pedido de 2026-09-26 sobre o rodapé. Cabeçalho e rodapé passam a ter a mesma altura.
 Aprovado por: humano.

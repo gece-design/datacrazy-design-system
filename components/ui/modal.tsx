@@ -20,7 +20,7 @@ import { BotaoFechar } from "@/components/ui/button";
  * `elevation/xl` · cabeçalho com 16 em cima e 12 embaixo · corpo com 4 em cima
  * e 16 embaixo · rodapé com traço e 12 em cima e embaixo, botões a 8 um do outro ·
  * fechar de 28 com X de 16. Por cima do arquivo, o cliente pediu compacto
- * (2026-09-21 e 2026-09-24): cabeçalho 12/8 com título `h4` e X de 24, corpo
+ * (2026-09-21 e 2026-09-24): cabeçalho 12/8 com título `h4` colado na descrição e X de 24, corpo
  * 4/12, rodapé 8/8 com botões `sm` — cabeçalho e rodapé fecham em 44 (ADR-039). Recuo lateral de 16 e rodapé com fundo
  * `background`: decisão do cliente (2026-09-21) por cima dos 20 sem fundo do
  * arquivo — o Figma acompanha (AUD-199). No destrutivo, círculo de 40 com
@@ -83,7 +83,8 @@ export const ModalPainel = React.forwardRef<HTMLDivElement, ModalPainelProps>(fu
             </span>
           ) : null}
           {/* Quebra em vez de cortar: es e pt-br são 20–30% mais longos (E1). */}
-          <div className="flex min-w-0 flex-1 flex-col gap-1 break-words">
+          {/* sem vão entre título e descrição: só a entrelinha separa (cliente, 2026-09-28) */}
+          <div className="flex min-w-0 flex-1 flex-col break-words">
             <h2 id={`${id}-titulo`} className="text-h4 text-foreground">
               {titulo}
             </h2>

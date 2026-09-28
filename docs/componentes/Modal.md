@@ -25,8 +25,9 @@ cabeçalho, corpo e rodapé; rodapé com fundo `background` e 8 em cima e embaix
 O corpo tem 4 em cima e 16 embaixo (era 4/4): o conteúdo encostava na faixa
 do rodapé (humano, 2026-09-23).
 Cabeçalho compacto (cliente, 2026-09-24: "o header ocupa muito"; ADR-039): 12 em
-cima e 8 embaixo, título `text/heading-4`, X de 24; no destrutivo, círculo de 32
-com `Warning` de 16. Cabeçalho e rodapé fecham em 44.
+cima e 8 embaixo, título `text/heading-4` colado na descrição (sem vão: só a
+entrelinha separa), X de 24; no destrutivo, círculo de 32 com `Warning` de 16.
+Cabeçalho e rodapé fecham em 44.
 
 ## Props
 
