@@ -4,7 +4,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CaretDown } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import { caixaDeCampo } from "@/lib/campo";
+import { blocoDeCampo, caixaDeCampo, linhaDoCartao, rotuloDoBloco } from "@/lib/campo";
 import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
@@ -98,8 +98,12 @@ export interface SelectProps extends VariantProps<typeof triggerVariants> {
   aoEscolher?: (valor: string) => void;
   /** O que o gatilho mostra quando nada foi escolhido. */
   textoVazio?: string;
-  /** Nome do controle para leitor de tela. Ex.: "Filtrar por etapa". */
+  /** Nome do controle para leitor de tela. Ex.: "Filtrar por etapa". No `cartao`, é o rótulo visível. */
   rotulo: string;
+  /** O cartão do drawer: o cartão inteiro é o gatilho, com o rótulo em bold, o
+   *  valor na linha de 24 e o caret — a casca do `CampoEditavel` ao lado
+   *  (cliente, 2026-09-28, ADR-041). Ignora `size`. */
+  cartao?: boolean;
   className?: string;
 }
 
@@ -110,6 +114,7 @@ export function Select({
   textoVazio = "Selecione",
   rotulo,
   size,
+  cartao,
   className,
 }: SelectProps) {
   const [aberto, setAberto] = React.useState(false);
@@ -172,27 +177,58 @@ export function Select({
     }
   }
 
+  function tecladoDoGatilho(e: React.KeyboardEvent) {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      abrir();
+    }
+  }
+
   return (
-    <div ref={caixa} className={cn("relative inline-block", className)}>
-      <SelectTrigger
-        ref={gatilho}
-        size={size}
-        aberto={aberto}
-        vazio={!escolhido}
-        aria-haspopup="listbox"
-        aria-expanded={aberto}
-        aria-controls={aberto ? `lista-${id}` : undefined}
-        aria-label={rotulo}
-        onClick={() => (aberto ? fechar(false) : abrir())}
-        onKeyDown={(e) => {
-          if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-            e.preventDefault();
-            abrir();
-          }
-        }}
-      >
-        {escolhido?.rotulo ?? textoVazio}
-      </SelectTrigger>
+    <div ref={caixa} className={cn("relative", cartao ? "block" : "inline-block", className)}>
+      {cartao ? (
+        // O cartão inteiro é o gatilho. O nome lido é "rótulo + valor", como no
+        // CampoEditavel — por isso sem aria-label. Aberto, fica no realce do hover.
+        <button
+          ref={gatilho}
+          type="button"
+          data-aberto={aberto ? "true" : undefined}
+          aria-haspopup="listbox"
+          aria-expanded={aberto}
+          aria-controls={aberto ? `lista-${id}` : undefined}
+          onClick={() => (aberto ? fechar(false) : abrir())}
+          onKeyDown={tecladoDoGatilho}
+          className={cn(blocoDeCampo({ realce: true }), "w-full text-left data-[aberto=true]:bg-accent", foco)}
+        >
+          <span className={rotuloDoBloco}>{rotulo}</span>
+          <span className={cn("flex items-center justify-between gap-2", linhaDoCartao)}>
+            <span className={cn("min-w-0 truncate text-body-md", escolhido ? "text-input-text" : "text-input-placeholder")}>
+              {escolhido?.rotulo ?? textoVazio}
+            </span>
+            <CaretDown
+              size={16}
+              weight="regular"
+              aria-hidden="true"
+              className={cn("shrink-0 text-input-placeholder transition-transform", aberto && "rotate-180")}
+            />
+          </span>
+        </button>
+      ) : (
+        <SelectTrigger
+          ref={gatilho}
+          size={size}
+          aberto={aberto}
+          vazio={!escolhido}
+          aria-haspopup="listbox"
+          aria-expanded={aberto}
+          aria-controls={aberto ? `lista-${id}` : undefined}
+          aria-label={rotulo}
+          onClick={() => (aberto ? fechar(false) : abrir())}
+          onKeyDown={tecladoDoGatilho}
+        >
+          {escolhido?.rotulo ?? textoVazio}
+        </SelectTrigger>
+      )}
 
       {visivel ? (
         <PainelFlutuante

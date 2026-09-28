@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Check, Copy, PencilSimple, type Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import { caixaDeCampo, blocoDeCampo, rotuloDoBloco, rotuloDeCampo, caixaNoCartao, erroDeCampo } from "@/lib/campo";
+import { caixaDeCampo, blocoDeCampo, rotuloDoBloco, rotuloDeCampo, caixaNoCartao, erroDeCampo, linhaDoCartao } from "@/lib/campo";
 
 // As classes do campo moram em lib/campo.ts (D21) e seguem exportadas daqui
 // por compatibilidade com quem já importava do Input.
@@ -296,10 +296,10 @@ export function CampoEditavel({
         </span>
       )}
 
-      {/* editando, a linha é a caixa do Input — 36px, traço e foco. Em repouso
-          é só a linha de 36px, sem caixa e sem recuo: o valor começa onde o
-          rótulo começa. */}
-      <div className={editando ? caixaDeCampo() : "flex h-9 items-center gap-2"}>
+      {/* editando, a linha é a caixa do Input com traço e foco; em repouso é só
+          a linha, sem caixa e sem recuo: o valor começa onde o rótulo começa.
+          Nos dois casos ela tem 24px (`linhaDoCartao`), não os 36 do Input. */}
+      <div className={editando ? cn(caixaDeCampo(), linhaDoCartao) : cn("flex items-center gap-2", linhaDoCartao)}>
         {IconeInicio ? (
           <IconeInicio size={16} weight="regular" aria-hidden="true" className="shrink-0 text-input-placeholder" />
         ) : null}

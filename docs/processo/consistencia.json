@@ -1051,7 +1051,7 @@
       "lote": "B8",
       "verificacao": "manual",
       "status": "corrigido",
-      "nota": "/actions/icon-button criada (quatro tamanhos, BotaoFechar, AcaoCampo); Progress e Empty State seguem no roadmap com pronto:false",
+      "nota": "/actions/icon-button criada (quatro tamanhos, BotaoFechar, AcaoCampo); Progress e Empty State seguiram no roadmap com pronto:false até 2026-09-28, quando o humano os tirou do nav e da home (\"pode excluir as telas\")",
       "fechadoEm": "B8"
     },
     {
@@ -3261,6 +3261,23 @@
       "status": "adiado",
       "fechadoEm": null,
       "nota": "**Decisões do cliente em 2026-09-24 (ADR-037, ADR-038, ADR-039).** `primary` e `destructive` sem o `button inner shadow` (269:32, 545:168); cabeçalho do Modal 12/8 com `heading-4`, X de 24 e círculo de 32; formulário com Select `field` (544:129), não o de card. Na remedição, o arquivo acompanha o código."
+    },
+    {
+      "id": "AUD-206",
+      "eixo": "fidelidade",
+      "titulo": "Figma atrás do código: Drawer com 920px arrastável, cartão do campo com linha de 24, Select `cartao`",
+      "onde": [
+        "components/ui/drawer.tsx",
+        "components/ui/input.tsx",
+        "components/ui/select.tsx"
+      ],
+      "regra": "fidelidade · cliente > arquivo (Figma é rascunho)",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Decisões do cliente em 2026-09-28 (ADR-040, ADR-041).** `DrawerPainel` abre com 920 (o arquivo desenha 1080) e a borda esquerda é alça de 720 a 1240; o cartão do campo tem a linha de 24, não os 36 do Input; o Select ganha a variante `cartao`, sem par no arquivo. Na remedição, o arquivo acompanha o código."
     }
   ]
 }

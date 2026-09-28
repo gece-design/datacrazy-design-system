@@ -106,17 +106,14 @@ export function PainelLead({
                     textoVazio="Adicionar"
                     acoes={<AcaoCopiar rotulo="Copiar e-mail" rotuloCopiado="E-mail copiado" valor={lead.email} />}
                   />
-                  <div className="flex flex-col gap-1">
-                    <span className="text-label-md text-input-label">Etapa do funil</span>
-                    <Select
-                      size="field"
-                      rotulo="Etapa do funil"
-                      opcoes={etapas.map((e) => ({ valor: e.id, rotulo: e.rotulo }))}
-                      valor={lead.etapa}
-                      aoEscolher={(v) => aoMudarEtapa(v)}
-                      className="w-full"
-                    />
-                  </div>
+                  {/* o mesmo cartão dos campos ao lado, com o caret (cliente, 2026-09-28) */}
+                  <Select
+                    cartao
+                    rotulo="Etapa do funil"
+                    opcoes={etapas.map((e) => ({ valor: e.id, rotulo: e.rotulo }))}
+                    valor={lead.etapa}
+                    aoEscolher={(v) => aoMudarEtapa(v)}
+                  />
                 </div>
               </DrawerSecao>
             </>
@@ -151,6 +148,8 @@ export function PainelLead({
       tom={lead.tom}
       secoes={secoes}
       aoFechar={aoFechar}
+      // a largura que a pessoa arrastou fica guardada por tela
+      memoria="pipeline-lead"
       className="rounded-none"
       tags={
         <>

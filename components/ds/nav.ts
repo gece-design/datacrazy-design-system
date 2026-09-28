@@ -76,7 +76,6 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Avatar", href: "/data-display/avatar", icone: "pessoa", pronto: true , descricao: "Identificação de pessoa"},
       { titulo: "Table", href: "/data-display/table", icone: "tabela", pronto: true , descricao: "A tabela de negócios do CRM"},
       { titulo: "Calendário", href: "/data-display/calendario", icone: "agenda", pronto: true, descricao: "Os negócios no mês ou na semana, pela próxima ação" },
-      { titulo: "Progress", href: "/data-display/progress", icone: "progresso" , descricao: "Andamento de etapa"},
     ],
   },
   {
@@ -85,7 +84,6 @@ export const navegacao: CategoriaNav[] = [
     itens: [
       { titulo: "Tooltip", href: "/feedback/tooltip", icone: "balao", pronto: true , descricao: "Conteúdo de texto truncado"},
       { titulo: "Toast", href: "/feedback/toast", icone: "sino", pronto: true , descricao: "Confirmação que não bloqueia"},
-      { titulo: "Empty State", href: "/feedback/empty-state", icone: "bandeja" , descricao: "Ausência de dados"},
       { titulo: "Modal", href: "/feedback/modal", icone: "camada", pronto: true , descricao: "Camada que exige decisão"},
       { titulo: "Drawer", href: "/feedback/drawer", icone: "gaveta", pronto: true , descricao: "O lead aberto pela direita"},
 { titulo: "Drawer variações", href: "/feedback/drawer-variacoes", icone: "proposta", pronto: true, descricao: "Cores, menu, linha do tempo e propostas"},

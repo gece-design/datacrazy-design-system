@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
 import { Select, SelectTrigger } from "@/components/ui/select";
-import { CartaoDeCampo } from "@/components/ui/input";
+import { CampoEditavel, CartaoDeCampo } from "@/components/ui/input";
 
 const etapas = [
   { valor: "prospeccao", rotulo: "Prospecção" },
@@ -15,6 +15,8 @@ const etapas = [
 
 const codigoTamanhos = `<Select size="md" rotulo="Ver por" opcoes={porValor} valor={por} aoEscolher={setPor} />
 <Select size="sm" rotulo="Filtrar por etapa" opcoes={etapas} valor={etapa} aoEscolher={setEtapa} />`;
+
+const codigoCartao = `<Select cartao rotulo="Etapa do funil" opcoes={etapas} valor={etapa} aoEscolher={setEtapa} />`;
 
 const codigoCampo = `<CartaoDeCampo rotulo="Etapa">
   <Select size="field" rotulo="Etapa" textoVazio="Selecione uma opção" opcoes={etapas} valor={etapa} aoEscolher={setEtapa} className="block w-full" />
@@ -28,6 +30,7 @@ export default function SelectPage() {
   const [por, setPor] = useState("valor");
   const [etapa, setEtapa] = useState("proposta");
   const [campo, setCampo] = useState("");
+  const [cartao, setCartao] = useState("qualificacao");
   const [gatilho, setGatilho] = useState(false);
 
   return (
@@ -69,6 +72,23 @@ export default function SelectPage() {
         </div>
       </Secao>
 
+      <Secao
+        titulo="No cartão do drawer"
+        spec="cartao · 68"
+        descricao="O cartão inteiro é o gatilho: rótulo em bold, valor na linha de 24 e o caret à direita — a mesma casca do CampoEditavel ao lado (cliente, 2026-09-28)."
+        codigo={codigoCartao}
+      >
+        <div className="rounded-md bg-card p-5">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <CampoEditavel rotulo="Atendente" valor="Esther" aoSalvar={() => {}} rotuloEditar="Editar atendente" textoVazio="Adicionar" />
+            <Select cartao rotulo="Etapa do funil" textoVazio="Selecione" opcoes={etapas} valor={cartao} aoEscolher={setCartao} />
+          </div>
+        </div>
+        <Legenda>
+          Ao lado de um <Chip>CampoEditavel</Chip>, o Select entra como <Chip>cartao</Chip>, não como <Chip>field</Chip> dentro
+          de um <Chip>CartaoDeCampo</Chip>: mesmo fundo, mesmo respiro, mesma linha de 24.
+        </Legenda>
+      </Secao>
       <Secao
         titulo="No formulário"
         spec="36 · field"

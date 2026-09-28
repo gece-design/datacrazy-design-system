@@ -779,6 +779,7 @@ export function DrawerLead({
   tom,
   menuInicial = "historicos",
   aoFechar,
+  memoria,
   className,
 }: {
   lead?: keyof typeof LEADS;
@@ -792,6 +793,8 @@ export function DrawerLead({
   tom?: TomPerfil;
   menuInicial?: string;
   aoFechar?: () => void;
+  /** Chave do navegador que lembra a largura arrastada do painel. */
+  memoria?: string;
   className?: string;
 }) {
   const dados = dadosDeFora ?? LEADS[lead];
@@ -806,7 +809,7 @@ export function DrawerLead({
 
   return (
     <LeadAtual.Provider value={dados}>
-    <DrawerPainel className={className}>
+    <DrawerPainel className={className} memoria={memoria}>
       {perfilAberto ? (
         <DrawerPerfil
           nome={dados.nome}

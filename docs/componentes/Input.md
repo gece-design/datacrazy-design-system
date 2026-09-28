@@ -51,9 +51,13 @@ contexto do Input) e vira um check em `success` por 1,5s, anunciado por
 | `acoes` | `ReactNode` | não | À direita, no modo leitura. Ex.: `AcaoCopiar` com `valor`. |
 | `iconeInicio`, `placeholder`, `inputMode`, `className` | — | não | Vão para o `<input>` do modo edição. |
 
+A linha do valor tem 24px em leitura e em edição (`linhaDoCartao`): o rótulo e
+o valor andam juntos — "gap menor entre o título e o conteúdo" (cliente,
+2026-09-28, ADR-041). Era a linha de 36 do Input.
+
 ### Helpers de classe
 
-`caixaDeCampo({ erro?, disabled? })`, `blocoDeCampo({ realce? })`, `rotuloDeCampo(cartao?)`, `caixaNoCartao` e `erroDeCampo` são as classes do campo. Moram em `lib/campo.ts` (regra D21, lote B6) — `InputTelefone`, `TimePicker`, `Rating` e `Select size="field"` importam de lá — e o Input as re-exporta por compatibilidade.
+`caixaDeCampo({ erro?, disabled? })`, `blocoDeCampo({ realce? })`, `rotuloDeCampo(cartao?)`, `caixaNoCartao`, `linhaDoCartao` e `erroDeCampo` são as classes do campo. Moram em `lib/campo.ts` (regra D21, lote B6) — `InputTelefone`, `TimePicker`, `Rating` e `Select size="field"` importam de lá — e o Input as re-exporta por compatibilidade.
 
 ### `Rating`
 

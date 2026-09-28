@@ -58,5 +58,10 @@ export function rotuloDeCampo(cartao?: boolean) {
  *  largura que o cartão tirou, senão um telefone com máscara trunca. */
 export const caixaNoCartao = "-mx-2 w-auto";
 
+/** A linha do valor no cartão: 24px em leitura e em edição, para o rótulo e o
+ *  valor andarem juntos — "gap menor entre o título e o conteúdo" (cliente,
+ *  2026-09-28, ADR-041). Era a linha de 36 do Input. */
+export const linhaDoCartao = "h-6";
+
 /** A mensagem de erro sob o campo (E6: erro inline é o padrão do DS). */
 export const erroDeCampo = "text-caption text-destructive";

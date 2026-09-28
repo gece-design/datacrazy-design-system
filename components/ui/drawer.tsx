@@ -33,7 +33,7 @@ import { foco, rolagemDiscreta } from "@/lib/estados";
  * conteúdo da coluna direita. O que é componente:
  *
  *   Drawer          a camada: scrim, foco preso, Escape
- *   DrawerPainel    a caixa de 1080px com raio à esquerda e elevação xl
+ *   DrawerPainel    a caixa de 920px (arrastável pela borda esquerda) com raio à esquerda e elevação xl
  *   DrawerPerfil    a coluna de 320px ("Profile section", 565:6448)
  *   DrawerBloco     "header info" recolhível + o que vem embaixo
  *   DrawerMetricas  "Card info" (563:4737)
@@ -105,18 +105,127 @@ export function Drawer({ aberto, aoFechar, rotulo, children }: DrawerProps) {
   );
 }
 
+/** Largura com que o painel abre e limites do arrasto, em px. O arquivo
+ *  desenha 1080; o cliente pediu menos tela ocupada e a opção de ajustar
+ *  (2026-09-28, ADR-040). */
+export const LARGURA_DO_PAINEL = 920;
+export const LARGURA_MINIMA_DO_PAINEL = 720;
+export const LARGURA_MAXIMA_DO_PAINEL = 1240;
+/** Setas na alça: 16px (64 com Shift), como na coluna da tabela. */
+const PASSO_DA_ALCA = 16;
+/** Nome da alça. `rotuloRedimensionar` troca pelo texto do idioma. */
+export const ROTULO_DE_REDIMENSIONAR = "Redimensionar painel";
+
+export interface DrawerPainelProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Largura inicial, em px. Padrão 920. */
+  largura?: number;
+  /** Chave do navegador que lembra a largura arrastada (ex.: "pipeline-lead"). */
+  memoria?: string;
+  /** Nome da alça para leitor de tela. Padrão "Redimensionar painel". */
+  rotuloRedimensionar?: string;
+  /** Sem alça: o painel fica na `largura`. */
+  fixo?: boolean;
+}
+
+/* Entre o mínimo e o máximo — e nunca mais que a janela menos 48. */
+function limitarLargura(v: number) {
+  const teto = typeof window === "undefined" ? LARGURA_MAXIMA_DO_PAINEL : Math.min(LARGURA_MAXIMA_DO_PAINEL, window.innerWidth - 48);
+  return Math.round(Math.min(Math.max(v, LARGURA_MINIMA_DO_PAINEL), Math.max(LARGURA_MINIMA_DO_PAINEL, teto)));
+}
+
 /** A caixa do drawer. Raio só à esquerda: o lado direito encosta na tela.
  *  Com altura definida (a tela inteira, na camada), perfil e conteúdo rolam
- *  cada um por conta própria. */
-export function DrawerPainel({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+ *  cada um por conta própria. A borda esquerda é a alça: sob o cursor aparece
+ *  um traço de 3px em `divider` e o arrasto muda a largura (720 a 1240);
+ *  `memoria` guarda a medida no navegador. */
+export function DrawerPainel({
+  largura = LARGURA_DO_PAINEL,
+  memoria,
+  rotuloRedimensionar = ROTULO_DE_REDIMENSIONAR,
+  fixo,
+  className,
+  style,
+  children,
+  ...props
+}: DrawerPainelProps) {
+  const [atual, setAtual] = React.useState(largura);
+  // a memória entra depois de montar: no servidor não há localStorage
+  React.useEffect(() => {
+    if (!memoria) return;
+    try {
+      const guardada = Number(localStorage.getItem(`ds:drawer:${memoria}`));
+      if (guardada) setAtual(limitarLargura(guardada));
+    } catch {
+      // sem armazenamento: fica na largura inicial
+    }
+  }, [memoria]);
+
+  function definir(v: number) {
+    const l = limitarLargura(v);
+    setAtual(l);
+    if (!memoria) return;
+    try {
+      localStorage.setItem(`ds:drawer:${memoria}`, String(l));
+    } catch {
+      // sem armazenamento: a medida vale só enquanto o painel estiver aberto
+    }
+  }
+
+  /* Arrastar para a esquerda alarga: o painel cresce a partir da borda direita. */
+  function alcaPonteiro(e: React.PointerEvent<HTMLSpanElement>) {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    const inicio = e.clientX;
+    const base = atual;
+    const alca = e.currentTarget;
+    alca.setPointerCapture(e.pointerId);
+    const mover = (ev: PointerEvent) => definir(base + (inicio - ev.clientX));
+    const soltar = () => {
+      alca.removeEventListener("pointermove", mover);
+      alca.removeEventListener("pointerup", soltar);
+      alca.removeEventListener("pointercancel", soltar);
+    };
+    alca.addEventListener("pointermove", mover);
+    alca.addEventListener("pointerup", soltar);
+    alca.addEventListener("pointercancel", soltar);
+  }
+
+  function alcaTeclado(e: React.KeyboardEvent) {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    const passo = (e.shiftKey ? 4 : 1) * PASSO_DA_ALCA;
+    definir(atual + (e.key === "ArrowLeft" ? passo : -passo));
+  }
+
   return (
     <div
       className={cn(
-        "flex h-full w-[1080px] max-w-full shrink-0 items-stretch overflow-hidden rounded-l-xl border border-border bg-card shadow-xl",
+        "relative flex h-full max-w-full shrink-0 items-stretch overflow-hidden rounded-l-xl border border-border bg-card shadow-xl",
         className,
       )}
+      style={{ width: atual, ...style }}
       {...props}
-    />
+    >
+      {children}
+      {fixo ? null : (
+        <span
+          role="separator"
+          aria-orientation="vertical"
+          aria-label={rotuloRedimensionar}
+          aria-valuenow={atual}
+          aria-valuemin={LARGURA_MINIMA_DO_PAINEL}
+          aria-valuemax={LARGURA_MAXIMA_DO_PAINEL}
+          tabIndex={0}
+          onPointerDown={alcaPonteiro}
+          onKeyDown={alcaTeclado}
+          className={cn(
+            "absolute inset-y-0 left-0 z-dropdown w-2 cursor-col-resize touch-none outline-none",
+            // o traço de 3px é um pseudo-elemento: `divider` sob o cursor, `primary` no foco
+            "after:absolute after:inset-y-0 after:left-0 after:w-[3px] after:bg-transparent after:transition-colors hover:after:bg-divider focus-visible:after:bg-primary",
+          )}
+        />
+      )}
+    </div>
   );
 }
 

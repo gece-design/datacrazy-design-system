@@ -207,3 +207,13 @@ Aprovado por: humano.
 Desvio: o arquivo (545:168) tem cabeçalho com 16 em cima e 12 embaixo, título `heading-3` e X de 28; no destrutivo, círculo de 40 com `Warning` de 20. O código fecha o cabeçalho em 44: 12 em cima, 8 embaixo, título `heading-4` colado na descrição (o vão de 4 saiu em 2026-09-28), X de 24, círculo de 32 com ícone de 16.
 Motivo: cliente, 2026-09-24 (Angélica: "o header também parece ocupar mais", referência Attio); continua o pedido de 2026-09-26 sobre o rodapé. Cabeçalho e rodapé passam a ter a mesma altura.
 Aprovado por: humano.
+
+## ADR-040 · Drawer abre com 920px e a pessoa arrasta a largura · 2026-09-28
+Desvio: o arquivo desenha o painel com 1080px fixos. O código abre com 920 (`LARGURA_DO_PAINEL`) e a borda esquerda é uma alça: sob o cursor aparece um traço de 3px em `divider` e o arrasto vai de 720 a 1240, nunca mais que a janela menos 48; `memoria` guarda a medida no navegador, por tela. Alça focável, setas ±16 (Shift ±64).
+Motivo: cliente, 2026-09-28 ("diminua o tamanho que o drawer ocupa na tela e adiciona opção de ajustar, passando o mouse no canto, stroke de 3px cinza, com limite"). A borda arrastável é a esquerda porque a direita encosta na tela.
+Aprovado por: humano.
+
+## ADR-041 · Cartão do drawer com linha de 24 e Select `cartao` · 2026-09-28
+Desvio: o arquivo dá ao cartão do campo a linha de 36 do Input; o código usa 24 (`linhaDoCartao`) em leitura e em edição, e o cartão fecha em 68. O Select ganha a variante `cartao`, sem par no arquivo (exceção à regra 6, a pedido do cliente): o cartão inteiro é o gatilho, com o rótulo em bold, o valor na linha de 24 e o caret — a mesma casca do `CampoEditavel` ao lado, no lugar de `field` dentro de `CartaoDeCampo`.
+Motivo: cliente, 2026-09-28 ("gap menor entre o título e o conteúdo"; "etapa do funil deve ter uma variante com o mesmo visual dos cards ao lado, e mantém o ícone de arrow").
+Aprovado por: humano.

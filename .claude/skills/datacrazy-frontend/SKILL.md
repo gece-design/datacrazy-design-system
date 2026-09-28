@@ -177,7 +177,9 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
 - **Formulário, rolagem e relevo**: Select ao lado de Input = `size="field"` (ADR-038). Área que rola =
   `rolagemDiscreta` (lib/estados.ts), nunca `[scrollbar-width:thin]` solto. Button `primary`/`destructive`
   planos — `shadow-button-inner-primary` não existe mais (ADR-037). Modal: cabeçalho 12/8, título `h4`,
-  X `icon-xs` (ADR-039). Alça da coluna: dois cliques ou Enter ajustam ao conteúdo.
+  X `icon-xs` (ADR-039). Alça da coluna: dois cliques ou Enter ajustam ao conteúdo. Cartão do drawer:
+  `CampoEditavel` e `Select cartao`, linha de 24 (ADR-041). `DrawerPainel` abre com 920 e arrasta pela borda
+  esquerda (720–1240), `memoria="<tela>"` lembra (ADR-040).
 - **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, children; sem segunda linha;
   breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
   o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.

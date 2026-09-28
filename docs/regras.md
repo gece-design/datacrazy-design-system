@@ -100,6 +100,10 @@ contexto em `docs/processo/ux-direcao-visual.md`.
   some no escuro.
 - Cabeçalho do Modal: 12 em cima, 8 embaixo, título `h4`, X de 24 (ADR-039).
 - Alça da coluna da tabela: dois cliques ou Enter ajustam ao conteúdo.
+- Cartão do drawer: rótulo em bold e valor numa linha de 24 (`linhaDoCartao`).
+  Select dentro do cartão é `cartao`, nunca `field` dentro de `CartaoDeCampo`.
+- Drawer abre com 920px e a pessoa arrasta a borda esquerda (720 a 1240);
+  `memoria` no `DrawerPainel` lembra a largura por tela.
 
 ### Fidelidade
 11. Pronto = diff ≤ 1% contra o Figma **e** geometria sem divergência.

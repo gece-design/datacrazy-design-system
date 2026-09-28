@@ -32,6 +32,7 @@ página de Elevation reserva a popover e menu de contexto).
 | `aoEscolher` | `(v: string) => void` | — | não | Chamado ao escolher. |
 | `textoVazio` | `string` | `"Selecione"` | não | O que o gatilho mostra sem escolha. |
 | `size` | `"md" \| "sm" \| "field"` | `"md"` | não | `md` no Card (32px, com realce interno); `sm` na tabela (29px); `field` é o campo de formulário (36px, a caixa do Input). |
+| `cartao` | `boolean` | `false` | não | O cartão do drawer: o cartão inteiro é o gatilho, com o rótulo visível em bold, o valor na linha de 24 e o caret. A casca do `CampoEditavel` ao lado (ADR-041). Ignora `size`. |
 | `className` | `string` | — | não | — |
 
 `SelectTrigger` recebe `aberto` (gira o caret e marca o gatilho como ativo) e `vazio` (no `field`, o texto sai na cor de placeholder).
@@ -45,6 +46,7 @@ outro componente.
 |----------|-------------|
 | `md` | Cabeçalho de card. |
 | `sm` | Barra de filtros de tabela. |
+| `cartao` | Cartão do drawer, ao lado de `CampoEditavel`: mesmo fundo, respiro e rótulo, com o caret. Nunca `field` dentro de `CartaoDeCampo` ali. |
 | `field` | Formulário: a caixa do Input (36px). Ao lado de um Input é sempre `field` — o `md` (card, cinza com realce) ao lado de um campo branco lê como desabilitado (cliente, 2026-09-24, ADR-038). |
 
 ## Estados
@@ -82,6 +84,12 @@ Usado por: [Card](Card.md) e [DataTable](DataTable.md)
   valor={etapa}
   aoEscolher={setEtapa}
 />
+```
+
+No cartão do drawer:
+
+```tsx
+<Select cartao rotulo="Etapa do funil" opcoes={etapas} valor={etapa} aoEscolher={setEtapa} />
 ```
 
 ## Acessibilidade
