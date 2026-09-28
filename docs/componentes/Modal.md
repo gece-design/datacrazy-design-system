@@ -20,7 +20,7 @@ título em (72,20), X de 28 a 20 da direita, traço do rodapé em 176, botões e
 Tema não virou prop: é token, e um componente atende os dois temas.
 
 Decisão do cliente (2026-09-21), por cima do arquivo: recuo lateral 20 → 16 em
-cabeçalho, corpo e rodapé; rodapé com fundo `background` e 12 em cima e embaixo
+cabeçalho, corpo e rodapé; rodapé com fundo `background` e 8 em cima e embaixo
 (era 12/20 sem fundo). O Figma acompanha o código (AUD-199, `aceito`).
 O corpo tem 4 em cima e 16 embaixo (era 4/4): o conteúdo encostava na faixa
 do rodapé (humano, 2026-09-23).
@@ -35,7 +35,7 @@ do rodapé (humano, 2026-09-23).
 | `size` | `"sm" \| "md" \| "lg"` | `"sm"` | não | Largura: 400, 520 ou 720px. |
 | `titulo` | `string` | — | sim | A decisão pedida. Vira o nome do diálogo. |
 | `descricao` | `string` | — | não | Uma linha de consequência. Vira a descrição do diálogo. |
-| `acoes` | `ReactNode` | — | não | Botões do rodapé. Sem eles, não há rodapé. |
+| `acoes` | `ReactNode` | — | não | Botões do rodapé, em `size="sm"` (cliente, 2026-09-26: "o footer e os botões ocupam muito espaço"). Sem eles, não há rodapé. |
 | `aoFechar` | `() => void` | — | não | Sem ele, o X não aparece. |
 | `rotuloFechar` | `string` | `"Fechar"` | não | Nome do X para leitor de tela. |
 | `children` | `ReactNode` | — | não | O corpo. Rola quando não cabe. |

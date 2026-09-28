@@ -347,8 +347,8 @@ const previews: Record<string, React.ReactNode> = {
         aoFechar={() => {}}
         acoes={
           <>
-            <Button variant="outline">Cancelar</Button>
-            <Button variant="destructive">
+            <Button variant="outline" size="sm">Cancelar</Button>
+            <Button variant="destructive" size="sm">
               <Trash size={16} weight="regular" />
               Excluir
             </Button>

@@ -169,6 +169,7 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
 - **Tabela com comportamentos**: `useAjustesDaTabela(colunas, { memoria })` → `DataTable ajustes=` +
   `BotaoColunas` na barra; a tabela só emite a ordenação, a tela ordena os dados
   (`ordenarPor`); cada célula leva `coluna="chave"`; linha com `aoSelecionar` (ADR-025/026).
+  Edição no lugar: `CelulaEditavel` (a tela grava). Rodapé de Modal: botões `size="sm"`.
   Grupos: `agrupavel` na coluna, `BotaoAgrupar`, `agruparPor` + `DataTableGrupo` na tela. Seleção em
   massa: `useSelecaoDaTabela` → `DataTable selecao=` + `DataTableRow chave/nome` + `BarraDeSelecao`
   com as ações da tela (ADR-031). Barra da tabela só com Button `tertiary` + Menu; nunca um Select ali.

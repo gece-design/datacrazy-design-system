@@ -48,7 +48,7 @@ export default function Entrar() {
         descricao="Digite a senha de acesso que você recebeu do time DataCrazy."
         className="motion-safe:animate-fade-in-fast"
         acoes={
-          <Button type="submit" form="form-acesso" disabled={enviando}>
+          <Button size="sm" type="submit" form="form-acesso" disabled={enviando}>
             {enviando ? "Entrando…" : "Entrar"}
           </Button>
         }

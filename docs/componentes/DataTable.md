@@ -145,6 +145,7 @@ tela; os ids são da tela, como na ordenação (ADR-031).
 | Célula | Props | O que mostra |
 |--------|-------|--------------|
 | `CelulaLead` | `nome`, `etiquetas?` | Nome + etiquetas em `Tag` (`EtiquetaDaCelula`: texto ou `{ rotulo, tom, status }`); quebram linha quando a coluna estreita |
+| `CelulaEditavel` | `valor`, `aoSalvar`, `rotulo`, `formatar?`, `inputMode?`, `alinharFim?` | Edita no lugar: texto com lápis no hover; clicar vira campo de 32px na célula; Enter e sair salvam, Escape desfaz (cliente, 2026-09-26) |
 | `CelulaDupla` | `principal`, `apoio?` | Valor com linha de apoio |
 | `CelulaTexto` | `children`, `enfase?` | Uma linha; `enfase` pinta em `primary` |
 | `CelulaProgresso` | `etapa`, `percentual`, `tom?` | Etapa + barra de 5px; com `tom` (um dos oito, ou `neutro`), bolinha e barra na cor da etapa — a mesma da coluna do quadro |
@@ -172,6 +173,7 @@ Os cinco comportamentos, com a referência do cliente (grid do ExtJS):
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
+| editando (célula) | `CelulaEditavel: botão com o valor e lápis no hover; clique vira input de 32px (caixaDeCampo) na célula; Enter/blur salvam, Escape desfaz e devolve o foco` | humano | ADR-035 |
 | marcada (seleção em massa) | `caixa (Checkbox) no cabeçalho e na linha com chave; linha marcada em bg-overlay-item-selected + aria-selected; barra fixa embaixo em overlay/bg + shadow-lg, fade-in-fast; sai com fade-out` | humano | ADR-031 |
 | hover | `bg-overlay-item-hover na linha` | humano | L2 |
 | focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |

@@ -11,6 +11,7 @@ import {
   Columns,
   DotsThree,
   DotsThreeVertical,
+  PencilSimple,
   Rows,
   SortAscending,
   SortDescending,
@@ -27,6 +28,7 @@ import { useSaida } from "@/lib/use-saida";
 
 import { foco, focoInterno } from "@/lib/estados";
 import { AcaoCampo } from "@/components/ui/input";
+import { caixaDeCampo } from "@/lib/campo";
 /**
  * Data Table — espelho do component set "Data Table" do Figma (node 331:1354).
  *
@@ -1280,6 +1282,98 @@ export function CelulaLead({ nome, etiquetas = [] }: { nome: string; etiquetas?:
 
 /** Uma etiqueta da `CelulaLead`: só o texto (cinza), com um dos tons da Tag ou com a bolinha de `status`. */
 export type EtiquetaDaCelula = string | { rotulo: string; tom?: Tom; status?: TagProps["status"] };
+
+/**
+ * A célula que edita no lugar (cliente, 2026-09-26: "ter a opção de editar os
+ * dados nas células da tabela"). Em repouso é o valor com o lápis no hover;
+ * clicar vira um campo de 32px na própria célula, sem trocar de linha. Enter
+ * e sair salvam; Escape desfaz e devolve o foco ao valor. O Escape para aqui:
+ * a tela de trás (drawer, modal) não pode fechar por causa dele.
+ */
+export function CelulaEditavel({
+  valor,
+  aoSalvar,
+  rotulo,
+  formatar,
+  inputMode,
+  alinharFim,
+  className,
+}: {
+  valor: string;
+  /** Só chama quando o texto mudou. */
+  aoSalvar: (valor: string) => void;
+  /** Nome da ação para leitor de tela e tooltip. Ex.: "Editar valor de Giovanna Alves". */
+  rotulo: string;
+  /** Como o valor aparece em repouso. Ex.: moeda. Editando, o texto cru. */
+  formatar?: (valor: string) => string;
+  inputMode?: React.InputHTMLAttributes<HTMLInputElement>["inputMode"];
+  alinharFim?: boolean;
+  className?: string;
+}) {
+  const [editando, setEditando] = React.useState(false);
+  const [rascunho, setRascunho] = React.useState(valor);
+  const gatilho = React.useRef<HTMLButtonElement>(null);
+  React.useEffect(() => {
+    if (!editando) setRascunho(valor);
+  }, [valor, editando]);
+  function salvar() {
+    setEditando(false);
+    if (rascunho !== valor) aoSalvar(rascunho);
+  }
+  function cancelar() {
+    setRascunho(valor);
+    setEditando(false);
+    requestAnimationFrame(() => gatilho.current?.focus());
+  }
+  return (
+    <div className={cn("group/celula -mx-2 flex min-w-0 items-center", alinharFim && "justify-end", className)}>
+      {editando ? (
+        <input
+          autoFocus
+          value={rascunho}
+          inputMode={inputMode}
+          aria-label={rotulo}
+          onFocus={(e) => e.currentTarget.select()}
+          onChange={(e) => setRascunho(e.target.value)}
+          onBlur={salvar}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              salvar();
+            } else if (e.key === "Escape") {
+              e.preventDefault();
+              e.stopPropagation();
+              e.nativeEvent.stopImmediatePropagation();
+              cancelar();
+            }
+          }}
+          className={cn(caixaDeCampo(), "h-8 px-2 text-body-lg tabular-nums text-input-text", alinharFim && "text-right")}
+        />
+      ) : (
+        <button
+          ref={gatilho}
+          type="button"
+          title={rotulo}
+          aria-label={rotulo}
+          onClick={() => setEditando(true)}
+          className={cn(
+            "flex h-8 min-w-0 max-w-full items-center gap-1.5 rounded-md px-2 text-body-lg tabular-nums text-foreground transition-colors hover:bg-accent",
+            alinharFim && "flex-row-reverse text-right",
+            foco,
+          )}
+        >
+          <span className="min-w-0 truncate">{formatar ? formatar(valor) : valor}</span>
+          <PencilSimple
+            size={14}
+            weight="regular"
+            aria-hidden="true"
+            className="shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover/celula:opacity-100 group-focus-within/celula:opacity-100"
+          />
+        </button>
+      )}
+    </div>
+  );
+}
 
 /** Valor em cima, complemento embaixo. Ex.: produto e preço. */
 export function CelulaDupla({ principal, apoio }: { principal: string; apoio?: string }) {

@@ -47,7 +47,7 @@ export interface ModalPainelProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   size?: ModalSize;
   titulo: string;
   descricao?: string;
-  /** Botões do rodapé: cancelar primeiro, confirmar por último. Sem eles, não há rodapé. */
+  /** Botões do rodapé, em `size="sm"`: cancelar primeiro, confirmar por último. Sem eles, não há rodapé. */
   acoes?: React.ReactNode;
   /** Sem ele, o X não aparece. */
   aoFechar?: () => void;
@@ -96,12 +96,14 @@ export const ModalPainel = React.forwardRef<HTMLDivElement, ModalPainelProps>(fu
 
       {/* O corpo é o que rola: com zoom alto ou conteúdo longo, cabeçalho e
           rodapé ficam presos e os botões nunca saem da tela. */}
-      {/* 4 em cima (o cabeçalho já deu os 12) e 16 embaixo: a faixa do rodapé
-          precisa de respiro, o conteúdo encostava nela (humano, 2026-09-23). */}
-      {children ? <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 pt-1">{children}</div> : null}
+      {/* 4 em cima (o cabeçalho já deu os 12) e 12 embaixo: respiro antes da
+          faixa do rodapé sem sobrar (humano, 2026-09-23; cliente, 2026-09-26). */}
+      {children ? <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-3 pt-1">{children}</div> : null}
 
       {acoes ? (
-        <div className="relative flex shrink-0 flex-wrap items-center justify-end gap-2 bg-background px-4 py-3">
+        // 8 em cima e embaixo, botões `sm`: "o footer e os botões ocupam muito
+        // espaço" (cliente, 2026-09-26). O rodapé fecha em 44px.
+        <div className="relative flex shrink-0 flex-wrap items-center justify-end gap-2 bg-background px-4 py-2">
           {/* Traço por cima, não `border`: não ocupa espaço. O fundo é o
               `background` da página — a faixa clara que o cliente pediu. */}
           <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-border" />

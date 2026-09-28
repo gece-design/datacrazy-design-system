@@ -2,7 +2,7 @@
 
 <!-- GERADO por scripts/consistencia.mjs render a partir de consistencia.json. Não edite à mão. -->
 
-Varredura de 2026-09-19 · 204 achados · 2 abertos · atualizado em 2026-09-24.
+Varredura de 2026-09-19 · 204 achados · 2 abertos · atualizado em 2026-09-28.
 Dono: [consistencia.json](consistencia.json). Método e lotes: plano da rodada (~/.claude/plans/como-podemos-iniciar-uma-hazy-shamir.md).
 
 ## O que é

@@ -16,6 +16,7 @@ import {
   DataTableGrupo,
   BotaoAgrupar,
   BarraDeSelecao,
+  CelulaEditavel,
   useSelecaoDaTabela,
   agruparPor,
   ordenarPor,
@@ -418,6 +419,75 @@ function TabelaComSelecao() {
   );
 }
 
+const codigoEdicao = `const [linhas, setLinhas] = useState(negocios);
+const editar = (id, campos) => setLinhas((l) => l.map((n) => (n.id === id ? { ...n, ...campos } : n)));
+
+<DataTableCell coluna="produto">
+  <CelulaEditavel
+    valor={String(n.valor)}
+    formatar={(v) => moeda(Number(v) || 0)}
+    inputMode="numeric"
+    rotulo={\`Editar valor de \${n.nome}\`}
+    aoSalvar={(v) => editar(n.id, { valor: Number(v.replace(/\\D/g, "")) || 0 })}
+  />
+</DataTableCell>
+<DataTableCell coluna="atividades">
+  <CelulaEditavel valor={n.atividades} rotulo={\`Editar atividades de \${n.nome}\`} aoSalvar={(v) => editar(n.id, { atividades: v })} />
+</DataTableCell>`;
+
+/** A seção de edição na célula: valor e atividades editam no lugar. */
+function TabelaEditavel() {
+  const [linhas, setLinhas] = useState(carteira);
+  const editar = (id: string, campos: Partial<Negocio>) =>
+    setLinhas((l) => l.map((n) => (n.id === id ? { ...n, ...campos } : n)));
+  return (
+    <div className="w-full overflow-hidden rounded-md bg-card">
+      <DataTableToolbar rotulo="Total de resultados" total="10 negócios" />
+      <DataTable colunas={colunas} className="rounded-none">
+        {linhas.map((n) => (
+          <DataTableRow key={n.id}>
+            <DataTableCell coluna="lead">
+              <CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} />
+            </DataTableCell>
+            <DataTableCell coluna="produto">
+              <div className="flex min-w-0 flex-col items-start gap-0.5">
+                <p className="w-full truncate text-h4 text-foreground">{n.produto}</p>
+                <CelulaEditavel
+                  valor={String(n.valor)}
+                  formatar={(v) => moeda(Number(v) || 0)}
+                  inputMode="numeric"
+                  rotulo={`Editar valor de ${n.nome}`}
+                  aoSalvar={(v) => editar(n.id, { valor: Number(v.replace(/\D/g, "")) || 0 })}
+                />
+              </div>
+            </DataTableCell>
+            <DataTableCell coluna="atividades">
+              <CelulaEditavel valor={n.atividades} rotulo={`Editar atividades de ${n.nome}`} aoSalvar={(v) => editar(n.id, { atividades: v })} />
+            </DataTableCell>
+            <DataTableCell coluna="atendente">
+              <Atendente nome={n.atendente} />
+            </DataTableCell>
+            <DataTableCell coluna="etapa">
+              <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
+            </DataTableCell>
+            <DataTableCell coluna="dados">
+              <CelulaEstatisticas
+                itens={[
+                  { valor: `${n.aberto}d`, rotulo: "Em aberto" },
+                  { valor: `${n.naEtapa}d`, rotulo: "Tempo na etapa" },
+                ]}
+              />
+            </DataTableCell>
+            <DataTableCell coluna="acoes">
+              <CelulaAcoes />
+            </DataTableCell>
+          </DataTableRow>
+        ))}
+      </DataTable>
+    </div>
+  );
+}
+
 type Parte = { nome: string; medida: string; papel: string };
 
 const anatomia: Parte[] = [
@@ -469,7 +539,7 @@ export default function Pagina() {
     <PaginaDS
       titulo="Table"
       descricao="A tabela de negócios do CRM: barra de filtros, sete colunas, dez linhas e paginação. É o componente mais denso do sistema, e o único onde a estrutura importa tanto quanto a aparência."
-      secoes={["Completa", "Ajustável", "Agrupada", "Seleção em massa", "Anatomia", "Como funciona"]}
+      secoes={["Completa", "Ajustável", "Agrupada", "Seleção em massa", "Edição na célula", "Anatomia", "Como funciona"]}
     >
       <Secao
         titulo="Completa"
@@ -637,6 +707,22 @@ export default function Pagina() {
         }
       >
         <TabelaComSelecao />
+      </Secao>
+
+      <Secao
+        titulo="Edição na célula"
+        spec="clique · Enter salva · Escape desfaz"
+        descricao="Valor e atividades editam no lugar: em repouso é o texto com o lápis no hover; clicar vira um campo na própria célula, sem trocar de tela nem de linha. Enter e sair do campo salvam; Escape desfaz."
+        codigo={codigoEdicao}
+        nota={
+          <>
+            <Chip>CelulaEditavel</Chip> guarda o texto cru e mostra o formatado (<Chip>formatar</Chip>: a moeda,
+            aqui). Só chama <Chip>aoSalvar</Chip> quando o texto mudou; quem grava é a tela. É o pedido do cliente
+            (2026-09-26): editar os dados na tabela, nas células. Para campo com regra (data, seleção), abra o Drawer.
+          </>
+        }
+      >
+        <TabelaEditavel />
       </Secao>
 
       <Secao titulo="Anatomia" spec="6 partes" semCaixa>

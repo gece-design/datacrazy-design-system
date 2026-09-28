@@ -22,13 +22,13 @@ const codigoVariantes = `<ModalPainel
   titulo="Título do modal"
   descricao="Descrição curta do que esta ação faz."
   aoFechar={fechar}
-  acoes={<><Button variant="outline">Cancelar</Button><Button>Aplicar</Button></>}
+  acoes={<><Button variant="outline" size="sm">Cancelar</Button><Button size="sm">Aplicar</Button></>}
 >
   {conteudo}
 </ModalPainel>
 
 <ModalPainel variant="destructive" titulo="Excluir negócio?" descricao="Ele sai do funil e do histórico. Não dá para desfazer." aoFechar={fechar}
-  acoes={<><Button variant="outline">Cancelar</Button><Button variant="destructive"><Trash size={16} />Excluir</Button></>}
+  acoes={<><Button variant="outline" size="sm">Cancelar</Button><Button variant="destructive" size="sm"><Trash size={16} />Excluir</Button></>}
 />`;
 
 const codigoCamada = `const [aberto, setAberto] = useState(false);
@@ -43,7 +43,7 @@ const codigoCamada = `const [aberto, setAberto] = useState(false);
   descricao="Ele sai do funil e do histórico. Não dá para desfazer."
   acoes={
     <>
-      <Button variant="outline" autoFocus onClick={() => setAberto(false)}>Cancelar</Button>
+      <Button size="sm" variant="outline" autoFocus onClick={() => setAberto(false)}>Cancelar</Button>
       <Button variant="destructive" onClick={excluir}><Trash size={16} />Excluir</Button>
     </>
   }
@@ -106,8 +106,8 @@ export default function ModalPage() {
             aoFechar={nada}
             acoes={
               <>
-                <Button variant="outline">Cancelar</Button>
-                <Button>Aplicar</Button>
+                <Button size="sm" variant="outline">Cancelar</Button>
+                <Button size="sm">Aplicar</Button>
               </>
             }
           >
@@ -120,8 +120,8 @@ export default function ModalPage() {
             aoFechar={nada}
             acoes={
               <>
-                <Button variant="outline">Cancelar</Button>
-                <Button variant="destructive">
+                <Button size="sm" variant="outline">Cancelar</Button>
+                <Button size="sm" variant="destructive">
                   <Trash size={16} />
                   Excluir
                 </Button>
@@ -145,7 +145,7 @@ export default function ModalPage() {
     titulo={"Título do modal · " + size}
     descricao="Descrição curta do que esta ação faz."
     aoFechar={fechar}
-    acoes={<><Button variant="outline">Cancelar</Button><Button>Aplicar</Button></>}
+    acoes={<><Button variant="outline" size="sm">Cancelar</Button><Button size="sm">Aplicar</Button></>}
   >
     {conteudo}
   </ModalPainel>
@@ -161,8 +161,8 @@ export default function ModalPage() {
               aoFechar={nada}
               acoes={
                 <>
-                  <Button variant="outline">Cancelar</Button>
-                  <Button>Aplicar</Button>
+                  <Button size="sm" variant="outline">Cancelar</Button>
+                  <Button size="sm">Aplicar</Button>
                 </>
               }
             >
@@ -195,10 +195,10 @@ export default function ModalPage() {
           descricao="O nome novo vale para todo o time, em todos os funis."
           acoes={
             <>
-              <Button variant="outline" onClick={() => setRenomear(false)}>
+              <Button size="sm" variant="outline" onClick={() => setRenomear(false)}>
                 Cancelar
               </Button>
-              <Button onClick={() => setRenomear(false)}>Salvar</Button>
+              <Button size="sm" onClick={() => setRenomear(false)}>Salvar</Button>
             </>
           }
         >
@@ -213,10 +213,10 @@ export default function ModalPage() {
           descricao="Proposta Rafael Pinto sai do funil e do histórico. Não dá para desfazer."
           acoes={
             <>
-              <Button variant="outline" autoFocus onClick={() => setExcluir(false)}>
+              <Button size="sm" variant="outline" autoFocus onClick={() => setExcluir(false)}>
                 Cancelar
               </Button>
-              <Button variant="destructive" onClick={() => setExcluir(false)}>
+              <Button size="sm" variant="destructive" onClick={() => setExcluir(false)}>
                 <Trash size={16} />
                 Excluir
               </Button>

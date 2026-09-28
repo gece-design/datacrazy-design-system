@@ -182,3 +182,8 @@ Aprovado por: humano.
 Desvio: nada disto está no arquivo (o Time Picker nunca esteve). As colunas de hora viram rodas como as do iPhone — cinco à vista, a do meio escolhida, `scroll-snap`, inclinação discreta e sombreado nas pontas — com a roda de AM/PM no formato de 12 horas; o fuso deixa o `<select>` nativo por um painel do DS com busca; o Date Picker ganha `meses={1}` e o `DatePicker` de uma data, e o painel ganha respiro (recuo 16, vão 32); o Switch ganha `linha`, com a linha inteira como alvo do clique.
 Motivo: reunião de 2026-09-18 e lembrete do humano (2026-09-24): "melhorar o espaço do popup, cenário de uma data só, melhorar o fuso e criar popup do DS dele, scroll das horas como o da Apple, tamanhos, olho de peixe discreto, sombreamento, AM e PM; nos switches, o clique na row inteira".
 Aprovado por: humano.
+
+## ADR-035 · Rodapé do Modal compacto; edição na célula da Table · 2026-09-27
+Desvio: o arquivo desenha o rodapé do Modal com 12 em cima e embaixo e botões de 32; a Table não tem edição no lugar.
+Motivo: cliente (Guilherme, WhatsApp de 2026-09-26): "me parece que o footer e os botões ocupam muito espaço" → rodapé com 8 em cima e embaixo, corpo com 12 embaixo e botões `sm` (28) — o rodapé fecha em 44 em vez de 56. E "ter a opção de editar os dados na tabela, nas células" → `CelulaEditavel`: texto com lápis no hover, clique vira campo de 32px na célula, Enter e sair salvam, Escape desfaz; a tela grava. Entra na página da Table e no valor da lista do pipeline.
+Aprovado por: humano ("precisamos aplicar este pedido de ajuste").

@@ -528,6 +528,7 @@ export function Tela() {
             aoAbrir={(l) => setAbertoId(l.id)}
             aoMoverEmMassa={moverEmMassa}
             aoExcluirEmMassa={excluirEmMassa}
+            aoEditar={editar}
             ajustes={ajustesDaLista}
           />
         ) : (
@@ -570,10 +571,10 @@ export function Tela() {
         size="sm"
         acoes={
           <>
-            <Button variant="secondary" onClick={() => setNovo(null)}>
+            <Button size="sm" variant="secondary" onClick={() => setNovo(null)}>
               Cancelar
             </Button>
-            <Button onClick={criarLead}>Criar lead</Button>
+            <Button size="sm" onClick={criarLead}>Criar lead</Button>
           </>
         }
       >
@@ -637,7 +638,7 @@ export function Tela() {
         acoes={
           <>
             {etapaEmEdicao?.modo === "editar" ? (
-              <Button
+              <Button size="sm"
                 variant="ghost"
                 disabled={leadsDaEtapaEmEdicao > 0}
                 title={
@@ -651,10 +652,10 @@ export function Tela() {
                 Excluir
               </Button>
             ) : null}
-            <Button variant="secondary" onClick={() => setEtapaEmEdicao(null)}>
+            <Button size="sm" variant="secondary" onClick={() => setEtapaEmEdicao(null)}>
               Cancelar
             </Button>
-            <Button onClick={salvarEtapa}>Salvar</Button>
+            <Button size="sm" onClick={salvarEtapa}>Salvar</Button>
           </>
         }
       >
@@ -716,10 +717,10 @@ export function Tela() {
         size="lg"
         acoes={
           <>
-            <Button variant="secondary" disabled={!quantosFiltros} onClick={() => setFiltro(SEM_FILTRO)}>
+            <Button size="sm" variant="secondary" disabled={!quantosFiltros} onClick={() => setFiltro(SEM_FILTRO)}>
               Limpar {quantosFiltros ? `(${quantosFiltros})` : ""}
             </Button>
-            <Button onClick={() => setFiltros(false)}>Concluir</Button>
+            <Button size="sm" onClick={() => setFiltros(false)}>Concluir</Button>
           </>
         }
       >

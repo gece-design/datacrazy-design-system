@@ -118,6 +118,13 @@
       ],
       "motion": "fast",
       "states": {
+        "editando (célula)": {
+          "impl": "CelulaEditavel: botão com o valor e lápis no hover; clique vira input de 32px (caixaDeCampo) na célula; Enter/blur salvam, Escape desfaz e devolve o foco",
+          "source": "humano",
+          "rule": "ADR-035",
+          "precedent": "CampoEditavel do Input",
+          "approvedIn": "2026-09-27"
+        },
         "marcada (seleção em massa)": {
           "impl": "caixa (Checkbox) no cabeçalho e na linha com chave; linha marcada em bg-overlay-item-selected + aria-selected; barra fixa embaixo em overlay/bg + shadow-lg, fade-in-fast; sai com fade-out",
           "source": "humano",

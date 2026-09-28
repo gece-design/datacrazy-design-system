@@ -3164,7 +3164,7 @@
       "verificacao": "manual",
       "status": "aceito",
       "fechadoEm": "2026-09-21",
-      "nota": "**Cliente pediu menos recuo e uma faixa clara no rodapé** (WhatsApp, 2026-09-21, prints do modal com marcação nas laterais do corpo). Recuo lateral 20 → 16 em cabeçalho, corpo e rodapé; rodapé com fundo `background` e 12/12 (era 12/20 sem fundo). Não é erro de medição: o arquivo (545:168) é que passa a acompanhar o código na remedição."
+      "nota": "**Cliente pediu menos recuo e uma faixa clara no rodapé** (WhatsApp, 2026-09-21, prints do modal com marcação nas laterais do corpo). Recuo lateral 20 → 16 em cabeçalho, corpo e rodapé; rodapé com fundo `background` e 12/12 (era 12/20 sem fundo). Não é erro de medição: o arquivo (545:168) é que passa a acompanhar o código na remedição. Em 2026-09-27, pedido do cliente: rodapé com 8/8 e botões `sm`, corpo com 12 embaixo (ADR-035)."
     },
     {
       "id": "AUD-200",

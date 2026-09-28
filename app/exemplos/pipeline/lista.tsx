@@ -4,6 +4,7 @@ import { Fragment, useRef, useState } from "react";
 import { Buildings, Clock, User, WarningCircle } from "@phosphor-icons/react";
 
 import {
+  CelulaEditavel,
   CelulaLead,
   CelulaProgresso,
   DataTable,
@@ -68,6 +69,7 @@ export function Lista({
   aoAbrir,
   aoMoverEmMassa,
   aoExcluirEmMassa,
+  aoEditar,
   ajustes,
 }: {
   etapas: Etapa[];
@@ -80,6 +82,8 @@ export function Lista({
   /** Ações em massa da barra: mover as marcadas de etapa e excluir as marcadas. */
   aoMoverEmMassa: (ids: string[], etapa: EtapaId) => void;
   aoExcluirEmMassa: (ids: string[]) => void;
+  /** Edita um campo do lead na célula (o valor, por enquanto). */
+  aoEditar: (id: string, campos: Partial<Lead>) => void;
 }) {
   const total = leads.reduce((n, l) => n + l.valor, 0);
   // Seleção em massa: a tela guarda os ids; a tabela desenha as caixas (2026-09-24).
@@ -144,7 +148,15 @@ export function Lista({
                   <Tag foto="/ds/atendente.png">{lead.responsavel}</Tag>
                 </DataTableCell>
                 <DataTableCell coluna="valor" className="text-right">
-                  <span className="text-label-lg tabular-nums text-foreground">{moeda(lead.valor)}</span>
+                  {/* edita no lugar: clique, digite, Enter (cliente, 2026-09-26) */}
+                  <CelulaEditavel
+                    alinharFim
+                    valor={String(lead.valor)}
+                    formatar={(v) => moeda(Number(v) || 0)}
+                    inputMode="numeric"
+                    rotulo={`Editar valor de ${lead.nome}`}
+                    aoSalvar={(v) => aoEditar(lead.id, { valor: Number(v.replace(/\D/g, "")) || 0 })}
+                  />
                 </DataTableCell>
                 <DataTableCell coluna="dias" className="text-right">
                   <span
