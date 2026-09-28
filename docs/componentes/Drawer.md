@@ -127,6 +127,10 @@ do arquivo.
 Estado que não está nesta tabela **o componente não tem**. Ausência é
 decisão, não buraco a preencher.
 
+Rolagem das colunas: barra fina que só aparece sob o cursor (`rolagemDiscreta`,
+lib/estados.ts) — "visível no hover" (cliente, 2026-09-24).
+É a mesma de toda área que rola no DS.
+
 ## Tokens consumidos
 
 `card` · `background` · `border` · `foreground` · `muted-foreground` ·

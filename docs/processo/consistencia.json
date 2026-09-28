@@ -3244,6 +3244,23 @@
       "status": "adiado",
       "fechadoEm": null,
       "nota": "**Decisões do humano em 2026-09-23 (ADR-028, ADR-029).** A busca do Header é sempre `HeaderBusca`: aberta (184px) quando a fileira só tem botões, `recolhida` (só a lupa, abre em 32 → 184) quando entra troca-visão, período ou data — o botão \"Pesquisar\" com texto de 601:12 não se usa. Entre a linha da trilha e a do título, 6px em vez dos 14 do arquivo, com o título no topo da fileira de ações: o Header fecha em 103, não 111. Na remedição, o arquivo acompanha o código."
+    },
+    {
+      "id": "AUD-205",
+      "eixo": "fidelidade",
+      "titulo": "Figma atrás do código após a reunião de 24/09: botão plano, cabeçalho do Modal compacto, Select `field` em formulário",
+      "onde": [
+        "components/ui/button.tsx",
+        "components/ui/modal.tsx",
+        "components/ui/select.tsx"
+      ],
+      "regra": "fidelidade · cliente > arquivo (Figma é rascunho)",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Decisões do cliente em 2026-09-24 (ADR-037, ADR-038, ADR-039).** `primary` e `destructive` sem o `button inner shadow` (269:32, 545:168); cabeçalho do Modal 12/8 com `heading-4`, X de 24 e círculo de 32; formulário com Select `field` (544:129), não o de card. Na remedição, o arquivo acompanha o código."
     }
   ]
 }

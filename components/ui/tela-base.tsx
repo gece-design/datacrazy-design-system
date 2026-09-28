@@ -9,6 +9,7 @@ import { Scrim } from "@/components/ui/modal";
 import { Sidebar } from "@/components/ui/sidebar";
 import { useCamada } from "@/lib/use-camada";
 import { useMontado, useSaida } from "@/lib/use-saida";
+import { rolagemDiscreta } from "@/lib/estados";
 
 /**
  * TelaBase — a casca de toda tela do CRM (pedido do humano, 2026-09-23).
@@ -161,7 +162,7 @@ export function TelaBase({
         />
         <main
           aria-label={r.conteudo}
-          className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:thin]", recuo && "p-4 lg:pl-1")}
+          className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", rolagemDiscreta, recuo && "p-4 lg:pl-1")}
         >
           {children}
         </main>

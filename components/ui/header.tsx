@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 
-import { foco, focoDentro, focoInterno } from "@/lib/estados";
+import { foco, focoDentro, focoInterno, rolagemDiscreta } from "@/lib/estados";
 /**
  * Header — o topo de uma página do CRM (set 601:464).
  *
@@ -418,7 +418,7 @@ export function Notificacoes({ itens, aoMarcarLida, aoMarcarTodas, rotulos, clas
 
               <ul
                 className={cn(
-                  "flex flex-col overflow-y-auto overscroll-contain transition-[max-height] duration-base ease-enter [scrollbar-width:thin]",
+                  "flex flex-col overflow-y-auto overscroll-contain transition-[max-height] duration-base ease-enter", rolagemDiscreta,
                   expandido ? "max-h-[calc(100vh-160px)]" : "max-h-[320px]",
                 )}
               >

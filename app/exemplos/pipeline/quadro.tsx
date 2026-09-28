@@ -20,7 +20,7 @@ import { Tag } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
 import { GRUPOS_TAGS, etapaPor, moeda, tagsDe, type Canal, type Etapa, type EtapaId, type Lead } from "./dados";
 
-import { foco } from "@/lib/estados";
+import { foco, rolagemDiscreta } from "@/lib/estados";
 /* O quadro do funil. Arrastar é HTML5 puro — `draggable` + os eventos de drag
    — porque a lista negativa do projeto não deixa entrar biblioteca nova por
    causa de uma tela de exemplo.
@@ -261,7 +261,7 @@ export function Quadro({
         onPointerUp={soltarPan}
         onPointerCancel={soltarPan}
         className={cn(
-          "flex min-h-0 flex-1 gap-4 overflow-x-auto pl-4 pr-4 pb-4 pt-1 lg:pl-1 [scrollbar-width:thin]",
+          "flex min-h-0 flex-1 gap-4 overflow-x-auto pl-4 pr-4 pb-4 pt-1 lg:pl-1", rolagemDiscreta,
           arrastandoTrilho ? "cursor-grabbing select-none" : "cursor-grab",
         )}
       >
@@ -367,7 +367,7 @@ export function Quadro({
                 </Button>
               </header>
 
-              <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto [scrollbar-width:thin]">
+              <div className={cn("flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto", rolagemDiscreta)}>
                 {nos}
                 {lista.length === 0 && !linhaAqui ? (
                   <p className="rounded-lg border border-dashed border-border px-3 py-6 text-center text-body-sm text-subtle-foreground">

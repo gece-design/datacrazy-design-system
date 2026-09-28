@@ -22,7 +22,7 @@ import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
 
-import { foco, focoInterno } from "@/lib/estados";
+import { foco, focoInterno, rolagemDiscreta } from "@/lib/estados";
 /**
  * TimePicker e DateTimePicker — hora, e data com hora.
  *
@@ -427,7 +427,7 @@ function SeletorDeFuso({
               className="min-w-0 flex-1 bg-transparent text-label-lg text-input-text outline-none placeholder:text-input-placeholder [&::-webkit-search-cancel-button]:appearance-none"
             />
           </label>
-          <ul id={`${id}-lista`} role="listbox" aria-label={rotulos.fuso} className="mt-1 max-h-56 overflow-y-auto [scrollbar-width:thin]">
+          <ul id={`${id}-lista`} role="listbox" aria-label={rotulos.fuso} className={cn("mt-1 max-h-56 overflow-y-auto", rolagemDiscreta)}>
             {encontrados.map((f, i) => (
               <li
                 key={f}

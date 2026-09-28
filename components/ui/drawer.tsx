@@ -23,7 +23,7 @@ import { useCamada } from "@/lib/use-camada";
 import { useMontado, useSaida } from "@/lib/use-saida";
 import { Scrim } from "@/components/ui/modal";
 
-import { foco } from "@/lib/estados";
+import { foco, rolagemDiscreta } from "@/lib/estados";
 /**
  * Drawer do lead — canvas "↳ Drawer" do Figma (node 533:3809).
  *
@@ -159,8 +159,8 @@ export type TomPerfil =
   | "ambar"
   | "vermelho";
 
-/** Rolagem de coluna: barra fina e sem arrastar a página junto no fim. */
-const rolagemDeColuna = "min-h-0 overflow-y-auto overscroll-contain [scrollbar-width:thin]";
+/** Rolagem de coluna: barra fina que só aparece sob o cursor (cliente, 2026-09-24) e sem arrastar a página junto no fim. */
+const rolagemDeColuna = `min-h-0 overflow-y-auto overscroll-contain ${rolagemDiscreta}`;
 
 /** Tem conteúdo acima? E abaixo? Reage à rolagem e a mudança de tamanho —
  *  recolher um bloco do perfil muda o que sobra para rolar. */

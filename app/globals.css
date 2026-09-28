@@ -115,8 +115,9 @@
 
     /* Sombra interna do arquivo (#E8F1FF a 40%). É um brilho CLARO: no escuro
        ele lava a superfície e apaga a diferença entre selecionado e trilha,
-       então some. O Button `primary` é a exceção — lá o brilho está sobre azul
-       cheio e continua lendo como relevo (`shadow-button-inner-primary`). */
+       então some. Vale para `tertiary`, `soft`, a busca do Header e a opção do
+       View Switcher; `primary` e `destructive` são planos nos dois temas
+       (cliente, 2026-09-24, ADR-037). */
     --shadow-button-inner: inset 2px 4px 8px 0 rgb(232 241 255 / 0.4);
 
     /* Button `soft`. O arquivo repete o claro no escuro (fundo `base/blue/50`),

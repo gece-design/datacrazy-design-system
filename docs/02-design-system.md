@@ -167,11 +167,11 @@ saía branco-azulado sobre fundo escuro; a opção escolhida em `accent` (#232C3
 era quase o `card` (#25252D) da trilha e a seleção sumia.
 
 Efeito de sombra: `button inner shadow` do Figma (`inset 2px 4px 8px #E8F1FF66`)
-virou **dois** nomes. `shadow-button-inner` sai de `--shadow-button-inner` e
-**vale só no Claro** — é um brilho claro, e no Escuro ele lava a superfície;
-usam-no `tertiary`, `soft`, `destructive`, a busca do Header e a opção do View
-Switcher. `shadow-button-inner-primary` é o valor literal, nos dois temas, para
-quem tem azul cheio embaixo: Button `primary` e o botão de adicionar tag.
+é `shadow-button-inner`, sai de `--shadow-button-inner` e **vale só no Claro** —
+é um brilho claro, e no Escuro ele lava a superfície; usam-no `tertiary`, `soft`,
+a busca do Header e a opção do View Switcher. Button `primary`, `destructive` e
+o botão de adicionar tag são planos nos dois temas: "prefiro plano" (cliente,
+2026-09-24, ADR-037). O literal `shadow-button-inner-primary` deixou de existir.
 
 ### Tipografia
 

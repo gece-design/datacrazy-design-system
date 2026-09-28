@@ -24,6 +24,9 @@ cabeçalho, corpo e rodapé; rodapé com fundo `background` e 8 em cima e embaix
 (era 12/20 sem fundo). O Figma acompanha o código (AUD-199, `aceito`).
 O corpo tem 4 em cima e 16 embaixo (era 4/4): o conteúdo encostava na faixa
 do rodapé (humano, 2026-09-23).
+Cabeçalho compacto (cliente, 2026-09-24: "o header ocupa muito"; ADR-039): 12 em
+cima e 8 embaixo, título `text/heading-4`, X de 24; no destrutivo, círculo de 32
+com `Warning` de 16. Cabeçalho e rodapé fecham em 44.
 
 ## Props
 
@@ -80,12 +83,12 @@ decisão, não buraco a preencher.
 
 `overlay/bg` · `overlay/border` · `overlay/item-hover` · `overlay/scrim` ·
 `border` · `destructive` · `foreground` · `muted-foreground` · `ring` ·
-`radius/lg` · `radius/md` · `elevation/xl` · `text/heading-3` ·
+`radius/lg` · `radius/md` · `elevation/xl` · `text/heading-4` ·
 `text/body-sm` · `z/modal`
 
 ## Composição
 
-Usa: `BotaoFechar` do [Button](Button.md) (o X, 28px), `lib/use-camada.ts` (foco preso, Escape, rolagem travada) e, nos exemplos, [Button](Button.md) e [Input](Input.md). Exporta o `Scrim` — o fundo de toda camada bloqueante (`overlay-scrim` com `opacity.scrim`, 40%), usado também pelo [Drawer](Drawer.md) e pela tela de senha ·
+Usa: `BotaoFechar` do [Button](Button.md) (o X, 24px), `lib/use-camada.ts` (foco preso, Escape, rolagem travada) e, nos exemplos, [Button](Button.md) e [Input](Input.md). Exporta o `Scrim` — o fundo de toda camada bloqueante (`overlay-scrim` com `opacity.scrim`, 40%), usado também pelo [Drawer](Drawer.md) e pela tela de senha ·
 Usado por: —
 
 ## Exemplo de uso

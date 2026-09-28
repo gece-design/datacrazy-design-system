@@ -54,6 +54,9 @@ redimensiona: aí `larguras` guarda a medida dela.
 | `coluna` | `string` | A `chave` da coluna, para seguir a ordem e a visibilidade. Sem ela, vale a posição. |
 | `primeira`, `ultima` | `boolean` | Recuo da ponta. Com `ajustes` a linha calcula sozinha. |
 
+Na `densa` a célula corta o que passa (`overflow-hidden`): uma Tag mais larga
+que a coluna trunca com reticências em vez de invadir a vizinha.
+
 ### `RotulosDaTabela`
 
 Todo texto dos controles vem de fora (E1); `ROTULOS_DA_TABELA` é a fábrica em pt-BR.
@@ -165,7 +168,7 @@ Os cinco comportamentos, com a referência do cliente (grid do ExtJS):
 | Ordenar | Clique no cabeçalho gira crescente → decrescente → nada; o menu da coluna tem Crescente e Decrescente | Enter no cabeçalho |
 | Colunas visíveis | Menu da coluna e botão `Colunas` da barra, um check por coluna; a primeira e a de ações não saem | Espaço no item alterna e o menu fica aberto |
 | Reordenar | Arrastar o cabeçalho (ghost segue o ponteiro, traço azul mostra onde cai); passou de 6px é arrasto, antes é clique | Menu: Mover para a esquerda / direita |
-| Redimensionar | A alça na borda direita do cabeçalho, com o cursor `col-resize`; mínimo 64px | Alça focável: setas ±16px, Shift ±64 |
+| Redimensionar | A alça na borda direita do cabeçalho, com o cursor `col-resize`; mínimo 64px; dois cliques na alça ajustam a coluna ao conteúdo | Alça focável: setas ±16px, Shift ±64, Enter ajusta ao conteúdo |
 | Selecionar | Clique na linha (fora de botão e campo); `aria-selected`; a tela liga ao detalhe — no CRM, o Drawer | Enter/Espaço escolhe, setas andam |
 | Agrupar (T2) | Seletor "Agrupar por" na barra ou item do menu da coluna; linha de grupo com caret, contagem e total; ordenar vale dentro do grupo | Caret é botão com `aria-expanded`; as setas da seleção pulam a linha do grupo |
 

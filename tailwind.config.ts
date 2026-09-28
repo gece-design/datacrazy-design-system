@@ -126,10 +126,8 @@ const config: Config = {
         // "button inner shadow" — estilo de efeito do Figma (269:32). Vem de
         // variável porque no escuro ele SOME: o brilho é claro e lava a
         // superfície (decisão do humano, 2026-09-18).
+        // `primary` e `destructive` não o usam: são planos (cliente, 2026-09-24, ADR-037).
         "button-inner": "var(--shadow-button-inner)",
-        // A exceção: sobre o cheio do `primary` e do `destructive` o brilho continua
-        // relevo nos dois temas (humano, 2026-09-24), então aqui o valor é literal.
-        "button-inner-primary": "inset 2px 4px 8px 0 rgb(232 241 255 / 0.4)",
       },
       backgroundImage: {
         // cartão de métrica do drawer: mesma ideia do topo do perfil, na diagonal

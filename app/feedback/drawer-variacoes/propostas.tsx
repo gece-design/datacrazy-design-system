@@ -33,7 +33,7 @@ import { Tag } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
 import { CATALOGO_TAGS, LEADS, MENU_LEAD, tagsEscolhidas, linhasDoContato } from "../drawer/drawer-lead";
 
-import { foco } from "@/lib/estados";
+import { foco, rolagemDiscreta } from "@/lib/estados";
 const LEAD = LEADS.joel;
 
 function TagsDoLead({ limite }: { limite?: number }) {
@@ -182,7 +182,7 @@ export function PropostaTrilhoDeIcones({ className }: { className?: string }) {
       <div data-tom="roxo" className="flex w-[320px] shrink-0 items-stretch border-r border-border bg-card">
         <nav
           aria-label="Seções do lead"
-          className="flex w-[52px] shrink-0 flex-col items-center gap-1 overflow-y-auto border-r border-border bg-background py-2 [scrollbar-width:thin]"
+          className={cn("flex w-[52px] shrink-0 flex-col items-center gap-1 overflow-y-auto border-r border-border bg-background py-2", rolagemDiscreta)}
         >
           {MENU_LEAD.map((item: ItemMenuDrawer) => {
             const Icone = item.icone;
@@ -209,7 +209,7 @@ export function PropostaTrilhoDeIcones({ className }: { className?: string }) {
           })}
         </nav>
 
-        <div className="flex min-w-0 flex-1 flex-col items-center gap-3 overflow-y-auto bg-drawer-perfil bg-local px-4 py-5 [scrollbar-width:thin]">
+        <div className={cn("flex min-w-0 flex-1 flex-col items-center gap-3 overflow-y-auto bg-drawer-perfil bg-local px-4 py-5", rolagemDiscreta)}>
           <div className="relative flex flex-col items-center gap-1">
             <Avatar nome={LEAD.nome} size="lg" aria-hidden="true" className="border-tom-anel text-tom-texto" />
             <p className="text-center text-h2 text-foreground">{LEAD.nome}</p>

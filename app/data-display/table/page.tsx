@@ -728,8 +728,8 @@ export default function Pagina() {
             navegador por tela — recarregue e a tabela volta como você deixou. A tabela só{" "}
             <span className="text-foreground">emite</span> a ordenação: as linhas chegam como filhos, então quem
             ordena os dados é a tela (<Chip>ordenarPor</Chip> ajuda). Cada célula diz de que coluna é
-            (<Chip>coluna=&quot;lead&quot;</Chip>) para seguir a ordem e a visibilidade. Teclado: setas na alça
-            redimensionam, o menu move a coluna, Enter ou Espaço seleciona a linha e as setas andam entre elas.
+            (<Chip>coluna=&quot;lead&quot;</Chip>) para seguir a ordem e a visibilidade. Dois cliques na alça ajustam a coluna ao conteúdo. Teclado: setas na alça
+            redimensionam, Enter ajusta ao conteúdo, o menu move a coluna, Enter ou Espaço seleciona a linha e as setas andam entre elas.
           </>
         }
       >

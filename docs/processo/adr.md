@@ -192,3 +192,18 @@ Aprovado por: humano ("precisamos aplicar este pedido de ajuste").
 Desvio: o arquivo desenha a tabela com respiro (linha de ~64px, recuo 20, sem traço vertical). O `layout="densa"` tem linha de 36px, recuo 8, traço `border` entre colunas e entre linhas, e cada célula numa linha só (nome e etiquetas lado a lado, empresa · cidade, etapa com a barra curta ao lado, estatísticas em linha, campo editável de 24px).
 Motivo: cliente (2026-09-27, com o print do Twenty): "menos gap, menos padding, stroke nas divs". Entra como layout, não como troca do padrão: a lista do pipeline usa `densa`; o `padrao` segue o arquivo para leitura com respiro.
 Aprovado por: humano.
+
+## ADR-037 · Button `primary` e `destructive` planos, sem a sombra interna · 2026-09-28
+Desvio: o arquivo (269:32, 545:168) desenha o `primary` e o Excluir do Modal com o `button inner shadow` (inset 2px 4px 8px #E8F1FF66). No código os dois são planos nos dois temas e o literal `shadow-button-inner-primary` deixou de existir. A sombra interna fica só onde é relevo sobre superfície clara (`tertiary`, `soft`, busca do Header, View Switcher) e continua `none` no escuro (decisão de 2026-09-18). O botão de adicionar tag acompanha: usava o mesmo literal.
+Motivo: cliente, reunião de 2026-09-24 ("prefiro plano"; ninguém defendeu manter). Supera as decisões de 2026-09-15 (destructive ganha a sombra), 2026-09-18 (só o primary a mantém no escuro) e 2026-09-24 (só o Excluir).
+Aprovado por: humano (2026-09-28: "pode tirar").
+
+## ADR-038 · Select ao lado de Input é sempre `field` · 2026-09-28
+Desvio: regra de uso, não do arquivo. O `md` (card: fundo `background` com realce) ao lado de um Input branco lê como desabilitado. Em formulário (Modal "Novo lead", painel do lead) o Select é `size="field"`, a caixa do Input (544:129).
+Motivo: cliente, 2026-09-24 (Angélica: "os selects estão cinza e as outras coisas não"; Ryan: "parece que tá disable").
+Aprovado por: humano.
+
+## ADR-039 · Cabeçalho do Modal compacto · 2026-09-28
+Desvio: o arquivo (545:168) tem cabeçalho com 16 em cima e 12 embaixo, título `heading-3` e X de 28; no destrutivo, círculo de 40 com `Warning` de 20. O código fecha o cabeçalho em 44: 12 em cima, 8 embaixo, título `heading-4`, X de 24, círculo de 32 com ícone de 16.
+Motivo: cliente, 2026-09-24 (Angélica: "o header também parece ocupar mais", referência Attio); continua o pedido de 2026-09-26 sobre o rodapé. Cabeçalho e rodapé passam a ter a mesma altura.
+Aprovado por: humano.

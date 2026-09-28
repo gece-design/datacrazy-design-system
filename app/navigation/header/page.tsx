@@ -297,8 +297,8 @@ export default function HeaderPage() {
           O escuro não tem desenho no arquivo e não ganha seção aqui: troque o tema no menu e a página inteira vira,
           porque todo valor é token. Três coisas precisaram de par próprio para isso funcionar de verdade. A{" "}
           <span className="text-foreground">sombra interna</span> do arquivo é um brilho claro: no escuro ela lava a
-          superfície, então <Chip>--shadow-button-inner</Chip> vira <Chip>none</Chip> e só o <Chip>primary</Chip>,
-          que tem azul cheio embaixo, mantém o relevo. O <Chip>soft</Chip> saía branco-azulado nos dois temas — agora
+          superfície, então <Chip>--shadow-button-inner</Chip> vira <Chip>none</Chip>; o <Chip>primary</Chip> é plano
+          nos dois temas (pedido do cliente, 2026-09-24). O <Chip>soft</Chip> saía branco-azulado nos dois temas — agora
           usa <Chip>--button-soft-*</Chip>, com <Chip>accent</Chip> e <Chip>blue-300</Chip> no escuro. E a opção
           selecionada dos seletores, em <Chip>accent</Chip>, era quase idêntica ao <Chip>card</Chip> da trilha:{" "}
           <Chip>--segmented-item-selected</Chip> passa a <Chip>background</Chip> no escuro, e a seleção volta a

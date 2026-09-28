@@ -10,7 +10,7 @@ import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
 
-import { foco } from "@/lib/estados";
+import { foco, rolagemDiscreta } from "@/lib/estados";
 /**
  * Tag — rótulo em pílula do perfil do lead (node 538:197).
  *
@@ -67,7 +67,9 @@ export function Tag({ status, tipo, foto, tom, icone, className, children, ...pr
       data-tom={tom}
       className={cn(
         // 22px = 14 de entrelinha + 4 de respiro em cima e embaixo
-        "inline-flex h-[22px] shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full px-1.5 text-label-sm uppercase text-foreground",
+        // `max-w-full` + texto que trunca: mais larga que o lugar (célula da
+        // grade densa), a tag corta com reticências em vez de invadir a vizinha.
+        "inline-flex h-[22px] max-w-full shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full px-1.5 text-label-sm uppercase text-foreground",
         // com tom: pastel por fundo, a mesma cor escura na letra. Sem: o cinza de antes.
         tom ? "bg-tom-brilho text-tom-texto" : "bg-input-bg-disabled",
         foto && "pl-0",
@@ -86,7 +88,7 @@ export function Tag({ status, tipo, foto, tom, icone, className, children, ...pr
         <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", tom ? "bg-tom-tag" : pontos[status])} />
       ) : null}
       {Icone ? <Icone size={12} weight="regular" className="shrink-0" aria-hidden="true" /> : null}
-      {children}
+      <span className="min-w-0 truncate">{children}</span>
     </span>
   );
 }
@@ -105,7 +107,7 @@ export const TagAdicionar = React.forwardRef<HTMLButtonElement, TagAdicionarProp
       aria-label={rotulo}
       title={rotulo}
       className={cn(
-        "inline-flex size-[22px] shrink-0 items-center justify-center rounded-full bg-primary text-background shadow-button-inner-primary transition-colors hover:bg-primary-hover",
+        "inline-flex size-[22px] shrink-0 items-center justify-center rounded-full bg-primary text-background transition-colors hover:bg-primary-hover",
         `${foco}`,
         className,
       )}
@@ -342,7 +344,7 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                 role="listbox"
                 aria-multiselectable="true"
                 aria-labelledby={grupo ? `${base}-aba-${grupo.id}` : undefined}
-                className="flex max-h-60 flex-col gap-0.5 overflow-y-auto overscroll-contain px-1.5 pb-1.5 [scrollbar-width:thin]"
+                className={cn("flex max-h-60 flex-col gap-0.5 overflow-y-auto overscroll-contain px-1.5 pb-1.5", rolagemDiscreta)}
               >
                 {filtradas.map((t, i) => {
                   const escolhida = selecionadas.includes(t.id);

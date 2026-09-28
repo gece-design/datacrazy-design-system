@@ -24,7 +24,7 @@ import {
   textoDeIntl,
 } from "@/lib/datas";
 
-import { foco, focoInterno } from "@/lib/estados";
+import { foco, focoInterno, rolagemDiscreta } from "@/lib/estados";
 /**
  * Calendário — a visão por data do pipeline (T4, pedido do cliente em
  * 2026-09-18: "uma visão de calendário" ao lado do Kanban e da lista).
@@ -426,7 +426,7 @@ export function Calendario({
                 }
               }}
               style={{ top: diaAberto.top, left: diaAberto.left, width: LARGURA_DO_PAINEL }}
-              className={cn("flex max-h-80 flex-col gap-1 overflow-y-auto p-2 [scrollbar-width:thin]", foco)}
+              className={cn("flex max-h-80 flex-col gap-1 overflow-y-auto p-2", rolagemDiscreta, foco)}
             >
               <p className="px-1 pb-1 text-label-md text-muted-foreground">{textoDeIntl(maiuscula(diaLongo.format(diaDoPainel), locale))}</p>
               {(porDia.get(diaAberto.chave) ?? []).map((e) => (

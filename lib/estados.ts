@@ -43,3 +43,12 @@ export const desabilitado = "disabled:cursor-not-allowed disabled:opacity-disabl
 /** Link ou item sem `disabled` nativo (`aria-disabled`): aqui o
  *  `pointer-events-none` fica, porque sem ele o link navega. */
 export const desabilitadoLink = "aria-disabled:pointer-events-none aria-disabled:opacity-disabled";
+
+/** Área que rola (coluna do Drawer, conteúdo da TelaBase, lista do pipeline,
+ *  lista do seletor de tags): barra fina que só aparece sob o cursor —
+ *  "visível no hover" (cliente, 2026-09-24). Não é `focus-within`: o Drawer
+ *  prende o foco na coluna e a barra ficaria sempre à vista. A cor é `divider`;
+ *  o espaço da barra fica reservado, então nada pula ao passar. Nunca
+ *  `[scrollbar-width:thin]` solto num componente. */
+export const rolagemDiscreta =
+  "[scrollbar-width:thin] [scrollbar-color:transparent_transparent] hover:[scrollbar-color:hsl(var(--divider))_transparent]";

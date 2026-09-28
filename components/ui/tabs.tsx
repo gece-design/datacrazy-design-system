@@ -67,7 +67,14 @@ export function Tabs({ itens, atual, aoEscolher, rotulo, id, className }: TabsPr
       const aba = fileira.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]');
       const proprio = aba?.querySelector<HTMLElement>(":scope > span[aria-hidden]");
       if (!aba || !proprio) return setTraco(null);
-      setTraco({ x: aba.offsetLeft + proprio.offsetLeft, w: proprio.getBoundingClientRect().width });
+      // Medido pelos retângulos, relativo à fileira (+ o que ela rolou). Antes
+      // somava `aba.offsetLeft + proprio.offsetLeft`, mas a aba não é positioned:
+      // o offset do span já era relativo à fileira e o traço dobrava o recuo da
+      // 2ª aba em diante ("o traço não está centralizado", humano, 2026-09-24).
+      // A entrada do painel é só opacidade, então os retângulos são confiáveis.
+      const base = fileira.current!.getBoundingClientRect();
+      const caixa = proprio.getBoundingClientRect();
+      setTraco({ x: caixa.left - base.left + fileira.current!.scrollLeft, w: caixa.width });
     };
     medir();
     window.addEventListener("resize", medir);

@@ -570,7 +570,6 @@
         "background",
         "radius/full",
         "text/label-sm",
-        "shadow-button-inner",
         "overlay/bg",
         "overlay/border",
         "overlay/item-hover",
@@ -1274,8 +1273,7 @@
         "ring",
         "radius/md",
         "text/button",
-        "shadow-button-inner",
-        "shadow-button-inner-primary"
+        "shadow-button-inner"
       ],
       "motion": "fast",
       "states": {

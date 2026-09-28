@@ -19,7 +19,9 @@ import { BotaoFechar } from "@/components/ui/button";
  * Medidas do arquivo: largura 400 · 520 · 720 · raio 8 (`radius/lg`) ·
  * `elevation/xl` · cabeçalho com 16 em cima e 12 embaixo · corpo com 4 em cima
  * e 16 embaixo · rodapé com traço e 12 em cima e embaixo, botões a 8 um do outro ·
- * fechar de 28 com X de 16. Recuo lateral de 16 e rodapé com fundo
+ * fechar de 28 com X de 16. Por cima do arquivo, o cliente pediu compacto
+ * (2026-09-21 e 2026-09-24): cabeçalho 12/8 com título `h4` e X de 24, corpo
+ * 4/12, rodapé 8/8 com botões `sm` — cabeçalho e rodapé fecham em 44 (ADR-039). Recuo lateral de 16 e rodapé com fundo
  * `background`: decisão do cliente (2026-09-21) por cima dos 20 sem fundo do
  * arquivo — o Figma acompanha (AUD-199). No destrutivo, círculo de 40 com
  * `Warning` de 20, a cor a 12% — medido no pixel, como no Toast. Os glifos são
@@ -68,19 +70,21 @@ export const ModalPainel = React.forwardRef<HTMLDivElement, ModalPainelProps>(fu
       className={cn(painelVariants({ size }), className)}
       {...props}
     >
-      <div className="flex shrink-0 items-start gap-3 px-4 pb-3 pt-4">
+      {/* 12 em cima e 8 embaixo, título h4 e X de 24: "o header ocupa muito"
+          (cliente, 2026-09-24, ADR-039). Fecha em 44, como o rodapé. */}
+      <div className="flex shrink-0 items-start gap-3 px-4 pb-2 pt-3">
         <div className="flex min-w-0 flex-1 items-start gap-3">
           {variant === "destructive" ? (
             <span
               aria-hidden="true"
-              className="flex size-10 shrink-0 items-center justify-center rounded-full bg-destructive/[0.12] text-destructive"
+              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-destructive/[0.12] text-destructive"
             >
-              <Warning size={20} weight="regular" />
+              <Warning size={16} weight="regular" />
             </span>
           ) : null}
           {/* Quebra em vez de cortar: es e pt-br são 20–30% mais longos (E1). */}
           <div className="flex min-w-0 flex-1 flex-col gap-1 break-words">
-            <h2 id={`${id}-titulo`} className="text-h3 text-foreground">
+            <h2 id={`${id}-titulo`} className="text-h4 text-foreground">
               {titulo}
             </h2>
             {descricao ? (
@@ -91,7 +95,7 @@ export const ModalPainel = React.forwardRef<HTMLDivElement, ModalPainelProps>(fu
           </div>
         </div>
 
-        {aoFechar ? <BotaoFechar rotulo={rotuloFechar} onClick={aoFechar} /> : null}
+        {aoFechar ? <BotaoFechar size="icon-xs" rotulo={rotuloFechar} onClick={aoFechar} /> : null}
       </div>
 
       {/* O corpo é o que rola: com zoom alto ou conteúdo longo, cabeçalho e

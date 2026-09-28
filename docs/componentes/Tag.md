@@ -30,6 +30,10 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 | `icone` | `ComponentType` | não | Ícone de 12px antes do texto, para quem não distingue as cores. |
 | `children` | `ReactNode` | sim | O texto. A caixa alta é CSS. |
 
+Mais larga que o lugar (`max-w-full`), a tag trunca o texto com reticências —
+é o que evita a invasão da coluna vizinha na grade densa; ponha `title` quando
+o rótulo inteiro importar.
+
 ### `TagAdicionar`
 
 `rotulo` (obrigatório) e os atributos de `<button>`.
@@ -75,7 +79,7 @@ A `Tag` é leitura. Só o `TagAdicionar` é interativo.
 
 `input/bg-disabled` · `foreground` · `primary` · `primary-hover` ·
 `destructive` · `info` · `success` · `background` · `radius/full` ·
-`text/label-sm` · `shadow-button-inner` · no seletor: `overlay/bg` ·
+`text/label-sm` · no seletor: `overlay/bg` ·
 `overlay/border` · `overlay/item-hover` · `overlay/item-selected` ·
 `overlay/item-text-selected` · `elevation/lg` · `radius/lg` · `text/body-md`
 

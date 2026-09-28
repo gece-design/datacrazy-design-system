@@ -46,10 +46,10 @@ O X de fechar de Modal, Toast e painéis: Button `ghost` quadrado com o glifo `X
 
 | Variante | Quando usar | Superfície |
 |----------|-------------|------------|
-| `primary` | A ação principal da tela, uma por vez | `primary` + `primary-foreground`, `shadow-button-inner-primary` |
+| `primary` | A ação principal da tela, uma por vez | `primary` + `primary-foreground`, plano (ADR-037) |
 | `secondary` | Ação de apoio com traço | `card` + `border`, hover `accent` |
 | `ghost` | Ação discreta, sem caixa | texto `muted-foreground`, hover `accent` |
-| `destructive` | Apagar, cancelar sem volta (Modal) | `destructive`, hover `destructive-hover`, sombra interna (ADR) |
+| `destructive` | Apagar, cancelar sem volta (Modal) | `destructive`, hover `destructive-hover`, plano (ADR-037) |
 | `soft` | "Secondary" do redesenho: azul-claro | `button-soft-*` (par escuro próprio, ADR-015) |
 | `outline` | "Ghost" do redesenho: só o traço | traço `background`, texto `surface-inverse` |
 | `tertiary` | Barra de ferramentas (Pesquisar, Filtros no Header, gatilho do Date Picker) | `card` + `muted-foreground`, sombra interna, hover `accent` |
@@ -75,7 +75,7 @@ por decisão (interactions.md L5).
 `foreground` · `muted-foreground` · `accent` · `destructive` ·
 `destructive-hover` · `button-soft-bg` · `button-soft-foreground` ·
 `button-soft-hover` · `background` · `surface-inverse` · `ring` · `radius/md` ·
-`text/button` · `shadow-button-inner` · `shadow-button-inner-primary`
+`text/button` · `shadow-button-inner` (só `soft` e `tertiary`)
 
 ## Composição
 

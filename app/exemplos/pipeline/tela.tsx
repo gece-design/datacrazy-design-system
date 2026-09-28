@@ -64,7 +64,7 @@ import { PainelLead } from "./painel-lead";
 import { Quadro, agrupar, CAMPOS_DO_CARTAO, ROTULOS_DOS_CAMPOS, type CampoDoCartao, type Colunas } from "./quadro";
 import { Menu } from "@/components/ui/menu";
 
-import { foco } from "@/lib/estados";
+import { foco, rolagemDiscreta } from "@/lib/estados";
 /* ---------------------------------------------------------------------------
    Tela de exemplo — NÃO é componente do design system.
 
@@ -533,7 +533,7 @@ export function Tela() {
           />
         ) : (
           // Calendário: os leads pela próxima ação; clicar abre o mesmo drawer.
-          <div className="min-w-0 min-h-0 flex-1 overflow-y-auto pl-4 pr-4 pb-4 lg:pl-1 [scrollbar-width:thin]">
+          <div className={cn("min-w-0 min-h-0 flex-1 overflow-y-auto pl-4 pr-4 pb-4 lg:pl-1", rolagemDiscreta)}>
             <Calendario
               locale="pt-BR"
               eventos={todos.filter((l) => l.proximaAcao).map((l) => ({ id: l.id, data: l.proximaAcao, rotulo: l.nome, detalhe: l.empresa, tom: l.tom }))}
@@ -607,12 +607,14 @@ export function Tela() {
               onChange={(e) => setNovo({ ...novo, valor: e.target.value })}
             />
             <Select
+              size="field"
               rotulo="Etapa"
               valor={novo.etapa}
               aoEscolher={(v) => setNovo({ ...novo, etapa: v as EtapaId })}
               opcoes={etapas.map((e) => ({ valor: e.id, rotulo: e.rotulo }))}
             />
             <Select
+              size="field"
               rotulo="Atendente"
               valor={novo.atendente}
               aoEscolher={(v) => setNovo({ ...novo, atendente: v })}
@@ -724,7 +726,7 @@ export function Tela() {
           </>
         }
       >
-        <div className="flex max-h-[60vh] flex-col gap-6 overflow-y-auto [scrollbar-width:thin]">
+        <div className={cn("flex max-h-[60vh] flex-col gap-6 overflow-y-auto", rolagemDiscreta)}>
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
             <GrupoDeFiltro titulo="Atendente">
               {ATENDENTES.map((a) => (

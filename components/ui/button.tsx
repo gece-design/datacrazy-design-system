@@ -17,12 +17,12 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground shadow-button-inner-primary enabled:hover:bg-primary-hover",
+        // Plano: sem a sombra interna do arquivo — "prefiro plano" (cliente, 2026-09-24, ADR-037).
+        primary: "bg-primary text-primary-foreground enabled:hover:bg-primary-hover",
         secondary: "border border-border bg-card text-foreground enabled:hover:bg-accent",
         ghost: "text-muted-foreground enabled:hover:bg-accent enabled:hover:text-foreground",
-        // Sombra interna conferida no botão "Excluir" do Modal (545:168).
-        // O relevo fica nos DOIS temas, como no primary: "só no botão de excluir" (humano, 2026-09-24).
-        destructive: "bg-destructive text-primary-foreground shadow-button-inner-primary enabled:hover:bg-destructive-hover",
+        // Plano como o primary (ADR-037): a sombra interna do Excluir do arquivo saiu com ele.
+        destructive: "bg-destructive text-primary-foreground enabled:hover:bg-destructive-hover",
         // Os dois abaixo vêm do redesenho do Button no Figma (269:32), onde se
         // chamam "Secondary" e "Ghost". Entraram com nome próprio para não mudar
         // o que `secondary` e `ghost` já significam nas telas prontas.
@@ -69,7 +69,7 @@ export { buttonVariants };
 export interface BotaoFecharProps extends Omit<ButtonProps, "variant" | "size" | "children"> {
   /** Nome do botão para leitor de tela e tooltip nativo. Ex.: "Fechar". Obrigatório: só tem ícone. */
   rotulo: string;
-  /** 24 (Toast), 28 (Modal, painéis) ou 32. Padrão 28. */
+  /** 24 (Toast, Modal), 28 (painéis) ou 32. Padrão 28. */
   size?: "icon-xs" | "icon-sm" | "icon";
 }
 

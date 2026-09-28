@@ -90,6 +90,17 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 - `HeaderDivisor` só entre o grupo de visão (troca-visão, período, data) e a
   ação principal. Fileira só com busca, filtros e a ação não leva divisor.
 
+### Formulário, rolagem e relevo
+- Select ao lado de Input é sempre `size="field"` (a caixa do Input). O `md` é
+  de card e, num formulário, parece desabilitado (ADR-038).
+- Área que rola usa `rolagemDiscreta` (lib/estados.ts): barra fina, visível só
+  sob o cursor. Nunca `[scrollbar-width:thin]` solto.
+- Button `primary` e `destructive` são planos (ADR-037). A sombra interna
+  (`shadow-button-inner`) fica em `tertiary`, `soft` e na busca do Header, e
+  some no escuro.
+- Cabeçalho do Modal: 12 em cima, 8 embaixo, título `h4`, X de 24 (ADR-039).
+- Alça da coluna da tabela: dois cliques ou Enter ajustam ao conteúdo.
+
 ### Fidelidade
 11. Pronto = diff ≤ 1% contra o Figma **e** geometria sem divergência.
 12. Divergência visual é bug do código até prova em contrário registrada como

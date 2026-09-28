@@ -109,6 +109,7 @@ export function PainelLead({
                   <div className="flex flex-col gap-1">
                     <span className="text-label-md text-input-label">Etapa do funil</span>
                     <Select
+                      size="field"
                       rotulo="Etapa do funil"
                       opcoes={etapas.map((e) => ({ valor: e.id, rotulo: e.rotulo }))}
                       valor={lead.etapa}

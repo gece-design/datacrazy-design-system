@@ -45,6 +45,7 @@ outro componente.
 |----------|-------------|
 | `md` | Cabeçalho de card. |
 | `sm` | Barra de filtros de tabela. |
+| `field` | Formulário: a caixa do Input (36px). Ao lado de um Input é sempre `field` — o `md` (card, cinza com realce) ao lado de um campo branco lê como desabilitado (cliente, 2026-09-24, ADR-038). |
 
 ## Estados
 

@@ -671,9 +671,44 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
       };
     }
 
+    /* Dois cliques na alça (ou Enter nela): a coluna ajusta ao conteúdo, como
+       numa planilha (cliente, 2026-09-28). Mede fora da grade: o cabeçalho e
+       cada célula da coluna clonados numa tabela de largura livre — a grade é
+       `table-fixed` e corta, então medir no lugar daria a largura de hoje. */
+    function ajustarAoConteudo(c: ColunaTabela) {
+      return () => {
+        if (!ajustes) return;
+        const th = cabecalhos.current[c.chave];
+        const fileira = th?.parentElement;
+        const tabela = th?.closest("table");
+        if (!th || !fileira || !tabela) return;
+        const foto = larguras();
+        const indice = Array.from(fileira.children).indexOf(th);
+        const celulas = Array.from(tabela.querySelectorAll<HTMLTableRowElement>("tbody > tr"))
+          // a linha de grupo tem colSpan: não é desta coluna
+          .filter((tr) => tr.children.length === fileira.children.length)
+          .map((tr) => tr.children[indice] as HTMLElement);
+        const medidor = document.createElement("table");
+        medidor.className = "border-collapse";
+        medidor.style.cssText = "position:absolute;top:0;left:0;width:max-content;visibility:hidden;pointer-events:none";
+        const corpo = medidor.createTBody();
+        for (const celula of [th, ...celulas]) corpo.insertRow().appendChild(celula.cloneNode(true));
+        tabela.parentElement?.appendChild(medidor);
+        const maior = Math.max(0, ...Array.from(corpo.rows, (tr) => tr.cells[0].getBoundingClientRect().width));
+        medidor.remove();
+        ajustes.redimensionar(c.chave, Math.max(c.minimo ?? LARGURA_MINIMA, Math.ceil(maior) + 1), foto);
+      };
+    }
+
     function alcaTeclado(c: ColunaTabela) {
       return (e: React.KeyboardEvent) => {
-        if (!ajustes || (e.key !== "ArrowLeft" && e.key !== "ArrowRight")) return;
+        if (!ajustes) return;
+        if (e.key === "Enter") {
+          e.preventDefault();
+          ajustarAoConteudo(c)();
+          return;
+        }
+        if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
         e.preventDefault();
         const foto = larguras();
         const passo = (e.shiftKey ? 4 : 1) * PASSO_DO_TECLADO * (e.key === "ArrowRight" ? 1 : -1);
@@ -898,7 +933,8 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
 
                         {ajustes ? (
                           // A alça: um separador vertical focável na borda direita. Setas
-                          // mudam 16px (64 com Shift); o ponteiro arrasta.
+                          // mudam 16px (64 com Shift); o ponteiro arrasta; dois cliques (ou
+                          // Enter) ajustam a coluna ao conteúdo.
                           <span
                             role="separator"
                             aria-orientation="vertical"
@@ -907,6 +943,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                             aria-valuemin={c.minimo ?? LARGURA_MINIMA}
                             tabIndex={0}
                             onPointerDown={alcaPonteiro(c)}
+                            onDoubleClick={ajustarAoConteudo(c)}
                             onKeyDown={alcaTeclado(c)}
                             className={cn(
                               // a linha da alça é um pseudo-elemento: aparece sob o cursor da
@@ -1098,7 +1135,9 @@ export const DataTableCell = React.forwardRef<HTMLTableCellElement, DataTableCel
         ref={ref}
         className={cn(
           "px-2 align-middle",
-          densa ? "py-1" : "py-3",
+          // na densa a célula corta o que passa: a Tag mais larga que a coluna
+          // trunca com reticências em vez de invadir a vizinha (cliente, 2026-09-28)
+          densa ? "overflow-hidden py-1" : "py-3",
           primeira && (compacta ? "pl-3" : densa ? "pl-2" : "pl-5"),
           ultima && (compacta ? "pr-3" : densa ? "pr-2" : "pr-5"),
           className,
@@ -1515,7 +1554,12 @@ export function CelulaEstatisticas({
 }) {
   const densa = React.useContext(Contexto).layout === "densa";
   return (
-    <div className={cn("flex min-w-0 items-start", densa ? "gap-3" : "gap-[18px]")}>
+    // densa: inteiras ou nada — a estatística que não cabe quebra para uma
+    // linha que a altura (16, a entrelinha do label-lg) esconde; o title lista todas
+    <div
+      className={cn("flex min-w-0 items-start", densa ? "max-h-4 flex-wrap gap-3 overflow-hidden" : "gap-[18px]")}
+      title={densa ? itens.map((i) => `${i.valor} ${i.rotulo}`).join(" · ") : undefined}
+    >
       {itens.map((i) => (
         <div key={i.rotulo} className={cn("flex min-w-0 shrink-0", densa ? "items-baseline gap-1" : "flex-col items-start gap-0.5")} title={`${i.valor} ${i.rotulo}`}>
           <p className={cn("tabular-nums text-foreground", densa ? "text-label-lg" : "text-h4")}>{i.valor}</p>

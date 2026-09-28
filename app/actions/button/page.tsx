@@ -132,7 +132,7 @@ export default function Botao() {
                 sem superfície em repouso · hover <Chip>accent</Chip>
               </Item>
               <Item mono='variant="destructive"'>
-                <Chip>bg-destructive</Chip> + sombra interna · hover <Chip>destructive-hover</Chip>
+                <Chip>bg-destructive</Chip>, plano · hover <Chip>destructive-hover</Chip>
               </Item>
               <Item mono='variant="soft"'>
                 <Chip>button-soft</Chip> + texto <Chip>button-soft-foreground</Chip> · hover <Chip>button-soft-hover</Chip>
@@ -149,9 +149,9 @@ export default function Botao() {
               Os sete botões acima são os de verdade: passe o mouse para ver cada hover no token que lhe cabe. No
               Figma, <Chip>soft</Chip> e <Chip>outline</Chip> se chamam &ldquo;Secondary&rdquo; e &ldquo;Ghost&rdquo;;
               entraram com nome próprio para não mudar o que <Chip>secondary</Chip> e <Chip>ghost</Chip> já são nas
-              telas prontas. O primary e o destructive têm a sombra interna do arquivo — a do destructive conferida no botão
-              Excluir do Modal. <span className="text-foreground">No escuro ela some em todos menos no primary</span>:
-              o brilho é claro e, sobre superfície escura, lava o botão. O <Chip>soft</Chip> também ganhou par próprio —
+              telas prontas. O primary e o destructive são planos: o cliente pediu sem a sombra interna do arquivo (2026-09-24).{" "}
+              <span className="text-foreground">Nos outros ela some no escuro</span>: o brilho é claro e, sobre
+              superfície escura, lava o botão. O <Chip>soft</Chip> também ganhou par próprio —
               o arquivo repetia o claro nos dois temas e ele saía branco-azulado no escuro.
             </p>
             <p className="mt-2.5">
