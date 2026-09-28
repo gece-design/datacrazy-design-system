@@ -63,5 +63,10 @@ export const caixaNoCartao = "-mx-2 w-auto";
  *  2026-09-28, ADR-041). Era a linha de 36 do Input. */
 export const linhaDoCartao = "h-6";
 
+/** A grade dos cartões no conteúdo do drawer: quantas colunas de 220px
+ *  couberem, nunca um número fixo — o painel muda de largura pela alça e três
+ *  colunas fixas amassavam os cartões (cliente, 2026-09-28). */
+export const gradeDeCartoes = "grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3";
+
 /** A mensagem de erro sob o campo (E6: erro inline é o padrão do DS). */
 export const erroDeCampo = "text-caption text-destructive";

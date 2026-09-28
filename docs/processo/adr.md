@@ -208,8 +208,8 @@ Desvio: o arquivo (545:168) tem cabeçalho com 16 em cima e 12 embaixo, título 
 Motivo: cliente, 2026-09-24 (Angélica: "o header também parece ocupar mais", referência Attio); continua o pedido de 2026-09-26 sobre o rodapé. Cabeçalho e rodapé passam a ter a mesma altura.
 Aprovado por: humano.
 
-## ADR-040 · Drawer abre com 920px e a pessoa arrasta a largura · 2026-09-28
-Desvio: o arquivo desenha o painel com 1080px fixos. O código abre com 920 (`LARGURA_DO_PAINEL`) e a borda esquerda é uma alça: sob o cursor aparece um traço de 3px em `divider` e o arrasto vai de 720 a 1240, nunca mais que a janela menos 48; `memoria` guarda a medida no navegador, por tela. Alça focável, setas ±16 (Shift ±64).
+## ADR-040 · Drawer abre com 840px e a pessoa arrasta a largura até 1080 · 2026-09-28
+Desvio: o arquivo desenha o painel com 1080px fixos. O código abre com 840 (`LARGURA_DO_PAINEL`; foi 920 por algumas horas — "pode diminuir mais") e a borda esquerda é uma alça: sob o cursor aparece um traço de 3px em `divider` e o arrasto vai de 720 a 1080 (o desenho do arquivo é o teto), nunca mais que a janela menos 48; o conteúdo acompanha com `gradeDeCartoes` (auto-fill de 220px), porque três colunas fixas amassavam os cartões; `memoria` guarda a medida no navegador, por tela. Alça focável, setas ±16 (Shift ±64).
 Motivo: cliente, 2026-09-28 ("diminua o tamanho que o drawer ocupa na tela e adiciona opção de ajustar, passando o mouse no canto, stroke de 3px cinza, com limite"). A borda arrastável é a esquerda porque a direita encosta na tela.
 Aprovado por: humano.
 

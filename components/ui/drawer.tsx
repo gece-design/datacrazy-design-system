@@ -33,7 +33,7 @@ import { foco, rolagemDiscreta } from "@/lib/estados";
  * conteúdo da coluna direita. O que é componente:
  *
  *   Drawer          a camada: scrim, foco preso, Escape
- *   DrawerPainel    a caixa de 920px (arrastável pela borda esquerda) com raio à esquerda e elevação xl
+ *   DrawerPainel    a caixa de 840px (arrastável pela borda esquerda, até 1080) com raio à esquerda e elevação xl
  *   DrawerPerfil    a coluna de 320px ("Profile section", 565:6448)
  *   DrawerBloco     "header info" recolhível + o que vem embaixo
  *   DrawerMetricas  "Card info" (563:4737)
@@ -107,17 +107,17 @@ export function Drawer({ aberto, aoFechar, rotulo, children }: DrawerProps) {
 
 /** Largura com que o painel abre e limites do arrasto, em px. O arquivo
  *  desenha 1080; o cliente pediu menos tela ocupada e a opção de ajustar
- *  (2026-09-28, ADR-040). */
-export const LARGURA_DO_PAINEL = 920;
+ *  (2026-09-28, ADR-040) — o 1080 do arquivo virou o teto do arrasto. */
+export const LARGURA_DO_PAINEL = 840;
 export const LARGURA_MINIMA_DO_PAINEL = 720;
-export const LARGURA_MAXIMA_DO_PAINEL = 1240;
+export const LARGURA_MAXIMA_DO_PAINEL = 1080;
 /** Setas na alça: 16px (64 com Shift), como na coluna da tabela. */
 const PASSO_DA_ALCA = 16;
 /** Nome da alça. `rotuloRedimensionar` troca pelo texto do idioma. */
 export const ROTULO_DE_REDIMENSIONAR = "Redimensionar painel";
 
 export interface DrawerPainelProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Largura inicial, em px. Padrão 920. */
+  /** Largura inicial, em px. Padrão 840. */
   largura?: number;
   /** Chave do navegador que lembra a largura arrastada (ex.: "pipeline-lead"). */
   memoria?: string;
@@ -136,7 +136,7 @@ function limitarLargura(v: number) {
 /** A caixa do drawer. Raio só à esquerda: o lado direito encosta na tela.
  *  Com altura definida (a tela inteira, na camada), perfil e conteúdo rolam
  *  cada um por conta própria. A borda esquerda é a alça: sob o cursor aparece
- *  um traço de 3px em `divider` e o arrasto muda a largura (720 a 1240);
+ *  um traço de 3px em `divider` e o arrasto muda a largura (720 a 1080);
  *  `memoria` guarda a medida no navegador. */
 export function DrawerPainel({
   largura = LARGURA_DO_PAINEL,

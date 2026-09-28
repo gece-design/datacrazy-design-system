@@ -57,7 +57,7 @@ o valor andam juntos — "gap menor entre o título e o conteúdo" (cliente,
 
 ### Helpers de classe
 
-`caixaDeCampo({ erro?, disabled? })`, `blocoDeCampo({ realce? })`, `rotuloDeCampo(cartao?)`, `caixaNoCartao`, `linhaDoCartao` e `erroDeCampo` são as classes do campo. Moram em `lib/campo.ts` (regra D21, lote B6) — `InputTelefone`, `TimePicker`, `Rating` e `Select size="field"` importam de lá — e o Input as re-exporta por compatibilidade.
+`caixaDeCampo({ erro?, disabled? })`, `blocoDeCampo({ realce? })`, `rotuloDeCampo(cartao?)`, `caixaNoCartao`, `linhaDoCartao`, `gradeDeCartoes` e `erroDeCampo` são as classes do campo. Moram em `lib/campo.ts` (regra D21, lote B6) — `InputTelefone`, `TimePicker`, `Rating` e `Select size="field"` importam de lá — e o Input as re-exporta por compatibilidade.
 
 ### `Rating`
 

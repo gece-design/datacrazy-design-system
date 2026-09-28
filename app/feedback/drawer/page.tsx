@@ -47,7 +47,7 @@ export default function DrawerPage() {
       </ComoFunciona>
       <Secao
         titulo="Drawer do lead"
-        spec="920px · arrastável · 5 seções desenhadas"
+        spec="840px · arrastável até 1080 · 5 seções desenhadas"
         descricao="Troque o lead e a seção no menu. O + no fim das tags abre o seletor; os dois quadrados de um campo copiam o valor; o botão do canto direito do perfil recolhe a coluna."
         codigo={`<DrawerPainel className="h-[760px]">
   <DrawerPerfil nome="Joel Jota" tipo="empresa" rotuloTipo="Empresa"
@@ -74,7 +74,7 @@ export default function DrawerPage() {
         nota={
           <>
             O preview fixa o painel em 760px de altura para mostrar o menu e o conteúdo rolando. Na{" "}
-            <span className="text-foreground">Camada</span> ele ocupa a tela inteira. Arraste a borda esquerda para mudar a largura (720 a 1240): sob o
+            <span className="text-foreground">Camada</span> ele ocupa a tela inteira. Arraste a borda esquerda para mudar a largura (720 a 1080): sob o
             cursor aparece um traço de 3px. Abaixo do mínimo, a caixa rola na horizontal.
           </>
         }

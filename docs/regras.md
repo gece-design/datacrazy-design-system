@@ -102,8 +102,9 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 - Alça da coluna da tabela: dois cliques ou Enter ajustam ao conteúdo.
 - Cartão do drawer: rótulo em bold e valor numa linha de 24 (`linhaDoCartao`).
   Select dentro do cartão é `cartao`, nunca `field` dentro de `CartaoDeCampo`.
-- Drawer abre com 920px e a pessoa arrasta a borda esquerda (720 a 1240);
-  `memoria` no `DrawerPainel` lembra a largura por tela.
+- Drawer abre com 840px e a pessoa arrasta a borda esquerda (720 a 1080);
+  `memoria` no `DrawerPainel` lembra a largura por tela. O conteúdo nunca tem
+  número fixo de colunas: cartões em `gradeDeCartoes` (auto-fill de 220px).
 
 ### Fidelidade
 11. Pronto = diff ≤ 1% contra o Figma **e** geometria sem divergência.

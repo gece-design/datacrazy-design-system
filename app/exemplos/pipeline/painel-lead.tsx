@@ -21,6 +21,7 @@ import { DrawerSecao, LinhaDoTempo } from "@/components/ui/drawer";
 // aberto com o lead clicado no quadro. Nada aqui é uma segunda versão dele.
 import { DrawerLead, cabecalhos, type LeadDoDrawer, type SecaoDoDrawer } from "@/app/feedback/drawer/drawer-lead";
 import { GRUPOS_TAGS, moeda, tagsDe, type Etapa, type EtapaId, type Lead, type TipoEvento } from "./dados";
+import { gradeDeCartoes } from "@/lib/campo";
 
 const glifos: Record<TipoEvento, Icon> = {
   mensagem: ChatCircleDots,
@@ -79,7 +80,7 @@ export function PainelLead({
           return (
             <>
               <DrawerSecao titulo="Dados cadastrais">
-                <div className="grid grid-cols-3 gap-3">
+                <div className={gradeDeCartoes}>
                   <CampoEditavel rotulo="Nome" valor={lead.nome} aoSalvar={(v) => aoEditar({ nome: v })} rotuloEditar="Editar nome do lead" textoVazio="Adicionar" />
                   <CampoEditavel rotulo="Empresa" valor={lead.empresa} aoSalvar={(v) => aoEditar({ empresa: v })} rotuloEditar="Editar empresa" textoVazio="Adicionar" />
                   <CampoEditavel rotulo="Cidade" valor={lead.cidade} aoSalvar={(v) => aoEditar({ cidade: v })} rotuloEditar="Editar cidade" textoVazio="Adicionar" iconeInicio={MapPin} />
@@ -89,7 +90,7 @@ export function PainelLead({
                 </div>
               </DrawerSecao>
               <DrawerSecao titulo="Contato">
-                <div className="grid grid-cols-3 gap-3">
+                <div className={gradeDeCartoes}>
                   <CampoEditavel
                     rotulo="Telefone"
                     valor={lead.telefone}

@@ -3265,7 +3265,7 @@
     {
       "id": "AUD-206",
       "eixo": "fidelidade",
-      "titulo": "Figma atrás do código: Drawer com 920px arrastável, cartão do campo com linha de 24, Select `cartao`",
+      "titulo": "Figma atrás do código: Drawer com 840px arrastável até 1080, cartão do campo com linha de 24, Select `cartao`",
       "onde": [
         "components/ui/drawer.tsx",
         "components/ui/input.tsx",
@@ -3277,7 +3277,7 @@
       "verificacao": "manual",
       "status": "adiado",
       "fechadoEm": null,
-      "nota": "**Decisões do cliente em 2026-09-28 (ADR-040, ADR-041).** `DrawerPainel` abre com 920 (o arquivo desenha 1080) e a borda esquerda é alça de 720 a 1240; o cartão do campo tem a linha de 24, não os 36 do Input; o Select ganha a variante `cartao`, sem par no arquivo. Na remedição, o arquivo acompanha o código."
+      "nota": "**Decisões do cliente em 2026-09-28 (ADR-040, ADR-041).** `DrawerPainel` abre com 840 (o arquivo desenha 1080, que virou o teto do arrasto) e a borda esquerda é alça de 720 a 1080; o cartão do campo tem a linha de 24, não os 36 do Input; o Select ganha a variante `cartao`, sem par no arquivo. Na remedição, o arquivo acompanha o código."
     }
   ]
 }
