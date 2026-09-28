@@ -28,7 +28,7 @@ Diff de pixels **não medido**: depende da ponte de escrita do Figma
 | Prop | Tipo | Descrição |
 |------|------|-----------|
 | `colunas` | `ColunaTabela[]` | `chave`, `rotulo`, `peso`, `alinharFim`, `ordenavel?`, `ocultavel?`, `minimo?`, `agrupavel?`. |
-| `layout` | `"padrao" \| "compacta"` | `compacta` é o Compact do drawer. |
+| `layout` | `"padrao" \| "compacta" \| "densa"` | `compacta` é o Compact do drawer; `densa` é a grade de lista à la Twenty (cliente, 2026-09-27): linha de 36px, recuo 8, traço entre colunas e linhas, cada célula numa linha só. |
 | `ajustes` | `AjustesDaTabela` | Liga os comportamentos. Vem de `useAjustesDaTabela`. |
 | `ordem`, `aoOrdenar` | `OrdemTabela`, `(ordem) => void` | Só ordenar, sem o resto; `ajustes` já traz os dois. |
 | `rotulos` | `Partial<RotulosDaTabela>` | Textos dos controles (i18n). Fábrica: `ROTULOS_DA_TABELA`. |

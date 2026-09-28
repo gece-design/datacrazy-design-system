@@ -124,16 +124,12 @@ export function Lista({
                   </button>
                 </DataTableCell>
                 <DataTableCell coluna="empresa">
-                  {/* o mesmo par do cartão: ícone do tipo + empresa, cidade embaixo */}
-                  <div className="flex min-w-0 flex-col gap-0.5">
-                    <p title={lead.empresa} className="flex min-w-0 items-center gap-1 text-h4 text-foreground">
-                      <Tipo size={14} weight="regular" aria-hidden="true" className="shrink-0 text-muted-foreground" />
-                      <span className="min-w-0 truncate">{lead.empresa}</span>
-                    </p>
-                    <p className="w-full truncate text-body-sm text-muted-foreground" title={lead.cidade}>
-                      {lead.cidade}
-                    </p>
-                  </div>
+                  {/* o mesmo par do cartão, numa linha: ícone do tipo + empresa · cidade */}
+                  <p title={`${lead.empresa} · ${lead.cidade}`} className="flex min-w-0 items-center gap-1 text-label-lg text-foreground">
+                    <Tipo size={14} weight="regular" aria-hidden="true" className="shrink-0 text-muted-foreground" />
+                    <span className="min-w-0 truncate">{lead.empresa}</span>
+                    <span className="shrink-0 truncate text-caption text-muted-foreground">· {lead.cidade}</span>
+                  </p>
                 </DataTableCell>
                 <DataTableCell coluna="etapa">
                   <CelulaProgresso etapa={etapa.rotulo} percentual={etapa.percentual} tom={etapa.cor} />
@@ -174,8 +170,9 @@ export function Lista({
     <div className="min-h-0 flex-1 overflow-y-auto pl-4 pr-4 pb-4 lg:pl-1 [scrollbar-width:thin]">
       <div className="w-full overflow-hidden rounded-md bg-card">
         {/* Só o resumo: Agrupar e Colunas estão na fileira do Header (humano, 2026-09-24). */}
-        <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />
-        <DataTable colunas={COLUNAS_DA_LISTA} ajustes={ajustes} selecao={selecao} className="rounded-none">
+        <DataTableToolbar layout="densa" rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />
+        {/* densa: a grade de lista à la Twenty (cliente, 2026-09-27) */}
+        <DataTable layout="densa" colunas={COLUNAS_DA_LISTA} ajustes={ajustes} selecao={selecao} className="rounded-none border-0">
           {grupos
             ? grupos.map((g) => (
                 <Fragment key={g.id}>

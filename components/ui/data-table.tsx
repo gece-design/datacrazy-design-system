@@ -522,7 +522,13 @@ export function BotaoAgrupar({ ajustes, recolhido = false, className }: { ajuste
 
 /* --------------------------------------------------------------- Tabela -- */
 
-type Layout = "padrao" | "compacta";
+/**
+ * `padrao` é o arquivo; `compacta` é o Compact do drawer; `densa` é a grade
+ * de lista à la Twenty (cliente, 2026-09-27: "menos gap, menos padding,
+ * stroke nas divs"): linha de 36px, recuo 8, traço entre colunas e entre
+ * linhas, cada célula numa linha só.
+ */
+type Layout = "padrao" | "compacta" | "densa";
 
 /** A seleção em massa por dentro: o que a linha precisa para desenhar a caixa. */
 type SelecaoInterna = {
@@ -560,6 +566,7 @@ export interface DataTableProps extends React.HTMLAttributes<HTMLDivElement> {
 export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
   ({ className, colunas, layout = "padrao", ajustes, ordem: ordemDeFora, aoOrdenar: aoOrdenarDeFora, rotulos, selecao, children, ...props }, ref) => {
     const compacta = layout === "compacta";
+    const densa = layout === "densa";
     const r = { ...ROTULOS_DA_TABELA, ...ajustes?.rotulos, ...rotulos };
     const naTela = ajustes ? ajustes.naTela : colunas;
     const ordem = ajustes ? ajustes.ordem : (ordemDeFora ?? null);
@@ -775,14 +782,14 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
       <Contexto.Provider value={contexto}>
         <div
           ref={ref}
-          className={cn("w-full overflow-hidden rounded-md bg-card", compacta && "border border-border", className)}
+          className={cn("w-full overflow-hidden rounded-md bg-card", (compacta || densa) && "border border-border", className)}
           {...props}
         >
           {/* O scroll horizontal vive aqui: numa tela estreita a tabela rola,
               em vez de espremer coluna até o texto virar uma letra por linha. */}
           <div className={cn("w-full overflow-x-auto", arrasto?.ativo && "select-none")}>
             <table
-              className={cn("w-full table-fixed border-collapse", !compacta && !emPixel && "min-w-[1160px]")}
+              className={cn("w-full table-fixed border-collapse", !compacta && !densa && !emPixel && "min-w-[1160px]")}
               // com larguras em px a tabela mede a soma delas: passou da caixa, rola
               style={emPixel ? { minWidth: soma + (selecao ? LARGURA_DA_CAIXA : 0) } : undefined}
             >
@@ -803,11 +810,11 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                 ))}
               </colgroup>
               <thead>
-                <tr className="bg-muted">
+                <tr className={cn("bg-muted", densa && "[&>th]:border-r [&>th]:border-border [&>th:last-child]:border-r-0")}>
                   {selecao ? (
                     // text-left: th centra por padrão e, com a coluna esticada, a caixa
                     // do cabeçalho saía do alinhamento das linhas (humano, 2026-09-24)
-                    <th scope="col" className={cn("text-left align-middle", compacta ? "pl-3 pr-1" : "pl-5 pr-1")}>
+                    <th scope="col" className={cn("text-left align-middle", compacta ? "pl-3 pr-1" : densa ? "pl-2 pr-1" : "pl-5 pr-1")}>
                       <Checkbox
                         aria-label={r.selecionarTodos}
                         checked={todasMarcadas}
@@ -829,10 +836,11 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                         scope="col"
                         aria-sort={podeOrdenar ? (ordenada === "asc" ? "ascending" : ordenada === "desc" ? "descending" : "none") : undefined}
                         className={cn(
-                          "group/coluna relative px-2 py-2.5 text-left align-middle text-label-md font-medium text-muted-foreground",
+                          "group/coluna relative px-2 text-left align-middle text-label-md font-medium text-muted-foreground",
+                          densa ? "py-1.5" : "py-2.5",
                           c.alinharFim && "text-right",
-                          i === 0 && !selecao && (compacta ? "pl-3" : "pl-5"),
-                          i === naTela.length - 1 && (compacta ? "pr-3" : "pr-5"),
+                          i === 0 && !selecao && (compacta ? "pl-3" : densa ? "pl-2" : "pl-5"),
+                          i === naTela.length - 1 && (compacta ? "pr-3" : densa ? "pr-2" : "pr-5"),
                           arrasto?.ativo && arrasto.chave === c.chave && "opacity-disabled",
                         )}
                       >
@@ -1040,7 +1048,8 @@ export const DataTableRow = React.forwardRef<HTMLTableRowElement, DataTableRowPr
       }}
       className={cn(
         "border-t transition-colors hover:bg-overlay-item-hover",
-        layout === "compacta" ? "border-border" : "border-card",
+        layout === "padrao" ? "border-card" : "border-border",
+        layout === "densa" && "[&>td]:border-r [&>td]:border-border [&>td:last-child]:border-r-0",
         selecionavel && `cursor-pointer ${focoInterno}`,
         (selecionada || marcada) && "bg-overlay-item-selected hover:bg-overlay-item-selected",
         className,
@@ -1049,7 +1058,7 @@ export const DataTableRow = React.forwardRef<HTMLTableRowElement, DataTableRowPr
     >
       {comCaixa ? (
         <td
-          className={cn("select-none text-left align-middle", layout === "compacta" ? "pl-3 pr-1" : "pl-5 pr-1")}
+          className={cn("select-none text-left align-middle", layout === "compacta" ? "pl-3 pr-1" : layout === "densa" ? "pl-2 pr-1" : "pl-5 pr-1")}
           onPointerDown={(e) => {
             shift.current = e.shiftKey;
           }}
@@ -1081,14 +1090,17 @@ export type DataTableCellProps = React.TdHTMLAttributes<HTMLTableCellElement> & 
 
 export const DataTableCell = React.forwardRef<HTMLTableCellElement, DataTableCellProps>(
   ({ className, primeira, ultima, coluna: _coluna, ...props }, ref) => {
-    const compacta = React.useContext(Contexto).layout === "compacta";
+    const layout = React.useContext(Contexto).layout;
+    const compacta = layout === "compacta";
+    const densa = layout === "densa";
     return (
       <td
         ref={ref}
         className={cn(
-          "px-2 py-3 align-middle",
-          primeira && (compacta ? "pl-3" : "pl-5"),
-          ultima && (compacta ? "pr-3" : "pr-5"),
+          "px-2 align-middle",
+          densa ? "py-1" : "py-3",
+          primeira && (compacta ? "pl-3" : densa ? "pl-2" : "pl-5"),
+          ultima && (compacta ? "pr-3" : densa ? "pr-2" : "pr-5"),
           className,
         )}
         {...props}
@@ -1126,10 +1138,11 @@ export function DataTableGrupo({
 }) {
   const { layout, chaves, naTela, selecao } = React.useContext(Contexto);
   const compacta = layout === "compacta";
+  const densa = layout === "densa";
   const r = { ...ROTULOS_DA_TABELA, ...rotulos };
   return (
-    <tr className={cn("border-t bg-muted", compacta ? "border-border" : "border-card", className)}>
-      <td colSpan={(naTela ?? chaves).length + (selecao ? 1 : 0)} className={cn("py-2", compacta ? "px-3" : "px-5")}>
+    <tr className={cn("border-t bg-muted", layout === "padrao" ? "border-card" : "border-border", className)}>
+      <td colSpan={(naTela ?? chaves).length + (selecao ? 1 : 0)} className={cn(densa ? "px-2 py-1.5" : compacta ? "px-3 py-2" : "px-5 py-2")}>
         <div className="flex items-center justify-between gap-3">
           <button
             type="button"
@@ -1172,11 +1185,12 @@ export function DataTableToolbar({
   children?: React.ReactNode;
 }) {
   const compacta = layout === "compacta";
+  const densa = layout === "densa";
   return (
-    <div className={cn("flex w-full flex-wrap items-center justify-between gap-4", !compacta && "px-5 py-4")}>
-      <div className={cn("flex flex-col", compacta ? "gap-0.5" : "gap-[3px]")}>
-        <p className={cn("text-muted-foreground", compacta ? "text-caption" : "text-body-sm")}>{rotulo}</p>
-        <p className={cn("text-foreground", compacta ? "text-h4" : "text-h3")}>{total}</p>
+    <div className={cn("flex w-full flex-wrap items-center justify-between gap-4", densa ? "px-3 py-2" : !compacta && "px-5 py-4")}>
+      <div className={cn("flex flex-col", compacta || densa ? "gap-0.5" : "gap-[3px]")}>
+        <p className={cn("text-muted-foreground", compacta || densa ? "text-caption" : "text-body-sm")}>{rotulo}</p>
+        <p className={cn("text-foreground", compacta || densa ? "text-h4" : "text-h3")}>{total}</p>
       </div>
       {children ? <div className="flex flex-wrap items-start gap-2">{children}</div> : null}
     </div>
@@ -1256,6 +1270,25 @@ export function BarraDeSelecao({
 
 /** Nome com as etiquetas embaixo — a primeira coluna do arquivo. */
 export function CelulaLead({ nome, etiquetas = [] }: { nome: string; etiquetas?: EtiquetaDaCelula[] }) {
+  // no denso, nome e etiquetas numa linha só: o nome trunca, entra a primeira
+  // etiqueta inteira e as outras viram "+N" (o title lista todas)
+  const densa = React.useContext(Contexto).layout === "densa";
+  const rotuloDe = (e: EtiquetaDaCelula) => (typeof e === "string" ? e : e.rotulo);
+  if (densa) {
+    const [primeira, ...resto] = etiquetas;
+    const p = primeira === undefined ? null : typeof primeira === "string" ? { rotulo: primeira, tom: undefined, status: undefined } : primeira;
+    return (
+      <div className="flex min-w-0 items-center gap-1.5" title={etiquetas.length ? `${nome} · ${etiquetas.map(rotuloDe).join(", ")}` : nome}>
+        <p className="min-w-0 truncate text-label-lg text-foreground">{nome}</p>
+        {p ? (
+          <Tag tom={p.tom} status={p.status} className="max-w-32">
+            {p.rotulo}
+          </Tag>
+        ) : null}
+        {resto.length > 0 ? <Tag className="shrink-0">+{resto.length}</Tag> : null}
+      </div>
+    );
+  }
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
       <p className="w-full truncate text-h4 text-foreground" title={nome}>
@@ -1313,6 +1346,8 @@ export function CelulaEditavel({
   const [editando, setEditando] = React.useState(false);
   const [rascunho, setRascunho] = React.useState(valor);
   const gatilho = React.useRef<HTMLButtonElement>(null);
+  const densa = React.useContext(Contexto).layout === "densa";
+  const altura = densa ? "h-6" : "h-8";
   React.useEffect(() => {
     if (!editando) setRascunho(valor);
   }, [valor, editando]);
@@ -1347,7 +1382,7 @@ export function CelulaEditavel({
               cancelar();
             }
           }}
-          className={cn(caixaDeCampo(), "h-8 px-2 text-body-lg tabular-nums text-input-text", alinharFim && "text-right")}
+          className={cn(caixaDeCampo(), altura, "px-2 text-body-lg tabular-nums text-input-text", alinharFim && "text-right")}
         />
       ) : (
         <button
@@ -1357,7 +1392,8 @@ export function CelulaEditavel({
           aria-label={rotulo}
           onClick={() => setEditando(true)}
           className={cn(
-            "flex h-8 min-w-0 max-w-full items-center gap-1.5 rounded-md px-2 text-body-lg tabular-nums text-foreground transition-colors hover:bg-accent",
+            "flex min-w-0 max-w-full items-center gap-1.5 rounded-md px-2 text-body-lg tabular-nums text-foreground transition-colors hover:bg-accent",
+            altura,
             alinharFim && "flex-row-reverse text-right",
             foco,
           )}
@@ -1377,6 +1413,16 @@ export function CelulaEditavel({
 
 /** Valor em cima, complemento embaixo. Ex.: produto e preço. */
 export function CelulaDupla({ principal, apoio }: { principal: string; apoio?: string }) {
+  const densa = React.useContext(Contexto).layout === "densa";
+  if (densa) {
+    // numa linha: principal e, apagado, o apoio
+    return (
+      <p className="flex min-w-0 items-baseline gap-1" title={apoio ? `${principal} · ${apoio}` : principal}>
+        <span className="min-w-0 truncate text-label-lg text-foreground">{principal}</span>
+        {apoio ? <span className="min-w-0 max-w-[45%] truncate text-caption text-muted-foreground">· {apoio}</span> : null}
+      </p>
+    );
+  }
   return (
     <div className="flex min-w-0 flex-col items-start gap-0.5">
       <p className="w-full truncate text-h4 text-foreground" title={principal}>
@@ -1414,14 +1460,16 @@ export function CelulaProgresso({ etapa, percentual, tom }: { etapa: string; per
   // a lista e o quadro contam a mesma história (humano, 2026-09-24)
   const comTom = tom !== undefined;
   const cor = tom === "neutro" || !tom ? "bg-muted-foreground" : "bg-tom-texto";
+  // no denso a barra vai ao lado do nome, curta — a célula tem uma linha
+  const densa = React.useContext(Contexto).layout === "densa";
   return (
-    <div data-tom={tom && tom !== "neutro" ? tom : undefined} className="flex min-w-0 flex-col items-start gap-[7px]">
-      <p className="flex w-full min-w-0 items-center gap-1.5 text-label-lg text-foreground" title={etapa}>
+    <div data-tom={tom && tom !== "neutro" ? tom : undefined} className={cn("flex min-w-0", densa ? "flex-row items-center gap-2" : "flex-col items-start gap-[7px]")}>
+      <p className={cn("flex min-w-0 items-center gap-1.5 text-label-lg text-foreground", !densa && "w-full")} title={etapa}>
         {comTom ? <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", cor)} /> : null}
         <span className="min-w-0 truncate">{etapa}</span>
       </p>
       <div
-        className="h-[5px] w-full overflow-hidden rounded-sm bg-background"
+        className={cn("overflow-hidden rounded-sm bg-background", densa ? "h-1 w-10 shrink-0" : "h-[5px] w-full")}
         role="progressbar"
         aria-valuenow={preenchido}
         aria-valuemin={0}
@@ -1440,14 +1488,13 @@ export function CelulaEstatisticas({
 }: {
   itens: { valor: string; rotulo: string }[];
 }) {
+  const densa = React.useContext(Contexto).layout === "densa";
   return (
-    <div className="flex min-w-0 items-start gap-[18px]">
+    <div className={cn("flex min-w-0 items-start", densa ? "gap-3" : "gap-[18px]")}>
       {itens.map((i) => (
-        <div key={i.rotulo} className="flex min-w-0 shrink-0 flex-col items-start gap-0.5">
-          <p className="text-h4 tabular-nums text-foreground">{i.valor}</p>
-          <p className="w-full truncate text-caption text-muted-foreground" title={i.rotulo}>
-            {i.rotulo}
-          </p>
+        <div key={i.rotulo} className={cn("flex min-w-0 shrink-0", densa ? "items-baseline gap-1" : "flex-col items-start gap-0.5")} title={`${i.valor} ${i.rotulo}`}>
+          <p className={cn("tabular-nums text-foreground", densa ? "text-label-lg" : "text-h4")}>{i.valor}</p>
+          <p className="w-full truncate text-caption text-muted-foreground">{i.rotulo}</p>
         </div>
       ))}
     </div>

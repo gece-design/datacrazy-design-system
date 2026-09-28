@@ -187,3 +187,8 @@ Aprovado por: humano.
 Desvio: o arquivo desenha o rodapé do Modal com 12 em cima e embaixo e botões de 32; a Table não tem edição no lugar.
 Motivo: cliente (Guilherme, WhatsApp de 2026-09-26): "me parece que o footer e os botões ocupam muito espaço" → rodapé com 8 em cima e embaixo, corpo com 12 embaixo e botões `sm` (28) — o rodapé fecha em 44 em vez de 56. E "ter a opção de editar os dados na tabela, nas células" → `CelulaEditavel`: texto com lápis no hover, clique vira campo de 32px na célula, Enter e sair salvam, Escape desfaz; a tela grava. Entra na página da Table e no valor da lista do pipeline.
 Aprovado por: humano ("precisamos aplicar este pedido de ajuste").
+
+## ADR-036 · Grade densa de lista, com traço entre colunas (referência: Twenty) · 2026-09-27
+Desvio: o arquivo desenha a tabela com respiro (linha de ~64px, recuo 20, sem traço vertical). O `layout="densa"` tem linha de 36px, recuo 8, traço `border` entre colunas e entre linhas, e cada célula numa linha só (nome e etiquetas lado a lado, empresa · cidade, etapa com a barra curta ao lado, estatísticas em linha, campo editável de 24px).
+Motivo: cliente (2026-09-27, com o print do Twenty): "menos gap, menos padding, stroke nas divs". Entra como layout, não como troca do padrão: a lista do pipeline usa `densa`; o `padrao` segue o arquivo para leitura com respiro.
+Aprovado por: humano.

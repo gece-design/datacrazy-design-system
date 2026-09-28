@@ -488,6 +488,70 @@ function TabelaEditavel() {
   );
 }
 
+const codigoDensa = `<DataTableToolbar layout="densa" rotulo="Total de resultados" total="10 negócios">
+  <BotaoColunas ajustes={ajustes} />
+</DataTableToolbar>
+<DataTable layout="densa" colunas={colunas} ajustes={ajustes} selecao={selecao}>
+  {linhas.map((n) => (
+    <DataTableRow key={n.id} chave={n.id} nome={n.nome}>
+      <DataTableCell coluna="lead"><CelulaLead nome={n.nome} etiquetas={n.etiquetas} /></DataTableCell>
+      <DataTableCell coluna="produto"><CelulaDupla principal={n.produto} apoio={n.valor} /></DataTableCell>
+      <DataTableCell coluna="etapa"><CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom="azul" /></DataTableCell>
+    </DataTableRow>
+  ))}
+</DataTable>`;
+
+/** A seção densa: a grade de lista à la Twenty — linha de 36px, recuo 8, traço entre colunas e linhas. */
+function TabelaDensa() {
+  const ajustes = useAjustesDaTabela(colunas, { memoria: "showcase-densa" });
+  const selecao = useSelecaoDaTabela();
+  const linhas = ordenarPor(carteira, ajustes.ordem, valorDe);
+  return (
+    <div className="w-full overflow-hidden rounded-md border border-border bg-card">
+      <DataTableToolbar layout="densa" rotulo="Total de resultados" total="10 negócios">
+        <BotaoColunas ajustes={ajustes} />
+      </DataTableToolbar>
+      <DataTable layout="densa" colunas={colunas} ajustes={ajustes} selecao={selecao} className="rounded-none border-0 border-t">
+        {linhas.map((n) => (
+          <DataTableRow key={n.id} chave={n.id} nome={n.nome}>
+            <DataTableCell coluna="lead">
+              <CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} />
+            </DataTableCell>
+            <DataTableCell coluna="produto">
+              <CelulaDupla principal={n.produto} apoio={moeda(n.valor)} />
+            </DataTableCell>
+            <DataTableCell coluna="atividades">
+              <CelulaTexto>{n.atividades}</CelulaTexto>
+            </DataTableCell>
+            <DataTableCell coluna="atendente">
+              <Atendente nome={n.atendente} />
+            </DataTableCell>
+            <DataTableCell coluna="etapa">
+              <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
+            </DataTableCell>
+            <DataTableCell coluna="dados">
+              <CelulaEstatisticas
+                itens={[
+                  { valor: `${n.aberto}d`, rotulo: "em aberto" },
+                  { valor: `${n.naEtapa}d`, rotulo: "na etapa" },
+                ]}
+              />
+            </DataTableCell>
+            <DataTableCell coluna="acoes">
+              <CelulaAcoes />
+            </DataTableCell>
+          </DataTableRow>
+        ))}
+      </DataTable>
+      <BarraDeSelecao selecao={selecao}>
+        <Button variant="tertiary" size="sm" onClick={() => selecao.limpar()}>
+          Exportar
+        </Button>
+      </BarraDeSelecao>
+    </div>
+  );
+}
+
 type Parte = { nome: string; medida: string; papel: string };
 
 const anatomia: Parte[] = [
@@ -539,7 +603,7 @@ export default function Pagina() {
     <PaginaDS
       titulo="Table"
       descricao="A tabela de negócios do CRM: barra de filtros, sete colunas, dez linhas e paginação. É o componente mais denso do sistema, e o único onde a estrutura importa tanto quanto a aparência."
-      secoes={["Completa", "Ajustável", "Agrupada", "Seleção em massa", "Edição na célula", "Anatomia", "Como funciona"]}
+      secoes={["Completa", "Ajustável", "Agrupada", "Seleção em massa", "Edição na célula", "Densa", "Anatomia", "Como funciona"]}
     >
       <Secao
         titulo="Completa"
@@ -555,7 +619,7 @@ export default function Pagina() {
         <CelulaDupla principal={n.produto} apoio={n.valor} />
       </DataTableCell>
       <DataTableCell><CelulaTexto>{n.atividades}</CelulaTexto></DataTableCell>
-      <DataTableCell><Atendente nome={n.atendente} /></DataTableCell>
+      <DataTableCell><Tag foto="/ds/atendente.png">{n.atendente}</Tag></DataTableCell>
       <DataTableCell>
         <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
       </DataTableCell>
@@ -723,6 +787,22 @@ export default function Pagina() {
         }
       >
         <TabelaEditavel />
+      </Secao>
+
+      <Secao
+        titulo="Densa"
+        spec="layout=densa · 36px · traço entre colunas"
+        descricao="A grade de lista, na referência que o time mandou (Twenty): linha de 36px, recuo 8, traço entre colunas e entre linhas, cada célula numa linha só. Os mesmos comportamentos — ordenar, colunas, alça, seleção — com muito mais linhas na tela."
+        codigo={codigoDensa}
+        nota={
+          <>
+            É a mesma tabela com <Chip>layout=&quot;densa&quot;</Chip>: as células sabem o layout e viram uma linha
+            (nome e etiquetas lado a lado, empresa · cidade, etapa com a barra curta ao lado). A lista do pipeline usa
+            esta. O <Chip>padrao</Chip> continua sendo o desenho do arquivo, para leitura com respiro.
+          </>
+        }
+      >
+        <TabelaDensa />
       </Secao>
 
       <Secao titulo="Anatomia" spec="6 partes" semCaixa>
