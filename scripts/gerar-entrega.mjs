@@ -128,7 +128,8 @@ const entrega = {
   auditoria: { total: auditoria.length, porStatus, porEixo },
   pedidos,
   qualidade: { checks, capturas, temas: 2 },
-  bancada: null,
+  // a bancada (scripts/bancada/resumo.mjs) — se já rodou
+  bancada: existe("docs/processo/bancada.json") ? JSON.parse(ler("docs/processo/bancada.json")) : null,
 };
 fs.writeFileSync(path.join(RAIZ, "lib/entrega.json"), JSON.stringify(entrega, null, 2) + "\n");
 console.log(`lib/entrega.json · ${componentes.length} componentes · ${registro.items.length} itens · ${adrs.length} ADRs · ${auditoria.length} achados · ${pedidos.length} pedidos · ${commits} commits`);

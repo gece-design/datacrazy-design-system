@@ -59,6 +59,9 @@ import { caixaDeCampo } from "@/lib/campo";
  * traço `border` em volta e entre linhas, recuo de 12px e sem largura mínima.
  */
 
+/** useLayoutEffect avisa no servidor: no SSR o hook cai para useEffect. */
+const useEfeitoDeLayout = typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
+
 export type ColunaTabela = {
   chave: string;
   rotulo: string;
@@ -576,6 +579,21 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
     const cabecalhos = React.useRef<Record<string, HTMLTableCellElement | null>>({});
     const corpo = React.useRef<HTMLTableSectionElement>(null);
 
+    /* A largura da tabela, medida. Com a caixa de seleção as proporções das
+       colunas são calculadas sobre o que sobra dela: `calc(% - px)` numa <col>
+       o navegador trata como `auto` e todas saíam iguais (bancada, 2026-09-29). */
+    const tabela = React.useRef<HTMLTableElement>(null);
+    const [larguraDaTabela, setLarguraDaTabela] = React.useState<number | null>(null);
+    useEfeitoDeLayout(() => {
+      const el = tabela.current;
+      if (!el) return;
+      const medir = () => setLarguraDaTabela(el.clientWidth);
+      medir();
+      const observador = new ResizeObserver(medir);
+      observador.observe(el);
+      return () => observador.disconnect();
+    }, []);
+
     /* Seleção em massa: a tabela só sabe quais linhas estão na tela, na ordem
        em que aparecem — é o que a caixa do cabeçalho e o Shift+clique usam.
        Quem guarda os ids escolhidos é a tela (`selecao`). */
@@ -812,6 +830,8 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
 
     const colunaDoMenu = menuAberto ? naTela.find((c) => c.chave === menuAberto) : undefined;
     const emArrasto = arrasto?.ativo ? naTela.find((c) => c.chave === arrasto.chave) : undefined;
+    // a coluna da caixa em % da tabela medida; antes da medida, 44px (um quadro)
+    const caixaPct = selecao && larguraDaTabela ? (LARGURA_DA_CAIXA / larguraDaTabela) * 100 : 0;
 
     return (
       <Contexto.Provider value={contexto}>
@@ -824,23 +844,26 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
               em vez de espremer coluna até o texto virar uma letra por linha. */}
           <div className={cn("w-full overflow-x-auto", arrasto?.ativo && "select-none")}>
             <table
+              ref={tabela}
               className={cn("w-full table-fixed border-collapse", !compacta && !densa && !emPixel && "min-w-[1160px]")}
-              // com larguras em px a tabela mede a soma delas: passou da caixa, rola
-              style={emPixel ? { minWidth: soma + (selecao ? LARGURA_DA_CAIXA : 0) } : undefined}
+              // com larguras em px a tabela mede a soma delas: passou da caixa, rola.
+              // A densa também tem piso (112 por coluna): abaixo disso rola em vez de
+              // espremer tudo em reticências (bancada, 2026-09-29).
+              style={
+                emPixel
+                  ? { minWidth: soma + (selecao ? LARGURA_DA_CAIXA : 0) }
+                  : densa
+                    ? { minWidth: naTela.length * 112 + (selecao ? LARGURA_DA_CAIXA : 0) }
+                    : undefined
+              }
             >
               <colgroup>
-                {selecao ? <col style={{ width: LARGURA_DA_CAIXA }} /> : null}
+                {selecao ? <col style={{ width: caixaPct ? `${caixaPct}%` : LARGURA_DA_CAIXA }} /> : null}
                 {naTela.map((c) => (
                   <col
                     key={c.chave}
-                    // com a caixa, as proporções descontam a coluna dela — senão a soma passa de 100% e a tabela rola
-                    style={{
-                      width: emPixel
-                        ? `${larguraDe(c)}px`
-                        : selecao
-                          ? `calc(${(c.peso / total) * 100}% - ${Math.round((LARGURA_DA_CAIXA * c.peso) / total)}px)`
-                          : `${(c.peso / total) * 100}%`,
-                    }}
+                    // com a caixa, as proporções repartem o que sobra dela (em %, medido)
+                    style={{ width: emPixel ? `${larguraDe(c)}px` : `${(c.peso / total) * (100 - caixaPct)}%` }}
                   />
                 ))}
               </colgroup>

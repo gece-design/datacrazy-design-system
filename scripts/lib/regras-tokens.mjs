@@ -97,9 +97,29 @@ export const REGRAS_DE_TELA = [
 
 /** `page.tsx` de tela do CRM sem `TelaBase`: montou Sidebar e Header à mão, ou
  *  nem isso. Vale para toda página em app/ menos a raiz (que costuma ser
- *  redirecionamento) — `ds-check:ignore sem-tela-base` dispensa. */
-export function semTelaBase(rel, fonte) {
+ *  redirecionamento) — `ds-check:ignore sem-tela-base` dispensa. A página pode
+ *  só renderizar um vizinho (`./tela`) que tem a TelaBase: `lerVizinho(spec)`
+ *  devolve o texto dele (ou null) e conta. */
+export function semTelaBase(rel, fonte, lerVizinho = () => null) {
   if (!/^app\/.+\/page\.tsx$/.test(rel)) return false;
   if (/ds-check:ignore\s+sem-tela-base/.test(fonte)) return false;
-  return !/\bTelaBase\b/.test(fonte);
+  if (/\bTelaBase\b/.test(fonte)) return false;
+  for (const m of fonte.matchAll(/from\s+["'](\.\/[^"']+)["']/g)) {
+    const vizinho = lerVizinho(m[1]);
+    if (vizinho && /\bTelaBase\b/.test(vizinho)) return false;
+  }
+  return true;
+}
+
+/** As regras que valem num arquivo de TELA (app/ ou components/ fora de ui):
+ *  as do DS que se aplicam ali — menos a da caixa de preview do site e menos o
+ *  `<button` cru simples de páginas, porque uma tela pode ter botão próprio
+ *  desde que com o `foco` do DS (a regra multilinha confere isso) — mais as
+ *  regras de tela. ds-check e bancada leem daqui, para pontuar igual. */
+export function regrasParaTela(rel) {
+  return [
+    ...REGRAS.filter((r) => r.onde(rel) && r.ativa !== false && r.regra !== "fundo-da-caixa" && !(r.regra === "botao-cru" && !r.multilinha)),
+    ...REGRAS.filter((r) => r.regra === "botao-cru" && r.multilinha && !r.onde(rel)),
+    ...REGRAS_DE_TELA,
+  ];
 }

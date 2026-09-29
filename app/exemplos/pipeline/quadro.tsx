@@ -428,7 +428,7 @@ function SetaDoTrilho({
         visivel ? "opacity-100" : "pointer-events-none opacity-0",
       )}
     >
-      <Seta size={18} weight="bold" aria-hidden="true" />
+      <Seta size={16} weight="bold" aria-hidden="true" />
     </button>
   );
 }
@@ -511,7 +511,7 @@ function Cartao({
 
       {mostra("empresa") ? (
         <p title={`${lead.empresa} · ${lead.cidade}`} className="mt-1 flex items-center gap-1 text-body-sm text-muted-foreground">
-          <Tipo size={13} weight="regular" aria-hidden="true" className="shrink-0" />
+          <Tipo size={14} weight="regular" aria-hidden="true" className="shrink-0" />
           <span className="min-w-0 truncate">{lead.empresa}</span>
           <span className="shrink-0 text-subtle-foreground">· {lead.cidade}</span>
         </p>

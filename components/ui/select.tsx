@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CaretDown } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
@@ -90,6 +91,9 @@ SelectTrigger.displayName = "SelectTrigger";
 
 export type OpcaoSelect = { valor: string; rotulo: string };
 
+/** Altura máxima da lista (o `max-h-64` de antes), em px: entra na medida de "cabe embaixo?". */
+const ALTURA_DA_LISTA = 256;
+
 export interface SelectProps extends VariantProps<typeof triggerVariants> {
   /** As opções da lista. */
   opcoes: OpcaoSelect[];
@@ -127,7 +131,34 @@ export function Select({
   const escolhido = opcoes.find((o) => o.valor === valor);
   const indiceAtual = Math.max(0, opcoes.findIndex((o) => o.valor === valor));
 
+  /* A lista abre em portal, `fixed`, medida a partir do gatilho: dentro de um
+     Modal (corpo que rola), de um CardHeader ou de qualquer caixa com
+     `overflow`, a lista absoluta era cortada (bancada, 2026-09-29). Para cima
+     só quando não cabe embaixo e cabe em cima; nunca vaza pela direita. */
+  const [pos, setPos] = React.useState<{ top?: number; bottom?: number; left: number; minWidth: number } | null>(null);
+  const posicionar = React.useCallback(() => {
+    const r = gatilho.current?.getBoundingClientRect();
+    if (!r) return;
+    const abaixo = window.innerHeight - r.bottom;
+    const acima = abaixo < ALTURA_DA_LISTA + 8 && r.top > abaixo;
+    setPos({
+      ...(acima ? { bottom: window.innerHeight - r.top + 4 } : { top: r.bottom + 4 }),
+      left: Math.max(8, Math.min(r.left, window.innerWidth - r.width - 8)),
+      minWidth: r.width,
+    });
+  }, []);
+  React.useEffect(() => {
+    if (!aberto) return;
+    window.addEventListener("resize", posicionar);
+    window.addEventListener("scroll", posicionar, true);
+    return () => {
+      window.removeEventListener("resize", posicionar);
+      window.removeEventListener("scroll", posicionar, true);
+    };
+  }, [aberto, posicionar]);
+
   function abrir() {
+    posicionar();
     setEmFoco(indiceAtual);
     setAberto(true);
   }
@@ -143,7 +174,7 @@ export function Select({
   }
 
   /* Clique fora fecha — é o que a pessoa espera de um menu (lib/use-clique-fora.ts). */
-  useCliqueFora(aberto, [caixa], () => setAberto(false));
+  useCliqueFora(aberto, [caixa, lista], () => setAberto(false));
   // fica montado durante o fade-out (lote B7)
   const { saindo, visivel } = useSaida(aberto);
 
@@ -230,7 +261,8 @@ export function Select({
         </SelectTrigger>
       )}
 
-      {visivel ? (
+      {visivel && pos
+        ? createPortal(
         <PainelFlutuante
           ref={lista}
           saindo={saindo}
@@ -240,8 +272,9 @@ export function Select({
           aria-activedescendant={`opcao-${id}-${emFoco}`}
           tabIndex={-1}
           onKeyDown={tecladoDaLista}
-          aDireita
-          className="max-h-64 min-w-full overflow-auto p-1 focus:outline-none"
+          fixo
+          style={{ top: pos.top, bottom: pos.bottom, left: pos.left, minWidth: pos.minWidth, maxHeight: ALTURA_DA_LISTA }}
+          className="overflow-auto p-1 focus:outline-none"
         >
           {opcoes.map((o, i) => {
             const selecionado = o.valor === valor;
@@ -267,8 +300,10 @@ export function Select({
               </div>
             );
           })}
-        </PainelFlutuante>
-      ) : null}
+        </PainelFlutuante>,
+        document.body,
+      )
+        : null}
     </div>
   );
 }

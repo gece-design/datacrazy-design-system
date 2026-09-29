@@ -68,6 +68,11 @@ export default function Installation() {
       >
         <Codigo lang="bash" codigo={`npx shadcn@latest add @datacrazy/setup`} />
         <Legenda>
+          Duas coisas que o instalador não faz por você: o <Chip>content</Chip> do Tailwind precisa incluir{" "}
+          <Chip>./lib/**/*.{"{ts,tsx}"}</Chip> (as classes de foco e rolagem moram lá), e a Geist entra pela variável{" "}
+          <Chip>--font-geist-sans</Chip> declarada no <Chip>&lt;html&gt;</Chip> do layout, não no <Chip>&lt;body&gt;</Chip>.
+        </Legenda>
+        <Legenda>
           Projeto em Tailwind v3 (com <Chip>tailwind.config</Chip>)? Use <Chip>@datacrazy/setup-v3</Chip>: o formato
           das variáveis de cor muda entre as versões, e cada setup escreve o da sua.
         </Legenda>

@@ -123,7 +123,8 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   size="sm"` (`outline` cancela, `primary` confirma). Muitos campos ou edição
   de um registro existente: não é modal — é o `Drawer` com cartões
   (`CampoEditavel`, `Select cartao`, `Rating`) em `gradeDeCartoes`.
-- **Dashboard**: `KpiCard` em grade (`grid-cols-2 lg:grid-cols-4`) no topo;
+- **Dashboard**: `KpiCard` em grade `grid-cols-1 sm:grid-cols-2 xl:grid-cols-4`
+  (com a Sidebar aberta, quatro só acima de 1280 — senão o número trunca);
   `Card` com `CardHeader` para gráfico e listas; `SegmentedControl` de período
   e `DateRangePicker` na fileira do Header.
 - **Detalhe de um registro**: `Drawer` + `DrawerPainel` (perfil à esquerda com

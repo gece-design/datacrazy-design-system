@@ -1,15 +1,15 @@
 {
-  "geradoEm": "2026-09-28",
+  "geradoEm": "2026-09-29",
   "periodo": {
     "inicio": "2026-09-02",
     "fim": "2026-09-28"
   },
   "git": {
-    "commits": 61,
+    "commits": 62,
     "arquivos": 318,
-    "linhasUi": 9811,
+    "linhasUi": 9869,
     "linhasLib": 785,
-    "linhasDocs": 7388
+    "linhasDocs": 7393
   },
   "catalogo": {
     "itens": 49,
@@ -124,7 +124,7 @@
       "variantes": 7,
       "estados": 4,
       "acessibilidade": 12,
-      "linhas": 1583
+      "linhas": 1606
     },
     {
       "name": "date-picker",
@@ -306,7 +306,7 @@
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 7,
-      "linhas": 275
+      "linhas": 310
     },
     {
       "name": "sidebar",
@@ -915,6 +915,12 @@
   },
   "pedidos": [
     {
+      "data": "2026-09-29",
+      "origem": "Lote",
+      "titulo": "BANCADA: RODADA 1 × RODADA 2, E O QUE ELA ACHOU NO DS",
+      "resumo": "Rodada 1 (skill só com regras) só fechou o caso \"contatos\": zero violação e TelaBase, mas tabela no padrao, filtros como Select na barra e tags coloridas — o \"parece o DataCrazy antigo\". Os outros doi"
+    },
+    {
       "data": "2026-09-28",
       "origem": "Lote",
       "titulo": "CORREÇÃO · DENSA: O NOME MANDA",
@@ -1242,5 +1248,149 @@
     "capturas": 74,
     "temas": 2
   },
-  "bancada": null
+  "bancada": {
+    "geradoEm": "2026-09-29",
+    "casos": [
+      {
+        "id": "contatos",
+        "prompt": "Crie a página de contatos com tabela, filtros e paginação usando os componentes do @datacrazy."
+      },
+      {
+        "id": "cadastro",
+        "prompt": "Crie a tela de cadastro de um lead (nome, empresa, telefone, e-mail, etapa do funil, atendente e valor do negócio) seguindo o design system @datacrazy."
+      },
+      {
+        "id": "dashboard",
+        "prompt": "Monte um dashboard de vendas com KPIs, um card de gráfico e a lista dos últimos negócios, usando o @datacrazy."
+      }
+    ],
+    "rodadas": [
+      {
+        "rotulo": "v1",
+        "skill": "regras (antiga)",
+        "casos": [
+          {
+            "id": "contatos",
+            "erro": null,
+            "violacoes": 0,
+            "componentes": 12,
+            "paginas": [
+              "/contatos",
+              "/"
+            ],
+            "telaBase": true,
+            "densa": false,
+            "headerFiltros": false,
+            "tagsNeutras": false,
+            "dsCheck": false,
+            "tsc": true,
+            "build": true,
+            "turnos": 63,
+            "minutos": 12,
+            "custo": 6.84
+          },
+          {
+            "id": "cadastro",
+            "erro": "limite da sessão",
+            "violacoes": 0,
+            "componentes": 0,
+            "paginas": [],
+            "telaBase": true,
+            "densa": null,
+            "headerFiltros": null,
+            "tagsNeutras": null,
+            "dsCheck": false,
+            "tsc": true,
+            "build": true,
+            "turnos": 25,
+            "minutos": 2,
+            "custo": 2.43
+          },
+          {
+            "id": "dashboard",
+            "erro": "limite da sessão",
+            "violacoes": 0,
+            "componentes": 0,
+            "paginas": [],
+            "telaBase": true,
+            "densa": null,
+            "headerFiltros": null,
+            "tagsNeutras": null,
+            "dsCheck": false,
+            "tsc": true,
+            "build": true,
+            "turnos": 1,
+            "minutos": 0,
+            "custo": 0
+          }
+        ]
+      },
+      {
+        "rotulo": "v2",
+        "skill": "receitas + densidade + ds-check",
+        "casos": [
+          {
+            "id": "contatos",
+            "erro": null,
+            "violacoes": 0,
+            "componentes": 16,
+            "paginas": [
+              "/contatos",
+              "/"
+            ],
+            "telaBase": true,
+            "densa": true,
+            "headerFiltros": true,
+            "tagsNeutras": true,
+            "dsCheck": true,
+            "tsc": true,
+            "build": false,
+            "turnos": 91,
+            "minutos": 17,
+            "custo": 12.01
+          },
+          {
+            "id": "cadastro",
+            "erro": null,
+            "violacoes": 0,
+            "componentes": 12,
+            "paginas": [
+              "/leads",
+              "/"
+            ],
+            "telaBase": true,
+            "densa": true,
+            "headerFiltros": false,
+            "tagsNeutras": true,
+            "dsCheck": true,
+            "tsc": true,
+            "build": true,
+            "turnos": 70,
+            "minutos": 15,
+            "custo": 9.38
+          },
+          {
+            "id": "dashboard",
+            "erro": null,
+            "violacoes": 0,
+            "componentes": 10,
+            "paginas": [
+              "/dashboard",
+              "/"
+            ],
+            "telaBase": true,
+            "densa": null,
+            "headerFiltros": null,
+            "tagsNeutras": null,
+            "dsCheck": true,
+            "tsc": true,
+            "build": true,
+            "turnos": 62,
+            "minutos": 13,
+            "custo": 8.24
+          }
+        ]
+      }
+    ]
+  }
 }

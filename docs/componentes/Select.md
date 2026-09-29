@@ -71,6 +71,9 @@ decisão, não buraco a preencher.
 
 ## Composição
 
+A lista abre em portal no `body`, `fixed`, medida a partir do gatilho: não é cortada pelo corpo do Modal (que rola), pelo `CardHeader` nem por qualquer caixa com `overflow`. Para cima só quando não cabe embaixo (256px) e cabe em cima; nunca vaza pela direita; remede em rolagem e redimensionamento (bancada, 2026-09-29).
+
+
 Usa: `PainelFlutuante` do [Popover](Popover.md) na lista aberta, `useCliqueFora` (lib) para fechar no clique fora e, no `size="field"`, a própria `caixaDeCampo` de `lib/campo.ts` — a caixa do [Input](Input.md), com o traço + anel interno no foco em vez do outline do botão. `SelectTrigger` é o gatilho, também usado pelo Card ·
 Usado por: [Card](Card.md) e [DataTable](DataTable.md)
 

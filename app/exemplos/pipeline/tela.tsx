@@ -698,7 +698,8 @@ export function Tela() {
                         "size-8 rounded-full border border-border transition-shadow",
                         `${foco}`,
                         c.valor === "neutro" ? "bg-card" : "bg-tom-anel",
-                        escolhida && "ring-2 ring-primary ring-offset-2 ring-offset-overlay-bg",
+                        // escolhida: contorno de 2 com respiro, como o foco (D6) — não ring com offset
+                        escolhida && "outline outline-2 outline-offset-2 outline-primary",
                       )}
                     />
                   );

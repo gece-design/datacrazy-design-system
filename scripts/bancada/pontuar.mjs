@@ -7,7 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawn } from "node:child_process";
 import { BASE, listar, rodar, flags } from "./lib.mjs";
-import { REGRAS, REGRAS_DE_TELA, semTelaBase } from "../lib/regras-tokens.mjs";
+import { regrasParaTela, semTelaBase } from "../lib/regras-tokens.mjs";
 
 const { args, tem } = flags();
 const DIR = path.resolve(args[0]);
@@ -32,11 +32,18 @@ for (const rel of escritos) {
   const texto = fs.readFileSync(path.join(DIR, rel), "utf8");
   const linhas = texto.split("\n");
   for (const m of texto.matchAll(/from ["']@\/components\/ui\/([\w-]+)["']/g)) usados.add(m[1]);
-  if (/\/page\.tsx$/.test(rel)) paginas.push({ rel, telaBase: !semTelaBase(rel, texto), rota: "/" + rel.replace(/^app\//, "").replace(/\/?page\.tsx$/, "") });
+  const vizinho = (spec) => {
+    for (const ext of ["", ".tsx", ".ts", "/index.tsx"]) {
+      const abs = path.join(DIR, path.dirname(rel), spec + ext);
+      if (fs.existsSync(abs) && fs.statSync(abs).isFile()) return fs.readFileSync(abs, "utf8");
+    }
+    return null;
+  };
+  if (/\/page\.tsx$/.test(rel)) paginas.push({ rel, telaBase: !semTelaBase(rel, texto, vizinho), rota: "/" + rel.replace(/^app\//, "").replace(/\/?page\.tsx$/, "") });
   linhas.forEach((bruta, i) => {
     const linha = semComentario(bruta);
-    for (const r of [...REGRAS.filter((x) => x.onde(rel) && x.ativa !== false && !x.multilinha), ...REGRAS_DE_TELA]) {
-      const m = r.teste(linha, rel);
+    for (const r of regrasParaTela(rel)) {
+      const m = r.teste(linha, rel, r.multilinha ? linhas.slice(i).join("\n") : undefined, r.multilinha ? texto : undefined);
       if (!m || !m.length) continue;
       if (r.informativa) { info[r.regra] = (info[r.regra] ?? 0) + m.length; continue; }
       achados.push({ regra: r.regra, arquivo: rel, linha: i + 1, trecho: [...new Set(m)].join(" ") });

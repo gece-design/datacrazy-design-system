@@ -418,7 +418,12 @@ const BLOCOS = [
       { de: "app/exemplos/pipeline/dados.ts", para: "app/pipeline/dados.ts" },
       { de: "app/feedback/drawer/drawer-lead.tsx", para: "app/pipeline/drawer-lead.tsx" },
     ],
-    reescritas: [["@/app/feedback/drawer/drawer-lead", "./drawer-lead"]],
+    // a foto do atendente é do site (/ds/…): no projeto de quem instala a Tag fica só com o nome
+    reescritas: [
+      ["@/app/feedback/drawer/drawer-lead", "./drawer-lead"],
+      [' foto="/ds/atendente.png"', ""],
+      ['foto: "/ds/atendente.png"', "foto: undefined"],
+    ],
     docs: `Pipeline: ${URL_DS}/exemplos/pipeline — a tela em app/pipeline; troque os dados de exemplo (dados.ts) pelos do CRM.`,
   },
 ];
@@ -428,7 +433,10 @@ const blocos = BLOCOS.map((b) => {
   const pacotes = new Set();
   const files = b.arquivos.map(({ de, para }) => {
     let fonte = ler(de);
-    for (const [antes, depois] of b.reescritas ?? []) fonte = fonte.split(`"${antes}"`).join(`"${depois}"`);
+    for (const [antes, depois] of b.reescritas ?? []) {
+      // import: troca o especificador entre aspas; texto solto: troca literal
+      fonte = antes.startsWith("@/") ? fonte.split(`"${antes}"`).join(`"${depois}"`) : fonte.split(antes).join(depois);
+    }
     const deps = dependenciasDe(fonte, de);
     // vizinho do bloco (./dados, ./tela) não é item do catálogo
     for (const i of deps.itens) if (!b.arquivos.some((a) => path.basename(a.para, path.extname(a.para)) === i)) itens.add(i);

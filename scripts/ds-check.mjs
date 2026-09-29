@@ -13,7 +13,7 @@
 // Exceção pontual: a linha (ou a de cima) leva `ds-check:ignore <regra> — motivo`.
 import fs from "node:fs";
 import path from "node:path";
-import { REGRAS, REGRAS_DE_TELA, semTelaBase } from "./lib/regras-tokens.mjs";
+import { regrasParaTela, semTelaBase } from "./lib/regras-tokens.mjs";
 
 const RAIZ = process.cwd();
 const args = process.argv.slice(2);
@@ -52,15 +52,7 @@ const informativos = [];
 for (const rel of arquivos) {
   const texto = fs.readFileSync(path.join(RAIZ, rel), "utf8");
   const linhas = texto.split("\n");
-  // as regras do próprio DS valem em app/ e components/ como lá: a de
-  // components/ui (dark:, setTimeout) fica de fora — components/ui é o DS
-  // `<button>` cru só reprova sem a constante `foco` (a regra multilinha do DS),
-  // em app/ e em components/: uma tela pode ter botão próprio, desde que com o foco do DS
-  const doArquivo = [
-    ...REGRAS.filter((r) => r.onde(rel) && r.ativa !== false && r.regra !== "fundo-da-caixa" && !(r.regra === "botao-cru" && !r.multilinha)),
-    ...REGRAS.filter((r) => r.regra === "botao-cru" && r.multilinha && !r.onde(rel)),
-    ...REGRAS_DE_TELA,
-  ];
+  const doArquivo = regrasParaTela(rel);
   linhas.forEach((bruta, i) => {
     const anterior = linhas[i - 1] ?? "";
     const ignora = (regra) => [bruta, anterior].some((l) => new RegExp(`(?:ds-check|check-tokens):ignore\\s+${regra}\\b`).test(l));
@@ -72,7 +64,15 @@ for (const rel of arquivos) {
       (r.informativa ? informativos : achados).push({ regra: r.regra, origem: r.origem, arquivo: rel, linha: i + 1, trecho: [...new Set(m)].join(" ").slice(0, 120) });
     }
   });
-  if (semTelaBase(rel, texto)) achados.push({ regra: "sem-tela-base", origem: "toda tela começa pela TelaBase (@datacrazy/tela)", arquivo: rel, linha: 1, trecho: "página sem TelaBase" });
+  // a página pode só renderizar `./tela`, que é quem tem a TelaBase
+  const vizinho = (spec) => {
+    for (const ext of ["", ".tsx", ".ts", "/index.tsx"]) {
+      const abs = path.join(RAIZ, path.dirname(rel), spec + ext);
+      if (fs.existsSync(abs) && fs.statSync(abs).isFile()) return fs.readFileSync(abs, "utf8");
+    }
+    return null;
+  };
+  if (semTelaBase(rel, texto, vizinho)) achados.push({ regra: "sem-tela-base", origem: "toda tela começa pela TelaBase (@datacrazy/tela)", arquivo: rel, linha: 1, trecho: "página sem TelaBase" });
 }
 
 if (json) {

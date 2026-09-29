@@ -65,6 +65,12 @@ const ICONE_DA_ORIGEM = { WhatsApp: WhatsappLogo, Reunião: UsersThree, Cliente:
 
 const NUMERO = "text-right tabular-nums text-label-lg text-foreground";
 
+/** Sim (verde), não (vermelho) ou não se aplica (traço). */
+function SimOuNao({ valor }: { valor: boolean | null }) {
+  if (valor === null) return <span className="text-caption text-muted-foreground">—</span>;
+  return <Tag status={valor ? "success" : "destructive"}>{valor ? "sim" : "não"}</Tag>;
+}
+
 export default function Entrega() {
   const ajustes = useAjustesDaTabela(COLUNAS, { memoria: "entrega-componentes" });
   const linhas = ordenarPor(entrega.componentes, ajustes.ordem, valorDe);
@@ -82,7 +88,7 @@ export default function Entrega() {
     <PaginaDS
       titulo="Entrega"
       descricao={`O que foi construído de ${dataLonga(entrega.periodo.inicio)} a ${dataLonga(entrega.periodo.fim)}, medido pelo próprio repositório. Números gerados em ${data(entrega.geradoEm)}.`}
-      secoes={["Como funciona", "Em números", "Componentes", "Qualidade", "Linha do tempo", "Decisões", "SystemCrazy", "Próximos passos"]}
+      secoes={["Como funciona", "Em números", "Componentes", "Qualidade", "Linha do tempo", "Decisões", "SystemCrazy", ...(entrega.bancada ? ["Bancada"] : []), "Próximos passos"]}
     >
       <ComoFunciona>
         <p>
@@ -243,10 +249,68 @@ export default function Entrega() {
         </div>
         <Legenda>
           {entrega.bancada
-            ? "Bancada de geração de telas: veja os resultados abaixo."
+            ? "A bancada abaixo mede isso na prática: um projeto Next limpo, os passos da página de instalação e um pedido de tela em linguagem normal ao Claude Code, sem ajuda."
             : "A bancada que mede o Claude gerando telas com o DS está em andamento; os números entram aqui quando fecharem."}
         </Legenda>
       </Secao>
+
+      {entrega.bancada ? (
+        <Secao
+          titulo="Bancada"
+          spec={`${entrega.bancada.rodadas.length} rodadas · ${entrega.bancada.casos.length} pedidos`}
+          descricao="Cada linha é um pedido feito ao Claude Code num projeto limpo. Violações são o que o check do DS apontou na tela pronta; as outras colunas dizem se a tela seguiu o padrão do CRM (lista densa, filtros no Header, tags neutras). A rodada 2 é a skill com receitas e densidade."
+          semSeletorDeFundo
+          className="p-0"
+        >
+          <div className="w-full overflow-hidden rounded-md bg-card">
+            <DataTable
+              layout="compacta"
+              colunas={[
+                { chave: "pedido", rotulo: "Pedido", peso: 2.2 },
+                { chave: "rodada", rotulo: "Skill", peso: 2.2 },
+                { chave: "violacoes", rotulo: "Violações", peso: 1, alinharFim: true },
+                { chave: "componentes", rotulo: "Comp. do DS", peso: 1.1, alinharFim: true },
+                { chave: "densa", rotulo: "Lista densa", peso: 1 },
+                { chave: "filtros", rotulo: "Filtros no Header", peso: 1.3 },
+                { chave: "tags", rotulo: "Tags neutras", peso: 1.1 },
+                { chave: "tempo", rotulo: "Minutos", peso: 0.9, alinharFim: true },
+              ]}
+              className="rounded-none border-0"
+            >
+              {entrega.bancada.rodadas.flatMap((r) =>
+                r.casos.map((c) => (
+                  <DataTableRow key={`${r.rotulo}-${c.id}`}>
+                    <DataTableCell coluna="pedido"><span className="text-label-lg text-foreground">{c.id}</span></DataTableCell>
+                    <DataTableCell coluna="rodada"><span className="text-body-sm text-muted-foreground">{r.rotulo} · {r.skill}</span></DataTableCell>
+                    {c.erro ? (
+                      <>
+                        <DataTableCell coluna="violacoes" className="text-right"><span className="text-caption text-muted-foreground">{c.erro}</span></DataTableCell>
+                        <DataTableCell coluna="componentes">{""}</DataTableCell>
+                        <DataTableCell coluna="densa">{""}</DataTableCell>
+                        <DataTableCell coluna="filtros">{""}</DataTableCell>
+                        <DataTableCell coluna="tags">{""}</DataTableCell>
+                        <DataTableCell coluna="tempo">{""}</DataTableCell>
+                      </>
+                    ) : (
+                      <>
+                        <DataTableCell coluna="violacoes" className={NUMERO}>{c.violacoes}</DataTableCell>
+                        <DataTableCell coluna="componentes" className={NUMERO}>{c.componentes}</DataTableCell>
+                        <DataTableCell coluna="densa"><SimOuNao valor={c.densa} /></DataTableCell>
+                        <DataTableCell coluna="filtros"><SimOuNao valor={c.headerFiltros} /></DataTableCell>
+                        <DataTableCell coluna="tags"><SimOuNao valor={c.tagsNeutras} /></DataTableCell>
+                        <DataTableCell coluna="tempo" className={NUMERO}>{c.minutos ?? "—"}</DataTableCell>
+                      </>
+                    )}
+                  </DataTableRow>
+                )),
+              )}
+            </DataTable>
+          </div>
+          <Legenda>
+            Os três pedidos: {entrega.bancada.casos.map((c) => `"${c.prompt}"`).join(" · ")}
+          </Legenda>
+        </Secao>
+      ) : null}
 
       <Secao
         titulo="Próximos passos"
