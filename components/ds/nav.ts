@@ -101,6 +101,7 @@ export const navegacao: CategoriaNav[] = [
     itens: [
       { titulo: "Tela base", href: "/exemplos/tela-base", icone: "tela", pronto: true, descricao: "A casca de toda tela nova: Sidebar, Header, subcabeçalho e breakpoints" },
       { titulo: "Pipeline", href: "/exemplos/pipeline", icone: "kanban", pronto: true, descricao: "Funil em kanban, com arrastar e soltar" },
+      { titulo: "Atendimento", href: "/exemplos/atendimento", icone: "conversa", pronto: true, descricao: "Conversas, mensagens e o lead na mesma tela" },
       // Decisão do humano em 2026-09-19: a proposta de cor das tags fica pública.
       { titulo: "Tags coloridas", href: "/exemplos/tags-proposta", icone: "etiqueta", pronto: true, descricao: "Antes e depois: a cor da tag vem da regra do grupo" },
     ],

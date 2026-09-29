@@ -41,10 +41,13 @@
         },
         {
           "id": "cadastro",
-          "erro": "limite da sessão",
+          "erro": null,
           "violacoes": 0,
-          "componentes": 0,
-          "paginas": [],
+          "componentes": 11,
+          "paginas": [
+            "/leads/novo",
+            "/"
+          ],
           "telaBase": true,
           "densa": null,
           "headerFiltros": null,
@@ -52,26 +55,29 @@
           "dsCheck": false,
           "tsc": true,
           "build": true,
-          "turnos": 25,
-          "minutos": 2,
-          "custo": 2.43
+          "turnos": 52,
+          "minutos": 9,
+          "custo": 5.95
         },
         {
           "id": "dashboard",
-          "erro": "limite da sessão",
+          "erro": null,
           "violacoes": 0,
-          "componentes": 0,
-          "paginas": [],
+          "componentes": 11,
+          "paginas": [
+            "/dashboard",
+            "/"
+          ],
           "telaBase": true,
-          "densa": null,
-          "headerFiltros": null,
-          "tagsNeutras": null,
+          "densa": false,
+          "headerFiltros": false,
+          "tagsNeutras": false,
           "dsCheck": false,
           "tsc": true,
           "build": true,
-          "turnos": 1,
-          "minutos": 0,
-          "custo": 0
+          "turnos": 67,
+          "minutos": 20,
+          "custo": 8.18
         }
       ]
     },

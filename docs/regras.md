@@ -36,7 +36,7 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 | A5 | **Um menu só.** Lateral **ou** superior, nunca os dois. Abas não são estratégia de crescimento — quebram por navegador e viram duas linhas | nº 10, 11 |
 | A6 | **Nada de título e descrição decorativos** em toda tela. Se o usuário já sabe onde está, o texto é ruído | nº 12 |
 | A7 | **Gráfico minimalista:** sem eixo, legenda embaixo, valor no hover | nº 13 e gosto nº 12 |
-| A8 | **Ícones Phosphor** (decisão do humano, 2026-09-01), com **um único peso** em toda a interface — `regular` padrão, `fill` para selecionado. Peso misto é quebra de padronização | nº 14 (conflito registrado em `docs/01-arquitetura.md`) e nº 2 |
+| A8 | **Ícones Phosphor** (pedido do cliente numa das primeiras reuniões; decisão de 2026-09-01), com **um único peso** em toda a interface — `regular` padrão, `fill` para selecionado. Peso misto é quebra de padronização | nº 14 (conflito registrado em `docs/01-arquitetura.md`) e nº 2 |
 | A9 | **"Algumas pinceladas", não layout novo.** O DS é adotável de forma incremental sobre o que existe — coerente com a regra 14 | nº 15 |
 
 ## Padrões que o time quer (do "O que MAIS gosta")
@@ -127,6 +127,14 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   (com a Sidebar aberta, quatro só acima de 1280 — senão o número trunca);
   `Card` com `CardHeader` para gráfico e listas; `SegmentedControl` de período
   e `DateRangePicker` na fileira do Header.
+- **Atendimento (chat, inbox, mensagens)**: bloco `@datacrazy/atendimento`
+  (`app/atendimento/`). Três colunas numa superfície só (`bg-card` com
+  `border`), separadas por traço: lista de conversas (320, abas de situação com
+  `Tabs`), mensagens (`role="log"`, recebida à esquerda em `muted`, enviada à
+  direita em `button-soft`, nota interna em `warning/10`, evento do sistema em
+  uma linha) e o lead (320, cartões do drawer). Compositor: `Textarea
+  rotuloOculto linhas={1}` + `SegmentedControl` Mensagem / Nota interna.
+  Abaixo de 1280 o lead abre por cima; abaixo de 768, lista OU conversa.
 - **Detalhe de um registro**: `Drawer` + `DrawerPainel` (perfil à esquerda com
   `DrawerPerfil`, `DrawerMetricas`, `DrawerMenu`; conteúdo à direita com
   `DrawerConteudo` e `DrawerSecao`).

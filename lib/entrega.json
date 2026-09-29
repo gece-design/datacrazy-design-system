@@ -2,23 +2,23 @@
   "geradoEm": "2026-09-29",
   "periodo": {
     "inicio": "2026-09-02",
-    "fim": "2026-09-28"
+    "fim": "2026-09-29"
   },
   "git": {
-    "commits": 62,
-    "arquivos": 318,
+    "commits": 63,
+    "arquivos": 320,
     "linhasUi": 9869,
     "linhasLib": 785,
-    "linhasDocs": 7393
+    "linhasDocs": 7408
   },
   "catalogo": {
-    "itens": 49,
+    "itens": 51,
     "porTipo": {
       "registry:theme": 4,
-      "registry:block": 2,
+      "registry:block": 3,
       "registry:item": 1,
       "registry:lib": 11,
-      "registry:ui": 31
+      "registry:ui": 32
     }
   },
   "componentes": [
@@ -387,6 +387,19 @@
       "linhas": 149
     },
     {
+      "name": "textarea",
+      "titulo": "Textarea",
+      "descricao": "Receber um texto de várias linhas — observação, nota interna, a mensagem do chat — na mesma caixa do Input, crescendo com o conteúdo.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 1,
+      "props": 6,
+      "variantes": 2,
+      "estados": 4,
+      "acessibilidade": 6,
+      "linhas": 99
+    },
+    {
       "name": "time-picker",
       "titulo": "TimePicker",
       "descricao": "Escolher uma hora, e uma data com hora, sabendo de fuso.",
@@ -427,14 +440,14 @@
     }
   ],
   "totais": {
-    "componentes": 31,
-    "pecas": 104,
-    "props": 311,
-    "variantes": 88,
-    "estados": 112,
-    "acessibilidade": 188,
-    "paginas": 37,
-    "docs": 31
+    "componentes": 32,
+    "pecas": 105,
+    "props": 317,
+    "variantes": 90,
+    "estados": 116,
+    "acessibilidade": 194,
+    "paginas": 38,
+    "docs": 32
   },
   "tokens": {
     "cores": 68,
@@ -667,8 +680,8 @@
     },
     {
       "titulo": "Telas de exemplo",
-      "total": 3,
-      "prontas": 3,
+      "total": 4,
+      "prontas": 4,
       "itens": [
         {
           "titulo": "Tela base",
@@ -678,6 +691,11 @@
         {
           "titulo": "Pipeline",
           "href": "/exemplos/pipeline",
+          "pronto": true
+        },
+        {
+          "titulo": "Atendimento",
+          "href": "/exemplos/atendimento",
           "pronto": true
         },
         {
@@ -893,6 +911,11 @@
       "id": "ADR-041",
       "titulo": "Cartão do drawer com linha de 24 e Select `cartao`",
       "data": "2026-09-28"
+    },
+    {
+      "id": "ADR-042",
+      "titulo": "Textarea nasce sem par no arquivo, da tela de Atendimento",
+      "data": "2026-09-29"
     }
   ],
   "auditoria": {
@@ -919,6 +942,12 @@
       "origem": "Lote",
       "titulo": "BANCADA: RODADA 1 × RODADA 2, E O QUE ELA ACHOU NO DS",
       "resumo": "Rodada 1 (skill só com regras) só fechou o caso \"contatos\": zero violação e TelaBase, mas tabela no padrao, filtros como Select na barra e tags coloridas — o \"parece o DataCrazy antigo\". Os outros doi"
+    },
+    {
+      "data": "2026-09-29",
+      "origem": "Cliente",
+      "titulo": "FIGJAM LIDO POR INTEIRO; TELA DE ATENDIMENTO; TEXTAREA",
+      "resumo": "O board lL301HOTFtRYnVak9o9dne foi lido pelo conector do Figma (1.228 textos, 70 stickies; as 87 imagens não). Dele: as telas que mais doem (Multiatendimento e Chat, Pipelines e Automações, Card do le"
     },
     {
       "data": "2026-09-28",
@@ -1245,7 +1274,7 @@
       "regressao",
       "sidebar"
     ],
-    "capturas": 74,
+    "capturas": 76,
     "temas": 2
   },
   "bancada": {
@@ -1291,10 +1320,13 @@
           },
           {
             "id": "cadastro",
-            "erro": "limite da sessão",
+            "erro": null,
             "violacoes": 0,
-            "componentes": 0,
-            "paginas": [],
+            "componentes": 11,
+            "paginas": [
+              "/leads/novo",
+              "/"
+            ],
             "telaBase": true,
             "densa": null,
             "headerFiltros": null,
@@ -1302,26 +1334,29 @@
             "dsCheck": false,
             "tsc": true,
             "build": true,
-            "turnos": 25,
-            "minutos": 2,
-            "custo": 2.43
+            "turnos": 52,
+            "minutos": 9,
+            "custo": 5.95
           },
           {
             "id": "dashboard",
-            "erro": "limite da sessão",
+            "erro": null,
             "violacoes": 0,
-            "componentes": 0,
-            "paginas": [],
+            "componentes": 11,
+            "paginas": [
+              "/dashboard",
+              "/"
+            ],
             "telaBase": true,
-            "densa": null,
-            "headerFiltros": null,
-            "tagsNeutras": null,
+            "densa": false,
+            "headerFiltros": false,
+            "tagsNeutras": false,
             "dsCheck": false,
             "tsc": true,
             "build": true,
-            "turnos": 1,
-            "minutos": 0,
-            "custo": 0
+            "turnos": 67,
+            "minutos": 20,
+            "custo": 8.18
           }
         ]
       },

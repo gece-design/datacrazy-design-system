@@ -185,6 +185,8 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   é o check instalado pelo `setup` (modo `--hook`). Blocos de tela em `BLOCOS` do gerar-registry (`tela`, `pipeline`);
   import de fora de ui/ e lib/ vira vizinho via `reescritas`. Tema: `useTema` de `lib/tema.ts`, nunca cópia local.
   Relatório: `node scripts/gerar-entrega.mjs` → `lib/entrega.json` → `/entrega` (fora do nav).
+  Telas que mais doem (FigJam): Atendimento feito (`app/exemplos/atendimento`, bloco `atendimento`); faltam
+  Automações, Card do lead e mobile. Texto de várias linhas: `Textarea` (ADR-042), nunca `<textarea>` cru.
 - **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, children; sem segunda linha;
   breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
   o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.

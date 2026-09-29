@@ -12,7 +12,8 @@ import {
   CheckSquare, CalendarBlank, Clock, SidebarSimple, Path, ListNumbers, ChartLineUp,
   Tag, UserCircle, Table, ChartBar, ChatTeardropText, Tray, Browsers, ArrowLineLeft,
   Cards, RadioButton, ToggleRight, Bell, Tabs, Browser, Flask, Kanban,
-  Waveform, CalendarDots
+  Waveform, CalendarDots,
+  ChatCircleDots,
 } from "@phosphor-icons/react";
 import { navegacao } from "./nav";
 import { Logo, LogoSimbolo } from "./logo";
@@ -68,6 +69,7 @@ const icones: Record<string, Glifo> = {
   gaveta: ArrowLineLeft,
   proposta: Flask,
   kanban: Kanban,
+  conversa: ChatCircleDots,
 };
 
 const glifo = (chave?: string): Glifo | null => (chave ? icones[chave] ?? null : null);

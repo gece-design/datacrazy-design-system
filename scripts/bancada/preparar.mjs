@@ -3,6 +3,8 @@
 // que a base já traz de errado é achado da instalação, não do Claude.
 //
 //   node scripts/bancada/preparar.mjs            (DS local em http://localhost:4321)
+//   BANCADA_BASE=base-v1 DS_URL=http://localhost:4399 node scripts/bancada/preparar.mjs
+//     (outra base, contra o catálogo de um commit antigo servido de um worktree — a rodada "antes")
 //   DS_URL=https://… node scripts/bancada/preparar.mjs
 //
 // Antes: o DS precisa estar servindo com o catálogo apontando para ele mesmo
@@ -16,7 +18,7 @@ fs.mkdirSync(PASTA, { recursive: true });
 fs.rmSync(BASE, { recursive: true, force: true });
 
 // 1 · projeto limpo
-rodar(`npx --yes ${NEXT} base --ts --tailwind --no-eslint --app --no-src-dir --import-alias "@/*" --use-npm --no-turbopack --yes`, PASTA);
+rodar(`npx --yes ${NEXT} ${path.basename(BASE)} --ts --tailwind --no-eslint --app --no-src-dir --import-alias "@/*" --use-npm --no-turbopack --yes`, PASTA);
 // 2 · shadcn iniciado (requisito da página de instalação)
 rodar(`npx --yes shadcn@latest init -d -y`, BASE);
 // 3 · os quatro passos da página de instalação

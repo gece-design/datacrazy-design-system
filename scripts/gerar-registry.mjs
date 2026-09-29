@@ -38,6 +38,7 @@ const PAGINA_FIXA = { "data-table": "table" };
 const SECAO_FIXA = {
   rating: { pagina: "/forms/input", ancora: "rating" },
   telefone: { pagina: "/forms/input", ancora: "telefone" },
+  textarea: { pagina: "/forms/input", ancora: "textarea" },
   "segmented-control": { pagina: "/navigation/header", ancora: "segmented-control-e-view-switcher" },
 };
 
@@ -243,6 +244,9 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    (\`app/pipeline/\`): é a tela do funil inteira, feita pelo time do DS —
    Header com busca e filtros, Table densa com seleção em massa, Drawer com
    cartões. É a referência de densidade e composição; não invente layout.
+   Chat, inbox ou qualquer tela de mensagens? \`${NAMESPACE}/atendimento\`
+   (\`app/atendimento/\`): conversas, mensagens e o lead em três colunas
+   numa superfície só.
 1. **Procure antes de criar.** O catálogo no fim deste arquivo lista tudo o que
    existe. Se o componente existe e não está em \`components/ui/\`, instale:
    \`npx shadcn@latest add ${NAMESPACE}/<nome>\` (ou pela ferramenta MCP do shadcn).
@@ -426,6 +430,21 @@ const BLOCOS = [
     ],
     docs: `Pipeline: ${URL_DS}/exemplos/pipeline — a tela em app/pipeline; troque os dados de exemplo (dados.ts) pelos do CRM.`,
   },
+  {
+    name: "atendimento",
+    title: "Atendimento",
+    description: "O multiatendimento inteiro, pronto: lista de conversas com abas de situação, mensagens com nota interna e respostas rápidas, e o lead editável ao lado. A tela de referência para chat e para o cartão do lead — copie o padrão dela.",
+    arquivos: [
+      { de: "app/exemplos/atendimento/page.tsx", para: "app/atendimento/page.tsx" },
+      { de: "app/exemplos/atendimento/tela.tsx", para: "app/atendimento/tela.tsx" },
+      { de: "app/exemplos/atendimento/lista.tsx", para: "app/atendimento/lista.tsx" },
+      { de: "app/exemplos/atendimento/conversa.tsx", para: "app/atendimento/conversa.tsx" },
+      { de: "app/exemplos/atendimento/painel.tsx", para: "app/atendimento/painel.tsx" },
+      { de: "app/exemplos/atendimento/dados.ts", para: "app/atendimento/dados.ts" },
+    ],
+    reescritas: [[' foto="/ds/atendente.png"', ""]],
+    docs: `Atendimento: ${URL_DS}/exemplos/atendimento — a tela em app/atendimento; troque os dados de exemplo (dados.ts) pelos da API.`,
+  },
 ];
 
 const blocos = BLOCOS.map((b) => {
@@ -599,7 +618,7 @@ fs.writeFileSync(
 1. \`npx shadcn@latest registry add ${NAMESPACE}=${URL_DS}/r/{name}.json\`
 2. \`npx shadcn@latest add ${NAMESPACE}/setup\` — tokens, cn(), a skill datacrazy-ds para o Claude Code e o check do DS (scripts/ds-check.mjs) (Tailwind v3: \`${NAMESPACE}/setup-v3\`)
 3. \`npx shadcn@latest mcp init --client claude\`
-4. \`npx shadcn@latest add ${NAMESPACE}/tela\` — a tela base: toda tela nova começa por ela; \`${NAMESPACE}/pipeline\` traz o funil inteiro (quadro, lista, calendário, drawer) como referência de tela real
+4. \`npx shadcn@latest add ${NAMESPACE}/tela\` — a tela base: toda tela nova começa por ela; \`${NAMESPACE}/pipeline\` traz o funil inteiro (quadro, lista, calendário, drawer) e \`${NAMESPACE}/atendimento\` o multiatendimento (conversas, mensagens, lead) como referência de tela real
 
 ## Verificar
 

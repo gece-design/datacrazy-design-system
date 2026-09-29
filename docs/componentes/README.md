@@ -49,6 +49,7 @@ markdown é a vista dele.
 | [Tag.md](Tag.md) | Mostrar uma etiqueta que o usuário pôs no lead. |
 | [TelaBase.md](TelaBase.md) | A casca de toda tela do CRM: Sidebar, Header e conteúdo já ligados, com os |
 | [Telefone.md](Telefone.md) | Receber um telefone com o país separado do número. |
+| [Textarea.md](Textarea.md) | Receber um texto de várias linhas — observação, nota interna, a mensagem do chat — na mesma caixa do Input, cr |
 | [TimePicker.md](TimePicker.md) | Escolher uma hora, e uma data com hora, sabendo de fuso. |
 | [Toast.md](Toast.md) | Confirmar o resultado de uma ação sem bloquear a tela. |
 | [Tooltip.md](Tooltip.md) | Mostrar um texto curto ancorado num gatilho, por cursor ou teclado. |

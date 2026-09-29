@@ -438,6 +438,7 @@ const descricoes: Record<string, string> = {
   "Drawer": "O lead pela direita: perfil, menu e cinco seções (G1).",
   "Drawer variações": "Tons, menu, linha do tempo, hierarquia, camada e as três propostas.",
   "Pipeline": "O funil do CRM: arraste um lead e abra o registro.",
+  "Atendimento": "WhatsApp, Instagram e site numa tela: responda, anote e edite o lead.",
 };
 
 export default function Home() {

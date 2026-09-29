@@ -6,6 +6,7 @@ import { Input, AcaoCampo, AcaoCopiar, CampoEditavel } from "@/components/ui/inp
 import { InputTelefone } from "@/components/ui/telefone";
 import { Rating } from "@/components/ui/rating";
 import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 
 const estados = [
@@ -23,6 +24,8 @@ const origens = [
 
 export default function InputPage() {
   const [nota, setNota] = useState(7);
+  const [anotacao, setAnotacao] = useState("");
+  const [mensagem, setMensagem] = useState("");
   const [origem, setOrigem] = useState<string>();
   const [cargo, setCargo] = useState("Guitarrista");
   const [observacao, setObservacao] = useState("");
@@ -36,7 +39,7 @@ export default function InputPage() {
     <PaginaDS
       titulo="Input"
       descricao="Campo de uma linha com rótulo: caixa de 36px, texto de 12px e raio de 6px. O arquivo desenha cinco estados nos dois temas; o mesmo corpo serve ao Select de formulário e ao Rating."
-      secoes={["Como funciona", "Estados", "Ícone e ações", "Clicar para editar", "Campo em cartão", "Telefone", "Select no formulário", "Rating", "Quando usar"]}
+      secoes={["Como funciona", "Estados", "Ícone e ações", "Clicar para editar", "Campo em cartão", "Telefone", "Select no formulário", "Rating", "Textarea", "Quando usar"]}
     >
       <ComoFunciona>
         <p>
@@ -336,6 +339,24 @@ export default function InputPage() {
         <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
           <Rating rotulo="ScoreDavi" valor={nota} aoMudar={setNota} />
           <Rating rotulo="Satisfação (só leitura, 0–5)" valor={4} max={5} />
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Textarea"
+        spec="várias linhas · cresce com o texto"
+        descricao="A caixa do Input com altura livre: cresce com o texto até o máximo de linhas e depois rola por dentro. Com rotuloOculto e uma linha, é o compositor do chat."
+        codigo={`<Textarea rotulo="Observação" placeholder="O que o próximo atendente precisa saber" value={anotacao} onChange={(e) => setAnotacao(e.target.value)} />
+
+<Textarea rotulo="Mensagem" rotuloOculto linhas={1} maximoDeLinhas={6} placeholder="Escreva uma mensagem" value={mensagem} onChange={(e) => setMensagem(e.target.value)} />`}
+      >
+        <div className="grid w-full gap-x-6 gap-y-5 sm:grid-cols-2">
+          <div className="rounded-md bg-card p-5">
+            <Textarea rotulo="Observação" placeholder="O que o próximo atendente precisa saber" value={anotacao} onChange={(e) => setAnotacao(e.target.value)} />
+          </div>
+          <div className="rounded-md bg-card p-5">
+            <Textarea rotulo="Mensagem" rotuloOculto linhas={1} maximoDeLinhas={6} placeholder="Escreva uma mensagem" value={mensagem} onChange={(e) => setMensagem(e.target.value)} />
+          </div>
         </div>
       </Secao>
 

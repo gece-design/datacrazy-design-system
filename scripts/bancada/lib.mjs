@@ -6,7 +6,9 @@ import path from "node:path";
 import { execSync, spawnSync } from "node:child_process";
 
 export const PASTA = process.env.BANCADA || path.join(os.homedir(), "datacrazy-bancada");
-export const BASE = path.join(PASTA, "base");
+// BANCADA_BASE troca a base: a rodada com a skill antiga usa `base-v1`, preparada
+// contra o catálogo de um commit anterior (ver README).
+export const BASE = path.join(PASTA, process.env.BANCADA_BASE || "base");
 export const RODADAS = path.join(PASTA, "rodadas");
 export const DS_URL = process.env.DS_URL || "http://localhost:4321";
 export const CASOS = JSON.parse(fs.readFileSync(new URL("./casos.json", import.meta.url), "utf8"));

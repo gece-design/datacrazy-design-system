@@ -16,8 +16,8 @@ Aprovado por: humano, na página do Button.
 
 ## ADR-003 · Ícones vêm do Phosphor, com um peso só · 2026-09-01
 Desvio: anti-referência nº 14 (ícone de biblioteca); o Figma desenhava carets à mão.
-Motivo: 9.000 ícones, 6 pesos, MIT; peso único (`regular`, `fill` no selecionado) mitiga a anti-referência. Caret desenhado à mão saiu (2026-09-04).
-Aprovado por: humano.
+Motivo: o cliente pediu Phosphor numa das primeiras reuniões (registrado em 2026-09-29; o sticky "manter o padrão atual, Lucide" do moodboard é anterior e está superado). 9.000 ícones, 6 pesos, MIT; peso único (`regular`, `fill` no selecionado) mitiga a anti-referência. Caret desenhado à mão saiu (2026-09-04).
+Aprovado por: humano, a pedido do cliente.
 
 ## ADR-004 · Moldura do site de docs não é superfície do produto · 2026-09-01
 Desvio: `components/ds` usa classes `.chrome-*` e medidas próprias, fora dos tokens do CRM (D3).
@@ -217,3 +217,8 @@ Aprovado por: humano.
 Desvio: o arquivo dá ao cartão do campo a linha de 36 do Input; o código usa 24 (`linhaDoCartao`) em leitura e em edição, e o cartão fecha em 68. O Select ganha a variante `cartao`, sem par no arquivo (exceção à regra 6, a pedido do cliente): o cartão inteiro é o gatilho, com o rótulo em bold, o valor na linha de 24 e o caret — a mesma casca do `CampoEditavel` ao lado, no lugar de `field` dentro de `CartaoDeCampo`.
 Motivo: cliente, 2026-09-28 ("gap menor entre o título e o conteúdo"; "etapa do funil deve ter uma variante com o mesmo visual dos cards ao lado, e mantém o ícone de arrow").
 Aprovado por: humano.
+
+## ADR-042 · Textarea nasce sem par no arquivo, da tela de Atendimento · 2026-09-29
+Desvio: exceção à regra 6 (variante ou componente novo só existe se existe no Figma). `Textarea` herda a caixa do Input (544:129) — traço, foco, erro e desabilitado — com altura livre: cresce com o texto até `maximoDeLinhas` e rola por dentro. `rotuloOculto` tira o rótulo da tela e o mantém para o leitor de tela.
+Motivo: o time confirmou atacar as telas que mais doem (FigJam, PASSO 1: Multiatendimento e Chat em primeiro). O compositor do chat e a nota interna precisam de várias linhas e o DS só tinha o Input de uma.
+Aprovado por: humano (2026-09-29: "vamos atacar sim").
