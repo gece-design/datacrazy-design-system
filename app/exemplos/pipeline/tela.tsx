@@ -40,7 +40,7 @@ import {
   SidebarUser,
 } from "@/components/ui/sidebar";
 import { Toaster, toast } from "@/components/ui/toast";
-import { useTema } from "@/components/ds/theme-toggle";
+import { useTema } from "@/lib/tema";
 import { cn } from "@/lib/utils";
 import {
   CORES_COLUNA,

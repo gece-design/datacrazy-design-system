@@ -9,7 +9,10 @@ import { RAIZ, existe, lerNavegacao, rotasDoApp } from "./lib/fonte.mjs";
 import { catraca, flags } from "./lib/ratchet.mjs";
 
 // Rotas fora da navegação de propósito.
-const FORA_DO_NAV = { "/entrar": "portão de senha, não é página do catálogo" };
+const FORA_DO_NAV = {
+  "/entrar": "portão de senha, não é página do catálogo",
+  "/entrega": "relatório de entrega — link direto para o cliente, fora do catálogo",
+};
 
 const nav = lerNavegacao();
 const paginas = new Set(rotasDoApp());

@@ -1,23 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTema } from "@/lib/tema";
 import { Sun, Moon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 import { foco } from "@/lib/estados";
-/** O tema do site vive numa classe no <html> + localStorage. Exportado porque a
- *  página do Sidebar liga o `SidebarThemeSwitch` no tema de verdade. */
-export function useTema() {
-  const [escuro, setEscuro] = useState(false);
-  useEffect(() => setEscuro(document.documentElement.classList.contains("dark")), []);
-  function alternar() {
-    const novo = !escuro;
-    setEscuro(novo);
-    document.documentElement.classList.toggle("dark", novo);
-    try { localStorage.setItem("dc-tema", novo ? "escuro" : "claro"); } catch {}
-  }
-  return { escuro, alternar };
-}
+/** O hook mora em lib/tema.ts (a mesma memória `dc-tema` das telas e dos
+ *  blocos instaláveis); fica exportado daqui porque a página do Sidebar e o
+ *  chrome do site já importam deste arquivo. */
+export { useTema } from "@/lib/tema";
 
 export function ThemeToggle({ className }: { className?: string }) {
   const { escuro, alternar } = useTema();

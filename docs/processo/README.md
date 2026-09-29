@@ -41,6 +41,8 @@ mora na raiz do `docs/`.
 | [referencias.md](referencias.md) | Índice das fontes: Figma, FigJam, PDF, repositórios, acessos | orquestrador |
 | [consistencia.json](consistencia.json) | Backlog da auditoria de consistência entre componentes (tokens, movimento, composição, páginas, instalação, docs): um achado por objeto, id estável, lote e status | sessão do lote (só `status`/`fechadoEm`) |
 | [consistencia.md](consistencia.md) | Vista legível do backlog — gerada por `node scripts/consistencia.mjs render`, nunca à mão | script |
+| `scripts/bancada/` | Bancada: o Claude Code gerando tela num projeto limpo com o DS instalado, pontuado pelas regras do DS (README lá) | script |
+| `lib/entrega.json` | Números da entrega, gerados por `node scripts/gerar-entrega.mjs` para a página `/entrega` | script |
 
 ## Regra da pasta
 

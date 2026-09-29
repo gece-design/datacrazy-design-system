@@ -1,0 +1,1246 @@
+{
+  "geradoEm": "2026-09-28",
+  "periodo": {
+    "inicio": "2026-09-02",
+    "fim": "2026-09-28"
+  },
+  "git": {
+    "commits": 60,
+    "arquivos": 306,
+    "linhasUi": 9811,
+    "linhasLib": 757,
+    "linhasDocs": 7388
+  },
+  "catalogo": {
+    "itens": 49,
+    "porTipo": {
+      "registry:theme": 4,
+      "registry:block": 2,
+      "registry:item": 1,
+      "registry:lib": 11,
+      "registry:ui": 31
+    }
+  },
+  "componentes": [
+    {
+      "name": "avatar",
+      "titulo": "Componente: Avatar",
+      "descricao": "Identificar pessoa ou empresa pela inicial, ou pela foto.",
+      "categoria": "Data Display",
+      "pagina": null,
+      "pecas": 3,
+      "props": 4,
+      "variantes": 4,
+      "estados": 0,
+      "acessibilidade": 4,
+      "linhas": 80
+    },
+    {
+      "name": "badge",
+      "titulo": "Componente: Badge",
+      "descricao": "Selo curto de status — a cor fica na borda e no texto, nunca preenchendo a superfície.",
+      "categoria": null,
+      "pagina": null,
+      "pecas": 1,
+      "props": 3,
+      "variantes": 3,
+      "estados": 0,
+      "acessibilidade": 3,
+      "linhas": 31
+    },
+    {
+      "name": "breadcrumb",
+      "titulo": "Componente: Breadcrumb",
+      "descricao": "Mostrar o caminho até a página atual e levar de volta a qualquer nível dele.",
+      "categoria": "Navigation",
+      "pagina": null,
+      "pecas": 1,
+      "props": 5,
+      "variantes": 0,
+      "estados": 6,
+      "acessibilidade": 5,
+      "linhas": 159
+    },
+    {
+      "name": "button",
+      "titulo": "Componente: Button",
+      "descricao": "Ação do usuário: sete variantes de peso visual e quatro tamanhos, com o mesmo foco, o mesmo disabled e a mesma fonte em todas.",
+      "categoria": "Actions",
+      "pagina": null,
+      "pecas": 2,
+      "props": 7,
+      "variantes": 7,
+      "estados": 3,
+      "acessibilidade": 5,
+      "linhas": 100
+    },
+    {
+      "name": "calendario",
+      "titulo": "Componente: Calendario",
+      "descricao": "Mostrar os negócios (ou qualquer evento datado) no mês ou na semana, pela data, e devolver o clicado — a visão por data do pipeline, ao lado do Kanban e da lista.",
+      "categoria": "Data Display",
+      "pagina": null,
+      "pecas": 1,
+      "props": 16,
+      "variantes": 2,
+      "estados": 6,
+      "acessibilidade": 8,
+      "linhas": 442
+    },
+    {
+      "name": "card",
+      "titulo": "Componente: Card",
+      "descricao": "Superfície que carrega um bloco de dados do dashboard.",
+      "categoria": "Data Display",
+      "pagina": null,
+      "pecas": 5,
+      "props": 10,
+      "variantes": 4,
+      "estados": 2,
+      "acessibilidade": 5,
+      "linhas": 299
+    },
+    {
+      "name": "checkbox",
+      "titulo": "Componente: Checkbox",
+      "descricao": "Marcar ou desmarcar uma opção independente, inclusive o \"parte marcada\" de quem seleciona um grupo.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 1,
+      "props": 5,
+      "variantes": 3,
+      "estados": 5,
+      "acessibilidade": 6,
+      "linhas": 83
+    },
+    {
+      "name": "data-table",
+      "titulo": "Componente: DataTable",
+      "descricao": "Lista os negócios do CRM em colunas, com filtros e paginação — e, com `ajustes`, deixa a pessoa ordenar, esconder, reordenar e redimensionar as colunas e selecionar a linha (T1, pedido do cliente em 2026-09-18).",
+      "categoria": "Data Display",
+      "pagina": null,
+      "pecas": 20,
+      "props": 51,
+      "variantes": 7,
+      "estados": 4,
+      "acessibilidade": 12,
+      "linhas": 1583
+    },
+    {
+      "name": "date-picker",
+      "titulo": "Componente: DatePicker",
+      "descricao": "Período em dois meses, com atalhos: um gatilho no estilo do Button `tertiary` que abre o painel de intervalo. `CalendarioDeDia` é a mesma grade com um dia só, para o TimePicker não redesenhar calendário.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 3,
+      "props": 14,
+      "variantes": 5,
+      "estados": 6,
+      "acessibilidade": 6,
+      "linhas": 864
+    },
+    {
+      "name": "drawer",
+      "titulo": "Componente: Drawer",
+      "descricao": "Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida.",
+      "categoria": "Feedback & Overlays",
+      "pagina": null,
+      "pecas": 13,
+      "props": 15,
+      "variantes": 3,
+      "estados": 6,
+      "acessibilidade": 10,
+      "linhas": 1062
+    },
+    {
+      "name": "header",
+      "titulo": "Componente: Header",
+      "descricao": "O topo de uma página do CRM: onde a pessoa está, que página é e o que dá para fazer nela.",
+      "categoria": "Navigation",
+      "pagina": null,
+      "pecas": 6,
+      "props": 21,
+      "variantes": 0,
+      "estados": 8,
+      "acessibilidade": 6,
+      "linhas": 472
+    },
+    {
+      "name": "input",
+      "titulo": "Componente: Input",
+      "descricao": "Receber um valor curto digitado, com rótulo visível e erro inline.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 5,
+      "props": 13,
+      "variantes": 0,
+      "estados": 4,
+      "acessibilidade": 6,
+      "linhas": 358
+    },
+    {
+      "name": "kpi-card",
+      "titulo": "Componente: KpiCard",
+      "descricao": "Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma legenda de apoio.",
+      "categoria": "Data Display",
+      "pagina": null,
+      "pecas": 1,
+      "props": 9,
+      "variantes": 5,
+      "estados": 0,
+      "acessibilidade": 5,
+      "linhas": 200
+    },
+    {
+      "name": "logo-datacrazy",
+      "titulo": "Componente: LogoDatacrazy",
+      "descricao": "Símbolo e logotipo do DataCrazy (`LogoDataCrazy` no código), em `currentColor` para acompanhar o tema. É a marca do **produto** — não confundir com `components/ds/logo.tsx`, a marca do site de documentação (Systemcrazy).",
+      "categoria": null,
+      "pagina": null,
+      "pecas": 2,
+      "props": 2,
+      "variantes": 2,
+      "estados": 0,
+      "acessibilidade": 2,
+      "linhas": 79
+    },
+    {
+      "name": "menu",
+      "titulo": "Componente: Menu",
+      "descricao": "A lista de ações e opções que abre de um botão: o menu da coluna e o botão Colunas da Table, o \"personalizar cartão\" do pipeline, o menu do usuário. Saiu da Table em 2026-09-23 para ser peça.",
+      "categoria": null,
+      "pagina": null,
+      "pecas": 1,
+      "props": 5,
+      "variantes": 3,
+      "estados": 5,
+      "acessibilidade": 5,
+      "linhas": 185
+    },
+    {
+      "name": "modal",
+      "titulo": "Componente: Modal",
+      "descricao": "Pedir uma decisão bloqueando a tela até ela ser tomada.",
+      "categoria": "Feedback & Overlays",
+      "pagina": null,
+      "pecas": 3,
+      "props": 13,
+      "variantes": 2,
+      "estados": 4,
+      "acessibilidade": 8,
+      "linhas": 188
+    },
+    {
+      "name": "pagination",
+      "titulo": "Componente: Pagination",
+      "descricao": "Navegar entre as páginas de uma lista longa.",
+      "categoria": "Navigation",
+      "pagina": null,
+      "pecas": 1,
+      "props": 6,
+      "variantes": 0,
+      "estados": 4,
+      "acessibilidade": 7,
+      "linhas": 102
+    },
+    {
+      "name": "popover",
+      "titulo": "Componente: Popover",
+      "descricao": "A casca de todo painel flutuante do DS — lista do Select, calendário, hora, seletor de tags, lista de notificações: camada, superfície, traço e sombra em um lugar só. O papel, o foco e o teclado são de quem usa.",
+      "categoria": null,
+      "pagina": null,
+      "pecas": 1,
+      "props": 8,
+      "variantes": 2,
+      "estados": 0,
+      "acessibilidade": 4,
+      "linhas": 49
+    },
+    {
+      "name": "radio-group",
+      "titulo": "Componente: RadioGroup",
+      "descricao": "Escolher exatamente uma opção entre poucas, todas visíveis ao mesmo tempo.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 2,
+      "props": 7,
+      "variantes": 2,
+      "estados": 4,
+      "acessibilidade": 6,
+      "linhas": 128
+    },
+    {
+      "name": "rating",
+      "titulo": "Componente: Rating",
+      "descricao": "Avaliação de 0 a 10 estrelas (o máximo é prop): editável por clique e setas, ou só leitura. Mostra a nota também em número.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 1,
+      "props": 5,
+      "variantes": 2,
+      "estados": 4,
+      "acessibilidade": 6,
+      "linhas": 163
+    },
+    {
+      "name": "segmented-control",
+      "titulo": "Componente: SegmentedControl",
+      "descricao": "Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualização.",
+      "categoria": "Navigation",
+      "pagina": null,
+      "pecas": 2,
+      "props": 4,
+      "variantes": 3,
+      "estados": 4,
+      "acessibilidade": 5,
+      "linhas": 153
+    },
+    {
+      "name": "select",
+      "titulo": "Componente: Select",
+      "descricao": "Escolher uma opção numa lista curta.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 2,
+      "props": 8,
+      "variantes": 4,
+      "estados": 3,
+      "acessibilidade": 7,
+      "linhas": 275
+    },
+    {
+      "name": "sidebar",
+      "titulo": "Componente: Sidebar",
+      "descricao": "Navegação principal do CRM: marca, grupos de itens com ícone e rótulo, interruptor de tema, atalhos e usuário — expandida em 282px ou colapsada em 88.",
+      "categoria": "Navigation",
+      "pagina": null,
+      "pecas": 9,
+      "props": 12,
+      "variantes": 3,
+      "estados": 5,
+      "acessibilidade": 7,
+      "linhas": 387
+    },
+    {
+      "name": "switch",
+      "titulo": "Componente: Switch",
+      "descricao": "Ligar ou desligar algo que passa a valer na hora, sem botão de salvar.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 1,
+      "props": 6,
+      "variantes": 2,
+      "estados": 4,
+      "acessibilidade": 7,
+      "linhas": 94
+    },
+    {
+      "name": "tabs",
+      "titulo": "Componente: Tabs",
+      "descricao": "Alternar entre as seções de um mesmo registro.",
+      "categoria": "Navigation",
+      "pagina": null,
+      "pecas": 2,
+      "props": 5,
+      "variantes": 0,
+      "estados": 4,
+      "acessibilidade": 7,
+      "linhas": 172
+    },
+    {
+      "name": "tag",
+      "titulo": "Componente: Tag",
+      "descricao": "Mostrar uma etiqueta que o usuário pôs no lead.",
+      "categoria": "Data Display",
+      "pagina": null,
+      "pecas": 4,
+      "props": 12,
+      "variantes": 6,
+      "estados": 4,
+      "acessibilidade": 7,
+      "linhas": 443
+    },
+    {
+      "name": "tela-base",
+      "titulo": "Componente: TelaBase",
+      "descricao": "A casca de toda tela do CRM: Sidebar, Header e conteúdo já ligados, com os breakpoints e a memória da sidebar. A tela só preenche os encaixes. Instala-se como bloco (`@datacrazy/tela`), que cria a página pronta.",
+      "categoria": "Telas de exemplo",
+      "pagina": null,
+      "pecas": 1,
+      "props": 7,
+      "variantes": 4,
+      "estados": 3,
+      "acessibilidade": 5,
+      "linhas": 201
+    },
+    {
+      "name": "telefone",
+      "titulo": "Componente: Telefone",
+      "descricao": "Receber um telefone com o país separado do número.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 2,
+      "props": 10,
+      "variantes": 0,
+      "estados": 4,
+      "acessibilidade": 4,
+      "linhas": 149
+    },
+    {
+      "name": "time-picker",
+      "titulo": "Componente: TimePicker",
+      "descricao": "Escolher uma hora, e uma data com hora, sabendo de fuso.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 2,
+      "props": 16,
+      "variantes": 3,
+      "estados": 4,
+      "acessibilidade": 6,
+      "linhas": 771
+    },
+    {
+      "name": "toast",
+      "titulo": "Componente: Toast",
+      "descricao": "Confirmar o resultado de uma ação sem bloquear a tela.",
+      "categoria": "Feedback & Overlays",
+      "pagina": null,
+      "pecas": 4,
+      "props": 8,
+      "variantes": 4,
+      "estados": 4,
+      "acessibilidade": 7,
+      "linhas": 276
+    },
+    {
+      "name": "tooltip",
+      "titulo": "Componente: Tooltip",
+      "descricao": "Mostrar um texto curto ancorado num gatilho, por cursor ou teclado.",
+      "categoria": "Feedback & Overlays",
+      "pagina": null,
+      "pecas": 2,
+      "props": 4,
+      "variantes": 3,
+      "estados": 2,
+      "acessibilidade": 7,
+      "linhas": 263
+    }
+  ],
+  "totais": {
+    "componentes": 31,
+    "pecas": 104,
+    "props": 311,
+    "variantes": 88,
+    "estados": 112,
+    "acessibilidade": 188,
+    "paginas": 37,
+    "docs": 31
+  },
+  "tokens": {
+    "cores": 68,
+    "tipografia": 15,
+    "raios": 7,
+    "sombras": 8,
+    "camadas": 7,
+    "animacoes": 9,
+    "duracoes": 3
+  },
+  "categorias": [
+    {
+      "titulo": "Getting Started",
+      "total": 2,
+      "prontas": 2,
+      "itens": [
+        {
+          "titulo": "Let's begin",
+          "href": "/",
+          "pronto": true
+        },
+        {
+          "titulo": "SystemCrazy",
+          "href": "/getting-started/installation",
+          "pronto": true
+        }
+      ]
+    },
+    {
+      "titulo": "Foundations",
+      "total": 7,
+      "prontas": 7,
+      "itens": [
+        {
+          "titulo": "Color",
+          "href": "/foundations/color",
+          "pronto": true
+        },
+        {
+          "titulo": "Typography",
+          "href": "/foundations/typography",
+          "pronto": true
+        },
+        {
+          "titulo": "Icons",
+          "href": "/foundations/icons",
+          "pronto": true
+        },
+        {
+          "titulo": "Spacing",
+          "href": "/foundations/spacing",
+          "pronto": true
+        },
+        {
+          "titulo": "Radius",
+          "href": "/foundations/radius",
+          "pronto": true
+        },
+        {
+          "titulo": "Elevation",
+          "href": "/foundations/elevation",
+          "pronto": true
+        },
+        {
+          "titulo": "Motion",
+          "href": "/foundations/motion",
+          "pronto": true
+        }
+      ]
+    },
+    {
+      "titulo": "Actions",
+      "total": 2,
+      "prontas": 2,
+      "itens": [
+        {
+          "titulo": "Button",
+          "href": "/actions/button",
+          "pronto": true
+        },
+        {
+          "titulo": "Icon Button",
+          "href": "/actions/icon-button",
+          "pronto": true
+        }
+      ]
+    },
+    {
+      "titulo": "Forms",
+      "total": 7,
+      "prontas": 7,
+      "itens": [
+        {
+          "titulo": "Input",
+          "href": "/forms/input",
+          "pronto": true
+        },
+        {
+          "titulo": "Select",
+          "href": "/forms/select",
+          "pronto": true
+        },
+        {
+          "titulo": "Checkbox",
+          "href": "/forms/checkbox",
+          "pronto": true
+        },
+        {
+          "titulo": "Radio Group",
+          "href": "/forms/radio-group",
+          "pronto": true
+        },
+        {
+          "titulo": "Switch",
+          "href": "/forms/switch",
+          "pronto": true
+        },
+        {
+          "titulo": "Date Picker",
+          "href": "/forms/date-picker",
+          "pronto": true
+        },
+        {
+          "titulo": "Time Picker",
+          "href": "/forms/time-picker",
+          "pronto": true
+        }
+      ]
+    },
+    {
+      "titulo": "Navigation",
+      "total": 5,
+      "prontas": 5,
+      "itens": [
+        {
+          "titulo": "Sidebar",
+          "href": "/navigation/sidebar",
+          "pronto": true
+        },
+        {
+          "titulo": "Header",
+          "href": "/navigation/header",
+          "pronto": true
+        },
+        {
+          "titulo": "Breadcrumb",
+          "href": "/navigation/breadcrumb",
+          "pronto": true
+        },
+        {
+          "titulo": "Pagination",
+          "href": "/navigation/pagination",
+          "pronto": true
+        },
+        {
+          "titulo": "Tabs",
+          "href": "/navigation/tabs",
+          "pronto": true
+        }
+      ]
+    },
+    {
+      "titulo": "Data Display",
+      "total": 6,
+      "prontas": 6,
+      "itens": [
+        {
+          "titulo": "Card",
+          "href": "/data-display/card",
+          "pronto": true
+        },
+        {
+          "titulo": "KPI Card",
+          "href": "/data-display/kpi-card",
+          "pronto": true
+        },
+        {
+          "titulo": "Tag",
+          "href": "/data-display/tag",
+          "pronto": true
+        },
+        {
+          "titulo": "Avatar",
+          "href": "/data-display/avatar",
+          "pronto": true
+        },
+        {
+          "titulo": "Table",
+          "href": "/data-display/table",
+          "pronto": true
+        },
+        {
+          "titulo": "Calendário",
+          "href": "/data-display/calendario",
+          "pronto": true
+        }
+      ]
+    },
+    {
+      "titulo": "Feedback & Overlays",
+      "total": 5,
+      "prontas": 5,
+      "itens": [
+        {
+          "titulo": "Tooltip",
+          "href": "/feedback/tooltip",
+          "pronto": true
+        },
+        {
+          "titulo": "Toast",
+          "href": "/feedback/toast",
+          "pronto": true
+        },
+        {
+          "titulo": "Modal",
+          "href": "/feedback/modal",
+          "pronto": true
+        },
+        {
+          "titulo": "Drawer",
+          "href": "/feedback/drawer",
+          "pronto": true
+        },
+        {
+          "titulo": "Drawer variações",
+          "href": "/feedback/drawer-variacoes",
+          "pronto": true
+        }
+      ]
+    },
+    {
+      "titulo": "Telas de exemplo",
+      "total": 3,
+      "prontas": 3,
+      "itens": [
+        {
+          "titulo": "Tela base",
+          "href": "/exemplos/tela-base",
+          "pronto": true
+        },
+        {
+          "titulo": "Pipeline",
+          "href": "/exemplos/pipeline",
+          "pronto": true
+        },
+        {
+          "titulo": "Tags coloridas",
+          "href": "/exemplos/tags-proposta",
+          "pronto": true
+        }
+      ]
+    }
+  ],
+  "adrs": [
+    {
+      "id": "ADR-001",
+      "titulo": "Estados de interação não são desenhados no Figma",
+      "data": "2026-09-01"
+    },
+    {
+      "id": "ADR-002",
+      "titulo": "Foco por `outline`, não por `ring` com offset",
+      "data": "2026-09-01"
+    },
+    {
+      "id": "ADR-003",
+      "titulo": "Ícones vêm do Phosphor, com um peso só",
+      "data": "2026-09-01"
+    },
+    {
+      "id": "ADR-004",
+      "titulo": "Moldura do site de docs não é superfície do produto",
+      "data": "2026-09-01"
+    },
+    {
+      "id": "ADR-005",
+      "titulo": "Espaçamento não é estendido no `tailwind.config`",
+      "data": "2026-09-04"
+    },
+    {
+      "id": "ADR-006",
+      "titulo": "Página atual da paginação com dois sinais",
+      "data": "2026-09-04"
+    },
+    {
+      "id": "ADR-007",
+      "titulo": "Hover na linha da tabela, que o arquivo não desenha",
+      "data": "2026-09-04"
+    },
+    {
+      "id": "ADR-008",
+      "titulo": "Tabs entra no DS e a fileira rola em vez de quebrar",
+      "data": "2026-09-15"
+    },
+    {
+      "id": "ADR-009",
+      "titulo": "Foco das abas por `ring-inset`",
+      "data": "2026-09-15"
+    },
+    {
+      "id": "ADR-010",
+      "titulo": "Toast com movimento e 8s na tela",
+      "data": "2026-09-15"
+    },
+    {
+      "id": "ADR-011",
+      "titulo": "Header sem prop de variante",
+      "data": "2026-09-15"
+    },
+    {
+      "id": "ADR-012",
+      "titulo": "Badge sai do showcase, fica no código",
+      "data": "2026-09-15"
+    },
+    {
+      "id": "ADR-013",
+      "titulo": "Scrim a 40%",
+      "data": "2026-09-15"
+    },
+    {
+      "id": "ADR-014",
+      "titulo": "Sombra interna só no tema claro",
+      "data": "2026-09-18"
+    },
+    {
+      "id": "ADR-015",
+      "titulo": "Button `soft` com par escuro próprio",
+      "data": "2026-09-18"
+    },
+    {
+      "id": "ADR-016",
+      "titulo": "Seleção do Segmented visível no escuro",
+      "data": "2026-09-18"
+    },
+    {
+      "id": "ADR-017",
+      "titulo": "Subtítulo do Header fora por padrão",
+      "data": "2026-09-18"
+    },
+    {
+      "id": "ADR-018",
+      "titulo": "Interruptor lista/cards do Drawer não é o Switch do DS",
+      "data": "2026-09-18"
+    },
+    {
+      "id": "ADR-019",
+      "titulo": "Drawer entra em 280ms com curva própria",
+      "data": "2026-09-18"
+    },
+    {
+      "id": "ADR-020",
+      "titulo": "Auditoria de consistência corrige sem remedir o Figma",
+      "data": "2026-09-19"
+    },
+    {
+      "id": "ADR-021",
+      "titulo": "Escala de movimento fast 150 · base 200 · slow 280",
+      "data": "2026-09-19"
+    },
+    {
+      "id": "ADR-022",
+      "titulo": "A Sidebar anima a largura ao colapsar",
+      "data": "2026-09-19"
+    },
+    {
+      "id": "ADR-023",
+      "titulo": "Componente de leitura não tem movimento",
+      "data": "2026-09-19"
+    },
+    {
+      "id": "ADR-024",
+      "titulo": "Telas de exemplo e propostas mantêm peças próprias",
+      "data": "2026-09-19"
+    },
+    {
+      "id": "ADR-025",
+      "titulo": "A tabela emite a ordenação; quem ordena os dados é a tela",
+      "data": "2026-09-23"
+    },
+    {
+      "id": "ADR-026",
+      "titulo": "Esconder coluna tem dois caminhos: menu do cabeçalho e botão Colunas",
+      "data": "2026-09-23"
+    },
+    {
+      "id": "ADR-027",
+      "titulo": "Breakpoints moram na casca da tela, não em cada tela",
+      "data": "2026-09-23"
+    },
+    {
+      "id": "ADR-028",
+      "titulo": "Na tela, recuo de 24 e busca que abre da lupa",
+      "data": "2026-09-23"
+    },
+    {
+      "id": "ADR-029",
+      "titulo": "Header: 6px entre as linhas e título no topo da fileira",
+      "data": "2026-09-23"
+    },
+    {
+      "id": "ADR-030",
+      "titulo": "Token `muted`: um cinza entre o fundo e o card",
+      "data": "2026-09-24"
+    },
+    {
+      "id": "ADR-031",
+      "titulo": "Agrupar como botão com menu; seleção em massa com barra",
+      "data": "2026-09-24"
+    },
+    {
+      "id": "ADR-032",
+      "titulo": "Header estreito centrado, medido pela própria largura",
+      "data": "2026-09-24"
+    },
+    {
+      "id": "ADR-033",
+      "titulo": "Escuro: traços com contraste e rótulo branco no primário",
+      "data": "2026-09-24"
+    },
+    {
+      "id": "ADR-034",
+      "titulo": "Hora em rodas, fuso em painel do DS, data única, Switch de linha",
+      "data": "2026-09-24"
+    },
+    {
+      "id": "ADR-035",
+      "titulo": "Rodapé do Modal compacto; edição na célula da Table",
+      "data": "2026-09-27"
+    },
+    {
+      "id": "ADR-036",
+      "titulo": "Grade densa de lista, com traço entre colunas (referência: Twenty)",
+      "data": "2026-09-27"
+    },
+    {
+      "id": "ADR-037",
+      "titulo": "Button `primary` e `destructive` planos, sem a sombra interna",
+      "data": "2026-09-28"
+    },
+    {
+      "id": "ADR-038",
+      "titulo": "Select ao lado de Input é sempre `field`",
+      "data": "2026-09-28"
+    },
+    {
+      "id": "ADR-039",
+      "titulo": "Cabeçalho do Modal compacto",
+      "data": "2026-09-28"
+    },
+    {
+      "id": "ADR-040",
+      "titulo": "Drawer abre com 840px e a pessoa arrasta a largura até 1080",
+      "data": "2026-09-28"
+    },
+    {
+      "id": "ADR-041",
+      "titulo": "Cartão do drawer com linha de 24 e Select `cartao`",
+      "data": "2026-09-28"
+    }
+  ],
+  "auditoria": {
+    "total": 206,
+    "porStatus": {
+      "corrigido": 67,
+      "aceito": 12,
+      "adiado": 125,
+      "aberto": 2
+    },
+    "porEixo": {
+      "movimento": 14,
+      "tokens": 20,
+      "composicao": 20,
+      "paginas": 10,
+      "instalacao": 11,
+      "docs": 10,
+      "fidelidade": 121
+    }
+  },
+  "pedidos": [
+    {
+      "data": "2026-09-28",
+      "origem": "Lote",
+      "titulo": "CORREÇÃO · DENSA: O NOME MANDA",
+      "resumo": "Na grade densa o nome do lead truncava por causa das etiquetas (\"Mari…\", \"Co…\"). Agora o nome tem prioridade (shrink-0) e as etiquetas aparecem inteiras ou somem (quebram para uma linha escondida, sem"
+    },
+    {
+      "data": "2026-09-28",
+      "origem": "Reunião",
+      "titulo": "LOTE DA REUNIÃO DE 24/09",
+      "resumo": "Button primary/destructive e o + de tag planos; shadow-button-inner-primary some (ADR-037). Select field no Modal \"Novo lead\" e no painel do lead; regra \"Select ao lado de Input é field\" (ADR-038). Ca"
+    },
+    {
+      "data": "2026-09-28",
+      "origem": "Revisão",
+      "titulo": "CARTÕES DO DRAWER, SELECT cartao, DRAWER ARRASTÁVEL; PROGRESS E EMPTY STATE SAEM DO NAV",
+      "resumo": "CampoEditavel com linha de 24 em leitura e edição (linhaDoCartao, lib/campo) — cartão fecha em 68 (ADR-041). Select ganha cartao: o cartão inteiro é o gatilho, rótulo em bold, valor e caret na linha d"
+    },
+    {
+      "data": "2026-09-28",
+      "origem": "Lote",
+      "titulo": "CORREÇÃO · DRAWER 840, TETO 1080, CONTEÚDO EM AUTO-LAYOUT",
+      "resumo": "\"ficou horrível, os cards amassados\": o conteúdo do painel tinha grid-cols-3 fixo e, com o painel mais estreito, os cartões espremiam. Agora gradeDeCartoes (lib/campo): auto-fill de colunas de 220px. "
+    },
+    {
+      "data": "2026-09-28",
+      "origem": "Lote",
+      "titulo": "AUTO-LAYOUT NAS OUTRAS SEÇÕES DO DRAWER",
+      "resumo": "As oito grades grid-cols-3 do DrawerLead do showcase (Dados cadastrais, Contatos, Contato principal, Campos adicionais, Campos personalizados, Campos gerais, Suporte, Empresa restrito) viram gradeDeCa"
+    },
+    {
+      "data": "2026-09-28",
+      "origem": "Cliente",
+      "titulo": "O CLAUDE GERANDO TELAS: BANCADA, BLOCO PIPELINE, CHECK INSTALÁVEL; PÁGINA /ENTREGA",
+      "resumo": "Decisão do humano: o contrato pode encerrar em 10/10 e o que decide é o Claude gerar tela com o DS no projeto do cliente. (1) scripts/bancada/: projeto Next limpo que segue a página de instalação (pre"
+    },
+    {
+      "data": "2026-09-27",
+      "origem": "WhatsApp",
+      "titulo": "PEDIDOS DO CLIENTE (WhatsApp de 26/09)",
+      "resumo": "(1) Modal \"parece grande\": rodapé com 8 em cima e embaixo, corpo com 12 embaixo e botões sm em todo rodapé (página do Modal e os três modais do pipeline) — fecha em 44 em vez de 56; Modal.md e AUD-199"
+    },
+    {
+      "data": "2026-09-27",
+      "origem": "Lote",
+      "titulo": "T8 · GRADE DENSA (referência Twenty)",
+      "resumo": "DataTable layout=\"densa\": linha de 36px, recuo 8, traço border entre colunas e entre linhas, cabeçalho de 32; as células sabem o layout pelo contexto e viram uma linha (CelulaLead nome + etiquetas lad"
+    },
+    {
+      "data": "2026-09-24",
+      "origem": "Lote",
+      "titulo": "CORREÇÃO · RECUO ESQUERDO 4",
+      "resumo": "(print) · TelaBase e pipeline: com a sidebar no lugar (≥ 1024) o recuo esquerdo do Header e do conteúdo cai a 4 (lg:pl-1) — a Sidebar já traz 16 de moldura na cor do fundo e os dois somavam aos olhos."
+    },
+    {
+      "data": "2026-09-24",
+      "origem": "Lote",
+      "titulo": "TOKEN muted + ÍCONES DO CABEÇALHO",
+      "resumo": "(prints) · Token novo muted (#F5F6F7 · #1D1D25), entre background e card: cabeçalho e linha de grupo da Table e linha dos dias do Calendário saem de background — sobre a página, sumiam (ADR-030). No c"
+    },
+    {
+      "data": "2026-09-24",
+      "origem": "Lote",
+      "titulo": "CORREÇÃO · HEADER: SEM TRAÇO, FILTROS COMO A BUSCA, DIVISOR SÓ ENTRE GRUPOS",
+      "resumo": "(prints) · Header perde o border-b (\"linha divisória que eu já pedi pra remover\"), fecha em 102. Peça nova HeaderFiltros (rótulo ou recolhido, contagem com soft + pílula/selo, rotuloComContagem): mesm"
+    },
+    {
+      "data": "2026-09-24",
+      "origem": "Lote",
+      "titulo": "CORREÇÃO · ETIQUETAS DA TABLE",
+      "resumo": "(print) · Bug: ao estreitar a coluna vizinha, as etiquetas da CelulaLead vazavam por cima dela — a fileira não quebrava. Agora quebra linha (flex-wrap, max-w-full). E as etiquetas passam de Badge para"
+    },
+    {
+      "data": "2026-09-24",
+      "origem": "Revisão",
+      "titulo": "T6 · SELEÇÃO EM MASSA + BARRA DA TABLE",
+      "resumo": "(referência: a tela atual do CRM, print do humano) · BotaoAgrupar no lugar do SelectAgrupar: mesmo botão tertiary do Colunas, menu com itens de rádio (tipo novo no Menu), soft com grupo ativo. Seleção"
+    },
+    {
+      "data": "2026-09-24",
+      "origem": "Lote",
+      "titulo": "HEADER ESTREITO CENTRADO",
+      "resumo": "(print do celular, \"gostei de centralizar no mobile\") · Abaixo de 640 da própria largura (container query, não a janela), trilha, título e ações ficam centrados e as ações em linha própria; a TelaBase"
+    },
+    {
+      "data": "2026-09-24",
+      "origem": "Revisão",
+      "titulo": "PIPELINE · LISTA COMO O QUADRO + BOTÕES NO HEADER",
+      "resumo": "(humano: \"a tabela está super diferente do kanban… e se eles ficarem no header?\") · BotaoAgrupar e BotaoColunas ganham recolhido (ícone + tooltip, 32px) e na tela do pipeline vão para a fileira do Hea"
+    },
+    {
+      "data": "2026-09-24",
+      "origem": "Lote",
+      "titulo": "ESCURO · TRAÇOS E RÓTULO BRANCO",
+      "resumo": "(print do modal de filtros) · border 20 → 26%, divider 25 → 36%, input/border com valor próprio a 45% (a caixa do Checkbox sumia); primary-foreground branco nos dois modos, primary do escuro em blue/5"
+    },
+    {
+      "data": "2026-09-24",
+      "origem": "Reunião",
+      "titulo": "T7 · HORA EM RODAS, FUSO, DATA ÚNICA, SWITCH DE LINHA",
+      "resumo": "(reunião de 2026-09-18) · TimePicker/DateTimePicker: as colunas viram rodas (5 à vista, scroll-snap, faixa no meio, olho de peixe discreto por rolagem, sombreado em cima e embaixo, setas/PageUp/PageDo"
+    },
+    {
+      "data": "2026-09-24",
+      "origem": "Lote",
+      "titulo": "CORREÇÃO · RODA MAIS FORTE, SEM ESPAÇO MORTO, SOMBRA INTERNA NO ESCURO",
+      "resumo": "Olho de peixe da roda \"bem mais forte\": inclina até 60°, apaga até 20%, o do meio cresce ~2px (escala 1,15). As rodas dividem a largura do painel e o botão do fuso fica só com ícone + deslocamento (a "
+    },
+    {
+      "data": "2026-09-24",
+      "origem": "Lote",
+      "titulo": "CORREÇÃO · SÓ O EXCLUIR, SELO BRANCO, GATILHO 32, TABLE DA DOC, CAIXA ALINHADA",
+      "resumo": "A sombra interna do escuro fica só no destructive (com o primary, shadow-button-inner-primary); o resto volta a none — ADR-014 anotada. Selo do sino em primary-foreground (branco nos dois). GatilhoDeD"
+    },
+    {
+      "data": "2026-09-23",
+      "origem": "Lote",
+      "titulo": "T1 · TABLE COM COMPORTAMENTOS",
+      "resumo": "(demanda nova, referência: grid do ExtJS examples/classic/grid/binding) · useAjustesDaTabela(colunas, { memoria }) guarda ordem, colunas escondidas, sequência e larguras (localStorage por tela, lido d"
+    },
+    {
+      "data": "2026-09-23",
+      "origem": "Lote",
+      "titulo": "T2 · LISTA AGRUPÁVEL",
+      "resumo": "ColunaTabela.agrupavel; os ajustes guardam grupo e recolhidos (memória por tela); SelectAgrupar na barra (o Select do DS) e \"Agrupar por X\"/\"Desagrupar\" no menu da coluna; agruparPor(itens, grupoDe, o"
+    },
+    {
+      "data": "2026-09-23",
+      "origem": "Lote",
+      "titulo": "T4 · CALENDÁRIO",
+      "resumo": "components/ui/calendario.tsx: mês e semana (SegmentedControl), setas e Hoje (Button tertiary), grade role=\"grid\" numa table com um dia por vez no Tab (setas, Home/End, PageUp/PageDown; sair da grade l"
+    },
+    {
+      "data": "2026-09-23",
+      "origem": "Lote",
+      "titulo": "TELA BASE (a casca)",
+      "resumo": "components/ui/tela-base.tsx: Sidebar + Header + subcabeçalho + conteúdo com os breakpoints (≥1280 aberta · 1024–1279 recolhida · <1024 menu por cima com Scrim e useCamada), memória da sidebar por tela"
+    },
+    {
+      "data": "2026-09-23",
+      "origem": "Revisão",
+      "titulo": "T3 · LAYOUT DO CARD",
+      "resumo": "(protótipo do Davi, \"Pipelines genéricas\": três presets, confirmado pelo humano) · Quadro densidade=\"compacto\" | \"padrao\" | \"detalhado\": compacto só nome, valor, atendente e dias; padrão o de hoje; de"
+    },
+    {
+      "data": "2026-09-23",
+      "origem": "Revisão",
+      "titulo": "CORREÇÃO · TELA BASE DE VERDADE",
+      "resumo": "humano: \"é sacanagem criar a tela base sabendo que eu pedi pra funcionar tudo\". (1) Tema: a tela base troca a classe dark e salva dc-tema (no CRM, trocar por quem cuida do tema). (2) Sino: o painel de"
+    },
+    {
+      "data": "2026-09-23",
+      "origem": "Revisão",
+      "titulo": "CORREÇÃO · ESPAÇOS E CARTÃO",
+      "resumo": "(prints do humano com medidas) · Modal: corpo com 16 embaixo, o conteúdo encostava na faixa do rodapé. Tela: recuo 24 (16 abaixo de 768) no Header e no conteúdo — TelaBase, pipeline (quadro, lista, ca"
+    },
+    {
+      "data": "2026-09-23",
+      "origem": "Revisão",
+      "titulo": "CORREÇÃO · HEADER EM TODA TELA",
+      "resumo": "humano: \"quando eu falo de um componente, ele precisa atualizar em todas as telas\" — e a regra da busca: \"em telas que têm espaço pode manter o campo; com muitos itens de filtro, só o ícone\". Regra es"
+    },
+    {
+      "data": "2026-09-23",
+      "origem": "Lote",
+      "titulo": "CORREÇÃO · RECUO 16",
+      "resumo": "(print com medidas, \"ainda tem muito espaço\") · TelaBase: recuo 16 em toda largura no Header e no conteúdo (era 16 · 24) e o Header sem recuo embaixo (pb-0) — as ações encostam no traço, o respiro é o"
+    },
+    {
+      "data": "2026-09-22",
+      "origem": "Lote",
+      "titulo": "AJUSTES DA WEEKLY DE 18/09",
+      "resumo": "(1) Drawer: quem rola é o menu (DrawerBloco rolagem, mínimo 80px, setas por dentro); se nem isso cabe, rola a área dos blocos, nunca o cabeçalho — nome e telefone sempre à vista (Davi). (2) Modo cards"
+    },
+    {
+      "data": "2026-09-21",
+      "origem": "Revisão",
+      "titulo": "CORREÇÃO · PÁGINA MOTION",
+      "resumo": "humano: \"o motion não está funcionando\". As amostras de /foundations/motion andavam 0px: translateX(calc(100% - 100%)) — percentual em transform é da caixa do próprio bloco, não da pista. Agora a pist"
+    },
+    {
+      "data": "2026-09-21",
+      "origem": "Revisão",
+      "titulo": "CORREÇÃO · SELETOR DE FUNDO DO PREVIEW",
+      "resumo": "humano: \"alguns não mudam a cor\". Sondagem nas 146 caixas do site (clicar Invertido e medir os pixels que mudam): 35 a 0%. Causa 1 (16 seções em 9 páginas): className=\"bg-background\" na Secao, escrito"
+    },
+    {
+      "data": "2026-09-21",
+      "origem": "WhatsApp",
+      "titulo": "PEDIDOS DO CLIENTE (WhatsApp)",
+      "resumo": "(1) SeletorTags com outro conteúdo: seção \"Outros cenários\" na página da Tag — produtos da proposta (planos com cor por degrau; serviços e add-ons corLivre com criar), responsáveis (foto, sem aoCriar)"
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Revisão",
+      "titulo": "AUDITORIA DE CONSISTÊNCIA · FASE A",
+      "resumo": "(decisão do humano: auditar e corrigir em lotes; só código nesta rodada, sem remedição contra o Figma). Varredura por 3 agentes (tokens/movimento · composição · instalação/docs) → **85 achados** em do"
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Lote",
+      "titulo": "compila",
+      "resumo": "Guarda-corpos novos, zero dependência: scripts/check-tokens.mjs (valor fora do token: duração, curva, foco em ring, opacidade, scrim, sombra, z, hex, timeout, ícone, botão cru), check-rotas.mjs (nav ×"
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Lote",
+      "titulo": "LOTE B0 · REGRAS",
+      "resumo": "interactions.md reescrito no formato v3.2 lendo o código e o log: a Parte 2 (\"a decidir\") esvaziou — foco (L1 = D6/D19), hover neutro (L2) e colorido (L3), disabled (L4, com decisão pendente), active "
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Revisão",
+      "titulo": "GATE B0 APROVADO",
+      "resumo": "pelo humano: (1) disabled em ação e navegação passa a seguir I5 no lote B3 (eventos mantidos, cursor not-allowed, opacidade por token); (2) ausência de active confirmada como decisão (L5); (3) escala "
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Lote",
+      "titulo": "LOTE B1 · DOCS + REGISTRY",
+      "resumo": "Seis docs novas lidas do código (check-doc-codigo --rascunho): Button, Badge, Sidebar, DatePicker, Rating, LogoDatacrazy — e as seis entradas no registro (27/27; _divida quitada). Props reconciliadas "
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Lote",
+      "titulo": "LOTE B2 · TOKENS DE MOVIMENTO E DIMENSÃO",
+      "resumo": "lib/movimento.ts é o dono único (DURACAO fast 150 · base 200 · slow 280; CURVA enter/exit/settle/pop; PERMANENCIA toast 8000 · copiado 1500; reduzido()); o tailwind.config.ts importa de lá — duration-"
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Lote",
+      "titulo": "LOTE B3 · FOCO E DISABLED",
+      "resumo": "lib/estados.ts (D21): foco (D6), focoAnel (D19), focoInterno, focoPeer, focoDentro, desabilitado (I5: cursor-not-allowed + opacity-disabled, eventos mantidos — decisão do gate B0) e desabilitadoLink ("
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Lote",
+      "titulo": "LOTE B4 · FAMÍLIA BUTTON",
+      "resumo": "size ganha icon-xs 24 · icon-sm 28 · icon-lg 36 (o icon 32 continua). BotaoFechar nasce em button.tsx: Button ghost quadrado com o X do Phosphor e hover em overlay-item-hover (D22); Modal (28/16), Toa"
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Revisão",
+      "titulo": "LOTE B5 · CAMADA E POPOVER",
+      "resumo": "lib/use-saida.ts (useMontado, useSaida — a saída animada que nasceu no Drawer), lib/use-clique-fora.ts (pointerdown em captura; era uma cópia por painel com três eventos diferentes) e lib/use-posicao."
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Lote",
+      "titulo": "LOTE B6 · CAMPO E CARD ÚNICOS",
+      "resumo": "lib/campo.ts (D21): caixaDeCampo, blocoDeCampo, rotuloDoBloco, rotuloDeCampo, caixaNoCartao e o novo erroDeCampo saem do Input (que re-exporta por compatibilidade); Rating, Tag, Telefone e TimePicker "
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Revisão",
+      "titulo": "LOTE B7 · MOVIMENTO ONDE FALTAVA",
+      "resumo": "PainelFlutuante ganha saindo: entra em fade-in-fast e sai em fade-out sem clique e aria-hidden; Select, TimePicker, DatePicker e seletor de tags ficam montados até o fim com useSaida (precedente Modal"
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Revisão",
+      "titulo": "LOTE B8 · PÁGINAS NO PADRÃO",
+      "resumo": "Os 12 trechos publicados com \"…\" viraram o JSX real do exemplo ao lado (check:exemplos: 0 pseudocódigo, 93 trechos compilam). Página de ícones usa o Button nos três botões e no snippet (era a única qu"
+    },
+    {
+      "data": "2026-09-19",
+      "origem": "Lote",
+      "titulo": "LOTE B9 · PROCESSO",
+      "resumo": ".github/workflows/kfe.yml escrito (tipos · npm run check · exemplos sem compilar · build; sem lint por decisão) — **push pendente**: o token do gh não tem o escopo workflow; subir com gh auth refresh "
+    },
+    {
+      "data": "2026-09-18",
+      "origem": "Revisão",
+      "titulo": "Drawer · indicador de rolagem e fixar item",
+      "resumo": "(pedido do humano). A coluna que rola passou a viver dentro de uma casca que NÃO rola — é ela que segura a seta parada na borda enquanto o conteúdo passa por baixo. A seta é decoração (aria-hidden) e "
+    },
+    {
+      "data": "2026-09-18",
+      "origem": "Revisão",
+      "titulo": "DECISÃO DO HUMANO · revisão do Header",
+      "resumo": ". (1) Subtítulo sai dos exemplos e passa a ser exceção — título e descrição decorativos em toda tela são anti-referência; o Header fecha em **111px** com ou sem ele: a linha do título guarda min-h-[46"
+    },
+    {
+      "data": "2026-09-18",
+      "origem": "Lote",
+      "titulo": "SOMBRA INTERNA SÓ NO CLARO",
+      "resumo": ": --shadow-button-inner vira none no .dark, e só o Button primary (e o + de tag, mesma superfície azul) mantém o brilho, por shadow-button-inner-primary. O brilho é claro: sobre superfície escura ele "
+    },
+    {
+      "data": "2026-09-18",
+      "origem": "Lote",
+      "titulo": "Button soft ganhou par escuro",
+      "resumo": "(--button-soft-bg · -foreground · -hover): o arquivo repete base/blue/50 + blue-600 nos dois modos e o botão saía branco-azulado no escuro. No escuro vira accent + blue-300, hover neutral-800 — o mesm"
+    },
+    {
+      "data": "2026-09-18",
+      "origem": "Revisão",
+      "titulo": "Seleção do Segmented e do View Switcher visível no escuro",
+      "resumo": ": --segmented-item-selected é accent no Claro (o do arquivo) e background no Escuro, onde accent (#232C3D) era quase o card (#25252D) da trilha — a seleção existia e não se via, e foi assim que o huma"
+    },
+    {
+      "data": "2026-09-18",
+      "origem": "Lote",
+      "titulo": "botão",
+      "resumo": "Drawer · a seta de rolagem virou (rola 80% da altura visível) e ganhou a \"sombrinha\": uma faixa de 48px em degradê do card, cobrindo a largura inteira da coluna, para a seta não encostar no texto que "
+    },
+    {
+      "data": "2026-09-18",
+      "origem": "Revisão",
+      "titulo": "linha do título do bloco",
+      "resumo": "Drawer · o interruptor lista/cards saiu de dentro da caixa do menu e foi para a (DrawerBloco acoes), com o caret virando botão próprio ao lado. Motivo medido na prática: o humano não achou o controle "
+    }
+  ],
+  "qualidade": {
+    "checks": [
+      "temas",
+      "tokens",
+      "rotas",
+      "doc-codigo",
+      "docs",
+      "paginas",
+      "exemplos",
+      "regressao",
+      "sidebar"
+    ],
+    "capturas": 74,
+    "temas": 2
+  },
+  "bancada": null
+}

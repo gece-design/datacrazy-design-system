@@ -16,7 +16,7 @@ export default function Installation() {
     <PaginaDS
       titulo="SystemCrazy"
       descricao="O design system entra no seu projeto pelo shadcn CLI e no Claude Code por MCP. São três comandos — registrar o catálogo, instalar a base e conectar o Claude — e depois é só pedir a tela."
-      secoes={["Como funciona", "Registrar o catálogo", "Instalar a base", "Conectar o Claude Code", "Criar uma tela", "Pedir a tela", "Atualizar"]}
+      secoes={["Como funciona", "Registrar o catálogo", "Instalar a base", "Conectar o Claude Code", "Criar uma tela", "Pedir a tela", "Verificar", "Atualizar"]}
     >
       <ComoFunciona>
         <p>
@@ -99,6 +99,12 @@ export default function Installation() {
       >
         <Codigo lang="bash" codigo={`npx shadcn@latest add @datacrazy/tela`} />
         <Legenda>
+          Tela de lista, quadro ou registro aberto? <Chip>@datacrazy/pipeline</Chip> traz o funil inteiro (quadro, lista,
+          calendário e o lead no drawer) em <Chip>app/pipeline</Chip>: é a tela de referência para copiar o padrão, com os
+          dados de exemplo em <Chip>dados.ts</Chip>.
+        </Legenda>
+        <Codigo className="mt-3" lang="bash" codigo={`npx shadcn@latest add @datacrazy/pipeline`} />
+        <Legenda>
           A casca é a <Chip>TelaBase</Chip>: acima de 1280px a sidebar aberta, entre 1024 e 1279 recolhida em ícones,
           abaixo de 1024 vira um menu por cima com o botão no Header. Veja a tela em branco em{" "}
           <Chip>/exemplos/tela-base</Chip>.
@@ -120,6 +126,35 @@ export default function Installation() {
             </li>
           ))}
         </ul>
+      </Secao>
+
+      <Secao
+        titulo="Verificar"
+        spec="passo 6"
+        descricao="A base instala scripts/ds-check.mjs: as mesmas regras que guardam o design system, no seu projeto. Ele aponta valor fora dos tokens, paleta e tipografia do Tailwind, <input> e <table> crus, ícone de outra biblioteca e página sem TelaBase. A skill manda o Claude rodar antes de dar a tela por pronta."
+        semCaixa
+        semSeletorDeFundo
+        className={semMoldura}
+      >
+        <Codigo lang="bash" codigo={`node scripts/ds-check.mjs`} />
+        <Legenda>
+          Para o Claude corrigir sozinho a cada arquivo que escreve, ligue o hook em <Chip>.claude/settings.json</Chip> do
+          projeto: a cada Write ou Edit o check roda no arquivo e devolve as violações ao Claude.
+        </Legenda>
+        <Codigo
+          className="mt-3"
+          lang="json"
+          codigo={`{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [{ "type": "command", "command": "node scripts/ds-check.mjs --hook" }]
+      }
+    ]
+  }
+}`}
+        />
       </Secao>
 
       <Secao

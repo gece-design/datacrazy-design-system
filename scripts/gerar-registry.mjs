@@ -238,6 +238,11 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    cria \`app/nova-tela/page.tsx\` com Sidebar, Header e conteúdo
    já ligados e responsivos (\`TelaBase\`). Renomeie a pasta e preencha os
    encaixes. Nunca monte Sidebar e Header à mão numa tela.
+   Tela de lista, quadro, calendário ou registro aberto? Instale
+   \`npx shadcn@latest add ${NAMESPACE}/pipeline\` e copie o padrão de lá
+   (\`app/pipeline/\`): é a tela do funil inteira, feita pelo time do DS —
+   Header com busca e filtros, Table densa com seleção em massa, Drawer com
+   cartões. É a referência de densidade e composição; não invente layout.
 1. **Procure antes de criar.** O catálogo no fim deste arquivo lista tudo o que
    existe. Se o componente existe e não está em \`components/ui/\`, instale:
    \`npx shadcn@latest add ${NAMESPACE}/<nome>\` (ou pela ferramenta MCP do shadcn).
@@ -250,6 +255,10 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    um caso: isso é decisão do time de design.
 5. **Texto nunca dentro do componente.** Toda string entra por prop — o produto
    é multi-idioma.
+6. **Antes de dar a tela por pronta, rode \`node scripts/ds-check.mjs\`** (o setup
+   instala) e corrija tudo que ele apontar: valor fora dos tokens, paleta ou
+   tipografia do Tailwind, \`<input>\`/\`<table>\` cru, ícone de outra biblioteca,
+   página sem \`TelaBase\`. Zero violação é critério de pronto. Depois, \`tsc\`.
 
 ## Tokens — a única fonte de estilo
 
@@ -382,9 +391,68 @@ const componentes = fs
     };
   });
 
+// Blocos: telas inteiras do site publicadas como `registry:block` — `shadcn add
+// @datacrazy/tela` escreve app/nova-tela/page.tsx pronta (pedido do humano,
+// 2026-09-23); `@datacrazy/pipeline` escreve a tela do funil inteira (quadro,
+// lista, calendário, lead no drawer), para o agente copiar o padrão de uma tela
+// real em vez de inventar (bancada, 2026-09-28). Import de fora de ui/ e lib/
+// vira vizinho do bloco (`reescritas`).
+const BLOCOS = [
+  {
+    name: "tela",
+    title: "Tela",
+    description: "Uma tela nova, pronta: Sidebar, Header e conteúdo já ligados e responsivos (TelaBase). Toda tela começa por aqui.",
+    arquivos: [{ de: "app/exemplos/tela-base/page.tsx", para: "app/nova-tela/page.tsx" }],
+    docs: `Tela base: ${URL_DS}/exemplos/tela-base — renomeie a pasta app/nova-tela e preencha os encaixes.`,
+  },
+  {
+    name: "pipeline",
+    title: "Pipeline",
+    description: "O funil do CRM inteiro, pronto: quadro com arrastar e soltar, lista densa com seleção em massa, calendário e o lead aberto no drawer. A tela de referência para lista, quadro e detalhe — copie o padrão dela.",
+    arquivos: [
+      { de: "app/exemplos/pipeline/page.tsx", para: "app/pipeline/page.tsx" },
+      { de: "app/exemplos/pipeline/tela.tsx", para: "app/pipeline/tela.tsx" },
+      { de: "app/exemplos/pipeline/lista.tsx", para: "app/pipeline/lista.tsx" },
+      { de: "app/exemplos/pipeline/quadro.tsx", para: "app/pipeline/quadro.tsx" },
+      { de: "app/exemplos/pipeline/painel-lead.tsx", para: "app/pipeline/painel-lead.tsx" },
+      { de: "app/exemplos/pipeline/dados.ts", para: "app/pipeline/dados.ts" },
+      { de: "app/feedback/drawer/drawer-lead.tsx", para: "app/pipeline/drawer-lead.tsx" },
+    ],
+    reescritas: [["@/app/feedback/drawer/drawer-lead", "./drawer-lead"]],
+    docs: `Pipeline: ${URL_DS}/exemplos/pipeline — a tela em app/pipeline; troque os dados de exemplo (dados.ts) pelos do CRM.`,
+  },
+];
+
+const blocos = BLOCOS.map((b) => {
+  const itens = new Set();
+  const pacotes = new Set();
+  const files = b.arquivos.map(({ de, para }) => {
+    let fonte = ler(de);
+    for (const [antes, depois] of b.reescritas ?? []) fonte = fonte.split(`"${antes}"`).join(`"${depois}"`);
+    const deps = dependenciasDe(fonte, de);
+    // vizinho do bloco (./dados, ./tela) não é item do catálogo
+    for (const i of deps.itens) if (!b.arquivos.some((a) => path.basename(a.para, path.extname(a.para)) === i)) itens.add(i);
+    for (const p of deps.pacotes) pacotes.add(p);
+    return { path: para, type: para.endsWith("page.tsx") ? "registry:page" : "registry:file", target: para, content: fonte };
+  });
+  return { ...b, itens: [...itens], pacotes: [...pacotes], files };
+});
+const itensDeBloco = blocos.map((b) => ({
+  $schema: SCHEMA_ITEM,
+  name: b.name,
+  type: "registry:block",
+  title: b.title,
+  description: b.description,
+  dependencies: b.pacotes,
+  registryDependencies: b.itens.map(urlDoItem),
+  files: b.files,
+  categories: ["telas"],
+  docs: b.docs,
+}));
+
 // lib/ entra só no que algum componente importa — o resto de lib/ é do site.
 const libs = new Map();
-const pendentes = componentes.flatMap((c) => c.itens).filter((n) => existe(`lib/${n}.ts`));
+const pendentes = [...componentes.flatMap((c) => c.itens), ...blocos.flatMap((b) => b.itens)].filter((n) => existe(`lib/${n}.ts`));
 while (pendentes.length) {
   const name = pendentes.pop();
   if (libs.has(name)) continue;
@@ -437,6 +505,26 @@ const arquivosDaSkill = [
   })),
 ];
 
+// O check do DS para o projeto de quem instala: scripts/ds-check.mjs com as
+// regras embutidas (lá não existe scripts/lib). Vai dentro do setup.
+function checkInstalavel() {
+  const regras = ler("scripts/lib/regras-tokens.mjs").replace(/^export /gm, "");
+  const corpo = ler("scripts/ds-check.mjs").replace(/^import \{ REGRAS, REGRAS_DE_TELA, semTelaBase \} from "\.\/lib\/regras-tokens\.mjs";\n/m, "");
+  const [cabecalho, resto] = corpo.split('import path from "node:path";\n');
+  return `${cabecalho}import path from "node:path";\n\n/* ---- regras (geradas de scripts/lib/regras-tokens.mjs do DS) ---- */\n${regras}\n/* ---- fim das regras ---- */\n${resto}`;
+}
+
+const HOOK_DO_CHECK = `{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [{ "type": "command", "command": "node scripts/ds-check.mjs --hook" }]
+      }
+    ]
+  }
+}`;
+
 const itemSetup = (versao) => ({
   $schema: SCHEMA_ITEM,
   name: versao === "v4" ? "setup" : "setup-v3",
@@ -450,8 +538,8 @@ const itemSetup = (versao) => ({
   // tudo cai na fonte de sistema em silêncio (AUD-067).
   dependencies: ["geist"],
   registryDependencies: [urlDoItem(versao === "v4" ? "tokens" : "tokens-v3"), urlDoItem("utils")],
-  files: arquivosDaSkill,
-  docs: "Skill instalada em .claude/skills/datacrazy-ds. Reinicie o Claude Code para ele carregar.",
+  files: [...arquivosDaSkill, { path: "scripts/ds-check.mjs", type: "registry:file", target: "scripts/ds-check.mjs", content: checkInstalavel() }],
+  docs: "Skill instalada em .claude/skills/datacrazy-ds (reinicie o Claude Code) e o check do DS em scripts/ds-check.mjs — rode `node scripts/ds-check.mjs` depois de cada tela, ou ligue o hook em .claude/settings.json (ver a página de instalação).",
 });
 
 const todos = {
@@ -463,26 +551,7 @@ const todos = {
   registryDependencies: componentes.map((c) => urlDoItem(c.name)),
 };
 
-// O bloco da tela: a página de exemplo /exemplos/tela-base publicada como
-// `registry:page` — `shadcn add @datacrazy/tela` escreve app/nova-tela/page.tsx
-// pronta no projeto de quem instala (pedido do humano, 2026-09-23).
-const TELA_REL = "app/exemplos/tela-base/page.tsx";
-const fonteDaTela = ler(TELA_REL);
-const depsDaTela = dependenciasDe(fonteDaTela, TELA_REL);
-const itemTela = {
-  $schema: SCHEMA_ITEM,
-  name: "tela",
-  type: "registry:block",
-  title: "Tela",
-  description: "Uma tela nova, pronta: Sidebar, Header e conteúdo já ligados e responsivos (TelaBase). Toda tela começa por aqui.",
-  dependencies: depsDaTela.pacotes,
-  registryDependencies: depsDaTela.itens.map(urlDoItem),
-  files: [{ path: "app/nova-tela/page.tsx", type: "registry:page", target: "app/nova-tela/page.tsx", content: fonteDaTela }],
-  categories: ["telas"],
-  docs: `Tela base: ${URL_DS}/exemplos/tela-base — renomeie a pasta app/nova-tela e preencha os encaixes.`,
-};
-
-const base = [itemSetup("v4"), itemSetup("v3"), itemTela, todos, itemTokens(ext, "v4"), itemTokens(ext, "v3"), ...itensDeLib];
+const base = [itemSetup("v4"), itemSetup("v3"), ...itensDeBloco, todos, itemTokens(ext, "v4"), itemTokens(ext, "v3"), ...itensDeLib];
 const itens = [...base, ...itensDeComponente];
 
 fs.rmSync(SAIDA, { recursive: true, force: true });
@@ -520,9 +589,17 @@ fs.writeFileSync(
 ## Instalar
 
 1. \`npx shadcn@latest registry add ${NAMESPACE}=${URL_DS}/r/{name}.json\`
-2. \`npx shadcn@latest add ${NAMESPACE}/setup\` — tokens, cn() e a skill datacrazy-ds para o Claude Code (Tailwind v3: \`${NAMESPACE}/setup-v3\`)
+2. \`npx shadcn@latest add ${NAMESPACE}/setup\` — tokens, cn(), a skill datacrazy-ds para o Claude Code e o check do DS (scripts/ds-check.mjs) (Tailwind v3: \`${NAMESPACE}/setup-v3\`)
 3. \`npx shadcn@latest mcp init --client claude\`
-4. \`npx shadcn@latest add ${NAMESPACE}/tela\` — a tela base: toda tela nova começa por ela
+4. \`npx shadcn@latest add ${NAMESPACE}/tela\` — a tela base: toda tela nova começa por ela; \`${NAMESPACE}/pipeline\` traz o funil inteiro (quadro, lista, calendário, drawer) como referência de tela real
+
+## Verificar
+
+\`node scripts/ds-check.mjs\` aponta o que saiu do DS numa tela (tokens, paleta, elemento cru, TelaBase). Como hook do Claude Code, em .claude/settings.json:
+
+\`\`\`json
+${HOOK_DO_CHECK}
+\`\`\`
 
 ## Base
 

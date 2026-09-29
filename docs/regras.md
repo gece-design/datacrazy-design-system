@@ -106,6 +106,62 @@ contexto em `docs/processo/ux-direcao-visual.md`.
   `memoria` no `DrawerPainel` lembra a largura por tela. O conteúdo nunca tem
   número fixo de colunas: cartões em `gradeDeCartoes` (auto-fill de 220px).
 
+### Telas: receitas (o que uma tela do CRM é)
+Toda tela nasce do bloco `@datacrazy/tela` (TelaBase: Sidebar + Header + conteúdo).
+O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
+`@datacrazy/pipeline` (`app/pipeline/`), feito pelo time do DS.
+- **Lista de registros** (contatos, leads, negócios): `DataTable layout="densa"`
+  com `useAjustesDaTabela` e `DataTableToolbar layout="densa"` (só rótulo e
+  total); `BotaoAgrupar` e `BotaoColunas` recolhidos na fileira do Header, ao
+  lado de `HeaderBusca recolhida` e `HeaderFiltros recolhido`; `Pagination`
+  embaixo; seleção em massa com `useSelecaoDaTabela` + `BarraDeSelecao`;
+  clique na linha abre o registro no `Drawer`. Células: `CelulaLead` (nome +
+  `Tag` neutra com `status`), `CelulaProgresso` (etapa), `Tag foto` (pessoa),
+  `CelulaEditavel` (valor editável).
+- **Cadastro / edição** (poucos campos): `Modal size="md"` com `Input`,
+  `Select size="field"`, `InputTelefone`, `DatePicker`; rodapé com `Button
+  size="sm"` (`outline` cancela, `primary` confirma). Muitos campos ou edição
+  de um registro existente: não é modal — é o `Drawer` com cartões
+  (`CampoEditavel`, `Select cartao`, `Rating`) em `gradeDeCartoes`.
+- **Dashboard**: `KpiCard` em grade (`grid-cols-2 lg:grid-cols-4`) no topo;
+  `Card` com `CardHeader` para gráfico e listas; `SegmentedControl` de período
+  e `DateRangePicker` na fileira do Header.
+- **Detalhe de um registro**: `Drawer` + `DrawerPainel` (perfil à esquerda com
+  `DrawerPerfil`, `DrawerMetricas`, `DrawerMenu`; conteúdo à direita com
+  `DrawerConteudo` e `DrawerSecao`).
+
+### Telas: densidade (os números que o cliente pediu)
+O cliente comparou com o Twenty e o Attio: "menos gap, menos padding, stroke
+nas divs; o nosso parece gigante". Os números que fecham isso:
+- Linha de tabela: 36px (`densa`), traço entre colunas e entre linhas.
+- Cartão de campo: 68px (rótulo em bold + linha de valor de 24).
+- Cabeçalho e rodapé de Modal: 44px; botões `sm` (28px).
+- Espaço entre cartões e blocos: `gap-3` (12). Recuo do conteúdo da tela: 16
+  (`p-4`), 4 ao lado da Sidebar. Entre seções: `gap-6`.
+- Título de tela `h1` uma vez, no Header; dentro do conteúdo só `h3`/`h4` e
+  `label-*`. Nada de `h2` decorativo, subtítulo explicativo ou texto de apoio
+  que a pessoa já sabe (regra A6).
+- Escala de espaço: 4 · 8 · 12 · 16 · 24 · 32. Fora dela é invenção.
+
+### Telas: anti-padrões (o que faz "parecer o DataCrazy antigo")
+- `grid-cols-N` fixo em conteúdo que muda de largura → `gradeDeCartoes` ou
+  `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`.
+- `Select` na barra da tabela para filtrar → `HeaderFiltros` no Header; a barra
+  da tabela só tem rótulo, total e, no máximo, Button `tertiary` + `Menu`.
+- `DataTable` no `padrao` (64px) para lista de registros → `densa`. O `padrao`
+  é do arquivo, para leitura com respiro (relatório, doc).
+- `Tag tom="…"` sorteada para cada etiqueta → `Tag` neutra com `status`; cor só
+  quando o produto define a cor daquele dado (etapa do funil, tom do perfil).
+  O cliente tirou a variação colorida em 18/09 ("vibe code").
+- Formulário longo em `Modal` → `Drawer` com cartões. Modal é decisão curta.
+- Sidebar ou Header montados à mão, ou tela sem `TelaBase`.
+- Card dentro de card, frame dentro de frame: uma superfície por bloco.
+- Espaço em branco no lugar de traço: onde a informação é densa (tabela,
+  cartões do drawer), o `border`/`divider` separa; o respiro fica para o
+  dashboard.
+- Título + descrição no topo de toda seção, botão `lg` onde cabe `md`,
+  ícone de 20/24 em botão (é 16).
+
 ### Fidelidade
 11. Pronto = diff ≤ 1% contra o Figma **e** geometria sem divergência.
 12. Divergência visual é bug do código até prova em contrário registrada como

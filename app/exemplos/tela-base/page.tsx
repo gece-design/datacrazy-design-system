@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ChartBar,
   ChatCircleDots,
@@ -20,6 +20,8 @@ import {
   WarningCircle,
 } from "@phosphor-icons/react";
 import { TelaBase } from "@/components/ui/tela-base";
+// o tema (classe `dark` + memória) vem da lib: no CRM, troque por quem já cuida dele
+import { useTema } from "@/lib/tema";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
 import { HeaderBusca, HeaderDivisor, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
@@ -64,27 +66,6 @@ const NOTIFICACOES: Notificacao[] = [
   { id: "5", icone: UserPlus, titulo: "Lead respondeu no WhatsApp", detalhe: "Helena Moraes pediu uma segunda proposta com prazo maior.", quando: "ontem", lida: true },
   { id: "6", icone: ClipboardText, titulo: "Relatório da semana pronto", detalhe: "O fechamento de 8 a 14 de setembro já está no painel do time.", quando: "há 3 dias", lida: true },
 ];
-
-/**
- * O tema vive numa classe `dark` no <html> e em localStorage — é o que o
- * setup do DS instala. No CRM, troque por quem já cuida do tema (next-themes):
- * o `SidebarThemeSwitch` só precisa de `tema` e `onTemaChange`.
- */
-function useTema() {
-  const [escuro, setEscuro] = useState(false);
-  useEffect(() => setEscuro(document.documentElement.classList.contains("dark")), []);
-  function mudar(tema: "claro" | "escuro") {
-    const novo = tema === "escuro";
-    setEscuro(novo);
-    document.documentElement.classList.toggle("dark", novo);
-    try {
-      localStorage.setItem("dc-tema", tema);
-    } catch {
-      /* sem memória do tema */
-    }
-  }
-  return { tema: escuro ? ("escuro" as const) : ("claro" as const), mudar };
-}
 
 export default function NovaTela() {
   const [rota, setRota] = useState("Início");

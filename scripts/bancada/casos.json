@@ -1,0 +1,14 @@
+[
+  {
+    "id": "contatos",
+    "prompt": "Crie a página de contatos com tabela, filtros e paginação usando os componentes do @datacrazy."
+  },
+  {
+    "id": "cadastro",
+    "prompt": "Crie a tela de cadastro de um lead (nome, empresa, telefone, e-mail, etapa do funil, atendente e valor do negócio) seguindo o design system @datacrazy."
+  },
+  {
+    "id": "dashboard",
+    "prompt": "Monte um dashboard de vendas com KPIs, um card de gráfico e a lista dos últimos negócios, usando o @datacrazy."
+  }
+]
