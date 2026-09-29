@@ -130,12 +130,13 @@ const leadVazio = { nome: "", empresa: "", valor: "", atendente: ATENDENTES[0], 
 
 const etapaVazia = { modo: "criar" as "criar" | "editar", id: "", rotulo: "", cor: "neutro" as CorColuna };
 
-export function Tela() {
+/** `visaoInicial`: a tela abre no quadro; a página de comparação visual abre direto na lista. */
+export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "lista" | "calendario" } = {}) {
   const [etapas, setEtapas] = React.useState<Etapa[]>(ETAPAS);
   const [colunas, setColunas] = React.useState<Colunas>(() => agrupar(ETAPAS, LEADS));
   const [busca, setBusca] = React.useState("");
   const [filtro, setFiltro] = React.useState<Filtro>(SEM_FILTRO);
-  const [visao, setVisao] = React.useState("quadro");
+  const [visao, setVisao] = React.useState<string>(visaoInicial);
   // O mês do calendário: começa em setembro de 2026, o mês da carteira de exemplo.
   const [referencia, setReferencia] = React.useState(() => new Date(2026, 8, 1));
   const [visaoDoCalendario, setVisaoDoCalendario] = React.useState<"mes" | "semana">("mes");

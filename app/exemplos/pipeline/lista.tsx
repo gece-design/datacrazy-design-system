@@ -74,6 +74,8 @@ export function Lista({
   aoExcluirEmMassa,
   aoEditar,
   ajustes,
+  semMoldura,
+  classeDaTabela,
 }: {
   etapas: Etapa[];
   leads: Lead[];
@@ -87,6 +89,10 @@ export function Lista({
   aoExcluirEmMassa: (ids: string[]) => void;
   /** Edita um campo do lead na célula (o valor, por enquanto). */
   aoEditar: (id: string, campos: Partial<Lead>) => void;
+  /** Sem recuo, sem cartão e sem a barra de resumo: a tabela encosta nas bordas de quem a hospeda (proposta visual). */
+  semMoldura?: boolean;
+  /** Classes a mais na tabela. */
+  classeDaTabela?: string;
 }) {
   const total = leads.reduce((n, l) => n + l.valor, 0);
   // Seleção em massa: a tela guarda os ids; a tabela desenha as caixas (2026-09-24).
@@ -174,12 +180,12 @@ export function Lista({
             );
   };
   return (
-    <div className={cn("min-h-0 flex-1 overflow-y-auto pl-4 pr-4 pb-4 lg:pl-1", rolagemDiscreta)}>
-      <div className="w-full overflow-hidden rounded-md bg-card">
+    <div className={cn("min-h-0 flex-1 overflow-y-auto", !semMoldura && "pb-4 pl-4 pr-4 lg:pl-1", rolagemDiscreta)}>
+      <div className={cn("w-full bg-card", !semMoldura && "overflow-hidden rounded-md")}>
         {/* Só o resumo: Agrupar e Colunas estão na fileira do Header (humano, 2026-09-24). */}
-        <DataTableToolbar layout="densa" rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />
+        {semMoldura ? null : <DataTableToolbar layout="densa" rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />}
         {/* densa: a grade de lista à la Twenty (cliente, 2026-09-27) */}
-        <DataTable layout="densa" colunas={COLUNAS_DA_LISTA} ajustes={ajustes} selecao={selecao} className="rounded-none border-0">
+        <DataTable layout="densa" colunas={COLUNAS_DA_LISTA} ajustes={ajustes} selecao={selecao} className={cn("rounded-none border-0", classeDaTabela)}>
           {grupos
             ? grupos.map((g) => (
                 <Fragment key={g.id}>
