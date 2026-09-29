@@ -33,7 +33,7 @@ const componentes = componentesUi().map((name) => {
   const h1 = (existe(`docs/componentes/${pascal(name)}.md`) ? ler(`docs/componentes/${pascal(name)}.md`) : "").match(/^# (.+)$/m)?.[1];
   return {
     name,
-    titulo: h1?.replace(/`/g, "").trim() || item?.title || pascal(name),
+    titulo: h1?.replace(/^Componente:\s*/i, "").replace(/`/g, "").trim() || item?.title || pascal(name),
     descricao: item?.description ?? "",
     categoria: item?.categories?.[0] ?? null,
     pagina,

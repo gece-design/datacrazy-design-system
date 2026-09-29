@@ -5,10 +5,10 @@
     "fim": "2026-09-28"
   },
   "git": {
-    "commits": 60,
-    "arquivos": 306,
+    "commits": 61,
+    "arquivos": 318,
     "linhasUi": 9811,
-    "linhasLib": 757,
+    "linhasLib": 785,
     "linhasDocs": 7388
   },
   "catalogo": {
@@ -24,7 +24,7 @@
   "componentes": [
     {
       "name": "avatar",
-      "titulo": "Componente: Avatar",
+      "titulo": "Avatar",
       "descricao": "Identificar pessoa ou empresa pela inicial, ou pela foto.",
       "categoria": "Data Display",
       "pagina": null,
@@ -37,7 +37,7 @@
     },
     {
       "name": "badge",
-      "titulo": "Componente: Badge",
+      "titulo": "Badge",
       "descricao": "Selo curto de status — a cor fica na borda e no texto, nunca preenchendo a superfície.",
       "categoria": null,
       "pagina": null,
@@ -50,7 +50,7 @@
     },
     {
       "name": "breadcrumb",
-      "titulo": "Componente: Breadcrumb",
+      "titulo": "Breadcrumb",
       "descricao": "Mostrar o caminho até a página atual e levar de volta a qualquer nível dele.",
       "categoria": "Navigation",
       "pagina": null,
@@ -63,7 +63,7 @@
     },
     {
       "name": "button",
-      "titulo": "Componente: Button",
+      "titulo": "Button",
       "descricao": "Ação do usuário: sete variantes de peso visual e quatro tamanhos, com o mesmo foco, o mesmo disabled e a mesma fonte em todas.",
       "categoria": "Actions",
       "pagina": null,
@@ -76,7 +76,7 @@
     },
     {
       "name": "calendario",
-      "titulo": "Componente: Calendario",
+      "titulo": "Calendario",
       "descricao": "Mostrar os negócios (ou qualquer evento datado) no mês ou na semana, pela data, e devolver o clicado — a visão por data do pipeline, ao lado do Kanban e da lista.",
       "categoria": "Data Display",
       "pagina": null,
@@ -89,7 +89,7 @@
     },
     {
       "name": "card",
-      "titulo": "Componente: Card",
+      "titulo": "Card",
       "descricao": "Superfície que carrega um bloco de dados do dashboard.",
       "categoria": "Data Display",
       "pagina": null,
@@ -102,7 +102,7 @@
     },
     {
       "name": "checkbox",
-      "titulo": "Componente: Checkbox",
+      "titulo": "Checkbox",
       "descricao": "Marcar ou desmarcar uma opção independente, inclusive o \"parte marcada\" de quem seleciona um grupo.",
       "categoria": "Forms",
       "pagina": null,
@@ -115,7 +115,7 @@
     },
     {
       "name": "data-table",
-      "titulo": "Componente: DataTable",
+      "titulo": "DataTable",
       "descricao": "Lista os negócios do CRM em colunas, com filtros e paginação — e, com `ajustes`, deixa a pessoa ordenar, esconder, reordenar e redimensionar as colunas e selecionar a linha (T1, pedido do cliente em 2026-09-18).",
       "categoria": "Data Display",
       "pagina": null,
@@ -128,7 +128,7 @@
     },
     {
       "name": "date-picker",
-      "titulo": "Componente: DatePicker",
+      "titulo": "DatePicker",
       "descricao": "Período em dois meses, com atalhos: um gatilho no estilo do Button `tertiary` que abre o painel de intervalo. `CalendarioDeDia` é a mesma grade com um dia só, para o TimePicker não redesenhar calendário.",
       "categoria": "Forms",
       "pagina": null,
@@ -141,7 +141,7 @@
     },
     {
       "name": "drawer",
-      "titulo": "Componente: Drawer",
+      "titulo": "Drawer",
       "descricao": "Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida.",
       "categoria": "Feedback & Overlays",
       "pagina": null,
@@ -154,7 +154,7 @@
     },
     {
       "name": "header",
-      "titulo": "Componente: Header",
+      "titulo": "Header",
       "descricao": "O topo de uma página do CRM: onde a pessoa está, que página é e o que dá para fazer nela.",
       "categoria": "Navigation",
       "pagina": null,
@@ -167,7 +167,7 @@
     },
     {
       "name": "input",
-      "titulo": "Componente: Input",
+      "titulo": "Input",
       "descricao": "Receber um valor curto digitado, com rótulo visível e erro inline.",
       "categoria": "Forms",
       "pagina": null,
@@ -180,7 +180,7 @@
     },
     {
       "name": "kpi-card",
-      "titulo": "Componente: KpiCard",
+      "titulo": "KpiCard",
       "descricao": "Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma legenda de apoio.",
       "categoria": "Data Display",
       "pagina": null,
@@ -193,7 +193,7 @@
     },
     {
       "name": "logo-datacrazy",
-      "titulo": "Componente: LogoDatacrazy",
+      "titulo": "LogoDatacrazy",
       "descricao": "Símbolo e logotipo do DataCrazy (`LogoDataCrazy` no código), em `currentColor` para acompanhar o tema. É a marca do **produto** — não confundir com `components/ds/logo.tsx`, a marca do site de documentação (Systemcrazy).",
       "categoria": null,
       "pagina": null,
@@ -206,7 +206,7 @@
     },
     {
       "name": "menu",
-      "titulo": "Componente: Menu",
+      "titulo": "Menu",
       "descricao": "A lista de ações e opções que abre de um botão: o menu da coluna e o botão Colunas da Table, o \"personalizar cartão\" do pipeline, o menu do usuário. Saiu da Table em 2026-09-23 para ser peça.",
       "categoria": null,
       "pagina": null,
@@ -219,7 +219,7 @@
     },
     {
       "name": "modal",
-      "titulo": "Componente: Modal",
+      "titulo": "Modal",
       "descricao": "Pedir uma decisão bloqueando a tela até ela ser tomada.",
       "categoria": "Feedback & Overlays",
       "pagina": null,
@@ -232,7 +232,7 @@
     },
     {
       "name": "pagination",
-      "titulo": "Componente: Pagination",
+      "titulo": "Pagination",
       "descricao": "Navegar entre as páginas de uma lista longa.",
       "categoria": "Navigation",
       "pagina": null,
@@ -245,7 +245,7 @@
     },
     {
       "name": "popover",
-      "titulo": "Componente: Popover",
+      "titulo": "Popover",
       "descricao": "A casca de todo painel flutuante do DS — lista do Select, calendário, hora, seletor de tags, lista de notificações: camada, superfície, traço e sombra em um lugar só. O papel, o foco e o teclado são de quem usa.",
       "categoria": null,
       "pagina": null,
@@ -258,7 +258,7 @@
     },
     {
       "name": "radio-group",
-      "titulo": "Componente: RadioGroup",
+      "titulo": "RadioGroup",
       "descricao": "Escolher exatamente uma opção entre poucas, todas visíveis ao mesmo tempo.",
       "categoria": "Forms",
       "pagina": null,
@@ -271,7 +271,7 @@
     },
     {
       "name": "rating",
-      "titulo": "Componente: Rating",
+      "titulo": "Rating",
       "descricao": "Avaliação de 0 a 10 estrelas (o máximo é prop): editável por clique e setas, ou só leitura. Mostra a nota também em número.",
       "categoria": "Forms",
       "pagina": null,
@@ -284,7 +284,7 @@
     },
     {
       "name": "segmented-control",
-      "titulo": "Componente: SegmentedControl",
+      "titulo": "SegmentedControl",
       "descricao": "Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualização.",
       "categoria": "Navigation",
       "pagina": null,
@@ -297,7 +297,7 @@
     },
     {
       "name": "select",
-      "titulo": "Componente: Select",
+      "titulo": "Select",
       "descricao": "Escolher uma opção numa lista curta.",
       "categoria": "Forms",
       "pagina": null,
@@ -310,7 +310,7 @@
     },
     {
       "name": "sidebar",
-      "titulo": "Componente: Sidebar",
+      "titulo": "Sidebar",
       "descricao": "Navegação principal do CRM: marca, grupos de itens com ícone e rótulo, interruptor de tema, atalhos e usuário — expandida em 282px ou colapsada em 88.",
       "categoria": "Navigation",
       "pagina": null,
@@ -323,7 +323,7 @@
     },
     {
       "name": "switch",
-      "titulo": "Componente: Switch",
+      "titulo": "Switch",
       "descricao": "Ligar ou desligar algo que passa a valer na hora, sem botão de salvar.",
       "categoria": "Forms",
       "pagina": null,
@@ -336,7 +336,7 @@
     },
     {
       "name": "tabs",
-      "titulo": "Componente: Tabs",
+      "titulo": "Tabs",
       "descricao": "Alternar entre as seções de um mesmo registro.",
       "categoria": "Navigation",
       "pagina": null,
@@ -349,7 +349,7 @@
     },
     {
       "name": "tag",
-      "titulo": "Componente: Tag",
+      "titulo": "Tag",
       "descricao": "Mostrar uma etiqueta que o usuário pôs no lead.",
       "categoria": "Data Display",
       "pagina": null,
@@ -362,7 +362,7 @@
     },
     {
       "name": "tela-base",
-      "titulo": "Componente: TelaBase",
+      "titulo": "TelaBase",
       "descricao": "A casca de toda tela do CRM: Sidebar, Header e conteúdo já ligados, com os breakpoints e a memória da sidebar. A tela só preenche os encaixes. Instala-se como bloco (`@datacrazy/tela`), que cria a página pronta.",
       "categoria": "Telas de exemplo",
       "pagina": null,
@@ -375,7 +375,7 @@
     },
     {
       "name": "telefone",
-      "titulo": "Componente: Telefone",
+      "titulo": "Telefone",
       "descricao": "Receber um telefone com o país separado do número.",
       "categoria": "Forms",
       "pagina": null,
@@ -388,7 +388,7 @@
     },
     {
       "name": "time-picker",
-      "titulo": "Componente: TimePicker",
+      "titulo": "TimePicker",
       "descricao": "Escolher uma hora, e uma data com hora, sabendo de fuso.",
       "categoria": "Forms",
       "pagina": null,
@@ -401,7 +401,7 @@
     },
     {
       "name": "toast",
-      "titulo": "Componente: Toast",
+      "titulo": "Toast",
       "descricao": "Confirmar o resultado de uma ação sem bloquear a tela.",
       "categoria": "Feedback & Overlays",
       "pagina": null,
@@ -414,7 +414,7 @@
     },
     {
       "name": "tooltip",
-      "titulo": "Componente: Tooltip",
+      "titulo": "Tooltip",
       "descricao": "Mostrar um texto curto ancorado num gatilho, por cursor ou teclado.",
       "categoria": "Feedback & Overlays",
       "pagina": null,
