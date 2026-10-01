@@ -17,6 +17,7 @@ import {
   Robot,
   UserPlus,
   UsersThree,
+  Star,
 } from "@phosphor-icons/react";
 
 import { Breadcrumb } from "@/components/ui/breadcrumb";
@@ -55,6 +56,8 @@ const PRINCIPAIS = [
   { rotulo: "Chat ao vivo", icone: ChatCircleDots },
   { rotulo: "Agentes de IA", icone: Robot },
 ];
+
+const FAVORITOS = ["Conversas sem resposta", "Leads quentes", "Propostas da semana"];
 
 const APOIO = [
   { rotulo: "Ajuda", icone: Question },
@@ -181,6 +184,14 @@ export function Tela() {
                 </SidebarItem>
               ))}
             </SidebarGrupo>
+            {/* Favoritos: atalhos que a pessoa fixou. Recolhida, o grupo some — estrela sem rótulo não diz nada. */}
+            <SidebarGrupo rotulo="Favoritos" ocultarRecolhida>
+              {FAVORITOS.map((f) => (
+                <SidebarItem key={f} icone={Star} componente="button" selecionado={f === rota} onClick={() => setRota(f)}>
+                  {f}
+                </SidebarItem>
+              ))}
+            </SidebarGrupo>
           </SidebarTopo>
           <SidebarRodape>
             <SidebarGrupo>
@@ -226,7 +237,7 @@ export function Tela() {
         ),
       }}
     >
-      <div className="flex min-h-0 flex-1 pb-4 pl-4 pr-4 lg:pl-1">
+      <div className="flex min-h-0 flex-1 pb-4 pl-4 pr-4 lg:pl-2">
         {/* Uma superfície só: as três colunas se separam por traço, não por cartão. */}
         <div className="relative flex min-h-0 min-w-0 flex-1 overflow-hidden rounded-md border border-border bg-card">
           <ListaDeConversas

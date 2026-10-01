@@ -260,7 +260,7 @@ export function Quadro({
         onPointerUp={soltarPan}
         onPointerCancel={soltarPan}
         className={cn(
-          "flex min-h-0 flex-1 gap-4 overflow-x-auto pl-4 pr-4 pb-4 pt-1 lg:pl-1", rolagemDiscreta,
+          "flex min-h-0 flex-1 gap-4 overflow-x-auto pl-4 pr-4 pb-4 pt-1 lg:pl-2", rolagemDiscreta,
           arrastandoTrilho ? "cursor-grabbing select-none" : "cursor-grab",
         )}
       >

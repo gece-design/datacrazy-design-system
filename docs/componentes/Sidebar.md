@@ -3,11 +3,13 @@
 ## Responsabilidade
 
 Navegação principal do CRM: marca, grupos de itens com ícone e rótulo,
-interruptor de tema, atalhos e usuário — expandida em 282px ou colapsada em 88.
+favoritos, interruptor de tema, atalhos e usuário — plana, direto no fundo da
+aplicação, expandida em 220px ou recolhida em 48.
 
 ## Quando usar
 
 - **Use** uma vez por tela, pela prop `navegacao` da `TelaBase`: é a navegação principal do CRM.
+- **Use** `SidebarGrupo rotulo="Favoritos" ocultarRecolhida` para os atalhos que a pessoa fixou.
 - **Não use** para as seções de um registro: é `DrawerMenu` ou `Tabs`.
 - **Não use** junto de um menu superior: a navegação é uma só.
 - **Não use** montada à mão ao lado do conteúdo.
@@ -19,19 +21,23 @@ interruptor de tema, atalhos e usuário — expandida em 282px ou colapsada em 8
 
 ## Par no Figma
 
-Node: `270:15429` (painel, stroke INSIDE de 16px em `background` — regra
-D9) · Marca: `270:7595` · Medição contra `124:2114` por
-`scripts/medir-sidebar.mjs` (17 campos de geometria + contraste + anel de
-foco, nos dois temas) · Lote: `1` · Escrita em 2026-09-03, antes do registro
-existir. Diff de pixels não medido.
+Node: `270:15429` (painel) · Marca: `270:7595` · Lote: `1`.
+
+**O código saiu do desenho de propósito.** O arquivo traz um painel de 282px em
+cartão, com moldura de 16px, item de 36, ícone de 20, marca d'água e um disco
+flutuante para recolher. Desde 2026-10-01 a navegação é plana — sem cartão,
+220px aberta e 48 recolhida, item de 32, ícone de 16 — e o botão de recolher
+fica na linha da marca (ADR-052 e ADR-054). É a proposta visual que aproxima o
+CRM do Twenty e do Attio, aplicada por partes; o Figma acompanha na remedição
+(AUD-210). `scripts/medir-sidebar.mjs` mede o desenho antigo e não vale mais.
 
 ## Props
 
-`Sidebar` — o painel. Fornece o contexto de colapso aos filhos.
+`Sidebar` — a navegação. Fornece o contexto de colapso aos filhos.
 
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
-| `colapsada` | `boolean` | `false` | não | 282px viram 88 e todo rótulo sai de cena; o `title` sobe para a raiz do item (D12). |
+| `colapsada` | `boolean` | `false` | não | 220px viram 48 e todo rótulo sai de cena; o `title` sobe para a raiz do item (D12). |
 | `onColapsarChange` | `(colapsada: boolean) => void` | — | não | Passe para ganhar o botão de recolher na linha da marca (`SidebarBrand`). Recolhida, o símbolo da marca é o botão de expandir. |
 | `rotulos` | `Partial<RotulosDaSidebar>` | `ROTULOS_DA_SIDEBAR` | não | `recolher` e `expandir`: os nomes do botão (i18n). |
 | `rotulo` | `string` | — | não | Rótulo acessível da região de navegação. |
@@ -41,10 +47,10 @@ Peças:
 
 | Peça | Props | O que é |
 |------|-------|---------|
-| `SidebarTopo` · `SidebarRodape` | `children` | Bloco de cima (marca + navegação) e de baixo (tema, atalhos, usuário), 8px entre filhos |
+| `SidebarTopo` · `SidebarRodape` | `children` | Bloco de cima (marca, destinos, favoritos; 16px entre filhos) e de baixo (tema, atalhos, usuário; 8px) |
 | `SidebarBrand` | — | `LogoDataCrazy` e, quando a Sidebar pode recolher, o `SidebarToggle` à direita. Recolhida, o símbolo é o botão de expandir: sob o cursor ou o foco, dá lugar ao ícone do painel |
-| `SidebarGrupo` | `recuo?`, `children` | `<ul>` com 4px entre linhas; `recuo` é a folga de 2px do grupo principal |
-| `SidebarItem` | `icone` (Phosphor, 20px, obrigatório), `children` (o rótulo), `selecionado?`, `href?`, `componente?`, `disabled?` | Raiz `a` com `href`, `span` sem; passe `Link` em `componente` para navegação client-side |
+| `SidebarGrupo` | `rotulo?`, `ocultarRecolhida?`, `children` | `<ul>` com 2px entre linhas. Com `rotulo`, é uma seção com nome ("Favoritos"): o nome some quando recolhe. `ocultarRecolhida` tira o grupo inteiro do painel recolhido. `recuo` não tem mais efeito |
+| `SidebarItem` | `icone` (Phosphor, 16px, obrigatório; `fill` no selecionado), `children` (o rótulo), `selecionado?`, `href?`, `componente?`, `disabled?` | Raiz `a` com `href`, `span` sem; passe `Link` em `componente` para navegação client-side |
 | `SidebarToggle` | `colapsada?`, `rotulos?` + props de botão | O botão de recolher: 28px, quadrado, sem relevo, com o ícone do painel; `aria-expanded`. A `SidebarBrand` já o traz — exportado para quem monta o topo de outro jeito. O arquivo desenha um disco flutuando na borda; saiu a pedido do cliente (ADR-052) |
 | `SidebarThemeSwitch` | `tema`, `onTemaChange`, `className?` | Trilho claro/escuro; colapsada vira um botão só que alterna |
 | `SidebarUser` | `nome`, `email`, `avatar?` | Rodapé com disco `sidebar-avatar` (sem foto: círculo cheio, como o arquivo) |
@@ -53,29 +59,30 @@ Peças:
 
 | Variante | Quando |
 |----------|--------|
-| expandida | Padrão |
-| colapsada | Heavy user recupera 15–20% da tela (padrão G4 do FigJam) |
-| item `selecionado` | Rota atual: `nav-item-selected` no fundo, ícone e texto |
+| expandida | Padrão: 220px |
+| colapsada | 48px: quem já conhece o produto devolve 172px à tela (padrão G4 do FigJam) |
+| item `selecionado` | Rota atual: `nav-item-selected` no fundo, texto na cor do token e ícone em `fill` |
+| grupo com `rotulo` | Favoritos: atalhos que a pessoa fixou, com o nome da seção em `caption` |
 
 ## Estados
 
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| hover | `bg-nav-item-hover no item` | figma | L2 |
-| selected | `bg-nav-item-selected + texto nav-item-selected-foreground + ícone nav-item-selected-icon` | figma | L7 |
+| hover | `bg-card + text-foreground no item (a navegação é plana, sobre background)` | humano | L2 |
+| selected | `bg-nav-item-selected + texto nav-item-selected-foreground + ícone fill em nav-item-selected-icon` | figma | L7 |
 | focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
 | disabled | `aria-disabled:opacity-50 aria-disabled:pointer-events-none no item` | banco | I5 |
-| recolhida | `282→88px, rótulos somem, title/aria-label sobem para a raiz (D12), toggle com aria-expanded` | humano | padrão G4 do FigJam |
+| recolhida | `220→48px, rótulos e nome de grupo somem, title/aria-label sobem para a raiz (D12), grupo com ocultarRecolhida sai, o símbolo da marca vira o botão de expandir` | humano | padrão G4 do FigJam |
 <!-- kfe:estados:end -->
 
 ## Tokens consumidos
 
-`sidebar-surface` (gradiente, D10) · `background` · `card` · `nav-item-hover` ·
-`nav-item-selected` · `nav-item-selected-icon` · `nav-item-selected-foreground` ·
-`nav-item-text` · `sidebar-avatar` · `muted-foreground` · `foreground` ·
-`surface-inverse` · `primary` · `ring` · `shadow-highlight` · `shadow-float` ·
-`radius/xl` · `radius/md` · `radius/full` · `text/button` · `text/body-lg`
+`background` · `card` · `nav-item-hover` · `nav-item-selected` ·
+`nav-item-selected-icon` · `nav-item-selected-foreground` · `nav-item-text` ·
+`sidebar-avatar` · `muted-foreground` · `foreground` · `surface-inverse` ·
+`ring` · `radius/md` · `radius/sm` · `radius/full` · `text/body-lg` ·
+`text/label-lg` · `text/caption`
 
 ## Composição
 
@@ -90,11 +97,16 @@ botões internos não são Button (AUD-035, lote B4).
 <Sidebar colapsada={colapsada} onColapsarChange={setColapsada} rotulo={t("navegacao")}>
   <SidebarTopo>
     <SidebarBrand />
-    <SidebarGrupo recuo>
+    <SidebarGrupo>
       <SidebarItem icone={House} componente={Link} href="/inicio" selecionado={rota === "/inicio"}>
         {t("inicio")}
       </SidebarItem>
       <SidebarItem icone={Kanban} componente={Link} href="/pipelines">{t("pipelines")}</SidebarItem>
+    </SidebarGrupo>
+    <SidebarGrupo rotulo={t("favoritos")} ocultarRecolhida>
+      {favoritos.map((f) => (
+        <SidebarItem key={f.href} icone={Star} componente={Link} href={f.href}>{f.rotulo}</SidebarItem>
+      ))}
     </SidebarGrupo>
   </SidebarTopo>
   <SidebarRodape>
@@ -115,7 +127,8 @@ botões internos não são Button (AUD-035, lote B4).
 | Toggle | `aria-expanded` e nome próprio (`rotulos`) no botão de recolher; recolhida, o símbolo da marca é um botão com o nome "Expandir menu" e funciona no toque |
 | Chevrons | `muted-foreground`, não `subtle-foreground`: 2,4:1 reprova a WCAG 1.4.11 (D13) |
 | Item sem destino | `span`, não `a` — um `a` dentro de outro é HTML inválido |
-| Texto longo | 160px de rótulo, `truncate` + `title` (D12) |
+| Texto longo | O rótulo ocupa o que sobra do item (~170px), `truncate` + `title` (D12) |
+| Favoritos | O `rotulo` do grupo é o nome acessível da lista (`aria-label`); o texto visível é decorativo |
 | Movimento | A largura desliza em `base` (ADR-022, exceção declarada à I11); os rótulos somem na hora ao colapsar e dissolvem ao voltar. Com redução de movimento, nada anima |
 
 ## Divergências abertas (para o gate)

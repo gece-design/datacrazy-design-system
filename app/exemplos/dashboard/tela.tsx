@@ -22,6 +22,7 @@ import {
   User,
   UsersThree,
   WarningCircle,
+  Star,
 } from "@phosphor-icons/react";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Card, CardChart, CardDonut, CardHeader, CardList } from "@/components/ui/card";
@@ -69,6 +70,8 @@ const PRINCIPAIS = [
   { rotulo: "Chat ao vivo", icone: ChatCircleDots },
   { rotulo: "Agentes de IA", icone: Robot },
 ];
+
+const FAVORITOS = ["Pipeline comercial", "Leads quentes", "Propostas da semana"];
 
 const APOIO = [
   { rotulo: "Ajuda", icone: Question },
@@ -128,6 +131,14 @@ export function Tela() {
               {PRINCIPAIS.map((r) => (
                 <SidebarItem key={r.rotulo} icone={r.icone} componente="button" selecionado={r.rotulo === rota} onClick={() => setRota(r.rotulo)}>
                   {r.rotulo}
+                </SidebarItem>
+              ))}
+            </SidebarGrupo>
+            {/* Favoritos: atalhos que a pessoa fixou. Recolhida, o grupo some — estrela sem rótulo não diz nada. */}
+            <SidebarGrupo rotulo="Favoritos" ocultarRecolhida>
+              {FAVORITOS.map((f) => (
+                <SidebarItem key={f} icone={Star} componente="button" selecionado={f === rota} onClick={() => setRota(f)}>
+                  {f}
                 </SidebarItem>
               ))}
             </SidebarGrupo>

@@ -22,16 +22,15 @@ import { rolagemDiscreta } from "@/lib/estados";
  * (humano, 2026-09-23 — "não ficou legal").
  *
  * Os breakpoints moram aqui, não na tela (ADR-027):
- *   ≥ 1280 (xl)  sidebar aberta, 282px
- *   1024–1279    sidebar recolhida em ícones, 88px — a pessoa pode abrir
+ *   ≥ 1280 (xl)  sidebar aberta, 220px
+ *   1024–1279    sidebar recolhida em ícones, 48px — a pessoa pode abrir
  *   < 1024 (lg)  sidebar some; o botão de menu no Header abre o painel por
  *                cima, com o Scrim do Modal e a camada (foco preso, Escape)
  * Os recuos do conteúdo e do Header: 16 — o arquivo desenha 32 no Header;
  * foi 24 e "ainda tinha muito espaço" (humano, 2026-09-23, ADR-028). O Header
  * é de uma linha (ADR-053) e tem 8 embaixo: fecha em 56px, com os controles
- * alinhados ao topo do painel da Sidebar. À esquerda, com a sidebar no lugar (lg+), o recuo é 4: a
- * Sidebar já traz 16 de moldura na cor do fundo, e 16 + 16 "dava a impressão
- * de mais espaço do que deveria" (humano, 2026-09-24).
+ * alinhados ao topo do painel da Sidebar. À esquerda, com a sidebar no lugar (lg+), o recuo é 8: a
+ * navegação plana já traz 8 do próprio recuo, e os dois somam os 16 do resto.
  *
  * Instala-se como bloco: `npx shadcn add @datacrazy/tela` cria a página
  * pronta com estes encaixes preenchidos por placeholders.
@@ -145,7 +144,7 @@ export function TelaBase({
     <div className={cn("flex h-screen overflow-hidden bg-background", className)}>
       {/* No lugar só de lg para cima; abaixo, vira o painel do menu. O
           `className` da Sidebar é do nav, por isso o esconder fica num
-          embrulho — é a caixa de 282/88px que precisa sumir. */}
+          embrulho — é a caixa de 220/48px que precisa sumir. */}
       <div className="hidden h-screen lg:block">
         <Sidebar
           rotulo={r.navegacao}
@@ -161,12 +160,12 @@ export function TelaBase({
       <div className="flex min-w-0 flex-1 flex-col">
         <Header
           {...cabecalho}
-          className={cn("shrink-0 pl-4 pr-4 pb-2 lg:pl-1", cabecalho.className)}
+          className={cn("shrink-0 pl-4 pr-4 pb-2 lg:pl-2", cabecalho.className)}
           inicio={botaoMenu}
         />
         <main
           aria-label={r.conteudo}
-          className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", rolagemDiscreta, recuo && "p-4 lg:pl-1")}
+          className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", rolagemDiscreta, recuo && "p-4 lg:pl-2")}
         >
           {children}
         </main>
@@ -195,7 +194,7 @@ export function TelaBase({
                 {navegacao}
               </Sidebar>
             </div>
-            <BotaoFechar rotulo={r.fecharMenu} onClick={() => setMenuAberto(false)} className="absolute right-5 top-5" />
+            <BotaoFechar rotulo={r.fecharMenu} onClick={() => setMenuAberto(false)} className="absolute right-2 top-[18px]" />
           </div>
         </div>
       ) : null}

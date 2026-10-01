@@ -1341,10 +1341,10 @@
       "variants": [
         "expandida",
         "colapsada",
-        "item selecionado"
+        "item selecionado",
+        "grupo com rotulo"
       ],
       "tokens": [
-        "sidebar-surface",
         "background",
         "card",
         "nav-item-hover",
@@ -1356,27 +1356,25 @@
         "muted-foreground",
         "foreground",
         "surface-inverse",
-        "primary",
         "ring",
-        "shadow-highlight",
-        "shadow-float",
-        "radius/xl",
         "radius/md",
+        "radius/sm",
         "radius/full",
-        "text/button",
-        "text/body-lg"
+        "text/body-lg",
+        "text/label-lg",
+        "text/caption"
       ],
       "motion": "largura em base (200, ADR-022) · rótulo fade-in-fast ao expandir",
       "states": {
         "hover": {
-          "impl": "bg-nav-item-hover no item",
-          "source": "figma",
+          "impl": "bg-card + text-foreground no item (a navegação é plana, sobre background)",
+          "source": "humano",
           "rule": "L2",
-          "precedent": "nav/item/bg-hover (variável do arquivo)",
-          "approvedIn": null
+          "precedent": "proposta visual (Twenty)",
+          "approvedIn": "C3"
         },
         "selected": {
-          "impl": "bg-nav-item-selected + texto nav-item-selected-foreground + ícone nav-item-selected-icon",
+          "impl": "bg-nav-item-selected + texto nav-item-selected-foreground + ícone fill em nav-item-selected-icon",
           "source": "figma",
           "rule": "L7",
           "precedent": "nav/item/bg-selected",
@@ -1397,7 +1395,7 @@
           "approvedIn": "B0"
         },
         "recolhida": {
-          "impl": "282→88px, rótulos somem, title/aria-label sobem para a raiz (D12), toggle com aria-expanded",
+          "impl": "220→48px, rótulos e nome de grupo somem, title/aria-label sobem para a raiz (D12), grupo com ocultarRecolhida sai, o símbolo da marca vira o botão de expandir",
           "source": "humano",
           "rule": null,
           "precedent": "padrão G4 do FigJam",
@@ -1678,7 +1676,7 @@
       "motion": "fast",
       "states": {
         "sidebar recolhida": {
-          "impl": "88px, só ícones — memória por tela (localStorage)",
+          "impl": "48px, só ícones — memória por tela (localStorage)",
           "source": "humano",
           "rule": "—",
           "precedent": "Sidebar (colapsada)",

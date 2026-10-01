@@ -201,7 +201,7 @@ export function Lista({
             );
   };
   return (
-    <div className={cn("min-h-0 flex-1 overflow-y-auto", !semMoldura && "pb-4 pl-4 pr-4 lg:pl-1", rolagemDiscreta)}>
+    <div className={cn("min-h-0 flex-1 overflow-y-auto", !semMoldura && "pb-4 pl-4 pr-4 lg:pl-2", rolagemDiscreta)}>
       <div className={cn("w-full bg-card", !semMoldura && "overflow-hidden rounded-md")}>
         {/* Só o resumo: Agrupar e Colunas estão na fileira do Header (humano, 2026-09-24). */}
         {semMoldura ? null : <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />}

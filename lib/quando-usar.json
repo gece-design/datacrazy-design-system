@@ -378,7 +378,8 @@
     {
       "componente": "Sidebar",
       "usar": [
-        "uma vez por tela, pela prop `navegacao` da `TelaBase`: é a navegação principal do CRM."
+        "uma vez por tela, pela prop `navegacao` da `TelaBase`: é a navegação principal do CRM.",
+        "`SidebarGrupo rotulo=\"Favoritos\" ocultarRecolhida` para os atalhos que a pessoa fixou."
       ],
       "naoUsar": [
         "para as seções de um registro: é `DrawerMenu` ou `Tabs`.",

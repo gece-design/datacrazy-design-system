@@ -62,11 +62,6 @@
     --nav-item-text-selected: var(--blue-600);
     --nav-item-icon-selected: var(--blue-600);
 
-    /* superfície do painel da sidebar. No Claro é o card chapado; no Escuro o
-       Figma pinta um gradiente vertical (background → accent). Como gradiente
-       é background-image e cor é background-color, o token é sempre gradiente
-       — assim o componente tem um caminho de código só. */
-    --sidebar-surface: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--card)) 100%);
 
     /* círculo do avatar sem foto. O Figma escolhe uma variável por tema —
        `surface-inverse` no Claro, `base/blue/700` no Escuro — porque a mesma
@@ -184,7 +179,6 @@
     --nav-item-text-selected: var(--blue-300);
     --nav-item-icon-selected: var(--blue-300);
 
-    --sidebar-surface: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--accent)) 100%);
     --sidebar-avatar: var(--blue-700);
 
     --avatar-md-fundo: var(--card);

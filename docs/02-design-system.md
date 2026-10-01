@@ -145,7 +145,6 @@ ramificar por tema.
 
 | Token | Uso | Claro | Escuro |
 |---|---|---|---|
-| `--sidebar-surface` | superfície do painel, sempre gradiente | `card` → `card` | `background` → `accent` |
 | `--sidebar-avatar` | círculo do avatar sem foto | `surface-inverse` | `blue-700` |
 | `--avatar-md-fundo` | disco do Avatar `md` | `accent` | `card` |
 | `--avatar-md-anel` | anel do Avatar `md` | `card` | `accent` |

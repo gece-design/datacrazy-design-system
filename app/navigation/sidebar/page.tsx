@@ -9,6 +9,7 @@ import {
   House,
   Kanban,
   Lightning,
+  Star,
   Question,
   Robot,
   UsersThree,
@@ -41,6 +42,8 @@ const PRINCIPAIS: Rota[] = [
   { rotulo: "Agentes de IA", icone: Robot },
 ];
 
+const FAVORITOS = ["Pipeline comercial", "Leads quentes", "Propostas da semana"];
+
 const APOIO: Rota[] = [
   { rotulo: "Calendar", icone: CalendarBlank },
   { rotulo: "Ajuda", icone: Question },
@@ -50,14 +53,14 @@ const APOIO: Rota[] = [
 type Parte = { classe: string; parte: string; valor: string };
 
 const anatomia: Parte[] = [
-  { classe: "w-[282px]", parte: "Largura aberta", valor: "282px · 88px colapsada" },
-  { classe: "border-[16px]", parte: "Respiro do shell", valor: "borda de background, não traço" },
-  { classe: "rounded-3xl", parte: "Raio do painel", valor: "24px por fora · 8px por dentro" },
-  { classe: "px-2 py-4", parte: "Padding interno", valor: "8px lateral · 16px topo e base" },
-  { classe: "gap-5", parte: "Topo ↔ rodapé", valor: "20px, com justify-between" },
-  { classe: "h-9 p-2", parte: "Item", valor: "36px de altura · 8px de padding" },
-  { classe: "gap-1", parte: "Entre itens", valor: "4px · no container, nunca margin" },
-  { classe: "text-button", parte: "Rótulo", valor: "13 / 18 · Medium 500" },
+  { classe: "w-[220px]", parte: "Largura aberta", valor: "220px · 48px recolhida" },
+  { classe: "bg-background", parte: "Superfície", valor: "nenhuma: o fundo da aplicação, sem cartão nem traço" },
+  { classe: "px-2 pt-4 pb-3", parte: "Recuo", valor: "8px lateral · 16 em cima, alinhado ao Header" },
+  { classe: "gap-4", parte: "Entre blocos", valor: "16px · marca, destinos, favoritos" },
+  { classe: "h-8 px-2", parte: "Item", valor: "32px de altura · 8px de recuo" },
+  { classe: "gap-0.5", parte: "Entre itens", valor: "2px · no container, nunca margin" },
+  { classe: "text-body-lg", parte: "Rótulo", valor: "13 / 18 · Regular 400" },
+  { classe: "size={16}", parte: "Ícone", valor: "16px · fill no selecionado" },
 ];
 
 type Uso = { nome: string; regra: string; texto: string };
@@ -73,7 +76,7 @@ const usos: Uso[] = [
     nome: "Colapsada",
     regra: "quando a tela é a tarefa",
     texto:
-      "194px de volta para a tabela — a largura de mais duas colunas no pipeline. O preço é real: sem rótulo, o ícone precisa carregar sozinho o significado, e é por isso que o title fica no item inteiro. Estado de quem já sabe onde as coisas estão.",
+      "172px de volta para a tabela — a largura de mais uma coluna e meia no pipeline. O preço é real: sem rótulo, o ícone precisa carregar sozinho o significado, e é por isso que o title fica no item inteiro. Estado de quem já sabe onde as coisas estão.",
   },
   {
     nome: "Item selecionado",
@@ -113,12 +116,13 @@ export default function PaginaSidebar() {
   return (
     <PaginaDS
       titulo="Sidebar"
-      descricao="A navegação principal do CRM: 282px que viram 88px, dez destinos em dois blocos, e um item de 36px que é o componente de verdade — cinco estados, três deles desenhados no Figma e dois derivados por regra."
+      descricao="A navegação principal do CRM: plana, direto no fundo da aplicação, com 220px que viram 48. Destinos em dois blocos, um grupo de Favoritos e um item de 32px que é o componente de verdade."
       secoes={[
         "Como funciona",
         "A sidebar inteira",
         "Item",
         "Estados do item",
+        "Favoritos",
         "Colapsada",
         "Theme Switch",
         "Usuário",
@@ -138,33 +142,19 @@ export default function PaginaSidebar() {
           que alguém esqueceria.
         </p>
         <p>
-          A borda de 16px do painel é o detalhe que engana. No Figma ela é um{" "}
-          <Chip>stroke INSIDE</Chip> de 16px na cor <Chip>background</Chip> — e não é traço nenhum:
-          é <span className="text-foreground">o respiro do shell</span>, na cor do fundo da
-          aplicação. Em CSS isso cai redondo em <Chip>border-[16px] border-background</Chip>, porque
-          o raio interno de um <Chip>border-box</Chip> é o externo menos a espessura: 24px por fora,
-          8px por dentro, exatamente como o desenho. Consequência prática: os 282px já incluem os 16
-          de cada lado, e o conteúdo trabalha em 234.
-        </p>
-        <p>
-          O painel muda de natureza entre os temas, e por isso a superfície é um token de gradiente,
-          não de cor. No claro é <Chip>card</Chip> chapado; no escuro, um gradiente vertical de{" "}
-          <Chip>background</Chip> para <Chip>accent</Chip> — o topo funde com o fundo da página e a
-          base emerge. Como gradiente é <Chip>background-image</Chip> e cor é{" "}
-          <Chip>background-color</Chip>, misturar os dois exigiria <span className="text-foreground">
-          ramificar o componente por tema</span>, que é justamente o que o critério de pronto proíbe.
-          A saída foi <Chip>--sidebar-surface</Chip> ser <span className="text-foreground">sempre</span>{" "}
-          gradiente: no claro, um gradiente de <Chip>card</Chip> para <Chip>card</Chip>. Um caminho
-          de código só, dois resultados.
+          A navegação é <span className="text-foreground">plana</span>: não tem cartão, moldura nem sombra. Fica
+          direto sobre <Chip>background</Chip>, a cor do fundo da aplicação, e quem a separa do conteúdo é o próprio
+          conteúdo, que vem em superfícies brancas. São 220px aberta e 48 recolhida — 16 deles de recuo —, com a
+          linha da marca alinhada à linha do Header. O arquivo desenha um painel de 282px em cartão, com item de
+          36; o time pediu a densidade do Twenty e do Attio, e a navegação foi a terceira parte dessa mudança.
         </p>
         <p>
           Os cinco tokens <Chip>nav/item/*</Chip> vieram do Figma com modo Claro e Escuro próprios —
           e é o que torna o item honesto nos dois temas sem uma linha de <Chip>dark:</Chip>. O
           selecionado é <Chip>blue-50</Chip> + <Chip>blue-600</Chip> no claro e{" "}
-          <Chip>accent</Chip> + <Chip>blue-300</Chip> no escuro, tudo por alias. O hover também veio
-          desenhado — <Chip>nav/item/bg-hover</Chip> —, o que é raro por aqui: pela exceção{" "}
-          <span className="text-foreground">E-01</span>, estado de interação costuma ser derivado
-          por regra, não desenhado. Aqui não precisou derivar nada.
+          <Chip>accent</Chip> + <Chip>blue-300</Chip> no escuro, tudo por alias. O hover é a exceção:
+          o do arquivo é <Chip>background</Chip>, que sumiria numa navegação plana sobre o próprio{" "}
+          <Chip>background</Chip>. Aqui o hover é <Chip>card</Chip> — aparece nos dois temas.
         </p>
         <p>
           Nem tudo veio tão pronto. O avatar sem foto é o caso do bloqueio{" "}
@@ -175,14 +165,14 @@ export default function PaginaSidebar() {
           variante escura não funciona: ela foi escolhida pelo valor que tem no modo{" "}
           <span className="text-foreground">Claro</span> do documento. E{" "}
           <Chip>surface-inverse</Chip> sozinha não serve, porque ela inverte — no escuro viraria um
-          disco branco de 32px no pé do painel. A saída é a mesma da superfície:{" "}
-          <Chip>--sidebar-avatar</Chip>, um token de componente que guarda as duas escolhas. Regra
+          disco branco no pé da navegação. A saída é um token de componente:{" "}
+          <Chip>--sidebar-avatar</Chip>, que guarda as duas escolhas. Regra
           que fica: <span className="text-foreground">onde a variante do Figma troca de variável,
           o código ganha um token — nunca um <Chip>dark:</Chip></span>.
         </p>
         <p>
-          Falta contar a armadilha, que é o rótulo. O item tem{" "}
-          <Chip>max-w-[160px]</Chip> e o Figma corta o texto seco, sem reticências e sem aviso —{" "}
+          Falta contar a armadilha, que é o rótulo. Ele ocupa o que sobra do item, uns 170px, e o
+          arquivo corta o texto seco, sem reticências e sem aviso —{" "}
           <span className="text-foreground">exatamente o padrão de três tickets</span> (#83283,
           #83274, #59567). Como <Chip>pt-br</Chip> e <Chip>es</Chip> crescem 20–30% sobre{" "}
           <Chip>en</Chip>, &quot;Agentes de IA&quot; passa. &quot;Configurações de automação&quot;
@@ -194,18 +184,22 @@ export default function PaginaSidebar() {
 
       <Secao
         titulo="A sidebar inteira"
-        spec="282 → 88px"
-        descricao="Viva: clique no botão ao lado da marca para recolher, no sol e na lua para trocar o tema da página inteira, e em qualquer destino para movê-lo. É o node 124:2114 do Figma, com as quatro variantes cobertas por dois estados."
+        spec="220 → 48px"
+        descricao="Viva: clique no botão ao lado da marca para recolher, no sol e na lua para trocar o tema da página inteira, e em qualquer destino para movê-lo."
         codigo={`const [colapsada, setColapsada] = useState(false);
 const [ativa, setAtiva] = useState("Pipelines");
 
 <Sidebar colapsada={colapsada} onColapsarChange={setColapsada}>
   <SidebarTopo>
     <SidebarBrand />
-    <SidebarGrupo recuo>
+    <SidebarGrupo>
       <SidebarItem icone={House} selecionado={ativa === "Início"}>Início</SidebarItem>
       <SidebarItem icone={Kanban} selecionado={ativa === "Pipelines"}>Pipelines</SidebarItem>
       <SidebarItem icone={UsersThree} selecionado={ativa === "Leads"}>Leads</SidebarItem>
+    </SidebarGrupo>
+    <SidebarGrupo rotulo="Favoritos" ocultarRecolhida>
+      <SidebarItem icone={Star}>Pipeline comercial</SidebarItem>
+      <SidebarItem icone={Star}>Leads quentes</SidebarItem>
     </SidebarGrupo>
   </SidebarTopo>
 
@@ -223,25 +217,21 @@ const [ativa, setAtiva] = useState("Pipelines");
           <>
             <ul className="space-y-1.5">
               <Item mono="colapsada">
-                282px viram 88px · o botão de recolher mora na linha da marca; recolhida, o símbolo
+                220px viram 48 · o botão de recolher mora na linha da marca; recolhida, o símbolo
                 vira o botão de expandir
               </Item>
               <Item mono="onColapsarChange">
-                é o que faz o botão existir — sem ele o painel é fixo e a marca fica sozinha, ao centro
+                é o que faz o botão existir — sem ele a navegação é fixa e a marca fica sozinha
               </Item>
               <Item mono="SidebarTopo / SidebarRodape">
                 os dois blocos do <Chip>justify-between</Chip>: o rodapé cola no pé mesmo com o
                 painel alto
               </Item>
-              <Item mono="recuo">
-                os 2px que o grupo principal ganha de folga lateral · o grupo do rodapé não tem
+              <Item mono="rotulo / ocultarRecolhida">
+                o grupo com nome (Favoritos) · recolhida, o nome some; com{" "}
+                <Chip>ocultarRecolhida</Chip>, o grupo inteiro
               </Item>
             </ul>
-            <p className="mt-2.5">
-              A marca d&apos;água é o símbolo a 362px, 7% de opacidade, sangrando pela esquerda no
-              rodapé — e ela se move quando o painel colapsa, porque o que está fixo é a diagonal do
-              símbolo, não a borda.
-            </p>
           </>
         }
       >
@@ -249,7 +239,7 @@ const [ativa, setAtiva] = useState("Pipelines");
           <Sidebar colapsada={colapsada} onColapsarChange={setColapsada}>
             <SidebarTopo>
               <SidebarBrand />
-              <SidebarGrupo recuo>
+              <SidebarGrupo>
                 {PRINCIPAIS.map((r) => (
                   <SidebarItem
                     key={r.rotulo}
@@ -262,6 +252,22 @@ const [ativa, setAtiva] = useState("Pipelines");
                     }}
                   >
                     {r.rotulo}
+                  </SidebarItem>
+                ))}
+              </SidebarGrupo>
+              <SidebarGrupo rotulo="Favoritos" ocultarRecolhida>
+                {FAVORITOS.map((f) => (
+                  <SidebarItem
+                    key={f}
+                    icone={Star}
+                    href="#"
+                    selecionado={ativa === f}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setAtiva(f);
+                    }}
+                  >
+                    {f}
                   </SidebarItem>
                 ))}
               </SidebarGrupo>
@@ -300,8 +306,8 @@ const [ativa, setAtiva] = useState("Pipelines");
 
       <Secao
         titulo="Item"
-        spec="h-9 · gap-2 · 20px"
-        descricao="O componente que a Sidebar existe para hospedar. Ícone de 20px — não 16, como no botão —, rótulo de 13/18 Medium, e 8px entre os dois. É um link quando tem para onde ir, e um span quando não tem: a prop componente troca a tag da raiz, e é por onde o next/link entra."
+        spec="h-8 · gap-2 · 16px"
+        descricao="O componente que a Sidebar existe para hospedar. Ícone de 16px, rótulo de 13/18 e 8px entre os dois, numa linha de 32. É um link quando tem para onde ir, e um span quando não tem."
         codigo={`<SidebarItem icone={House} href="/inicio">Início</SidebarItem>
 
 <SidebarItem icone={Kanban} href="/pipelines" selecionado>
@@ -334,14 +340,14 @@ const [ativa, setAtiva] = useState("Pipelines");
               </Item>
             </ul>
             <p className="mt-2.5">
-              Os ícones são Phosphor no peso <Chip>regular</Chip>, o único peso da interface. O
-              selecionado não muda para <Chip>fill</Chip> aqui: quem marca a seleção é a superfície,
-              e dobrar o sinal gastaria dois recursos para dizer a mesma coisa.
+              Os ícones são Phosphor no peso <Chip>regular</Chip>. No item selecionado o ícone passa
+              a <Chip>fill</Chip> — a única troca de peso da interface: na navegação plana a
+              superfície do selecionado é discreta, e o ícone cheio é o que o olho acha primeiro.
             </p>
           </>
         }
       >
-        <div className="mx-auto w-[234px]">
+        <div className="mx-auto w-[204px]">
           <SidebarGrupo>
             <SidebarItem icone={House} href="#" onClick={(e) => e.preventDefault()}>
               Início
@@ -371,12 +377,12 @@ const [ativa, setAtiva] = useState("Pipelines");
                 sozinho entre os temas
               </Item>
               <Item mono="hover">
-                <Chip>bg-nav-item-hover</Chip> · <Chip>background</Chip> no claro,{" "}
-                <Chip>card</Chip> no escuro — veio desenhado, não derivado
+                <Chip>bg-card</Chip> + <Chip>text-foreground</Chip> · a navegação fica sobre{" "}
+                <Chip>background</Chip>, então o hover do arquivo (<Chip>background</Chip>) sumiria
               </Item>
               <Item mono="selecionado">
-                <Chip>bg-nav-item-selected</Chip> + <Chip>shadow-highlight</Chip>, o realce interno
-                de 1px que o Figma põe em toda superfície do painel
+                <Chip>bg-nav-item-selected</Chip> + <Chip>text-nav-item-selected-foreground</Chip>,
+                com o ícone em <Chip>fill</Chip>
               </Item>
               <Item mono="focus-visible">
                 <Chip>outline-2 outline-offset-2 outline-ring</Chip> · o mesmo anel do{" "}
@@ -395,7 +401,7 @@ const [ativa, setAtiva] = useState("Pipelines");
           </>
         }
       >
-        <div className="mx-auto w-[234px]">
+        <div className="mx-auto w-[204px]">
           <SidebarGrupo>
             <SidebarItem icone={House} href="#" onClick={(e) => e.preventDefault()}>
               Repouso
@@ -414,28 +420,64 @@ const [ativa, setAtiva] = useState("Pipelines");
       </Secao>
 
       <Secao
+        titulo="Favoritos"
+        spec="rotulo · ocultarRecolhida"
+        descricao="Os atalhos que a pessoa fixou: uma visão salva, uma lista, um funil. É um grupo com nome — o nome vem em caption, acima da lista — e some inteiro quando a navegação recolhe."
+        codigo={`<SidebarGrupo rotulo="Favoritos" ocultarRecolhida>
+  <SidebarItem icone={Star} href="/pipelines/comercial">Pipeline comercial</SidebarItem>
+  <SidebarItem icone={Star} href="/leads?visao=quentes">Leads quentes</SidebarItem>
+</SidebarGrupo>`}
+        nota={
+          <>
+            <ul className="space-y-1.5">
+              <Item mono="rotulo">
+                o nome da seção · vira o nome acessível da lista e some quando a navegação recolhe
+              </Item>
+              <Item mono="ocultarRecolhida">
+                recolhida, o grupo sai de cena · três estrelas iguais sem rótulo não dizem nada
+              </Item>
+            </ul>
+            <p className="mt-2.5">
+              Favorito é atalho, não destino novo: aponta para um lugar que já existe na navegação
+              de cima. Quem fixa e desfixa é a tela — o grupo só mostra.
+            </p>
+          </>
+        }
+      >
+        <div className="mx-auto w-[204px]">
+          <SidebarGrupo rotulo="Favoritos" ocultarRecolhida>
+            {FAVORITOS.map((f) => (
+              <SidebarItem key={f} icone={Star} href="#" onClick={(e) => e.preventDefault()}>
+                {f}
+              </SidebarItem>
+            ))}
+          </SidebarGrupo>
+        </div>
+      </Secao>
+
+      <Secao
         titulo="Colapsada"
-        spec="88px · 36×36"
-        descricao="O mesmo item, sem rótulo: 36 por 36, ícone centrado e o texto inteiro no title. Devolve 194px para a tela — a largura de duas colunas de tabela no pipeline."
+        spec="48px · 32×32"
+        descricao="O mesmo item, sem rótulo: 32 por 32, ícone centrado e o texto inteiro no title. Devolve 172px para a tela."
         codigo={`<Sidebar colapsada>
   {/* nada muda aqui dentro: o contexto avisa cada filho */}
 </Sidebar>`}
         nota={
           <>
             <ul className="space-y-1.5">
-              <Item mono="w-[88px]">
-                88 = 40 de conteúdo + 8 de padding + 16 de respiro, dos dois lados
+              <Item mono="w-12">
+                48 = 32 de conteúdo + 8 de recuo de cada lado
               </Item>
               <Item mono="title">
                 o rótulo vira <Chip>title</Chip> e <Chip>aria-label</Chip> · sem eles o ícone fica
                 mudo para o mouse e para o leitor de tela
               </Item>
               <Item mono="theme switch">
-                o trilho de dois botões não cabe em 40px: vira um botão só, que mostra o tema atual
+                o trilho de dois botões não cabe em 32px: vira um botão só, que mostra o tema atual
                 e alterna no clique
               </Item>
               <Item mono="user">
-                sobra o círculo de 32px · nome e e-mail vão para o <Chip>title</Chip>
+                sobra o círculo de 24px · nome e e-mail vão para o <Chip>title</Chip>
               </Item>
             </ul>
           </>
@@ -445,7 +487,7 @@ const [ativa, setAtiva] = useState("Pipelines");
           <Sidebar colapsada={soColapsada} onColapsarChange={setSoColapsada}>
             <SidebarTopo>
               <SidebarBrand />
-              <SidebarGrupo recuo>
+              <SidebarGrupo>
                 {PRINCIPAIS.map((r) => (
                   <SidebarItem
                     key={r.rotulo}
@@ -487,8 +529,8 @@ const [ativa, setAtiva] = useState("Pipelines");
 
       <Secao
         titulo="Theme Switch"
-        spec="68×36 · 32×32"
-        descricao="Dois botões num trilho de 2px de padding. O ativo herda a superfície do item selecionado — mesmo token, mesma cor — e é o que amarra o seletor ao resto do painel. Clique: ele troca o tema desta página."
+        spec="60×32 · 28×28"
+        descricao="Dois botões num trilho de 2px de padding. O ativo herda a superfície do item selecionado — mesmo token, mesma cor — e é o que amarra o seletor ao resto da navegação. Clique: ele troca o tema desta página."
         codigo={`const [tema, setTema] = useState<"claro" | "escuro">("claro");
 
 <SidebarThemeSwitch tema={tema} onTemaChange={setTema} />`}
@@ -508,10 +550,8 @@ const [ativa, setAtiva] = useState("Pipelines");
               </Item>
             </ul>
             <p className="mt-2.5">
-              O trilho tem <Chip>bg-card</Chip>, e no tema claro isso significa branco sobre branco:
-              é o <Chip>shadow-highlight</Chip> que o separa do painel, não uma borda. No Figma o
-              botão inativo tem raio 16 e o ativo 6 — como o inativo não tem superfície, a diferença
-              nunca aparece, e o código usa 6 nos dois.
+              O trilho tem <Chip>bg-card</Chip>: sobre o fundo da aplicação ele aparece sozinho, sem
+              borda nem sombra. Tem a altura do item, 32px, para não desalinhar a lista.
             </p>
           </>
         }
@@ -528,8 +568,8 @@ const [ativa, setAtiva] = useState("Pipelines");
 
       <Secao
         titulo="Usuário"
-        spec="h-10 · rounded-xl"
-        descricao="A última linha do painel: avatar de 32px, nome em Medium, e-mail em Regular e um caret que promete um menu. Raio de 12px — maior que o do item, porque é uma linha que se lê como cartão, não como destino."
+        spec="h-10 · rounded-md"
+        descricao="A última linha da navegação: avatar de 24px, nome em Medium, e-mail embaixo e um caret que promete um menu. É a única linha de 40px — tem duas linhas de texto."
         codigo={`<SidebarUser nome="Gabriel Correa" email="gece@datacrazy.com" />
 
 {/* com foto, quando houver */}
@@ -554,13 +594,13 @@ const [ativa, setAtiva] = useState("Pipelines");
               </Item>
             </ul>
             <p className="mt-2.5">
-              Os dois exemplos abaixo estão em 234px, a largura real dentro do painel. O de baixo
+              Os dois exemplos abaixo estão em 204px, a largura real dentro da navegação. O de baixo
               tem um e-mail longo de propósito: é onde o <Chip>truncate</Chip> aparece.
             </p>
           </>
         }
       >
-        <div className="mx-auto w-[234px] space-y-2">
+        <div className="mx-auto w-[204px] space-y-2">
           <SidebarUser nome="Gabriel Correa" email="gece@datacrazy.com" />
           <SidebarUser
             nome="Marina Albuquerque"
@@ -571,8 +611,8 @@ const [ativa, setAtiva] = useState("Pipelines");
 
       <Secao
         titulo="Anatomia"
-        spec="282 · 234 · 36px"
-        descricao="Oito decisões sustentam o painel. A que mais explica o resto é a segunda: a borda de 16px não é traço, é o fundo da aplicação entrando pelo componente — e é ela que faz 282 virarem 234 de conteúdo."
+        spec="220 · 204 · 32px"
+        descricao="Oito decisões sustentam a navegação. A que mais explica o resto é a segunda: ela não tem superfície própria — é o fundo da aplicação — e por isso tudo nela é mais baixo e mais junto que num painel em cartão."
         nota={
           <>
             <ul className="space-y-1.5">
@@ -583,17 +623,15 @@ const [ativa, setAtiva] = useState("Pipelines");
               ))}
             </ul>
             <p className="mt-2.5">
-              Três raios convivem no painel e cada um tem motivo: 24px no painel, 12px na linha do
-              usuário, 6px no item e no seletor de tema. Forma diferente entre componentes exige
-              motivo — é a regra A1 — e aqui o motivo é hierarquia: quanto menor o elemento, menor o
-              raio.
+              Um raio só: 6px no item, no seletor de tema e na linha do usuário. Forma diferente
+              entre componentes exige motivo — é a regra A1 —, e numa navegação plana não há motivo.
             </p>
           </>
         }
       >
         <Palco alta={false}>
-          <div className="w-[234px] py-4">
-            <SidebarGrupo recuo>
+          <div className="w-[204px] py-4">
+            <SidebarGrupo>
               <SidebarItem icone={Kanban} href="#" selecionado onClick={(e) => e.preventDefault()}>
                 Pipelines
               </SidebarItem>
@@ -625,8 +663,8 @@ const [ativa, setAtiva] = useState("Pipelines");
           </>
         }
       >
-        <div className="mx-auto w-[234px]">
-          <SidebarGrupo recuo>
+        <div className="mx-auto w-[204px]">
+          <SidebarGrupo>
             <SidebarItem icone={Kanban} href="#" selecionado onClick={(e) => e.preventDefault()}>
               Pipelines
             </SidebarItem>

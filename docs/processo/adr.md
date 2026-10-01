@@ -281,3 +281,8 @@ Desvio: o arquivo (601:464) desenha o Header em duas linhas — trilha e sino em
 Motivo: crítica de design de 2026-09-28, ponto 7 ("o header possui bastante espaço em branco e ocupa duas linhas"). É a segunda parte da proposta visual (referência Twenty e Attio), que o humano mandou aplicar por partes (2026-10-01).
 Aprovado por: humano (2026-10-01: "por partes"). Os controles seguem com 32px; a proposta desenhava 28 — fica para a parte da superfície única, se ele quiser.
 
+## ADR-054 · Navegação plana de 220, com Favoritos · 2026-10-01
+Desvio: o arquivo (124:2114) desenha a Sidebar como um painel em cartão de 282px (88 recolhida), com moldura de 16, superfície em gradiente, marca d'água, item de 36 com ícone de 20 e `shadow-highlight`. No código ela passa a ser plana: sem cartão, direto sobre `background`, 220px aberta e 48 recolhida, item de 32 com ícone de 16 (`fill` no selecionado — é o uso que a regra A8 já previa), rótulo em `body-lg`, 2px entre itens. O hover é `card`, não o `nav-item-hover` do arquivo (`background` sobre `background` sumiria). `SidebarGrupo` ganha `rotulo` (seção com nome) e `ocultarRecolhida`, e com eles o grupo de Favoritos — um dos pedidos do FigJam ("sidebar com favoritos"). Seletor de tema com botões de 28 e linha do usuário com avatar de 24; `--sidebar-surface` e a marca d'água saem. Na `TelaBase`, o recuo esquerdo do conteúdo passa de 4 para 8.
+Motivo: proposta visual (referência Twenty e Attio: navegação de 220, item de 32), terceira parte; o humano mandou seguir (2026-10-01: "sim").
+Aprovado por: humano (2026-10-01).
+

@@ -18,6 +18,7 @@ import {
   UserPlus,
   UsersThree,
   WarningCircle,
+  Star,
 } from "@phosphor-icons/react";
 import { TelaBase } from "@/components/ui/tela-base";
 // o tema (classe `dark` + memória) vem da lib: no CRM, troque por quem já cuida dele
@@ -53,6 +54,8 @@ const PRINCIPAIS = [
   { rotulo: "Agentes de IA", icone: Robot },
 ];
 
+const FAVORITOS = ["Primeiro favorito", "Segundo favorito"];
+
 const APOIO = [
   { rotulo: "Ajuda", icone: Question },
   { rotulo: "Configurações", icone: Gear },
@@ -86,6 +89,14 @@ export default function NovaTela() {
               {PRINCIPAIS.map((r) => (
                 <SidebarItem key={r.rotulo} icone={r.icone} componente="button" selecionado={r.rotulo === rota} onClick={() => setRota(r.rotulo)}>
                   {r.rotulo}
+                </SidebarItem>
+              ))}
+            </SidebarGrupo>
+            {/* Favoritos: atalhos que a pessoa fixou. Recolhida, o grupo some — estrela sem rótulo não diz nada. */}
+            <SidebarGrupo rotulo="Favoritos" ocultarRecolhida>
+              {FAVORITOS.map((f) => (
+                <SidebarItem key={f} icone={Star} componente="button" selecionado={f === rota} onClick={() => setRota(f)}>
+                  {f}
                 </SidebarItem>
               ))}
             </SidebarGrupo>

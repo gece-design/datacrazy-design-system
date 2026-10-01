@@ -5,11 +5,11 @@
     "fim": "2026-10-01"
   },
   "git": {
-    "commits": 70,
+    "commits": 72,
     "arquivos": 343,
-    "linhasUi": 11056,
+    "linhasUi": 11055,
     "linhasLib": 785,
-    "linhasDocs": 8241
+    "linhasDocs": 8266
   },
   "catalogo": {
     "itens": 55,
@@ -350,14 +350,14 @@
     {
       "name": "sidebar",
       "titulo": "Sidebar",
-      "descricao": "Navegação principal do CRM: marca, grupos de itens com ícone e rótulo, interruptor de tema, atalhos e usuário — expandida em 282px ou colapsada em 88.",
+      "descricao": "Navegação principal do CRM: marca, grupos de itens com ícone e rótulo, favoritos, interruptor de tema, atalhos e usuário — plana, direto no fundo da aplicação, expandida em 220px ou recolhida em 48.",
       "categoria": "Navigation",
       "pagina": null,
       "pecas": 9,
       "props": 13,
-      "variantes": 3,
+      "variantes": 4,
       "estados": 5,
-      "acessibilidade": 7,
+      "acessibilidade": 8,
       "linhas": 428
     },
     {
@@ -410,7 +410,7 @@
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 5,
-      "linhas": 205
+      "linhas": 204
     },
     {
       "name": "telefone",
@@ -482,9 +482,9 @@
     "componentes": 35,
     "pecas": 115,
     "props": 354,
-    "variantes": 99,
+    "variantes": 100,
     "estados": 127,
-    "acessibilidade": 211,
+    "acessibilidade": 212,
     "paginas": 41,
     "docs": 35
   },
@@ -1025,6 +1025,11 @@
       "id": "ADR-053",
       "titulo": "Header de uma linha",
       "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-054",
+      "titulo": "Navegação plana de 220, com Favoritos",
+      "data": "2026-10-01"
     }
   ],
   "auditoria": {
@@ -1075,6 +1080,12 @@
       "origem": "Cliente",
       "titulo": "CASCA NOVA, PARTES 1 E 2 (PROPOSTA VISUAL APLICADA POR PARTES)",
       "resumo": "O humano respondeu \"por partes\" à proposta de /exemplos/proposta-visual; lido como: uma parte de cada vez, um commit por parte, começando pelo que o cliente apontou na crítica de 28/09. Parte 1 (ponto"
+    },
+    {
+      "data": "2026-10-01",
+      "origem": "Revisão",
+      "titulo": "CASCA NOVA, PARTE 3: NAVEGAÇÃO PLANA COM FAVORITOS",
+      "resumo": "O humano confirmou a leitura de \"por partes\" e mandou seguir com as três que faltavam. Parte 3 (ADR-054): a Sidebar deixa o cartão — sem moldura, gradiente nem marca d'água —, fica direto sobre backgr"
     },
     {
       "data": "2026-09-29",

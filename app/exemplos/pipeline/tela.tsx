@@ -24,6 +24,7 @@ import {
   Robot,
   Rows,
   UsersThree,
+  Star,
 } from "@phosphor-icons/react";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos } from "@/components/ui/barra-de-filtros";
@@ -93,6 +94,8 @@ const PRINCIPAIS = [
   { rotulo: "Chat ao vivo", icone: ChatCircleDots },
   { rotulo: "Agentes de IA", icone: Robot },
 ];
+
+const FAVORITOS = ["Pipeline comercial", "Leads quentes", "Propostas da semana"];
 
 const APOIO = [
   { rotulo: "Calendar", icone: CalendarBlank },
@@ -390,6 +393,14 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
               </SidebarItem>
             ))}
           </SidebarGrupo>
+          {/* Favoritos: atalhos que a pessoa fixou. Recolhida, o grupo some — estrela sem rótulo não diz nada. */}
+          <SidebarGrupo rotulo="Favoritos" ocultarRecolhida>
+            {FAVORITOS.map((f) => (
+              <SidebarItem key={f} icone={Star} componente="button" selecionado={f === rota} onClick={() => setRota(f)}>
+                {f}
+              </SidebarItem>
+            ))}
+          </SidebarGrupo>
         </SidebarTopo>
 
         <SidebarRodape>
@@ -531,7 +542,7 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
             abrirAoMontar
             aria-label="Filtros"
             role="group"
-            className="shrink-0 pb-3 pl-4 pr-4 lg:pl-1"
+            className="shrink-0 pb-3 pl-4 pr-4 lg:pl-2"
             campos={camposDeFiltro(etapas)}
             valor={filtro}
             aoMudar={setFiltro}
@@ -569,7 +580,7 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
           />
         ) : (
           // Calendário: os leads pela próxima ação; clicar abre o mesmo drawer.
-          <div className={cn("min-w-0 min-h-0 flex-1 overflow-y-auto pl-4 pr-4 pb-4 lg:pl-1", rolagemDiscreta)}>
+          <div className={cn("min-w-0 min-h-0 flex-1 overflow-y-auto pl-4 pr-4 pb-4 lg:pl-2", rolagemDiscreta)}>
             <Calendario
               locale="pt-BR"
               eventos={todos.filter((l) => l.proximaAcao).map((l) => ({ id: l.id, data: l.proximaAcao, rotulo: l.nome, detalhe: l.empresa, tom: l.tom }))}

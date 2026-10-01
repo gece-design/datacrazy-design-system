@@ -87,6 +87,9 @@ contexto em `docs/processo/ux-direcao-visual.md`.
   página. Nunca repita o nome da página como último item da trilha.
 - O botão de recolher a navegação mora na linha da marca da Sidebar (ADR-052);
   a `TelaBase` já cuida disso.
+- A navegação é plana, 220px (48 recolhida), item de 32 (ADR-054). Atalhos que
+  a pessoa fixou vão em `SidebarGrupo rotulo="Favoritos" ocultarRecolhida`,
+  depois dos destinos. Não use `recuo` no `SidebarGrupo`: não tem mais efeito.
 
 ### Busca, filtros e divisor no Header
 - A busca é sempre `HeaderBusca` e os filtros sempre `HeaderFiltros`; nunca um

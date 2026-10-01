@@ -43,16 +43,16 @@ arquivo acompanha na remedição (AUD-203).
 
 | Largura | O que a casca faz |
 |---------|-------------------|
-| ≥ 1280px (`xl`) | Sidebar aberta, 282px. A pessoa pode recolher; a escolha fica na memória. |
-| 1024–1279px (`lg`) | Sidebar nasce recolhida em ícones, 88px. A pessoa pode abrir. |
+| ≥ 1280px (`xl`) | Sidebar aberta, 220px. A pessoa pode recolher; a escolha fica na memória. |
+| 1024–1279px (`lg`) | Sidebar nasce recolhida em ícones, 48px. A pessoa pode abrir. |
 | < 1024px | A sidebar some. O botão de menu no Header abre a mesma Sidebar num painel por cima, com o `Scrim` do Modal, foco preso, Escape e o foco de volta ao botão. |
 
 Os recuos do Header e do conteúdo: 16 — o arquivo desenha 32 no Header; foi
 24 e "ainda tinha muito espaço" (humano, 2026-09-23, ADR-028). O Header é de
 uma linha e fecha em 56px (16 em cima, controles de 32, 8 embaixo — ADR-053),
-com os controles alinhados ao topo do painel da Sidebar. À esquerda, com a sidebar no lugar (≥ 1024), o recuo é 4: a Sidebar
-já traz 16 de moldura na cor do fundo e os dois somavam aos olhos (humano,
-2026-09-24). Não há segunda linha de controles: filtros, abas e troca-visão vão
+com os controles alinhados à linha da marca da Sidebar. À esquerda, com a
+sidebar no lugar (≥ 1024), o recuo é 8: a navegação plana já traz 8 do próprio
+recuo (ADR-054). Não há segunda linha de controles: filtros, abas e troca-visão vão
 na fileira de ações do Header ("não ficou legal"). A memória é lida antes da primeira pintura, para a
 sidebar não abrir e recolher na frente da pessoa.
 
