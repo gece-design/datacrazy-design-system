@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 import { GRUPOS_TAGS, etapaPor, moeda, tagsDe, type Etapa, type EtapaId, type Lead } from "./dados";
 import { IconeDoCanal } from "./quadro";
 
-import { foco, rolagemDiscreta } from "@/lib/estados";
+import { rolagemDiscreta } from "@/lib/estados";
 /* A mesma carteira do quadro, na Table do design system. É o argumento de que
    a visão não é a tela: o dado é um só, a leitura é que muda — e por isso a
    linha mostra o que o cartão mostra, do mesmo jeito: as tags com a bolinha
@@ -123,15 +123,8 @@ export function Lista({
               // Selecionar a linha abre o lead: o Drawer é o detalhe (mestre-detalhe da referência).
               <DataTableRow key={lead.id} chave={lead.id} nome={lead.nome} selecionada={lead.id === aberto} aoSelecionar={() => aoAbrir(lead)}>
                 <DataTableCell coluna="lead">
-                  {/* O nome é o que abre o lead: linha inteira clicável seria um
-                      `tr` fingindo de botão, sem foco e sem nome acessível. */}
-                  <button
-                    type="button"
-                    onClick={() => aoAbrir(lead)}
-                    className={`w-full rounded-sm text-left ${foco}`}
-                  >
-                    <CelulaLead nome={lead.nome} />
-                  </button>
+                  {/* O nome é o que abre o lead; as iniciais vêm na cor que o nome sorteia. */}
+                  <CelulaLead nome={lead.nome} avatar aoAbrir={() => aoAbrir(lead)} />
                 </DataTableCell>
                 <DataTableCell coluna="tags">
                   {/* na grade densa as tags têm coluna própria: o nome não briga com elas.

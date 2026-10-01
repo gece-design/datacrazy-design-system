@@ -11,6 +11,7 @@ import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
 
 import { foco, rolagemDiscreta } from "@/lib/estados";
+import { TONS, tomDe, type Tom } from "@/lib/tons";
 /**
  * Tag — rótulo em pílula do perfil do lead (node 538:197).
  *
@@ -27,32 +28,8 @@ const pontos = {
   success: "bg-success",
 } as const;
 
-/** Os catorze tons de `[data-tom]` no globals.css, na ordem do círculo de
- *  cores — é a ordem das amostras de quem cria a tag. Com a tag sem tom
- *  (cinza), são quinze cores (cliente, 2026-09-28; humano, 2026-10-01). A tag
- *  não inventa cor: escolhe um. */
-export const TONS = [
-  "azul", "indigo", "roxo", "fucsia", "rosa", "vermelho", "laranja",
-  "ambar", "amarelo", "lima", "verde", "turquesa", "ciano", "marrom",
-] as const;
-export type Tom = (typeof TONS)[number];
-
-/** O sorteio continua nos seis de sempre: abrir a paleta não pode trocar a cor
-    de uma lista que já existe. Verde e vermelho ficam fora porque querem dizer
-    "deu certo" e "deu errado" — uma lista qualquer em vermelho lê como alarme.
-    Os tons novos entram por escolha de quem cria. */
-const SORTEAVEIS: Tom[] = ["azul", "roxo", "rosa", "laranja", "ciano", "ambar"];
-
-/**
- * Tom estável a partir de um texto — a mesma lista recebe sempre a mesma cor,
- * em qualquer máquina e entre recargas. Serve de padrão quando ninguém
- * escolheu: uma tag nova nasce colorida em vez de cinza.
- */
-export function tomDe(chave: string): Tom {
-  let h = 0;
-  for (let i = 0; i < chave.length; i++) h = (h * 31 + chave.charCodeAt(i)) >>> 0;
-  return SORTEAVEIS[h % SORTEAVEIS.length];
-}
+// Os tons moram em lib/tons.ts (o Avatar também usa); a Tag continua exportando.
+export { TONS, tomDe, type Tom } from "@/lib/tons";
 
 export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Bolinha de 6px antes do texto. O texto continua sendo o sinal: a cor só reforça. */
@@ -126,6 +103,66 @@ export const TagAdicionar = React.forwardRef<HTMLButtonElement, TagAdicionarProp
   ),
 );
 TagAdicionar.displayName = "TagAdicionar";
+
+/* ------------------------------------------------------- Seletor de cor -- */
+
+export interface SeletorDeTomProps {
+  /** O tom marcado. `null` é "sem cor": a tag cinza. */
+  valor: Tom | null;
+  aoEscolher: (tom: Tom | null) => void;
+  /** Nome do grupo para leitor de tela. Ex.: "Cor da tag". */
+  rotulo: string;
+  /** Nome de cada cor, para leitor de tela e tooltip (i18n). Sem ele, a chave do tom. */
+  nomes?: Partial<Record<Tom | "neutro", string>>;
+  /** Abre a fileira com a amostra cinza, "sem cor": são as quinze cores. */
+  comNeutro?: boolean;
+  /** 16px na fileira do seletor de tags; 24px, com o check na marcada, em formulário. */
+  tamanho?: "sm" | "md";
+  className?: string;
+}
+
+/**
+ * SeletorDeTom — as amostras de cor de quem cria uma tag, uma etapa, uma lista.
+ *
+ * Cada amostra mostra as duas cores que a peça vai ter: o pastel do fundo e a
+ * letra, no anel. São os catorze tons de `TONS` — quinze com `comNeutro` — e
+ * nenhum outro: quem cria escolhe, não inventa (ADR-051). Era a fileira de
+ * dentro do `SeletorTags`; virou peça porque o modal de criar tag do cliente
+ * precisa dela num formulário (crítica de 2026-09-28).
+ */
+export function SeletorDeTom({ valor, aoEscolher, rotulo, nomes, comNeutro = false, tamanho = "sm", className }: SeletorDeTomProps) {
+  const md = tamanho === "md";
+  const amostras: (Tom | null)[] = comNeutro ? [null, ...TONS] : [...TONS];
+  return (
+    <div role="radiogroup" aria-label={rotulo} className={cn("flex flex-wrap items-center", md ? "gap-2" : "gap-1", className)}>
+      {amostras.map((t) => {
+        const marcada = valor === t;
+        const nome = nomes?.[t ?? "neutro"] ?? t ?? "sem cor";
+        return (
+          <button
+            key={t ?? "neutro"}
+            type="button"
+            role="radio"
+            aria-checked={marcada}
+            aria-label={nome}
+            title={nome}
+            data-tom={t ?? undefined}
+            onClick={() => aoEscolher(t)}
+            className={cn(
+              "grid shrink-0 place-items-center rounded-full ring-2 ring-inset transition-transform",
+              md ? "size-6" : "size-4",
+              t ? "bg-tom-brilho text-tom-texto ring-tom-texto" : "bg-input-bg-disabled text-muted-foreground ring-muted-foreground",
+              `${foco}`,
+              marcada ? "scale-110 outline outline-2 outline-offset-2 outline-foreground" : "hover:scale-110",
+            )}
+          >
+            {md && marcada ? <Check size={12} weight="bold" aria-hidden="true" /> : null}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 /* ------------------------------------------------------------ Seletor -- */
 
@@ -412,33 +449,10 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
               {/* Fileira de cores — fora do listbox, porque amostra não é opção
                   de tag. Só nas abas de cor livre: nas outras a cor é regra. */}
               {podeCriar && grupo?.corLivre ? (
-                <div role="radiogroup" aria-label={rotulos.cor} className="flex items-center gap-2 border-t border-border px-3 py-2">
-                  <span className="shrink-0 text-label-sm uppercase text-muted-foreground">{rotulos.cor}</span>
-                  <div className="flex flex-wrap items-center gap-1">
-                    {TONS.map((t) => {
-                      const marcada = (tomNovo ?? tomDe(termo)) === t;
-                      return (
-                        <button
-                          key={t}
-                          type="button"
-                          role="radio"
-                          aria-checked={marcada}
-                          aria-label={t}
-                          title={t}
-                          data-tom={t}
-                          onMouseDown={(e) => e.preventDefault()}
-                          onClick={() => setTomNovo(t)}
-                          // a amostra mostra as duas cores que a tag vai ter:
-                          // o pastel do fundo e a letra por dentro do anel
-                          className={cn(
-                            "size-4 shrink-0 rounded-full bg-tom-brilho ring-2 ring-inset ring-tom-texto transition-transform",
-                            `${foco}`,
-                            marcada ? "scale-110 outline outline-2 outline-offset-2 outline-foreground" : "hover:scale-110",
-                          )}
-                        />
-                      );
-                    })}
-                  </div>
+                // o clique na amostra não tira o foco da busca
+                <div onMouseDown={(e) => e.preventDefault()} className="flex items-center gap-2 border-t border-border px-3 py-2">
+                  <span aria-hidden="true" className="shrink-0 text-label-sm uppercase text-muted-foreground">{rotulos.cor}</span>
+                  <SeletorDeTom rotulo={rotulos.cor} valor={tomNovo ?? tomDe(termo)} aoEscolher={(tom) => setTomNovo(tom)} />
                 </div>
               ) : null}
             </PainelFlutuante>,

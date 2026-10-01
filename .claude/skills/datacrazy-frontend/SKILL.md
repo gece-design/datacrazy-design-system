@@ -210,12 +210,16 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   quadro e chat com `recuo={false}` (ADR-055); parte 5 — `PainelLateral` (+ `PainelLateralCorpo`, `ListaDeCampos`,
   `LinhaDeCampo`) nos encaixes `lateral`/`lateralCheia` da TelaBase: o registro abre ao lado e empurra a lista; o Drawer
   fica para o registro completo (ADR-056). As cinco partes estão no DS; `/exemplos/proposta-visual` saiu.
+- **Cor que a pessoa escolhe e cor do nome**: os tons moram em `lib/tons.ts` (`TONS`, `Tom`, `tomDe`).
+  Escolher cor é `SeletorDeTom` (as quinze, nunca cor livre); lista de pessoas usa `CelulaLead avatar aoAbrir`
+  (ou `Avatar tom="auto"`); `CelulaTags` mostra "+N" do que não coube. Tela de referência para lista de
+  registros: `app/exemplos/leads` (bloco `leads`) — ADR-058.
 - **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, children; sem segunda linha;
   breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
   o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.
 - **Busca e filtros no Header**: sempre `HeaderBusca` e `HeaderFiltros`. Só botões na fileira
   de ações → busca aberta e filtros com rótulo; com `ViewSwitcher`, `SegmentedControl` ou
-  `DateRangePicker` → `recolhida` / `recolhido` (só o ícone). Por tela, não por largura. Nunca
+  `DateRangePicker`, ou em tela com registro ao lado (`lateral`) → `recolhida` / `recolhido` (só o ícone). Por tela, não por largura. Nunca
   um Button com texto no lugar (ADR-028). `HeaderDivisor` só entre o grupo de visão e a ação
   principal; sem troca-visão, período ou data, sem divisor. O Header não tem traço embaixo.
 - **Componente que muda, muda em toda tela**: a mudança entra na peça (`components/ui`) e a

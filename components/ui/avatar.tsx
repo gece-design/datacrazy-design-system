@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import { tomDe, type Tom } from "@/lib/tons";
 
 /**
  * Avatar — inicial num disco com anel (node 538:200).
@@ -11,6 +12,11 @@ import { cn } from "@/lib/utils";
  *
  * O `md` troca os papéis entre os temas (disco `accent` no Claro, `card` no
  * Escuro). Isso mora nos tokens `--avatar-md-*`, não numa prop de tema.
+ *
+ * `tom` colore o disco sem foto com um dos catorze tons da Tag — pastel no
+ * fundo, a cor escura na letra. `"auto"` tira o tom do nome: a mesma pessoa
+ * tem sempre a mesma cor, e uma lista de nomes deixa de ser uma coluna de
+ * discos iguais (crítica de 2026-09-28: "avatares com iniciais coloridas").
  */
 const avatarVariants = cva(
   "relative inline-flex shrink-0 select-none items-center justify-center overflow-hidden rounded-full text-nav-item-selected-foreground",
@@ -61,11 +67,28 @@ export interface AvatarProps
   src?: string;
   /** Quantas letras sem foto: só a do primeiro nome, ou primeiro + último ("Joel Jota" → "JJ"). */
   iniciais?: Iniciais;
+  /** Cor do disco sem foto: um dos catorze tons, ou `"auto"` (o tom sai do nome). Sem ela, o azul do arquivo. */
+  tom?: Tom | "auto";
 }
 
-export function Avatar({ nome, src, size, iniciais = "uma", className, ...props }: AvatarProps) {
+export function Avatar({ nome, src, size, iniciais = "uma", tom, className, ...props }: AvatarProps) {
+  // com foto não há disco para colorir
+  const cor = src ? undefined : tom === "auto" ? tomDe(nome) : tom;
   return (
-    <span role="img" aria-label={nome} className={cn(avatarVariants({ size }), className)} {...props}>
+    <span
+      role="img"
+      aria-label={nome}
+      // `data-tom` liga os --tom-* daquele tom neste span (globals.css)
+      data-tom={cor}
+      className={cn(
+        avatarVariants({ size }),
+        cor && "bg-tom-brilho text-tom-texto",
+        // o anel do `md` e do `lg` acompanha o tom; o do `sm` é da superfície
+        cor && (size === "md" || size === "lg") && "border-tom-anel",
+        className,
+      )}
+      {...props}
+    >
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={src} alt="" className="size-full rounded-full object-cover" />

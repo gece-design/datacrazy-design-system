@@ -107,9 +107,10 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 ### Busca, filtros e divisor no Header
 - A busca é sempre `HeaderBusca` e os filtros sempre `HeaderFiltros`; nunca um
   Button com texto no lugar. Fileira de ações só com botões: busca aberta
-  (184px) e filtros com rótulo. Com troca-visão, período ou data: busca
-  `recolhida` (só a lupa; clicar abre) e filtros `recolhido` (só o ícone, com
-  tooltip). Por tela, não por largura (ADR-028).
+  (184px) e filtros com rótulo. Com troca-visão, período ou data — ou em tela
+  que abre o registro ao lado (`lateral`), onde a fileira encolhe quando ele
+  abre —: busca `recolhida` (só a lupa; clicar abre) e filtros `recolhido` (só
+  o ícone, com tooltip). Por tela, não por largura (ADR-028).
 - `HeaderDivisor` só entre o grupo de visão (troca-visão, período, data) e a
   ação principal. Fileira só com busca, filtros e a ação não leva divisor.
 - Os filtros em si são a `BarraDeFiltros`, sob o Header: cada filtro ativo é um
@@ -170,12 +171,25 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   o ranking (`CardList`) ao lado. Período no Header (`SegmentedControl` ou
   `DateRangePicker`), valendo para a tela toda; dashboard não tem ação principal.
   `trend` do KpiCard é a direção literal do número, não "bom" ou "ruim".
+- **Lista de registros (contatos, empresas, produtos)**: bloco `@datacrazy/leads`
+  (`app/leads/`). `recuo={false}`; `DataTable` densa encostada nas bordas do
+  painel, com `icone` em toda coluna e `minimo` por coluna. A primeira coluna é
+  `CelulaLead avatar aoAbrir` — o nome com as iniciais na cor que ele sorteia,
+  e o nome é o botão que abre o registro (nunca um `<button>` à mão na célula). Valor de lista edita na célula com
+  `CelulaEscolha` (tags com `multiplo`; origem com `grupo` e `icone` por
+  opção, marca em `IconeDeMarca`); célula sem valor mostra um traço.
+  `HeaderBusca recolhida`, `HeaderFiltros recolhido`, `BotaoAgrupar` e
+  `BotaoColunas` recolhidos no Header (a tela abre o registro ao lado);
+  filtros em `BarraDeFiltros`; ações em
+  massa na `BarraDeSelecao`. Criar tag é `Modal size="sm"` com `Input` e
+  `SeletorDeTom tamanho="md" comNeutro` — as quinze cores, nunca um seletor
+  de cor livre.
 - **Atendimento (chat, inbox, mensagens)**: bloco `@datacrazy/atendimento`
   (`app/atendimento/`). `recuo={false}`: três colunas encostadas nas bordas
   do painel da tela, separadas por traço: lista de conversas (320, abas de situação com
   `Tabs`), mensagens (`role="log"`, recebida à esquerda em `muted`, enviada à
   direita em `button-soft`, nota interna em `warning/10`, evento do sistema em
-  uma linha) e o lead (320, cartões do drawer). Compositor: `Textarea
+  uma linha) e o lead (320, campos em linha: `ListaDeCampos` + `LinhaDeCampo`). Compositor: `Textarea
   rotuloOculto linhas={1}` + `SegmentedControl` Mensagem / Nota interna.
   Abaixo de 1280 o lead abre por cima; abaixo de 768, lista OU conversa.
 - **Fluxo, automação, editor em canvas**: bloco `@datacrazy/automacoes`

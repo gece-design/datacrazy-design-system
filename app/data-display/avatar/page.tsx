@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/ui/avatar";
-import { Tag } from "@/components/ui/tag";
+import { Tag, TONS } from "@/components/ui/tag";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 
 const tamanhos = [
@@ -14,8 +14,8 @@ export default function AvatarPage() {
   return (
     <PaginaDS
       titulo="Avatar"
-      descricao="A inicial num disco com anel, em três tamanhos: 32, 48 e 90px. Com foto, a foto ocupa o disco. A cor da letra é a do item selecionado da navegação."
-      secoes={["Como funciona", "Tamanhos", "Iniciais", "Com foto", "Em contexto", "Quando usar"]}
+      descricao="A inicial num disco com anel, em três tamanhos: 32, 48 e 90px, mais o de 20px para linha de tabela. Com foto, a foto ocupa o disco. Sem foto, o disco é azul — ou tem a cor que o nome sorteia, para uma lista de pessoas não virar uma fila de discos iguais."
+      secoes={["Como funciona", "Tamanhos", "Iniciais", "Cores", "Com foto", "Em contexto", "Quando usar"]}
     >
       <ComoFunciona>
         <p>
@@ -87,6 +87,42 @@ export default function AvatarPage() {
               <span className="font-mono chrome-caption text-subtle-foreground">iniciais=&quot;{iniciais}&quot;</span>
             </div>
           ))}
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Cores"
+        spec="tom · 14 tons"
+        descricao="Numa lista de pessoas sem foto, o disco ganha cor: pastel no fundo e a mesma cor, escura, na letra. Com tom automático a cor sai do nome — a mesma pessoa tem sempre a mesma cor, em qualquer tela."
+        codigo={`<Avatar nome="Ana Beatriz Ferreira" size="xs" iniciais="duas" tom="auto" />
+<Avatar nome="Bruno Henrique Souza" size="sm" iniciais="duas" tom="auto" />
+<Avatar nome="Daniel Martins" size="md" iniciais="duas" tom="verde" />`}
+        nota={
+          <>
+            <Chip>tom=&quot;auto&quot;</Chip> sorteia entre seis tons, os mesmos da <Chip>Tag</Chip>; verde e vermelho
+            ficam de fora, porque numa lista leriam como &quot;deu certo&quot; e &quot;deu errado&quot;. Para fixar
+            uma cor, passe o tom. Na tabela, a <Chip>CelulaLead avatar</Chip> já põe o disco de 20px antes do nome.
+          </>
+        }
+      >
+        <div className="flex flex-col items-center gap-6 py-4">
+          <div className="flex flex-col gap-2">
+            {["Ana Beatriz Ferreira", "Bruno Henrique Souza", "Carolina Almeida", "Daniel Martins", "Eduarda Ribeiro", "Felipe Andrade"].map((nome) => (
+              <div key={nome} className="flex items-center gap-2">
+                <Avatar nome={nome} size="xs" iniciais="duas" tom="auto" aria-hidden="true" />
+                <p className="text-label-lg text-foreground">{nome}</p>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {TONS.map((t) => (
+              <Avatar key={t} nome={t} size="sm" tom={t} />
+            ))}
+          </div>
+          <div className="flex items-center gap-4">
+            <Avatar nome="Joel Jota" size="md" iniciais="duas" tom="roxo" />
+            <Avatar nome="Joel Jota" size="lg" iniciais="duas" tom="roxo" />
+          </div>
         </div>
       </Secao>
 

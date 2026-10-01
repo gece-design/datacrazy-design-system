@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  UsersThree,
   MagnifyingGlass, CaretDown, CaretRight, Lock, X,
   // um por item da navegação — Phosphor, peso regular, a mesma biblioteca do
   // design system (regra A8: um peso só na interface inteira).
@@ -74,6 +75,7 @@ const icones: Record<string, Glifo> = {
   funil: FunnelSimple,
   lateral: SquareSplitHorizontal,
   fluxo: FlowArrow,
+  contatos: UsersThree,
 };
 
 const glifo = (chave?: string): Glifo | null => (chave ? icones[chave] ?? null : null);

@@ -218,7 +218,8 @@ export interface HeaderBuscaProps extends Omit<React.InputHTMLAttributes<HTMLInp
    * 184px com movimento e o foco entra; sem texto, fecha ao sair.
    *
    * A regra (humano, 2026-09-23, ADR-028): a fileira de ações só tem botões →
-   * busca aberta; tem troca-visão, período ou data → `recolhida`. A escolha é
+   * busca aberta; tem troca-visão, período ou data, ou a tela abre o registro
+   * ao lado (a fileira encolhe quando ele abre) → `recolhida`. A escolha é
    * por tela, não por largura: o estado não muda quando a janela encolhe.
    */
   recolhida?: boolean;

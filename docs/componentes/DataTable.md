@@ -157,10 +157,10 @@ tela; os ids são da tela, como na ordenação (ADR-031).
 
 | Célula | Props | O que mostra |
 |--------|-------|--------------|
-| `CelulaLead` | `nome`, `etiquetas?` | Nome + etiquetas em `Tag` (`EtiquetaDaCelula`: texto ou `{ rotulo, tom, status }`); quebram linha quando a coluna estreita |
+| `CelulaLead` | `nome`, `etiquetas?`, `aoAbrir?`, `avatar?` | Nome + etiquetas em `Tag` (`EtiquetaDaCelula`: texto ou `{ rotulo, tom, status }`); quebram linha quando a coluna estreita. Com `aoAbrir`, o nome é o botão que abre o registro — nunca um `<button>` à mão na célula. Com `avatar`, as iniciais vêm antes do nome, num disco de 20px na cor que o nome sorteia |
 | `CelulaEditavel` | `valor`, `aoSalvar`, `rotulo`, `formatar?`, `inputMode?`, `alinharFim?` | Edita no lugar: texto com lápis no hover; clicar vira campo de 32px na célula; Enter e sair salvam, Escape desfaz (cliente, 2026-09-26) |
 | `CelulaEscolha` | `rotulo`, `opcoes`, `selecionados`, `aoAlternar`, `multiplo?`, `rotulos`, `children` | Escolhe no lugar: o valor em repouso (os filhos) é o gatilho e o clique abre a lista com busca do `ComboboxPainel` na própria célula, sem modal. Par da `CelulaEditavel` para valor que vem de lista — tags, etapa, origem (ADR-049) |
-| `CelulaTags` | `etiquetas` | Só as etiquetas, numa linha: a coluna "Tags" da grade densa; a que não cabe some inteira (o title lista todas) |
+| `CelulaTags` | `etiquetas` | Só as etiquetas, numa linha: a coluna "Tags" da grade densa; a que não cabe some inteira e um "+N" no fim diz quantas ficaram de fora (o title lista todas) |
 | `CelulaDupla` | `principal`, `apoio?` | Valor com linha de apoio |
 | `CelulaTexto` | `children`, `enfase?` | Uma linha; `enfase` pinta em `primary` |
 | `CelulaProgresso` | `etapa`, `percentual`, `tom?` | Etapa + barra de 5px; com `tom` (um dos oito, ou `neutro`), bolinha e barra na cor da etapa — a mesma da coluna do quadro |

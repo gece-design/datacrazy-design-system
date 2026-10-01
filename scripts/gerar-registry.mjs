@@ -246,6 +246,9 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    Header de uma linha com busca, filtros em chips (\`BarraDeFiltros\`), Table
    densa com seleção em massa e edição na célula, e o registro aberto num
    \`PainelLateral\` ao lado da lista. É a referência de densidade e composição; não invente layout.
+   Lista de registros (contatos, empresas, produtos)? \`${NAMESPACE}/leads\`
+   (\`app/leads/\`): grade densa com ícone por coluna, edição na célula,
+   filtros em chips, seleção em massa e o registro num \`PainelLateral\`.
    Chat, inbox ou qualquer tela de mensagens? \`${NAMESPACE}/atendimento\`
    (\`app/atendimento/\`): conversas, mensagens e o lead em três colunas
    numa superfície só.
@@ -437,6 +440,18 @@ const BLOCOS = [
       ['foto: "/ds/atendente.png"', "foto: undefined"],
     ],
     docs: `Pipeline: ${URL_DS}/exemplos/pipeline — a tela em app/pipeline; troque os dados de exemplo (dados.ts) pelos do CRM.`,
+  },
+  {
+    name: "leads",
+    title: "Leads",
+    description: "A lista de contatos do CRM, pronta: grade densa com ícone por coluna e iniciais coloridas, tags e origem editadas na célula, filtros em chips, agrupar, seleção em massa, o lead aberto num painel ao lado e o modal de criar tag com as quinze cores. A tela de referência para lista de registros — copie o padrão dela.",
+    arquivos: [
+      { de: "app/exemplos/leads/page.tsx", para: "app/leads/page.tsx" },
+      { de: "app/exemplos/leads/tela.tsx", para: "app/leads/tela.tsx" },
+      { de: "app/exemplos/leads/painel-lead.tsx", para: "app/leads/painel-lead.tsx" },
+      { de: "app/exemplos/leads/dados.ts", para: "app/leads/dados.ts" },
+    ],
+    docs: `Leads: ${URL_DS}/exemplos/leads — a tela em app/leads; troque os dados de exemplo (dados.ts) pelos do CRM.`,
   },
   {
     name: "atendimento",

@@ -1,6 +1,7 @@
 "use client";
 
-import { Tag, TagAdicionar, TONS, type Tom } from "@/components/ui/tag";
+import * as React from "react";
+import { SeletorDeTom, Tag, TagAdicionar, TONS, type Tom } from "@/components/ui/tag";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 import { TagsDoLead } from "@/app/feedback/drawer/drawer-lead";
 import { FileiraDeTags, PRODUTOS, ROTULOS_PRODUTOS, RESPONSAVEIS, ROTULOS_RESPONSAVEIS, ORIGEM, ROTULOS_ORIGEM } from "./cenarios";
@@ -23,12 +24,28 @@ const NOME_DO_TOM: Record<Tom, string> = {
   marrom: "Marrom",
 };
 
+/** O seletor de cor num formulário: a amostra escolhida pinta a prévia ao lado. */
+function DemoSeletorDeTom() {
+  const [tom, setTom] = React.useState<Tom | null>("azul");
+  return (
+    <div className="flex w-full max-w-[420px] flex-col gap-3 rounded-md bg-card p-4">
+      <SeletorDeTom tamanho="md" comNeutro rotulo="Cor da tag" nomes={{ ...NOME_DO_TOM, neutro: "Cinza" }} valor={tom} aoEscolher={setTom} />
+      <div className="flex items-center gap-2 text-caption text-muted-foreground">
+        Como fica:
+        <Tag tom={tom ?? undefined} status={tom ? "info" : undefined}>
+          Cliente VIP
+        </Tag>
+      </div>
+    </div>
+  );
+}
+
 export default function TagPage() {
   return (
     <PaginaDS
       titulo="Tag"
       descricao="A etiqueta que o usuário põe no lead: pílula de 22px em caixa alta, com bolinha de status, ícone de tipo ou foto do atendente. O + no fim da fileira abre o seletor, com uma aba por tipo de tag e busca que também cria."
-      secoes={["Como funciona", "Variantes", "Cores", "No perfil", "Seletor de tags", "Outros cenários", "Quando usar"]}
+      secoes={["Como funciona", "Variantes", "Cores", "Seletor de cor", "No perfil", "Seletor de tags", "Outros cenários", "Quando usar"]}
     >
       <ComoFunciona>
         <p>
@@ -117,6 +134,29 @@ export default function TagPage() {
             ))}
           </div>
         </div>
+      </Secao>
+
+      <Secao
+        titulo="Seletor de cor"
+        spec="15 amostras · 16 ou 24px"
+        descricao="As amostras de quem cria uma tag, uma etapa ou uma lista: as quinze cores, e nenhuma outra. Cada amostra mostra as duas cores que a tag vai ter — o pastel do fundo e a letra, no anel. A marcada ganha contorno e, no tamanho de formulário, o check."
+        codigo={`<SeletorDeTom
+  tamanho="md"
+  comNeutro
+  rotulo="Cor da tag"
+  nomes={nomesDasCores}
+  valor={tom}
+  aoEscolher={setTom}
+/>`}
+        nota={
+          <>
+            Não existe seletor de cor livre nem campo de hexadecimal: quem cria escolhe uma das quinze, e a tag sai
+            legível no claro e no escuro. <Chip>nomes</Chip> dá o nome de cada cor ao leitor de tela e ao tooltip.
+            Dentro do <Chip>SeletorTags</Chip> a mesma peça aparece com 16px.
+          </>
+        }
+      >
+        <DemoSeletorDeTom />
       </Secao>
 
       <Secao

@@ -5,19 +5,19 @@
     "fim": "2026-10-01"
   },
   "git": {
-    "commits": 79,
+    "commits": 82,
     "arquivos": 347,
-    "linhasUi": 11260,
-    "linhasLib": 796,
-    "linhasDocs": 8474
+    "linhasUi": 11370,
+    "linhasLib": 811,
+    "linhasDocs": 8528
   },
   "catalogo": {
-    "itens": 57,
+    "itens": 59,
     "porTipo": {
       "registry:theme": 4,
-      "registry:block": 5,
+      "registry:block": 6,
       "registry:item": 1,
-      "registry:lib": 11,
+      "registry:lib": 12,
       "registry:ui": 36
     }
   },
@@ -29,11 +29,11 @@
       "categoria": "Data Display",
       "pagina": null,
       "pecas": 3,
-      "props": 4,
-      "variantes": 4,
+      "props": 5,
+      "variantes": 5,
       "estados": 0,
       "acessibilidade": 4,
-      "linhas": 80
+      "linhas": 103
     },
     {
       "name": "badge",
@@ -85,7 +85,7 @@
       "variantes": 7,
       "estados": 3,
       "acessibilidade": 5,
-      "linhas": 101
+      "linhas": 102
     },
     {
       "name": "calendario",
@@ -150,7 +150,7 @@
       "variantes": 7,
       "estados": 4,
       "acessibilidade": 12,
-      "linhas": 1691
+      "linhas": 1753
     },
     {
       "name": "date-picker",
@@ -163,7 +163,7 @@
       "variantes": 5,
       "estados": 6,
       "acessibilidade": 6,
-      "linhas": 864
+      "linhas": 866
     },
     {
       "name": "drawer",
@@ -189,7 +189,7 @@
       "variantes": 0,
       "estados": 8,
       "acessibilidade": 6,
-      "linhas": 492
+      "linhas": 498
     },
     {
       "name": "icone-de-marca",
@@ -345,7 +345,7 @@
       "variantes": 3,
       "estados": 4,
       "acessibilidade": 5,
-      "linhas": 153
+      "linhas": 154
     },
     {
       "name": "select",
@@ -406,11 +406,11 @@
       "categoria": "Data Display",
       "pagina": null,
       "pecas": 4,
-      "props": 12,
-      "variantes": 6,
-      "estados": 4,
-      "acessibilidade": 7,
-      "linhas": 451
+      "props": 19,
+      "variantes": 7,
+      "estados": 5,
+      "acessibilidade": 8,
+      "linhas": 465
     },
     {
       "name": "tela-base",
@@ -423,7 +423,7 @@
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 5,
-      "linhas": 223
+      "linhas": 224
     },
     {
       "name": "telefone",
@@ -494,11 +494,11 @@
   "totais": {
     "componentes": 36,
     "pecas": 119,
-    "props": 371,
-    "variantes": 103,
-    "estados": 131,
-    "acessibilidade": 219,
-    "paginas": 43,
+    "props": 379,
+    "variantes": 105,
+    "estados": 132,
+    "acessibilidade": 220,
+    "paginas": 44,
     "docs": 36
   },
   "tokens": {
@@ -747,8 +747,8 @@
     },
     {
       "titulo": "Telas de exemplo",
-      "total": 6,
-      "prontas": 6,
+      "total": 7,
+      "prontas": 7,
       "itens": [
         {
           "titulo": "Tela base",
@@ -763,6 +763,11 @@
         {
           "titulo": "Pipeline",
           "href": "/exemplos/pipeline",
+          "pronto": true
+        },
+        {
+          "titulo": "Leads",
+          "href": "/exemplos/leads",
           "pronto": true
         },
         {
@@ -1063,14 +1068,24 @@
       "id": "ADR-056",
       "titulo": "PainelLateral: o registro abre ao lado da lista",
       "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-057",
+      "titulo": "Controles de 28 no topo e linha de tabela de 32",
+      "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-058",
+      "titulo": "Iniciais coloridas, seletor de cor como peça e a tela de Leads",
+      "data": "2026-10-01"
     }
   ],
   "auditoria": {
-    "total": 210,
+    "total": 211,
     "porStatus": {
       "corrigido": 67,
       "aceito": 12,
-      "adiado": 129,
+      "adiado": 130,
       "aberto": 2
     },
     "porEixo": {
@@ -1080,7 +1095,7 @@
       "paginas": 10,
       "instalacao": 11,
       "docs": 10,
-      "fidelidade": 125
+      "fidelidade": 126
     }
   },
   "pedidos": [
@@ -1138,6 +1153,16 @@
       "data": "2026-10-01",
       "origem": "Lote",
       "titulo": "CELULAR: AS TELAS EM 390px"
+    },
+    {
+      "data": "2026-10-01",
+      "origem": "Revisão",
+      "titulo": "TOPO COM CONTROLES DE 28 E LINHA DE TABELA DE 32"
+    },
+    {
+      "data": "2026-10-01",
+      "origem": "Cliente",
+      "titulo": "TELA DE LEADS, INICIAIS COLORIDAS E SELETOR DE COR"
     },
     {
       "data": "2026-09-29",
@@ -1426,7 +1451,7 @@
       "exemplos",
       "regressao"
     ],
-    "capturas": 86,
+    "capturas": 88,
     "temas": 2
   },
   "bancada": {

@@ -19,6 +19,7 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { Avatar } from "@/components/ui/avatar";
 import { Tag, type TagProps, type Tom } from "@/components/ui/tag";
 import { Tooltip } from "@/components/ui/tooltip";
 import { Button, BotaoFechar } from "@/components/ui/button";
@@ -1345,22 +1346,50 @@ export function BarraDeSelecao({
 
 /* -------------------------------------------------------------- Células -- */
 
-/** Nome com as etiquetas embaixo — a primeira coluna do arquivo. */
-export function CelulaLead({ nome, etiquetas = [] }: { nome: string; etiquetas?: EtiquetaDaCelula[] }) {
+/**
+ * Nome com as etiquetas — a primeira coluna do arquivo. Com `aoAbrir`, o nome
+ * é o botão que abre o registro (linha inteira clicável seria um `tr` fingindo
+ * de botão, sem foco e sem nome). Com `avatar`, as iniciais vêm antes, num
+ * disco de 20px na cor que o nome sorteia — a coluna de nomes deixa de ser
+ * uma fila igual (crítica de 2026-09-28: "avatares com iniciais coloridas").
+ */
+export function CelulaLead({
+  nome,
+  etiquetas = [],
+  aoAbrir,
+  avatar = false,
+}: {
+  nome: string;
+  etiquetas?: EtiquetaDaCelula[];
+  /** O nome vira o botão que abre o registro. Sem ela, é texto. */
+  aoAbrir?: () => void;
+  /** As iniciais antes do nome, na cor que o nome sorteia (`Avatar size="xs" tom="auto"`). */
+  avatar?: boolean;
+}) {
   // no denso, nome e etiquetas numa linha só: o nome manda, as etiquetas
   // entram inteiras enquanto cabem (o title lista todas)
   const densa = React.useContext(Contexto).layout === "densa";
   const rotuloDe = (e: EtiquetaDaCelula) => (typeof e === "string" ? e : e.rotulo);
+  const disco = avatar ? <Avatar nome={nome} size="xs" iniciais="duas" tom="auto" aria-hidden="true" /> : null;
   if (densa) {
+    const classeDoNome = "flex h-[22px] max-w-full shrink-0 items-center gap-2 text-label-lg text-foreground";
     return (
       <div className="flex max-h-[22px] min-w-0 flex-wrap items-center gap-1.5 overflow-hidden" title={etiquetas.length ? `${nome} · ${etiquetas.map(rotuloDe).join(", ")}` : nome}>
         {/* o nome manda (Twenty): trunca só quando nem ele cabe. As etiquetas
             ficam com o que sobra, inteiras ou nada: a que não cabe quebra para
             uma segunda linha que a altura da célula esconde (o title lista todas). */}
         {/* a mesma altura da Tag (22): sem etiqueta na linha, o nome continua no centro da célula */}
-        <p className="flex h-[22px] max-w-full shrink-0 items-center text-label-lg text-foreground">
-          <span className="min-w-0 truncate">{nome}</span>
-        </p>
+        {aoAbrir ? (
+          <button type="button" onClick={aoAbrir} className={cn(classeDoNome, "rounded-sm text-left", foco)}>
+            {disco}
+            <span className="min-w-0 truncate">{nome}</span>
+          </button>
+        ) : (
+          <p className={classeDoNome}>
+            {disco}
+            <span className="min-w-0 truncate">{nome}</span>
+          </p>
+        )}
         {etiquetas.map((e) => {
           const { rotulo, tom, status } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined } : e;
           return (
@@ -1374,9 +1403,17 @@ export function CelulaLead({ nome, etiquetas = [] }: { nome: string; etiquetas?:
   }
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
-      <p className="w-full truncate text-h4 text-foreground" title={nome}>
-        {nome}
-      </p>
+      {aoAbrir ? (
+        <button type="button" onClick={aoAbrir} title={nome} className={cn("flex w-full min-w-0 items-center gap-2 rounded-sm text-left text-h4 text-foreground", foco)}>
+          {disco}
+          <span className="min-w-0 truncate">{nome}</span>
+        </button>
+      ) : (
+        <p className="flex w-full min-w-0 items-center gap-2 text-h4 text-foreground" title={nome}>
+          {disco}
+          <span className="min-w-0 truncate">{nome}</span>
+        </p>
+      )}
       {etiquetas.length > 0 ? (
         /* As etiquetas são a Tag do DS, a mesma do drawer e do cartão (humano,
            2026-09-24: "outro padrão de tags?"). Quebram linha quando a coluna
@@ -1396,21 +1433,44 @@ export function CelulaLead({ nome, etiquetas = [] }: { nome: string; etiquetas?:
   );
 }
 
-/** Só as etiquetas, numa linha: a coluna "Tags" da grade densa. Inteiras ou
- *  nada: a que não cabe quebra para uma segunda linha que a altura esconde;
- *  o title lista todas. */
+/**
+ * Só as etiquetas, numa linha: a coluna "Tags" da grade densa. Inteiras ou
+ * nada: a que não cabe quebra para uma segunda linha que a altura esconde, e
+ * um "+N" no fim diz quantas ficaram de fora — sem ele, a célula com duas
+ * tags e a com uma pareciam iguais. O title lista todas.
+ */
 export function CelulaTags({ etiquetas, className }: { etiquetas: EtiquetaDaCelula[]; className?: string }) {
   const nomes = etiquetas.map((e) => (typeof e === "string" ? e : e.rotulo));
+  const fileira = React.useRef<HTMLDivElement>(null);
+  const [escondidas, setEscondidas] = React.useState(0);
+  const chave = nomes.join("|");
+  // Conta as que caíram para a segunda linha. O "+N" tira largura da fileira,
+  // então a medida roda de novo quando ele entra — e assenta, porque só cresce.
+  useEfeitoDeLayout(() => {
+    const el = fileira.current;
+    if (!el) return;
+    const medir = () => {
+      const topo = el.firstElementChild instanceof HTMLElement ? el.firstElementChild.offsetTop : 0;
+      setEscondidas([...el.children].filter((f) => f instanceof HTMLElement && f.offsetTop > topo).length);
+    };
+    medir();
+    const obs = new ResizeObserver(medir);
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [chave]);
   return (
-    <div className={cn("flex max-h-[22px] min-w-0 flex-wrap items-center gap-1 overflow-hidden", className)} title={nomes.join(", ")}>
-      {etiquetas.map((e) => {
-        const { rotulo, tom, status } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined } : e;
-        return (
-          <Tag key={rotulo} tom={tom} status={status} className="shrink-0">
-            {rotulo}
-          </Tag>
-        );
-      })}
+    <div className={cn("flex min-w-0 items-center gap-1", className)} title={nomes.join(", ")}>
+      <div ref={fileira} className="flex max-h-[22px] min-w-0 flex-wrap items-center gap-1 overflow-hidden">
+        {etiquetas.map((e) => {
+          const { rotulo, tom, status } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined } : e;
+          return (
+            <Tag key={rotulo} tom={tom} status={status} className="shrink-0">
+              {rotulo}
+            </Tag>
+          );
+        })}
+      </div>
+      {escondidas > 0 ? <span className="shrink-0 text-label-sm tabular-nums text-muted-foreground">+{escondidas}</span> : null}
     </div>
   );
 }

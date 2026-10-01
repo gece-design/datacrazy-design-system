@@ -45,8 +45,8 @@ export type RotulosDoCombobox = {
   vazio: string;
 };
 
-/** Busca + lista (max-h-64) + recuos: entra na medida de "cabe embaixo?". */
-const ALTURA_DO_PAINEL = 320;
+/** Busca + lista (max-h-80: dez opções à vista) + recuos: entra na medida de "cabe embaixo?". */
+const ALTURA_DO_PAINEL = 384;
 const LARGURA_DO_PAINEL = 256;
 
 /* Buscar "saude" tem que achar "Saúde": quem digita rápido não põe acento. */
@@ -212,7 +212,7 @@ export function ComboboxPainel({
         role="listbox"
         aria-label={rotulo}
         aria-multiselectable={multiplo || undefined}
-        className={cn("max-h-64 overflow-y-auto overscroll-contain px-1.5 pb-1.5", rolagemDiscreta)}
+        className={cn("max-h-80 overflow-y-auto overscroll-contain px-1.5 pb-1.5", rolagemDiscreta)}
       >
         {agruparOpcoes(filtradas).map((bloco, b) => (
           <GrupoDeOpcoes key={bloco.grupo ?? `sem-grupo-${b}`} grupo={bloco.grupo} primeiro={b === 0}>

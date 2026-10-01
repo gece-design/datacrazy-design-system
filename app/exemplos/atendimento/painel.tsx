@@ -1,21 +1,25 @@
 "use client";
 
-import { Buildings, EnvelopeSimple, MapPin, Phone, User } from "@phosphor-icons/react";
+import { Buildings, CurrencyDollar, EnvelopeSimple, FunnelSimple, Headset, MapPin, Phone, User } from "@phosphor-icons/react";
 
 import { Avatar } from "@/components/ui/avatar";
 import { BotaoFechar } from "@/components/ui/button";
-import { DrawerSecao } from "@/components/ui/drawer";
-import { AcaoCopiar, CampoEditavel } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { CelulaEditavel, CelulaEscolha } from "@/components/ui/data-table";
+import { AcaoCopiar } from "@/components/ui/input";
+import { LinhaDeCampo, ListaDeCampos } from "@/components/ui/painel-lateral";
 import { SeletorTags, Tag } from "@/components/ui/tag";
-import { gradeDeCartoes } from "@/lib/campo";
 import { rolagemDiscreta } from "@/lib/estados";
 import { cn } from "@/lib/utils";
 import { ATENDENTES, ETAPAS, GRUPOS_TAGS, moeda, tagsDe, type Conversa, type EtapaId } from "./dados";
 
-/* A coluna do lead: quem é, em que etapa está, quanto vale — o cartão do lead
-   ao lado da conversa, sem abrir outra tela. Os campos são os cartões do
-   drawer (`CampoEditavel`, `Select cartao`), editáveis no lugar. */
+/* A coluna do lead: quem é, em que etapa está, quanto vale — ao lado da
+   conversa, sem abrir outra tela. Os campos vêm em linha, como no
+   `PainelLateral` (rótulo à esquerda, valor à direita), e editam no lugar:
+   texto com `CelulaEditavel`, valor de lista com `CelulaEscolha`. */
+
+const ROTULOS_DA_LISTA = { busca: "Buscar", vazio: "Nada encontrado" };
+/** A coluna tem 320: o rótulo fica com 96 em vez dos 144 do painel de 480. */
+const linha = "[&>dt]:w-24";
 
 export function PainelDoLead({
   conversa,
@@ -65,67 +69,67 @@ export function PainelDoLead({
           />
         </div>
 
-        <DrawerSecao titulo="Negócio">
-          <div className={gradeDeCartoes}>
-            <Select
-              cartao
-              rotulo="Etapa do funil"
-              opcoes={ETAPAS.map((e) => ({ valor: e.id, rotulo: e.rotulo }))}
-              valor={conversa.etapa}
-              aoEscolher={(v) => aoEditar({ etapa: v as EtapaId })}
-            />
-            <CampoEditavel
-              rotulo="Valor do negócio"
-              valor={moeda(conversa.valor)}
-              aoSalvar={(v) => {
-                const n = Number(v.replace(/[^\d]/g, ""));
-                if (Number.isFinite(n)) aoEditar({ valor: n });
-              }}
-              rotuloEditar="Editar valor do negócio"
-              textoVazio="R$ 0"
-              inputMode="numeric"
-            />
-            <Select
-              cartao
-              rotulo="Atendente"
-              textoVazio="Sem atendente"
-              opcoes={ATENDENTES.map((a) => ({ valor: a, rotulo: a }))}
-              valor={conversa.atendente ?? ""}
-              aoEscolher={(v) => aoEditar({ atendente: v })}
-            />
-          </div>
-        </DrawerSecao>
+        <section aria-labelledby="atendimento-negocio" className="flex flex-col gap-1">
+          <h3 id="atendimento-negocio" className="text-label-md uppercase text-muted-foreground">
+            Negócio
+          </h3>
+          <ListaDeCampos>
+            <LinhaDeCampo icone={FunnelSimple} rotulo="Etapa" className={linha}>
+              <CelulaEscolha
+                rotulo={`Mudar etapa de ${conversa.nome}`}
+                opcoes={ETAPAS.map((e) => ({ valor: e.id, rotulo: e.rotulo }))}
+                selecionados={[conversa.etapa]}
+                aoAlternar={(v) => aoEditar({ etapa: v as EtapaId })}
+                rotulos={ROTULOS_DA_LISTA}
+              >
+                {ETAPAS.find((e) => e.id === conversa.etapa)?.rotulo}
+              </CelulaEscolha>
+            </LinhaDeCampo>
+            <LinhaDeCampo icone={CurrencyDollar} rotulo="Valor" className={linha}>
+              <CelulaEditavel
+                valor={String(conversa.valor)}
+                formatar={(v) => moeda(Number(v) || 0)}
+                inputMode="numeric"
+                rotulo={`Editar valor do negócio de ${conversa.nome}`}
+                aoSalvar={(v) => aoEditar({ valor: Number(v.replace(/\D/g, "")) || 0 })}
+              />
+            </LinhaDeCampo>
+            <LinhaDeCampo icone={Headset} rotulo="Atendente" className={linha}>
+              <CelulaEscolha
+                rotulo={`Mudar atendente de ${conversa.nome}`}
+                opcoes={ATENDENTES.map((a) => ({ valor: a, rotulo: a }))}
+                selecionados={conversa.atendente ? [conversa.atendente] : []}
+                aoAlternar={(v) => aoEditar({ atendente: v })}
+                rotulos={ROTULOS_DA_LISTA}
+              >
+                {conversa.atendente ?? <span className="text-subtle-foreground">Sem atendente</span>}
+              </CelulaEscolha>
+            </LinhaDeCampo>
+          </ListaDeCampos>
+        </section>
 
-        <DrawerSecao titulo="Contato">
-          <div className={gradeDeCartoes}>
-            <CampoEditavel
-              rotulo="Telefone"
-              valor={conversa.telefone}
-              aoSalvar={(v) => aoEditar({ telefone: v })}
-              rotuloEditar="Editar telefone"
-              textoVazio="Adicionar"
-              iconeInicio={Phone}
-              acoes={<AcaoCopiar rotulo="Copiar telefone" rotuloCopiado="Telefone copiado" valor={conversa.telefone} />}
-            />
-            <CampoEditavel
-              rotulo="E-mail"
-              valor={conversa.email}
-              aoSalvar={(v) => aoEditar({ email: v })}
-              rotuloEditar="Editar e-mail"
-              textoVazio="Adicionar"
-              iconeInicio={EnvelopeSimple}
-              acoes={<AcaoCopiar rotulo="Copiar e-mail" rotuloCopiado="E-mail copiado" valor={conversa.email} />}
-            />
-            <CampoEditavel
-              rotulo="Cidade"
-              valor={conversa.cidade}
-              aoSalvar={(v) => aoEditar({ cidade: v })}
-              rotuloEditar="Editar cidade"
-              textoVazio="Adicionar"
-              iconeInicio={MapPin}
-            />
-          </div>
-        </DrawerSecao>
+        <section aria-labelledby="atendimento-contato" className="flex flex-col gap-1">
+          <h3 id="atendimento-contato" className="text-label-md uppercase text-muted-foreground">
+            Contato
+          </h3>
+          <ListaDeCampos>
+            <LinhaDeCampo icone={Phone} rotulo="Telefone" className={linha}>
+              <span className="flex items-center gap-1">
+                <CelulaEditavel valor={conversa.telefone} rotulo={`Editar telefone de ${conversa.nome}`} aoSalvar={(v) => aoEditar({ telefone: v })} />
+                <AcaoCopiar rotulo="Copiar telefone" rotuloCopiado="Telefone copiado" valor={conversa.telefone} />
+              </span>
+            </LinhaDeCampo>
+            <LinhaDeCampo icone={EnvelopeSimple} rotulo="E-mail" className={linha}>
+              <span className="flex items-center gap-1">
+                <CelulaEditavel valor={conversa.email} rotulo={`Editar e-mail de ${conversa.nome}`} aoSalvar={(v) => aoEditar({ email: v })} />
+                <AcaoCopiar rotulo="Copiar e-mail" rotuloCopiado="E-mail copiado" valor={conversa.email} />
+              </span>
+            </LinhaDeCampo>
+            <LinhaDeCampo icone={MapPin} rotulo="Cidade" className={linha}>
+              <CelulaEditavel valor={conversa.cidade} rotulo={`Editar cidade de ${conversa.nome}`} aoSalvar={(v) => aoEditar({ cidade: v })} />
+            </LinhaDeCampo>
+          </ListaDeCampos>
+        </section>
       </div>
     </aside>
   );

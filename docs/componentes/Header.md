@@ -75,7 +75,8 @@ Controles que entram em `acoes` e têm doc própria: [Button](Button.md)
 
 **Quando recolher** (humano, 2026-09-23 e 24): a fileira de ações só tem
 botões → busca aberta e filtros com rótulo. Tem troca-visão, período ou
-seletor de data → `recolhida` e `recolhido`. A escolha é por tela, não por
+seletor de data — ou a tela abre o registro ao lado (`lateral` da `TelaBase`),
+e a fileira encolhe quando ele abre → `recolhida` e `recolhido`. A escolha é por tela, não por
 largura: o estado não muda quando a janela encolhe. Busca e filtros são
 sempre `HeaderBusca` e `HeaderFiltros` — os botões com texto do arquivo
 (601:12) não se usam (AUD-204). O `HeaderDivisor` só entra entre o grupo de

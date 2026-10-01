@@ -431,6 +431,23 @@ const previews: Record<string, React.ReactNode> = {
       </div>
     </div>
   ),
+  "/exemplos/leads": (
+    <div className="flex w-full max-w-full flex-col overflow-hidden rounded-md border border-border bg-card">
+      {[
+        ["Ana Beatriz Ferreira", "vermelho", "Carrinho"],
+        ["Bruno Henrique Souza", "verde", "Recorrente"],
+        ["Daniel Martins", "amarelo", "VIP"],
+      ].map(([nome, tom, tag]) => (
+        <div key={nome} className="flex items-center gap-2 border-b border-border px-2 py-1 last:border-b-0">
+          <Avatar nome={nome} size="xs" iniciais="duas" tom="auto" aria-hidden="true" />
+          <p className="min-w-0 flex-1 truncate text-label-md text-foreground">{nome}</p>
+          <Tag tom={tom as "vermelho" | "verde" | "amarelo"} status="info">
+            {tag}
+          </Tag>
+        </div>
+      ))}
+    </div>
+  ),
   "/exemplos/automacoes": (
     <div className="flex w-full max-w-full items-center justify-center gap-2">
       {["Início", "Mensagem", "Condição"].map((bloco, i) => (
@@ -526,6 +543,7 @@ const descricoes: Record<string, string> = {
   "Drawer variações": "Tons, menu, linha do tempo, hierarquia, camada e as três propostas.",
   "Dashboard": "Indicadores, receita por dia e os negócios parados, numa tela.",
   "Pipeline": "O funil do CRM: arraste um lead e abra o registro.",
+  "Leads": "A lista de contatos: edite tags e origem na célula e crie uma tag.",
   "Automações": "O fluxo em blocos ligados; clique num bloco e edite ao lado.",
   "Painel lateral": "O registro ao lado da lista: 480px, campos em linha.",
   "Atendimento": "WhatsApp, Instagram e site numa tela: responda, anote e edite o lead.",

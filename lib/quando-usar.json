@@ -17,9 +17,11 @@
     {
       "componente": "Avatar",
       "usar": [
-        "para identificar pessoa ou empresa pela inicial ou pela foto: perfil do lead, lista de conversas, usuário logado."
+        "para identificar pessoa ou empresa pela inicial ou pela foto: perfil do lead, lista de conversas, usuário logado.",
+        "`tom=\"auto\"` em lista de pessoas ou empresas sem foto (a primeira coluna da tabela, com `size=\"xs\"` e `iniciais=\"duas\"`): cada nome ganha sempre a mesma cor e a coluna deixa de ser uma fila de discos iguais."
       ],
       "naoUsar": [
+        "`tom` para dizer situação (verde = ok, vermelho = erro): a cor do avatar só distingue, não significa.",
         "para o atendente numa linha de tabela ou num cartão: ali é `Tag foto` (22px, já com o nome).",
         "como botão nem como indicador de status: o status é `Tag status`."
       ]
@@ -84,7 +86,8 @@
       "componente": "Tag",
       "usar": [
         "para etiqueta do lead, status com bolinha (`status`), tipo do registro (`tipo`) e atendente (`foto`).",
-        "neutra por padrão; `tom` só quando o produto define a cor daquele dado (etapa do funil, perfil)."
+        "neutra por padrão; `tom` só quando o produto define a cor daquele dado (etapa do funil, perfil).",
+        "`SeletorDeTom` quando a pessoa escolhe a cor de algo que ela cria (tag, etapa, lista): as quinze cores do DS, em amostras. Nunca um seletor de cor livre nem campo de hexadecimal."
       ],
       "naoUsar": [
         "para selo de situação do sistema (beta, novo): é `Badge`.",

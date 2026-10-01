@@ -7,6 +7,8 @@ Identificar pessoa ou empresa pela inicial, ou pela foto.
 ## Quando usar
 
 - **Use** para identificar pessoa ou empresa pela inicial ou pela foto: perfil do lead, lista de conversas, usuário logado.
+- **Use** `tom="auto"` em lista de pessoas ou empresas sem foto (a primeira coluna da tabela, com `size="xs"` e `iniciais="duas"`): cada nome ganha sempre a mesma cor e a coluna deixa de ser uma fila de discos iguais.
+- **Não use** `tom` para dizer situação (verde = ok, vermelho = erro): a cor do avatar só distingue, não significa.
 - **Não use** para o atendente numa linha de tabela ou num cartão: ali é `Tag foto` (22px, já com o nome).
 - **Não use** como botão nem como indicador de status: o status é `Tag status`.
 
@@ -29,13 +31,15 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 | `nome` | `string` | — | sim | Dá a inicial (primeira letra) e o `aria-label`. |
 | `src` | `string` | — | não | Foto. Sem ela, a inicial. |
 | `iniciais` | `"uma" \| "duas"` | `"uma"` | não | Sem foto: só a letra do primeiro nome, ou primeiro + último ("Joel Jota" → "JJ"). |
-| `size` | `"xs" \| "sm" \| "md" \| "lg"` | `"sm"` | não | 32, 48 ou 90px. |
+| `size` | `"xs" \| "sm" \| "md" \| "lg"` | `"sm"` | não | 20 (sem anel: trilha e linha de tabela), 32, 48 ou 90px. |
+| `tom` | `Tom \| "auto"` | — | não | Cor do disco sem foto: um dos catorze tons (`TONS`, os da Tag) ou `"auto"`, que tira o tom do nome (`tomDe`) — a mesma pessoa, sempre a mesma cor. Pastel no fundo, a cor escura na letra; no `md` e no `lg` o anel acompanha. Sem ela, o azul do arquivo. Com foto, não tem efeito. |
 
 ## Variantes
 
 | Tamanho | Quando usar |
 |---------|-------------|
-| `sm` | Lista, linha de tabela. Anel 4px. |
+| `xs` | Linha de tabela densa e nível da trilha. 20px, sem anel. |
+| `sm` | Lista, cabeçalho do painel lateral. Anel 4px. |
 | `md` | Empresa com nome ao lado, nó da hierarquia. Anel 6px. |
 | `lg` | Só o topo do perfil no drawer. Anel 10px. |
 
@@ -53,11 +57,12 @@ Avatar é leitura. Se clicar abre algo, o clique vai no elemento em volta.
 ## Tokens consumidos
 
 `card` · `accent` · `--avatar-md-fundo` · `--avatar-md-anel` ·
-`nav/item/text-selected` · `radius/full` · `text/label-md` · `text/heading-3`
+`nav/item/text-selected` · `radius/full` · `text/label-md` · `text/heading-3` ·
+com `tom`: `tom/brilho` · `tom/texto` · `tom/anel`
 
 ## Composição
 
-Usa: nenhum componente do DS · Exporta também `inicialDe(nome)`, a inicial que o disco mostra ·
+Usa: nenhum componente do DS; os tons vêm de `lib/tons.ts` (`tomDe`, `Tom`) · Exporta também `inicialDe(nome)`, a inicial que o disco mostra ·
 Usado por: [Drawer](Drawer.md) (perfil, empresa mãe, nó da hierarquia) e [Breadcrumb](Breadcrumb.md) (`size="xs"` no nível com avatar)
 
 ## Exemplo de uso
@@ -65,6 +70,7 @@ Usado por: [Drawer](Drawer.md) (perfil, empresa mãe, nó da hierarquia) e [Brea
 ```tsx
 <Avatar nome="Rafael Pinto Pinheiro" size="lg" />
 <Avatar nome="Joel Jota" size="md" iniciais="duas" />
+<Avatar nome="Ana Beatriz Ferreira" size="xs" iniciais="duas" tom="auto" />
 
 <div className="flex items-center gap-2">
   <Avatar nome="Jojota Podcast LTDA." size="md" aria-hidden="true" />

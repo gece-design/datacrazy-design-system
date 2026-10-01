@@ -11,6 +11,7 @@ Mostrar uma etiqueta que o usuário pôs no lead.
 - **Não use** para selo de situação do sistema (beta, novo): é `Badge`.
 - **Não use** `tom` sorteado para colorir a lista: cor só quando carrega significado.
 - **Não use** como botão: adicionar é `TagAdicionar` ou `SeletorTags`.
+- **Use** `SeletorDeTom` quando a pessoa escolhe a cor de algo que ela cria (tag, etapa, lista): as quinze cores do DS, em amostras. Nunca um seletor de cor livre nem campo de hexadecimal.
 
 ## Família
 
@@ -57,6 +58,20 @@ o rótulo inteiro importar.
 | `rotulos` | `{ gatilho, busca, vazio, criar, cor }` | sim | Textos (i18n), **os cinco obrigatórios**. `criar(texto, grupo)` devolve a frase da opção; `cor` é o rótulo da fileira de cores. |
 | `className` | `string` | não | — |
 
+### `SeletorDeTom`
+
+| Prop | Tipo | Padrão | Obrigatória | Descrição |
+|------|------|--------|-------------|-----------|
+| `valor` | `Tom \| null` | — | sim | O tom marcado. `null` é "sem cor": a tag cinza. |
+| `aoEscolher` | `(tom: Tom \| null) => void` | — | sim | Clique numa amostra. |
+| `rotulo` | `string` | — | sim | Nome do grupo para leitor de tela. Ex.: "Cor da tag". |
+| `nomes` | `Partial<Record<Tom \| "neutro", string>>` | — | não | Nome de cada cor, para leitor de tela e tooltip (i18n). Sem ele, a chave do tom. |
+| `comNeutro` | `boolean` | `false` | não | Abre a fileira com a amostra cinza: são as quinze cores. |
+| `tamanho` | `"sm" \| "md"` | `"sm"` | não | 16px na fileira do seletor de tags; 24px, com o check na marcada, em formulário. |
+| `className` | `string` | — | não | — |
+
+Os tons (`TONS`, `Tom`, `tomDe`) moram em `lib/tons.ts` e a Tag os re-exporta.
+
 ## Variantes
 
 | Arquivo | Código |
@@ -66,6 +81,7 @@ o rótulo inteiro importar.
 | Pessoa · Empresa | `tipo="pessoa"` · `"empresa"` |
 | Atendente | `foto` |
 | Adicionar | `<TagAdicionar>` |
+| — (sem par) | `<SeletorDeTom>`: as amostras de cor, de 16 ou 24px |
 
 ## Estados
 
@@ -76,6 +92,7 @@ o rótulo inteiro importar.
 | focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
 | selecionada | `bg-overlay-item-selected + Check overlay-item-text-selected` | figma | Select Item 544:99 |
 | aberto | `painel em portal fixo + foco na busca + Escape so no painel` | humano | L11 |
+| cor marcada | `amostra do SeletorDeTom: scale-110 + outline 2px foreground; no tamanho md, Check de 12 na cor da letra` | humano | fileira de cores do SeletorTags (2026-09-18) |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -94,7 +111,7 @@ A `Tag` é leitura. Só o `TagAdicionar` é interativo.
 ## Composição
 
 Usa: `caixaDeCampo` do [Input](Input.md) na busca, [Tabs](Tabs.md) nas abas do seletor, `PainelFlutuante` do [Popover](Popover.md) em modo `fixo` (portal) e `useCliqueFora` (lib); ícones Phosphor (`User`, `Buildings`, `Plus`, `Check`, `MagnifyingGlass`) ·
-Usado por: [Drawer](Drawer.md) (perfil, tabela de negócios, nó da hierarquia)
+Usado por: [Drawer](Drawer.md) (perfil, tabela de negócios, nó da hierarquia); o `SeletorDeTom`, pelo `SeletorTags` e pelo modal de criar tag da tela de Leads
 
 ## Exemplo de uso
 
@@ -120,6 +137,7 @@ filtra) e origem do lead (canal com logo e cor fixa; campanha com cor livre).
 | Cor | A bolinha é `aria-hidden`: o sentido está no texto, não na cor |
 | Caixa alta | `uppercase` no CSS — o leitor de tela lê a string original |
 | Adicionar | `<button>` com `aria-label` e `title` (regra E7) |
+| Seletor de cor | `role="radiogroup"` com o `rotulo`; cada amostra é `role="radio"` com o nome da cor (`nomes`) e `aria-checked`; a marcada tem contorno e, no `md`, o check — não depende só da cor |
 | Seletor | Painel `role="dialog"`; abas do `Tabs`; busca `role="combobox"` com `aria-activedescendant` numa `listbox` multisseleção |
 | Teclado | Setas andam na lista, Enter põe/tira ou cria, Escape fecha só o painel e devolve o foco ao + |
 | Alvo de toque | `TagAdicionar` tem 22px — **abaixo dos 44 da regra I15** |

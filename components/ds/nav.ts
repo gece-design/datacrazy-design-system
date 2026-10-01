@@ -105,6 +105,7 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Tela base", href: "/exemplos/tela-base", icone: "tela", pronto: true, descricao: "A casca de toda tela nova: Sidebar, Header, subcabeçalho e breakpoints" },
       { titulo: "Dashboard", href: "/exemplos/dashboard", icone: "progresso", pronto: true, descricao: "Indicadores, gráfico e o que precisa de atenção" },
       { titulo: "Pipeline", href: "/exemplos/pipeline", icone: "kanban", pronto: true, descricao: "Funil em kanban, com arrastar e soltar" },
+      { titulo: "Leads", href: "/exemplos/leads", icone: "contatos", pronto: true, descricao: "A lista de contatos: grade densa, edição na célula e criar tag" },
       { titulo: "Atendimento", href: "/exemplos/atendimento", icone: "conversa", pronto: true, descricao: "Conversas, mensagens e o lead na mesma tela" },
       { titulo: "Automações", href: "/exemplos/automacoes", icone: "fluxo", pronto: true, descricao: "O fluxo em blocos, com o bloco aberto ao lado" },
       // Decisão do humano em 2026-09-19: a proposta de cor das tags fica pública.
