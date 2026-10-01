@@ -216,6 +216,22 @@ nas divs; o nosso parece gigante". Os números que fecham isso:
   que a pessoa já sabe (regra A6).
 - Escala de espaço: 4 · 8 · 12 · 16 · 24 · 32. Fora dela é invenção.
 
+### Telas: no celular
+O produto é responsivo, não desktop-first. Toda tela é conferida em 390px.
+- A casca é da `TelaBase`: abaixo de 1024 a navegação vira um menu por cima, o
+  painel da tela ocupa a janela sem margem, o Header centra o título e desce
+  as ações para a linha de baixo. A tela não escreve breakpoint para isso.
+- A página nunca rola de lado. Grade cai para uma coluna (`grid-cols-1
+  sm:grid-cols-2 xl:grid-cols-4`), nada tem largura fixa, e o que é largo por
+  natureza rola DENTRO de si: a `DataTable` (o `minimo` de cada coluna é o
+  piso), o quadro, o canvas.
+- Mestre-detalhe vira um OU outro: o `PainelLateral` já ocupa a tela abaixo de
+  1024; lista e conversa alternam, com um botão de voltar. Com o detalhe
+  aberto, busca, filtros e a ação principal do Header saem — a tela é o detalhe.
+- Controle tem 32px de altura; ícone clicável nunca fica solto com menos de 24.
+- Rótulo que não cabe some inteiro ou trunca com `title` — nunca vira "0…". O
+  `CardChart` já mostra só os rótulos que cabem.
+
 ### Telas: anti-padrões (o que faz "parecer o DataCrazy antigo")
 - `grid-cols-N` fixo em conteúdo que muda de largura → `gradeDeCartoes` ou
   `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`.

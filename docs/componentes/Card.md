@@ -80,7 +80,7 @@ A casca `Card` tem traço de 1px em `border` (ADR-045): toda superfície do dash
 |----------|-------------|
 | `CardList` | Comparar pessoas ou categorias por mais de um número. |
 | `CardDonut` | Distribuição percentual entre **poucas** categorias. Cor chapada em `primary`; as fatias se distinguem pela opacidade (100 · 60 · 35 · 20%). |
-| `CardChart` | Série por período. Barras chapadas em `primary` (o gradiente do arquivo saiu, ADR-044), valor no balão ao passar o cursor, eixo opcional. |
+| `CardChart` | Série por período. Barras chapadas em `primary` (o gradiente do arquivo saiu, ADR-044), valor no balão ao passar o cursor, eixo opcional. Quando os rótulos de baixo não cabem (coluna de celular), aparece um a cada N, inteiro — nunca cortado. |
 
 ## Estados
 

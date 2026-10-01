@@ -5,11 +5,11 @@
     "fim": "2026-10-01"
   },
   "git": {
-    "commits": 77,
-    "arquivos": 342,
-    "linhasUi": 11244,
+    "commits": 78,
+    "arquivos": 347,
+    "linhasUi": 11260,
     "linhasLib": 796,
-    "linhasDocs": 8457
+    "linhasDocs": 8474
   },
   "catalogo": {
     "itens": 57,
@@ -111,7 +111,7 @@
       "variantes": 4,
       "estados": 2,
       "acessibilidade": 5,
-      "linhas": 314
+      "linhas": 330
     },
     {
       "name": "checkbox",
@@ -1143,6 +1143,12 @@
       "origem": "Lote",
       "titulo": "TELA DE AUTOMAÇÕES (A SEGUNDA DAS QUE MAIS DOEM)",
       "resumo": "/exemplos/automacoes, publicada como bloco @datacrazy/automacoes. Os blocos da tela atual do CRM, lidos do FigJam (Início/gatilho, Mensagem, Espera, Condição, Ação, Randomizador; saídas \"respondeu / n"
+    },
+    {
+      "data": "2026-10-01",
+      "origem": "Lote",
+      "titulo": "CELULAR: AS TELAS EM 390px",
+      "resumo": "A última das \"telas que mais doem\" era o app no celular — o requisito do FigJam é \"responsivo, não desktop-first\". As cinco telas de exemplo (tela base, pipeline nas três visões, atendimento, dashboar"
     },
     {
       "data": "2026-09-29",

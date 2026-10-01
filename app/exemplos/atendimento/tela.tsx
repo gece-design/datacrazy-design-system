@@ -246,15 +246,16 @@ export function Tela() {
           />
         ),
         // Fileira só com busca, filtros e a ação: busca aberta, filtros com rótulo, sem divisor (regra do Header).
+        // No celular, com a conversa aberta, busca, filtros e a ação saem: a tela é a conversa.
         acoes: (
-          <>
+          <div className={naConversa ? "hidden md:contents" : "contents"}>
             <HeaderBusca rotulo="Pesquisar conversas" placeholder="Pesquisar" value={busca} onChange={(e) => setBusca(e.target.value)} />
             <HeaderFiltros rotulo="Filtros" contagem={quantosFiltros} rotuloComContagem={(n) => `Filtros: ${n} ativos`} aria-expanded={filtros} onClick={() => setFiltros((v) => !v)} />
             <Button onClick={() => toast({ variant: "info", titulo: "Nova conversa", descricao: "No CRM: escolhe o contato e a conexão de saída." })}>
               <Plus size={16} weight="regular" />
               Nova conversa
             </Button>
-          </>
+          </div>
         ),
       }}
     >

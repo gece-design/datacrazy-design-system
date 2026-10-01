@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -246,6 +248,8 @@ export type BarraDoGrafico = { rotulo: string; valor: number };
 const ALTURA_PLOT = 224;
 const ALTURA_MAXIMA = 218;
 const ALTURA_ZERO = 3;
+/** Espaço que um rótulo do eixo de baixo precisa para aparecer inteiro ("28/09", "Sem 38"). */
+const LARGURA_DO_ROTULO = 48;
 
 /**
  * Barras verticais por período, em cor chapada: o gradiente primary → accent do
@@ -265,6 +269,20 @@ export function CardChart({
   formatar?: (valor: number) => string;
 }) {
   const maximo = Math.max(...barras.map((b) => b.valor), 0);
+  /* Rótulo cortado em "0…" não diz nada (E1). Quando não cabem todos — o
+     card numa coluna de celular —, aparece um a cada `passo`, inteiro; os
+     outros somem, e a barra continua dizendo o dela no balão. */
+  const fileira = React.useRef<HTMLDivElement>(null);
+  const [passo, setPasso] = React.useState(1);
+  React.useEffect(() => {
+    const el = fileira.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const medir = () => setPasso(Math.max(1, Math.ceil((barras.length * LARGURA_DO_ROTULO) / (el.clientWidth || 1))));
+    medir();
+    const observador = new ResizeObserver(medir);
+    observador.observe(el);
+    return () => observador.disconnect();
+  }, [barras.length]);
   return (
     <div className="flex w-full min-w-0 flex-col gap-5">
       <div className="flex w-full min-w-0 items-end gap-3">
@@ -297,13 +315,11 @@ export function CardChart({
       </div>
       <div className="flex w-full min-w-0 items-start gap-3" aria-hidden="true">
         {eixoY ? <span className="w-[66px] shrink-0" /> : null}
-        <div className="flex min-w-0 flex-1 gap-[14px]">
-          {barras.map((b) => (
-            <p
-              key={b.rotulo}
-              className="min-w-0 flex-1 truncate text-center text-body-sm tabular-nums text-muted-foreground"
-            >
-              {b.rotulo}
+        <div ref={fileira} className="flex min-w-0 flex-1 gap-[14px]">
+          {barras.map((b, i) => (
+            // a caixa do rótulo é a largura da barra; o texto, inteiro, pode passar dela para os dois lados
+            <p key={b.rotulo} className="flex min-w-0 flex-1 justify-center text-body-sm tabular-nums text-muted-foreground">
+              {i % passo === 0 ? <span className="whitespace-nowrap">{b.rotulo}</span> : null}
             </p>
           ))}
         </div>
