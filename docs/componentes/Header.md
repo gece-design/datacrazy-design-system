@@ -2,14 +2,16 @@
 
 ## Responsabilidade
 
-O topo de uma página do CRM: onde a pessoa está, que página é e o que dá para
-fazer nela.
+O topo de uma página do CRM, numa linha só: onde a pessoa está, que página é e
+o que dá para fazer nela.
 
 ## Quando usar
 
 - **Use** uma vez por tela, pela prop `cabecalho` da `TelaBase`. Busca é `HeaderBusca`, filtros `HeaderFiltros`, sino `Notificacoes`.
 - **Use** `HeaderFiltros` para mostrar e esconder a `BarraDeFiltros`, com a conta dos filtros ativos.
+- **Use** a trilha com `Breadcrumb ancestrais`: ela traz os níveis acima, e o `titulo` é a página — o último nível.
 - **Não use** montado à mão, nem um segundo título dentro do conteúdo.
+- **Não use** o nome da página como último item da trilha: ele apareceria duas vezes, na trilha e no título.
 - **Não use** `subtitulo` decorativo: só quando a frase diz o que o título não diz.
 - **Não use** Button com texto no lugar da busca ou dos filtros.
 
@@ -20,7 +22,7 @@ fazer nela.
 
 ## Par no Figma
 
-Node: `601:464` (set "Header", 6 variantes) · Lote: `3` · 102px sem subtítulo, sem traço embaixo (o arquivo: 111, com traço e vão de 14 — ADR-029) ·
+Node: `601:464` (set "Header", 6 variantes) · Lote: `3` · **uma linha**, 64px (56 na `TelaBase`), sem traço embaixo. O arquivo desenha duas linhas, 111px, com traço; o código já tinha fechado em 102 (ADR-029) e passou a uma linha em 2026-10-01, a pedido do cliente (ADR-053) ·
 Última verificação: ver [processo/kfe-state.md](../processo/kfe-state.md), entrada de 2026-09-15.
 
 **O set está com erro no arquivo.** As seis variantes se chamam
@@ -36,17 +38,18 @@ que o produto ainda vai ter — são composição dos encaixes.
 
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
-| `titulo` | `string` | — | sim | `h1`, trunca com `title`. |
-| `subtitulo` | `string` | — | não | `body-sm` a 2px do título. **Fora por padrão** (2026-09-18): título e descrição decorativos em toda tela são anti-referência. Com ele, a linha cresce (50) e as ações continuam no topo. |
-| `trilha` | `ReactNode` | — | não | Em cima, à esquerda. Normalmente `Breadcrumb`. |
-| `utilitarios` | `ReactNode` | — | não | Em cima, à direita. Normalmente `HeaderNotificacoes`. |
-| `acoes` | `ReactNode` | — | não | Embaixo, à direita, 6px abaixo da linha da trilha, alinhadas pelo topo com o título (ADR-029). |
+| `titulo` | `string` | — | sim | `h1` em `h4` (13px), logo depois da trilha: é o último nível dela. Trunca com `title`. |
+| `subtitulo` | `string` | — | não | `body-sm`, depois do título, na mesma linha; só aparece com 960px ou mais de largura. **Fora por padrão** (2026-09-18): título e descrição decorativos em toda tela são anti-referência. |
+| `inicio` | `ReactNode` | — | não | Antes da trilha. É onde a `TelaBase` põe o botão de menu (< 1024px). |
+| `trilha` | `ReactNode` | — | não | À esquerda, antes do título: os níveis acima da página. Normalmente `Breadcrumb ancestrais`. Abaixo de 640px de largura do Header, sai. |
+| `utilitarios` | `ReactNode` | — | não | Na ponta direita, depois das ações. Normalmente `Notificacoes`. |
+| `acoes` | `ReactNode` | — | não | À direita, na mesma linha do título, com 32px e vão de 8. Quando não cabem, descem para uma linha própria (ADR-053). |
 
 Peças do mesmo arquivo:
 
 | Peça | Props | O que é |
 |------|-------|---------|
-| `HeaderDivisor` | `className?` | Traço 1×20 em `divider` (601:55), `role="separator"` |
+| `HeaderDivisor` | `className?` | Traço 1×20 em `divider` (601:55), `role="separator"`. Some abaixo de 640px, quando as ações quebram em linhas centradas |
 | `HeaderNotificacoes` | `rotulo`, `contagem?` + props de botão | Button `tertiary` `icon` com sino e selo; acima de 99, "99+" |
 | `HeaderBusca` | `rotulo`, `recolhida?` + props de input | A busca do Header: aberta (184px, variante Search 610:14049) ou só a lupa (32px) — regra abaixo |
 | `HeaderFiltros` | `rotulo`, `contagem?`, `rotuloComContagem?`, `recolhido?` + props de botão | O botão de filtros: com rótulo ou só o ícone (mesma regra da busca); com filtro ativo vira `soft` e mostra a conta |
@@ -136,9 +139,8 @@ Usa: Button · Tooltip · (por encaixe) Breadcrumb, SegmentedControl, ViewSwitch
 
 ```tsx
 <Header
-  titulo="Dashboard"
-  subtitulo="Acompanhe os principais indicadores do time"
-  trilha={<Breadcrumb rotulo="Trilha de navegação" rotuloRecolhidos={(n) => `Mostrar ${n} níveis ocultos`} itens={trilha} link={Link} />}
+  titulo="Comercial"
+  trilha={<Breadcrumb ancestrais rotulo="Trilha de navegação" rotuloRecolhidos={(n) => `Mostrar ${n} níveis ocultos`} itens={[{ rotulo: "Início", href: "/" }, { rotulo: "Pipelines", href: "/pipelines" }]} link={Link} />}
   utilitarios={<HeaderNotificacoes rotulo={t("notificacoes", { n })} contagem={n} />}
   acoes={
     <>
@@ -157,10 +159,10 @@ Usa: Button · Tooltip · (por encaixe) Breadcrumb, SegmentedControl, ViewSwitch
 | Item | Como está resolvido |
 |------|---------------------|
 | Papel | `<header>` com `h1`; trilha é `nav` com `aria-label`; divisor é `separator` vertical |
-| Teclado | Ordem natural: trilha, sino, ações. Controles segmentados entram por uma opção só e andam por setas |
+| Teclado | Ordem natural: menu, trilha, ações, sino. Controles segmentados entram por uma opção só e andam por setas |
 | Nome acessível | Sino, filtros recolhidos e opções do View Switcher só têm ícone: `aria-label` obrigatório e tooltip com o mesmo texto; selo e pílula `aria-hidden` (a contagem vai no rótulo) |
 | Foco visível | Outline com folga (D6) em todos os controles |
-| Texto longo | Trunca com `title`; ações quebram linha em vez de vazar |
+| Texto longo | O título trunca com `title` e nunca fica com menos de 160px: antes disso as ações descem de linha, em vez de vazar |
 | Zoom | Nenhuma largura fixa além da busca (184, com `max-w-full`) |
 
 ## Divergências abertas (para o gate)

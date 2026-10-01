@@ -158,9 +158,10 @@ export function Tela() {
         titulo: "Visão geral",
         trilha: (
           <Breadcrumb
+            ancestrais
             rotulo="Trilha de navegação"
             rotuloRecolhidos={(n) => `Mostrar ${n} níveis ocultos`}
-            itens={[{ rotulo: "Início" }, { rotulo: "Visão geral" }]}
+            itens={[{ rotulo: "Início" }]}
           />
         ),
         utilitarios: (

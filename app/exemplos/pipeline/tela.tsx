@@ -424,12 +424,14 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
         </>
       }
       cabecalho={{
-        titulo: "Pipeline comercial",
+        // Header de uma linha: a trilha traz os ancestrais e o título é a própria página.
+        titulo: "Comercial",
         trilha: (
             <Breadcrumb
+              ancestrais
               rotulo="Trilha"
               rotuloRecolhidos={(n) => `Mostrar mais ${n} níveis`}
-              itens={[{ rotulo: "Início" }, { rotulo: "Pipelines" }, { rotulo: "Comercial" }]}
+              itens={[{ rotulo: "Início" }, { rotulo: "Pipelines", icone: Kanban }]}
             />
         ),
           // A ordem é a do arquivo (601:464): busca, filtros, visualização,

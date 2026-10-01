@@ -199,6 +199,10 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   a barra) — nunca Modal com Checkbox empilhado. Célula que escolhe no lugar: `CelulaEscolha`. Marca: `IconeDeMarca`
   (conjunto fechado de logos de verdade, SVG embutido com id de gradiente por instância; as cores são do logo, não tokens;
   único arquivo com exceção de hex no check; `mono` = glifo Phosphor). ADR-048/049/050.
+- **Casca nova, por partes** (proposta visual, humano 2026-10-01): parte 1 — `SidebarToggle` quadrado na linha da
+  marca (`SidebarBrand`), recolhida o símbolo é o botão (ADR-052); parte 2 — `Header` de uma linha, 56px na TelaBase,
+  `Breadcrumb ancestrais` + título como último nível, `inicio` para o botão de menu (ADR-053). Faltam: navegação plana
+  de 220 com Favoritos, superfície única, registro em painel lateral. Uma parte por commit.
 - **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, children; sem segunda linha;
   breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
   o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.

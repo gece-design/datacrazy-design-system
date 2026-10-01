@@ -28,8 +28,8 @@ import { rolagemDiscreta } from "@/lib/estados";
  *                cima, com o Scrim do Modal e a camada (foco preso, Escape)
  * Os recuos do conteúdo e do Header: 16 — o arquivo desenha 32 no Header;
  * foi 24 e "ainda tinha muito espaço" (humano, 2026-09-23, ADR-028). O Header
- * tem 8 embaixo: zero era para o subcabeçalho, que saiu; sem ele, "tá muito
- * colado com o conteúdo" (humano, 2026-09-24). À esquerda, com a sidebar no lugar (lg+), o recuo é 4: a
+ * é de uma linha (ADR-053) e tem 8 embaixo: fecha em 56px, com os controles
+ * alinhados ao topo do painel da Sidebar. À esquerda, com a sidebar no lugar (lg+), o recuo é 4: a
  * Sidebar já traz 16 de moldura na cor do fundo, e 16 + 16 "dava a impressão
  * de mais espaço do que deveria" (humano, 2026-09-24).
  *
@@ -162,14 +162,7 @@ export function TelaBase({
         <Header
           {...cabecalho}
           className={cn("shrink-0 pl-4 pr-4 pb-2 lg:pl-1", cabecalho.className)}
-          trilha={
-            // w-full: o botão de menu fica na ponta esquerda mesmo quando a trilha
-            // centra no estreito (humano, 2026-09-24)
-            <div className="flex w-full min-w-0 items-center gap-2">
-              {botaoMenu}
-              {cabecalho.trilha ? <div className="flex min-w-0 flex-1 justify-center [@container_(min-width:640px)]:justify-start">{cabecalho.trilha}</div> : null}
-            </div>
-          }
+          inicio={botaoMenu}
         />
         <main
           aria-label={r.conteudo}

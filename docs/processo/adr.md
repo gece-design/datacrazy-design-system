@@ -275,3 +275,8 @@ Desvio: o arquivo desenha o botão de recolher como um disco de 32px com sombra,
 Motivo: crítica de design de 2026-09-28, ponto 1 ("o botão de toggle fica visualmente flutuando e é o único botão 100% redondo… padrão que deveríamos evitar repetir do design antigo"). É a primeira parte da proposta visual, que o humano mandou aplicar por partes (2026-10-01).
 Aprovado por: humano (2026-10-01: "por partes").
 
+## ADR-053 · Header de uma linha · 2026-10-01
+Desvio: o arquivo (601:464) desenha o Header em duas linhas — trilha e sino em cima, título `h1` (22px) e ações embaixo, 111px; o código já estava em 102 (ADR-029). Agora é uma linha: a trilha (só os ancestrais, `Breadcrumb ancestrais`), o separador, o título como último nível (`h1` no tamanho `h4`, 13px) e, à direita, as ações e os utilitários. 64px sozinho, 56 na `TelaBase`. `Header` ganha `inicio` (o botão de menu da TelaBase); `subtitulo` vai para a mesma linha e só aparece com largura. Abaixo de 640px a trilha sai, o título fica centrado entre o menu e o sino e as ações descem (mantém o ADR-032). Não há variante de duas linhas: o componente muda em todas as telas.
+Motivo: crítica de design de 2026-09-28, ponto 7 ("o header possui bastante espaço em branco e ocupa duas linhas"). É a segunda parte da proposta visual (referência Twenty e Attio), que o humano mandou aplicar por partes (2026-10-01).
+Aprovado por: humano (2026-10-01: "por partes"). Os controles seguem com 32px; a proposta desenhava 28 — fica para a parte da superfície única, se ele quiser.
+

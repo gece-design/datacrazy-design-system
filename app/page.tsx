@@ -308,7 +308,7 @@ const previews: Record<string, React.ReactNode> = {
       className="w-full rounded-md border px-4 py-3"
       titulo="Negócios"
       subtitulo="37 em aberto"
-      trilha={<Breadcrumb {...rotulosTrilha} itens={[trilhaLonga[0], trilhaLonga[3]]} />}
+      trilha={<Breadcrumb ancestrais {...rotulosTrilha} itens={[trilhaLonga[0], trilhaLonga[3]]} />}
       utilitarios={<HeaderNotificacoes rotulo="Notificações: 5 não lidas" contagem={5} />}
       acoes={
         <Button size="sm">

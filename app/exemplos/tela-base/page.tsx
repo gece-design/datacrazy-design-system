@@ -112,7 +112,9 @@ export default function NovaTela() {
       cabecalho={{
         titulo: "Título da tela",
         trilha: (
+          // `ancestrais`: a trilha traz só os níveis acima; a página é o título, logo depois
           <Breadcrumb
+            ancestrais
             rotulo="Trilha de navegação"
             rotuloRecolhidos={(n) => `Mostrar ${n} níveis ocultos`}
             itens={[

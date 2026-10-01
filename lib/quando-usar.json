@@ -339,10 +339,12 @@
       "componente": "Header",
       "usar": [
         "uma vez por tela, pela prop `cabecalho` da `TelaBase`. Busca é `HeaderBusca`, filtros `HeaderFiltros`, sino `Notificacoes`.",
-        "`HeaderFiltros` para mostrar e esconder a `BarraDeFiltros`, com a conta dos filtros ativos."
+        "`HeaderFiltros` para mostrar e esconder a `BarraDeFiltros`, com a conta dos filtros ativos.",
+        "a trilha com `Breadcrumb ancestrais`: ela traz os níveis acima, e o `titulo` é a página — o último nível."
       ],
       "naoUsar": [
         "montado à mão, nem um segundo título dentro do conteúdo.",
+        "o nome da página como último item da trilha: ele apareceria duas vezes, na trilha e no título.",
         "`subtitulo` decorativo: só quando a frase diz o que o título não diz.",
         "Button com texto no lugar da busca ou dos filtros."
       ]

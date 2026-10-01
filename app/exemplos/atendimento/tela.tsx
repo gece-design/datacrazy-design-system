@@ -204,7 +204,7 @@ export function Tela() {
       cabecalho={{
         titulo: "Atendimento",
         trilha: (
-          <Breadcrumb rotulo="Trilha" rotuloRecolhidos={(n) => `Mostrar mais ${n} níveis`} itens={[{ rotulo: "Início" }, { rotulo: "Atendimento" }]} />
+          <Breadcrumb ancestrais rotulo="Trilha" rotuloRecolhidos={(n) => `Mostrar mais ${n} níveis`} itens={[{ rotulo: "Início" }]} />
         ),
         utilitarios: (
           <Notificacoes

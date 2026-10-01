@@ -39,14 +39,18 @@ export interface BreadcrumbProps {
   rotuloRecolhidos: (quantidade: number) => string;
   /** Níveis à vista antes de recolher. Padrão 3, o que o arquivo desenha; mínimo 2. */
   maximo?: number;
+  /** A trilha traz só os ancestrais: a página atual é o título que vem depois
+   *  dela, no Header. Sem isto, o último nível é a página atual. */
+  ancestrais?: boolean;
   /** Elemento de link. No CRM, o `Link` do Next. */
   link?: React.ElementType;
   className?: string;
 }
 
 /** Vetor exportado do arquivo (node 261:256), em currentColor. Não é o
- *  CaretRight do Phosphor: aqui o traço é de 1,5px com ponta arredondada. */
-function Separador() {
+ *  CaretRight do Phosphor: aqui o traço é de 1,5px com ponta arredondada.
+ *  Exportado para o Header, que o põe entre a trilha e o título. */
+export function SeparadorDaTrilha() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" className="shrink-0 text-subtle-foreground">
       <path
@@ -109,7 +113,7 @@ function Nivel({ item, atual, Link }: { item: ItemBreadcrumb; atual: boolean; Li
   );
 }
 
-export function Breadcrumb({ itens, rotulo, rotuloRecolhidos, maximo = 3, link = "a", className }: BreadcrumbProps) {
+export function Breadcrumb({ itens, rotulo, rotuloRecolhidos, maximo = 3, ancestrais = false, link = "a", className }: BreadcrumbProps) {
   const [aberta, setAberta] = React.useState(false);
   const lista = React.useRef<HTMLOListElement>(null);
 
@@ -133,9 +137,9 @@ export function Breadcrumb({ itens, rotulo, rotuloRecolhidos, maximo = 3, link =
       <ol ref={lista} className="flex min-w-0 items-center gap-1">
         {visiveis.map((item, i) => (
           <li key={item ? `${i}-${item.href ?? item.rotulo}` : "recolhidos"} className="flex min-w-0 items-center gap-1">
-            {i > 0 ? <Separador /> : null}
+            {i > 0 ? <SeparadorDaTrilha /> : null}
             {item ? (
-              <Nivel item={item} atual={i === visiveis.length - 1} Link={link} />
+              <Nivel item={item} atual={!ancestrais && i === visiveis.length - 1} Link={link} />
             ) : (
               <button
                 type="button"

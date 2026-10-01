@@ -81,6 +81,13 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 10. `hover:` sempre sob `hoverOnlyWhenSupported`; o equivalente para toque é
     decidido explicitamente (G7).
 
+### Header de uma linha
+- O Header é uma linha: trilha, título e, à direita, ações e sino (ADR-053). A
+  trilha traz só os níveis acima — `Breadcrumb ancestrais` — e o `titulo` é a
+  página. Nunca repita o nome da página como último item da trilha.
+- O botão de recolher a navegação mora na linha da marca da Sidebar (ADR-052);
+  a `TelaBase` já cuida disso.
+
 ### Busca, filtros e divisor no Header
 - A busca é sempre `HeaderBusca` e os filtros sempre `HeaderFiltros`; nunca um
   Button com texto no lugar. Fileira de ações só com botões: busca aberta
@@ -171,7 +178,8 @@ nas divs; o nosso parece gigante". Os números que fecham isso:
 - Cabeçalho e rodapé de Modal: 44px; botões `sm` (28px).
 - Espaço entre cartões e blocos: `gap-3` (12). Recuo do conteúdo da tela: 16
   (`p-4`), 4 ao lado da Sidebar. Entre seções: `gap-6`.
-- Título de tela `h1` uma vez, no Header; dentro do conteúdo só `h3`/`h4` e
+- Título de tela uma vez, no Header (é o `h1`, em 13px, ao lado da trilha);
+  dentro do conteúdo só `h3`/`h4` e
   `label-*`. Nada de `h2` decorativo, subtítulo explicativo ou texto de apoio
   que a pessoa já sabe (regra A6).
 - Escala de espaço: 4 · 8 · 12 · 16 · 24 · 32. Fora dela é invenção.

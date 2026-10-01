@@ -3,6 +3,7 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { Bell, FunnelSimple, MagnifyingGlass, type Icon } from "@phosphor-icons/react";
+import { SeparadorDaTrilha } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { PainelFlutuante } from "@/components/ui/popover";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -12,77 +13,93 @@ import { useSaida } from "@/lib/use-saida";
 
 import { foco, focoDentro, focoInterno, rolagemDiscreta } from "@/lib/estados";
 /**
- * Header — o topo de uma página do CRM (set 601:464).
+ * Header — o topo de uma página do CRM, numa linha só.
  *
- * O arquivo tem seis combinações de ações, e o produto terá outras: trilha de
- * um a N níveis, título de qualquer tamanho, qualquer conjunto de botões. Por
- * isso não existe prop `actions="default"`. O Header é a moldura — três
- * encaixes e a geometria — e o conteúdo entra por composição:
+ * O arquivo (set 601:464) desenha duas linhas: trilha e sino em cima, título
+ * `h1` e ações embaixo, 102px. O cliente apontou "bastante espaço em branco e
+ * duas linhas" (crítica de 2026-09-28, ponto 7), e a proposta visual que o
+ * humano aprovou por partes junta tudo numa linha, como o Twenty e o Attio
+ * (ADR-053): a trilha, o título como último nível dela, e à direita as ações
+ * e os utilitários. 64px sozinho; 56 dentro da `TelaBase`.
  *
- *   trilha       → em cima, à esquerda (Breadcrumb)
- *   utilitarios  → em cima, à direita (notificações)
- *   acoes        → embaixo, à direita, alinhadas pelo topo com o título
+ * O Header é a moldura — os encaixes e a geometria — e o conteúdo entra por
+ * composição, porque o produto tem trilha de um a N níveis, título de
+ * qualquer tamanho e qualquer conjunto de botões:
  *
- * Medidas: recuo 32×16, sem traço embaixo (o arquivo desenha um; "linha
- * divisória que eu já pedi pra remover", humano, 2026-09-24), linha de cima
- * com a altura do botão (32), 6px abaixo o título `h1` alinhado ao topo da fileira
- * de ações (32, vão 8) e, quando houver, subtítulo `body-sm` a 2px. Fecha em
- * 102px sem subtítulo. O arquivo desenha 14 de vão, traço e 111; o humano
- * pediu 6 e o título no topo — "um espaço cinza me incomodando" (ADR-029).
+ *   inicio       → antes de tudo (o botão de menu da `TelaBase`)
+ *   trilha       → os ANCESTRAIS da página (`Breadcrumb ancestrais`)
+ *   titulo       → a página: `h1` em `h4`, o último nível da trilha
+ *   acoes        → à direita: busca, filtros, visão, período, a ação principal
+ *   utilitarios  → na ponta direita: o sino
  *
- * O subtítulo fica FORA por padrão (decisão do humano, 2026-09-18): título e
- * descrição decorativos em toda tela são anti-referência, e a trilha acima já
- * diz onde a pessoa está.
+ * Medidas: recuo 32×16, sem traço embaixo ("linha divisória que eu já pedi
+ * pra remover", humano, 2026-09-24), controles de 32, vão de 8 entre eles.
+ *
+ * O subtítulo fica FORA por padrão (decisão do humano, 2026-09-18): descrição
+ * decorativa em toda tela é anti-referência. Quando existe, vem depois do
+ * título, em `body-sm`, e só aparece com 960px ou mais de largura.
  *
  * Quando não cabe, as ações descem para uma linha própria, à direita, e
- * quebram entre si; título e subtítulo truncam com `title` (D12). Abaixo de
- * 640 da própria largura (container query), trilha, título e ações ficam
- * centrados, com as ações em linha própria (humano, 2026-09-24, ADR-032).
+ * quebram entre si; o título trunca com `title` (D12). Abaixo de 640 da
+ * própria largura (container query, não a janela), a trilha sai, o título
+ * fica centrado entre o menu e o sino, e as ações vão para a linha de baixo,
+ * centradas (humano, 2026-09-24, ADR-032).
  */
 
 export interface HeaderProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
   titulo: string;
   /** Fora por padrão. Passe só quando a frase disser o que o título não diz. */
   subtitulo?: string;
-  /** Em cima, à esquerda. Normalmente um `Breadcrumb`. */
+  /** Antes da trilha. É onde a `TelaBase` põe o botão de menu (< 1024px). */
+  inicio?: React.ReactNode;
+  /** Os níveis acima da página, antes do título. Normalmente `Breadcrumb ancestrais`. */
   trilha?: React.ReactNode;
-  /** Em cima, à direita. Normalmente `HeaderNotificacoes`. */
+  /** Na ponta direita, depois das ações. Normalmente `Notificacoes`. */
   utilitarios?: React.ReactNode;
-  /** Embaixo, à direita: botões, `SegmentedControl`, `ViewSwitcher`, `HeaderDivisor`… */
+  /** À direita: botões, `SegmentedControl`, `ViewSwitcher`, `HeaderDivisor`… */
   acoes?: React.ReactNode;
 }
 
-export function Header({ titulo, subtitulo, trilha, utilitarios, acoes, className, ...props }: HeaderProps) {
+/* "Largo" é 640 ou mais da PRÓPRIA largura de conteúdo (a caixa sem o recuo —
+   é o que o @container mede; não a janela). Medir a caixa e não a janela é o
+   que faz o preview estreito da doc mostrar o mesmo que o celular. As classes
+   vão por extenso: o Tailwind só enxerga o que está escrito inteiro. */
+
+export function Header({ titulo, subtitulo, inicio, trilha, utilitarios, acoes, className, ...props }: HeaderProps) {
   return (
-    // O Header é container: abaixo de 640 da PRÓPRIA largura de conteúdo (a
-    // caixa sem o recuo — é o que o @container mede; não a janela), trilha,
-    // título e ações ficam centrados e as ações em linha própria —
-    // "gostei de centralizar no mobile" (humano, 2026-09-24, ADR-032). Medir a
-    // caixa e não a janela é o que faz o preview estreito da doc mostrar o mesmo.
-    <header className={cn("flex flex-col gap-1.5 bg-background px-8 py-4 [container-type:inline-size]", className)} {...props}>
-      {trilha || utilitarios ? (
-        <div className="flex min-h-8 items-center justify-between gap-4">
-          <div className="flex min-w-0 flex-1 justify-center [@container_(min-width:640px)]:justify-start">{trilha}</div>
-          {utilitarios ? <div className="flex shrink-0 items-center gap-2">{utilitarios}</div> : null}
-        </div>
-      ) : null}
-      {/* gap-1.5 do <header>: 6px entre a linha da trilha e esta. O título
-          (h1, 28) alinha pelo topo com a fileira de ações (32) — items-start,
-          não center: é o que fecha o espaço cinza (humano, 2026-09-23). */}
-      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
-        <div className="flex w-full min-w-0 flex-col gap-0.5 text-center [@container_(min-width:640px)]:w-auto [@container_(min-width:640px)]:text-left">
-          <h1 title={titulo} className="truncate text-h1 text-foreground">
+    <header
+      className={cn("flex flex-wrap items-center gap-x-4 gap-y-2 bg-background px-8 py-4 [container-type:inline-size]", className)}
+      {...props}
+    >
+      {/* Trilha e título. O piso de 160px é o que faz as ações descerem de
+          linha antes de o título virar reticências. */}
+      <div className="flex min-h-8 min-w-[160px] flex-1 items-center gap-2">
+        {inicio}
+        <div className="flex min-w-0 flex-1 items-center justify-center gap-1 [@container_(min-width:640px)]:justify-start">
+          {trilha ? (
+            <div className="hidden min-w-0 shrink items-center gap-1 [@container_(min-width:640px)]:flex">
+              {trilha}
+              <SeparadorDaTrilha />
+            </div>
+          ) : null}
+          <h1 title={titulo} className="min-w-0 truncate text-h4 text-foreground">
             {titulo}
           </h1>
           {subtitulo ? (
-            <p title={subtitulo} className="truncate text-body-sm text-muted-foreground">
+            <p title={subtitulo} className="ml-1 hidden min-w-0 truncate text-body-sm text-muted-foreground [@container_(min-width:960px)]:block">
               {subtitulo}
             </p>
           ) : null}
         </div>
-        {/* largo: ml-auto mantém a fileira à direita quando desce de linha; estreito: centrada */}
-        {acoes ? <div className="mx-auto flex max-w-full flex-wrap items-center justify-center gap-2 [@container_(min-width:640px)]:ml-auto [@container_(min-width:640px)]:mr-0 [@container_(min-width:640px)]:justify-end">{acoes}</div> : null}
       </div>
+      {/* Largo: na mesma linha, à direita; se não couber, desce e continua à
+          direita. Estreito: linha própria, centrada, depois dos utilitários. */}
+      {acoes ? (
+        <div className="order-last flex w-full flex-wrap items-center justify-center gap-2 [@container_(min-width:640px)]:order-none [@container_(min-width:640px)]:ml-auto [@container_(min-width:640px)]:w-auto [@container_(min-width:640px)]:max-w-full [@container_(min-width:640px)]:justify-end">
+          {acoes}
+        </div>
+      ) : null}
+      {utilitarios ? <div className="flex shrink-0 items-center gap-2">{utilitarios}</div> : null}
     </header>
   );
 }
@@ -93,7 +110,8 @@ export function Header({ titulo, subtitulo, trilha, utilitarios, acoes, classNam
  * fileira só com busca, filtros e a ação não leva (humano, 2026-09-24).
  */
 export function HeaderDivisor({ className }: { className?: string }) {
-  return <div role="separator" aria-orientation="vertical" className={cn("h-5 w-px shrink-0 bg-divider", className)} />;
+  // estreito: as ações quebram em linhas centradas e o traço ficaria solto na ponta de uma delas
+  return <div role="separator" aria-orientation="vertical" className={cn("hidden h-5 w-px shrink-0 bg-divider [@container_(min-width:640px)]:block", className)} />;
 }
 
 export interface HeaderNotificacoesProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

@@ -5,11 +5,11 @@
     "fim": "2026-10-01"
   },
   "git": {
-    "commits": 68,
+    "commits": 70,
     "arquivos": 343,
-    "linhasUi": 10989,
+    "linhasUi": 11056,
     "linhasLib": 785,
-    "linhasDocs": 8215
+    "linhasDocs": 8241
   },
   "catalogo": {
     "itens": 55,
@@ -67,12 +67,12 @@
       "descricao": "Mostrar o caminho até a página atual e levar de volta a qualquer nível dele.",
       "categoria": "Navigation",
       "pagina": null,
-      "pecas": 1,
-      "props": 5,
+      "pecas": 2,
+      "props": 6,
       "variantes": 0,
       "estados": 6,
       "acessibilidade": 5,
-      "linhas": 159
+      "linhas": 163
     },
     {
       "name": "button",
@@ -181,15 +181,15 @@
     {
       "name": "header",
       "titulo": "Header",
-      "descricao": "O topo de uma página do CRM: onde a pessoa está, que página é e o que dá para fazer nela.",
+      "descricao": "O topo de uma página do CRM, numa linha só: onde a pessoa está, que página é e o que dá para fazer nela.",
       "categoria": "Navigation",
       "pagina": null,
       "pecas": 6,
-      "props": 21,
+      "props": 22,
       "variantes": 0,
       "estados": 8,
       "acessibilidade": 6,
-      "linhas": 472
+      "linhas": 490
     },
     {
       "name": "icone-de-marca",
@@ -354,11 +354,11 @@
       "categoria": "Navigation",
       "pagina": null,
       "pecas": 9,
-      "props": 12,
+      "props": 13,
       "variantes": 3,
       "estados": 5,
       "acessibilidade": 7,
-      "linhas": 387
+      "linhas": 428
     },
     {
       "name": "switch",
@@ -410,7 +410,7 @@
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 5,
-      "linhas": 201
+      "linhas": 205
     },
     {
       "name": "telefone",
@@ -480,8 +480,8 @@
   ],
   "totais": {
     "componentes": 35,
-    "pecas": 114,
-    "props": 351,
+    "pecas": 115,
+    "props": 354,
     "variantes": 99,
     "estados": 127,
     "acessibilidade": 211,
@@ -1015,14 +1015,24 @@
       "id": "ADR-051",
       "titulo": "Paleta da Tag: de oito para catorze tons (quinze cores com o neutro)",
       "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-052",
+      "titulo": "O botão de recolher sai da borda da Sidebar",
+      "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-053",
+      "titulo": "Header de uma linha",
+      "data": "2026-10-01"
     }
   ],
   "auditoria": {
-    "total": 209,
+    "total": 210,
     "porStatus": {
       "corrigido": 67,
       "aceito": 12,
-      "adiado": 128,
+      "adiado": 129,
       "aberto": 2
     },
     "porEixo": {
@@ -1032,7 +1042,7 @@
       "paginas": 10,
       "instalacao": 11,
       "docs": 10,
-      "fidelidade": 124
+      "fidelidade": 125
     }
   },
   "pedidos": [
@@ -1059,6 +1069,12 @@
       "origem": "Revisão",
       "titulo": "RESPOSTAS DO HUMANO: MARCAS CORRETAS, TAG COM QUINZE CORES, CASCA POR PARTES",
       "resumo": "(1) \"Os ícones de marcas estão horríveis, coloque os corretos\": o IconeDeMarca deixa de pintar o glifo do Phosphor e passa a trazer os logos de verdade — coleção \"SVG Logos\" (CC0) e o Instagram de \"Sk"
+    },
+    {
+      "data": "2026-10-01",
+      "origem": "Cliente",
+      "titulo": "CASCA NOVA, PARTES 1 E 2 (PROPOSTA VISUAL APLICADA POR PARTES)",
+      "resumo": "O humano respondeu \"por partes\" à proposta de /exemplos/proposta-visual; lido como: uma parte de cada vez, um commit por parte, começando pelo que o cliente apontou na crítica de 28/09. Parte 1 (ponto"
     },
     {
       "data": "2026-09-29",

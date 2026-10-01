@@ -32,7 +32,11 @@ colapsam em reticências", mas o desenho tem três. O padrão segue o desenho
 | `rotulo` | `string` | — | sim | `aria-label` do `nav`. |
 | `rotuloRecolhidos` | `(n: number) => string` | — | sim | Nome do botão de reticências. |
 | `maximo` | `number` | `3` | não | Níveis à vista antes de recolher (mínimo 2). |
+| `ancestrais` | `boolean` | `false` | não | A trilha traz só os níveis acima: a página atual é o título que vem depois dela, no Header. Sem isto, o último nível é a página atual (`aria-current`). |
 | `link` | `ElementType` | `"a"` | não | No CRM, o `Link` do Next. |
+
+`SeparadorDaTrilha` é o vetor do separador, exportado para o Header, que o
+põe entre a trilha e o título.
 
 ## Variantes
 

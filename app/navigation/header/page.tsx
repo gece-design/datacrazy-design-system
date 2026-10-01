@@ -101,7 +101,8 @@ function Sino() {
 
 function Trilha({ itens = trilhaDoArquivo }: { itens?: ItemBreadcrumb[] }) {
   return (
-    <Breadcrumb rotulo="Trilha de navegação" rotuloRecolhidos={(n) => `Mostrar ${n} níveis ocultos`} itens={itens} />
+    // `ancestrais`: a trilha traz os níveis acima; a página é o título, logo depois dela
+    <Breadcrumb ancestrais rotulo="Trilha de navegação" rotuloRecolhidos={(n) => `Mostrar ${n} níveis ocultos`} itens={itens} />
   );
 }
 
@@ -175,6 +176,7 @@ const codigoDefault = `<Header
   titulo="Dashboard"
   trilha={
     <Breadcrumb
+      ancestrais
       rotulo="Trilha de navegação"
       rotuloRecolhidos={(n) => \`Mostrar \${n} níveis ocultos\`}
       itens={[
@@ -257,7 +259,7 @@ export default function HeaderPage() {
   return (
     <PaginaDS
       titulo="Header"
-      descricao="O topo de cada página: 102px, recuo 32×16, sem traço embaixo, trilha e sino numa linha de 32, o título h1 6px abaixo, no topo da fileira de ações (vão de 8). Seis combinações no arquivo, nenhuma prop de variante — o conteúdo entra por três encaixes."
+      descricao="O topo de cada página, numa linha só: 64px, recuo 32×16, sem traço embaixo. À esquerda a trilha e o título, que é o último nível dela; à direita as ações e o sino, com 32px e vão de 8. Nenhuma prop de variante — o conteúdo entra por encaixes."
       secoes={[
         "Como funciona",
         "Default",
@@ -275,12 +277,20 @@ export default function HeaderPage() {
           O arquivo tem seis combinações de ações, e o CRM vai ter dezenas: trilha de um a sete níveis, título que é
           nome de empresa, botões que mudam por tela. Por isso o <Chip>Header</Chip> não tem prop de variante. Ele é a{" "}
           <span className="text-foreground">moldura</span> — três encaixes, <Chip>trilha</Chip>,{" "}
-          <Chip>utilitarios</Chip> e <Chip>acoes</Chip>, mais o título — e guarda só a geometria do arquivo.
+          <Chip>acoes</Chip> e <Chip>utilitarios</Chip>, mais o título — e guarda só a geometria.
+        </p>
+        <p>
+          Tudo cabe em <span className="text-foreground">uma linha</span>. O arquivo desenha duas — trilha e sino em
+          cima, título grande e ações embaixo — e era isso que deixava um bloco de espaço em branco no topo de toda
+          tela. Agora o título é o último nível da trilha: os níveis acima vêm apagados, o título vem em seguida, com
+          peso. Por isso a trilha entra com <Chip>ancestrais</Chip> no <Chip>Breadcrumb</Chip> — ela traz só o caminho
+          até a página, e a página é o título.
         </p>
         <p>
           O subtítulo continua existindo como prop (<Chip>subtitulo</Chip>), mas fora por padrão: título e descrição
-          decorativos em toda tela são anti-referência deste produto, e a trilha acima já diz onde a pessoa está. Passe{" "}
-          <Chip>subtitulo</Chip> só quando a frase disser algo que o título não diz.
+          decorativos em toda tela são anti-referência deste produto, e a trilha já diz onde a pessoa está. Passe{" "}
+          <Chip>subtitulo</Chip> só quando a frase disser algo que o título não diz: ele vem depois do título, discreto,
+          e só aparece quando há largura.
         </p>
         <p>
           O que entra nos encaixes são peças que já existem: <Chip>Breadcrumb</Chip>, <Chip>Button</Chip> (com a
@@ -289,9 +299,11 @@ export default function HeaderPage() {
           <Chip>divider</Chip>, token que o arquivo tinha e o código não.
         </p>
         <p>
-          Quando não cabe, nada vaza. A fileira de ações desce para a linha de baixo, à direita, e quebra entre si; abaixo de 640 da largura do Header, tudo centra (celular);
-          título e cada nível da trilha truncam com o texto inteiro no <Chip>title</Chip> (D12). Nesta coluna de leitura
-          as ações do Default já não cabem ao lado do título — é o comportamento real, não defeito do preview.
+          Quando não cabe, nada vaza. A fileira de ações desce para a linha de baixo, à direita, e quebra entre si;
+          abaixo de 640 da largura do Header (celular), a trilha sai, o título fica centrado entre o menu e o sino e as
+          ações vão para a linha de baixo, centradas. Título e cada nível da trilha truncam com o texto inteiro no{" "}
+          <Chip>title</Chip> (D12). Nesta coluna de leitura as ações do Default já não cabem ao lado do título — é o
+          comportamento real, não defeito do preview.
         </p>
         <p>
           O escuro não tem desenho no arquivo e não ganha seção aqui: troque o tema no menu e a página inteira vira,
@@ -476,13 +488,13 @@ export default function HeaderPage() {
       <Secao
         titulo="Trilha longa"
         spec="7 níveis · 3 à vista"
-        descricao="Sete níveis do CRM real. Passando de três, os do meio recolhem em reticências; clique nelas para abrir a trilha inteira no lugar."
+        descricao="Seis níveis acima da página, do CRM real. Passando de três, os do meio recolhem em reticências; clique nelas para abrir a trilha inteira no lugar. O título continua sendo o último nível."
         semCaixa
         semSeletorDeFundo
       >
         <Header
-          titulo="Construtora Horizonte Ltda."
-          trilha={<Trilha itens={trilhaLonga} />}
+          titulo="Negócio #4821"
+          trilha={<Trilha itens={trilhaLonga.slice(0, -1)} />}
           utilitarios={<Sino />}
           acoes={
             <>
@@ -496,7 +508,7 @@ export default function HeaderPage() {
       <Secao
         titulo="Quando não cabe"
         spec="360px · es"
-        descricao="Espanhol, que é 20–30% mais longo, numa coluna de celular. Abaixo de 640 da largura do próprio Header, trilha, título e ações ficam centrados e as ações em linha própria; o título trunca. Passe o cursor num texto cortado para ler inteiro."
+        descricao="Espanhol, que é 20–30% mais longo, numa coluna de celular. Abaixo de 640 da largura do próprio Header, a trilha sai, o título fica centrado ao lado do sino e as ações vão para a linha de baixo, centradas; o título trunca. Passe o cursor num texto cortado para ler inteiro."
       >
         <div className="mx-auto w-full max-w-[360px] overflow-hidden rounded-md">
           <Header
