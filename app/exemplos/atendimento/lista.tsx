@@ -1,8 +1,9 @@
 "use client";
 
-import { Globe, InstagramLogo, WhatsappLogo, type Icon } from "@phosphor-icons/react";
+import { Globe } from "@phosphor-icons/react";
 
 import { Avatar } from "@/components/ui/avatar";
+import { IconeDeMarca } from "@/components/ui/icone-de-marca";
 import { Tabs } from "@/components/ui/tabs";
 import { focoInterno, rolagemDiscreta } from "@/lib/estados";
 import { cn } from "@/lib/utils";
@@ -12,7 +13,13 @@ import type { Canal, Conversa, Situacao } from "./dados";
    cartão dentro de cartão (referência: Twenty e Attio). A busca e os filtros
    ficam no Header da tela; aqui, só as abas de situação e a lista. */
 
-export const ICONES_DOS_CANAIS: Record<Canal, Icon> = { WhatsApp: WhatsappLogo, Instagram: InstagramLogo, Site: Globe };
+/** O ícone do canal — a lista, a conversa e o filtro usam o mesmo. Marca é
+ *  `IconeDeMarca`; o que não é marca é Phosphor. `rotulo` quando o ícone aparece sem o nome ao lado. */
+export function IconeDoCanal({ canal, tamanho = 14, rotulo }: { canal: Canal; tamanho?: 12 | 14 | 16; rotulo?: string }) {
+  if (canal === "WhatsApp") return <IconeDeMarca marca="whatsapp" tamanho={tamanho} rotulo={rotulo} />;
+  if (canal === "Instagram") return <IconeDeMarca marca="instagram" tamanho={tamanho} rotulo={rotulo} />;
+  return <Globe size={tamanho} weight="regular" role={rotulo ? "img" : undefined} aria-label={rotulo} aria-hidden={rotulo ? undefined : true} className="shrink-0 text-muted-foreground" />;
+}
 
 export const ABAS: { valor: Situacao; rotulo: string }[] = [
   { valor: "aberta", rotulo: "Abertas" },
@@ -61,7 +68,6 @@ export function ListaDeConversas({
       ) : (
         <ul className={cn("min-h-0 flex-1 overflow-y-auto", rolagemDiscreta)}>
           {conversas.map((c) => {
-            const Canal = ICONES_DOS_CANAIS[c.canal];
             const { texto, hora } = previa(c);
             const aberta = c.id === abertaId;
             return (
@@ -84,7 +90,7 @@ export function ListaDeConversas({
                       <span className="shrink-0 text-caption tabular-nums text-muted-foreground">{hora}</span>
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <Canal size={14} weight="regular" aria-label={c.canal} className="shrink-0 text-muted-foreground" />
+                      <IconeDoCanal canal={c.canal} rotulo={c.canal} />
                       <span className={cn("min-w-0 flex-1 truncate text-body-sm", c.naoLidas ? "text-foreground" : "text-muted-foreground")}>{texto}</span>
                       {c.naoLidas ? (
                         <span

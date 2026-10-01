@@ -25,7 +25,7 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { rolagemDiscreta } from "@/lib/estados";
 import { cn } from "@/lib/utils";
 import { ATENDENTES, EU, RESPOSTAS_RAPIDAS, type Conversa, type Mensagem } from "./dados";
-import { ICONES_DOS_CANAIS } from "./lista";
+import { IconeDoCanal } from "./lista";
 
 /* A coluna do meio: cabeçalho da conversa, mensagens e o compositor. Mensagem
    recebida à esquerda, enviada à direita; a nota interna é do time (o contato
@@ -101,7 +101,6 @@ export function ConversaAberta({
   const botaoTransferir = React.useRef<HTMLButtonElement>(null);
   const botaoRespostas = React.useRef<HTMLButtonElement>(null);
   const fim = React.useRef<HTMLDivElement>(null);
-  const Canal = ICONES_DOS_CANAIS[conversa.canal];
   const finalizada = conversa.situacao === "finalizada";
 
   // conversa nova ou mensagem nova: a última fica à vista
@@ -131,7 +130,7 @@ export function ConversaAberta({
         <div className="flex min-w-0 flex-1 flex-col">
           <h2 className="truncate text-label-lg text-foreground">{conversa.nome}</h2>
           <p className="flex min-w-0 items-center gap-1 text-caption text-muted-foreground">
-            <Canal size={12} weight="regular" aria-hidden="true" className="shrink-0" />
+            <IconeDoCanal canal={conversa.canal} tamanho={12} />
             <span className="truncate">
               {conversa.canal} · {conversa.telefone}
             </span>

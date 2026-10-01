@@ -18,22 +18,22 @@ import {
   UserPlus,
   UsersThree,
   Star,
+  Headset,
+  ShareNetwork,
 } from "@phosphor-icons/react";
 
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos } from "@/components/ui/barra-de-filtros";
 import { HeaderBusca, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
-import { Modal } from "@/components/ui/modal";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
-import { Switch } from "@/components/ui/switch";
 import { TelaBase } from "@/components/ui/tela-base";
 import { Toaster, toast } from "@/components/ui/toast";
 import { useTema } from "@/lib/tema";
 import { cn } from "@/lib/utils";
 import { ConversaAberta } from "./conversa";
 import { CONVERSAS, EU, type Canal, type Conversa, type Mensagem, type Situacao } from "./dados";
-import { ListaDeConversas } from "./lista";
+import { IconeDoCanal, ListaDeConversas } from "./lista";
 import { PainelDoLead } from "./painel";
 
 /**
@@ -65,6 +65,26 @@ const APOIO = [
 ];
 
 const CANAIS: Canal[] = ["WhatsApp", "Instagram", "Site"];
+const SEM_ATENDENTE = "sem-atendente";
+
+/** Os campos que a tela deixa filtrar: cada um ativo vira um chip na barra. */
+const CAMPOS_DE_FILTRO: CampoDeFiltro[] = [
+  {
+    id: "canal",
+    rotulo: "Canal",
+    icone: ShareNetwork,
+    opcoes: CANAIS.map((c) => ({ valor: c, rotulo: c, icone: <IconeDoCanal canal={c} tamanho={16} /> })),
+  },
+  {
+    id: "atendente",
+    rotulo: "Atendente",
+    icone: Headset,
+    opcoes: [
+      ...["Esther", "Liam", "Marina"].map((a) => ({ valor: a, rotulo: a === EU ? `${a} (eu)` : a })),
+      { valor: SEM_ATENDENTE, rotulo: "Sem atendente" },
+    ],
+  },
+];
 
 const NOTIFICACOES: Notificacao[] = [
   { id: "1", icone: ChatsCircle, titulo: "Conversa sem atendente", detalhe: "Rafael Pinto escreveu pelo WhatsApp e ninguém assumiu.", quando: "agora", lida: false },
@@ -82,8 +102,7 @@ export function Tela() {
   const [abertaId, setAbertaId] = React.useState<string | null>("c1");
   const [aba, setAba] = React.useState<Situacao>("aberta");
   const [busca, setBusca] = React.useState("");
-  const [canais, setCanais] = React.useState<Canal[]>([]);
-  const [soMinhas, setSoMinhas] = React.useState(false);
+  const [filtro, setFiltro] = React.useState<FiltrosAtivos>({});
   const [filtros, setFiltros] = React.useState(false);
   const [painelAberto, setPainelAberto] = React.useState(true);
   // só no celular: a tela mostra a lista OU a conversa
@@ -96,16 +115,18 @@ export function Tela() {
   }, []);
 
   const termo = semAcento(busca.trim());
+  const canais = filtro.canal ?? [];
+  const atendentes = filtro.atendente ?? [];
   const filtradas = conversas.filter(
     (c) =>
       (!canais.length || canais.includes(c.canal)) &&
-      (!soMinhas || c.atendente === EU) &&
+      (!atendentes.length || atendentes.includes(c.atendente ?? SEM_ATENDENTE)) &&
       (!termo || [c.nome, c.empresa, c.telefone, ...c.mensagens.map((m) => m.texto)].some((t) => semAcento(t).includes(termo))),
   );
   const contagem = { aberta: 0, pendente: 0, finalizada: 0 } as Record<Situacao, number>;
   for (const c of filtradas) contagem[c.situacao]++;
   const aberta = conversas.find((c) => c.id === abertaId) ?? null;
-  const quantosFiltros = canais.length + (soMinhas ? 1 : 0);
+  const quantosFiltros = contarFiltros(filtro);
 
   /** Muda uma conversa; com `subir`, ela vai para o topo da lista (acabou de ter movimento). */
   function mudar_(id: string, fazer: (c: Conversa) => Conversa, subir = false) {
@@ -228,7 +249,7 @@ export function Tela() {
         acoes: (
           <>
             <HeaderBusca rotulo="Pesquisar conversas" placeholder="Pesquisar" value={busca} onChange={(e) => setBusca(e.target.value)} />
-            <HeaderFiltros rotulo="Filtros" contagem={quantosFiltros} rotuloComContagem={(n) => `Filtros: ${n} ativos`} onClick={() => setFiltros(true)} />
+            <HeaderFiltros rotulo="Filtros" contagem={quantosFiltros} rotuloComContagem={(n) => `Filtros: ${n} ativos`} aria-expanded={filtros} onClick={() => setFiltros((v) => !v)} />
             <Button onClick={() => toast({ variant: "info", titulo: "Nova conversa", descricao: "No CRM: escolhe o contato e a conexão de saída." })}>
               <Plus size={16} weight="regular" />
               Nova conversa
@@ -237,6 +258,19 @@ export function Tela() {
         ),
       }}
     >
+      {/* Filtros em chips, numa faixa do painel: valem para as três abas, na hora. */}
+      {filtros ? (
+        <BarraDeFiltros
+          abrirAoMontar
+          role="group"
+          aria-label="Filtros"
+          className="shrink-0 border-b border-border px-3 py-2"
+          campos={CAMPOS_DE_FILTRO}
+          valor={filtro}
+          aoMudar={setFiltro}
+          rotulos={{ adicionar: "Filtro", limpar: "Limpar", busca: "Buscar", vazio: "Nada encontrado", remover: (campo) => `Remover filtro ${campo}` }}
+        />
+      ) : null}
       <div className="flex min-h-0 flex-1">
         {/* A superfície é o painel da tela (TelaBase): as três colunas encostam nas bordas dele e se separam por traço. */}
         <div className="relative flex min-h-0 min-w-0 flex-1 overflow-hidden">
@@ -277,44 +311,6 @@ export function Tela() {
         </div>
       </div>
 
-      <Modal
-        aberto={filtros}
-        aoFechar={() => setFiltros(false)}
-        size="sm"
-        titulo="Filtros"
-        descricao="Valem para as três abas."
-        acoes={
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                setCanais([]);
-                setSoMinhas(false);
-              }}
-            >
-              Limpar
-            </Button>
-            <Button size="sm" onClick={() => setFiltros(false)}>
-              Aplicar
-            </Button>
-          </>
-        }
-      >
-        <div className="flex flex-col gap-4">
-          <fieldset className="flex flex-col gap-2">
-            <legend className="mb-2 text-label-md text-input-label">Canal</legend>
-            {CANAIS.map((c) => (
-              <Checkbox key={c} checked={canais.includes(c)} onChange={() => setCanais((l) => (l.includes(c) ? l.filter((x) => x !== c) : [...l, c]))}>
-                {c}
-              </Checkbox>
-            ))}
-          </fieldset>
-          <Switch linha descricao="Esconde as conversas de outros atendentes" checked={soMinhas} onChange={(e) => setSoMinhas(e.target.checked)}>
-            Só as minhas
-          </Switch>
-        </div>
-      </Modal>
       <Toaster />
     </TelaBase>
   );

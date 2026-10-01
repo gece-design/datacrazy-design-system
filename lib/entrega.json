@@ -5,11 +5,11 @@
     "fim": "2026-10-01"
   },
   "git": {
-    "commits": 74,
-    "arquivos": 340,
-    "linhasUi": 11077,
+    "commits": 76,
+    "arquivos": 342,
+    "linhasUi": 11244,
     "linhasLib": 796,
-    "linhasDocs": 8310
+    "linhasDocs": 8446
   },
   "catalogo": {
     "itens": 56,
@@ -1128,6 +1128,12 @@
       "resumo": "ADR-056. Componente novo, PainelLateral (com PainelLateralCorpo, ListaDeCampos e LinhaDeCampo): o registro abre num <aside> de 480px dentro do painel da tela e empurra a lista, que continua à vista — "
     },
     {
+      "data": "2026-10-01",
+      "origem": "Lote",
+      "titulo": "ATENDIMENTO NO PADRÃO NOVO; LIMPEZA",
+      "resumo": "A tela de Atendimento ainda filtrava num Modal com Checkbox e Switch — o anti-padrão que a regra nova proíbe. Agora o HeaderFiltros mostra e esconde a BarraDeFiltros (Canal e Atendente, este no lugar "
+    },
+    {
       "data": "2026-09-29",
       "origem": "Lote",
       "titulo": "BANCADA: RODADA 1 × RODADA 2, E O QUE ELA ACHOU NO DS",
@@ -1467,8 +1473,7 @@
       "docs",
       "paginas",
       "exemplos",
-      "regressao",
-      "sidebar"
+      "regressao"
     ],
     "capturas": 84,
     "temas": 2

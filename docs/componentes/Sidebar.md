@@ -29,7 +29,7 @@ flutuante para recolher. Desde 2026-10-01 a navegação é plana — sem cartão
 220px aberta e 48 recolhida, item de 32, ícone de 16 — e o botão de recolher
 fica na linha da marca (ADR-052 e ADR-054). É a proposta visual que aproxima o
 CRM do Twenty e do Attio, aplicada por partes; o Figma acompanha na remedição
-(AUD-210). `scripts/medir-sidebar.mjs` mede o desenho antigo e não vale mais.
+(AUD-210). O script que media o desenho antigo (`medir-sidebar.mjs`) saiu.
 
 ## Props
 
