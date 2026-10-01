@@ -41,6 +41,7 @@ markdown é a vista dele.
 | [Menu.md](Menu.md) | A lista de ações e opções que abre de um botão: o menu da coluna e o botão |
 | [Modal.md](Modal.md) | Pedir uma decisão bloqueando a tela até ela ser tomada. |
 | [Pagination.md](Pagination.md) | Navegar entre as páginas de uma lista longa. |
+| [PainelLateral.md](PainelLateral.md) | Mostrar um registro aberto ao lado da lista, sem cobri-la: o lead, o negócio ou o contato num painel de 480px  |
 | [Popover.md](Popover.md) | A casca de todo painel flutuante do DS — lista do Select, calendário, hora, |
 | [RadioGroup.md](RadioGroup.md) | Escolher exatamente uma opção entre poucas, todas visíveis ao mesmo tempo. |
 | [Rating.md](Rating.md) | Avaliação de 0 a 10 estrelas (o máximo é prop): editável por clique e setas, |

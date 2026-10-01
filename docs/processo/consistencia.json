@@ -3334,11 +3334,14 @@
     {
       "id": "AUD-210",
       "eixo": "fidelidade",
-      "titulo": "Figma atrás do código: casca nova por partes — botão de recolher na linha da marca, Header de uma linha",
+      "titulo": "Figma atrás do código: a casca nova inteira — botão de recolher, Header de uma linha, navegação plana, superfície única, PainelLateral",
       "onde": [
         "components/ui/sidebar.tsx",
         "components/ui/header.tsx",
-        "components/ui/tela-base.tsx"
+        "components/ui/tela-base.tsx",
+        "components/ui/painel-lateral.tsx",
+        "components/ui/button.tsx",
+        "components/ui/segmented-control.tsx"
       ],
       "regra": "fidelidade · cliente > arquivo (Figma é rascunho)",
       "gravidade": "media",
@@ -3346,7 +3349,7 @@
       "verificacao": "manual",
       "status": "adiado",
       "fechadoEm": null,
-      "nota": "**Proposta visual aplicada por partes, por decisão do humano em 2026-10-01 (ADR-052 em diante).** Cada parte que entra no código deixa o arquivo para trás: o disco flutuante da Sidebar (124:2114) e o Header de duas linhas (601:464). Na remedição, o arquivo acompanha o código."
+      "nota": "**Proposta visual aplicada em cinco partes, por decisão do humano em 2026-10-01 (ADR-052 a ADR-056).** O arquivo ficou para trás em tudo o que é casca: o disco flutuante e o painel em cartão da Sidebar (124:2114), o Header de duas linhas (601:464), Header e conteúdo soltos sobre o fundo, o registro no Drawer por cima da lista. Na remedição, redesenhar a casca no arquivo a partir do código: navegação plana de 220/48, painel único com Header de 48, controles de apoio em `background` dentro do painel, e o component set do PainelLateral (ao lado, tela cheia, campos em linha)."
     }
   ]
 }

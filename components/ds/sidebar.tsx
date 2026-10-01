@@ -13,7 +13,7 @@ import {
   Tag, UserCircle, Table, ChartBar, ChatTeardropText, Tray, Browsers, ArrowLineLeft,
   Cards, RadioButton, ToggleRight, Bell, Tabs, Browser, Flask, Kanban,
   Waveform, CalendarDots,
-  ChatCircleDots, ListMagnifyingGlass, FunnelSimple,
+  ChatCircleDots, ListMagnifyingGlass, FunnelSimple, SquareSplitHorizontal,
 } from "@phosphor-icons/react";
 import { navegacao } from "./nav";
 import { Logo, LogoSimbolo } from "./logo";
@@ -72,6 +72,7 @@ const icones: Record<string, Glifo> = {
   conversa: ChatCircleDots,
   lupa: ListMagnifyingGlass,
   funil: FunnelSimple,
+  lateral: SquareSplitHorizontal,
 };
 
 const glifo = (chave?: string): Glifo | null => (chave ? icones[chave] ?? null : null);

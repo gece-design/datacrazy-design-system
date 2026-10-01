@@ -205,7 +205,9 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   220/48, item de 32, hover `card`, `SidebarGrupo rotulo/ocultarRecolhida` (Favoritos), recuo esquerdo da TelaBase 8
   (ADR-054); parte 4 — superfície única: a TelaBase põe Header + conteúdo num painel `card` com `data-superficie`;
   `superficieDeApoio` (lib/estados) troca tertiary/segmentado/busca para `background` ali dentro; Header sem fundo; lista,
-  quadro e chat com `recuo={false}` (ADR-055). Falta: registro em painel lateral. Uma parte por commit.
+  quadro e chat com `recuo={false}` (ADR-055); parte 5 — `PainelLateral` (+ `PainelLateralCorpo`, `ListaDeCampos`,
+  `LinhaDeCampo`) nos encaixes `lateral`/`lateralCheia` da TelaBase: o registro abre ao lado e empurra a lista; o Drawer
+  fica para o registro completo (ADR-056). As cinco partes estão no DS; `/exemplos/proposta-visual` saiu.
 - **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, children; sem segunda linha;
   breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
   o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.

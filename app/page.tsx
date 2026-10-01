@@ -409,6 +409,28 @@ const previews: Record<string, React.ReactNode> = {
       </div>
     </div>
   ),
+  "/feedback/painel-lateral": (
+    <div className="flex h-24 w-full max-w-full overflow-hidden rounded-md border border-border bg-card">
+      <div className="flex min-w-0 flex-1 flex-col">
+        {["Marina Alvarenga", "Rafael Pinto", "Júlia Bastos"].map((nome, i) => (
+          <p key={nome} className={`truncate border-b border-border px-2 py-1.5 text-label-md text-foreground ${i === 0 ? "bg-accent" : ""}`}>
+            {nome}
+          </p>
+        ))}
+      </div>
+      <div className="flex w-1/2 flex-col gap-1.5 border-l border-border p-2">
+        <p className="truncate text-label-lg text-foreground">Marina Alvarenga</p>
+        <p className="flex justify-between gap-2 text-caption text-muted-foreground">
+          <span>Etapa</span>
+          <span className="truncate text-foreground">Novo lead</span>
+        </p>
+        <p className="flex justify-between gap-2 text-caption text-muted-foreground">
+          <span>Valor</span>
+          <span className="truncate text-foreground">R$ 18.400</span>
+        </p>
+      </div>
+    </div>
+  ),
   "/exemplos/dashboard": (
     <div className="flex w-full max-w-full flex-col gap-2">
       <div className="grid grid-cols-3 gap-2">
@@ -494,6 +516,7 @@ const descricoes: Record<string, string> = {
   "Drawer variações": "Tons, menu, linha do tempo, hierarquia, camada e as três propostas.",
   "Dashboard": "Indicadores, receita por dia e os negócios parados, numa tela.",
   "Pipeline": "O funil do CRM: arraste um lead e abra o registro.",
+  "Painel lateral": "O registro ao lado da lista: 480px, campos em linha.",
   "Atendimento": "WhatsApp, Instagram e site numa tela: responda, anote e edite o lead.",
 };
 

@@ -66,6 +66,11 @@ export interface TelaBaseProps {
   cabecalho: HeaderProps;
   /** O conteúdo. Rola por dentro; o cabeçalho fica. */
   children: React.ReactNode;
+  /** O registro aberto ao lado do conteúdo: um `PainelLateral`. Fica dentro do
+   *  painel da tela, à direita, e EMPURRA o conteúdo. Abaixo de 1024px ocupa a tela. */
+  lateral?: React.ReactNode;
+  /** O painel lateral em tela cheia: o Header e o conteúdo saem de cena. */
+  lateralCheia?: boolean;
   /** Chave da memória da sidebar (aberta ou recolhida) no navegador. Sem ela, começa pelo breakpoint. */
   memoria?: string;
   /** Recuo do conteúdo (16). Desligue quando o conteúdo encosta nas bordas do painel: lista, quadro, chat. */
@@ -84,6 +89,8 @@ export function TelaBase({
   navegacao,
   cabecalho,
   children,
+  lateral,
+  lateralCheia = false,
   memoria,
   recuo = true,
   rotulos,
@@ -163,18 +170,23 @@ export function TelaBase({
           apoio (tertiary, segmentado, busca) de que estão sobre `card`. Abaixo
           de 1024 o painel ocupa a tela inteira, sem margem nem raio. */}
       <div className="flex min-w-0 flex-1 lg:py-2 lg:pr-2">
-        <div data-superficie className="flex min-w-0 flex-1 flex-col overflow-hidden bg-card lg:rounded-lg lg:border lg:border-border">
-          <Header
-            {...cabecalho}
-            className={cn("shrink-0 border-b border-border px-3 py-2", cabecalho.className)}
-            inicio={botaoMenu}
-          />
-          <main
-            aria-label={r.conteudo}
-            className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", rolagemDiscreta, recuo && "p-4")}
-          >
-            {children}
-          </main>
+        <div data-superficie className="flex min-w-0 flex-1 overflow-hidden bg-card lg:rounded-lg lg:border lg:border-border">
+          {/* Com o painel lateral aberto, a coluna da tela encolhe; em tela
+              cheia — e abaixo de 1024, onde o painel é a tela — ela sai. */}
+          <div className={cn("min-w-0 flex-1 flex-col", lateral ? (lateralCheia ? "hidden" : "hidden lg:flex") : "flex")}>
+            <Header
+              {...cabecalho}
+              className={cn("shrink-0 border-b border-border px-3 py-2", cabecalho.className)}
+              inicio={botaoMenu}
+            />
+            <main
+              aria-label={r.conteudo}
+              className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", rolagemDiscreta, recuo && "p-4")}
+            >
+              {children}
+            </main>
+          </div>
+          {lateral}
         </div>
       </div>
 

@@ -44,14 +44,16 @@ const OPCOES_DE_TAG = GRUPOS_TAGS.flatMap((g) =>
 /** As colunas da lista. Ficam aqui, exportadas, porque os botões Agrupar e
  *  Colunas moram na fileira do Header da tela, não na barra da tabela. */
 export const COLUNAS_DA_LISTA: ColunaTabela[] = [
-  { chave: "lead", rotulo: "Lead", icone: User, peso: 2.2 },
-  { chave: "tags", rotulo: "Tags", icone: IconeDeTag, peso: 2 },
-  { chave: "empresa", rotulo: "Empresa", icone: Buildings, peso: 2.3 },
-  { chave: "etapa", rotulo: "Etapa", icone: FunnelSimple, peso: 2, agrupavel: true },
-  { chave: "origem", rotulo: "Origem", icone: ShareNetwork, peso: 1.3, agrupavel: true },
-  { chave: "responsavel", rotulo: "Atendente", icone: Headset, peso: 1.5, agrupavel: true },
-  { chave: "valor", rotulo: "Valor", icone: CurrencyDollar, peso: 1.5, alinharFim: true },
-  { chave: "dias", rotulo: "Parado", icone: Clock, peso: 1.2, alinharFim: true },
+  // `minimo` é o piso de cada coluna: com o lead aberto ao lado a lista encolhe, e abaixo
+  // da soma deles ela rola na horizontal em vez de cortar tudo em reticências
+  { chave: "lead", rotulo: "Lead", icone: User, peso: 2.2, minimo: 170 },
+  { chave: "tags", rotulo: "Tags", icone: IconeDeTag, peso: 2, minimo: 160 },
+  { chave: "empresa", rotulo: "Empresa", icone: Buildings, peso: 2.3, minimo: 190 },
+  { chave: "etapa", rotulo: "Etapa", icone: FunnelSimple, peso: 2, minimo: 160, agrupavel: true },
+  { chave: "origem", rotulo: "Origem", icone: ShareNetwork, peso: 1.3, minimo: 120, agrupavel: true },
+  { chave: "responsavel", rotulo: "Atendente", icone: Headset, peso: 1.5, minimo: 120, agrupavel: true },
+  { chave: "valor", rotulo: "Valor", icone: CurrencyDollar, peso: 1.5, minimo: 110, alinharFim: true },
+  { chave: "dias", rotulo: "Parado", icone: Clock, peso: 1.2, minimo: 88, alinharFim: true },
 ];
 
 /* O que cada coluna lê do lead, para ordenar. Etapa ordena pela posição no funil. */
@@ -80,8 +82,6 @@ export function Lista({
   aoExcluirEmMassa,
   aoEditar,
   ajustes,
-  semMoldura,
-  classeDaTabela,
 }: {
   etapas: Etapa[];
   leads: Lead[];
@@ -95,10 +95,6 @@ export function Lista({
   aoExcluirEmMassa: (ids: string[]) => void;
   /** Edita um campo do lead na célula (o valor, por enquanto). */
   aoEditar: (id: string, campos: Partial<Lead>) => void;
-  /** Sem a barra de resumo: só a tabela. */
-  semMoldura?: boolean;
-  /** Classes a mais na tabela. */
-  classeDaTabela?: string;
 }) {
   const total = leads.reduce((n, l) => n + l.valor, 0);
   // Seleção em massa: a tela guarda os ids; a tabela desenha as caixas (2026-09-24).
@@ -205,9 +201,9 @@ export function Lista({
     <div className={cn("min-h-0 flex-1 overflow-y-auto", rolagemDiscreta)}>
       <div className="w-full">
         {/* Só o resumo: Agrupar e Colunas estão na fileira do Header (humano, 2026-09-24). */}
-        {semMoldura ? null : <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />}
+        <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />
         {/* densa: a grade de lista à la Twenty (cliente, 2026-09-27) */}
-        <DataTable colunas={COLUNAS_DA_LISTA} ajustes={ajustes} selecao={selecao} className={cn("rounded-none border-0", classeDaTabela)}>
+        <DataTable colunas={COLUNAS_DA_LISTA} ajustes={ajustes} selecao={selecao} className="rounded-none border-0">
           {grupos
             ? grupos.map((g) => (
                 <Fragment key={g.id}>

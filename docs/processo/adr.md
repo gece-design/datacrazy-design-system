@@ -291,3 +291,8 @@ Desvio: no arquivo o Header e o conteúdo ficam soltos sobre o fundo da aplicaç
 Motivo: proposta visual (referência Twenty e Attio: "uma superfície só, separada por traço"), quarta parte; o humano mandou seguir (2026-10-01).
 Aprovado por: humano (2026-10-01).
 
+## ADR-056 · PainelLateral: o registro abre ao lado da lista · 2026-10-01
+Desvio: componente novo sem par no arquivo (regra 6), e mudança do padrão de detalhe. O arquivo abre o registro no Drawer, por cima da lista (840px, perfil e seções em cartões). Agora o registro que abre de uma lista, de um quadro ou de um calendário vai num `PainelLateral`: `<aside>` de 480px dentro do painel da tela, com traço à esquerda, cabeçalho de 48, que EMPURRA o conteúdo — a lista continua à vista e clicar em outra linha troca o registro. Não é diálogo: não prende o foco nem escurece. Campos em linha (`ListaDeCampos` + `LinhaDeCampo`, 32px) no lugar do cartão de 68, editando no lugar com `CelulaEditavel` e `CelulaEscolha`. Botão de tela cheia; abaixo de 1024px o painel já ocupa a tela. A `TelaBase` ganha os encaixes `lateral` e `lateralCheia`. O `Drawer` continua no DS para o registro completo (perfil, métricas, menu de seções). O pipeline passa a usar o painel; o bloco `pipeline` deixa de levar o `drawer-lead`. A página de proposta (`/exemplos/proposta-visual`) sai: as cinco partes estão no DS.
+Motivo: proposta visual (referência Twenty e Attio: "registro em painel lateral que empurra a lista, com campos em linha"), quinta e última parte; pedido registrado desde a reunião de 24/09 ("painel lateral no lugar do Drawer"). O humano mandou seguir (2026-10-01).
+Aprovado por: humano (2026-10-01).
+

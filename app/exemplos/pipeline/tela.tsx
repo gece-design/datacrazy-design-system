@@ -29,7 +29,6 @@ import {
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos } from "@/components/ui/barra-de-filtros";
 import { Button } from "@/components/ui/button";
-import { Drawer } from "@/components/ui/drawer";
 import { Header, HeaderBusca, HeaderDivisor, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
@@ -196,6 +195,12 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
     { id: "3", icone: Handshake, titulo: "Negócio ganho", detalhe: "Rede Bom Dia assinou o plano anual — R$ 145.000.", quando: "ontem", lida: false },
   ]);
   const [abertoId, setAbertoId] = React.useState<string | null>(null);
+  const [leadEmTelaCheia, setLeadEmTelaCheia] = React.useState(false);
+  // fechar sempre volta ao painel ao lado: o próximo lead não abre em tela cheia
+  const fecharLead = () => {
+    setAbertoId(null);
+    setLeadEmTelaCheia(false);
+  };
   const [rota, setRota] = React.useState("Pipelines");
   const [novo, setNovo] = React.useState<typeof leadVazio | null>(null);
   const [filtros, setFiltros] = React.useState(false);
@@ -376,6 +381,27 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
     <TelaBase
       memoria="pipeline"
       recuo={false}
+      // O lead abre AO LADO, dentro do painel da tela, e empurra o quadro ou a
+      // lista: clicar em outra linha troca o registro sem fechar nada.
+      lateral={
+        aberto ? (
+          <PainelLead
+            etapas={etapas}
+            atendentes={ATENDENTES}
+            origens={OPCOES_DE_ORIGEM}
+            lead={aberto}
+            telaCheia={leadEmTelaCheia}
+            aoAlternarTelaCheia={() => setLeadEmTelaCheia((v) => !v)}
+            aoFechar={fecharLead}
+            aoMudarEtapa={(etapa) => {
+              if (etapa !== aberto.etapa) mover(aberto.id, etapa, 0);
+            }}
+            aoEditar={(campos) => editar(aberto.id, campos)}
+            aoTrocarTags={(ids) => editar(aberto.id, { tags: ids })}
+          />
+        ) : null
+      }
+      lateralCheia={Boolean(aberto) && leadEmTelaCheia}
       navegacao={
         <>
         <SidebarTopo>
@@ -593,20 +619,6 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
             />
           </div>
         )}
-      <Drawer aberto={Boolean(aberto)} aoFechar={() => setAbertoId(null)} rotulo={`Lead ${aberto?.nome ?? ""}`}>
-        {aberto ? (
-          <PainelLead
-            etapas={etapas}
-            lead={aberto}
-            aoFechar={() => setAbertoId(null)}
-            aoMudarEtapa={(etapa) => {
-              if (etapa !== aberto.etapa) mover(aberto.id, etapa, 0);
-            }}
-            aoEditar={(campos) => editar(aberto.id, campos)}
-            aoTrocarTags={(ids) => editar(aberto.id, { tags: ids })}
-          />
-        ) : null}
-      </Drawer>
 
       <Modal
         aberto={Boolean(novo)}

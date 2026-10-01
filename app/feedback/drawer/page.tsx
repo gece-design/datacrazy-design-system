@@ -113,13 +113,13 @@ export default function DrawerPage() {
 
       <Secao
         titulo="Quando usar"
-        descricao="Drawer é para consultar e editar um registro sem sair da lista. Se a tarefa pede a tela inteira, é página."
+        descricao="Drawer é para o registro completo: perfil, métricas e um menu de seções. O registro que abre de uma lista fica no Painel lateral, que não cobre a lista."
       >
         <ul className="space-y-3 chrome-prose text-muted-foreground">
           <li>
-            <span className="text-foreground">Um registro por vez.</span> O drawer abre o lead clicado na tabela ou no
-            funil; a lista continua atrás, no mesmo lugar. Dois drawers empilhados é sinal de que o segundo devia ser
-            página.
+            <span className="text-foreground">Um registro por vez.</span> O drawer cobre a tela para mostrar tudo
+            de um lead. Para consultar e editar passando de um registro a outro, o lugar é o Painel lateral. Dois
+            drawers empilhados é sinal de que o segundo devia ser página.
           </li>
           <li>
             <span className="text-foreground">O menu troca o conteúdo, não a URL da lista.</span> Cada seção é uma

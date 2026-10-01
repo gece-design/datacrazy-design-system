@@ -1991,6 +1991,60 @@
       "motion": null,
       "states": {},
       "_states_doc": "Leitura: nenhum estado. Conjunto fechado; marca nova entra no componente, nunca na tela. As cores sao do logo, nao tokens. ADR-048."
+    },
+    {
+      "name": "PainelLateral",
+      "family": "overlay",
+      "figmaNode": "sem par (proposta visual, parte 5)",
+      "batch": "C5",
+      "variants": [
+        "ao lado",
+        "telaCheia",
+        "abaixo de 1024"
+      ],
+      "tokens": [
+        "card",
+        "border",
+        "foreground",
+        "muted-foreground",
+        "ring",
+        "text/h4",
+        "text/caption",
+        "text/body-md",
+        "duration/fast"
+      ],
+      "motion": "entrada: fade-in-fast",
+      "states": {
+        "aberto": {
+          "impl": "aside de 480px com traço à esquerda, dentro do painel da tela; a lista encolhe e continua à vista",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "proposta visual (Twenty, Attio)",
+          "approvedIn": "C5"
+        },
+        "tela cheia": {
+          "impl": "o painel ocupa a tela; a TelaBase esconde Header e conteúdo (lateralCheia); corpo em coluna de 720px",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "proposta visual",
+          "approvedIn": "C5"
+        },
+        "focus": {
+          "impl": "outline 2px nos botões do cabeçalho; o foco não é preso — região complementar, não diálogo",
+          "source": "banco",
+          "rule": "D6",
+          "precedent": "Button",
+          "approvedIn": "C5"
+        },
+        "abrindo": {
+          "impl": "fade-in-fast; fecha na hora",
+          "source": "banco",
+          "rule": "L10",
+          "precedent": "Popover",
+          "approvedIn": "C5"
+        }
+      },
+      "_states_doc": "Sem par no arquivo: ADR-056. Nao e dialogo: nao prende o foco nem escurece. Escape com o foco dentro fecha. Abaixo de 1024 ocupa a tela."
     }
   ]
 }

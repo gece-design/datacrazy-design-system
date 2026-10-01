@@ -5,20 +5,20 @@
     "fim": "2026-10-01"
   },
   "git": {
-    "commits": 73,
-    "arquivos": 343,
-    "linhasUi": 11065,
+    "commits": 74,
+    "arquivos": 340,
+    "linhasUi": 11077,
     "linhasLib": 796,
-    "linhasDocs": 8290
+    "linhasDocs": 8310
   },
   "catalogo": {
-    "itens": 55,
+    "itens": 56,
     "porTipo": {
       "registry:theme": 4,
       "registry:block": 4,
       "registry:item": 1,
       "registry:lib": 11,
-      "registry:ui": 35
+      "registry:ui": 36
     }
   },
   "componentes": [
@@ -283,6 +283,19 @@
       "linhas": 102
     },
     {
+      "name": "painel-lateral",
+      "titulo": "PainelLateral",
+      "descricao": "Mostrar um registro aberto ao lado da lista, sem cobri-la: o lead, o negócio ou o contato num painel de 480px que empurra o conteúdo.",
+      "categoria": "Feedback & Overlays",
+      "pagina": null,
+      "pecas": 4,
+      "props": 15,
+      "variantes": 3,
+      "estados": 4,
+      "acessibilidade": 7,
+      "linhas": 167
+    },
+    {
       "name": "popover",
       "titulo": "Popover",
       "descricao": "A casca de todo painel flutuante do DS — lista do Select, calendário, hora, seletor de tags, lista de notificações: camada, superfície, traço e sombra em um lugar só. O papel, o foco e o teclado são de quem usa.",
@@ -406,11 +419,11 @@
       "categoria": "Telas de exemplo",
       "pagina": null,
       "pecas": 1,
-      "props": 7,
+      "props": 9,
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 5,
-      "linhas": 211
+      "linhas": 223
     },
     {
       "name": "telefone",
@@ -479,14 +492,14 @@
     }
   ],
   "totais": {
-    "componentes": 35,
-    "pecas": 115,
-    "props": 354,
-    "variantes": 100,
-    "estados": 127,
-    "acessibilidade": 212,
-    "paginas": 41,
-    "docs": 35
+    "componentes": 36,
+    "pecas": 119,
+    "props": 371,
+    "variantes": 103,
+    "estados": 131,
+    "acessibilidade": 219,
+    "paginas": 42,
+    "docs": 36
   },
   "tokens": {
     "cores": 68,
@@ -697,8 +710,8 @@
     },
     {
       "titulo": "Feedback & Overlays",
-      "total": 5,
-      "prontas": 5,
+      "total": 6,
+      "prontas": 6,
       "itens": [
         {
           "titulo": "Tooltip",
@@ -713,6 +726,11 @@
         {
           "titulo": "Modal",
           "href": "/feedback/modal",
+          "pronto": true
+        },
+        {
+          "titulo": "Painel lateral",
+          "href": "/feedback/painel-lateral",
           "pronto": true
         },
         {
@@ -1035,6 +1053,11 @@
       "id": "ADR-055",
       "titulo": "Uma superfície só: Header e conteúdo no mesmo painel",
       "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-056",
+      "titulo": "PainelLateral: o registro abre ao lado da lista",
+      "data": "2026-10-01"
     }
   ],
   "auditoria": {
@@ -1097,6 +1120,12 @@
       "origem": "Lote",
       "titulo": "CASCA NOVA, PARTE 4: UMA SUPERFÍCIE SÓ",
       "resumo": "ADR-055. A TelaBase põe o Header e o conteúdo num painel só (card, traço, raio lg), a 8px da janela e da navegação; o Header é a primeira faixa (48px) e perde o fundo próprio. Os controles de apoio (B"
+    },
+    {
+      "data": "2026-10-01",
+      "origem": "Lote",
+      "titulo": "CASCA NOVA, PARTE 5: O REGISTRO NO PAINEL LATERAL — PROPOSTA VISUAL CONCLUÍDA",
+      "resumo": "ADR-056. Componente novo, PainelLateral (com PainelLateralCorpo, ListaDeCampos e LinhaDeCampo): o registro abre num <aside> de 480px dentro do painel da tela e empurra a lista, que continua à vista — "
     },
     {
       "data": "2026-09-29",
@@ -1441,7 +1470,7 @@
       "regressao",
       "sidebar"
     ],
-    "capturas": 82,
+    "capturas": 84,
     "temas": 2
   },
   "bancada": {

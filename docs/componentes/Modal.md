@@ -6,8 +6,9 @@ Pedir uma decisão bloqueando a tela até ela ser tomada.
 
 ## Quando usar
 
-- **Use** para decisão que bloqueia a tela: confirmar exclusão, criar com poucos campos (até ~6), filtros.
-- **Não use** para ver ou editar um registro inteiro: é `Drawer`.
+- **Use** para decisão que bloqueia a tela: confirmar exclusão, criar com poucos campos (até ~6).
+- **Não use** para ver ou editar um registro: é `PainelLateral` (ao lado da lista) ou `Drawer` (o registro completo).
+- **Não use** para filtrar uma lista: é `BarraDeFiltros`.
 - **Não use** para avisar que deu certo: é `Toast`.
 - **Não use** modal sobre modal, nem formulário longo com rolagem.
 

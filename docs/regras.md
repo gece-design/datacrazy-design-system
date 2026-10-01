@@ -150,7 +150,8 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   total); `BotaoAgrupar` e `BotaoColunas` recolhidos na fileira do Header, ao
   lado de `HeaderBusca recolhida` e `HeaderFiltros recolhido`, que mostra e
   esconde a `BarraDeFiltros` sob o Header; `Pagination` embaixo; seleção em massa com `useSelecaoDaTabela` + `BarraDeSelecao`;
-  clique na linha abre o registro no `Drawer`. Células: `CelulaLead` (nome +
+  clique na linha abre o registro no `PainelLateral`, ao lado da lista (encaixe
+  `lateral` da `TelaBase`). Células: `CelulaLead` (nome +
   `Tag` neutra com `status`), `CelulaProgresso` (etapa), `Tag foto` (pessoa),
   `CelulaEditavel` (valor editável), `CelulaEscolha` (valor que vem de lista:
   tags, etapa — edita na célula, sem modal), origem com `IconeDeMarca`.
@@ -177,9 +178,14 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   uma linha) e o lead (320, cartões do drawer). Compositor: `Textarea
   rotuloOculto linhas={1}` + `SegmentedControl` Mensagem / Nota interna.
   Abaixo de 1280 o lead abre por cima; abaixo de 768, lista OU conversa.
-- **Detalhe de um registro**: `Drawer` + `DrawerPainel` (perfil à esquerda com
-  `DrawerPerfil`, `DrawerMetricas`, `DrawerMenu`; conteúdo à direita com
-  `DrawerConteudo` e `DrawerSecao`).
+- **Detalhe de um registro**: `PainelLateral` no encaixe `lateral` da
+  `TelaBase` (ADR-056) — 480px ao lado da lista, que continua à vista; `Tabs`
+  para as seções; dados em `ListaDeCampos` + `LinhaDeCampo` (rótulo à esquerda,
+  valor à direita), editando no lugar com `CelulaEditavel` e `CelulaEscolha`;
+  `aoAlternarTelaCheia` + `lateralCheia` para a tela cheia. O `Drawer`
+  (`DrawerPainel`, `DrawerPerfil`, `DrawerMetricas`, `DrawerMenu`,
+  `DrawerConteudo`, `DrawerSecao`) fica para o registro completo, com perfil e
+  muitas seções, que não cabe em 480px.
 
 ### Telas: densidade (os números que o cliente pediu)
 O cliente comparou com o Twenty e o Attio: "menos gap, menos padding, stroke
@@ -215,7 +221,10 @@ nas divs; o nosso parece gigante". Os números que fecham isso:
 - `Tag tom="…"` sorteada para cada etiqueta → `Tag` neutra com `status`; cor só
   quando o produto define a cor daquele dado (etapa do funil, tom do perfil).
   O cliente tirou a variação colorida em 18/09 ("vibe code").
-- Formulário longo em `Modal` → `Drawer` com cartões. Modal é decisão curta.
+- Formulário longo em `Modal` → `PainelLateral` com campos em linha, ou
+  `Drawer` com cartões. Modal é decisão curta.
+- `Drawer` ou `Modal` para abrir o registro clicado numa lista → `PainelLateral`:
+  a lista não pode sumir atrás do registro.
 - Sidebar ou Header montados à mão, ou tela sem `TelaBase`.
 - Card dentro de card, frame dentro de frame, tabela dentro de `Card`: uma
   superfície por bloco, e toda superfície tem traço (`border`).

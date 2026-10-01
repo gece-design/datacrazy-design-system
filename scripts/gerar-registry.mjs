@@ -30,7 +30,7 @@ const urlDoItem = (nome) => `${URL_DS}/r/${nome}.json`;
 // Todo componente tem doc (lote B1 da auditoria): a descrição vem da seção
 // Responsabilidade. Sem doc, a geração quebra de propósito.
 const DESCRICAO_FIXA = {};
-const TITULO_FIXO = { "data-table": "Data Table", "logo-datacrazy": "Logo DataCrazy", "icone-de-marca": "Ícone de marca", "barra-de-filtros": "Barra de filtros" };
+const TITULO_FIXO = { "data-table": "Data Table", "logo-datacrazy": "Logo DataCrazy", "icone-de-marca": "Ícone de marca", "barra-de-filtros": "Barra de filtros", "painel-lateral": "Painel lateral" };
 // Slug da página no site quando difere do nome do arquivo.
 const PAGINA_FIXA = { "data-table": "table" };
 // Componente que vive como SEÇÃO de outra página (decisão do humano, 2026-09-19):
@@ -243,8 +243,9 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    Tela de lista, quadro, calendário ou registro aberto? Instale
    \`npx shadcn@latest add ${NAMESPACE}/pipeline\` e copie o padrão de lá
    (\`app/pipeline/\`): é a tela do funil inteira, feita pelo time do DS —
-   Header com busca, filtros em chips (\`BarraDeFiltros\`), Table densa com
-   seleção em massa e edição na célula, Drawer com cartões. É a referência de densidade e composição; não invente layout.
+   Header de uma linha com busca, filtros em chips (\`BarraDeFiltros\`), Table
+   densa com seleção em massa e edição na célula, e o registro aberto num
+   \`PainelLateral\` ao lado da lista. É a referência de densidade e composição; não invente layout.
    Chat, inbox ou qualquer tela de mensagens? \`${NAMESPACE}/atendimento\`
    (\`app/atendimento/\`): conversas, mensagens e o lead em três colunas
    numa superfície só.
@@ -418,7 +419,7 @@ const BLOCOS = [
   {
     name: "pipeline",
     title: "Pipeline",
-    description: "O funil do CRM inteiro, pronto: quadro com arrastar e soltar, lista densa com seleção em massa, calendário e o lead aberto no drawer. A tela de referência para lista, quadro e detalhe — copie o padrão dela.",
+    description: "O funil do CRM inteiro, pronto: quadro com arrastar e soltar, lista densa com seleção em massa e edição na célula, calendário, filtros em chips e o lead aberto num painel ao lado. A tela de referência para lista, quadro e detalhe — copie o padrão dela.",
     arquivos: [
       { de: "app/exemplos/pipeline/page.tsx", para: "app/pipeline/page.tsx" },
       { de: "app/exemplos/pipeline/tela.tsx", para: "app/pipeline/tela.tsx" },
@@ -426,11 +427,9 @@ const BLOCOS = [
       { de: "app/exemplos/pipeline/quadro.tsx", para: "app/pipeline/quadro.tsx" },
       { de: "app/exemplos/pipeline/painel-lead.tsx", para: "app/pipeline/painel-lead.tsx" },
       { de: "app/exemplos/pipeline/dados.ts", para: "app/pipeline/dados.ts" },
-      { de: "app/feedback/drawer/drawer-lead.tsx", para: "app/pipeline/drawer-lead.tsx" },
     ],
     // a foto do atendente é do site (/ds/…): no projeto de quem instala a Tag fica só com o nome
     reescritas: [
-      ["@/app/feedback/drawer/drawer-lead", "./drawer-lead"],
       [' foto="/ds/atendente.png"', ""],
       ['foto: "/ds/atendente.png"', "foto: undefined"],
     ],

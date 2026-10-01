@@ -180,7 +180,7 @@ Os cinco comportamentos, com a referência do cliente (grid do ExtJS):
 | Colunas visíveis | Menu da coluna e botão `Colunas` da barra, um check por coluna; a primeira e a de ações não saem | Espaço no item alterna e o menu fica aberto |
 | Reordenar | Arrastar o cabeçalho (ghost segue o ponteiro, traço azul mostra onde cai); passou de 6px é arrasto, antes é clique | Menu: Mover para a esquerda / direita |
 | Redimensionar | A alça na borda direita do cabeçalho, com o cursor `col-resize`; mínimo 64px; dois cliques na alça ajustam a coluna ao conteúdo | Alça focável: setas ±16px, Shift ±64, Enter ajusta ao conteúdo |
-| Selecionar | Clique na linha (fora de botão e campo); `aria-selected`; a tela liga ao detalhe — no CRM, o Drawer | Enter/Espaço escolhe, setas andam |
+| Selecionar | Clique na linha (fora de botão e campo); `aria-selected`; a tela liga ao detalhe — no CRM, o `PainelLateral`, ao lado da lista | Enter/Espaço escolhe, setas andam |
 | Agrupar (T2) | Seletor "Agrupar por" na barra ou item do menu da coluna; linha de grupo com caret, contagem e total; ordenar vale dentro do grupo | Caret é botão com `aria-expanded`; as setas da seleção pulam a linha do grupo |
 
 ## Estados

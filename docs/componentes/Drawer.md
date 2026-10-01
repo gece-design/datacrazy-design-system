@@ -6,7 +6,8 @@ Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida
 
 ## Quando usar
 
-- **Use** para abrir um registro (lead, negócio) sem sair da lista: perfil à esquerda, seções à direita, largura que a pessoa arrasta.
+- **Use** para o registro completo, que pede mais que um painel de 480px: perfil e métricas à esquerda, um menu de seções (histórico, negócios, hierarquia) à direita, largura que a pessoa arrasta.
+- **Não use** para o registro que abre de uma lista ou de um quadro: é `PainelLateral`, que fica ao lado e não cobre a lista.
 - **Não use** para decisão curta ou confirmação: é `Modal`.
 - **Não use** para criar com poucos campos: `Modal`.
 - **Não use** com número fixo de colunas no conteúdo: os cartões vão em `gradeDeCartoes`.

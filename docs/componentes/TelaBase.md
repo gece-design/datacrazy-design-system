@@ -34,6 +34,8 @@ arquivo acompanha na remedição (AUD-203).
 | `navegacao` | `ReactNode` | sim | O miolo da Sidebar: `SidebarTopo` (marca e itens) e `SidebarRodape` (tema, atalhos, usuário). |
 | `cabecalho` | `HeaderProps` | sim | As props do [Header](Header.md): `titulo`, `subtitulo`, `trilha`, `utilitarios`, `acoes`. O botão de menu entra sozinho antes da trilha (`inicio`); o Header é de uma linha, e os controles da tela são `acoes`. |
 | `children` | `ReactNode` | sim | O conteúdo. Rola por dentro; o cabeçalho fica. |
+| `lateral` | `ReactNode` | não | O registro aberto ao lado do conteúdo: um [PainelLateral](PainelLateral.md). Fica dentro do painel da tela, à direita, e empurra o conteúdo. Abaixo de 1024px ocupa a tela. |
+| `lateralCheia` | `boolean` | não | O painel lateral em tela cheia: Header e conteúdo saem de cena. Acompanhe o `telaCheia` do `PainelLateral`. |
 | `memoria` | `string` | não | Chave da memória da sidebar (aberta ou recolhida) no navegador, uma por tela. Sem ela, começa pelo breakpoint. |
 | `recuo` | `boolean` | não | Padrão `true`: 16px em toda largura. Desligue (`recuo={false}`) quando o conteúdo encosta nas bordas do painel: lista, quadro, chat. |
 | `rotulos` | `Partial<RotulosDaTela>` | não | `abrirMenu`, `fecharMenu`, `recolherMenu`, `expandirMenu`, `navegacao`, `conteudo` (i18n). Fábrica: `ROTULOS_DA_TELA`. |
@@ -65,7 +67,7 @@ sidebar não abrir e recolher na frente da pessoa.
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| sidebar recolhida | `88px, só ícones — memória por tela (localStorage)` | humano | — |
+| sidebar recolhida | `48px, só ícones — memória por tela (localStorage)` | humano | — |
 | menu aberto (< 1024) | `painel fixo com Scrim, role=dialog, foco preso, fade-in-fast; sai com fade-out` | humano | L10 |
 | focus | `outline 2px (foco) nos botões da casca` | banco | D6 |
 <!-- kfe:estados:end -->

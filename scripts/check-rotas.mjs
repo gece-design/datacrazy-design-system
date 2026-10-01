@@ -12,7 +12,6 @@ import { catraca, flags } from "./lib/ratchet.mjs";
 const FORA_DO_NAV = {
   "/entrar": "portão de senha, não é página do catálogo",
   "/entrega": "relatório de entrega — link direto para o cliente, fora do catálogo",
-  "/exemplos/proposta-visual": "proposta de casca (Twenty/Attio) para o humano aprovar — link direto, não é catálogo",
 };
 
 const nav = lerNavegacao();
