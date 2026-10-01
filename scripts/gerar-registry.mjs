@@ -30,7 +30,7 @@ const urlDoItem = (nome) => `${URL_DS}/r/${nome}.json`;
 // Todo componente tem doc (lote B1 da auditoria): a descrição vem da seção
 // Responsabilidade. Sem doc, a geração quebra de propósito.
 const DESCRICAO_FIXA = {};
-const TITULO_FIXO = { "data-table": "Data Table", "logo-datacrazy": "Logo DataCrazy" };
+const TITULO_FIXO = { "data-table": "Data Table", "logo-datacrazy": "Logo DataCrazy", "icone-de-marca": "Ícone de marca", "barra-de-filtros": "Barra de filtros" };
 // Slug da página no site quando difere do nome do arquivo.
 const PAGINA_FIXA = { "data-table": "table" };
 // Componente que vive como SEÇÃO de outra página (decisão do humano, 2026-09-19):
@@ -39,6 +39,7 @@ const SECAO_FIXA = {
   rating: { pagina: "/forms/input", ancora: "rating" },
   telefone: { pagina: "/forms/input", ancora: "telefone" },
   textarea: { pagina: "/forms/input", ancora: "textarea" },
+  "icone-de-marca": { pagina: "/foundations/icons", ancora: "marcas" },
   "segmented-control": { pagina: "/navigation/header", ancora: "segmented-control-e-view-switcher" },
 };
 
@@ -242,8 +243,8 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    Tela de lista, quadro, calendário ou registro aberto? Instale
    \`npx shadcn@latest add ${NAMESPACE}/pipeline\` e copie o padrão de lá
    (\`app/pipeline/\`): é a tela do funil inteira, feita pelo time do DS —
-   Header com busca e filtros, Table densa com seleção em massa, Drawer com
-   cartões. É a referência de densidade e composição; não invente layout.
+   Header com busca, filtros em chips (\`BarraDeFiltros\`), Table densa com
+   seleção em massa e edição na célula, Drawer com cartões. É a referência de densidade e composição; não invente layout.
    Chat, inbox ou qualquer tela de mensagens? \`${NAMESPACE}/atendimento\`
    (\`app/atendimento/\`): conversas, mensagens e o lead em três colunas
    numa superfície só.

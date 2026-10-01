@@ -247,3 +247,19 @@ Aprovado por: humano (2026-10-01).
 Decisão: toda `docs/componentes/*.md` tem `## Quando usar`, com itens "**Use**" e "**Não use**" — o segundo sempre aponta o componente certo. A seção é a primeira da referência que a skill entrega ao Claude e aparece na página do componente no site (`lib/quando-usar.json`, gerado; a página que já tinha a sua, com exemplo vivo, fica com ela). `check-doc-codigo` reprova doc sem a seção e seção que cita componente inexistente.
 Motivo: crítica de design de 2026-09-28 ("falta dizer quando usar cada componente"; "menu usado onde devia ser select"). É a mesma lacuna que faz o agente escolher o componente errado.
 Aprovado por: humano (2026-10-01).
+
+## ADR-048 · IconeDeMarca: conjunto fechado, tokens `marca/*` e logo em `fill` · 2026-10-01
+Desvio: três exceções de uma vez, todas sem par no arquivo. (1) Componente novo (regra 6): `IconeDeMarca`, com nove marcas — WhatsApp, Instagram, Facebook, Google, Meta, LinkedIn, Telegram, YouTube, TikTok. (2) Tokens novos fora do Figma: primitivos `marca/*` com a cor oficial de cada marca, iguais nos dois modos (a cor é da marca, não do tema; TikTok usa `foreground`). Só o ícone usa — nunca fundo, texto ou traço. (3) Exceção à regra A8 (peso único): o logo é `fill`, na cor da marca; `mono` devolve o `regular` em `currentColor`. Os glifos são os logos do Phosphor: nenhum desenhado à mão.
+Motivo: crítica de design de 2026-09-28 ("ícone de marca não existe no DS… falta um componente ícone de integração com um conjunto fechado de marcas aprovadas"). Sem a peça, cada tela pintaria um logo com cor solta.
+Aprovado por: humano (2026-10-01: ordem dos lotes aprovada, "vai"). As nove marcas e as cores ficam para conferência dele; o Figma acompanha na remedição.
+
+## ADR-049 · Combobox, grupos e ícone no Select, CelulaEscolha · 2026-10-01
+Desvio: exceção à regra 6. `Combobox`, `ComboboxMultiplo` e `ComboboxPainel` nascem sem par no arquivo: gatilho do Select (`SelectTrigger`), painel do Popover, busca do `SeletorTags`, caixa de marcar do `Menu` — nenhuma superfície nova. `OpcaoSelect` ganha `grupo` (cabeçalho) e `icone`; `agruparOpcoes` e `GrupoDeOpcoes` servem ao Select e ao Combobox. Na Table, `CelulaEscolha` abre o `ComboboxPainel` na própria célula. A regra de escolha fica escrita: até ~10 opções fechadas é Select; lista longa, com busca ou várias escolhas é Combobox.
+Motivo: crítica de design de 2026-09-28, pontos 3 e 1.3 ("dropdown sem agrupamento nem ícone por opção"; "o catálogo nem lista um componente chamado Combobox separado do Select"; "multi-seleção por check editando direto na célula").
+Aprovado por: humano (2026-10-01: "vai").
+
+## ADR-050 · BarraDeFiltros substitui o modal de filtros · 2026-10-01
+Desvio: exceção à regra 6 (sem par no arquivo), e revisão de uma decisão anterior: o pipeline filtrava num Modal com tudo à vista (sete grupos de Checkbox, "nada de dropdown"). Agora os filtros são chips sob o Header: cada campo ativo é um chip (`Button soft`), o "+ Filtro" lista os campos, cada campo abre a própria lista com busca (`ComboboxPainel`), `unico` separa o campo de um valor do de vários, e chip sem valor some. O `HeaderFiltros` mostra e esconde a barra e exibe `contarFiltros`.
+Motivo: crítica de design de 2026-09-28 ("filtro com muitas opções não tem padrão… sete grupos de checkbox empilhados, sem busca, sem hierarquia entre filtro de um valor só e de múltiplos valores"). Referência: Twenty, Attio, Linear.
+Aprovado por: humano (2026-10-01: "vai").
+

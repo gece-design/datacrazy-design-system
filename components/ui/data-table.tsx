@@ -24,6 +24,7 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { Button, BotaoFechar } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Menu, type ItemDoMenu } from "@/components/ui/menu";
+import { ComboboxPainel, type OpcaoCombobox, type RotulosDoCombobox } from "@/components/ui/combobox";
 import { useSaida } from "@/lib/use-saida";
 
 import { foco, focoInterno } from "@/lib/estados";
@@ -1408,6 +1409,78 @@ export function CelulaTags({ etiquetas, className }: { etiquetas: EtiquetaDaCelu
           </Tag>
         );
       })}
+    </div>
+  );
+}
+
+/**
+ * A célula que escolhe no lugar: o valor em repouso (os filhos — texto,
+ * `CelulaTags`, um ícone de marca com o nome) é o gatilho, e o clique abre a
+ * lista com busca do `ComboboxPainel` ali mesmo, sem modal (cliente,
+ * 2026-09-28: "multi-seleção por check editando direto na célula"). É o par
+ * da `CelulaEditavel` para valor que vem de lista. A tela grava.
+ */
+export function CelulaEscolha({
+  rotulo,
+  opcoes,
+  selecionados,
+  aoAlternar,
+  multiplo,
+  rotulos,
+  children,
+  className,
+}: {
+  /** Nome da ação para leitor de tela e tooltip. Ex.: "Editar tags de Giovanna Alves". */
+  rotulo: string;
+  opcoes: OpcaoCombobox[];
+  /** Os valores que a linha tem. */
+  selecionados: string[];
+  /** Clique numa opção: com `multiplo`, põe ou tira; sem, troca e fecha. */
+  aoAlternar: (valor: string) => void;
+  multiplo?: boolean;
+  rotulos: RotulosDoCombobox;
+  /** O valor em repouso. */
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const [aberto, setAberto] = React.useState(false);
+  const gatilho = React.useRef<HTMLButtonElement>(null);
+  const densa = React.useContext(Contexto).layout === "densa";
+  return (
+    // O painel é um portal, mas o clique nele sobe pela árvore do React até a
+    // linha: para aqui, senão escolher uma opção abriria o registro.
+    <div className={cn("-mx-2 flex min-w-0 items-center", className)} onClick={(e) => e.stopPropagation()}>
+      <button
+        ref={gatilho}
+        type="button"
+        title={rotulo}
+        aria-label={rotulo}
+        aria-haspopup="dialog"
+        aria-expanded={aberto}
+        onClick={() => setAberto((a) => !a)}
+        className={cn(
+          "flex min-w-0 max-w-full flex-1 items-center rounded-md px-2 text-left transition-colors hover:bg-accent",
+          densa ? "min-h-6" : "min-h-8",
+          aberto && "bg-accent",
+          foco,
+        )}
+      >
+        {children}
+      </button>
+      <ComboboxPainel
+        aberto={aberto}
+        aoFechar={(devolver = true) => {
+          setAberto(false);
+          if (devolver) gatilho.current?.focus();
+        }}
+        gatilho={gatilho}
+        rotulo={rotulo}
+        opcoes={opcoes}
+        selecionados={selecionados}
+        aoAlternar={aoAlternar}
+        multiplo={multiplo}
+        rotulos={rotulos}
+      />
     </div>
   );
 }

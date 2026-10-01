@@ -3296,6 +3296,25 @@
       "status": "adiado",
       "fechadoEm": null,
       "nota": "**Crítica de design de 2026-09-28, lote 1 (ADR-043 a ADR-046).** A tabela nasce com linha de 36 e o cabeçalho aceita ícone por coluna; barras e rosca saem do gradiente para `primary` chapado (fatias por opacidade) e o eixo é opcional; o `fill` do KPI ganha traço `border`; a etiqueta PESSOA/EMPRESA sai de cima do avatar. Na remedição, o arquivo acompanha o código."
+    },
+    {
+      "id": "AUD-208",
+      "eixo": "fidelidade",
+      "titulo": "Figma atrás do código: IconeDeMarca e tokens `marca/*`, Combobox, BarraDeFiltros, grupos e ícone no Select",
+      "onde": [
+        "components/ui/icone-de-marca.tsx",
+        "components/ui/combobox.tsx",
+        "components/ui/barra-de-filtros.tsx",
+        "components/ui/select.tsx",
+        "app/globals.css"
+      ],
+      "regra": "fidelidade · regra 6 (componente novo só com par no arquivo) · exceções ADR-048/049/050",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Crítica de design de 2026-09-28, lote 2.** Três componentes e oito primitivos de cor nasceram no código, a pedido do cliente, sem desenho no arquivo. Na remedição: criar os component sets (Combobox com os três tamanhos do gatilho e o painel aberto; chip de filtro; ícone de marca nas nove marcas, colorido e mono) e a coleção `marca/*`. Conferir com o humano as nove marcas e as cores oficiais."
     }
   ]
 }

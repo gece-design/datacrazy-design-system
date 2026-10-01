@@ -8,15 +8,13 @@ import {
   Clock,
   Globe,
   Handshake,
-  InstagramLogo,
   Plus,
   User,
   WarningCircle,
-  WhatsappLogo,
 } from "@phosphor-icons/react";
-import type { Icon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Tag } from "@/components/ui/tag";
+import { IconeDeMarca } from "@/components/ui/icone-de-marca";
 import { cn } from "@/lib/utils";
 import { GRUPOS_TAGS, etapaPor, moeda, tagsDe, type Canal, type Etapa, type EtapaId, type Lead } from "./dados";
 
@@ -30,13 +28,14 @@ import { foco, rolagemDiscreta } from "@/lib/estados";
    O trilho rola de três jeitos: roda do mouse, setas nas bordas e arrastando o
    fundo do quadro, como no Trello. */
 
-/** O ícone de cada origem — o quadro e a lista usam o mesmo. */
-export const ICONES_DOS_CANAIS: Record<Canal, Icon> = {
-  WhatsApp: WhatsappLogo,
-  Instagram: InstagramLogo,
-  Site: Globe,
-  "Indicação": Handshake,
-};
+/** O ícone de cada origem — o quadro, a lista e os filtros usam o mesmo.
+ *  Marca é `IconeDeMarca`, na cor da marca; o que não é marca é Phosphor. */
+export function IconeDoCanal({ canal, tamanho = 14 }: { canal: Canal; tamanho?: 14 | 16 }) {
+  if (canal === "WhatsApp") return <IconeDeMarca marca="whatsapp" tamanho={tamanho} />;
+  if (canal === "Instagram") return <IconeDeMarca marca="instagram" tamanho={tamanho} />;
+  const Glifo = canal === "Site" ? Globe : Handshake;
+  return <Glifo size={tamanho} weight="regular" aria-hidden="true" className="shrink-0 text-muted-foreground" />;
+}
 
 /** Largura da coluna + vão. Um clique na seta anda exatamente uma coluna. */
 const PASSO = 316;
@@ -460,7 +459,6 @@ function Cartao({
   aoTerminar: () => void;
 }) {
   const Tipo = lead.tipo === "empresa" ? Buildings : User;
-  const CanalIcone = ICONES_DOS_CANAIS[lead.canal];
   const parado = lead.dias >= 7;
   const tags = tagsDe(GRUPOS_TAGS, lead.tags);
   const mostra = (c: CampoDoCartao) => campos.includes(c);
@@ -546,7 +544,7 @@ function Cartao({
           {mostra("dias") ? (
             <div className="flex shrink-0 items-center gap-2.5 text-muted-foreground">
               <span title={`Origem: ${lead.canal}`} className="flex items-center">
-                <CanalIcone size={14} weight="regular" aria-hidden="true" />
+                <IconeDoCanal canal={lead.canal} />
                 <span className="sr-only">{lead.canal}</span>
               </span>
               <span

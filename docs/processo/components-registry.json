@@ -1,7 +1,7 @@
 {
   "product": "DataCrazy",
   "kit": "3.2",
-  "updated": "2026-09-19",
+  "updated": "2026-10-01",
   "_doc": "Registro vivo de componentes — a memoria que alimenta a inferencia por analogia. Escrito pela fw-doc ao fim de CADA lote, nunca a mao. source de cada estado: figma | declarado | banco | inferido | humano.",
   "_divida": "Quitada em 2026-09-19 (lote B1): os seis componentes escritos antes do registro (Button, Badge, Sidebar, DatePicker, Rating, LogoDatacrazy) ganharam entrada lida do código.",
   "components": [
@@ -157,7 +157,9 @@
       "variants": [
         "md",
         "sm",
-        "aberto"
+        "aberto",
+        "grupo",
+        "icone"
       ],
       "tokens": [
         "card",
@@ -1827,6 +1829,178 @@
         }
       },
       "_states_doc": "Herda os estados da caixa do Input (caixaDeCampo). Cresce com o texto ate maximoDeLinhas. Sem par no arquivo: ADR-042."
+    },
+    {
+      "name": "Combobox",
+      "family": "entrada",
+      "figmaNode": "sem par (gatilho do Select, 261:333; painel dos tokens overlay/*)",
+      "batch": "C2",
+      "variants": [
+        "Combobox",
+        "ComboboxMultiplo",
+        "ComboboxPainel",
+        "grupo",
+        "icone"
+      ],
+      "tokens": [
+        "overlay/bg",
+        "overlay/border",
+        "overlay/item-hover",
+        "overlay/item-selected",
+        "overlay/item-text-selected",
+        "elevation/lg",
+        "z/popover",
+        "input/bg",
+        "input/border",
+        "input/border-focus",
+        "input/text",
+        "input/placeholder",
+        "primary",
+        "primary-foreground",
+        "card",
+        "foreground",
+        "muted-foreground",
+        "subtle-foreground",
+        "ring",
+        "radius/lg",
+        "radius/sm",
+        "text/label-lg",
+        "text/body-md",
+        "text/overline",
+        "duration/fast",
+        "duration/base"
+      ],
+      "motion": "painel: fade-in-fast / fade-out (Popover)",
+      "states": {
+        "hover": {
+          "impl": "bg-overlay-item-hover na opção; text-foreground no gatilho",
+          "source": "banco",
+          "rule": "L2",
+          "precedent": "Select / Menu",
+          "approvedIn": "C2"
+        },
+        "focus": {
+          "impl": "busca: traço e anel interno do campo; opção: o realce do hover, por aria-activedescendant; gatilho: outline 2px",
+          "source": "banco",
+          "rule": "D6",
+          "precedent": "SeletorTags",
+          "approvedIn": "C2"
+        },
+        "selecionado": {
+          "impl": "uma escolha: bg-overlay-item-selected + Check 16; várias: caixa 16px primary com Check 12",
+          "source": "banco",
+          "rule": "—",
+          "precedent": "Select / Menu (check)",
+          "approvedIn": "C2"
+        },
+        "aberto": {
+          "impl": "caret do gatilho girado 180 + text-foreground",
+          "source": "banco",
+          "rule": "L11",
+          "precedent": "Select",
+          "approvedIn": "C2"
+        },
+        "vazio": {
+          "impl": "busca sem resultado: rotulos.vazio em muted-foreground",
+          "source": "banco",
+          "rule": "—",
+          "precedent": "SeletorTags",
+          "approvedIn": "C2"
+        },
+        "abrindo": {
+          "impl": "fade-in-fast; sai com fade-out",
+          "source": "banco",
+          "rule": "L10",
+          "precedent": "Select",
+          "approvedIn": "C2"
+        }
+      },
+      "_states_doc": "Sem par no arquivo: ADR-049. Gatilho do Select, painel do Popover, busca do SeletorTags, caixa de marcar do Menu. Escape fecha so o painel."
+    },
+    {
+      "name": "BarraDeFiltros",
+      "family": "navegacao",
+      "figmaNode": "sem par (Button soft 269:32 + ComboboxPainel)",
+      "batch": "C2",
+      "variants": [
+        "varios valores",
+        "unico",
+        "abrirAoMontar"
+      ],
+      "tokens": [
+        "button/soft-bg",
+        "button/soft-foreground",
+        "button/soft-hover",
+        "accent",
+        "muted-foreground",
+        "foreground",
+        "ring",
+        "radius/md",
+        "text/button"
+      ],
+      "motion": "lista: fade-in-fast / fade-out (Popover)",
+      "states": {
+        "hover": {
+          "impl": "o do Button: button-soft-hover no chip, accent no + Filtro e no Limpar",
+          "source": "banco",
+          "rule": "I1",
+          "precedent": "Button",
+          "approvedIn": "C2"
+        },
+        "focus": {
+          "impl": "outline 2px nos dois botões do chip, no + Filtro e no Limpar",
+          "source": "banco",
+          "rule": "D6",
+          "precedent": "Button",
+          "approvedIn": "C2"
+        },
+        "ativo": {
+          "impl": "chip soft com o resumo dos valores (um ou dois por extenso, depois primeiro +n)",
+          "source": "banco",
+          "rule": "—",
+          "precedent": "HeaderFiltros (soft com a contagem)",
+          "approvedIn": "C2"
+        },
+        "aberto": {
+          "impl": "caret do chip girado 180 + aria-expanded",
+          "source": "banco",
+          "rule": "L11",
+          "precedent": "Select",
+          "approvedIn": "C2"
+        },
+        "vazio": {
+          "impl": "chip fechado sem nenhum valor some",
+          "source": "inferido",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "C2"
+        }
+      },
+      "_states_doc": "Sem par no arquivo: ADR-050. Aplica na hora, sem botao de confirmar. Substitui o modal de filtros com checkbox empilhado."
+    },
+    {
+      "name": "IconeDeMarca",
+      "family": "midia",
+      "figmaNode": "sem par (logos do Phosphor; cores oficiais das marcas)",
+      "batch": "C2",
+      "variants": [
+        "colorido",
+        "mono"
+      ],
+      "tokens": [
+        "marca/whatsapp",
+        "marca/instagram",
+        "marca/facebook",
+        "marca/google",
+        "marca/meta",
+        "marca/linkedin",
+        "marca/telegram",
+        "marca/youtube",
+        "foreground"
+      ],
+      "motion": null,
+      "states": {},
+      "_states_doc": "Leitura: nenhum estado. Conjunto fechado; marca nova entra no componente, nunca na tela. Unica excecao ao peso unico (A8): fill na cor da marca. ADR-048."
     }
   ]
 }

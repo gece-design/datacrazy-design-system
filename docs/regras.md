@@ -36,7 +36,7 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 | A5 | **Um menu só.** Lateral **ou** superior, nunca os dois. Abas não são estratégia de crescimento — quebram por navegador e viram duas linhas | nº 10, 11 |
 | A6 | **Nada de título e descrição decorativos** em toda tela. Se o usuário já sabe onde está, o texto é ruído | nº 12 |
 | A7 | **Gráfico minimalista:** sem eixo, legenda embaixo, valor no hover | nº 13 e gosto nº 12 |
-| A8 | **Ícones Phosphor** (pedido do cliente numa das primeiras reuniões; decisão de 2026-09-01), com **um único peso** em toda a interface — `regular` padrão, `fill` para selecionado. Peso misto é quebra de padronização | nº 14 (conflito registrado em `docs/01-arquitetura.md`) e nº 2 |
+| A8 | **Ícones Phosphor** (pedido do cliente numa das primeiras reuniões; decisão de 2026-09-01), com **um único peso** em toda a interface — `regular` padrão, `fill` para selecionado. Peso misto é quebra de padronização. Única exceção: `IconeDeMarca` — logo de marca em `fill`, na cor da marca (ADR-048) | nº 14 (conflito registrado em `docs/01-arquitetura.md`) e nº 2 |
 | A9 | **"Algumas pinceladas", não layout novo.** O DS é adotável de forma incremental sobre o que existe — coerente com a regra 14 | nº 15 |
 
 ## Padrões que o time quer (do "O que MAIS gosta")
@@ -89,10 +89,20 @@ contexto em `docs/processo/ux-direcao-visual.md`.
   tooltip). Por tela, não por largura (ADR-028).
 - `HeaderDivisor` só entre o grupo de visão (troca-visão, período, data) e a
   ação principal. Fileira só com busca, filtros e a ação não leva divisor.
+- Os filtros em si são a `BarraDeFiltros`, sob o Header: cada filtro ativo é um
+  chip ("Etapa: Proposta"), o "+ Filtro" lista os campos, e cada campo abre a
+  própria lista com busca. O `HeaderFiltros` mostra e esconde a barra e exibe
+  `contarFiltros(valor)`. Campo de um valor só leva `unico`. Aplica na hora:
+  sem botão de confirmar, sem modal (ADR-050).
 
 ### Formulário, rolagem e relevo
 - Select ao lado de Input é sempre `size="field"` (a caixa do Input). O `md` é
   de card e, num formulário, parece desabilitado (ADR-038).
+- Escolha em lista: até ~10 opções fechadas é `Select`; lista longa, com busca
+  ou com várias escolhas é `Combobox` / `ComboboxMultiplo`. Os dois aceitam
+  `grupo` (cabeçalho) e `icone` por opção (ADR-049).
+- Marca (WhatsApp, Instagram, Google…) é sempre `IconeDeMarca`, com o nome ao
+  lado. Nunca um logo com cor solta nem as cores `marca/*` fora do ícone (ADR-048).
 - Área que rola usa `rolagemDiscreta` (lib/estados.ts): barra fina, visível só
   sob o cursor. Nunca `[scrollbar-width:thin]` solto.
 - Button `primary` e `destructive` são planos (ADR-037). A sombra interna
@@ -114,11 +124,12 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   `densa`; não passe `layout`), `icone` em cada coluna, com
   `useAjustesDaTabela` e `DataTableToolbar` (só rótulo e
   total); `BotaoAgrupar` e `BotaoColunas` recolhidos na fileira do Header, ao
-  lado de `HeaderBusca recolhida` e `HeaderFiltros recolhido`; `Pagination`
-  embaixo; seleção em massa com `useSelecaoDaTabela` + `BarraDeSelecao`;
+  lado de `HeaderBusca recolhida` e `HeaderFiltros recolhido`, que mostra e
+  esconde a `BarraDeFiltros` sob o Header; `Pagination` embaixo; seleção em massa com `useSelecaoDaTabela` + `BarraDeSelecao`;
   clique na linha abre o registro no `Drawer`. Células: `CelulaLead` (nome +
   `Tag` neutra com `status`), `CelulaProgresso` (etapa), `Tag foto` (pessoa),
-  `CelulaEditavel` (valor editável).
+  `CelulaEditavel` (valor editável), `CelulaEscolha` (valor que vem de lista:
+  tags, etapa — edita na célula, sem modal), origem com `IconeDeMarca`.
 - **Cadastro / edição** (poucos campos): `Modal size="md"` com `Input`,
   `Select size="field"`, `InputTelefone`, `DatePicker`; rodapé com `Button
   size="sm"` (`outline` cancela, `primary` confirma). Muitos campos ou edição
@@ -161,8 +172,12 @@ nas divs; o nosso parece gigante". Os números que fecham isso:
 ### Telas: anti-padrões (o que faz "parecer o DataCrazy antigo")
 - `grid-cols-N` fixo em conteúdo que muda de largura → `gradeDeCartoes` ou
   `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`.
-- `Select` na barra da tabela para filtrar → `HeaderFiltros` no Header; a barra
-  da tabela só tem rótulo, total e, no máximo, Button `tertiary` + `Menu`.
+- `Select` na barra da tabela para filtrar → `BarraDeFiltros` sob o Header; a
+  barra da tabela só tem rótulo, total e, no máximo, Button `tertiary` + `Menu`.
+- `Modal` com grupos de `Checkbox` empilhados para filtrar → `BarraDeFiltros`.
+- `Select` com vinte opções, ou vários `Checkbox` para escolher numa lista longa
+  → `Combobox` / `ComboboxMultiplo`.
+- Logo de marca colado como `<svg>` ou pintado com cor solta → `IconeDeMarca`.
 - `DataTable layout="confortavel"` (linha alta, a do arquivo) para lista de
   registros → tire a prop: a Table nasce `densa`. `confortavel` é para
   leitura com respiro (relatório, doc).

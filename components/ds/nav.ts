@@ -44,6 +44,7 @@ export const navegacao: CategoriaNav[] = [
     itens: [
       { titulo: "Input", href: "/forms/input", icone: "campo", pronto: true , descricao: "Campo de texto de uma linha"},
       { titulo: "Select", href: "/forms/select", icone: "selecao", pronto: true, descricao: "Escolha numa lista, com a lista aberta"},
+      { titulo: "Combobox", href: "/forms/combobox", icone: "lupa", pronto: true, descricao: "Lista com busca, uma ou várias escolhas"},
       { titulo: "Checkbox", href: "/forms/checkbox", icone: "caixa", pronto: true , descricao: "Marcação, com indeterminado"},
       { titulo: "Radio Group", href: "/forms/radio-group", icone: "radio", pronto: true , descricao: "Escolha exclusiva por setas"},
       { titulo: "Switch", href: "/forms/switch", icone: "interruptor", pronto: true , descricao: "Liga e desliga na hora"},
@@ -62,6 +63,7 @@ export const navegacao: CategoriaNav[] = [
       // Estava no escopo negativo do roadmap (anti-referência nº 11). Entrou por
       // decisão do humano em 2026-09-15, com fileira que rola em vez de quebrar.
       { titulo: "Tabs", href: "/navigation/tabs", icone: "abas", pronto: true , descricao: "Seções do mesmo registro"},
+      { titulo: "Filtros", href: "/navigation/barra-de-filtros", icone: "funil", pronto: true, descricao: "Cada filtro ativo é um chip" },
     ],
   },
   {

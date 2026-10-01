@@ -10,7 +10,8 @@ quem seleciona um grupo.
 - **Use** para marcar várias opções independentes, confirmar um aceite e selecionar linhas da Table.
 - **Não use** para ligar algo que passa a valer na hora: é `Switch`.
 - **Não use** para escolher uma entre poucas (`RadioGroup`) ou uma entre muitas (`Select`).
-- **Não use** empilhado em sete grupos num modal de filtros: filtro de um valor é `Select`; só o de vários valores é Checkbox.
+- **Não use** empilhado em grupos num modal para filtrar uma lista: é `BarraDeFiltros`.
+- **Não use** para várias escolhas numa lista longa: é `ComboboxMultiplo`.
 
 ## Família
 

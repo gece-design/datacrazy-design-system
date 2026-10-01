@@ -89,7 +89,40 @@ export const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerPr
 );
 SelectTrigger.displayName = "SelectTrigger";
 
-export type OpcaoSelect = { valor: string; rotulo: string };
+export type OpcaoSelect = {
+  valor: string;
+  rotulo: string;
+  /** Ícone de 16px antes do rótulo: Phosphor ou `IconeDeMarca`. Aparece na lista e no gatilho. */
+  icone?: React.ReactNode;
+  /** Cabeçalho do grupo. Opções seguidas com o mesmo `grupo` ficam sob ele. Ex.: "Redes sociais". */
+  grupo?: string;
+};
+
+/** Opções na ordem em que chegam, repartidas em blocos pelo `grupo` — cada
+ *  uma com o índice que tem na lista inteira (é o que o teclado percorre). */
+export function agruparOpcoes<T extends { grupo?: string }>(opcoes: T[]) {
+  const blocos: { grupo?: string; itens: { opcao: T; indice: number }[] }[] = [];
+  opcoes.forEach((opcao, indice) => {
+    const ultimo = blocos[blocos.length - 1];
+    if (ultimo && ultimo.grupo === opcao.grupo) ultimo.itens.push({ opcao, indice });
+    else blocos.push({ grupo: opcao.grupo, itens: [{ opcao, indice }] });
+  });
+  return blocos;
+}
+
+/** Um bloco da lista: com `grupo`, ganha o cabeçalho e o `role="group"`. O
+ *  cabeçalho não é opção — o teclado passa direto por ele. */
+export function GrupoDeOpcoes({ grupo, primeiro, children }: { grupo?: string; primeiro?: boolean; children: React.ReactNode }) {
+  if (!grupo) return <>{children}</>;
+  return (
+    <div role="group" aria-label={grupo} className={cn(!primeiro && "mt-1 border-t border-overlay-border pt-1")}>
+      <div aria-hidden="true" className="px-3 pb-1 pt-1.5 text-overline uppercase text-subtle-foreground">
+        {grupo}
+      </div>
+      {children}
+    </div>
+  );
+}
 
 /** Altura máxima da lista (o `max-h-64` de antes), em px: entra na medida de "cabe embaixo?". */
 const ALTURA_DA_LISTA = 256;
@@ -233,8 +266,9 @@ export function Select({
         >
           <span className={rotuloDoBloco}>{rotulo}</span>
           <span className={cn("flex items-center justify-between gap-2", linhaDoCartao)}>
-            <span className={cn("min-w-0 truncate text-body-md", escolhido ? "text-input-text" : "text-input-placeholder")}>
-              {escolhido?.rotulo ?? textoVazio}
+            <span className={cn("flex min-w-0 items-center gap-1.5 text-body-md", escolhido ? "text-input-text" : "text-input-placeholder")}>
+              {escolhido?.icone}
+              <span className="min-w-0 truncate">{escolhido?.rotulo ?? textoVazio}</span>
             </span>
             <CaretDown
               size={16}
@@ -257,7 +291,14 @@ export function Select({
           onClick={() => (aberto ? fechar(false) : abrir())}
           onKeyDown={tecladoDoGatilho}
         >
-          {escolhido?.rotulo ?? textoVazio}
+          {escolhido?.icone ? (
+            <span className="flex min-w-0 items-center gap-1.5">
+              {escolhido.icone}
+              <span className="min-w-0 truncate">{escolhido.rotulo}</span>
+            </span>
+          ) : (
+            (escolhido?.rotulo ?? textoVazio)
+          )}
         </SelectTrigger>
       )}
 
@@ -276,30 +317,36 @@ export function Select({
           style={{ top: pos.top, bottom: pos.bottom, left: pos.left, minWidth: pos.minWidth, maxHeight: ALTURA_DA_LISTA }}
           className="overflow-auto p-1 focus:outline-none"
         >
-          {opcoes.map((o, i) => {
-            const selecionado = o.valor === valor;
-            return (
-              <div
-                key={o.valor}
-                id={`opcao-${id}-${i}`}
-                role="option"
-                aria-selected={selecionado}
-                onMouseEnter={() => setEmFoco(i)}
-                onClick={() => escolher(o)}
-                className={cn(
-                  "cursor-pointer whitespace-nowrap rounded-sm px-3 py-1.5 text-label-lg transition-colors",
-                  selecionado
-                    ? "bg-overlay-item-selected text-overlay-item-text-selected"
-                    : "text-muted-foreground",
-                  /* O realce do teclado e o do mouse são o mesmo: quem navega
-                     por seta vê exatamente o que quem passa o cursor vê. */
-                  i === emFoco && !selecionado && "bg-overlay-item-hover text-foreground",
-                )}
-              >
-                {o.rotulo}
-              </div>
-            );
-          })}
+          {agruparOpcoes(opcoes).map((bloco, b) => (
+            <GrupoDeOpcoes key={bloco.grupo ?? `sem-grupo-${b}`} grupo={bloco.grupo} primeiro={b === 0}>
+              {bloco.itens.map(({ opcao: o, indice: i }) => {
+                const selecionado = o.valor === valor;
+                return (
+                  <div
+                    key={o.valor}
+                    id={`opcao-${id}-${i}`}
+                    role="option"
+                    aria-selected={selecionado}
+                    onMouseEnter={() => setEmFoco(i)}
+                    onClick={() => escolher(o)}
+                    className={cn(
+                      "cursor-pointer whitespace-nowrap rounded-sm px-3 py-1.5 text-label-lg transition-colors",
+                      o.icone && "flex items-center gap-2",
+                      selecionado
+                        ? "bg-overlay-item-selected text-overlay-item-text-selected"
+                        : "text-muted-foreground",
+                      /* O realce do teclado e o do mouse são o mesmo: quem navega
+                         por seta vê exatamente o que quem passa o cursor vê. */
+                      i === emFoco && !selecionado && "bg-overlay-item-hover text-foreground",
+                    )}
+                  >
+                    {o.icone}
+                    {o.rotulo}
+                  </div>
+                );
+              })}
+            </GrupoDeOpcoes>
+          ))}
         </PainelFlutuante>,
         document.body,
       )

@@ -9,8 +9,9 @@ Escolher uma opção numa lista curta.
 - **Use** para escolher uma opção numa lista curta (até ~10) e fechada.
 - **Use** `size="field"` ao lado de Input num formulário; `cartao` no drawer; `sm` e `md` em card e barra.
 - **Não use** para ações (`Menu`), para ligar e desligar (`Switch`) ou para 2 a 4 opções que cabem à vista (`SegmentedControl`, `RadioGroup`).
-- **Não use** na barra da tabela para filtrar: filtros ficam no Header.
-- **Não use** para lista longa com busca, grupos ou várias escolhas: esse componente ainda não existe no DS. Para etiquetas, é `SeletorTags`; nos outros casos componha com `PainelFlutuante`, `Input` e a lista, sem adaptar o Select.
+- **Não use** na barra da tabela para filtrar: filtros são a `BarraDeFiltros`, sob o Header.
+- **Use** `grupo` quando a lista tem mais de um assunto ("Redes sociais" / "Outras") e `icone` quando a opção tem marca ou símbolo.
+- **Não use** para lista longa (mais de ~10 opções), com busca ou com várias escolhas: é `Combobox` ou `ComboboxMultiplo`.
 
 ## Família
 
@@ -34,7 +35,7 @@ página de Elevation reserva a popover e menu de contexto).
 
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
-| `opcoes` | `OpcaoSelect[]` | — | sim | `valor` e `rotulo`. |
+| `opcoes` | `OpcaoSelect[]` | — | sim | `valor`, `rotulo`, `icone?` (ícone de 16px antes do rótulo, na lista e no gatilho: Phosphor ou `IconeDeMarca`) e `grupo?` (cabeçalho do bloco: opções seguidas com o mesmo `grupo` ficam sob ele). |
 | `rotulo` | `string` | — | sim | Nome do controle para leitor de tela. Ex.: "Filtrar por etapa". |
 | `valor` | `string` | — | sim | O valor escolhido (controlado). Vazio = o gatilho mostra `textoVazio`. |
 | `aoEscolher` | `(v: string) => void` | — | não | Chamado ao escolher. |
@@ -47,6 +48,9 @@ página de Elevation reserva a popover e menu de contexto).
 
 `SelectTrigger` é exportado à parte, para quando a abertura for controlada por
 outro componente.
+
+`agruparOpcoes` e `GrupoDeOpcoes` (`grupo`, `primeiro`) são as duas peças da lista com
+grupos; o `Combobox` usa as mesmas. Quem só usa o Select não precisa delas.
 
 ## Variantes
 

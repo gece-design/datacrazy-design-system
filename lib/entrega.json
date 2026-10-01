@@ -2,23 +2,23 @@
   "geradoEm": "2026-10-01",
   "periodo": {
     "inicio": "2026-09-02",
-    "fim": "2026-09-29"
+    "fim": "2026-10-01"
   },
   "git": {
-    "commits": 65,
-    "arquivos": 331,
-    "linhasUi": 9992,
+    "commits": 66,
+    "arquivos": 332,
+    "linhasUi": 10112,
     "linhasLib": 785,
-    "linhasDocs": 7756
+    "linhasDocs": 7806
   },
   "catalogo": {
-    "itens": 51,
+    "itens": 54,
     "porTipo": {
       "registry:theme": 4,
       "registry:block": 3,
       "registry:item": 1,
       "registry:lib": 11,
-      "registry:ui": 32
+      "registry:ui": 35
     }
   },
   "componentes": [
@@ -47,6 +47,19 @@
       "estados": 0,
       "acessibilidade": 3,
       "linhas": 31
+    },
+    {
+      "name": "barra-de-filtros",
+      "titulo": "BarraDeFiltros",
+      "descricao": "Filtrar uma lista por vários campos: cada filtro ativo é um chip (\"Etapa: Proposta\"), e o \"+ Filtro\" lista os campos que ainda não entraram.",
+      "categoria": "Navigation",
+      "pagina": null,
+      "pecas": 2,
+      "props": 6,
+      "variantes": 3,
+      "estados": 5,
+      "acessibilidade": 6,
+      "linhas": 247
     },
     {
       "name": "breadcrumb",
@@ -114,17 +127,30 @@
       "linhas": 83
     },
     {
+      "name": "combobox",
+      "titulo": "Combobox",
+      "descricao": "Escolher uma ou várias opções numa lista com busca — o Select para lista longa, com grupos ou com várias escolhas.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 3,
+      "props": 20,
+      "variantes": 4,
+      "estados": 6,
+      "acessibilidade": 7,
+      "linhas": 390
+    },
+    {
       "name": "data-table",
       "titulo": "DataTable",
       "descricao": "Lista os negócios do CRM em colunas, com filtros e paginação — e, com `ajustes`, deixa a pessoa ordenar, esconder, reordenar e redimensionar as colunas e selecionar a linha (T1, pedido do cliente em 2026-09-18).",
       "categoria": "Data Display",
       "pagina": null,
-      "pecas": 20,
-      "props": 51,
+      "pecas": 21,
+      "props": 52,
       "variantes": 7,
       "estados": 4,
       "acessibilidade": 12,
-      "linhas": 1618
+      "linhas": 1691
     },
     {
       "name": "date-picker",
@@ -164,6 +190,19 @@
       "estados": 8,
       "acessibilidade": 6,
       "linhas": 472
+    },
+    {
+      "name": "icone-de-marca",
+      "titulo": "IconeDeMarca",
+      "descricao": "Mostrar a marca de um canal ou integração — WhatsApp, Instagram, Google — num conjunto fechado, com a cor da marca.",
+      "categoria": "Foundations",
+      "pagina": null,
+      "pecas": 1,
+      "props": 5,
+      "variantes": 2,
+      "estados": 0,
+      "acessibilidade": 4,
+      "linhas": 68
     },
     {
       "name": "input",
@@ -301,12 +340,12 @@
       "descricao": "Escolher uma opção numa lista curta.",
       "categoria": "Forms",
       "pagina": null,
-      "pecas": 2,
+      "pecas": 4,
       "props": 8,
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 7,
-      "linhas": 310
+      "linhas": 357
     },
     {
       "name": "sidebar",
@@ -440,17 +479,17 @@
     }
   ],
   "totais": {
-    "componentes": 32,
-    "pecas": 105,
-    "props": 318,
-    "variantes": 90,
-    "estados": 116,
-    "acessibilidade": 194,
-    "paginas": 38,
-    "docs": 32
+    "componentes": 35,
+    "pecas": 114,
+    "props": 350,
+    "variantes": 99,
+    "estados": 127,
+    "acessibilidade": 211,
+    "paginas": 40,
+    "docs": 35
   },
   "tokens": {
-    "cores": 68,
+    "cores": 76,
     "tipografia": 15,
     "raios": 7,
     "sombras": 8,
@@ -537,8 +576,8 @@
     },
     {
       "titulo": "Forms",
-      "total": 7,
-      "prontas": 7,
+      "total": 8,
+      "prontas": 8,
       "itens": [
         {
           "titulo": "Input",
@@ -548,6 +587,11 @@
         {
           "titulo": "Select",
           "href": "/forms/select",
+          "pronto": true
+        },
+        {
+          "titulo": "Combobox",
+          "href": "/forms/combobox",
           "pronto": true
         },
         {
@@ -579,8 +623,8 @@
     },
     {
       "titulo": "Navigation",
-      "total": 5,
-      "prontas": 5,
+      "total": 6,
+      "prontas": 6,
       "itens": [
         {
           "titulo": "Sidebar",
@@ -605,6 +649,11 @@
         {
           "titulo": "Tabs",
           "href": "/navigation/tabs",
+          "pronto": true
+        },
+        {
+          "titulo": "Filtros",
+          "href": "/navigation/barra-de-filtros",
           "pronto": true
         }
       ]
@@ -941,14 +990,29 @@
       "id": "ADR-047",
       "titulo": "\"Quando usar\" é seção obrigatória da doc do componente",
       "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-048",
+      "titulo": "IconeDeMarca: conjunto fechado, tokens `marca/*` e logo em `fill`",
+      "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-049",
+      "titulo": "Combobox, grupos e ícone no Select, CelulaEscolha",
+      "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-050",
+      "titulo": "BarraDeFiltros substitui o modal de filtros",
+      "data": "2026-10-01"
     }
   ],
   "auditoria": {
-    "total": 207,
+    "total": 208,
     "porStatus": {
       "corrigido": 67,
       "aceito": 12,
-      "adiado": 126,
+      "adiado": 127,
       "aberto": 2
     },
     "porEixo": {
@@ -958,7 +1022,7 @@
       "paginas": 10,
       "instalacao": 11,
       "docs": 10,
-      "fidelidade": 122
+      "fidelidade": 123
     }
   },
   "pedidos": [
@@ -967,6 +1031,12 @@
       "origem": "Revisão",
       "titulo": "CRÍTICA DE DESIGN DE 28/09 (RYAN PACHECO) · LOTE 1",
       "resumo": "O PDF Design_Critique.pdf foi lido por inteiro e cruzado com o DS; o humano aprovou a ordem (\"vai\"). Lote 1, o que não pede decisão: (1) a Table nasce densa; a linha alta vira confortavel (padrao segu"
+    },
+    {
+      "data": "2026-10-01",
+      "origem": "Lote",
+      "titulo": "CRÍTICA DE DESIGN DE 28/09 · LOTE 2",
+      "resumo": "Três componentes novos, sem par no arquivo. (1) IconeDeMarca (ADR-048): nove marcas, logos do Phosphor em fill na cor oficial (marca/*, primitivos em :root), mono para a fileira em que a cor compete; "
     },
     {
       "data": "2026-09-29",
@@ -1311,7 +1381,7 @@
       "regressao",
       "sidebar"
     ],
-    "capturas": 76,
+    "capturas": 80,
     "temas": 2
   },
   "bancada": {

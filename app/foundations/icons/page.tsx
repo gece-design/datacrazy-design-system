@@ -6,6 +6,7 @@ import {
 import type { IconWeight } from "@phosphor-icons/react";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 import { IconBrowser } from "@/components/ds/icon-browser";
+import { IconeDeMarca, MARCAS_DISPONIVEIS, type Marca } from "@/components/ui/icone-de-marca";
 import { Button } from "@/components/ui/button";
 
 /* ------------------------------------------------------------------------- */
@@ -31,6 +32,24 @@ import { Button } from "@/components/ui/button";
   </Button>
 </div>`;
 
+const CODIGO_MARCA = `<p className="flex items-center gap-1.5 text-label-lg text-foreground">
+  <IconeDeMarca marca="whatsapp" tamanho={14} />
+  WhatsApp
+</p>`;
+
+/** Como cada marca se escreve — nome de marca não se traduz. */
+const NOME_DA_MARCA: Record<Marca, string> = {
+  whatsapp: "WhatsApp",
+  instagram: "Instagram",
+  facebook: "Facebook",
+  google: "Google",
+  meta: "Meta",
+  linkedin: "LinkedIn",
+  telegram: "Telegram",
+  youtube: "YouTube",
+  tiktok: "TikTok",
+};
+
 /* ------------------------------------------------------------------------- */
 
 export default function Icones() {
@@ -38,7 +57,7 @@ export default function Icones() {
     <PaginaDS
       titulo="Icons"
       descricao="Phosphor: 1.512 nomes em 6 pesos, um módulo por ícone. O CRM usa 104 deles, em três tamanhos — 16, 20 e 24 — e num peso só: regular, com fill reservado ao item selecionado."
-      secoes={["Como funciona", "Import", "Peso", "Tamanhos", "Biblioteca"]}
+      secoes={["Como funciona", "Import", "Peso", "Tamanhos", "Marcas", "Biblioteca"]}
     >
       <ComoFunciona>
         <p>
@@ -175,6 +194,48 @@ export default function Icones() {
             <ChartLine size={24} weight="regular" />
             Receita do mês
           </span>
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Marcas"
+        spec="IconeDeMarca · 9 marcas"
+        descricao="De onde o lead veio e por onde a conversa acontece. É um conjunto fechado: o logo é do Phosphor, a cor é a oficial da marca, e a tela nunca pinta um logo por conta própria."
+        codigo={CODIGO_MARCA}
+        nota={
+          <>
+            É a única exceção ao peso único: logo é <Chip>fill</Chip>, na cor da marca. Com <Chip>mono</Chip> o
+            glifo volta ao peso <Chip>regular</Chip> e à cor do texto em volta — para a fileira em que a cor
+            competiria com o dado. O ícone anda sempre com o nome ao lado; sozinho, só com <Chip>rotulo</Chip>.
+            Marca que falta entra no componente, não na tela.
+          </>
+        }
+      >
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-wrap gap-x-6 gap-y-3">
+            {MARCAS_DISPONIVEIS.map((m) => (
+              <p key={m} className="flex items-center gap-1.5 text-label-lg text-foreground">
+                <IconeDeMarca marca={m} />
+                {NOME_DA_MARCA[m]}
+              </p>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-x-6 gap-y-3">
+            {MARCAS_DISPONIVEIS.map((m) => (
+              <p key={m} className="flex items-center gap-1.5 text-label-lg text-muted-foreground">
+                <IconeDeMarca marca={m} mono />
+                {NOME_DA_MARCA[m]}
+              </p>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-end gap-4">
+            {([12, 14, 16, 20] as const).map((tamanho) => (
+              <span key={tamanho} className="flex flex-col items-center gap-1.5">
+                <IconeDeMarca marca="whatsapp" tamanho={tamanho} rotulo="WhatsApp" />
+                <span className="font-mono text-label-sm text-subtle-foreground">{tamanho}</span>
+              </span>
+            ))}
+          </div>
         </div>
       </Secao>
 

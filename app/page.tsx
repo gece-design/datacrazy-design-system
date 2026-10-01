@@ -3,6 +3,7 @@
 import {
   ChartBar,
   Funnel,
+  FunnelSimple,
   Handshake,
   House,
   Kanban,
@@ -12,6 +13,7 @@ import {
   Trash,
   UsersThree,
 } from "@phosphor-icons/react";
+import { IconeDeMarca } from "@/components/ui/icone-de-marca";
 import { navegacao } from "@/components/ds/nav";
 import { PaginaDS, Secao, ComoFunciona, Chip, CardComponente } from "@/components/ds/preview";
 import { Button } from "@/components/ui/button";
@@ -245,6 +247,40 @@ const previews: Record<string, React.ReactNode> = {
       <Input rotulo="E-mail" placeholder="Exemplo: email@dominio.com" />
     </div>
   ),
+  // Estáticos de propósito: o card já é um link, e controle dentro de link não vale.
+  "/forms/combobox": (
+    <div className="w-56 max-w-full rounded-lg border border-overlay-border bg-overlay-bg p-1.5 shadow-lg">
+      <div className="flex h-8 items-center gap-2 rounded-md border border-input-border px-2 text-body-md text-input-placeholder">
+        <MagnifyingGlass size={14} weight="regular" aria-hidden="true" />
+        Buscar origem
+      </div>
+      <div className="mt-1 flex h-8 items-center gap-2 rounded-sm bg-overlay-item-hover px-2 text-label-lg text-foreground">
+        <IconeDeMarca marca="whatsapp" />
+        WhatsApp
+      </div>
+      <div className="flex h-8 items-center gap-2 rounded-sm px-2 text-label-lg text-muted-foreground">
+        <IconeDeMarca marca="instagram" />
+        Instagram
+      </div>
+    </div>
+  ),
+  "/navigation/barra-de-filtros": (
+    <div className="flex flex-wrap items-center justify-center gap-1.5">
+      <span className="inline-flex h-7 items-center gap-1.5 rounded-md bg-button-soft px-2.5 text-button text-button-soft-foreground">
+        <FunnelSimple size={14} weight="regular" aria-hidden="true" />
+        <span className="font-normal">Etapa:</span>
+        Proposta
+      </span>
+      <span className="inline-flex h-7 items-center gap-1.5 rounded-md bg-button-soft px-2.5 text-button text-button-soft-foreground">
+        <span className="font-normal">Origem:</span>
+        WhatsApp
+      </span>
+      <span className="inline-flex h-7 items-center gap-1.5 px-2.5 text-button text-muted-foreground">
+        <Plus size={14} weight="regular" aria-hidden="true" />
+        Filtro
+      </span>
+    </div>
+  ),
   "/forms/checkbox": (
     <div className="flex flex-col gap-2.5">
       <Checkbox defaultChecked>Negócios em aberto</Checkbox>
@@ -416,7 +452,9 @@ const descricoes: Record<string, string> = {
   "Button": "Quatro variantes, três tamanhos, estados por regra.",
   "Icon Button": "Ação sem rótulo: exige tooltip e aria-label (E7).",
   "Input": "Rótulo, cinco estados e ações dentro da caixa (E6).",
-  "Select": "Escolha única: é o ▾ dos filtros do dashboard.",
+  "Select": "Escolha única numa lista curta, com grupos e ícone por opção.",
+  "Combobox": "Lista com busca: uma ou várias escolhas, grupos e ícones.",
+  "Filtros": "Cada filtro ativo é um chip; o + Filtro traz os outros campos.",
   "Checkbox": "Alternância booleana, com estado indeterminado.",
   "Radio Group": "Escolha exclusiva: setas movem e selecionam.",
   "Switch": "Efeito imediato, sem botão de salvar.",

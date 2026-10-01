@@ -23,15 +23,18 @@ markdown é a vista dele.
 |---------|------------------|
 | [Avatar.md](Avatar.md) | Identificar pessoa ou empresa pela inicial, ou pela foto. |
 | [Badge.md](Badge.md) | Selo curto de status — a cor fica na borda e no texto, nunca preenchendo a |
+| [BarraDeFiltros.md](BarraDeFiltros.md) | Filtrar uma lista por vários campos: cada filtro ativo é um chip ("Etapa: Proposta"), e o "+ Filtro" lista os  |
 | [Breadcrumb.md](Breadcrumb.md) | Mostrar o caminho até a página atual e levar de volta a qualquer nível dele. |
 | [Button.md](Button.md) | Ação do usuário: sete variantes de peso visual e quatro tamanhos, com o mesmo |
 | [Calendario.md](Calendario.md) | Mostrar os negócios (ou qualquer evento datado) no mês ou na semana, pela |
 | [Card.md](Card.md) | Superfície que carrega um bloco de dados do dashboard. |
 | [Checkbox.md](Checkbox.md) | Marcar ou desmarcar uma opção independente, inclusive o "parte marcada" de |
+| [Combobox.md](Combobox.md) | Escolher uma ou várias opções numa lista com busca — o Select para lista longa, com grupos ou com várias escol |
 | [DataTable.md](DataTable.md) | Lista os negócios do CRM em colunas, com filtros e paginação — e, com |
 | [DatePicker.md](DatePicker.md) | Período em dois meses, com atalhos: um gatilho no estilo do Button `tertiary` |
 | [Drawer.md](Drawer.md) | Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida. |
 | [Header.md](Header.md) | O topo de uma página do CRM: onde a pessoa está, que página é e o que dá para |
+| [IconeDeMarca.md](IconeDeMarca.md) | Mostrar a marca de um canal ou integração — WhatsApp, Instagram, Google — num conjunto fechado, com a cor da m |
 | [Input.md](Input.md) | Receber um valor curto digitado, com rótulo visível e erro inline. |
 | [KpiCard.md](KpiCard.md) | Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma |
 | [LogoDatacrazy.md](LogoDatacrazy.md) | Símbolo e logotipo do DataCrazy (`LogoDataCrazy` no código), em `currentColor` para acompanhar o tema. É a |

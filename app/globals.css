@@ -22,6 +22,16 @@
     --blue-700: 215.8 79.8% 32.9%;
     --neutral-900: 240.0 9.1% 12.9%;
     --neutral-800: 221.2 16.0% 19.6%;
+    /* marcas — a cor é da marca, não do tema: mesmo valor nos dois modos.
+       Sem par no arquivo (ADR-048): só o `IconeDeMarca` usa. */
+    --marca-whatsapp: 142.4 70.2% 48.6%;
+    --marca-instagram: 348.7 75.2% 57.3%;
+    --marca-facebook: 217.2 100.0% 51.6%;
+    --marca-google: 217.4 89.0% 60.8%;
+    --marca-meta: 212.9 96.5% 44.5%;
+    --marca-linkedin: 210.0 90.2% 40.0%;
+    --marca-telegram: 199.9 77.9% 52.2%;
+    --marca-youtube: 0.0 100.0% 50.0%;
 
     /* semânticos — modo Claro */
     --background: 210.0 11.1% 92.9%;

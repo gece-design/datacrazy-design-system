@@ -11,7 +11,12 @@ import {
   House,
   Kanban,
   SlidersHorizontal,
+  FunnelSimple,
   Handshake,
+  Headset,
+  ShareNetwork,
+  Tag as IconeDeTag,
+  WarningCircle,
   Clock,
   Lightning,
   Plus,
@@ -21,7 +26,7 @@ import {
   UsersThree,
 } from "@phosphor-icons/react";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { Checkbox } from "@/components/ui/checkbox";
+import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos } from "@/components/ui/barra-de-filtros";
 import { Button } from "@/components/ui/button";
 import { Drawer } from "@/components/ui/drawer";
 import { Header, HeaderBusca, HeaderDivisor, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
@@ -61,7 +66,8 @@ import { BotaoAgrupar, BotaoColunas, useAjustesDaTabela } from "@/components/ui/
 import { Calendario } from "@/components/ui/calendario";
 import { TelaBase } from "@/components/ui/tela-base";
 import { PainelLead } from "./painel-lead";
-import { Quadro, agrupar, CAMPOS_DO_CARTAO, ROTULOS_DOS_CAMPOS, type CampoDoCartao, type Colunas } from "./quadro";
+import { Quadro, IconeDoCanal, agrupar, CAMPOS_DO_CARTAO, ROTULOS_DOS_CAMPOS, type CampoDoCartao, type Colunas } from "./quadro";
+import { Tag } from "@/components/ui/tag";
 import { Menu } from "@/components/ui/menu";
 
 import { foco, rolagemDiscreta } from "@/lib/estados";
@@ -97,19 +103,10 @@ const APOIO = [
 const ATENDENTES = ["Esther", "Liam", "Marina"];
 const CANAIS: Canal[] = ["WhatsApp", "Instagram", "Site", "Indicação"];
 
-/* Filtro é uma lista por dimensão: vazia significa "tudo". Dentro da mesma
-   dimensão soma (ou), entre dimensões corta (e) — é o que o comercial espera
-   ao marcar dois atendentes e uma origem. */
-type Filtro = {
-  atendentes: string[];
-  etapas: EtapaId[];
-  canais: string[];
-  tags: string[];
-  sinais: string[];
-};
-
-const SEM_FILTRO: Filtro = { atendentes: [], etapas: [], canais: [], tags: [], sinais: [] };
-
+/* Filtro é uma lista por campo: campo fora do objeto significa "tudo". Dentro
+   do mesmo campo soma (ou), entre campos corta (e) — é o que o comercial
+   espera ao marcar dois atendentes e uma origem. O formato é o da
+   `BarraDeFiltros`: cada campo ativo vira um chip. */
 const SINAIS: { id: string; rotulo: string; vale: (l: Lead) => boolean }[] = [
   { id: "parados", rotulo: "Parados há 7 dias ou mais", vale: (l) => l.dias >= 7 },
   { id: "sem-tag", rotulo: "Sem nenhuma tag", vale: (l) => l.tags.length === 0 },
@@ -117,8 +114,30 @@ const SINAIS: { id: string; rotulo: string; vale: (l: Lead) => boolean }[] = [
   { id: "novos", rotulo: "Entraram nesta semana", vale: (l) => l.dias <= 7 },
 ];
 
-const contarFiltros = (f: Filtro) =>
-  f.atendentes.length + f.etapas.length + f.canais.length + f.tags.length + f.sinais.length;
+/** As origens, em dois grupos — o mesmo recorte do Select de "Novo lead". */
+const OPCOES_DE_ORIGEM = CANAIS.map((c) => ({
+  valor: c,
+  rotulo: c,
+  grupo: c === "WhatsApp" || c === "Instagram" ? "Redes sociais" : "Outras",
+  icone: <IconeDoCanal canal={c} tamanho={16} />,
+}));
+
+/** Os campos que a tela deixa filtrar. Etapa depende das etapas do funil, que a pessoa edita. */
+const camposDeFiltro = (etapas: Etapa[]): CampoDeFiltro[] => [
+  { id: "etapas", rotulo: "Etapa", icone: FunnelSimple, opcoes: etapas.map((e) => ({ valor: e.id, rotulo: e.rotulo })) },
+  { id: "atendentes", rotulo: "Atendente", icone: Headset, opcoes: ATENDENTES.map((a) => ({ valor: a, rotulo: a })) },
+  { id: "canais", rotulo: "Origem", icone: ShareNetwork, opcoes: OPCOES_DE_ORIGEM },
+  {
+    id: "tags",
+    rotulo: "Tags",
+    icone: IconeDeTag,
+    opcoes: GRUPOS_TAGS.flatMap((g) =>
+      g.tags.map((x) => ({ valor: x.id, rotulo: x.rotulo, grupo: g.rotulo, conteudo: <Tag status={x.status}>{x.rotulo}</Tag> })),
+    ),
+  },
+  { id: "sinais", rotulo: "Situação", icone: WarningCircle, opcoes: SINAIS.map((s) => ({ valor: s.id, rotulo: s.rotulo })) },
+];
+
 const TONS = ["azul", "roxo", "verde", "ciano", "ambar", "rosa", "vermelho", "laranja"] as const;
 
 /* Buscar "saude" tem que achar "Saúde": quem digita rápido não põe acento. */
@@ -126,7 +145,7 @@ function semAcento(texto: string) {
   return texto.normalize("NFD").replace(/\p{Diacritic}/gu, "").trim().toLowerCase();
 }
 
-const leadVazio = { nome: "", empresa: "", valor: "", atendente: ATENDENTES[0], etapa: "novo" as EtapaId };
+const leadVazio = { nome: "", empresa: "", valor: "", atendente: ATENDENTES[0], etapa: "novo" as EtapaId, canal: "WhatsApp" as Canal };
 
 const etapaVazia = { modo: "criar" as "criar" | "editar", id: "", rotulo: "", cor: "neutro" as CorColuna };
 
@@ -135,7 +154,7 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
   const [etapas, setEtapas] = React.useState<Etapa[]>(ETAPAS);
   const [colunas, setColunas] = React.useState<Colunas>(() => agrupar(ETAPAS, LEADS));
   const [busca, setBusca] = React.useState("");
-  const [filtro, setFiltro] = React.useState<Filtro>(SEM_FILTRO);
+  const [filtro, setFiltro] = React.useState<FiltrosAtivos>({});
   const [visao, setVisao] = React.useState<string>(visaoInicial);
   // O mês do calendário: começa em setembro de 2026, o mês da carteira de exemplo.
   const [referencia, setReferencia] = React.useState(() => new Date(2026, 8, 1));
@@ -188,11 +207,12 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
 
   const combina = React.useCallback(
     (l: Lead) => {
-      if (filtro.atendentes.length && !filtro.atendentes.includes(l.responsavel)) return false;
-      if (filtro.etapas.length && !filtro.etapas.includes(l.etapa)) return false;
-      if (filtro.canais.length && !filtro.canais.includes(l.canal)) return false;
-      if (filtro.tags.length && !filtro.tags.some((t) => l.tags.includes(t))) return false;
-      if (filtro.sinais.length && !filtro.sinais.every((id) => SINAIS.find((x) => x.id === id)?.vale(l))) return false;
+      const de = (campo: string) => filtro[campo] ?? [];
+      if (de("atendentes").length && !de("atendentes").includes(l.responsavel)) return false;
+      if (de("etapas").length && !de("etapas").includes(l.etapa)) return false;
+      if (de("canais").length && !de("canais").includes(l.canal)) return false;
+      if (de("tags").length && !de("tags").some((t) => l.tags.includes(t))) return false;
+      if (de("sinais").length && !de("sinais").every((id) => SINAIS.find((x) => x.id === id)?.vale(l))) return false;
       const t = semAcento(busca);
       if (t === "") return true;
       const campos = [l.nome, l.empresa, l.responsavel, l.cidade, l.canal, ...tagsDe(GRUPOS_TAGS, l.tags).map((x) => x.rotulo)];
@@ -200,14 +220,6 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
     },
     [busca, filtro],
   );
-
-  /** Marca ou desmarca uma opção. Aplica na hora: sem botão de confirmar. */
-  function alternarFiltro(dimensao: keyof Filtro, valor: string) {
-    setFiltro((f) => ({
-      ...f,
-      [dimensao]: f[dimensao].includes(valor) ? f[dimensao].filter((v) => v !== valor) : [...f[dimensao], valor],
-    }));
-  }
 
   const quantosFiltros = contarFiltros(filtro);
 
@@ -293,7 +305,7 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
       telefone: "",
       email: "",
       cidade: "",
-      canal: "Site",
+      canal: novo.canal,
       responsavel: novo.atendente,
       valor,
       dias: 0,
@@ -440,14 +452,15 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
                 value={busca}
                 onChange={(e) => setBusca(e.target.value)}
               />
-              {/* Só o ícone, como a busca (a fileira tem o troca-visão). Com
-                  filtro ativo vira soft e mostra a conta. */}
+              {/* Só o ícone, como a busca (a fileira tem o troca-visão). Mostra e
+                  esconde a barra de filtros; com filtro ativo vira soft e mostra a conta. */}
               <HeaderFiltros
                 recolhido
                 rotulo="Filtros"
                 contagem={quantosFiltros}
                 rotuloComContagem={(n) => `Filtros: ${n} ativos`}
-                onClick={() => setFiltros(true)}
+                aria-expanded={filtros}
+                onClick={() => setFiltros((v) => !v)}
               />
               <ViewSwitcher
                 rotulo="Visualização"
@@ -509,6 +522,26 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
         ),
       }}
     >
+        {/* Os filtros em chips: só o que está ativo ocupa espaço, e cada campo
+            abre a própria lista com busca. Vale para o quadro, a lista e na hora. */}
+        {filtros ? (
+          <BarraDeFiltros
+            abrirAoMontar
+            aria-label="Filtros"
+            role="group"
+            className="shrink-0 pb-3 pl-4 pr-4 lg:pl-1"
+            campos={camposDeFiltro(etapas)}
+            valor={filtro}
+            aoMudar={setFiltro}
+            rotulos={{
+              adicionar: "Filtro",
+              limpar: "Limpar",
+              busca: "Buscar",
+              vazio: "Nada encontrado",
+              remover: (campo) => `Remover filtro ${campo}`,
+            }}
+          />
+        ) : null}
 
         {visao === "quadro" ? (
           <Quadro
@@ -621,6 +654,14 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
               aoEscolher={(v) => setNovo({ ...novo, atendente: v })}
               opcoes={ATENDENTES.map((a) => ({ valor: a, rotulo: a }))}
             />
+            {/* grupos com cabeçalho e ícone por opção; marca é `IconeDeMarca` */}
+            <Select
+              size="field"
+              rotulo="Origem"
+              valor={novo.canal}
+              aoEscolher={(v) => setNovo({ ...novo, canal: v as Canal })}
+              opcoes={OPCOES_DE_ORIGEM}
+            />
           </div>
         ) : null}
       </Modal>
@@ -711,103 +752,7 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
         ) : null}
       </Modal>
 
-      {/* Tudo à vista e um clique por escolha: nada de dropdown, nada de
-          aplicar. O quadro atrás já muda enquanto o modal está aberto. */}
-      <Modal
-        aberto={filtros}
-        aoFechar={() => setFiltros(false)}
-        titulo="Filtros"
-        descricao="Marque o que quiser ver. Vale para o quadro e para a lista, e vale na hora."
-        size="lg"
-        acoes={
-          <>
-            <Button size="sm" variant="secondary" disabled={!quantosFiltros} onClick={() => setFiltro(SEM_FILTRO)}>
-              Limpar {quantosFiltros ? `(${quantosFiltros})` : ""}
-            </Button>
-            <Button size="sm" onClick={() => setFiltros(false)}>Concluir</Button>
-          </>
-        }
-      >
-        <div className={cn("flex max-h-[60vh] flex-col gap-6 overflow-y-auto", rolagemDiscreta)}>
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
-            <GrupoDeFiltro titulo="Atendente">
-              {ATENDENTES.map((a) => (
-                <Checkbox
-                  key={a}
-                  checked={filtro.atendentes.includes(a)}
-                  onChange={() => alternarFiltro("atendentes", a)}
-                >
-                  {a}
-                </Checkbox>
-              ))}
-            </GrupoDeFiltro>
-
-            <GrupoDeFiltro titulo="Origem">
-              {CANAIS.map((c) => (
-                <Checkbox key={c} checked={filtro.canais.includes(c)} onChange={() => alternarFiltro("canais", c)}>
-                  {c}
-                </Checkbox>
-              ))}
-            </GrupoDeFiltro>
-
-            <GrupoDeFiltro titulo="Etapa">
-              {etapas.map((e) => (
-                <Checkbox
-                  key={e.id}
-                  checked={filtro.etapas.includes(e.id)}
-                  onChange={() => alternarFiltro("etapas", e.id)}
-                >
-                  {e.rotulo}
-                </Checkbox>
-              ))}
-            </GrupoDeFiltro>
-          </div>
-
-          <GrupoDeFiltro titulo="Situação">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2.5">
-              {SINAIS.map((s) => (
-                <Checkbox
-                  key={s.id}
-                  checked={filtro.sinais.includes(s.id)}
-                  onChange={() => alternarFiltro("sinais", s.id)}
-                >
-                  {s.rotulo}
-                </Checkbox>
-              ))}
-            </div>
-          </GrupoDeFiltro>
-
-          {GRUPOS_TAGS.map((g) => (
-            <GrupoDeFiltro key={g.id} titulo={`Tags · ${g.rotulo}`}>
-              <div className="flex flex-wrap gap-x-6 gap-y-2.5">
-                {g.tags.map((t) => (
-                  <Checkbox
-                    key={t.id}
-                    checked={filtro.tags.includes(t.id)}
-                    onChange={() => alternarFiltro("tags", t.id)}
-                  >
-                    {t.rotulo}
-                  </Checkbox>
-                ))}
-              </div>
-            </GrupoDeFiltro>
-          ))}
-        </div>
-      </Modal>
-
       <Toaster />
     </TelaBase>
-  );
-}
-
-/** Um bloco do modal de filtros: título e as opções embaixo. */
-function GrupoDeFiltro({ titulo, children }: { titulo: string; children: React.ReactNode }) {
-  return (
-    <fieldset className="flex min-w-0 flex-col gap-2.5">
-      <legend className="mb-2.5 text-body-sm font-semibold uppercase leading-[18px] text-muted-foreground">
-        {titulo}
-      </legend>
-      {children}
-    </fieldset>
   );
 }

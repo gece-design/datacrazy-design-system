@@ -191,6 +191,12 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   componente certo"); é a primeira seção da skill do cliente e a seção automática da página do componente
   (`lib/quando-usar.json`, gerado pelo gerar-registry — não editar à mão). `check-doc-codigo` reprova doc sem
   ela ou que cite componente inexistente (ADR-047). Gráficos chapados em `primary`, `eixoY` opcional (ADR-044).
+- **Lista com busca, filtros e marca** (crítica de 28/09, lote 2): `Combobox` / `ComboboxMultiplo` / `ComboboxPainel`
+  (combobox.tsx; o painel é controlado e ancora em qualquer gatilho, como o Menu) para lista longa, com busca ou várias
+  escolhas — `Select` fica com a lista curta; os dois aceitam `grupo` e `icone` na opção (`agruparOpcoes`, `GrupoDeOpcoes`
+  no select.tsx). Filtros de tela: `BarraDeFiltros` (chips; `contarFiltros` alimenta o `HeaderFiltros`, que mostra e esconde
+  a barra) — nunca Modal com Checkbox empilhado. Célula que escolhe no lugar: `CelulaEscolha`. Marca: `IconeDeMarca`
+  (conjunto fechado, tokens `marca/*`, primitivos só em `:root`; única exceção ao peso único). ADR-048/049/050.
 - **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, children; sem segunda linha;
   breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
   o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.

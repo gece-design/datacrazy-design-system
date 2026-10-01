@@ -5,6 +5,7 @@ import { Buildings, Clock, CurrencyDollar, FunnelSimple, Headset, ShareNetwork, 
 
 import {
   CelulaEditavel,
+  CelulaEscolha,
   CelulaLead,
   CelulaProgresso,
   CelulaTags,
@@ -25,7 +26,7 @@ import { Menu } from "@/components/ui/menu";
 import { Tag } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
 import { GRUPOS_TAGS, etapaPor, moeda, tagsDe, type Etapa, type EtapaId, type Lead } from "./dados";
-import { ICONES_DOS_CANAIS } from "./quadro";
+import { IconeDoCanal } from "./quadro";
 
 import { foco, rolagemDiscreta } from "@/lib/estados";
 /* A mesma carteira do quadro, na Table do design system. É o argumento de que
@@ -34,6 +35,11 @@ import { foco, rolagemDiscreta } from "@/lib/estados";
    de status, a etapa na cor da coluna, o atendente com foto, a origem com o
    ícone, os dias com o relógio ou o aviso (humano, 2026-09-24: "a tabela está
    super diferente do kanban"). */
+
+/** O catálogo de tags como opções da célula: agrupadas, cada uma como a Tag que vai aparecer. */
+const OPCOES_DE_TAG = GRUPOS_TAGS.flatMap((g) =>
+  g.tags.map((t) => ({ valor: t.id, rotulo: t.rotulo, grupo: g.rotulo, conteudo: <Tag status={t.status}>{t.rotulo}</Tag> })),
+);
 
 /** As colunas da lista. Ficam aqui, exportadas, porque os botões Agrupar e
  *  Colunas moram na fileira do Header da tela, não na barra da tabela. */
@@ -117,7 +123,6 @@ export function Lista({
             const etapa = etapaPor(etapas, lead.etapa);
             const parado = lead.dias >= 7;
             const Tipo = lead.tipo === "empresa" ? Buildings : User;
-            const Canal = ICONES_DOS_CANAIS[lead.canal];
             return (
               // Selecionar a linha abre o lead: o Drawer é o detalhe (mestre-detalhe da referência).
               <DataTableRow key={lead.id} chave={lead.id} nome={lead.nome} selecionada={lead.id === aberto} aoSelecionar={() => aoAbrir(lead)}>
@@ -133,8 +138,24 @@ export function Lista({
                   </button>
                 </DataTableCell>
                 <DataTableCell coluna="tags">
-                  {/* na grade densa as tags têm coluna própria: o nome não briga com elas */}
-                  <CelulaTags etiquetas={tagsDe(GRUPOS_TAGS, lead.tags).map((t) => ({ rotulo: t.rotulo, status: t.status }))} />
+                  {/* na grade densa as tags têm coluna própria: o nome não briga com elas.
+                      Editam no lugar: o clique abre a lista com busca, sem modal. */}
+                  <CelulaEscolha
+                    multiplo
+                    rotulo={`Editar tags de ${lead.nome}`}
+                    opcoes={OPCOES_DE_TAG}
+                    selecionados={lead.tags}
+                    aoAlternar={(id) =>
+                      aoEditar(lead.id, { tags: lead.tags.includes(id) ? lead.tags.filter((t) => t !== id) : [...lead.tags, id] })
+                    }
+                    rotulos={{ busca: "Buscar tag", vazio: "Nenhuma tag encontrada" }}
+                  >
+                    {lead.tags.length ? (
+                      <CelulaTags etiquetas={tagsDe(GRUPOS_TAGS, lead.tags).map((t) => ({ rotulo: t.rotulo, status: t.status }))} />
+                    ) : (
+                      <span className="text-label-lg text-subtle-foreground">Adicionar</span>
+                    )}
+                  </CelulaEscolha>
                 </DataTableCell>
                 <DataTableCell coluna="empresa">
                   {/* o mesmo par do cartão, numa linha: ícone do tipo + empresa · cidade */}
@@ -149,7 +170,7 @@ export function Lista({
                 </DataTableCell>
                 <DataTableCell coluna="origem">
                   <p className="flex min-w-0 items-center gap-1.5 text-label-lg text-foreground" title={`Origem: ${lead.canal}`}>
-                    <Canal size={14} weight="regular" aria-hidden="true" className="shrink-0 text-muted-foreground" />
+                    <IconeDoCanal canal={lead.canal} />
                     <span className="min-w-0 truncate">{lead.canal}</span>
                   </p>
                 </DataTableCell>

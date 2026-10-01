@@ -18,6 +18,7 @@ import {
   BotaoAgrupar,
   BarraDeSelecao,
   CelulaEditavel,
+  CelulaEscolha,
   useSelecaoDaTabela,
   agruparPor,
   ordenarPor,
@@ -74,6 +75,8 @@ const TOM_DA_ETAPA: Record<string, Tom | "neutro"> = {
   Fechamento: "verde",
 };
 const tomDaEtapa = (etapa: string) => TOM_DA_ETAPA[etapa] ?? "neutro";
+const PERCENTUAL_DA_ETAPA: Record<string, number> = { Qualificação: 20, Proposta: 60, Negociação: 80, Fechamento: 95 };
+const ETAPAS_DO_FUNIL = Object.keys(PERCENTUAL_DA_ETAPA).map((e) => ({ valor: e, rotulo: e }));
 function Atendente({ nome }: { nome: string }) {
   return nome === "Sem atendente" ? <CelulaTexto>{nome}</CelulaTexto> : <Tag foto="/ds/atendente.png">{nome}</Tag>;
 }
@@ -399,9 +402,23 @@ const editar = (id, campos) => setLinhas((l) => l.map((n) => (n.id === id ? { ..
 </DataTableCell>
 <DataTableCell coluna="atividades">
   <CelulaEditavel valor={n.atividades} rotulo={\`Editar atividades de \${n.nome}\`} aoSalvar={(v) => editar(n.id, { atividades: v })} />
+</DataTableCell>
+<DataTableCell coluna="etapa">
+  <CelulaEscolha
+    rotulo={\`Mudar etapa de \${n.nome}\`}
+    opcoes={etapas}
+    selecionados={[n.etapa]}
+    aoAlternar={(etapa) => editar(n.id, { etapa })}
+    rotulos={{ busca: "Buscar etapa", vazio: "Nenhuma etapa encontrada" }}
+  >
+    <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
+  </CelulaEscolha>
 </DataTableCell>`;
 
 /** A seção de edição na célula: valor e atividades editam no lugar. */
+/* Na seção de edição o produto divide a célula com o valor que edita: a coluna pede mais piso. */
+const colunasEditaveis: ColunaTabela[] = colunas.map((c) => (c.chave === "produto" ? { ...c, peso: 250, minimo: 260 } : c));
+
 function TabelaEditavel() {
   const [linhas, setLinhas] = useState(carteira);
   const editar = (id: string, campos: Partial<Negocio>) =>
@@ -409,16 +426,18 @@ function TabelaEditavel() {
   return (
     <div className="w-full overflow-hidden rounded-md bg-card">
       <DataTableToolbar rotulo="Total de resultados" total="10 negócios" />
-      <DataTable colunas={colunas} className="rounded-none">
+      <DataTable colunas={colunasEditaveis} className="rounded-none">
         {linhas.map((n) => (
           <DataTableRow key={n.id}>
             <DataTableCell coluna="lead">
               <CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} />
             </DataTableCell>
             <DataTableCell coluna="produto">
-              <div className="flex min-w-0 flex-col items-start gap-0.5">
-                <p className="w-full truncate text-h4 text-foreground">{n.produto}</p>
+              {/* uma linha só, como toda célula da grade: produto e, ao lado, o valor que edita */}
+              <div className="flex min-w-0 items-center gap-1">
+                <p className="min-w-0 truncate text-h4 text-foreground" title={n.produto}>{n.produto}</p>
                 <CelulaEditavel
+                  className="shrink-0"
                   valor={String(n.valor)}
                   formatar={(v) => moeda(Number(v) || 0)}
                   inputMode="numeric"
@@ -434,7 +453,16 @@ function TabelaEditavel() {
               <Atendente nome={n.atendente} />
             </DataTableCell>
             <DataTableCell coluna="etapa">
-              <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
+              {/* valor que vem de lista: o clique abre as opções na própria célula */}
+              <CelulaEscolha
+                rotulo={`Mudar etapa de ${n.nome}`}
+                opcoes={ETAPAS_DO_FUNIL}
+                selecionados={[n.etapa]}
+                aoAlternar={(etapa) => editar(n.id, { etapa, percentual: PERCENTUAL_DA_ETAPA[etapa] ?? n.percentual })}
+                rotulos={{ busca: "Buscar etapa", vazio: "Nenhuma etapa encontrada" }}
+              >
+                <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
+              </CelulaEscolha>
             </DataTableCell>
             <DataTableCell coluna="dados">
               <CelulaEstatisticas
@@ -719,14 +747,16 @@ export default function Pagina() {
 
       <Secao
         titulo="Edição na célula"
-        spec="clique · Enter salva · Escape desfaz"
-        descricao="Valor e atividades editam no lugar: em repouso é o texto com o lápis no hover; clicar vira um campo na própria célula, sem trocar de tela nem de linha. Enter e sair do campo salvam; Escape desfaz."
+        spec="texto: Enter salva · lista: clique escolhe"
+        descricao="Valor e atividades editam no lugar: em repouso é o texto com o lápis no hover; clicar vira um campo na própria célula, sem trocar de tela nem de linha. Enter e sair do campo salvam; Escape desfaz. A etapa vem de lista: o clique abre as opções ali mesmo, com busca."
         codigo={codigoEdicao}
         nota={
           <>
             <Chip>CelulaEditavel</Chip> guarda o texto cru e mostra o formatado (<Chip>formatar</Chip>: a moeda,
-            aqui). Só chama <Chip>aoSalvar</Chip> quando o texto mudou; quem grava é a tela. É o pedido do cliente
-            (2026-09-26): editar os dados na tabela, nas células. Para campo com regra (data, seleção), abra o Drawer.
+            aqui). Só chama <Chip>aoSalvar</Chip> quando o texto mudou; quem grava é a tela.{" "}
+            <Chip>CelulaEscolha</Chip> é o par dela para valor que vem de lista — etapa, tags, origem: uma escolha
+            troca e fecha; com <Chip>multiplo</Chip>, cada opção ganha caixa de marcar. Para campo com regra (data,
+            endereço), abra o Drawer.
           </>
         }
       >

@@ -12,7 +12,7 @@ do usuário. Saiu da Table em 2026-09-23 para ser peça.
 - **Use** `tipo: "check"` para ligar e desligar várias coisas sem fechar; `tipo: "radio"` para escolher um modo (Agrupar por).
 - **Não use** para escolher o valor de um campo: é `Select`.
 - **Não use** para navegação principal: é a `Sidebar`.
-- **Não use** com mais de ~10 itens ou com busca: o caso é de seletor com busca, não de menu.
+- **Não use** com mais de ~10 itens ou com busca: é `Combobox`.
 
 ## Família
 

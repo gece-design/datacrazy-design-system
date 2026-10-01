@@ -69,11 +69,12 @@
       "usar": [
         "para lista de registros (leads, contatos, negócios). Ela nasce `densa`; `confortavel` é só para leitura com respiro; `compacta` é a de dentro do Drawer.",
         "`ajustes`, `selecao` e `CelulaEditavel` em vez de abrir modal para ordenar, agir em massa ou editar um valor.",
-        "`icone` em cada coluna quando a grade tem mais de cinco: ajuda a achar o campo sem ler o rótulo."
+        "`icone` em cada coluna quando a grade tem mais de cinco: ajuda a achar o campo sem ler o rótulo.",
+        "`CelulaEscolha` para trocar na própria linha um valor que vem de lista (tags, etapa, origem), sem modal."
       ],
       "naoUsar": [
         "para menos de cinco itens com dois campos: é `CardList` dentro de um Card.",
-        "`Select` na barra da tabela para filtrar: busca e filtros ficam no Header; Agrupar e Colunas também.",
+        "`Select` na barra da tabela para filtrar: a busca fica no Header e os filtros na `BarraDeFiltros`; Agrupar e Colunas também sobem para o Header.",
         "`<table>` cru nem tabela dentro de Card."
       ]
     }
@@ -164,7 +165,24 @@
       "naoUsar": [
         "para ligar algo que passa a valer na hora: é `Switch`.",
         "para escolher uma entre poucas (`RadioGroup`) ou uma entre muitas (`Select`).",
-        "empilhado em sete grupos num modal de filtros: filtro de um valor é `Select`; só o de vários valores é Checkbox."
+        "empilhado em grupos num modal para filtrar uma lista: é `BarraDeFiltros`.",
+        "para várias escolhas numa lista longa: é `ComboboxMultiplo`."
+      ]
+    }
+  ],
+  "/forms/combobox": [
+    {
+      "componente": "Combobox",
+      "usar": [
+        "`Combobox` para uma escolha numa lista longa (mais de ~10 opções) ou que cresce com o uso: cidade, produto, responsável, origem.",
+        "`ComboboxMultiplo` para várias escolhas com caixa de marcar: tags, canais, segmentos.",
+        "`ComboboxPainel` quando o gatilho já existe: o chip da `BarraDeFiltros`, a `CelulaEscolha` da tabela."
+      ],
+      "naoUsar": [
+        "para lista curta e fechada (até ~10 opções, sem busca): é `Select`.",
+        "para ações sobre um item: é `Menu`.",
+        "para as etiquetas do lead no drawer: é `SeletorTags`, que cria tag e separa por aba.",
+        "vários Combobox empilhados num modal para filtrar uma lista: é `BarraDeFiltros`."
       ]
     }
   ],
@@ -239,12 +257,13 @@
       "componente": "Select",
       "usar": [
         "para escolher uma opção numa lista curta (até ~10) e fechada.",
-        "`size=\"field\"` ao lado de Input num formulário; `cartao` no drawer; `sm` e `md` em card e barra."
+        "`size=\"field\"` ao lado de Input num formulário; `cartao` no drawer; `sm` e `md` em card e barra.",
+        "`grupo` quando a lista tem mais de um assunto (\"Redes sociais\" / \"Outras\") e `icone` quando a opção tem marca ou símbolo."
       ],
       "naoUsar": [
         "para ações (`Menu`), para ligar e desligar (`Switch`) ou para 2 a 4 opções que cabem à vista (`SegmentedControl`, `RadioGroup`).",
-        "na barra da tabela para filtrar: filtros ficam no Header.",
-        "para lista longa com busca, grupos ou várias escolhas: esse componente ainda não existe no DS. Para etiquetas, é `SeletorTags`; nos outros casos componha com `PainelFlutuante`, `Input` e a lista, sem adaptar o Select."
+        "na barra da tabela para filtrar: filtros são a `BarraDeFiltros`, sob o Header.",
+        "para lista longa (mais de ~10 opções), com busca ou com várias escolhas: é `Combobox` ou `ComboboxMultiplo`."
       ]
     }
   ],
@@ -272,6 +291,37 @@
       ]
     }
   ],
+  "/foundations/icons": [
+    {
+      "componente": "IconeDeMarca",
+      "usar": [
+        "para a origem do lead, o canal da conversa e a integração conectada: na célula da tabela, no cartão, na opção de `Select` e de `Combobox`.",
+        "sempre com o nome ao lado; sozinho, só em espaço apertado e com `rotulo`.",
+        "`mono` quando a cor competiria com o dado da fileira (uma lista de configurações, um menu)."
+      ],
+      "naoUsar": [
+        "para ícone de ação ou de interface: é Phosphor, peso `regular`.",
+        "logo pintado com cor solta nem `<svg>` de marca colado na tela: a marca que falta entra neste conjunto.",
+        "as cores `marca/*` em fundo, texto ou traço: são só do ícone."
+      ]
+    }
+  ],
+  "/navigation/barra-de-filtros": [
+    {
+      "componente": "Barra de filtros",
+      "usar": [
+        "em tela de lista ou quadro com três campos de filtro ou mais: só o que está ativo ocupa espaço, e cada campo abre a própria lista com busca.",
+        "com o `HeaderFiltros`: o botão do Header mostra e esconde a barra, e `contarFiltros` dá a conta que ele exibe.",
+        "`unico` no campo que aceita um valor só (período, responsável único); sem ele o campo aceita vários, com caixa de marcar."
+      ],
+      "naoUsar": [
+        "`Modal` com grupos de `Checkbox` empilhados para filtrar: é esta barra.",
+        "`Select` na barra da tabela para filtrar: é esta barra, sob o Header.",
+        "para a busca por texto: é `HeaderBusca`.",
+        "para as situações fixas de uma lista (Abertas · Pendentes · Finalizadas): é `Tabs`."
+      ]
+    }
+  ],
   "/navigation/breadcrumb": [
     {
       "componente": "Breadcrumb",
@@ -288,7 +338,8 @@
     {
       "componente": "Header",
       "usar": [
-        "uma vez por tela, pela prop `cabecalho` da `TelaBase`. Busca é `HeaderBusca`, filtros `HeaderFiltros`, sino `Notificacoes`."
+        "uma vez por tela, pela prop `cabecalho` da `TelaBase`. Busca é `HeaderBusca`, filtros `HeaderFiltros`, sino `Notificacoes`.",
+        "`HeaderFiltros` para mostrar e esconder a `BarraDeFiltros`, com a conta dos filtros ativos."
       ],
       "naoUsar": [
         "montado à mão, nem um segundo título dentro do conteúdo.",

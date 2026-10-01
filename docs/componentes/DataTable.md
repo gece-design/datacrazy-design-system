@@ -12,7 +12,8 @@ colunas e selecionar a linha (T1, pedido do cliente em 2026-09-18).
 - **Use** `ajustes`, `selecao` e `CelulaEditavel` em vez de abrir modal para ordenar, agir em massa ou editar um valor.
 - **Use** `icone` em cada coluna quando a grade tem mais de cinco: ajuda a achar o campo sem ler o rótulo.
 - **Não use** para menos de cinco itens com dois campos: é `CardList` dentro de um Card.
-- **Não use** `Select` na barra da tabela para filtrar: busca e filtros ficam no Header; Agrupar e Colunas também.
+- **Use** `CelulaEscolha` para trocar na própria linha um valor que vem de lista (tags, etapa, origem), sem modal.
+- **Não use** `Select` na barra da tabela para filtrar: a busca fica no Header e os filtros na `BarraDeFiltros`; Agrupar e Colunas também sobem para o Header.
 - **Não use** `<table>` cru nem tabela dentro de Card.
 
 ## Família
@@ -158,6 +159,7 @@ tela; os ids são da tela, como na ordenação (ADR-031).
 |--------|-------|--------------|
 | `CelulaLead` | `nome`, `etiquetas?` | Nome + etiquetas em `Tag` (`EtiquetaDaCelula`: texto ou `{ rotulo, tom, status }`); quebram linha quando a coluna estreita |
 | `CelulaEditavel` | `valor`, `aoSalvar`, `rotulo`, `formatar?`, `inputMode?`, `alinharFim?` | Edita no lugar: texto com lápis no hover; clicar vira campo de 32px na célula; Enter e sair salvam, Escape desfaz (cliente, 2026-09-26) |
+| `CelulaEscolha` | `rotulo`, `opcoes`, `selecionados`, `aoAlternar`, `multiplo?`, `rotulos`, `children` | Escolhe no lugar: o valor em repouso (os filhos) é o gatilho e o clique abre a lista com busca do `ComboboxPainel` na própria célula, sem modal. Par da `CelulaEditavel` para valor que vem de lista — tags, etapa, origem (ADR-049) |
 | `CelulaTags` | `etiquetas` | Só as etiquetas, numa linha: a coluna "Tags" da grade densa; a que não cabe some inteira (o title lista todas) |
 | `CelulaDupla` | `principal`, `apoio?` | Valor com linha de apoio |
 | `CelulaTexto` | `children`, `enfase?` | Uma linha; `enfase` pinta em `primary` |

@@ -101,6 +101,13 @@ Os três do meio trocam de token entre os modos e por isso reaparecem no
 `400` `#599CFF` · `500` `#3385FF` · `600` `#1266E2` · `700` `#114797` ·
 `base/neutral/900` `#1E1E24` · `base/neutral/800` `#2A2F3A`
 
+**Marcas** (`marca/*`, sem par no arquivo — ADR-048): a cor é da marca, não do
+tema, por isso não muda entre os modos. Só o `IconeDeMarca` usa; nunca em
+fundo, texto ou traço de interface.
+`whatsapp` `#25D366` · `instagram` `#E4405F` · `facebook` `#0866FF` ·
+`google` `#4285F4` · `meta` `#0467DF` · `linkedin` `#0A66C2` ·
+`telegram` `#26A5E4` · `youtube` `#FF0000`. TikTok usa `foreground`.
+
 ### Cor — estados
 
 | Token | Claro | Escuro |

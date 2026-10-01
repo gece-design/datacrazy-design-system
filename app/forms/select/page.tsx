@@ -4,6 +4,8 @@ import { useState } from "react";
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
 import { Select, SelectTrigger } from "@/components/ui/select";
 import { CampoEditavel, CartaoDeCampo } from "@/components/ui/input";
+import { IconeDeMarca } from "@/components/ui/icone-de-marca";
+import { Globe, Handshake } from "@phosphor-icons/react";
 
 const etapas = [
   { valor: "prospeccao", rotulo: "Prospecção" },
@@ -12,6 +14,25 @@ const etapas = [
   { valor: "negociacao", rotulo: "Negociação" },
   { valor: "fechado", rotulo: "Fechado" },
 ];
+
+const origens = [
+  { valor: "whatsapp", rotulo: "WhatsApp", grupo: "Redes sociais", icone: <IconeDeMarca marca="whatsapp" /> },
+  { valor: "instagram", rotulo: "Instagram", grupo: "Redes sociais", icone: <IconeDeMarca marca="instagram" /> },
+  { valor: "google", rotulo: "Google", grupo: "Redes sociais", icone: <IconeDeMarca marca="google" /> },
+  { valor: "meta", rotulo: "Meta", grupo: "Redes sociais", icone: <IconeDeMarca marca="meta" /> },
+  { valor: "linkedin", rotulo: "LinkedIn", grupo: "Redes sociais", icone: <IconeDeMarca marca="linkedin" /> },
+  { valor: "site", rotulo: "Site", grupo: "Outras", icone: <Globe size={16} weight="regular" aria-hidden="true" /> },
+  { valor: "indicacao", rotulo: "Indicação", grupo: "Outras", icone: <Handshake size={16} weight="regular" aria-hidden="true" /> },
+];
+
+const codigoGrupos = `const origens = [
+  { valor: "whatsapp", rotulo: "WhatsApp", grupo: "Redes sociais", icone: <IconeDeMarca marca="whatsapp" /> },
+  { valor: "instagram", rotulo: "Instagram", grupo: "Redes sociais", icone: <IconeDeMarca marca="instagram" /> },
+  { valor: "site", rotulo: "Site", grupo: "Outras", icone: <Globe size={16} weight="regular" aria-hidden="true" /> },
+  { valor: "indicacao", rotulo: "Indicação", grupo: "Outras", icone: <Handshake size={16} weight="regular" aria-hidden="true" /> },
+];
+
+<Select size="field" rotulo="Origem" textoVazio="Selecione a origem" opcoes={origens} valor={origem} aoEscolher={setOrigem} />`;
 
 const codigoTamanhos = `<Select size="md" rotulo="Ver por" opcoes={porValor} valor={por} aoEscolher={setPor} />
 <Select size="sm" rotulo="Filtrar por etapa" opcoes={etapas} valor={etapa} aoEscolher={setEtapa} />`;
@@ -32,12 +53,13 @@ export default function SelectPage() {
   const [campo, setCampo] = useState("");
   const [cartao, setCartao] = useState("qualificacao");
   const [gatilho, setGatilho] = useState(false);
+  const [origem, setOrigem] = useState("whatsapp");
 
   return (
     <PaginaDS
       titulo="Select"
       descricao="Escolha numa lista curta: três tamanhos de gatilho (32, 29 e 36px) e uma lista aberta em overlay/bg com elevation/lg, teclado completo e foco que volta ao gatilho. Só o gatilho está desenhado no arquivo; a lista é derivação — o Select Menu do Figma segue no backlog."
-      secoes={["Como funciona", "Tamanhos", "No formulário", "Só o gatilho", "Teclado"]}
+      secoes={["Como funciona", "Tamanhos", "No cartão do drawer", "No formulário", "Grupos e ícones", "Só o gatilho", "Teclado"]}
     >
       <ComoFunciona>
         <p>
@@ -105,6 +127,25 @@ export default function SelectPage() {
         <Legenda>
           Vazio, o gatilho mostra o <Chip>textoVazio</Chip> em <Chip>input/placeholder</Chip>. Escolhido, o rótulo da opção em{" "}
           <Chip>input/text</Chip>.
+        </Legenda>
+      </Secao>
+
+      <Secao
+        titulo="Grupos e ícones"
+        spec="grupo · icone"
+        descricao="Lista com mais de um assunto ganha cabeçalho por grupo; opção com marca ou símbolo ganha ícone, que aparece também no gatilho. O cabeçalho não é opção: o teclado passa direto por ele."
+        codigo={codigoGrupos}
+      >
+        <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
+          <div className="rounded-md bg-card p-5">
+            <CartaoDeCampo rotulo="Origem">
+              <Select size="field" rotulo="Origem" textoVazio="Selecione a origem" opcoes={origens} valor={origem} aoEscolher={setOrigem} className="block w-full" />
+            </CartaoDeCampo>
+          </div>
+        </div>
+        <Legenda>
+          Marca é <Chip>IconeDeMarca</Chip>, na cor da marca; o que não é marca é Phosphor de 16px. Passou de umas
+          dez opções, ou precisa de busca ou de várias escolhas? É <Chip>Combobox</Chip>.
         </Legenda>
       </Secao>
 
