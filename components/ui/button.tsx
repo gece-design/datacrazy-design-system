@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
-import { foco, desabilitado, superficieDeApoio } from "@/lib/estados";
+import { alturaCompacta, desabilitado, foco, quadradoCompacto, recuoCompacto, superficieDeApoio } from "@/lib/estados";
 const buttonVariants = cva(
   // Base: foco sempre visível (E7) · estados de interação por regra, não por desenho (E-01)
   // Foco por outline, não por ring com offset: o offset do ring é pintado com uma
@@ -37,14 +37,15 @@ const buttonVariants = cva(
       },
       size: {
         sm: "h-7 px-2.5",
-        md: "h-8 px-3",
+        // No topo da tela (Header, `data-compacto`) o `md` mede 28: ver `alturaCompacta`.
+        md: `h-8 px-3 ${alturaCompacta} ${recuoCompacto}`,
         lg: "h-9 px-4",
         // Quadrados só de ícone — exigem `aria-label`. 32 é o sino do Header;
         // 28 e 24 são os X de fechar (Modal, Toast); 36 é o degrau `lg`.
         // Lote B4 da auditoria: antes cada um era um <button> à mão.
         "icon-xs": "size-6",
         "icon-sm": "size-7",
-        icon: "size-8",
+        icon: `size-8 ${quadradoCompacto}`,
         "icon-lg": "size-9",
       },
     },

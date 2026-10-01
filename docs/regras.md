@@ -200,7 +200,10 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
 ### Telas: densidade (os números que o cliente pediu)
 O cliente comparou com o Twenty e o Attio: "menos gap, menos padding, stroke
 nas divs; o nosso parece gigante". Os números que fecham isso:
-- Linha de tabela: 36px (`densa`, o padrão da Table), traço entre colunas e entre linhas.
+- Linha de tabela: 32px (`densa`, o padrão da Table), traço entre colunas e entre linhas.
+- Topo da tela: 48px, com os controles em 28. O `Header` encolhe sozinho o Button, o
+  `SegmentedControl`, o `ViewSwitcher` e o gatilho de data que estão nele — use o tamanho
+  padrão; não passe `size="sm"` nem altura por `className`.
 - Espaço vazio tem critério. É respiro quando separa grupos (`gap-6` entre
   seções). É desperdício quando fica ENTRE itens do mesmo grupo ou quando o
   conteúdo estica para preencher a tela: cartão e campo têm a largura do
@@ -228,7 +231,7 @@ O produto é responsivo, não desktop-first. Toda tela é conferida em 390px.
 - Mestre-detalhe vira um OU outro: o `PainelLateral` já ocupa a tela abaixo de
   1024; lista e conversa alternam, com um botão de voltar. Com o detalhe
   aberto, busca, filtros e a ação principal do Header saem — a tela é o detalhe.
-- Controle tem 32px de altura; ícone clicável nunca fica solto com menos de 24.
+- Controle tem 32px de altura (28 no topo da tela, onde o `Header` encolhe sozinho); ícone clicável nunca fica solto com menos de 24.
 - Rótulo que não cabe some inteiro ou trunca com `title` — nunca vira "0…". O
   `CardChart` já mostra só os rótulos que cabem.
 

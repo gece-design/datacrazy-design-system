@@ -5,7 +5,7 @@ import type { Icon } from "@phosphor-icons/react";
 import { Tooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-import { foco, desabilitado, superficieDeApoio } from "@/lib/estados";
+import { alturaCompacta, desabilitado, foco, opcaoCompacta, superficieDeApoio } from "@/lib/estados";
 /**
  * Segmented Control e View Switcher — escolha exclusiva à vista, numa trilha
  * de `card` (nodes 269:68 e 471:2947).
@@ -71,7 +71,7 @@ export function SegmentedControl({ itens, atual, aoEscolher, rotulo, className }
       role="radiogroup"
       aria-label={rotulo}
       onKeyDown={teclado}
-      className={cn("inline-flex h-8 max-w-full items-center rounded-md p-1", superficieDeApoio, className)}
+      className={cn("inline-flex h-8 max-w-full items-center rounded-md p-1", alturaCompacta, superficieDeApoio, className)}
     >
       {itens.map((item) => {
         const selecionada = item.valor === atual;
@@ -91,6 +91,7 @@ export function SegmentedControl({ itens, atual, aoEscolher, rotulo, className }
               // Aqui é body-md em todas: peso que muda por opção faz a trilha
               // mudar de largura quando a seleção troca.
               "h-7 rounded-md px-2.5 text-body-md",
+              opcaoCompacta,
               selecionada
                 ? "bg-segmented-item-selected text-overlay-item-text-selected"
                 // hover derivado (E-01), o mesmo do Tabs
@@ -118,7 +119,7 @@ export function ViewSwitcher({ itens, atual, aoEscolher, rotulo, className }: Gr
       onKeyDown={teclado}
       // min-w e não w: com três opções fecha nos 116 do arquivo; com quatro,
       // cresce em vez de espremer o ícone.
-      className={cn("inline-flex h-8 min-w-[116px] items-center rounded-md p-0.5", superficieDeApoio, className)}
+      className={cn("inline-flex h-8 min-w-[116px] items-center rounded-md p-0.5", alturaCompacta, superficieDeApoio, className)}
     >
       {itens.map((item) => {
         const selecionada = item.valor === atual;

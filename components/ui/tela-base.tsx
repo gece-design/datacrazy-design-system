@@ -176,7 +176,8 @@ export function TelaBase({
           <div className={cn("min-w-0 flex-1 flex-col", lateral ? (lateralCheia ? "hidden" : "hidden lg:flex") : "flex")}>
             <Header
               {...cabecalho}
-              className={cn("shrink-0 border-b border-border px-3 py-2", cabecalho.className)}
+              // 48 com o traço, como o cabeçalho do PainelLateral ao lado
+              className={cn("min-h-12 shrink-0 border-b border-border px-3 py-2", cabecalho.className)}
               inicio={botaoMenu}
             />
             <main

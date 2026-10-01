@@ -34,7 +34,7 @@ nas ações do Header (2026-09-15), o excesso é este.
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
 | `variant` | `"primary" \| "secondary" \| "ghost" \| "destructive" \| "soft" \| "outline" \| "tertiary"` | `"primary"` | não | Ver Variantes. |
-| `size` | `"sm" \| "md" \| "lg" \| "icon-xs" \| "icon-sm" \| "icon" \| "icon-lg"` | `"md"` | não | 28 · 32 · 36px de altura. Os `icon-*` são quadrados só de ícone (24 · 28 · 32 · 36) e **exigem `aria-label`**. |
+| `size` | `"sm" \| "md" \| "lg" \| "icon-xs" \| "icon-sm" \| "icon" \| "icon-lg"` | `"md"` | não | 28 · 32 · 36px de altura. Os `icon-*` são quadrados só de ícone (24 · 28 · 32 · 36) e **exigem `aria-label`**. Dentro do `Header`, `md` e `icon` medem 28 sozinhos (ADR-057): não troque o `size` para encolher. |
 | `asChild` | `boolean` | `false` | não | Renderiza o filho (`Slot` do Radix) com as classes do botão — para `Link`. |
 | demais | `ButtonHTMLAttributes` | — | não | `type`, `disabled`, `onClick`… vão para o `<button>`. |
 

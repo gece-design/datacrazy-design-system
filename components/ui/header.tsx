@@ -20,7 +20,7 @@ import { foco, focoDentro, focoInterno, rolagemDiscreta, superficieDeApoio } fro
  * duas linhas" (crítica de 2026-09-28, ponto 7), e a proposta visual que o
  * humano aprovou por partes junta tudo numa linha, como o Twenty e o Attio
  * (ADR-053): a trilha, o título como último nível dela, e à direita as ações
- * e os utilitários. 64px sozinho; 56 dentro da `TelaBase`.
+ * e os utilitários. 60px sozinho; 48 dentro da `TelaBase`.
  *
  * O Header é a moldura — os encaixes e a geometria — e o conteúdo entra por
  * composição, porque o produto tem trilha de um a N níveis, título de
@@ -32,7 +32,9 @@ import { foco, focoDentro, focoInterno, rolagemDiscreta, superficieDeApoio } fro
  *   acoes        → à direita: busca, filtros, visão, período, a ação principal
  *   utilitarios  → na ponta direita: o sino
  *
- * Medidas: recuo 32×16, controles de 32, vão de 8 entre eles. Não tem fundo
+ * Medidas: recuo 32×16, controles de 28, vão de 8 entre eles. O Header se
+ * marca com `data-compacto` e o Button, o SegmentedControl, o ViewSwitcher e o
+ * gatilho de data encolhem de 32 para 28 sozinhos (ADR-057). Não tem fundo
  * nem traço próprios: fica sobre a superfície de quem o hospeda. Na `TelaBase`
  * ele é a primeira faixa do painel da tela e o traço de baixo é dela (ADR-055).
  *
@@ -69,12 +71,14 @@ export interface HeaderProps extends Omit<React.HTMLAttributes<HTMLElement>, "ti
 export function Header({ titulo, subtitulo, inicio, trilha, utilitarios, acoes, className, ...props }: HeaderProps) {
   return (
     <header
+      // avisa os controles de dentro de que a faixa é compacta: 28 em vez de 32
+      data-compacto=""
       className={cn("flex flex-wrap items-center gap-x-4 gap-y-2 px-8 py-4 [container-type:inline-size]", className)}
       {...props}
     >
       {/* Trilha e título. O piso de 160px é o que faz as ações descerem de
           linha antes de o título virar reticências. */}
-      <div className="flex min-h-8 min-w-[160px] flex-1 items-center gap-2">
+      <div className="flex min-h-7 min-w-[160px] flex-1 items-center gap-2">
         {inicio}
         <div className="flex min-w-0 flex-1 items-center justify-center gap-1 [@container_(min-width:640px)]:justify-start">
           {trilha ? (
@@ -123,7 +127,7 @@ export interface HeaderNotificacoesProps extends React.ButtonHTMLAttributes<HTML
 }
 
 /**
- * Sino com selo (607:12957): Button `tertiary` de 32px e selo `destructive`
+ * Sino com selo (607:12957): Button `tertiary` de 28px no Header (32 fora dele) e selo `destructive`
  * de 16px de altura, 4px para fora do canto, com anel de 1,5 em `card`.
  *
  * O número do selo é `primary-foreground`, não o `destructive-foreground` do
@@ -210,7 +214,7 @@ export interface HeaderBuscaProps extends Omit<React.InputHTMLAttributes<HTMLInp
   /** Nome do campo para leitor de tela. Ex.: "Pesquisar leads". */
   rotulo: string;
   /**
-   * Só a lupa (a caixa de 32px do botão tertiary). Clicar abre a caixa de
+   * Só a lupa (a caixa de 28px do botão tertiary). Clicar abre a caixa de
    * 184px com movimento e o foco entra; sem texto, fecha ao sair.
    *
    * A regra (humano, 2026-09-23, ADR-028): a fileira de ações só tem botões →
@@ -224,7 +228,7 @@ export interface HeaderBuscaProps extends Omit<React.InputHTMLAttributes<HTMLInp
  * A busca do Header — sempre esta peça, nunca um Button "Pesquisar" com texto.
  * Aberta (variante Search, 610:14049): a caixa do Button `tertiary` com
  * 184px, virada campo. Sem rótulo visível — o placeholder é a pista e
- * `rotulo` é o nome acessível. Com `recolhida`, a caixa nasce com 32px e a
+ * `rotulo` é o nome acessível. Com `recolhida`, a caixa nasce com 28px e a
  * largura anima até 184 quando abre (`base` · `enter`). Quando usar cada uma:
  * ver a prop.
  */
@@ -246,10 +250,11 @@ export const HeaderBusca = React.forwardRef<HTMLInputElement, HeaderBuscaProps>(
     return (
       <label
         className={cn(
-          "flex h-8 max-w-full items-center gap-0.5 rounded-md text-muted-foreground shadow-button-inner",
+          // 28 de altura, como os botões do topo (ADR-057)
+          "flex h-7 max-w-full items-center gap-0.5 rounded-md text-muted-foreground shadow-button-inner",
           superficieDeApoio,
-          recolhida ? "transition-[width] duration-base ease-enter" : "w-[184px] cursor-text p-2",
-          recolhida && (fechada ? "w-8 cursor-pointer justify-center" : "w-[184px] cursor-text p-2"),
+          recolhida ? "transition-[width] duration-base ease-enter" : "w-[184px] cursor-text px-2 py-1.5",
+          recolhida && (fechada ? "w-7 cursor-pointer justify-center" : "w-[184px] cursor-text px-2 py-1.5"),
           !fechada && `${focoDentro}`,
           className,
         )}
@@ -260,7 +265,7 @@ export const HeaderBusca = React.forwardRef<HTMLInputElement, HeaderBuscaProps>(
             aria-label={rotulo}
             title={rotulo}
             onClick={() => setAberta(true)}
-            className={cn("flex size-8 shrink-0 items-center justify-center rounded-md transition-colors hover:text-foreground", foco)}
+            className={cn("flex size-7 shrink-0 items-center justify-center rounded-md transition-colors hover:text-foreground", foco)}
           >
             <MagnifyingGlass size={16} weight="regular" aria-hidden="true" />
           </button>

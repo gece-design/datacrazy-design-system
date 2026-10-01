@@ -63,3 +63,18 @@ export const rolagemDiscreta =
  */
 export const superficieDeApoio = "bg-card [[data-superficie]_&]:bg-background";
 
+
+/**
+ * Faixa compacta — o topo da tela. O `Header` se marca com `data-compacto` e
+ * os controles de dentro medem 28 em vez de 32: Button `md` e `icon`, trilho
+ * do SegmentedControl e do ViewSwitcher, gatilho de data. A tela não escolhe
+ * tamanho: o mesmo `<Button>` mede 32 no conteúdo e 28 no topo (ADR-057). O
+ * que abre em portal (menus, painéis) fica fora da marca e não encolhe.
+ */
+export const alturaCompacta = "[[data-compacto]_&]:h-7";
+/** O quadrado de ícone na faixa compacta: 28 em vez de 32. */
+export const quadradoCompacto = "[[data-compacto]_&]:size-7";
+/** O recuo lateral do botão com texto na faixa compacta: 10, o do `sm`. */
+export const recuoCompacto = "[[data-compacto]_&]:px-2.5";
+/** A opção do SegmentedControl na faixa compacta: 24, para caber no trilho de 28. */
+export const opcaoCompacta = "[[data-compacto]_&]:h-6";

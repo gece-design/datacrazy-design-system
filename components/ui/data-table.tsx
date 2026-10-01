@@ -534,7 +534,7 @@ export function BotaoAgrupar({ ajustes, recolhido = false, className }: { ajuste
 /**
  * `padrao` é o arquivo; `compacta` é o Compact do drawer; `densa` é a grade
  * de lista à la Twenty (cliente, 2026-09-27: "menos gap, menos padding,
- * stroke nas divs"): linha de 36px, recuo 8, traço entre colunas e entre
+ * stroke nas divs"): linha de 32px, recuo 8, traço entre colunas e entre
  * linhas, cada célula numa linha só.
  */
 /** `densa` é o padrão (cliente, 2026-09-28: "as telas usam a linha alta"); `confortavel`
@@ -1173,7 +1173,9 @@ export const DataTableCell = React.forwardRef<HTMLTableCellElement, DataTableCel
           "px-2 align-middle",
           // na densa a célula corta o que passa: a Tag mais larga que a coluna
           // trunca com reticências em vez de invadir a vizinha (cliente, 2026-09-28)
-          densa ? "overflow-hidden py-1" : "py-3",
+          // h-8 é piso (célula de tabela cresce): a linha mede 32 com qualquer
+          // conteúdo — texto, Tag ou avatar — em vez de variar com ele
+          densa ? "h-8 overflow-hidden py-0.5" : "py-3",
           primeira && (compacta ? "pl-3" : densa ? "pl-2" : "pl-5"),
           ultima && (compacta ? "pr-3" : densa ? "pr-2" : "pr-5"),
           className,

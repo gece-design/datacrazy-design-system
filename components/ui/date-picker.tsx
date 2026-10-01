@@ -20,7 +20,7 @@ import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
 
-import { foco, focoInterno, desabilitado } from "@/lib/estados";
+import { alturaCompacta, desabilitado, foco, focoInterno } from "@/lib/estados";
 /* ---------------------------------------------------------------------------
    Date Range Picker — seleção de período com dois meses e atalhos.
 
@@ -281,9 +281,11 @@ const GatilhoDeData = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttrib
       aria-haspopup="dialog"
       aria-expanded={aberto}
       className={cn(
-        // h-8: o arquivo desenha 29, mas na fileira do Header ele fica ao lado de
-        // botões de 32 — "no mesmo tamanho dos outros" (humano, 2026-09-24, AUD-122)
+        // h-8: o arquivo desenha 29, mas ele fica ao lado de botões de 32 — "no
+        // mesmo tamanho dos outros" (humano, 2026-09-24, AUD-122). No topo da
+        // tela desce para 28 com eles (`alturaCompacta`).
         "inline-flex h-8 max-w-full items-center gap-1 rounded-md px-2 text-body-md",
+        alturaCompacta,
         "outline-none transition-colors",
         `${foco}`,
         `${desabilitado} [&_svg]:shrink-0`,

@@ -22,7 +22,7 @@ o que dá para fazer nela.
 
 ## Par no Figma
 
-Node: `601:464` (set "Header", 6 variantes) · Lote: `3` · **uma linha**, 64px sozinho e 48 como primeira faixa do painel da `TelaBase`. Não tem fundo nem traço próprios: fica sobre a superfície de quem o hospeda (ADR-055). O arquivo desenha duas linhas, 111px, com traço; o código já tinha fechado em 102 (ADR-029) e passou a uma linha em 2026-10-01, a pedido do cliente (ADR-053) ·
+Node: `601:464` (set "Header", 6 variantes) · Lote: `3` · **uma linha**, 60px sozinho e 48 como primeira faixa do painel da `TelaBase`. Não tem fundo nem traço próprios: fica sobre a superfície de quem o hospeda (ADR-055). O arquivo desenha duas linhas, 111px, com traço; o código já tinha fechado em 102 (ADR-029) e passou a uma linha em 2026-10-01, a pedido do cliente (ADR-053) ·
 Última verificação: ver [processo/kfe-state.md](../processo/kfe-state.md), entrada de 2026-09-15.
 
 **O set está com erro no arquivo.** As seis variantes se chamam
@@ -43,7 +43,7 @@ que o produto ainda vai ter — são composição dos encaixes.
 | `inicio` | `ReactNode` | — | não | Antes da trilha. É onde a `TelaBase` põe o botão de menu (< 1024px). |
 | `trilha` | `ReactNode` | — | não | À esquerda, antes do título: os níveis acima da página. Normalmente `Breadcrumb ancestrais`. Abaixo de 640px de largura do Header, sai. |
 | `utilitarios` | `ReactNode` | — | não | Na ponta direita, depois das ações. Normalmente `Notificacoes`. |
-| `acoes` | `ReactNode` | — | não | À direita, na mesma linha do título, com 32px e vão de 8. Quando não cabem, descem para uma linha própria (ADR-053). |
+| `acoes` | `ReactNode` | — | não | À direita, na mesma linha do título, com 28px e vão de 8: o Header encolhe sozinho o Button `md` e `icon`, o `SegmentedControl`, o `ViewSwitcher` e o gatilho de data (ADR-057) — não passe `size`. Quando não cabem, descem para uma linha própria (ADR-053). |
 
 Peças do mesmo arquivo:
 
@@ -51,7 +51,7 @@ Peças do mesmo arquivo:
 |------|-------|---------|
 | `HeaderDivisor` | `className?` | Traço 1×20 em `divider` (601:55), `role="separator"`. Some abaixo de 640px, quando as ações quebram em linhas centradas |
 | `HeaderNotificacoes` | `rotulo`, `contagem?` + props de botão | Button `tertiary` `icon` com sino e selo; acima de 99, "99+" |
-| `HeaderBusca` | `rotulo`, `recolhida?` + props de input | A busca do Header: aberta (184px, variante Search 610:14049) ou só a lupa (32px) — regra abaixo |
+| `HeaderBusca` | `rotulo`, `recolhida?` + props de input | A busca do Header: aberta (184px, variante Search 610:14049) ou só a lupa (28px) — regra abaixo |
 | `HeaderFiltros` | `rotulo`, `contagem?`, `rotuloComContagem?`, `recolhido?` + props de botão | O botão de filtros: com rótulo ou só o ícone (mesma regra da busca); com filtro ativo vira `soft` e mostra a conta |
 
 Controles que entram em `acoes` e têm doc própria: [Button](Button.md)
@@ -71,7 +71,7 @@ Controles que entram em `acoes` e têm doc própria: [Button](Button.md)
 | `rotulo` | `string` | sim | Texto do botão; com `recolhido`, nome acessível e tooltip. |
 | `contagem` | `number` | não | Filtros ativos. Acima de zero, `soft` com a conta (pílula no rótulo; selo no canto quando recolhido). |
 | `rotuloComContagem` | `(n: number) => string` | não | Nome acessível com a conta. Padrão: `"rotulo (n)"`. |
-| `recolhido` | `boolean` | não | Só o ícone (32px), com tooltip. Mesma regra da busca. |
+| `recolhido` | `boolean` | não | Só o ícone (28px), com tooltip. Mesma regra da busca. |
 
 **Quando recolher** (humano, 2026-09-23 e 24): a fileira de ações só tem
 botões → busca aberta e filtros com rótulo. Tem troca-visão, período ou

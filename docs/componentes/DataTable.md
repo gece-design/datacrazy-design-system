@@ -38,7 +38,7 @@ Diff de pixels **não medido**: depende da ponte de escrita do Figma
 | Prop | Tipo | Descrição |
 |------|------|-----------|
 | `colunas` | `ColunaTabela[]` | `chave`, `rotulo`, `peso`, `alinharFim`, `ordenavel?`, `ocultavel?`, `minimo?`, `agrupavel?`, `icone?` (ícone Phosphor de 14px antes do rótulo, como nas grades do Attio e do Twenty). Na `densa`, a soma dos `minimo` (112 para quem não declara) é o piso da tabela: abaixo dele ela rola na horizontal. |
-| `layout` | `"densa" \| "confortavel" \| "compacta"` | Padrão **`densa`** (ADR-043): a grade de lista à la Twenty — linha de 36px, recuo 8, traço entre colunas e linhas, cada célula numa linha só. `confortavel` é o desenho do arquivo, com linha alta, para leitura com respiro (`padrao` é o nome antigo e continua aceito). `compacta` é o Compact do drawer. |
+| `layout` | `"densa" \| "confortavel" \| "compacta"` | Padrão **`densa`** (ADR-043): a grade de lista à la Twenty — linha de 32px, recuo 8, traço entre colunas e linhas, cada célula numa linha só. `confortavel` é o desenho do arquivo, com linha alta, para leitura com respiro (`padrao` é o nome antigo e continua aceito). `compacta` é o Compact do drawer. |
 | `ajustes` | `AjustesDaTabela` | Liga os comportamentos. Vem de `useAjustesDaTabela`. |
 | `ordem`, `aoOrdenar` | `OrdemTabela`, `(ordem) => void` | Só ordenar, sem o resto; `ajustes` já traz os dois. |
 | `rotulos` | `Partial<RotulosDaTabela>` | Textos dos controles (i18n). Fábrica: `ROTULOS_DA_TABELA`. |
@@ -104,14 +104,14 @@ valorDe)` compara número como número e texto em pt-BR.
 | Prop | Tipo | Descrição |
 |------|------|-----------|
 | `ajustes` | `AjustesDaTabela` | Os mesmos da tabela. Abre a lista de colunas com check e "Restaurar colunas". |
-| `recolhido` | `boolean` | Só o ícone (32px) com tooltip, `soft` com coluna escondida: é como o botão entra na fileira do Header, ao lado da lupa e do troca-visão (a tela do pipeline). |
+| `recolhido` | `boolean` | Só o ícone (28px no Header) com tooltip, `soft` com coluna escondida: é como o botão entra na fileira do Header, ao lado da lupa e do troca-visão (a tela do pipeline). |
 
 ### `BotaoAgrupar`
 
 | Prop | Tipo | Descrição |
 |------|------|-----------|
 | `ajustes` | `AjustesDaTabela` | O botão "Agrupar por": menu de rádio com "Sem grupos" e as colunas `agrupavel`; `soft` com grupo ativo. |
-| `recolhido` | `boolean` | Só o ícone (32px) com tooltip, para a fileira do Header. |
+| `recolhido` | `boolean` | Só o ícone (28px no Header) com tooltip, para a fileira do Header. |
 
 ### `DataTableGrupo`
 

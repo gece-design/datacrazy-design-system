@@ -169,7 +169,7 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
 - **Tabela com comportamentos**: `useAjustesDaTabela(colunas, { memoria })` → `DataTable ajustes=` +
   `BotaoColunas` na barra; a tabela só emite a ordenação, a tela ordena os dados
   (`ordenarPor`); cada célula leva `coluna="chave"`; linha com `aoSelecionar` (ADR-025/026).
-  Edição no lugar: `CelulaEditavel` (a tela grava). A Table nasce `densa` (36px, traço entre
+  Edição no lugar: `CelulaEditavel` (a tela grava). A Table nasce `densa` (32px, traço entre
   colunas, uma linha por célula; ADR-043); `confortavel` é o arquivo. Coluna com `icone`. Rodapé de Modal: botões `size="sm"`.
   Grupos: `agrupavel` na coluna, `BotaoAgrupar`, `agruparPor` + `DataTableGrupo` na tela. Seleção em
   massa: `useSelecaoDaTabela` → `DataTable selecao=` + `DataTableRow chave/nome` + `BarraDeSelecao`
@@ -202,7 +202,7 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   (conjunto fechado de logos de verdade, SVG embutido com id de gradiente por instância; as cores são do logo, não tokens;
   único arquivo com exceção de hex no check; `mono` = glifo Phosphor). ADR-048/049/050.
 - **Casca nova, por partes** (proposta visual, humano 2026-10-01): parte 1 — `SidebarToggle` quadrado na linha da
-  marca (`SidebarBrand`), recolhida o símbolo é o botão (ADR-052); parte 2 — `Header` de uma linha, 56px na TelaBase,
+  marca (`SidebarBrand`), recolhida o símbolo é o botão (ADR-052); parte 2 — `Header` de uma linha, 48px na TelaBase, com os controles em 28 sozinhos (ADR-057: não passe `size` para encolher),
   `Breadcrumb ancestrais` + título como último nível, `inicio` para o botão de menu (ADR-053); parte 3 — navegação plana
   220/48, item de 32, hover `card`, `SidebarGrupo rotulo/ocultarRecolhida` (Favoritos), recuo esquerdo da TelaBase 8
   (ADR-054); parte 4 — superfície única: a TelaBase põe Header + conteúdo num painel `card` com `data-superficie`;

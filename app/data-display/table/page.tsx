@@ -593,12 +593,12 @@ export default function Pagina() {
   return (
     <PaginaDS
       titulo="Table"
-      descricao="A tabela de negócios do CRM: barra com o total, sete colunas, dez linhas de 36px e paginação. É o componente mais denso do sistema, e o único onde a estrutura importa tanto quanto a aparência."
+      descricao="A tabela de negócios do CRM: barra com o total, sete colunas, dez linhas de 32px e paginação. É o componente mais denso do sistema, e o único onde a estrutura importa tanto quanto a aparência."
       secoes={["Completa", "Ajustável", "Agrupada", "Seleção em massa", "Edição na célula", "Confortável", "Anatomia", "Como funciona"]}
     >
       <Secao
         titulo="Completa"
-        spec="7 colunas · linha de 36px"
+        spec="7 colunas · linha de 32px"
         descricao="Barra com o total, cabeçalho com ícone por coluna, linhas de uma linha só e paginação — a unidade inteira. Busca e filtros não moram na barra da tabela: ficam no Header da tela."
         codigo={`const colunas = [
   { chave: "lead", rotulo: "Lead", peso: 230, minimo: 220, icone: User },
@@ -766,7 +766,7 @@ export default function Pagina() {
       <Secao
         titulo="Confortável"
         spec="layout=confortavel · linha alta · o desenho do arquivo"
-        descricao="A tabela nasce densa: linha de 36px, recuo 8, traço entre colunas e entre linhas — a grade de lista que o time pediu (referência: Twenty). Esta é a outra leitura, a do arquivo, com respiro: para relatório ou para poucas linhas com muito conteúdo por célula."
+        descricao="A tabela nasce densa: linha de 32px, recuo 8, traço entre colunas e entre linhas — a grade de lista que o time pediu (referência: Twenty). Esta é a outra leitura, a do arquivo, com respiro: para relatório ou para poucas linhas com muito conteúdo por célula."
         codigo={codigoConfortavel}
         nota={
           <>

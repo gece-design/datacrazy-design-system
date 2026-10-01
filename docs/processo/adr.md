@@ -296,3 +296,7 @@ Desvio: componente novo sem par no arquivo (regra 6), e mudança do padrão de d
 Motivo: proposta visual (referência Twenty e Attio: "registro em painel lateral que empurra a lista, com campos em linha"), quinta e última parte; pedido registrado desde a reunião de 24/09 ("painel lateral no lugar do Drawer"). O humano mandou seguir (2026-10-01).
 Aprovado por: humano (2026-10-01).
 
+## ADR-057 · Controles de 28 no topo e linha de tabela de 32 · 2026-10-01
+Desvio: o arquivo desenha os controles do Header com 32px e a linha da tabela com 56; o código estava em 32 e 36 (ADR-043). Agora o topo da tela é uma faixa compacta: o `Header` se marca com `data-compacto` e o Button `md` e `icon`, o trilho do `SegmentedControl` e do `ViewSwitcher`, o gatilho de data e a `HeaderBusca` medem 28 dentro dele — sem a tela passar `size`. Fora do Header nada muda: o mesmo `<Button>` continua com 32 no conteúdo, no Modal e nos menus (que abrem em portal, fora da marca). O Header sozinho fica com 60px; na `TelaBase`, 48 com o traço, alinhado ao cabeçalho do `PainelLateral`. A Table `densa` desce de 36 para 32 por linha (recuo vertical da célula de 4 para 2); o cabeçalho segue com 28.
+Motivo: proposta visual (referência Twenty e Attio: "topo de 48 com ações de 28, linha de 32"). Ficou anotado como pendência na ADR-053; o humano mandou aplicar (2026-10-01: "sim, do jeito da proposta").
+Aprovado por: humano (2026-10-01).
