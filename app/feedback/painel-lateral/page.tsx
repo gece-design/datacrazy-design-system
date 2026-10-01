@@ -46,7 +46,12 @@ const aberto = leads.find((l) => l.id === abertoId);
         aoFechar={() => { setAbertoId(null); setTelaCheia(false); }}
         rotulos={{ fechar: "Fechar o lead", expandir: "Abrir em tela cheia", recolher: "Voltar ao painel" }}
       >
-        <PainelLateralCorpo>{/* Tabs, ListaDeCampos… */}</PainelLateralCorpo>
+        <PainelLateralCorpo>
+          <ListaDeCampos>
+            <LinhaDeCampo icone={Phone} rotulo="Telefone">{aberto.telefone}</LinhaDeCampo>
+            <LinhaDeCampo icone={MapPin} rotulo="Cidade">{aberto.cidade}</LinhaDeCampo>
+          </ListaDeCampos>
+        </PainelLateralCorpo>
       </PainelLateral>
     ) : null
   }
