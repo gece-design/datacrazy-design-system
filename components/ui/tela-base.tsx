@@ -41,6 +41,9 @@ export type RotulosDaTela = {
   /** Nome do botão de menu (< 1024px). */
   abrirMenu: string;
   fecharMenu: string;
+  /** Nomes do botão que recolhe e expande a sidebar (≥ 1024px). */
+  recolherMenu: string;
+  expandirMenu: string;
   /** Nome da região de navegação (a Sidebar). */
   navegacao: string;
   /** Nome da região de conteúdo (o main). */
@@ -50,6 +53,8 @@ export type RotulosDaTela = {
 export const ROTULOS_DA_TELA: RotulosDaTela = {
   abrirMenu: "Abrir menu",
   fecharMenu: "Fechar menu",
+  recolherMenu: "Recolher menu",
+  expandirMenu: "Expandir menu",
   navegacao: "Navegação principal",
   conteudo: "Conteúdo",
 };
@@ -142,7 +147,13 @@ export function TelaBase({
           `className` da Sidebar é do nav, por isso o esconder fica num
           embrulho — é a caixa de 282/88px que precisa sumir. */}
       <div className="hidden h-screen lg:block">
-        <Sidebar rotulo={r.navegacao} colapsada={colapsada} onColapsarChange={colapsar} className="h-screen">
+        <Sidebar
+          rotulo={r.navegacao}
+          rotulos={{ recolher: r.recolherMenu, expandir: r.expandirMenu }}
+          colapsada={colapsada}
+          onColapsarChange={colapsar}
+          className="h-screen"
+        >
           {navegacao}
         </Sidebar>
       </div>

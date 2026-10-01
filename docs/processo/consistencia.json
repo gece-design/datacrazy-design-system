@@ -3330,6 +3330,23 @@
       "status": "adiado",
       "fechadoEm": null,
       "nota": "**Decisão do humano em 2026-10-01 (ADR-051).** Seis tons derivados pela regra de contraste, sem variável no arquivo: criar as variáveis `tom/*` no Figma e conferir os valores com o humano. Medido na mesma conta: a letra de `rosa` (3,7:1) e de `laranja` (3,0:1) sobre o próprio brilho, no claro, fica abaixo de 4,5:1 — são os valores aprovados em 2026-09-15 (mesmo S/L do azul); baixar o L da letra resolve, e é decisão dele."
+    },
+    {
+      "id": "AUD-210",
+      "eixo": "fidelidade",
+      "titulo": "Figma atrás do código: casca nova por partes — botão de recolher na linha da marca, Header de uma linha",
+      "onde": [
+        "components/ui/sidebar.tsx",
+        "components/ui/header.tsx",
+        "components/ui/tela-base.tsx"
+      ],
+      "regra": "fidelidade · cliente > arquivo (Figma é rascunho)",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Proposta visual aplicada por partes, por decisão do humano em 2026-10-01 (ADR-052 em diante).** Cada parte que entra no código deixa o arquivo para trás: o disco flutuante da Sidebar (124:2114) e o Header de duas linhas (601:464). Na remedição, o arquivo acompanha o código."
     }
   ]
 }

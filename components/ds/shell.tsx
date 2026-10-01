@@ -49,7 +49,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <div className="flex items-center justify-between gap-3">
               <nav aria-label="Trilha" className="flex min-w-0 items-center gap-1.5 chrome-item sm:gap-2">
                 {/* só o gesto do celular mora no header. No desktop quem
-                    recolhe é o botão redondo na borda da sidebar — o mesmo
+                    recolhe é o botão na linha da marca da sidebar — o mesmo
                     componente do DS (`SidebarToggle`). */}
                 <button
                   onClick={() => setDrawer(true)}

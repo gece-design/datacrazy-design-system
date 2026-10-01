@@ -32,7 +32,8 @@ existir. Diff de pixels não medido.
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
 | `colapsada` | `boolean` | `false` | não | 282px viram 88 e todo rótulo sai de cena; o `title` sobe para a raiz do item (D12). |
-| `onColapsarChange` | `(colapsada: boolean) => void` | — | não | Passe para ganhar o `SidebarToggle` pendurado na borda direita (3px da borda, 59px do topo — coordenadas do arquivo, iguais nas duas larguras). |
+| `onColapsarChange` | `(colapsada: boolean) => void` | — | não | Passe para ganhar o botão de recolher na linha da marca (`SidebarBrand`). Recolhida, o símbolo da marca é o botão de expandir. |
+| `rotulos` | `Partial<RotulosDaSidebar>` | `ROTULOS_DA_SIDEBAR` | não | `recolher` e `expandir`: os nomes do botão (i18n). |
 | `rotulo` | `string` | — | não | Rótulo acessível da região de navegação. |
 | `children` | `ReactNode` | — | sim | `SidebarTopo` e `SidebarRodape`. |
 
@@ -41,10 +42,10 @@ Peças:
 | Peça | Props | O que é |
 |------|-------|---------|
 | `SidebarTopo` · `SidebarRodape` | `children` | Bloco de cima (marca + navegação) e de baixo (tema, atalhos, usuário), 8px entre filhos |
-| `SidebarBrand` | — | `LogoDataCrazy`; vira só o símbolo quando colapsa |
+| `SidebarBrand` | — | `LogoDataCrazy` e, quando a Sidebar pode recolher, o `SidebarToggle` à direita. Recolhida, o símbolo é o botão de expandir: sob o cursor ou o foco, dá lugar ao ícone do painel |
 | `SidebarGrupo` | `recuo?`, `children` | `<ul>` com 4px entre linhas; `recuo` é a folga de 2px do grupo principal |
 | `SidebarItem` | `icone` (Phosphor, 20px, obrigatório), `children` (o rótulo), `selecionado?`, `href?`, `componente?`, `disabled?` | Raiz `a` com `href`, `span` sem; passe `Link` em `componente` para navegação client-side |
-| `SidebarToggle` | `colapsada?` + props de botão | O botão da borda; `aria-expanded` |
+| `SidebarToggle` | `colapsada?`, `rotulos?` + props de botão | O botão de recolher: 28px, quadrado, sem relevo, com o ícone do painel; `aria-expanded`. A `SidebarBrand` já o traz — exportado para quem monta o topo de outro jeito. O arquivo desenha um disco flutuando na borda; saiu a pedido do cliente (ADR-052) |
 | `SidebarThemeSwitch` | `tema`, `onTemaChange`, `className?` | Trilho claro/escuro; colapsada vira um botão só que alterna |
 | `SidebarUser` | `nome`, `email`, `avatar?` | Rodapé com disco `sidebar-avatar` (sem foto: círculo cheio, como o arquivo) |
 
@@ -79,7 +80,7 @@ Peças:
 ## Composição
 
 Usa: [LogoDataCrazy](LogoDatacrazy.md) ·
-Usado por: a moldura do site de docs reaproveita só o `SidebarToggle`. O disco
+Usado por: a `TelaBase`; a moldura do site de docs reaproveita só o `SidebarToggle`. O disco
 do usuário **não** é o [Avatar](Avatar.md) (AUD-047, lote B6); os quatro
 botões internos não são Button (AUD-035, lote B4).
 
@@ -111,7 +112,7 @@ botões internos não são Button (AUD-035, lote B4).
 |------|---------------------|
 | Foco visível | Outline de 2px (D6) em item, toggle, tema e usuário |
 | Rótulo colapsado | `title` e `aria-label` sobem para a raiz do item — o ícone sozinho tem nome |
-| Toggle | `aria-expanded` no botão da borda |
+| Toggle | `aria-expanded` e nome próprio (`rotulos`) no botão de recolher; recolhida, o símbolo da marca é um botão com o nome "Expandir menu" e funciona no toque |
 | Chevrons | `muted-foreground`, não `subtle-foreground`: 2,4:1 reprova a WCAG 1.4.11 (D13) |
 | Item sem destino | `span`, não `a` — um `a` dentro de outro é HTML inválido |
 | Texto longo | 160px de rótulo, `truncate` + `title` (D12) |

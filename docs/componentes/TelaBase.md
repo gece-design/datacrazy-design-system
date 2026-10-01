@@ -36,7 +36,7 @@ arquivo acompanha na remedição (AUD-203).
 | `children` | `ReactNode` | sim | O conteúdo. Rola por dentro; o cabeçalho fica. |
 | `memoria` | `string` | não | Chave da memória da sidebar (aberta ou recolhida) no navegador, uma por tela. Sem ela, começa pelo breakpoint. |
 | `recuo` | `boolean` | não | Padrão `true`: 16px em toda largura. Desligue quando o conteúdo traz o próprio (o quadro do pipeline). |
-| `rotulos` | `Partial<RotulosDaTela>` | não | `abrirMenu`, `fecharMenu`, `navegacao`, `conteudo` (i18n). Fábrica: `ROTULOS_DA_TELA`. |
+| `rotulos` | `Partial<RotulosDaTela>` | não | `abrirMenu`, `fecharMenu`, `recolherMenu`, `expandirMenu`, `navegacao`, `conteudo` (i18n). Fábrica: `ROTULOS_DA_TELA`. |
 | `className` | `string` | não | — |
 
 ## Variantes

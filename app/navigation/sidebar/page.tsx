@@ -195,7 +195,7 @@ export default function PaginaSidebar() {
       <Secao
         titulo="A sidebar inteira"
         spec="282 → 88px"
-        descricao="Viva: clique no botão da borda para colapsar, no sol e na lua para trocar o tema da página inteira, e em qualquer destino para movê-lo. É o node 124:2114 do Figma, com as quatro variantes cobertas por dois estados."
+        descricao="Viva: clique no botão ao lado da marca para recolher, no sol e na lua para trocar o tema da página inteira, e em qualquer destino para movê-lo. É o node 124:2114 do Figma, com as quatro variantes cobertas por dois estados."
         codigo={`const [colapsada, setColapsada] = useState(false);
 const [ativa, setAtiva] = useState("Pipelines");
 
@@ -223,11 +223,11 @@ const [ativa, setAtiva] = useState("Pipelines");
           <>
             <ul className="space-y-1.5">
               <Item mono="colapsada">
-                282px viram 88px · o botão da borda não se move: <Chip>right-[3px] top-[59px]</Chip>{" "}
-                nas duas larguras
+                282px viram 88px · o botão de recolher mora na linha da marca; recolhida, o símbolo
+                vira o botão de expandir
               </Item>
               <Item mono="onColapsarChange">
-                é o que faz o botão existir — sem ele o painel é fixo e o toggle não é renderizado
+                é o que faz o botão existir — sem ele o painel é fixo e a marca fica sozinha, ao centro
               </Item>
               <Item mono="SidebarTopo / SidebarRodape">
                 os dois blocos do <Chip>justify-between</Chip>: o rodapé cola no pé mesmo com o

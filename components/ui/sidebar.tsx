@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useId } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { CaretDown, CaretLeft, CaretRight, Moon, Sun } from "@phosphor-icons/react";
+import { CaretDown, Moon, SidebarSimple, Sun } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { LogoDataCrazy } from "./logo-datacrazy";
@@ -14,7 +14,16 @@ import { foco, desabilitado, desabilitadoLink } from "@/lib/estados";
    cada filho seria erro esperando acontecer.
 --------------------------------------------------------------------------- */
 
-const SidebarContexto = createContext<{ colapsada: boolean }>({ colapsada: false });
+/** Os nomes do botão de recolher. Todo texto vem de fora (a UI é multi-idioma); estes são os de fábrica. */
+export type RotulosDaSidebar = { recolher: string; expandir: string };
+export const ROTULOS_DA_SIDEBAR: RotulosDaSidebar = { recolher: "Recolher menu", expandir: "Expandir menu" };
+
+const SidebarContexto = createContext<{
+  colapsada: boolean;
+  /** Presente quando o painel pode recolher: é o que faz a marca ganhar o botão. */
+  aoColapsar?: (colapsada: boolean) => void;
+  rotulos: RotulosDaSidebar;
+}>({ colapsada: false, rotulos: ROTULOS_DA_SIDEBAR });
 
 function useSidebar() {
   return useContext(SidebarContexto);
@@ -59,23 +68,25 @@ function MarcaDagua({ colapsada }: { colapsada: boolean }) {
 export interface SidebarProps extends Omit<React.HTMLAttributes<HTMLElement>, "onToggle"> {
   /** Estado colapsado: 282px viram 88px e todo rótulo sai de cena. */
   colapsada?: boolean;
-  /** Passe para ganhar o botão de colapsar pendurado na borda direita. */
+  /** Passe para ganhar o botão de recolher, na linha da marca (`SidebarBrand`). */
   onColapsarChange?: (colapsada: boolean) => void;
   /** Rótulo acessível da região de navegação. */
   rotulo?: string;
+  /** Nomes do botão de recolher (i18n). Padrão: "Recolher menu" e "Expandir menu". */
+  rotulos?: Partial<RotulosDaSidebar>;
 }
 
 export function Sidebar({
   colapsada = false,
   onColapsarChange,
   rotulo = "Navegação principal",
+  rotulos,
   className,
   children,
   ...props
 }: SidebarProps) {
   return (
-    <SidebarContexto.Provider value={{ colapsada }}>
-      {/* wrapper sem recorte: o botão de colapsar precisa vazar a borda do painel */}
+    <SidebarContexto.Provider value={{ colapsada, aoColapsar: onColapsarChange, rotulos: { ...ROTULOS_DA_SIDEBAR, ...rotulos } }}>
       {/* A largura anima em `base` — exceção declarada à I11 (ADR-022), com o
           precedente do Toast. Colapsar esconde os rótulos na hora; expandir
           traz cada um dissolvendo depois que a largura abriu. */}
@@ -94,61 +105,91 @@ export function Sidebar({
           <MarcaDagua colapsada={colapsada} />
           {children}
         </nav>
-
-        {onColapsarChange && (
-          <SidebarToggle colapsada={colapsada} onClick={() => onColapsarChange(!colapsada)} />
-        )}
       </div>
     </SidebarContexto.Provider>
   );
 }
 
 /* ---------------------------------------------------------------------------
-   Toggle — o botão redondo que colapsa o painel
+   Toggle — o botão que recolhe o painel
 --------------------------------------------------------------------------- */
 
+/**
+ * O botão de recolher: 28px, quadrado, sem relevo, com o ícone do painel —
+ * mora na linha da marca, dentro da Sidebar. O arquivo desenha um disco de
+ * 32px com sombra, pendurado na borda; o cliente apontou que ele "fica
+ * flutuando e é o único botão 100% redondo" (crítica de 2026-09-28, ADR-052).
+ * A `SidebarBrand` já o traz quando a Sidebar recebe `onColapsarChange`;
+ * exportado para quem monta o topo de outro jeito.
+ */
 export function SidebarToggle({
   colapsada = false,
+  rotulos = ROTULOS_DA_SIDEBAR,
   className,
   ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & { colapsada?: boolean }) {
-  const Seta = colapsada ? CaretRight : CaretLeft;
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { colapsada?: boolean; rotulos?: RotulosDaSidebar }) {
+  const nome = colapsada ? rotulos.expandir : rotulos.recolher;
   return (
     <button
       type="button"
-      aria-label={colapsada ? "Expandir menu" : "Recolher menu"}
+      aria-label={nome}
+      title={nome}
       aria-expanded={!colapsada}
       className={cn(
-        // 3px da borda direita e 59px do topo: as coordenadas do Figma, iguais
-        // nas duas larguras — o botão não se move quando o painel colapsa.
-        "absolute right-[3px] top-[59px] z-dropdown grid size-8 place-items-center",
-        // o Figma pinta o chevron em `subtle-foreground`, que no claro dá 2.4:1 —
-        // abaixo dos 3:1 que a WCAG 1.4.11 exige de componente gráfico. Um degrau
-        // mais escuro passa nos dois temas sem mudar a leitura do desenho.
-        "rounded-full bg-card text-muted-foreground shadow-float transition-colors",
-        "hover:text-foreground",
+        "grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors",
+        "hover:bg-nav-item-hover hover:text-foreground",
         `${foco}`,
         className
       )}
       {...props}
     >
-      <Seta size={16} weight="bold" />
+      <SidebarSimple size={16} weight="regular" aria-hidden="true" />
     </button>
   );
 }
 
 /* ---------------------------------------------------------------------------
-   Marca — o logo do topo
+   Marca — o logo do topo e, quando o painel recolhe, o botão ao lado
 --------------------------------------------------------------------------- */
 
 export function SidebarBrand({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  const { colapsada } = useSidebar();
+  const { colapsada, aoColapsar, rotulos } = useSidebar();
+
+  // Recolhida, não há lugar para marca e botão lado a lado: o símbolo É o
+  // botão de expandir. Sob o cursor ou o foco, dá lugar ao ícone do painel.
+  if (colapsada && aoColapsar) {
+    return (
+      <div className={cn("flex h-8 items-center justify-center", className)} {...props}>
+        <button
+          type="button"
+          aria-label={rotulos.expandir}
+          title={rotulos.expandir}
+          aria-expanded={false}
+          onClick={() => aoColapsar(false)}
+          className={cn(
+            "group/marca grid size-8 place-items-center rounded-md text-surface-inverse transition-colors hover:bg-nav-item-hover",
+            `${foco}`
+          )}
+        >
+          <LogoDataCrazy simbolo className="group-hover/marca:hidden group-focus-visible/marca:hidden" />
+          <SidebarSimple
+            size={16}
+            weight="regular"
+            aria-hidden="true"
+            className="hidden text-foreground group-hover/marca:block group-focus-visible/marca:block"
+          />
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div
-      className={cn("flex h-8 items-center justify-center text-surface-inverse", className)}
+      className={cn("flex h-8 items-center text-surface-inverse", aoColapsar ? "justify-between pl-2" : "justify-center", className)}
       {...props}
     >
       <LogoDataCrazy simbolo={colapsada} />
+      {aoColapsar ? <SidebarToggle rotulos={rotulos} onClick={() => aoColapsar(true)} /> : null}
     </div>
   );
 }

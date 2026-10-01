@@ -270,3 +270,8 @@ Desvio: seis tons sem par no arquivo — `indigo` (240°), `fucsia` (298°), `am
 Motivo: crítica de design de 2026-09-28 ("paleta de cor da Tag: 8 tons fixos vs. paleta livre… seletor de cor com ~15 opções na criação da tag") e decisão do humano (2026-10-01: "colorida pra 15").
 Aprovado por: humano (2026-10-01). Os valores dos seis tons ficam para conferência dele; o Figma acompanha na remedição.
 
+## ADR-052 · O botão de recolher sai da borda da Sidebar · 2026-10-01
+Desvio: o arquivo desenha o botão de recolher como um disco de 32px com sombra, pendurado na borda do painel (3px da borda, 59px do topo). No código ele passa a ser um botão quadrado de 28px, sem relevo, com o ícone do painel, na linha da marca (`SidebarBrand`). Recolhida, o símbolo da marca é o botão de expandir. Os nomes do botão viram prop (`rotulos`), como todo texto.
+Motivo: crítica de design de 2026-09-28, ponto 1 ("o botão de toggle fica visualmente flutuando e é o único botão 100% redondo… padrão que deveríamos evitar repetir do design antigo"). É a primeira parte da proposta visual, que o humano mandou aplicar por partes (2026-10-01).
+Aprovado por: humano (2026-10-01: "por partes").
+

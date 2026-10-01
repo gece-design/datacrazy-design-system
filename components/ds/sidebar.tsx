@@ -101,8 +101,6 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
       .filter((c) => c.itens.length > 0);
   }, [busca]);
 
-  // wrapper sem recorte: o botão de colapsar precisa vazar a borda do painel —
-  // o mesmo arranjo do componente de produto (components/ui/sidebar.tsx).
   const moldura = cn("relative shrink-0", className);
   const painel =
     "flex h-full flex-col gap-3 overflow-hidden rounded-[16px] border border-card bg-background p-[13px]";
@@ -120,6 +118,9 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
           >
             <LogoSimbolo className="h-[26px] w-auto" />
           </Link>
+
+          {/* o mesmo botão de recolher do produto (`SidebarToggle`), na linha de baixo da marca */}
+          {onColapsarChange && <SidebarToggle colapsada onClick={() => onColapsarChange(false)} />}
 
           <button
             onClick={() => onColapsarChange?.(false)}
@@ -181,16 +182,6 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
           </ul>
         </nav>
 
-        {onColapsarChange && (
-          <SidebarToggle
-            colapsada
-            onClick={() => onColapsarChange(false)}
-            // no rail o painel tem 64px e o conteúdo é centrado: o botão sai
-            // para a folga entre a sidebar e o conteúdo (-12px) para não cobrir
-            // o símbolo. Na altura, a linha da marca — a única sem glifo.
-            className="top-[12px] -right-3"
-          />
-        )}
       </div>
     );
   }
@@ -208,6 +199,8 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
             <Logo className="h-[28px] w-auto" />
           </Link>
           {onFechar && <BotaoFechar rotulo="Fechar menu" onClick={onFechar} className="-mr-1" />}
+          {/* o mesmo botão de recolher do produto (`SidebarToggle`), na linha da marca */}
+          {onColapsarChange && <SidebarToggle onClick={() => onColapsarChange(true)} className="-mr-1" />}
         </div>
 
         <div className="relative h-9 shrink-0">
@@ -315,15 +308,6 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
         </div>
       </nav>
 
-      {onColapsarChange && (
-        <SidebarToggle
-          colapsada={false}
-          onClick={() => onColapsarChange(true)}
-          // linha da marca, e não a da busca: em 59px (a coordenada do Figma
-          // para o painel do produto) o botão cairia sobre o atalho ⌘K.
-          className="top-[12px]"
-        />
-      )}
     </div>
   );
 }
