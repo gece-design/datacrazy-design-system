@@ -5,17 +5,17 @@
     "fim": "2026-10-01"
   },
   "git": {
-    "commits": 66,
-    "arquivos": 332,
-    "linhasUi": 10112,
+    "commits": 67,
+    "arquivos": 340,
+    "linhasUi": 10822,
     "linhasLib": 785,
-    "linhasDocs": 7806
+    "linhasDocs": 8206
   },
   "catalogo": {
-    "itens": 54,
+    "itens": 55,
     "porTipo": {
       "registry:theme": 4,
-      "registry:block": 3,
+      "registry:block": 4,
       "registry:item": 1,
       "registry:lib": 11,
       "registry:ui": 35
@@ -107,11 +107,11 @@
       "categoria": "Data Display",
       "pagina": null,
       "pecas": 5,
-      "props": 11,
+      "props": 12,
       "variantes": 4,
       "estados": 2,
       "acessibilidade": 5,
-      "linhas": 309
+      "linhas": 314
     },
     {
       "name": "checkbox",
@@ -481,11 +481,11 @@
   "totais": {
     "componentes": 35,
     "pecas": 114,
-    "props": 350,
+    "props": 351,
     "variantes": 99,
     "estados": 127,
     "acessibilidade": 211,
-    "paginas": 40,
+    "paginas": 41,
     "docs": 35
   },
   "tokens": {
@@ -729,12 +729,17 @@
     },
     {
       "titulo": "Telas de exemplo",
-      "total": 4,
-      "prontas": 4,
+      "total": 5,
+      "prontas": 5,
       "itens": [
         {
           "titulo": "Tela base",
           "href": "/exemplos/tela-base",
+          "pronto": true
+        },
+        {
+          "titulo": "Dashboard",
+          "href": "/exemplos/dashboard",
           "pronto": true
         },
         {
@@ -1037,6 +1042,12 @@
       "origem": "Lote",
       "titulo": "CRÍTICA DE DESIGN DE 28/09 · LOTE 2",
       "resumo": "Três componentes novos, sem par no arquivo. (1) IconeDeMarca (ADR-048): nove marcas, logos do Phosphor em fill na cor oficial (marca/*, primitivos em :root), mono para a fileira em que a cor compete; "
+    },
+    {
+      "data": "2026-10-01",
+      "origem": "Lote",
+      "titulo": "CRÍTICA DE DESIGN DE 28/09 · LOTE 3, A PARTE QUE NÃO PEDE DECISÃO: DASHBOARD",
+      "resumo": "Ponto 4 da crítica (\"dashboard sem composição nova\"). /exemplos/dashboard, publicado como bloco @datacrazy/dashboard: três faixas, do resumo ao detalhe — quatro KpiCard; a série no tempo (CardChart, s"
     },
     {
       "data": "2026-09-29",
@@ -1381,7 +1392,7 @@
       "regressao",
       "sidebar"
     ],
-    "capturas": 80,
+    "capturas": 82,
     "temas": 2
   },
   "bancada": {

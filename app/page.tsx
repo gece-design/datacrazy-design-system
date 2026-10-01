@@ -408,6 +408,22 @@ const previews: Record<string, React.ReactNode> = {
       </div>
     </div>
   ),
+  "/exemplos/dashboard": (
+    <div className="flex w-full max-w-full flex-col gap-2">
+      <div className="grid grid-cols-3 gap-2">
+        {["R$ 184,6K", "118", "27,1%"].map((valor) => (
+          <div key={valor} className="rounded-md border border-border bg-card p-2">
+            <p className="truncate text-h4 tabular-nums text-foreground">{valor}</p>
+          </div>
+        ))}
+      </div>
+      <div className="flex h-12 items-end gap-1.5 rounded-md border border-border bg-card p-2">
+        {["h-3", "h-5", "h-2", "h-6", "h-4", "h-8", "h-5", "h-7"].map((altura, i) => (
+          <span key={i} className={`flex-1 rounded-sm bg-primary ${altura}`} />
+        ))}
+      </div>
+    </div>
+  ),
   "/exemplos/pipeline": (
     <div className="flex w-full max-w-full gap-2">
       {[
@@ -475,6 +491,7 @@ const descricoes: Record<string, string> = {
   "Modal": "Grupos à esquerda, conteúdo à direita, botões à parte (G10).",
   "Drawer": "O lead pela direita: perfil, menu e cinco seções (G1).",
   "Drawer variações": "Tons, menu, linha do tempo, hierarquia, camada e as três propostas.",
+  "Dashboard": "Indicadores, receita por dia e os negócios parados, numa tela.",
   "Pipeline": "O funil do CRM: arraste um lead e abra o registro.",
   "Atendimento": "WhatsApp, Instagram e site numa tela: responda, anote e edite o lead.",
 };

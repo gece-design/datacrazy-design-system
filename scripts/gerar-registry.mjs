@@ -248,6 +248,9 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    Chat, inbox ou qualquer tela de mensagens? \`${NAMESPACE}/atendimento\`
    (\`app/atendimento/\`): conversas, mensagens e o lead em três colunas
    numa superfície só.
+   Dashboard, painel ou relatório? \`${NAMESPACE}/dashboard\`
+   (\`app/dashboard/\`): indicadores, gráfico ao lado da repartição, tabela
+   do que precisa de atenção ao lado do ranking, período no Header.
 1. **Procure antes de criar.** O catálogo no fim deste arquivo lista tudo o que
    existe. Se o componente existe e não está em \`components/ui/\`, instale:
    \`npx shadcn@latest add ${NAMESPACE}/<nome>\` (ou pela ferramenta MCP do shadcn).
@@ -447,6 +450,17 @@ const BLOCOS = [
     ],
     reescritas: [[' foto="/ds/atendente.png"', ""]],
     docs: `Atendimento: ${URL_DS}/exemplos/atendimento — a tela em app/atendimento; troque os dados de exemplo (dados.ts) pelos da API.`,
+  },
+  {
+    name: "dashboard",
+    title: "Dashboard",
+    description: "O dashboard do CRM, pronto: quatro indicadores, receita por dia ao lado da origem dos negócios, e os negócios parados ao lado do ranking de atendentes, com o período no Header. A tela de referência para painel e relatório — copie o padrão dela.",
+    arquivos: [
+      { de: "app/exemplos/dashboard/page.tsx", para: "app/dashboard/page.tsx" },
+      { de: "app/exemplos/dashboard/tela.tsx", para: "app/dashboard/tela.tsx" },
+      { de: "app/exemplos/dashboard/dados.ts", para: "app/dashboard/dados.ts" },
+    ],
+    docs: `Dashboard: ${URL_DS}/exemplos/dashboard — a tela em app/dashboard; troque os dados de exemplo (dados.ts) pelos da API.`,
   },
 ];
 

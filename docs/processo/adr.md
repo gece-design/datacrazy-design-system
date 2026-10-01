@@ -237,6 +237,7 @@ Aprovado por: humano (2026-10-01).
 Desvio: no arquivo o `fill` não tem contorno (o traço é da cor do cartão). O código usa `border`.
 Motivo: crítica de design de 2026-09-28 ("os cartões de métrica não possuem contorno e têm pouca visibilidade").
 Aprovado por: humano (2026-10-01).
+Atualização (2026-10-01, dashboard): o traço `border` sobe para a casca — o `Card` inteiro, não só o KpiCard `fill`. Lado a lado no dashboard, KPI com traço, Table com traço e Card sem traço eram três superfícies diferentes; o pedido do cliente é um só ("stroke nas divs").
 
 ## ADR-046 · Etiqueta de tipo do perfil no fluxo, sob o nome · 2026-10-01
 Desvio: o arquivo flutua a etiqueta "PESSOA"/"EMPRESA" sobre o avatar do `DrawerPerfil`. O código põe a etiqueta no fluxo, sob o nome.

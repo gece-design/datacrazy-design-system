@@ -56,6 +56,7 @@ Só superfície. Aceita `className` e filhos.
 |------|------|-----------|
 | `fatias` | `FatiaDaRosca[]` | `nome` e `percentual`. |
 | `destaque` | `string` | O número grande no centro. |
+| `formatar` | `(percentual: number) => string` | Como o percentual aparece na legenda. Padrão: uma casa e ponto ("46.0%"); passe o formato do idioma. |
 | `rotulo` | `string` | A linha pequena sob ele. |
 
 ### `CardChart`
@@ -72,6 +73,8 @@ O recorte usa o [Select](Select.md), que virou componente próprio quando a Data
 Table pediu o mesmo controle.
 
 ## Variantes
+
+A casca `Card` tem traço de 1px em `border` (ADR-045): toda superfície do dashboard — card, KPI, tabela — tem o mesmo contorno.
 
 | Conteúdo | Quando usar |
 |----------|-------------|

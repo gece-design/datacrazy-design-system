@@ -135,10 +135,16 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   size="sm"` (`outline` cancela, `primary` confirma). Muitos campos ou edição
   de um registro existente: não é modal — é o `Drawer` com cartões
   (`CampoEditavel`, `Select cartao`, `Rating`) em `gradeDeCartoes`.
-- **Dashboard**: `KpiCard` em grade `grid-cols-1 sm:grid-cols-2 xl:grid-cols-4`
-  (com a Sidebar aberta, quatro só acima de 1280 — senão o número trunca);
-  `Card` com `CardHeader` para gráfico e listas; `SegmentedControl` de período
-  e `DateRangePicker` na fileira do Header.
+- **Dashboard**: bloco `@datacrazy/dashboard` (`app/dashboard/`). Três faixas,
+  do resumo ao detalhe, com `gap-3`: (1) `KpiCard` em grade `grid-cols-1
+  sm:grid-cols-2 xl:grid-cols-4` (com a Sidebar aberta, quatro só acima de 1280
+  — senão o número trunca); (2) `grid xl:grid-cols-3` com o `Card` do gráfico
+  (`CardChart`, sem eixo) em `xl:col-span-2` e a repartição (`CardDonut`) ao
+  lado; (3) `grid xl:grid-cols-3 items-start` com a `DataTable` do que precisa
+  de atenção (`xl:col-span-2`, direto na superfície, nunca dentro de `Card`) e
+  o ranking (`CardList`) ao lado. Período no Header (`SegmentedControl` ou
+  `DateRangePicker`), valendo para a tela toda; dashboard não tem ação principal.
+  `trend` do KpiCard é a direção literal do número, não "bom" ou "ruim".
 - **Atendimento (chat, inbox, mensagens)**: bloco `@datacrazy/atendimento`
   (`app/atendimento/`). Três colunas numa superfície só (`bg-card` com
   `border`), separadas por traço: lista de conversas (320, abas de situação com
@@ -186,7 +192,8 @@ nas divs; o nosso parece gigante". Os números que fecham isso:
   O cliente tirou a variação colorida em 18/09 ("vibe code").
 - Formulário longo em `Modal` → `Drawer` com cartões. Modal é decisão curta.
 - Sidebar ou Header montados à mão, ou tela sem `TelaBase`.
-- Card dentro de card, frame dentro de frame: uma superfície por bloco.
+- Card dentro de card, frame dentro de frame, tabela dentro de `Card`: uma
+  superfície por bloco, e toda superfície tem traço (`border`).
 - Espaço em branco no lugar de traço: onde a informação é densa (tabela,
   cartões do drawer), o `border`/`divider` separa; o respiro fica para o
   dashboard.

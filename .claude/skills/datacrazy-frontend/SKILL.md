@@ -186,7 +186,8 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   import de fora de ui/ e lib/ vira vizinho via `reescritas`. Tema: `useTema` de `lib/tema.ts`, nunca cópia local.
   Relatório: `node scripts/gerar-entrega.mjs` → `lib/entrega.json` → `/entrega` (fora do nav).
   Telas que mais doem (FigJam): Atendimento feito (`app/exemplos/atendimento`, bloco `atendimento`); faltam
-  Automações, Card do lead e mobile. Texto de várias linhas: `Textarea` (ADR-042), nunca `<textarea>` cru.
+  Automações, Card do lead e mobile. Dashboard feito (`app/exemplos/dashboard`, bloco `dashboard`): três faixas,
+  só peças do DS; `Card` tem traço `border` (ADR-045), `CardDonut formatar` dá o percentual no idioma. Texto de várias linhas: `Textarea` (ADR-042), nunca `<textarea>` cru.
 - **Quando usar**: toda `docs/componentes/*.md` tem `## Quando usar` ("- **Use** …" / "- **Não use** … → o
   componente certo"); é a primeira seção da skill do cliente e a seção automática da página do componente
   (`lib/quando-usar.json`, gerado pelo gerar-registry — não editar à mão). `check-doc-codigo` reprova doc sem

@@ -50,7 +50,7 @@ tokens sob `.dark`.
 
 | Variante | Quando usar |
 |----------|-------------|
-| `fill` | Padrão. Um número e uma contagem. A faixa do topo do dashboard. Altura 139–140. Tem traço de 1px em `border` (ADR-045): sem ele o cartão sumia sobre superfície clara. |
+| `fill` | Padrão. Um número e uma contagem. A faixa do topo do dashboard. Altura 139–140. Tem traço de 1px em `border`, que vem da casca `Card` (ADR-045): sem ele o cartão sumia sobre superfície clara. |
 | `outline` | Um número, a variação dele e o que ela significa. Tem divisória e rodapé. Traço de 2px, altura 172. |
 | `trend="neutral"` | Não há comparação com período anterior. |
 | `trend="up"` | Variação positiva. |
@@ -79,7 +79,7 @@ interativo e aí ganha `focus-visible` (I4) e alvo de toque (I15).
 
 ## Composição
 
-Usa: [Card](Card.md) como casca (raio, traço `card` e fundo; lote B6) — o KPI só muda largura, recuo por variante (D14) e, no Outline, o traço de 2 sem fundo; glifos exportados do arquivo ·
+Usa: [Card](Card.md) como casca (raio, traço `border` e fundo; lote B6) — o KPI só muda largura, recuo por variante (D14) e, no Outline, o traço de 2 sem fundo; glifos exportados do arquivo ·
 Usado por: home do site (galeria) e dashboard (tela ainda não construída)
 
 ## Exemplo de uso

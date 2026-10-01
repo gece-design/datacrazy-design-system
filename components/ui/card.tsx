@@ -22,7 +22,9 @@ export const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
     <div
       ref={ref}
       className={cn(
-        "flex min-w-0 flex-col items-start overflow-hidden rounded-md border border-card bg-card p-[19px]",
+        // traço visível (`border`): sem ele o card some sobre superfície clara e destoa
+        // do KpiCard e da Table ao lado (cliente, 2026-09-28: "stroke nas divs"; ADR-045)
+        "flex min-w-0 flex-col items-start overflow-hidden rounded-md border border-border bg-card p-[19px]",
         className,
       )}
       {...props}
@@ -158,8 +160,11 @@ export function CardDonut({
   fatias,
   destaque,
   rotulo,
+  formatar = (percentual) => `${percentual.toFixed(1)}%`,
 }: {
   fatias: FatiaDaRosca[];
+  /** Como o percentual aparece na legenda. Padrão: uma casa e ponto ("46.0%"); passe o formato do idioma. */
+  formatar?: (percentual: number) => string;
   /** O número grande no centro. Ex.: "100.0%". */
   destaque: string;
   /** A linha pequena sob ele. Ex.: o nome da fatia dominante. */
@@ -222,7 +227,7 @@ export function CardDonut({
               </p>
             </div>
             <p className="shrink-0 text-label-lg tabular-nums text-foreground">
-              {f.percentual.toFixed(1)}%
+              {formatar(f.percentual)}
             </p>
           </div>
         ))}
