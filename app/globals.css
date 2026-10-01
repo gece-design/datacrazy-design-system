@@ -22,16 +22,6 @@
     --blue-700: 215.8 79.8% 32.9%;
     --neutral-900: 240.0 9.1% 12.9%;
     --neutral-800: 221.2 16.0% 19.6%;
-    /* marcas — a cor é da marca, não do tema: mesmo valor nos dois modos.
-       Sem par no arquivo (ADR-048): só o `IconeDeMarca` usa. */
-    --marca-whatsapp: 142.4 70.2% 48.6%;
-    --marca-instagram: 348.7 75.2% 57.3%;
-    --marca-facebook: 217.2 100.0% 51.6%;
-    --marca-google: 217.4 89.0% 60.8%;
-    --marca-meta: 212.9 96.5% 44.5%;
-    --marca-linkedin: 210.0 90.2% 40.0%;
-    --marca-telegram: 199.9 77.9% 52.2%;
-    --marca-youtube: 0.0 100.0% 50.0%;
 
     /* semânticos — modo Claro */
     --background: 210.0 11.1% 92.9%;
@@ -282,6 +272,48 @@
     --tom-tag: 356 100% 60%;
     --tom-brilho: 356 100% 93.9%;
   }
+  /* 2026-10-01: mais seis, a pedido do cliente (paleta de ~15 na criação da
+     tag) — `indigo` (240°), `fucsia` (298°), `amarelo` (60°), `lima` (88°),
+     `turquesa` (166°) e `marrom` (25°, com menos saturação). Mesma regra dos
+     de 18/09: o matiz gira e o L da letra desce (ou sobe, no índigo) até dar
+     pelo menos 4,5:1 sobre o próprio brilho e 5,2:1 sobre card. Com o neutro
+     (tag sem tom), são quinze cores. */
+  [data-tom="indigo"] {
+    --tom-anel: 240 100% 95.5%;
+    --tom-texto: 240 85.2% 60%;
+    --tom-tag: 240 100% 70%;
+    --tom-brilho: 240 100% 93.9%;
+  }
+  [data-tom="fucsia"] {
+    --tom-anel: 298 100% 95.5%;
+    --tom-texto: 298 85.2% 39.6%;
+    --tom-tag: 298 100% 48%;
+    --tom-brilho: 298 100% 93.9%;
+  }
+  [data-tom="amarelo"] {
+    --tom-anel: 60 100% 95.5%;
+    --tom-texto: 60 85.2% 24.2%;
+    --tom-tag: 60 100% 28.3%;
+    --tom-brilho: 60 100% 93.9%;
+  }
+  [data-tom="lima"] {
+    --tom-anel: 88 100% 95.5%;
+    --tom-texto: 88 85.2% 25.7%;
+    --tom-tag: 88 100% 30%;
+    --tom-brilho: 88 100% 93.9%;
+  }
+  [data-tom="turquesa"] {
+    --tom-anel: 166 100% 95.5%;
+    --tom-texto: 166 85.2% 26%;
+    --tom-tag: 166 100% 30.3%;
+    --tom-brilho: 166 100% 93.9%;
+  }
+  [data-tom="marrom"] {
+    --tom-anel: 25 60% 95.5%;
+    --tom-texto: 25 55% 39.7%;
+    --tom-tag: 25 60% 49.5%;
+    --tom-brilho: 25 60% 93.9%;
+  }
   .dark [data-tom="roxo"] {
     --tom-anel: 266 27.1% 18.8%;
     --tom-texto: 266 100% 75.1%;
@@ -323,6 +355,42 @@
     --tom-texto: 356 100% 75.1%;
     --tom-tag: 356 100% 67.5%;
     --tom-brilho: 356 27.1% 18.8%;
+  }
+  .dark [data-tom="indigo"] {
+    --tom-anel: 240 27.1% 18.8%;
+    --tom-texto: 240 100% 78%;
+    --tom-tag: 240 100% 70%;
+    --tom-brilho: 240 27.1% 18.8%;
+  }
+  .dark [data-tom="fucsia"] {
+    --tom-anel: 298 27.1% 18.8%;
+    --tom-texto: 298 100% 75.1%;
+    --tom-tag: 298 100% 67.5%;
+    --tom-brilho: 298 27.1% 18.8%;
+  }
+  .dark [data-tom="amarelo"] {
+    --tom-anel: 60 27.1% 18.8%;
+    --tom-texto: 60 100% 75.1%;
+    --tom-tag: 60 100% 67.5%;
+    --tom-brilho: 60 27.1% 18.8%;
+  }
+  .dark [data-tom="lima"] {
+    --tom-anel: 88 27.1% 18.8%;
+    --tom-texto: 88 100% 75.1%;
+    --tom-tag: 88 100% 67.5%;
+    --tom-brilho: 88 27.1% 18.8%;
+  }
+  .dark [data-tom="turquesa"] {
+    --tom-anel: 166 27.1% 18.8%;
+    --tom-texto: 166 100% 75.1%;
+    --tom-tag: 166 100% 67.5%;
+    --tom-brilho: 166 27.1% 18.8%;
+  }
+  .dark [data-tom="marrom"] {
+    --tom-anel: 25 18% 18.8%;
+    --tom-texto: 25 60% 75.1%;
+    --tom-tag: 25 55% 62%;
+    --tom-brilho: 25 18% 18.8%;
   }
 
   * {

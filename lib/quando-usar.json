@@ -301,8 +301,8 @@
       ],
       "naoUsar": [
         "para ícone de ação ou de interface: é Phosphor, peso `regular`.",
-        "logo pintado com cor solta nem `<svg>` de marca colado na tela: a marca que falta entra neste conjunto.",
-        "as cores `marca/*` em fundo, texto ou traço: são só do ícone."
+        "`<svg>` de marca colado na tela nem glifo pintado com cor solta: a marca que falta entra neste conjunto.",
+        "as cores das marcas em fundo, texto ou traço: elas existem só dentro do logo."
       ]
     }
   ],

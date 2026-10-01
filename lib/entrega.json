@@ -5,11 +5,11 @@
     "fim": "2026-10-01"
   },
   "git": {
-    "commits": 67,
-    "arquivos": 340,
-    "linhasUi": 10822,
+    "commits": 68,
+    "arquivos": 343,
+    "linhasUi": 10989,
     "linhasLib": 785,
-    "linhasDocs": 8206
+    "linhasDocs": 8215
   },
   "catalogo": {
     "itens": 55,
@@ -98,7 +98,7 @@
       "variantes": 2,
       "estados": 6,
       "acessibilidade": 8,
-      "linhas": 442
+      "linhas": 444
     },
     {
       "name": "card",
@@ -176,7 +176,7 @@
       "variantes": 3,
       "estados": 6,
       "acessibilidade": 10,
-      "linhas": 1062
+      "linhas": 1068
     },
     {
       "name": "header",
@@ -194,7 +194,7 @@
     {
       "name": "icone-de-marca",
       "titulo": "IconeDeMarca",
-      "descricao": "Mostrar a marca de um canal ou integração — WhatsApp, Instagram, Google — num conjunto fechado, com a cor da marca.",
+      "descricao": "Mostrar a marca de um canal ou integração — WhatsApp, Instagram, Google — num conjunto fechado, com o logo de verdade.",
       "categoria": "Foundations",
       "pagina": null,
       "pecas": 1,
@@ -202,7 +202,7 @@
       "variantes": 2,
       "estados": 0,
       "acessibilidade": 4,
-      "linhas": 68
+      "linhas": 219
     },
     {
       "name": "input",
@@ -397,7 +397,7 @@
       "variantes": 6,
       "estados": 4,
       "acessibilidade": 7,
-      "linhas": 443
+      "linhas": 451
     },
     {
       "name": "tela-base",
@@ -489,7 +489,7 @@
     "docs": 35
   },
   "tokens": {
-    "cores": 76,
+    "cores": 68,
     "tipografia": 15,
     "raios": 7,
     "sombras": 8,
@@ -998,7 +998,7 @@
     },
     {
       "id": "ADR-048",
-      "titulo": "IconeDeMarca: conjunto fechado, tokens `marca/*` e logo em `fill`",
+      "titulo": "IconeDeMarca: conjunto fechado de logos de verdade",
       "data": "2026-10-01"
     },
     {
@@ -1010,14 +1010,19 @@
       "id": "ADR-050",
       "titulo": "BarraDeFiltros substitui o modal de filtros",
       "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-051",
+      "titulo": "Paleta da Tag: de oito para catorze tons (quinze cores com o neutro)",
+      "data": "2026-10-01"
     }
   ],
   "auditoria": {
-    "total": 208,
+    "total": 209,
     "porStatus": {
       "corrigido": 67,
       "aceito": 12,
-      "adiado": 127,
+      "adiado": 128,
       "aberto": 2
     },
     "porEixo": {
@@ -1027,7 +1032,7 @@
       "paginas": 10,
       "instalacao": 11,
       "docs": 10,
-      "fidelidade": 123
+      "fidelidade": 124
     }
   },
   "pedidos": [
@@ -1048,6 +1053,12 @@
       "origem": "Lote",
       "titulo": "CRÍTICA DE DESIGN DE 28/09 · LOTE 3, A PARTE QUE NÃO PEDE DECISÃO: DASHBOARD",
       "resumo": "Ponto 4 da crítica (\"dashboard sem composição nova\"). /exemplos/dashboard, publicado como bloco @datacrazy/dashboard: três faixas, do resumo ao detalhe — quatro KpiCard; a série no tempo (CardChart, s"
+    },
+    {
+      "data": "2026-10-01",
+      "origem": "Revisão",
+      "titulo": "RESPOSTAS DO HUMANO: MARCAS CORRETAS, TAG COM QUINZE CORES, CASCA POR PARTES",
+      "resumo": "(1) \"Os ícones de marcas estão horríveis, coloque os corretos\": o IconeDeMarca deixa de pintar o glifo do Phosphor e passa a trazer os logos de verdade — coleção \"SVG Logos\" (CC0) e o Instagram de \"Sk"
     },
     {
       "data": "2026-09-29",

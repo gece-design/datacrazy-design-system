@@ -52,7 +52,7 @@ Divergência registrada em [../processo/consistencia.json](../processo/consisten
 | `mais` | `(n) => string` | sim | O botão do dia cheio. "+2 mais". |
 | `dia` | `(data, eventos) => string` | sim | Nome do botão do dia: a data por extenso e quantos eventos tem. |
 
-`TomDoEvento` são os oito tons do DS (os da [Tag](Tag.md) e do perfil do
+`TomDoEvento` são os catorze tons do DS (os da [Tag](Tag.md) e do perfil do
 [Drawer](Drawer.md)); só a bolinha do evento pinta.
 
 ## Variantes

@@ -9,7 +9,7 @@ import { PaginaDS, Secao, Chip } from "@/components/ds/preview";
 import { DrawerLead, MENU_LEAD } from "../drawer/drawer-lead";
 import { PropostaBarraDeIcones, PropostaGrade, PropostaTrilhoDeIcones } from "./propostas";
 
-/* As variações do Drawer, fora da página principal: os oito tons, o menu
+/* As variações do Drawer, fora da página principal: os catorze tons, o menu
    solto, a linha do tempo, o nó da hierarquia, a camada — e as três propostas
    do cliente refeitas com os componentes do sistema. O drawer inteiro, que é
    o que se copia, fica em /feedback/drawer. */
@@ -23,6 +23,12 @@ const tons: { tom: TomPerfil; nome: string; tipo: "pessoa" | "empresa"; origem: 
   { tom: "ciano", nome: "Helena Moraes", tipo: "pessoa", origem: "matiz 190°" },
   { tom: "ambar", nome: "Oficina Farol", tipo: "empresa", origem: "matiz 45°" },
   { tom: "vermelho", nome: "Tomás Vilela", tipo: "pessoa", origem: "matiz 356°" },
+  { tom: "indigo", nome: "Clínica Vitalis", tipo: "empresa", origem: "matiz 240°" },
+  { tom: "fucsia", nome: "Júlia Bastos", tipo: "pessoa", origem: "matiz 298°" },
+  { tom: "amarelo", nome: "Rede Bom Dia", tipo: "empresa", origem: "matiz 60°" },
+  { tom: "lima", nome: "Pedro Nakamura", tipo: "pessoa", origem: "matiz 88°" },
+  { tom: "turquesa", nome: "Instituto Raízes", tipo: "empresa", origem: "matiz 166°" },
+  { tom: "marrom", nome: "Camila Ferraz", tipo: "pessoa", origem: "matiz 25°, menos saturação" },
 ];
 
 export default function DrawerVariacoesPage() {

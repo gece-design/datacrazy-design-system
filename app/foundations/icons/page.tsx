@@ -200,14 +200,14 @@ export default function Icones() {
       <Secao
         titulo="Marcas"
         spec="IconeDeMarca · 9 marcas"
-        descricao="De onde o lead veio e por onde a conversa acontece. É um conjunto fechado: o logo é do Phosphor, a cor é a oficial da marca, e a tela nunca pinta um logo por conta própria."
+        descricao="De onde o lead veio e por onde a conversa acontece. É um conjunto fechado, com o logo de verdade de cada marca: a tela nunca cola um SVG nem pinta um glifo por conta própria."
         codigo={CODIGO_MARCA}
         nota={
           <>
-            É a única exceção ao peso único: logo é <Chip>fill</Chip>, na cor da marca. Com <Chip>mono</Chip> o
-            glifo volta ao peso <Chip>regular</Chip> e à cor do texto em volta — para a fileira em que a cor
-            competiria com o dado. O ícone anda sempre com o nome ao lado; sozinho, só com <Chip>rotulo</Chip>.
-            Marca que falta entra no componente, não na tela.
+            As cores são do logo, como numa imagem: não são tokens e não mudam com o tema. Com{" "}
+            <Chip>mono</Chip>, o logo dá lugar ao glifo do Phosphor em peso <Chip>regular</Chip>, na cor do
+            texto em volta — para a fileira em que a cor competiria com o dado. O ícone anda sempre com o nome
+            ao lado; sozinho, só com <Chip>rotulo</Chip>. Marca que falta entra no componente, não na tela.
           </>
         }
       >

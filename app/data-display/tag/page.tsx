@@ -1,16 +1,34 @@
 "use client";
 
-import { Tag, TagAdicionar } from "@/components/ui/tag";
+import { Tag, TagAdicionar, TONS, type Tom } from "@/components/ui/tag";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 import { TagsDoLead } from "@/app/feedback/drawer/drawer-lead";
 import { FileiraDeTags, PRODUTOS, ROTULOS_PRODUTOS, RESPONSAVEIS, ROTULOS_RESPONSAVEIS, ORIGEM, ROTULOS_ORIGEM } from "./cenarios";
+
+/** Como cada tom se chama na tela. No CRM, o nome vem do next-intl. */
+const NOME_DO_TOM: Record<Tom, string> = {
+  azul: "Azul",
+  indigo: "Índigo",
+  roxo: "Roxo",
+  fucsia: "Fúcsia",
+  rosa: "Rosa",
+  vermelho: "Vermelho",
+  laranja: "Laranja",
+  ambar: "Âmbar",
+  amarelo: "Amarelo",
+  lima: "Lima",
+  verde: "Verde",
+  turquesa: "Turquesa",
+  ciano: "Ciano",
+  marrom: "Marrom",
+};
 
 export default function TagPage() {
   return (
     <PaginaDS
       titulo="Tag"
       descricao="A etiqueta que o usuário põe no lead: pílula de 22px em caixa alta, com bolinha de status, ícone de tipo ou foto do atendente. O + no fim da fileira abre o seletor, com uma aba por tipo de tag e busca que também cria."
-      secoes={["Como funciona", "Variantes", "No perfil", "Seletor de tags", "Outros cenários", "Quando usar"]}
+      secoes={["Como funciona", "Variantes", "Cores", "No perfil", "Seletor de tags", "Outros cenários", "Quando usar"]}
     >
       <ComoFunciona>
         <p>
@@ -64,6 +82,40 @@ export default function TagPage() {
           <Tag tipo="empresa">Empresa</Tag>
           <Tag foto="/ds/atendente.png">Esther</Tag>
           <TagAdicionar rotulo="Adicionar tag" />
+        </div>
+      </Secao>
+
+      <Secao
+        titulo="Cores"
+        spec="14 tons + neutro"
+        descricao="Quinze cores para quem cria a tag: catorze tons, na ordem do círculo de cores, e a tag sem tom, que é o cinza. Cada tom tem o fundo, a letra e a bolinha medidos para o claro e para o escuro."
+        codigo={`<Tag tom="turquesa">Turquesa</Tag>
+<Tag tom="fucsia" status="info">Fúcsia</Tag>
+<Tag>Neutro</Tag>`}
+        nota={
+          <>
+            A cor é escolha de quem cria a tag, não sorteio da tela: lista inteira colorida ao acaso vira ruído.{" "}
+            <Chip>tomDe</Chip>, que dá uma cor estável a um texto, continua sorteando só entre seis tons — abrir a
+            paleta não troca a cor de uma lista que já existe.
+          </>
+        }
+      >
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {TONS.map((t) => (
+              <Tag key={t} tom={t}>
+                {NOME_DO_TOM[t]}
+              </Tag>
+            ))}
+            <Tag>Neutro</Tag>
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5">
+            {TONS.map((t) => (
+              <Tag key={t} tom={t} status="info">
+                {NOME_DO_TOM[t]}
+              </Tag>
+            ))}
+          </div>
         </div>
       </Secao>
 

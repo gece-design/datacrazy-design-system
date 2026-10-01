@@ -34,7 +34,7 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 | `status` | `"destructive" \| "info" \| "success"` | não | Bolinha de 6px antes do texto. |
 | `tipo` | `"pessoa" \| "empresa"` | não | Ícone de 12px e texto em `primary`. |
 | `foto` | `string` | não | Foto de 22px encostada à esquerda (atendente). |
-| `tom` | `Tom` | não | Um dos oito tons de `[data-tom]` (`TONS`): `azul` `roxo` `rosa` `laranja` `verde` `ciano` `ambar` `vermelho`. Sem tom, a tag é cinza — o atendente. `tomDe(chave)` dá um tom estável para um texto (verde e vermelho ficam fora do sorteio). |
+| `tom` | `Tom` | não | Um dos catorze tons de `[data-tom]` (`TONS`, na ordem do círculo de cores): `azul` `indigo` `roxo` `fucsia` `rosa` `vermelho` `laranja` `ambar` `amarelo` `lima` `verde` `turquesa` `ciano` `marrom`. Sem tom, a tag é cinza — o atendente; com ela, são quinze cores (ADR-051). `tomDe(chave)` dá um tom estável para um texto, sempre entre os seis de antes (`azul` `roxo` `rosa` `laranja` `ciano` `ambar`): abrir a paleta não troca a cor de lista que já existe. |
 | `icone` | `ComponentType` | não | Ícone de 12px antes do texto, para quem não distingue as cores. |
 | `children` | `ReactNode` | sim | O texto. A caixa alta é CSS. |
 

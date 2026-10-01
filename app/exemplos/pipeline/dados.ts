@@ -12,19 +12,25 @@ import type { TomPerfil } from "@/components/ui/drawer";
    execução — e ETAPAS é só o estado inicial. */
 export type EtapaId = string;
 
-/** Cor do painel da coluna. São os oito tons do DS mais o neutro. */
+/** Cor do painel da coluna. São os catorze tons do DS mais o neutro. */
 export type CorColuna = "neutro" | TomPerfil;
 
 export const CORES_COLUNA: { valor: CorColuna; rotulo: string }[] = [
   { valor: "neutro", rotulo: "Neutro" },
   { valor: "azul", rotulo: "Azul" },
-  { valor: "ciano", rotulo: "Ciano" },
-  { valor: "verde", rotulo: "Verde" },
-  { valor: "ambar", rotulo: "Âmbar" },
-  { valor: "laranja", rotulo: "Laranja" },
-  { valor: "vermelho", rotulo: "Vermelho" },
-  { valor: "rosa", rotulo: "Rosa" },
+  { valor: "indigo", rotulo: "Índigo" },
   { valor: "roxo", rotulo: "Roxo" },
+  { valor: "fucsia", rotulo: "Fúcsia" },
+  { valor: "rosa", rotulo: "Rosa" },
+  { valor: "vermelho", rotulo: "Vermelho" },
+  { valor: "laranja", rotulo: "Laranja" },
+  { valor: "ambar", rotulo: "Âmbar" },
+  { valor: "amarelo", rotulo: "Amarelo" },
+  { valor: "lima", rotulo: "Lima" },
+  { valor: "verde", rotulo: "Verde" },
+  { valor: "turquesa", rotulo: "Turquesa" },
+  { valor: "ciano", rotulo: "Ciano" },
+  { valor: "marrom", rotulo: "Marrom" },
 ];
 
 export type Etapa = {
@@ -121,7 +127,7 @@ export type Lead = {
   etapa: EtapaId;
   /** Ids do catálogo `GRUPOS_TAGS`. */
   tags: string[];
-  /** Cor do perfil no drawer. Os oito tons do DS giram entre os leads. */
+  /** Cor do perfil no drawer. Os tons do DS giram entre os leads. */
   tom: TomPerfil;
   /** A pessoa por trás de um lead empresa. Lead pessoa não tem (cliente, 2026-09-18). */
   contatoPrincipal?: { nome: string; cargo?: string; telefone?: string; email?: string };

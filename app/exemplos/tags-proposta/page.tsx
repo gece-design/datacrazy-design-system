@@ -90,7 +90,7 @@ export default function Page() {
         </Linha>
       </Bloco>
 
-      <Bloco titulo="Os oito tons" nota="Já existem no globals.css e já passam no contraste dos dois temas. Ao criar uma tag em Listas, a pessoa escolhe um deles.">
+      <Bloco titulo="Os catorze tons" nota="Com a tag sem tom, são quinze cores. Ao criar uma tag em Listas, a pessoa escolhe uma delas.">
         <div className="flex flex-wrap items-center gap-1.5">
           {TONS.map((t) => (
             <Tag key={t} tom={t}>

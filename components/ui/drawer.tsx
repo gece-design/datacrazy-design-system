@@ -260,13 +260,19 @@ export function DrawerBotaoCanto({
 /** Cor do topo do perfil. Os valores moram em `app/globals.css` (`[data-tom]`). */
 export type TomPerfil =
   | "azul"
+  | "indigo"
   | "roxo"
+  | "fucsia"
   | "rosa"
+  | "vermelho"
   | "laranja"
-  | "verde"
-  | "ciano"
   | "ambar"
-  | "vermelho";
+  | "amarelo"
+  | "lima"
+  | "verde"
+  | "turquesa"
+  | "ciano"
+  | "marrom";
 
 /** Rolagem de coluna: barra fina que só aparece sob o cursor (cliente, 2026-09-24) e sem arrastar a página junto no fim. */
 const rolagemDeColuna = `min-h-0 overflow-y-auto overscroll-contain ${rolagemDiscreta}`;

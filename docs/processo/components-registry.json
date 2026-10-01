@@ -1981,26 +1981,18 @@
     {
       "name": "IconeDeMarca",
       "family": "midia",
-      "figmaNode": "sem par (logos do Phosphor; cores oficiais das marcas)",
+      "figmaNode": "sem par (logos prontos: SVG Logos, CC0; Instagram de Skill Icons, MIT)",
       "batch": "C2",
       "variants": [
         "colorido",
         "mono"
       ],
       "tokens": [
-        "marca/whatsapp",
-        "marca/instagram",
-        "marca/facebook",
-        "marca/google",
-        "marca/meta",
-        "marca/linkedin",
-        "marca/telegram",
-        "marca/youtube",
         "foreground"
       ],
       "motion": null,
       "states": {},
-      "_states_doc": "Leitura: nenhum estado. Conjunto fechado; marca nova entra no componente, nunca na tela. Unica excecao ao peso unico (A8): fill na cor da marca. ADR-048."
+      "_states_doc": "Leitura: nenhum estado. Conjunto fechado; marca nova entra no componente, nunca na tela. As cores sao do logo, nao tokens. ADR-048."
     }
   ]
 }

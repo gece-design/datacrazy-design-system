@@ -719,7 +719,7 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
               }}
             />
 
-            {/* As amostras são os oito tons do DS no degrau mais claro, mais o
+            {/* As amostras são os catorze tons do DS no degrau mais claro, mais o
                 neutro. Nenhuma cor nova: `data-tom` troca as variáveis. */}
             <div className="flex flex-col gap-2">
               <span className="text-label-md text-input-label">Cor da coluna</span>

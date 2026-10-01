@@ -249,10 +249,11 @@ Decisão: toda `docs/componentes/*.md` tem `## Quando usar`, com itens "**Use**"
 Motivo: crítica de design de 2026-09-28 ("falta dizer quando usar cada componente"; "menu usado onde devia ser select"). É a mesma lacuna que faz o agente escolher o componente errado.
 Aprovado por: humano (2026-10-01).
 
-## ADR-048 · IconeDeMarca: conjunto fechado, tokens `marca/*` e logo em `fill` · 2026-10-01
-Desvio: três exceções de uma vez, todas sem par no arquivo. (1) Componente novo (regra 6): `IconeDeMarca`, com nove marcas — WhatsApp, Instagram, Facebook, Google, Meta, LinkedIn, Telegram, YouTube, TikTok. (2) Tokens novos fora do Figma: primitivos `marca/*` com a cor oficial de cada marca, iguais nos dois modos (a cor é da marca, não do tema; TikTok usa `foreground`). Só o ícone usa — nunca fundo, texto ou traço. (3) Exceção à regra A8 (peso único): o logo é `fill`, na cor da marca; `mono` devolve o `regular` em `currentColor`. Os glifos são os logos do Phosphor: nenhum desenhado à mão.
-Motivo: crítica de design de 2026-09-28 ("ícone de marca não existe no DS… falta um componente ícone de integração com um conjunto fechado de marcas aprovadas"). Sem a peça, cada tela pintaria um logo com cor solta.
-Aprovado por: humano (2026-10-01: ordem dos lotes aprovada, "vai"). As nove marcas e as cores ficam para conferência dele; o Figma acompanha na remedição.
+## ADR-048 · IconeDeMarca: conjunto fechado de logos de verdade · 2026-10-01
+Desvio: componente novo sem par no arquivo (regra 6). `IconeDeMarca`, com nove marcas — WhatsApp, Instagram, Facebook, Google, Meta, LinkedIn, Telegram, YouTube, TikTok. Os desenhos são os logos de verdade, prontos: coleção "SVG Logos", de Gil Barbara (CC0), e o do Instagram de "Skill Icons" (MIT). As cores moram no desenho, como numa imagem: não são tokens, não mudam com o tema e não existem fora do ícone (por isso o arquivo é a única exceção à regra "sem hex" no check de tokens). `mono` troca o logo pelo glifo do Phosphor em `regular`, em `currentColor` — dentro da regra A8, sem exceção.
+Motivo: crítica de design de 2026-09-28 ("ícone de marca não existe no DS… falta um componente ícone de integração com um conjunto fechado de marcas aprovadas"). Sem a peça, cada tela colaria um `<svg>` ou pintaria um glifo com cor solta.
+Histórico: a primeira versão, do mesmo dia, pintava o glifo `fill` do Phosphor com a cor da marca (tokens `marca/*`). Recusada pelo humano ("os ícones de marcas estão horríveis, coloque os corretos"); os tokens `marca/*` saíram.
+Aprovado por: humano (2026-10-01).
 
 ## ADR-049 · Combobox, grupos e ícone no Select, CelulaEscolha · 2026-10-01
 Desvio: exceção à regra 6. `Combobox`, `ComboboxMultiplo` e `ComboboxPainel` nascem sem par no arquivo: gatilho do Select (`SelectTrigger`), painel do Popover, busca do `SeletorTags`, caixa de marcar do `Menu` — nenhuma superfície nova. `OpcaoSelect` ganha `grupo` (cabeçalho) e `icone`; `agruparOpcoes` e `GrupoDeOpcoes` servem ao Select e ao Combobox. Na Table, `CelulaEscolha` abre o `ComboboxPainel` na própria célula. A regra de escolha fica escrita: até ~10 opções fechadas é Select; lista longa, com busca ou várias escolhas é Combobox.
@@ -263,4 +264,9 @@ Aprovado por: humano (2026-10-01: "vai").
 Desvio: exceção à regra 6 (sem par no arquivo), e revisão de uma decisão anterior: o pipeline filtrava num Modal com tudo à vista (sete grupos de Checkbox, "nada de dropdown"). Agora os filtros são chips sob o Header: cada campo ativo é um chip (`Button soft`), o "+ Filtro" lista os campos, cada campo abre a própria lista com busca (`ComboboxPainel`), `unico` separa o campo de um valor do de vários, e chip sem valor some. O `HeaderFiltros` mostra e esconde a barra e exibe `contarFiltros`.
 Motivo: crítica de design de 2026-09-28 ("filtro com muitas opções não tem padrão… sete grupos de checkbox empilhados, sem busca, sem hierarquia entre filtro de um valor só e de múltiplos valores"). Referência: Twenty, Attio, Linear.
 Aprovado por: humano (2026-10-01: "vai").
+
+## ADR-051 · Paleta da Tag: de oito para catorze tons (quinze cores com o neutro) · 2026-10-01
+Desvio: seis tons sem par no arquivo — `indigo` (240°), `fucsia` (298°), `amarelo` (60°), `lima` (88°), `turquesa` (166°) e `marrom` (25°, com menos saturação). Valores DERIVADOS pela regra dos tons de 18/09: o matiz gira e o L da letra é o que dá pelo menos 4,5:1 sobre o próprio brilho e 5,2:1 sobre card; no escuro repetem o S/L do azul escuro (o índigo sobe o L da letra para 78%). `TONS` passa a seguir a ordem do círculo de cores. O sorteio (`tomDe`) continua nos seis de antes: abrir a paleta não pode trocar a cor de lista que já existe. Valem onde vale `[data-tom]`: Tag, perfil do Drawer, coluna do pipeline, evento do Calendário.
+Motivo: crítica de design de 2026-09-28 ("paleta de cor da Tag: 8 tons fixos vs. paleta livre… seletor de cor com ~15 opções na criação da tag") e decisão do humano (2026-10-01: "colorida pra 15").
+Aprovado por: humano (2026-10-01). Os valores dos seis tons ficam para conferência dele; o Figma acompanha na remedição.
 

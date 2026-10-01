@@ -15,6 +15,8 @@ export const EXCECOES = {
   "components/ui/button.tsx": ["botao-cru"],
   // a página da paleta MOSTRA os hex: é documentação do token, não estilo
   "app/foundations/color/page.tsx": ["hex"],
+  // os logos de marca são desenhos prontos: a cor é do logo, como numa imagem
+  "components/ui/icone-de-marca.tsx": ["hex"],
 };
 
 /** @type {Array<{regra:string, origem:string, onde:(f:string)=>boolean, ativa?:boolean, informativa?:boolean, teste:(linha:string, f:string)=>string[]|null}>} */

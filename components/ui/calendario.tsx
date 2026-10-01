@@ -41,9 +41,11 @@ import { foco, focoInterno, rolagemDiscreta } from "@/lib/estados";
  * Quem guarda os dois é a tela.
  */
 
-/** Os oito tons do DS (os mesmos da Tag e do perfil do Drawer). Só a
+/** Os catorze tons do DS (os mesmos da Tag e do perfil do Drawer). Só a
  *  bolinha do evento pinta: a cor reforça, o texto é o sinal. */
-export type TomDoEvento = "azul" | "roxo" | "rosa" | "laranja" | "verde" | "ciano" | "ambar" | "vermelho";
+export type TomDoEvento =
+  | "azul" | "indigo" | "roxo" | "fucsia" | "rosa" | "vermelho" | "laranja"
+  | "ambar" | "amarelo" | "lima" | "verde" | "turquesa" | "ciano" | "marrom";
 
 export type EventoCalendario = {
   id: string;

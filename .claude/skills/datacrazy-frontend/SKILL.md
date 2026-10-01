@@ -197,7 +197,8 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   escolhas — `Select` fica com a lista curta; os dois aceitam `grupo` e `icone` na opção (`agruparOpcoes`, `GrupoDeOpcoes`
   no select.tsx). Filtros de tela: `BarraDeFiltros` (chips; `contarFiltros` alimenta o `HeaderFiltros`, que mostra e esconde
   a barra) — nunca Modal com Checkbox empilhado. Célula que escolhe no lugar: `CelulaEscolha`. Marca: `IconeDeMarca`
-  (conjunto fechado, tokens `marca/*`, primitivos só em `:root`; única exceção ao peso único). ADR-048/049/050.
+  (conjunto fechado de logos de verdade, SVG embutido com id de gradiente por instância; as cores são do logo, não tokens;
+  único arquivo com exceção de hex no check; `mono` = glifo Phosphor). ADR-048/049/050.
 - **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, children; sem segunda linha;
   breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
   o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.

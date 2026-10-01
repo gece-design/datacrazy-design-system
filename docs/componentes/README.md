@@ -34,7 +34,7 @@ markdown é a vista dele.
 | [DatePicker.md](DatePicker.md) | Período em dois meses, com atalhos: um gatilho no estilo do Button `tertiary` |
 | [Drawer.md](Drawer.md) | Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida. |
 | [Header.md](Header.md) | O topo de uma página do CRM: onde a pessoa está, que página é e o que dá para |
-| [IconeDeMarca.md](IconeDeMarca.md) | Mostrar a marca de um canal ou integração — WhatsApp, Instagram, Google — num conjunto fechado, com a cor da m |
+| [IconeDeMarca.md](IconeDeMarca.md) | Mostrar a marca de um canal ou integração — WhatsApp, Instagram, Google — num conjunto fechado, com o logo de  |
 | [Input.md](Input.md) | Receber um valor curto digitado, com rótulo visível e erro inline. |
 | [KpiCard.md](KpiCard.md) | Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma |
 | [LogoDatacrazy.md](LogoDatacrazy.md) | Símbolo e logotipo do DataCrazy (`LogoDataCrazy` no código), em `currentColor` para acompanhar o tema. É a |

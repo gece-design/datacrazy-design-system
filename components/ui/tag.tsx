@@ -27,13 +27,21 @@ const pontos = {
   success: "bg-success",
 } as const;
 
-/** Os oito tons de `[data-tom]` no globals.css. A tag não inventa cor: escolhe um. */
-export const TONS = ["azul", "roxo", "rosa", "laranja", "verde", "ciano", "ambar", "vermelho"] as const;
+/** Os catorze tons de `[data-tom]` no globals.css, na ordem do círculo de
+ *  cores — é a ordem das amostras de quem cria a tag. Com a tag sem tom
+ *  (cinza), são quinze cores (cliente, 2026-09-28; humano, 2026-10-01). A tag
+ *  não inventa cor: escolhe um. */
+export const TONS = [
+  "azul", "indigo", "roxo", "fucsia", "rosa", "vermelho", "laranja",
+  "ambar", "amarelo", "lima", "verde", "turquesa", "ciano", "marrom",
+] as const;
 export type Tom = (typeof TONS)[number];
 
-/** Fora do sorteio: verde e vermelho querem dizer "deu certo" e "deu errado".
-    Uma lista qualquer em vermelho lê como alarme. Quem escolher, escolhe. */
-const SORTEAVEIS = TONS.filter((t) => t !== "verde" && t !== "vermelho");
+/** O sorteio continua nos seis de sempre: abrir a paleta não pode trocar a cor
+    de uma lista que já existe. Verde e vermelho ficam fora porque querem dizer
+    "deu certo" e "deu errado" — uma lista qualquer em vermelho lê como alarme.
+    Os tons novos entram por escolha de quem cria. */
+const SORTEAVEIS: Tom[] = ["azul", "roxo", "rosa", "laranja", "ciano", "ambar"];
 
 /**
  * Tom estável a partir de um texto — a mesma lista recebe sempre a mesma cor,
@@ -53,7 +61,7 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   tipo?: "pessoa" | "empresa";
   /** Foto de 22px encostada à esquerda — a tag do atendente. */
   foto?: string;
-  /** Um dos oito tons. Sem tom, a tag é cinza — é assim que o atendente fica. */
+  /** Um dos catorze tons. Sem tom, a tag é cinza — é assim que o atendente fica. */
   tom?: Tom;
   /** Ícone de 12px antes do texto, para quem não distingue as cores. */
   icone?: React.ComponentType<{ size?: number; weight?: "regular" | "fill"; className?: string }>;

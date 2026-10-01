@@ -3300,13 +3300,12 @@
     {
       "id": "AUD-208",
       "eixo": "fidelidade",
-      "titulo": "Figma atrás do código: IconeDeMarca e tokens `marca/*`, Combobox, BarraDeFiltros, grupos e ícone no Select",
+      "titulo": "Figma atrás do código: IconeDeMarca (logos de verdade), Combobox, BarraDeFiltros, grupos e ícone no Select",
       "onde": [
         "components/ui/icone-de-marca.tsx",
         "components/ui/combobox.tsx",
         "components/ui/barra-de-filtros.tsx",
-        "components/ui/select.tsx",
-        "app/globals.css"
+        "components/ui/select.tsx"
       ],
       "regra": "fidelidade · regra 6 (componente novo só com par no arquivo) · exceções ADR-048/049/050",
       "gravidade": "media",
@@ -3314,7 +3313,23 @@
       "verificacao": "manual",
       "status": "adiado",
       "fechadoEm": null,
-      "nota": "**Crítica de design de 2026-09-28, lote 2.** Três componentes e oito primitivos de cor nasceram no código, a pedido do cliente, sem desenho no arquivo. Na remedição: criar os component sets (Combobox com os três tamanhos do gatilho e o painel aberto; chip de filtro; ícone de marca nas nove marcas, colorido e mono) e a coleção `marca/*`. Conferir com o humano as nove marcas e as cores oficiais."
+      "nota": "**Crítica de design de 2026-09-28, lote 2.** Três componentes nasceram no código, a pedido do cliente, sem desenho no arquivo. Na remedição: criar os component sets (Combobox com os três tamanhos do gatilho e o painel aberto; chip de filtro; ícone de marca nas nove marcas, colorido e mono). Os logos são os de verdade (SVG Logos, CC0; Instagram de Skill Icons, MIT) — a primeira versão, com glifo pintado, foi recusada pelo humano em 2026-10-01."
+    },
+    {
+      "id": "AUD-209",
+      "eixo": "fidelidade",
+      "titulo": "Figma atrás do código: seis tons novos da Tag (indigo, fucsia, amarelo, lima, turquesa, marrom); rosa e laranja abaixo de 4,5:1 no claro",
+      "onde": [
+        "app/globals.css",
+        "components/ui/tag.tsx"
+      ],
+      "regra": "fidelidade · token só com par no arquivo · exceção ADR-051",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Decisão do humano em 2026-10-01 (ADR-051).** Seis tons derivados pela regra de contraste, sem variável no arquivo: criar as variáveis `tom/*` no Figma e conferir os valores com o humano. Medido na mesma conta: a letra de `rosa` (3,7:1) e de `laranja` (3,0:1) sobre o próprio brilho, no claro, fica abaixo de 4,5:1 — são os valores aprovados em 2026-09-15 (mesmo S/L do azul); baixar o L da letra resolve, e é decisão dele."
     }
   ]
 }

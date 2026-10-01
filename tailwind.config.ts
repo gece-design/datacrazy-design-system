@@ -86,18 +86,6 @@ const config: Config = {
           },
           neutral: { "800": "hsl(var(--neutral-800))", "900": "hsl(var(--neutral-900))" },
         },
-        // Cor de marca (WhatsApp, Instagram…): primitivo, igual nos dois modos.
-        // Só o `IconeDeMarca` usa — nunca em fundo, texto ou traço de interface (ADR-048).
-        marca: {
-          whatsapp: "hsl(var(--marca-whatsapp))",
-          instagram: "hsl(var(--marca-instagram))",
-          facebook: "hsl(var(--marca-facebook))",
-          google: "hsl(var(--marca-google))",
-          meta: "hsl(var(--marca-meta))",
-          linkedin: "hsl(var(--marca-linkedin))",
-          telegram: "hsl(var(--marca-telegram))",
-          youtube: "hsl(var(--marca-youtube))",
-        },
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)"],

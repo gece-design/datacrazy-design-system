@@ -101,12 +101,8 @@ Os três do meio trocam de token entre os modos e por isso reaparecem no
 `400` `#599CFF` · `500` `#3385FF` · `600` `#1266E2` · `700` `#114797` ·
 `base/neutral/900` `#1E1E24` · `base/neutral/800` `#2A2F3A`
 
-**Marcas** (`marca/*`, sem par no arquivo — ADR-048): a cor é da marca, não do
-tema, por isso não muda entre os modos. Só o `IconeDeMarca` usa; nunca em
-fundo, texto ou traço de interface.
-`whatsapp` `#25D366` · `instagram` `#E4405F` · `facebook` `#0866FF` ·
-`google` `#4285F4` · `meta` `#0467DF` · `linkedin` `#0A66C2` ·
-`telegram` `#26A5E4` · `youtube` `#FF0000`. TikTok usa `foreground`.
+**Marcas**: não há token. O `IconeDeMarca` traz os logos de verdade, e as
+cores de cada marca moram no próprio desenho, como numa imagem (ADR-048).
 
 ### Cor — estados
 
@@ -167,6 +163,10 @@ Em 2026-09-18 entraram `verde` (142°), `ciano` (190°), `ambar` (45°) e
 `vermelho` (356°). Os três primeiros baixam o L da letra e da tag até o
 contraste empatar com o do azul — no L do arquivo o texto da tag não se lê
 sobre o fundo claro.
+Em 2026-10-01 entraram mais seis, pela mesma regra, para a paleta de quinze
+cores que o cliente pediu na criação da tag (ADR-051): `indigo` (240°),
+`fucsia` (298°), `amarelo` (60°), `lima` (88°), `turquesa` (166°) e `marrom`
+(25°, com menos saturação). São catorze tons mais a tag sem tom.
 
 Os três últimos nascem da mesma causa: o arquivo repete o modo Claro no Escuro
 e o código não pode repetir junto (decisão do humano, 2026-09-18). O `soft`
