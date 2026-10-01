@@ -4,6 +4,12 @@
 
 Ligar ou desligar algo que passa a valer na hora, sem botão de salvar.
 
+## Quando usar
+
+- **Use** para ligar e desligar algo que passa a valer na hora, sem botão de salvar. `linha` nas listas de preferências.
+- **Não use** em formulário que só grava no Salvar: é `Checkbox`.
+- **Não use** para escolher entre duas opções com nome: é `SegmentedControl`.
+
 ## Família
 
 `entrada` — define a regra de estado herdada

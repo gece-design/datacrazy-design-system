@@ -4,6 +4,13 @@
 
 Superfície que carrega um bloco de dados do dashboard.
 
+## Quando usar
+
+- **Use** para um bloco de dados do dashboard com título e ação: lista (`CardList`), rosca (`CardDonut`) ou barras (`CardChart`).
+- **Não use** para uma métrica só: é `KpiCard`.
+- **Não use** card dentro de card, nem como contêiner de formulário ou de tabela: a Table já é a superfície.
+- **Não use** `CardDonut` com mais de quatro fatias: vire lista ou barras.
+
 ## Família
 
 `superficie` — define a regra de estado herdada
@@ -56,7 +63,8 @@ Só superfície. Aceita `className` e filhos.
 | Prop | Tipo | Descrição |
 |------|------|-----------|
 | `barras` | `BarraDoGrafico[]` | `rotulo` e `valor`. |
-| `eixoY` | `string[]` | Rótulos do topo para a base, já formatados. |
+| `eixoY` | `string[]` | Opcional. Rótulos do topo para a base, já formatados. Sem eles o gráfico fica sem eixo (regra A7). |
+| `formatar` | `(valor: number) => string` | Como o valor aparece no balão da barra, ao passar o cursor. Padrão: o número. |
 
 ### Seletor do cabeçalho
 
@@ -68,8 +76,8 @@ Table pediu o mesmo controle.
 | Conteúdo | Quando usar |
 |----------|-------------|
 | `CardList` | Comparar pessoas ou categorias por mais de um número. |
-| `CardDonut` | Distribuição percentual entre **poucas** categorias. |
-| `CardChart` | Série por período. |
+| `CardDonut` | Distribuição percentual entre **poucas** categorias. Cor chapada em `primary`; as fatias se distinguem pela opacidade (100 · 60 · 35 · 20%). |
+| `CardChart` | Série por período. Barras chapadas em `primary` (o gradiente do arquivo saiu, ADR-044), valor no balão ao passar o cursor, eixo opcional. |
 
 ## Estados
 

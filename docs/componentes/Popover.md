@@ -6,6 +6,13 @@ A casca de todo painel flutuante do DS — lista do Select, calendário, hora,
 seletor de tags, lista de notificações: camada, superfície, traço e sombra
 em um lugar só. O papel, o foco e o teclado são de quem usa.
 
+## Quando usar
+
+- **Use** `PainelFlutuante` como casca de um painel ancorado que você está construindo: lista, calendário, seletor.
+- **Não use** direto numa tela para menu de ações (`Menu`) ou escolha de valor (`Select`): eles já trazem casca, foco e teclado.
+- **Não use** para conteúdo que exige decisão: é `Modal`.
+- **Não use** com `card`, `border` ou sombra própria: a superfície flutuante é `overlay-*`.
+
 ## Família
 
 `overlay` — define a regra de estado herdada

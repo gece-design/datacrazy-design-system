@@ -5,6 +5,12 @@
 Selo curto de status — a cor fica na borda e no texto, nunca preenchendo a
 superfície.
 
+## Quando usar
+
+- **Use** para um selo curto de situação do sistema (rascunho, beta, novo), em borda e texto.
+- **Não use** para etiqueta do lead nem dado de tabela: é `Tag`.
+- **Não use** para contagem em botão: o Header já traz o selo das notificações e dos filtros.
+
 ## Família
 
 `feedback` — define a regra de estado herdada

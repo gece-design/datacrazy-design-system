@@ -4,6 +4,13 @@
 
 Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida.
 
+## Quando usar
+
+- **Use** para abrir um registro (lead, negócio) sem sair da lista: perfil à esquerda, seções à direita, largura que a pessoa arrasta.
+- **Não use** para decisão curta ou confirmação: é `Modal`.
+- **Não use** para criar com poucos campos: `Modal`.
+- **Não use** com número fixo de colunas no conteúdo: os cartões vão em `gradeDeCartoes`.
+
 ## Família
 
 `overlay` — define a regra de estado herdada
@@ -45,7 +52,7 @@ conteúdo da coluna direita.
 |------|------|-------------|-----------|
 | `nome` | `string` | sim | Nome, inicial do avatar e rótulo da coluna. |
 | `tipo` | `"pessoa" \| "empresa"` | sim | Ícone da tag sobre o avatar. |
-| `rotuloTipo` | `string` | sim | Texto dessa tag (i18n). |
+| `rotuloTipo` | `string` | sim | Texto dessa tag (i18n). A tag fica no fluxo, sob o nome — não flutua mais sobre o avatar (ADR-046). |
 | `telefone`, `email` | `string` | não | Linhas sob o nome. |
 | `estilo` | `"outline" \| "fill"` | não | Padrão `outline`. Desce por contexto aos blocos. |
 | `tom` | `"azul" \| "roxo" \| "rosa" \| "laranja" \| "verde" \| "ciano" \| "ambar" \| "vermelho"` | não | Anel e letra do avatar, tag de tipo e brilho. Padrão: azul para pessoa, roxo para empresa. |

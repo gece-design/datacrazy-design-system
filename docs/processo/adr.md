@@ -222,3 +222,28 @@ Aprovado por: humano.
 Desvio: exceção à regra 6 (variante ou componente novo só existe se existe no Figma). `Textarea` herda a caixa do Input (544:129) — traço, foco, erro e desabilitado — com altura livre: cresce com o texto até `maximoDeLinhas` e rola por dentro. `rotuloOculto` tira o rótulo da tela e o mantém para o leitor de tela.
 Motivo: o time confirmou atacar as telas que mais doem (FigJam, PASSO 1: Multiatendimento e Chat em primeiro). O compositor do chat e a nota interna precisam de várias linhas e o DS só tinha o Input de uma.
 Aprovado por: humano (2026-09-29: "vamos atacar sim").
+
+## ADR-043 · A Table nasce densa; a linha alta vira `confortavel` · 2026-10-01
+Desvio: o arquivo desenha a tabela com linha alta (64) e esse era o padrão do código. Agora `DataTable` e `DataTableToolbar` nascem `layout="densa"` (36px); o desenho do arquivo passa a se chamar `confortavel` (`padrao` continua aceito, como apelido). `ColunaTabela` ganha `icone`, de 14px, antes do rótulo do cabeçalho.
+Motivo: crítica de design de 2026-09-28 (Ryan Pacheco): "tabelas com espaçamento excessivo", referência Twenty e Attio, ícone por coluna. A bancada já mostrava o mesmo: sem a receita, o Claude gerava a tabela alta.
+Aprovado por: humano (2026-10-01: "vai").
+
+## ADR-044 · Gráficos chapados, valor no balão, eixo opcional · 2026-10-01
+Desvio: o arquivo pinta as barras do `CardChart` e as fatias do `CardDonut` com gradiente. O código usa `primary` chapado; as fatias da rosca se distinguem por opacidade (100 · 60 · 35 · 20%). A barra mostra o valor no Tooltip ao passar o cursor (`formatar`) e tem nome acessível; `eixoY` vira opcional — sem ele o gráfico fica sem eixo, como pede a regra A7.
+Motivo: crítica de design de 2026-09-28 ("gradientes nos gráficos parecem datados; cor chapada"), e o FigJam ("gráfico sem eixo").
+Aprovado por: humano (2026-10-01).
+
+## ADR-045 · KpiCard `fill` com traço visível · 2026-10-01
+Desvio: no arquivo o `fill` não tem contorno (o traço é da cor do cartão). O código usa `border`.
+Motivo: crítica de design de 2026-09-28 ("os cartões de métrica não possuem contorno e têm pouca visibilidade").
+Aprovado por: humano (2026-10-01).
+
+## ADR-046 · Etiqueta de tipo do perfil no fluxo, sob o nome · 2026-10-01
+Desvio: o arquivo flutua a etiqueta "PESSOA"/"EMPRESA" sobre o avatar do `DrawerPerfil`. O código põe a etiqueta no fluxo, sob o nome.
+Motivo: crítica de design de 2026-09-28 ("a etiqueta sobreposta ao avatar atrapalha a leitura").
+Aprovado por: humano (2026-10-01).
+
+## ADR-047 · "Quando usar" é seção obrigatória da doc do componente · 2026-10-01
+Decisão: toda `docs/componentes/*.md` tem `## Quando usar`, com itens "**Use**" e "**Não use**" — o segundo sempre aponta o componente certo. A seção é a primeira da referência que a skill entrega ao Claude e aparece na página do componente no site (`lib/quando-usar.json`, gerado; a página que já tinha a sua, com exemplo vivo, fica com ela). `check-doc-codigo` reprova doc sem a seção e seção que cita componente inexistente.
+Motivo: crítica de design de 2026-09-28 ("falta dizer quando usar cada componente"; "menu usado onde devia ser select"). É a mesma lacuna que faz o agente escolher o componente errado.
+Aprovado por: humano (2026-10-01).

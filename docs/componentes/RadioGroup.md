@@ -4,6 +4,12 @@
 
 Escolher exatamente uma opção entre poucas, todas visíveis ao mesmo tempo.
 
+## Quando usar
+
+- **Use** para uma escolha entre 2 e 5 opções que precisam ficar todas à vista, com descrição quando ajuda.
+- **Não use** com mais de 5 opções: é `Select`.
+- **Não use** para alternar período ou escopo numa barra: é `SegmentedControl`.
+
 ## Família
 
 `entrada` — define a regra de estado herdada

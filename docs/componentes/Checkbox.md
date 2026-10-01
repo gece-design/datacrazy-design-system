@@ -5,6 +5,13 @@
 Marcar ou desmarcar uma opção independente, inclusive o "parte marcada" de
 quem seleciona um grupo.
 
+## Quando usar
+
+- **Use** para marcar várias opções independentes, confirmar um aceite e selecionar linhas da Table.
+- **Não use** para ligar algo que passa a valer na hora: é `Switch`.
+- **Não use** para escolher uma entre poucas (`RadioGroup`) ou uma entre muitas (`Select`).
+- **Não use** empilhado em sete grupos num modal de filtros: filtro de um valor é `Select`; só o de vários valores é Checkbox.
+
 ## Família
 
 `entrada` — define a regra de estado herdada

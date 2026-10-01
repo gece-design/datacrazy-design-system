@@ -4,6 +4,13 @@
 
 Confirmar o resultado de uma ação sem bloquear a tela.
 
+## Quando usar
+
+- **Use** para confirmar o resultado de uma ação sem bloquear: salvo, movido, transferido, erro que dá para tentar de novo.
+- **Não use** para erro de campo: o erro é inline, no próprio campo.
+- **Não use** para pedir decisão: é `Modal`.
+- **Não use** para conteúdo que a pessoa precisa consultar depois: ele some.
+
 ## Família
 
 `feedback` — define a regra de estado herdada

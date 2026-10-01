@@ -6,6 +6,12 @@ Período em dois meses, com atalhos: um gatilho no estilo do Button `tertiary`
 que abre o painel de intervalo. `CalendarioDeDia` é a mesma grade com um dia
 só, para o [TimePicker](TimePicker.md) não redesenhar calendário.
 
+## Quando usar
+
+- **Use** `DatePicker` para uma data; `DateRangePicker` para período, com atalhos, no Header ou num filtro.
+- **Não use** para data com hora: é `DateTimePicker`, do TimePicker.
+- **Não use** três Selects (dia, mês, ano) nem `Input` com máscara de data.
+
 ## Família
 
 `entrada` — define a regra de estado herdada

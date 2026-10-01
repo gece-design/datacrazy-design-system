@@ -3278,6 +3278,24 @@
       "status": "adiado",
       "fechadoEm": null,
       "nota": "**Decisões do cliente em 2026-09-28 (ADR-040, ADR-041).** `DrawerPainel` abre com 840 (o arquivo desenha 1080, que virou o teto do arrasto) e a borda esquerda é alça de 720 a 1080; o cartão do campo tem a linha de 24, não os 36 do Input; o Select ganha a variante `cartao`, sem par no arquivo. Na remedição, o arquivo acompanha o código."
+    },
+    {
+      "id": "AUD-207",
+      "eixo": "fidelidade",
+      "titulo": "Figma atrás do código: Table densa por padrão e ícone na coluna, gráficos chapados, KpiCard `fill` com traço, etiqueta de tipo sob o nome",
+      "onde": [
+        "components/ui/data-table.tsx",
+        "components/ui/card.tsx",
+        "components/ui/kpi-card.tsx",
+        "components/ui/drawer.tsx"
+      ],
+      "regra": "fidelidade · cliente > arquivo (Figma é rascunho)",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Crítica de design de 2026-09-28, lote 1 (ADR-043 a ADR-046).** A tabela nasce com linha de 36 e o cabeçalho aceita ícone por coluna; barras e rosca saem do gradiente para `primary` chapado (fatias por opacidade) e o eixo é opcional; o `fill` do KPI ganha traço `border`; a etiqueta PESSOA/EMPRESA sai de cima do avatar. Na remedição, o arquivo acompanha o código."
     }
   ]
 }

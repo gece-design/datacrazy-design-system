@@ -5,6 +5,12 @@
 Avaliação de 0 a 10 estrelas (o máximo é prop): editável por clique e setas,
 ou só leitura. Mostra a nota também em número.
 
+## Quando usar
+
+- **Use** para nota de 0 a N num campo do lead (score), editável ou só leitura.
+- **Não use** para progresso de etapa: é `CelulaProgresso`.
+- **Não use** para porcentagem ou meta: é número, no `KpiCard`.
+
 ## Família
 
 `entrada` — define a regra de estado herdada

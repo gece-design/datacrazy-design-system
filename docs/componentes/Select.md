@@ -4,6 +4,14 @@
 
 Escolher uma opção numa lista curta.
 
+## Quando usar
+
+- **Use** para escolher uma opção numa lista curta (até ~10) e fechada.
+- **Use** `size="field"` ao lado de Input num formulário; `cartao` no drawer; `sm` e `md` em card e barra.
+- **Não use** para ações (`Menu`), para ligar e desligar (`Switch`) ou para 2 a 4 opções que cabem à vista (`SegmentedControl`, `RadioGroup`).
+- **Não use** na barra da tabela para filtrar: filtros ficam no Header.
+- **Não use** para lista longa com busca, grupos ou várias escolhas: esse componente ainda não existe no DS. Para etiquetas, é `SeletorTags`; nos outros casos componha com `PainelFlutuante`, `Input` e a lista, sem adaptar o Select.
+
 ## Família
 
 `entrada` — define a regra de estado herdada

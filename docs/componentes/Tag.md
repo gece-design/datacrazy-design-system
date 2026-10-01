@@ -4,6 +4,14 @@
 
 Mostrar uma etiqueta que o usuário pôs no lead.
 
+## Quando usar
+
+- **Use** para etiqueta do lead, status com bolinha (`status`), tipo do registro (`tipo`) e atendente (`foto`).
+- **Use** neutra por padrão; `tom` só quando o produto define a cor daquele dado (etapa do funil, perfil).
+- **Não use** para selo de situação do sistema (beta, novo): é `Badge`.
+- **Não use** `tom` sorteado para colorir a lista: cor só quando carrega significado.
+- **Não use** como botão: adicionar é `TagAdicionar` ou `SeletorTags`.
+
 ## Família
 
 `superficie` — define a regra de estado herdada

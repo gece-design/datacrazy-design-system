@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Eye, Code as CodeIcon } from "@phosphor-icons/react";
+import { Check, Eye, Code as CodeIcon, X } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Colunas } from "./colunas";
 import { Codigo } from "./codigo";
@@ -19,7 +19,14 @@ import {
 } from "./fundo-preview";
 
 import { foco } from "@/lib/estados";
+import guia from "@/lib/quando-usar.json";
 export { FUNDOS, type Fundo } from "./fundo-preview";
+
+/* "Quando usar" sai da doc do componente (docs/componentes/*.md), a mesma que
+ * o Claude lê pela skill — `gerar-registry.mjs` escreve o JSON. A página só
+ * mostra; quem quer mudar o texto muda a doc. */
+type GuiaDeUso = { componente: string; usar: string[]; naoUsar: string[] };
+const TITULO_DO_GUIA = "Quando usar";
 
 // slug e o índice moram em ./indice — quem monta o link e quem lê a âncora
 // precisam da mesma função, e duplicá-la é como as duas se soltam.
@@ -37,16 +44,77 @@ export function Chip({ children }: { children: React.ReactNode }) {
 }
 
 export function PaginaDS({
-  titulo, descricao, secoes = [], children,
+  titulo, descricao, secoes: declaradas = [], children,
 }: { titulo: string; descricao: string; secoes?: string[]; children: React.ReactNode }) {
+  const rota = usePathname();
+  const grupos = (guia as Record<string, GuiaDeUso[]>)[rota] ?? [];
+  // página que já escreveu o seu "Quando usar" (com exemplo vivo) fica com ele
+  const comGuia = grupos.length > 0 && !declaradas.some((s) => s.startsWith(TITULO_DO_GUIA));
+  const secoes = useMemo(
+    () => (comGuia ? [...declaradas, TITULO_DO_GUIA] : declaradas),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [comGuia, declaradas.join("|")],
+  );
   return (
     <Colunas trilho={<Indice secoes={secoes} />}>
       <h1 className="chrome-h1 text-foreground">{titulo}</h1>
       <p className="mt-3 chrome-lead text-muted-foreground">{descricao}</p>
       <IndiceCompacto secoes={secoes} />
-      <div className="mt-8 space-y-10 sm:mt-10 sm:space-y-12">{children}</div>
+      <div className="mt-8 space-y-10 sm:mt-10 sm:space-y-12">
+        {children}
+        {comGuia && <QuandoUsar grupos={grupos} />}
+      </div>
       <Paginacao />
     </Colunas>
+  );
+}
+
+/** Texto da doc: o que vem entre crases vira Chip. */
+function comChips(texto: string) {
+  return texto.split("`").map((parte, i) => (i % 2 ? <Chip key={i}>{parte}</Chip> : parte));
+}
+
+function ListaDeUso({ titulo, itens, sim }: { titulo: string; itens: string[]; sim?: boolean }) {
+  const Icone = sim ? Check : X;
+  return (
+    <div className="min-w-0">
+      <p className="chrome-label text-foreground">{titulo}</p>
+      <ul className="mt-3 space-y-3 chrome-prose text-muted-foreground">
+        {itens.map((item) => (
+          <li key={item} className="flex gap-2">
+            <Icone
+              size={14}
+              weight="bold"
+              aria-hidden="true"
+              className={cn("mt-1 shrink-0", sim ? "text-success" : "text-destructive")}
+            />
+            <span className="min-w-0">{comChips(item)}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function QuandoUsar({ grupos }: { grupos: GuiaDeUso[] }) {
+  return (
+    <Secao
+      titulo={TITULO_DO_GUIA}
+      descricao="O que este componente resolve — e, quando o caso é de outro, qual."
+      semSeletorDeFundo
+    >
+      <div className="space-y-8">
+        {grupos.map((g) => (
+          <div key={g.componente}>
+            {grupos.length > 1 && <h3 className="mb-4 chrome-h3 text-foreground">{g.componente}</h3>}
+            <div className="grid gap-6 md:grid-cols-2 md:gap-8">
+              <ListaDeUso titulo="Use" itens={g.usar} sim />
+              <ListaDeUso titulo="Não use" itens={g.naoUsar} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </Secao>
   );
 }
 

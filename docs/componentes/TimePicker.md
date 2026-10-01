@@ -4,6 +4,12 @@
 
 Escolher uma hora, e uma data com hora, sabendo de fuso.
 
+## Quando usar
+
+- **Use** `TimePicker` para hora; `DateTimePicker` para data com hora (agendamento), com `fusos` quando o time atende em mais de um fuso.
+- **Não use** para duração ("esperar 5 minutos"): é `Input` numérico com a unidade.
+- **Não use** para só a data: é `DatePicker`.
+
 ## Família
 
 `entrada` — define a regra de estado herdada

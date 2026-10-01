@@ -66,7 +66,7 @@ export default function Pagina() {
           <>
             A descrição do componente no Figma promete <Chip>success</Chip> para up e{" "}
             <Chip>destructive</Chip> para down, mas os glifos do arquivo estão os dois em{" "}
-            <Chip>primary</Chip>. O código segue o arquivo — decisão do humano em 2026-09-03.
+            <Chip>primary</Chip>. O código segue o arquivo.
           </>
         }
       >

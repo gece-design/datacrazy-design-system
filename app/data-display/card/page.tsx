@@ -66,10 +66,10 @@ const pessoas: LinhaDaLista[] = [
 ];
 
 const fatias: FatiaDaRosca[] = [
-  { nome: "Breno Ramos", percentual: 100 },
-  { nome: "Millena Aragão", percentual: 0 },
-  { nome: "Junior Santos", percentual: 0 },
-  { nome: "Kali Suporte Datacrazy (AR)", percentual: 0 },
+  { nome: "Breno Ramos", percentual: 48 },
+  { nome: "Millena Aragão", percentual: 27 },
+  { nome: "Junior Santos", percentual: 15 },
+  { nome: "Kali Suporte Datacrazy (AR)", percentual: 10 },
   { nome: "[DC] Allan Kipfer", percentual: 0 },
 ];
 
@@ -84,7 +84,7 @@ const dias: BarraDoGrafico[] = [
   { rotulo: "17/08", valor: 0 },
 ];
 
-const eixoY = ["R$ 1,00K", "R$ 750,00", "R$ 500,00", "R$ 250,00", "R$ 0,00"];
+const reais = (valor: number) => valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 /* Opções simuladas do recorte — o arquivo desenha só o estado fechado. */
 const recortes = [
@@ -124,7 +124,7 @@ const anatomia: Parte[] = [
     nome: "Anel",
     medida: "150px · raio 62,25 · traço 25,5",
     papel:
-      "Desenhado com stroke, não com fatias recortadas: um círculo por fatia, com dasharray proporcional. O gradiente é vertical e vale para o anel inteiro.",
+      "Desenhado com stroke, não com fatias recortadas: um círculo por fatia, com dasharray proporcional. Cor chapada: as fatias se distinguem pela intensidade.",
   },
   {
     nome: "Barra",
@@ -169,17 +169,16 @@ export default function Pagina() {
         codigo={`<Card className="min-h-[452px] justify-between">
   <CardHeader
     title="Dados diários"
-    value="R$ 0,00"
+    value="R$ 3,00K"
     subtitle="Visualização por valor dos negócios"
     action={<Select rotulo="Recorte do gráfico" opcoes={recortes} valor={recorte} aoEscolher={setRecorte} />}
   />
-  <CardDonut fatias={fatias} destaque="100.0%" rotulo="Breno Ramos" />
+  <CardDonut fatias={fatias} destaque="48.0%" rotulo="Breno Ramos" />
 </Card>`}
         nota={
           <>
-            O arquivo não entrega paleta categórica. Com uma fatia em 100% o anel bate exatamente com
-            o desenho, mas duas fatias com valor sairiam da mesma cor — limite do desenho, não do
-            código. É o bloqueio <Chip>B8</Chip> do roadmap.
+            As fatias usam a mesma cor em quatro intensidades (100 · 60 · 35 · 20%), na ordem em que
+            chegam. Mais de quatro categorias pedem lista ou barras, não rosca.
           </>
         }
       >
@@ -187,11 +186,11 @@ export default function Pagina() {
           <Card className="min-h-[452px] w-full justify-between">
             <CardHeader
               title="Dados diários"
-              value="R$ 0,00"
+              value="R$ 3,00K"
               subtitle="Visualização por valor dos negócios"
               action={<Select rotulo="Recorte do gráfico" opcoes={recortes} valor={recorte} aoEscolher={setRecorte} />}
             />
-            <CardDonut fatias={fatias} destaque="100.0%" rotulo="Breno Ramos" />
+            <CardDonut fatias={fatias} destaque="48.0%" rotulo="Breno Ramos" />
           </Card>
         </div>
       </Secao>
@@ -199,7 +198,7 @@ export default function Pagina() {
       <Secao
         titulo="Barras"
         spec="por período"
-        descricao="Uma barra por dia, com eixo Y à esquerda e datas embaixo. O gradiente desce de primary para accent, o que dá peso à base sem precisar de linha de grade."
+        descricao="Uma barra por dia, em cor chapada, com as datas embaixo. Sem eixo: o valor de cada barra aparece ao passar o cursor."
         codigo={`<Card className="min-h-[452px] gap-5">
   <CardHeader
     title="Dados diários"
@@ -207,7 +206,7 @@ export default function Pagina() {
     subtitle="Visualização por valor dos negócios"
     action={<Select rotulo="Recorte do gráfico" opcoes={recortes} valor={recorte} aoEscolher={setRecorte} />}
   />
-  <CardChart barras={dias} eixoY={eixoY} />
+  <CardChart barras={dias} formatar={reais} />
 </Card>`}
       >
         <Card className="min-h-[452px] w-full gap-5">
@@ -217,11 +216,11 @@ export default function Pagina() {
             subtitle="Visualização por valor dos negócios"
             action={<Select rotulo="Recorte do gráfico" opcoes={recortes} valor={recorte} aoEscolher={setRecorte} />}
           />
-          <CardChart barras={dias} eixoY={eixoY} />
+          <CardChart barras={dias} formatar={reais} />
         </Card>
         <Legenda>
           Quatro dos oito dias estão zerados. O traço de 3px é o que diferencia &quot;zero&quot; de
-          &quot;não existe&quot;.
+          &quot;não existe&quot;. Quando a escala precisa ficar à vista, <Chip>eixoY</Chip> traz o eixo de volta.
         </Legenda>
       </Secao>
 
@@ -248,7 +247,7 @@ export default function Pagina() {
         </p>
         <p>
           O gráfico de barras não tem SVG nem biblioteca. São <Chip>div</Chip>s com{" "}
-          <Chip>flex-1</Chip> e altura proporcional, e o gradiente é o do Tailwind. Isso importa
+          <Chip>flex-1</Chip> e altura proporcional, na cor <Chip>primary</Chip>. Isso importa
           menos pelo peso e mais pelo controle: a barra herda os tokens do tema sem uma linha de
           ponte, e no escuro ela muda junto com o resto.
         </p>

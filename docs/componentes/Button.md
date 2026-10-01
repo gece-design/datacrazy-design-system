@@ -5,6 +5,14 @@
 Ação do usuário: sete variantes de peso visual e quatro tamanhos, com o mesmo
 foco, o mesmo disabled e a mesma fonte em todas.
 
+## Quando usar
+
+- **Use** `primary` para a única ação principal da tela ou do modal; `secondary` ou `outline` para a de apoio; `tertiary` nas barras (Header, tabela); `ghost` para ação discreta; `soft` para destaque secundário; `destructive` só para apagar sem volta.
+- **Use** `size="icon"` com `aria-label` quando for só ícone; o X de fechar é `BotaoFechar`.
+- **Não use** dois `primary` na mesma fileira.
+- **Não use** para trocar de visualização (`ViewSwitcher`), escolher uma opção (`SegmentedControl`) ou ligar e desligar (`Switch`).
+- **Não use** `<button>` cru: se o caso não cabe em variante nenhuma, use a constante `foco` de `lib/estados`.
+
 ## Família
 
 `acao` — define a regra de estado herdada

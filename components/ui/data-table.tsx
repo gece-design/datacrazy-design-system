@@ -73,8 +73,11 @@ export type ColunaTabela = {
   ordenavel?: boolean;
   /** Pode sair da tela pelo menu Colunas. Padrão: sim; a de ações e a primeira, não. */
   ocultavel?: boolean;
-  /** Largura mínima ao redimensionar, em px. Padrão 64. */
+  /** Largura mínima ao redimensionar, em px. Padrão 64. Na `densa`, a soma dos
+   *  `minimo` (112 para quem não declara) é o piso da tabela: abaixo dele ela rola. */
   minimo?: number;
+  /** Ícone de 14px antes do rótulo (pessoa, telefone, empresa…), como nas grades do Attio e do Twenty. */
+  icone?: Icon;
   /** Entra no "Agrupar por" (barra e menu da coluna). Padrão: não. */
   agrupavel?: boolean;
 };
@@ -133,6 +136,8 @@ export const ROTULOS_DA_TABELA: RotulosDaTabela = {
 };
 
 const LARGURA_MINIMA = 64;
+/** Piso de cada coluna na densa, para quem não declara `minimo`. */
+const PISO_DA_COLUNA_DENSA = 112;
 /** O ⋮ do cabeçalho com traço cheio: o regular sumia sobre o cinza do cabeçalho. */
 const DotsThreeVerticalCheio: Icon = React.forwardRef((props, ref) => <DotsThreeVertical ref={ref} weight="bold" {...props} />);
 DotsThreeVerticalCheio.displayName = "DotsThreeVerticalCheio";
@@ -531,7 +536,10 @@ export function BotaoAgrupar({ ajustes, recolhido = false, className }: { ajuste
  * stroke nas divs"): linha de 36px, recuo 8, traço entre colunas e entre
  * linhas, cada célula numa linha só.
  */
-type Layout = "padrao" | "compacta" | "densa";
+/** `densa` é o padrão (cliente, 2026-09-28: "as telas usam a linha alta"); `confortavel`
+ *  é o desenho do arquivo, para leitura com respiro; `compacta` é a do Drawer.
+ *  `padrao` é o nome antigo de `confortavel` e continua aceito. */
+type Layout = "densa" | "confortavel" | "compacta" | "padrao";
 
 /** A seleção em massa por dentro: o que a linha precisa para desenhar a caixa. */
 type SelecaoInterna = {
@@ -567,7 +575,7 @@ export interface DataTableProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
-  ({ className, colunas, layout = "padrao", ajustes, ordem: ordemDeFora, aoOrdenar: aoOrdenarDeFora, rotulos, selecao, children, ...props }, ref) => {
+  ({ className, colunas, layout = "densa", ajustes, ordem: ordemDeFora, aoOrdenar: aoOrdenarDeFora, rotulos, selecao, children, ...props }, ref) => {
     const compacta = layout === "compacta";
     const densa = layout === "densa";
     const r = { ...ROTULOS_DA_TABELA, ...ajustes?.rotulos, ...rotulos };
@@ -847,13 +855,13 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
               ref={tabela}
               className={cn("w-full table-fixed border-collapse", !compacta && !densa && !emPixel && "min-w-[1160px]")}
               // com larguras em px a tabela mede a soma delas: passou da caixa, rola.
-              // A densa também tem piso (112 por coluna): abaixo disso rola em vez de
-              // espremer tudo em reticências (bancada, 2026-09-29).
+              // A densa também tem piso — o `minimo` de cada coluna, ou 112: abaixo
+              // disso rola em vez de espremer tudo em reticências (bancada, 2026-09-29).
               style={
                 emPixel
                   ? { minWidth: soma + (selecao ? LARGURA_DA_CAIXA : 0) }
                   : densa
-                    ? { minWidth: naTela.length * 112 + (selecao ? LARGURA_DA_CAIXA : 0) }
+                    ? { minWidth: naTela.reduce((s, c) => s + (c.minimo ?? PISO_DA_COLUNA_DENSA), 0) + (selecao ? LARGURA_DA_CAIXA : 0) }
                     : undefined
               }
             >
@@ -922,13 +930,17 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                                 ordenada && "text-foreground",
                               )}
                             >
+                              {c.icone ? <c.icone size={14} weight="regular" aria-hidden="true" className="shrink-0" /> : null}
                               <span className="min-w-0 truncate">{c.rotulo || <span className="sr-only">Ações</span>}</span>
                               {ordenada ? <Seta size={12} weight="bold" aria-hidden="true" className="shrink-0 text-primary" /> : null}
                             </button>
                           ) : (
                             /* A coluna de ações tem rótulo vazio no arquivo. Vazio para
                                quem vê, nomeado para quem ouve. */
-                            <span className="min-w-0 truncate">{c.rotulo || <span className="sr-only">Ações</span>}</span>
+                            <span className="flex min-w-0 items-center gap-1">
+                              {c.icone ? <c.icone size={14} weight="regular" aria-hidden="true" className="shrink-0" /> : null}
+                              <span className="min-w-0 truncate">{c.rotulo || <span className="sr-only">Ações</span>}</span>
+                            </span>
                           )}
 
                           {ajustes && c.rotulo ? (
@@ -1234,7 +1246,7 @@ export function DataTableGrupo({
 export function DataTableToolbar({
   rotulo,
   total,
-  layout = "padrao",
+  layout = "densa",
   children,
 }: {
   /** Linha de cima, pequena. Ex.: "Total de resultados". */

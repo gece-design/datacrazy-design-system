@@ -4,6 +4,12 @@
 
 Identificar pessoa ou empresa pela inicial, ou pela foto.
 
+## Quando usar
+
+- **Use** para identificar pessoa ou empresa pela inicial ou pela foto: perfil do lead, lista de conversas, usuário logado.
+- **Não use** para o atendente numa linha de tabela ou num cartão: ali é `Tag foto` (22px, já com o nome).
+- **Não use** como botão nem como indicador de status: o status é `Tag status`.
+
 ## Família
 
 `midia` — define a regra de estado herdada

@@ -5,6 +5,13 @@
 O topo de uma página do CRM: onde a pessoa está, que página é e o que dá para
 fazer nela.
 
+## Quando usar
+
+- **Use** uma vez por tela, pela prop `cabecalho` da `TelaBase`. Busca é `HeaderBusca`, filtros `HeaderFiltros`, sino `Notificacoes`.
+- **Não use** montado à mão, nem um segundo título dentro do conteúdo.
+- **Não use** `subtitulo` decorativo: só quando a frase diz o que o título não diz.
+- **Não use** Button com texto no lugar da busca ou dos filtros.
+
 ## Família
 
 `navegacao` — define a regra de estado herdada

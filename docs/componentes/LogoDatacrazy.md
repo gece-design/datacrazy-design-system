@@ -6,6 +6,12 @@ Símbolo e logotipo do DataCrazy (`LogoDataCrazy` no código), em `currentColor`
 marca do **produto** — não confundir com `components/ds/logo.tsx`, a marca do
 site de documentação (Systemcrazy).
 
+## Quando usar
+
+- **Use** na Sidebar (já vem em `SidebarBrand`) e em tela de entrada, como a de login.
+- **Não use** como ícone decorativo, nem recolorido fora de `currentColor`.
+- **Não use** no lugar de `components/ds/logo`, que é a marca do site de documentação.
+
 ## Família
 
 `midia` — define a regra de estado herdada

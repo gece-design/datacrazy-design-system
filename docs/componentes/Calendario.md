@@ -6,6 +6,12 @@ Mostrar os negócios (ou qualquer evento datado) no mês ou na semana, pela
 data, e devolver o clicado — a visão por data do pipeline, ao lado do Kanban
 e da lista.
 
+## Quando usar
+
+- **Use** para ver registros com data (negócios, tarefas) no mês ou na semana, como visão alternativa da lista e do quadro.
+- **Não use** para escolher uma data num campo: é `DatePicker`.
+- **Não use** para agenda com horários de duração variável: o componente mostra o dia, não a hora.
+
 ## Família
 
 `superficie` — define a regra de estado herdada

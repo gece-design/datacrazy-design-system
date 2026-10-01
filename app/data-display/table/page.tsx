@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useRef, useState } from "react";
+import { Clock, FunnelSimple, Headset, ListChecks, Package, User } from "@phosphor-icons/react";
 import {
   DataTable,
   DataTableRow,
@@ -24,58 +25,23 @@ import {
   type ColunaTabela,
 } from "@/components/ui/data-table";
 import { Pagination } from "@/components/ui/pagination";
-import { Select, type OpcaoSelect } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Tag, type Tom } from "@/components/ui/tag";
 import { Menu } from "@/components/ui/menu";
 import { Toaster, toast } from "@/components/ui/toast";
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
 
-/* Larguras do arquivo (node 261:805) usadas como peso. */
+/* Larguras do arquivo (node 261:805) usadas como peso; `minimo` é o piso de
+   cada coluna na grade densa — abaixo da soma deles a tabela rola. */
 const colunas: ColunaTabela[] = [
-  { chave: "lead", rotulo: "Lead", peso: 230 },
-  { chave: "produto", rotulo: "Produto", peso: 170 },
-  { chave: "atividades", rotulo: "Atividades", peso: 160 },
-  { chave: "atendente", rotulo: "Atendente", peso: 150 },
-  { chave: "etapa", rotulo: "Etapa", peso: 200 },
-  { chave: "dados", rotulo: "Dados", peso: 180 },
-  { chave: "acoes", rotulo: "", peso: 42, alinharFim: true },
+  { chave: "lead", rotulo: "Lead", peso: 230, minimo: 220, icone: User },
+  { chave: "produto", rotulo: "Produto", peso: 170, minimo: 200, icone: Package },
+  { chave: "atividades", rotulo: "Atividades", peso: 160, minimo: 130, icone: ListChecks },
+  { chave: "atendente", rotulo: "Atendente", peso: 150, minimo: 170, icone: Headset },
+  { chave: "etapa", rotulo: "Etapa", peso: 200, minimo: 180, icone: FunnelSimple },
+  { chave: "dados", rotulo: "Dados", peso: 180, minimo: 150, icone: Clock },
+  { chave: "acoes", rotulo: "", peso: 42, minimo: 44, alinharFim: true },
 ];
-
-/* Opções simuladas dos filtros — o arquivo desenha só o estado fechado. */
-const etapas: OpcaoSelect[] = [
-  { valor: "todas", rotulo: "Todas as etapas" },
-  { valor: "qualificacao", rotulo: "Qualificação" },
-  { valor: "proposta", rotulo: "Proposta" },
-  { valor: "negociacao", rotulo: "Negociação" },
-  { valor: "fechamento", rotulo: "Fechamento" },
-];
-
-const atendentes: OpcaoSelect[] = [
-  { valor: "todos", rotulo: "Todos os atendentes" },
-  { valor: "breno", rotulo: "Breno Ramos" },
-  { valor: "millena", rotulo: "Millena Aragão" },
-  { valor: "junior", rotulo: "Junior Santos" },
-];
-
-const visoes: OpcaoSelect[] = [
-  { valor: "colunas", rotulo: "Colunas" },
-  { valor: "compacta", rotulo: "Visão compacta" },
-  { valor: "completa", rotulo: "Visão completa" },
-];
-
-/* A barra do arquivo mede 88 de 200 — 44%. */
-const negocios = Array.from({ length: 10 }, (_, i) => ({
-  id: i,
-  nome: "Giovanna",
-  etiquetas: ["Frio", "sinal", "+1"],
-  produto: "Sem produto",
-  valor: "R$ 0,00",
-  atividades: "Sem atividades",
-  atendente: "Sem atendente",
-  etapa: "quiro",
-  percentual: 44,
-}));
 
 /* Dez negócios diferentes entre si, para a ordenação ter o que mostrar. */
 const carteira = [
@@ -488,10 +454,10 @@ function TabelaEditavel() {
   );
 }
 
-const codigoDensa = `<DataTableToolbar layout="densa" rotulo="Total de resultados" total="10 negócios">
+const codigoConfortavel = `<DataTableToolbar layout="confortavel" rotulo="Total de resultados" total="10 negócios">
   <BotaoColunas ajustes={ajustes} />
 </DataTableToolbar>
-<DataTable layout="densa" colunas={colunas} ajustes={ajustes} selecao={selecao}>
+<DataTable layout="confortavel" colunas={colunas} ajustes={ajustes} selecao={selecao}>
   {linhas.map((n) => (
     <DataTableRow key={n.id} chave={n.id} nome={n.nome}>
       <DataTableCell coluna="lead"><CelulaLead nome={n.nome} etiquetas={n.etiquetas} /></DataTableCell>
@@ -501,17 +467,17 @@ const codigoDensa = `<DataTableToolbar layout="densa" rotulo="Total de resultado
   ))}
 </DataTable>`;
 
-/** A seção densa: a grade de lista à la Twenty — linha de 36px, recuo 8, traço entre colunas e linhas. */
-function TabelaDensa() {
-  const ajustes = useAjustesDaTabela(colunas, { memoria: "showcase-densa" });
+/** A seção confortável: o desenho do arquivo — linha alta, recuo 20, sem traço entre colunas. */
+function TabelaConfortavel() {
+  const ajustes = useAjustesDaTabela(colunas, { memoria: "showcase-confortavel" });
   const selecao = useSelecaoDaTabela();
   const linhas = ordenarPor(carteira, ajustes.ordem, valorDe);
   return (
     <div className="w-full overflow-hidden rounded-md border border-border bg-card">
-      <DataTableToolbar layout="densa" rotulo="Total de resultados" total="10 negócios">
+      <DataTableToolbar layout="confortavel" rotulo="Total de resultados" total="10 negócios">
         <BotaoColunas ajustes={ajustes} />
       </DataTableToolbar>
-      <DataTable layout="densa" colunas={colunas} ajustes={ajustes} selecao={selecao} className="rounded-none border-0 border-t">
+      <DataTable layout="confortavel" colunas={colunas} ajustes={ajustes} selecao={selecao} className="rounded-none border-0 border-t">
         {linhas.map((n) => (
           <DataTableRow key={n.id} chave={n.id} nome={n.nome}>
             <DataTableCell coluna="lead">
@@ -556,34 +522,34 @@ type Parte = { nome: string; medida: string; papel: string };
 
 const anatomia: Parte[] = [
   {
-    nome: "Barra de filtros",
-    medida: "px-5 py-4",
+    nome: "Barra da tabela",
+    medida: "px-3 py-2",
     papel:
-      "Total de resultados à esquerda, recortes à direita. Os três filtros usam o mesmo SelectTrigger do Card — é o mesmo controle, então é o mesmo componente.",
+      "Total de resultados à esquerda; à direita, só os botões que mexem na própria tabela (Colunas, Agrupar). Busca e filtros ficam no Header da tela.",
   },
   {
     nome: "Cabeçalho",
-    medida: "bg-background · label-md",
+    medida: "32px · label-md · ícone de 14",
     papel:
-      "Única faixa da tabela que muda de superfície. A coluna de ações tem rótulo vazio no desenho e um nome só para leitor de tela.",
+      "Única faixa da tabela que muda de superfície. Cada coluna pode ter um ícone antes do rótulo. A coluna de ações tem rótulo vazio no desenho e um nome só para leitor de tela.",
   },
   {
     nome: "Linha",
-    medida: "px-5 py-3 · border-t",
+    medida: "36px · px-2 py-1 · traço border",
     papel:
-      "Sete células com larguras proporcionais. O traço superior usa o token card, a mesma cor do fundo — o que separa de fato é o respiro.",
+      "Sete células com larguras proporcionais, cada uma numa linha só. Traço entre linhas e entre colunas, como numa planilha. Na confortável a linha cresce e o traço some: quem separa é o respiro.",
   },
   {
     nome: "Célula de lead",
-    medida: "gap-1 · badge sm",
+    medida: "nome + Tag de 22px",
     papel:
-      "Nome e etiquetas. A primeira etiqueta classifica e sai em primary; as outras são contexto e saem em neutral. Reusa o Badge do DS.",
+      "Nome e etiquetas na mesma linha. O nome tem prioridade: etiqueta que não cabe inteira some, em vez de cortar o nome. As etiquetas são a Tag do DS, neutras, com a bolinha de status quando há.",
   },
   {
     nome: "Progresso",
     medida: "h-[5px] · rounded-sm",
     papel:
-      "Etapa em cima, barra embaixo. É role=progressbar com valor e rótulo — a barra sozinha não diria nada a quem não vê.",
+      "Etapa e barra lado a lado, na cor da etapa. É role=progressbar com valor e rótulo — a barra sozinha não diria nada a quem não vê.",
   },
   {
     nome: "Paginação",
@@ -595,85 +561,63 @@ const anatomia: Parte[] = [
 
 export default function Pagina() {
   const [pagina, setPagina] = useState(1);
-  const [etapa, setEtapa] = useState("todas");
-  const [atendente, setAtendente] = useState("todos");
-  const [visao, setVisao] = useState("colunas");
 
   return (
     <PaginaDS
       titulo="Table"
-      descricao="A tabela de negócios do CRM: barra de filtros, sete colunas, dez linhas e paginação. É o componente mais denso do sistema, e o único onde a estrutura importa tanto quanto a aparência."
-      secoes={["Completa", "Ajustável", "Agrupada", "Seleção em massa", "Edição na célula", "Densa", "Anatomia", "Como funciona"]}
+      descricao="A tabela de negócios do CRM: barra com o total, sete colunas, dez linhas de 36px e paginação. É o componente mais denso do sistema, e o único onde a estrutura importa tanto quanto a aparência."
+      secoes={["Completa", "Ajustável", "Agrupada", "Seleção em massa", "Edição na célula", "Confortável", "Anatomia", "Como funciona"]}
     >
       <Secao
         titulo="Completa"
-        spec="7 colunas"
-        descricao="Barra de filtros, cabeçalho, linhas e paginação — a unidade inteira, como o arquivo desenha."
-        codigo={`<DataTable colunas={colunas}>
-  {negocios.map((n) => (
-    <DataTableRow key={n.id}>
-      <DataTableCell primeira>
-        <CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} />
-      </DataTableCell>
-      <DataTableCell>
-        <CelulaDupla principal={n.produto} apoio={n.valor} />
-      </DataTableCell>
-      <DataTableCell><CelulaTexto>{n.atividades}</CelulaTexto></DataTableCell>
-      <DataTableCell><Tag foto="/ds/atendente.png">{n.atendente}</Tag></DataTableCell>
-      <DataTableCell>
-        <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
-      </DataTableCell>
-      <DataTableCell>
-        <CelulaEstatisticas itens={[
-          { valor: "0d", rotulo: "Em aberto" },
-          { valor: "0d", rotulo: "Tempo na etapa" },
-        ]} />
-      </DataTableCell>
-      <DataTableCell ultima><CelulaAcoes /></DataTableCell>
-    </DataTableRow>
-  ))}
-</DataTable>`}
+        spec="7 colunas · linha de 36px"
+        descricao="Barra com o total, cabeçalho com ícone por coluna, linhas de uma linha só e paginação — a unidade inteira. Busca e filtros não moram na barra da tabela: ficam no Header da tela."
+        codigo={`const colunas = [
+  { chave: "lead", rotulo: "Lead", peso: 230, minimo: 220, icone: User },
+  { chave: "produto", rotulo: "Produto", peso: 170, minimo: 200, icone: Package },
+  { chave: "etapa", rotulo: "Etapa", peso: 200, minimo: 180, icone: FunnelSimple },
+  { chave: "acoes", rotulo: "", peso: 42, minimo: 44, alinharFim: true },
+];
+
+<>
+  <DataTableToolbar rotulo="Total de resultados" total="37 negócios" />
+  <DataTable colunas={colunas}>
+    {negocios.map((n) => (
+      <DataTableRow key={n.id}>
+        <DataTableCell primeira>
+          <CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} />
+        </DataTableCell>
+        <DataTableCell>
+          <CelulaDupla principal={n.produto} apoio={moeda(n.valor)} />
+        </DataTableCell>
+        <DataTableCell>
+          <CelulaProgresso etapa={n.etapa} percentual={n.percentual} tom={tomDaEtapa(n.etapa)} />
+        </DataTableCell>
+        <DataTableCell ultima><CelulaAcoes /></DataTableCell>
+      </DataTableRow>
+    ))}
+  </DataTable>
+  <Pagination resumo="Mostrando 10 de 37 negócios" paginas={4} atual={pagina} onIr={setPagina} />
+</>`}
         nota={
           <>
-            As larguras do arquivo viram <strong>proporção</strong>, não pixel. Coluna fixa em px é o
-            bug <Chip>#83285</Chip> esperando acontecer — o que quebra fora de zoom 100%. Abaixo de
-            1160px a tabela rola na horizontal em vez de espremer coluna.
+            As larguras entram como <strong>proporção</strong> (<Chip>peso</Chip>), não como pixel: a
+            tabela reparte o espaço que tem e aguenta zoom. O <Chip>minimo</Chip> de cada coluna é o
+            piso — quando a soma deles não cabe, a tabela rola na horizontal em vez de espremer.
           </>
         }
       >
         <div className="w-full overflow-hidden rounded-md bg-card">
-          <DataTableToolbar rotulo="Total de resultados" total="37 negócios">
-            <Select
-              size="sm"
-              rotulo="Filtrar por etapa"
-              opcoes={etapas}
-              valor={etapa}
-              aoEscolher={setEtapa}
-            />
-            <Select
-              size="sm"
-              rotulo="Filtrar por atendente"
-              opcoes={atendentes}
-              valor={atendente}
-              aoEscolher={setAtendente}
-            />
-            <Select
-              size="sm"
-              rotulo="Escolher visão das colunas"
-              opcoes={visoes}
-              valor={visao}
-              aoEscolher={setVisao}
-            />
-          </DataTableToolbar>
+          <DataTableToolbar rotulo="Total de resultados" total="37 negócios" />
 
           <DataTable colunas={colunas} className="rounded-none">
-            {negocios.map((n) => (
+            {carteira.map((n) => (
               <DataTableRow key={n.id}>
                 <DataTableCell primeira>
                   <CelulaLead nome={n.nome} etiquetas={n.etiquetas.map(comStatus)} />
                 </DataTableCell>
                 <DataTableCell>
-                  <CelulaDupla principal={n.produto} apoio={n.valor} />
+                  <CelulaDupla principal={n.produto} apoio={moeda(n.valor)} />
                 </DataTableCell>
                 <DataTableCell>
                   <CelulaTexto>{n.atividades}</CelulaTexto>
@@ -687,8 +631,8 @@ export default function Pagina() {
                 <DataTableCell>
                   <CelulaEstatisticas
                     itens={[
-                      { valor: "0d", rotulo: "Em aberto" },
-                      { valor: "0d", rotulo: "Tempo na etapa" },
+                      { valor: `${n.aberto}d`, rotulo: "Em aberto" },
+                      { valor: `${n.naEtapa}d`, rotulo: "Tempo na etapa" },
                     ]}
                   />
                 </DataTableCell>
@@ -700,7 +644,7 @@ export default function Pagina() {
           </DataTable>
 
           <Pagination
-            className="px-5 py-3.5"
+            className="px-3 py-2.5"
             resumo="Mostrando 10 de 37 negócios"
             paginas={4}
             atual={pagina}
@@ -708,10 +652,10 @@ export default function Pagina() {
           />
         </div>
         <Legenda>
-          <strong>Role a tabela para o lado</strong> para ver Etapa, Dados e ações: a coluna de
-          leitura desta página tem 820px e a tabela pede 1160. Não é defeito do preview — é o mesmo
-          que acontece numa tela estreita, e é o comportamento que o componente escolhe em vez de
-          espremer sete colunas. A paginação também funciona: clique nos números e repare que{" "}
+          <strong>Role a tabela para o lado</strong> para ver Dados e ações: a coluna de leitura
+          desta página é mais estreita que a soma dos pisos das colunas. Não é defeito do preview — é
+          o mesmo que acontece numa tela estreita, e é o comportamento que o componente escolhe em
+          vez de espremer sete colunas. A paginação também funciona: clique nos números e repare que{" "}
           <Chip>Anterior</Chip> e <Chip>Próxima</Chip> desabilitam nas pontas.
         </Legenda>
       </Secao>
@@ -790,19 +734,19 @@ export default function Pagina() {
       </Secao>
 
       <Secao
-        titulo="Densa"
-        spec="layout=densa · 36px · traço entre colunas"
-        descricao="A grade de lista, na referência que o time mandou (Twenty): linha de 36px, recuo 8, traço entre colunas e entre linhas, cada célula numa linha só. Os mesmos comportamentos — ordenar, colunas, alça, seleção — com muito mais linhas na tela."
-        codigo={codigoDensa}
+        titulo="Confortável"
+        spec="layout=confortavel · linha alta · o desenho do arquivo"
+        descricao="A tabela nasce densa: linha de 36px, recuo 8, traço entre colunas e entre linhas — a grade de lista que o time pediu (referência: Twenty). Esta é a outra leitura, a do arquivo, com respiro: para relatório ou para poucas linhas com muito conteúdo por célula."
+        codigo={codigoConfortavel}
         nota={
           <>
-            É a mesma tabela com <Chip>layout=&quot;densa&quot;</Chip>: as células sabem o layout e viram uma linha
-            (nome e etiquetas lado a lado, empresa · cidade, etapa com a barra curta ao lado). A lista do pipeline usa
-            esta. O <Chip>padrao</Chip> continua sendo o desenho do arquivo, para leitura com respiro.
+            É a mesma tabela com <Chip>layout=&quot;confortavel&quot;</Chip>: as células sabem o layout e voltam a duas
+            linhas (nome com as etiquetas embaixo, valor com a linha de apoio). Sem a prop, vale a{" "}
+            <Chip>densa</Chip>. <Chip>padrao</Chip> é o nome antigo de <Chip>confortavel</Chip> e continua aceito.
           </>
         }
       >
-        <TabelaDensa />
+        <TabelaConfortavel />
       </Secao>
 
       <Secao titulo="Anatomia" spec="6 partes" semCaixa>
@@ -831,20 +775,15 @@ export default function Pagina() {
           As sete larguras do arquivo — 230, 170, 160, 150, 200, 180 e 42 — entram como{" "}
           <strong>peso</strong>, não como pixel. A tabela do CRM vive em telas de largura variável e
           em zoom acima de 100%; coluna fixa em px é exatamente o tipo de medida que só fecha numa
-          resolução, que é a família de bugs #83285, #80170 e #79852. Abaixo de 1160px ela rola na
-          horizontal em vez de espremer.
+          resolução, que é a família de bugs #83285, #80170 e #79852. Cada coluna tem um piso
+          (<Chip>minimo</Chip>); quando a soma deles não cabe, a tabela rola na horizontal em vez de
+          espremer.
         </p>
         <p>
           A barra de progresso não é um retângulo decorativo: é{" "}
           <Chip>role=&quot;progressbar&quot;</Chip> com valor e rótulo. Uma barra sem isso não diz
           nada a quem não enxerga, e a etapa do funil é justamente o dado que a linha existe para
           mostrar.
-        </p>
-        <p>
-          Três controles desta página são o mesmo componente do Card: o{" "}
-          <Chip>SelectTrigger</Chip>. Ele apareceu duas vezes no Figma com a mesma cara — recorte do
-          Card e filtro da tabela — e por isso virou peça única, com dois tamanhos. Hoje é o gatilho do{" "}
-          <Chip>Select</Chip> do DS.
         </p>
         <p>
           Os comportamentos (ordenar, colunas, redimensionar, reordenar, selecionar) vieram de um pedido do

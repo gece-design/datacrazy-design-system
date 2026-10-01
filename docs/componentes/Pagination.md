@@ -4,6 +4,12 @@
 
 Navegar entre as páginas de uma lista longa.
 
+## Quando usar
+
+- **Use** sob a tabela, quando a lista vem paginada do servidor, com o resumo do que está à vista.
+- **Não use** com uma página só.
+- **Não use** junto de rolagem infinita: é uma ou outra.
+
 ## Família
 
 `navegacao` — define a regra de estado herdada

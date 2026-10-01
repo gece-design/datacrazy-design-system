@@ -169,8 +169,8 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
 - **Tabela com comportamentos**: `useAjustesDaTabela(colunas, { memoria })` → `DataTable ajustes=` +
   `BotaoColunas` na barra; a tabela só emite a ordenação, a tela ordena os dados
   (`ordenarPor`); cada célula leva `coluna="chave"`; linha com `aoSelecionar` (ADR-025/026).
-  Edição no lugar: `CelulaEditavel` (a tela grava). Lista do CRM: `layout="densa"` (36px, traço entre
-  colunas, uma linha por célula); `padrao` é o arquivo. Rodapé de Modal: botões `size="sm"`.
+  Edição no lugar: `CelulaEditavel` (a tela grava). A Table nasce `densa` (36px, traço entre
+  colunas, uma linha por célula; ADR-043); `confortavel` é o arquivo. Coluna com `icone`. Rodapé de Modal: botões `size="sm"`.
   Grupos: `agrupavel` na coluna, `BotaoAgrupar`, `agruparPor` + `DataTableGrupo` na tela. Seleção em
   massa: `useSelecaoDaTabela` → `DataTable selecao=` + `DataTableRow chave/nome` + `BarraDeSelecao`
   com as ações da tela (ADR-031). Barra da tabela só com Button `tertiary` + Menu; nunca um Select ali.
@@ -187,6 +187,10 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   Relatório: `node scripts/gerar-entrega.mjs` → `lib/entrega.json` → `/entrega` (fora do nav).
   Telas que mais doem (FigJam): Atendimento feito (`app/exemplos/atendimento`, bloco `atendimento`); faltam
   Automações, Card do lead e mobile. Texto de várias linhas: `Textarea` (ADR-042), nunca `<textarea>` cru.
+- **Quando usar**: toda `docs/componentes/*.md` tem `## Quando usar` ("- **Use** …" / "- **Não use** … → o
+  componente certo"); é a primeira seção da skill do cliente e a seção automática da página do componente
+  (`lib/quando-usar.json`, gerado pelo gerar-registry — não editar à mão). `check-doc-codigo` reprova doc sem
+  ela ou que cite componente inexistente (ADR-047). Gráficos chapados em `primary`, `eixoY` opcional (ADR-044).
 - **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, children; sem segunda linha;
   breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
   o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.

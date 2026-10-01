@@ -4,6 +4,14 @@
 
 Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualização.
 
+## Quando usar
+
+- **Use** para alternar entre 2 e 4 opções à vista que mudam o que a tela mostra (período, escopo).
+- **Use** `ViewSwitcher` para trocar a visualização do mesmo dado (quadro, lista, calendário), com ícone.
+- **Não use** para seções de um registro: é `Tabs`.
+- **Não use** para valor de formulário: `RadioGroup` ou `Select`.
+- **Não use** com mais de 4 opções: é `Select`.
+
 ## Família
 
 `navegacao` — define a regra de estado herdada

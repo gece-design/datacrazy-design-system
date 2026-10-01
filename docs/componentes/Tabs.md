@@ -4,6 +4,13 @@
 
 Alternar entre as seções de um mesmo registro.
 
+## Quando usar
+
+- **Use** para as seções de um mesmo registro e para a situação de uma lista (Abertas · Pendentes · Finalizadas), com a contagem no rótulo.
+- **Não use** como navegação principal nem para fazer o menu crescer: a navegação principal é a `Sidebar`.
+- **Não use** para trocar a visualização do mesmo dado: é `ViewSwitcher`.
+- **Não use** com mais de ~6 abas: reveja a estrutura.
+
 ## Família
 
 `navegacao` — define a regra de estado herdada

@@ -1,15 +1,15 @@
 {
-  "geradoEm": "2026-09-29",
+  "geradoEm": "2026-10-01",
   "periodo": {
     "inicio": "2026-09-02",
     "fim": "2026-09-29"
   },
   "git": {
-    "commits": 63,
-    "arquivos": 320,
-    "linhasUi": 9869,
+    "commits": 65,
+    "arquivos": 331,
+    "linhasUi": 9992,
     "linhasLib": 785,
-    "linhasDocs": 7408
+    "linhasDocs": 7756
   },
   "catalogo": {
     "itens": 51,
@@ -94,11 +94,11 @@
       "categoria": "Data Display",
       "pagina": null,
       "pecas": 5,
-      "props": 10,
+      "props": 11,
       "variantes": 4,
       "estados": 2,
       "acessibilidade": 5,
-      "linhas": 299
+      "linhas": 309
     },
     {
       "name": "checkbox",
@@ -124,7 +124,7 @@
       "variantes": 7,
       "estados": 4,
       "acessibilidade": 12,
-      "linhas": 1606
+      "linhas": 1618
     },
     {
       "name": "date-picker",
@@ -189,7 +189,7 @@
       "variantes": 5,
       "estados": 0,
       "acessibilidade": 5,
-      "linhas": 200
+      "linhas": 202
     },
     {
       "name": "logo-datacrazy",
@@ -442,7 +442,7 @@
   "totais": {
     "componentes": 32,
     "pecas": 105,
-    "props": 317,
+    "props": 318,
     "variantes": 90,
     "estados": 116,
     "acessibilidade": 194,
@@ -916,14 +916,39 @@
       "id": "ADR-042",
       "titulo": "Textarea nasce sem par no arquivo, da tela de Atendimento",
       "data": "2026-09-29"
+    },
+    {
+      "id": "ADR-043",
+      "titulo": "A Table nasce densa; a linha alta vira `confortavel`",
+      "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-044",
+      "titulo": "Gráficos chapados, valor no balão, eixo opcional",
+      "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-045",
+      "titulo": "KpiCard `fill` com traço visível",
+      "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-046",
+      "titulo": "Etiqueta de tipo do perfil no fluxo, sob o nome",
+      "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-047",
+      "titulo": "\"Quando usar\" é seção obrigatória da doc do componente",
+      "data": "2026-10-01"
     }
   ],
   "auditoria": {
-    "total": 206,
+    "total": 207,
     "porStatus": {
       "corrigido": 67,
       "aceito": 12,
-      "adiado": 125,
+      "adiado": 126,
       "aberto": 2
     },
     "porEixo": {
@@ -933,10 +958,16 @@
       "paginas": 10,
       "instalacao": 11,
       "docs": 10,
-      "fidelidade": 121
+      "fidelidade": 122
     }
   },
   "pedidos": [
+    {
+      "data": "2026-10-01",
+      "origem": "Revisão",
+      "titulo": "CRÍTICA DE DESIGN DE 28/09 (RYAN PACHECO) · LOTE 1",
+      "resumo": "O PDF Design_Critique.pdf foi lido por inteiro e cruzado com o DS; o humano aprovou a ordem (\"vai\"). Lote 1, o que não pede decisão: (1) a Table nasce densa; a linha alta vira confortavel (padrao segu"
+    },
     {
       "data": "2026-09-29",
       "origem": "Lote",
@@ -948,6 +979,12 @@
       "origem": "Cliente",
       "titulo": "FIGJAM LIDO POR INTEIRO; TELA DE ATENDIMENTO; TEXTAREA",
       "resumo": "O board lL301HOTFtRYnVak9o9dne foi lido pelo conector do Figma (1.228 textos, 70 stickies; as 87 imagens não). Dele: as telas que mais doem (Multiatendimento e Chat, Pipelines e Automações, Card do le"
+    },
+    {
+      "data": "2026-09-29",
+      "origem": "Revisão",
+      "titulo": "PROPOSTA VISUAL (TWENTY / ATTIO) PARA DECISÃO",
+      "resumo": "O humano não conseguiu imaginar as quatro mudanças sugeridas; virou tela: /exemplos/proposta-visual (fora do nav, check-rotas) mostra a lista do pipeline como está HOJE e na PROPOSTA, com um interrupt"
     },
     {
       "data": "2026-09-28",

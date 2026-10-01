@@ -450,6 +450,12 @@ export function DrawerPerfil({
             <div className="flex flex-col items-center gap-1">
               <Avatar nome={nome} size="lg" aria-hidden="true" className="border-tom-anel text-tom-texto" />
               <h2 className="text-center text-h1 text-foreground">{nome}</h2>
+              {/* A tag de tipo fica no fluxo, sob o nome. No arquivo ela flutua sobre a
+                  borda do avatar; o cliente apontou que "flutua solta, sem se conectar
+                  ao card" (2026-09-28), o mesmo defeito do botão redondo da sidebar. */}
+              <Tag tipo={tipo} className="text-tom-tag">
+                {rotuloTipo}
+              </Tag>
               {telefone ? (
                 <p className="flex items-start justify-center gap-1 text-label-sm text-foreground">
                   <Phone size={15} weight="regular" aria-hidden="true" className="shrink-0" />
@@ -463,12 +469,6 @@ export function DrawerPerfil({
                 </p>
               ) : null}
             </div>
-            {/* A tag de tipo flutua sobre a borda do avatar, na posição exata do
-                arquivo. Nessa instância o fundo é `background` e o recuo é 4px
-                em volta — override do próprio arquivo sobre a Tag. */}
-            <Tag tipo={tipo} className="absolute left-[158px] top-[13px] bg-background p-1 text-tom-tag">
-              {rotuloTipo}
-            </Tag>
             {tags ? <div className="flex w-full flex-wrap items-center justify-center gap-1">{tags}</div> : null}
             {acoes ? <div className="flex items-start justify-center gap-2">{acoes}</div> : null}
           </div>

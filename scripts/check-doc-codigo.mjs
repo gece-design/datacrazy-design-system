@@ -94,6 +94,20 @@ for (const c of comps) {
   const propsTxt = secoes.Props ?? "";
   const cita = (txt, nome) => new RegExp("`[^`]*\\b" + nome.replace(/[$]/g, "\\$") + "\\b[^`]*`").test(txt);
 
+  // "Quando usar" é o que a skill lê para ESCOLHER o componente; apontar para
+  // um componente que não existe é mandar o agente inventar.
+  const guia = secoes["Quando usar"];
+  if (!guia) marca("erro", "sem-quando-usar", c.nome, `${docRel} não tem a seção "Quando usar"`);
+  else {
+    if (!/^- \*\*Use\*\* /m.test(guia) || !/^- \*\*Não use\*\* /m.test(guia))
+      marca("erro", "quando-usar-incompleto", c.nome, `"Quando usar" precisa de ao menos um "- **Use** …" e um "- **Não use** …"`);
+    for (const [, cod] of guia.matchAll(/`([^`]+)`/g)) {
+      const nome = cod.match(/^<?([A-Z][A-Za-z]+)\b/)?.[1];
+      if (nome && !indiceExports.has(nome) && !ehPhosphor(nome))
+        marca("erro", "quando-usar-fantasma", c.nome, `\`${nome}\` no "Quando usar" não é exportado por nenhum components/ui`);
+    }
+  }
+
   for (const p of c.props) {
     if (p.nome === "className" || p.nome === "children") continue; // convenção, não contrato
     if (!cita(propsTxt, p.nome)) marca("erro", "prop-fora-da-doc", c.nome, `\`${p.dono}.${p.nome}\` (${p.opcional ? "opcional" : "obrigatória"}) não aparece na seção Props`);

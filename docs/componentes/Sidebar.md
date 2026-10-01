@@ -5,6 +5,13 @@
 Navegação principal do CRM: marca, grupos de itens com ícone e rótulo,
 interruptor de tema, atalhos e usuário — expandida em 282px ou colapsada em 88.
 
+## Quando usar
+
+- **Use** uma vez por tela, pela prop `navegacao` da `TelaBase`: é a navegação principal do CRM.
+- **Não use** para as seções de um registro: é `DrawerMenu` ou `Tabs`.
+- **Não use** junto de um menu superior: a navegação é uma só.
+- **Não use** montada à mão ao lado do conteúdo.
+
 ## Família
 
 `navegacao` — define a regra de estado herdada

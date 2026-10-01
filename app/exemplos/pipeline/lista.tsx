@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useRef, useState } from "react";
-import { Buildings, Clock, User, WarningCircle } from "@phosphor-icons/react";
+import { Buildings, Clock, CurrencyDollar, FunnelSimple, Headset, ShareNetwork, Tag as IconeDeTag, User, WarningCircle } from "@phosphor-icons/react";
 
 import {
   CelulaEditavel,
@@ -38,14 +38,14 @@ import { foco, rolagemDiscreta } from "@/lib/estados";
 /** As colunas da lista. Ficam aqui, exportadas, porque os botões Agrupar e
  *  Colunas moram na fileira do Header da tela, não na barra da tabela. */
 export const COLUNAS_DA_LISTA: ColunaTabela[] = [
-  { chave: "lead", rotulo: "Lead", peso: 2.2 },
-  { chave: "tags", rotulo: "Tags", peso: 2 },
-  { chave: "empresa", rotulo: "Empresa", peso: 2.5 },
-  { chave: "etapa", rotulo: "Etapa", peso: 2, agrupavel: true },
-  { chave: "origem", rotulo: "Origem", peso: 1.3, agrupavel: true },
-  { chave: "responsavel", rotulo: "Atendente", peso: 1.5, agrupavel: true },
-  { chave: "valor", rotulo: "Valor", peso: 1.5, alinharFim: true },
-  { chave: "dias", rotulo: "Parado", peso: 1, alinharFim: true },
+  { chave: "lead", rotulo: "Lead", icone: User, peso: 2.2 },
+  { chave: "tags", rotulo: "Tags", icone: IconeDeTag, peso: 2 },
+  { chave: "empresa", rotulo: "Empresa", icone: Buildings, peso: 2.3 },
+  { chave: "etapa", rotulo: "Etapa", icone: FunnelSimple, peso: 2, agrupavel: true },
+  { chave: "origem", rotulo: "Origem", icone: ShareNetwork, peso: 1.3, agrupavel: true },
+  { chave: "responsavel", rotulo: "Atendente", icone: Headset, peso: 1.5, agrupavel: true },
+  { chave: "valor", rotulo: "Valor", icone: CurrencyDollar, peso: 1.5, alinharFim: true },
+  { chave: "dias", rotulo: "Parado", icone: Clock, peso: 1.2, alinharFim: true },
 ];
 
 /* O que cada coluna lê do lead, para ordenar. Etapa ordena pela posição no funil. */
@@ -183,9 +183,9 @@ export function Lista({
     <div className={cn("min-h-0 flex-1 overflow-y-auto", !semMoldura && "pb-4 pl-4 pr-4 lg:pl-1", rolagemDiscreta)}>
       <div className={cn("w-full bg-card", !semMoldura && "overflow-hidden rounded-md")}>
         {/* Só o resumo: Agrupar e Colunas estão na fileira do Header (humano, 2026-09-24). */}
-        {semMoldura ? null : <DataTableToolbar layout="densa" rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />}
+        {semMoldura ? null : <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />}
         {/* densa: a grade de lista à la Twenty (cliente, 2026-09-27) */}
-        <DataTable layout="densa" colunas={COLUNAS_DA_LISTA} ajustes={ajustes} selecao={selecao} className={cn("rounded-none border-0", classeDaTabela)}>
+        <DataTable colunas={COLUNAS_DA_LISTA} ajustes={ajustes} selecao={selecao} className={cn("rounded-none border-0", classeDaTabela)}>
           {grupos
             ? grupos.map((g) => (
                 <Fragment key={g.id}>

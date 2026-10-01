@@ -5,6 +5,13 @@
 Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma
 legenda de apoio.
 
+## Quando usar
+
+- **Use** para uma métrica em destaque no topo do dashboard. `fill` quando é número e contagem; `outline` quando há variação e o que ela significa.
+- **Não use** para lista ou gráfico: é `Card`.
+- **Não use** mais de quatro numa fileira: a grade é `grid-cols-1 sm:grid-cols-2 xl:grid-cols-4`.
+- **Não use** `trend` como enfeite: só quando o dado tem direção de verdade.
+
 ## Família
 
 `superficie` — define a regra de estado herdada
@@ -43,7 +50,7 @@ tokens sob `.dark`.
 
 | Variante | Quando usar |
 |----------|-------------|
-| `fill` | Padrão. Um número e uma contagem. A faixa do topo do dashboard. Altura 139–140. |
+| `fill` | Padrão. Um número e uma contagem. A faixa do topo do dashboard. Altura 139–140. Tem traço de 1px em `border` (ADR-045): sem ele o cartão sumia sobre superfície clara. |
 | `outline` | Um número, a variação dele e o que ela significa. Tem divisória e rodapé. Traço de 2px, altura 172. |
 | `trend="neutral"` | Não há comparação com período anterior. |
 | `trend="up"` | Variação positiva. |

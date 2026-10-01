@@ -4,6 +4,12 @@
 
 Receber um texto de várias linhas — observação, nota interna, a mensagem do chat — na mesma caixa do Input, crescendo com o conteúdo.
 
+## Quando usar
+
+- **Use** para texto de várias linhas: observação, nota interna, mensagem. Com `rotuloOculto` e `linhas={1}`, é o compositor do chat.
+- **Não use** para valor curto: é `Input`.
+- **Não use** `<textarea>` cru nem altura fixa em px: use `linhas` e `maximoDeLinhas`.
+
 ## Família
 
 `entrada` — define a regra de estado herdada

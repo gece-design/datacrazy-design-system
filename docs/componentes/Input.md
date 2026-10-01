@@ -4,6 +4,13 @@
 
 Receber um valor curto digitado, com rótulo visível e erro inline.
 
+## Quando usar
+
+- **Use** para um valor curto, de uma linha, com rótulo visível.
+- **Use** `CampoEditavel` no cartão do drawer: o valor aparece como texto e vira campo no clique.
+- **Não use** para várias linhas (`Textarea`), telefone (`InputTelefone`), escolha em lista (`Select`) ou data (`DatePicker`).
+- **Não use** `<input>` cru nem placeholder no lugar do rótulo.
+
 ## Família
 
 `entrada` — define a regra de estado herdada

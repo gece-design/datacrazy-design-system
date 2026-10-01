@@ -4,6 +4,11 @@
 
 Receber um telefone com o país separado do número.
 
+## Quando usar
+
+- **Use** `InputTelefone` para todo telefone: país separado do número, com máscara.
+- **Não use** `Input` com máscara própria, nem dois campos (DDD e número).
+
 ## Família
 
 `entrada` — define a regra de estado herdada

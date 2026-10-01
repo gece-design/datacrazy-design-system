@@ -110,8 +110,9 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 Toda tela nasce do bloco `@datacrazy/tela` (TelaBase: Sidebar + Header + conteúdo).
 O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
 `@datacrazy/pipeline` (`app/pipeline/`), feito pelo time do DS.
-- **Lista de registros** (contatos, leads, negócios): `DataTable layout="densa"`
-  com `useAjustesDaTabela` e `DataTableToolbar layout="densa"` (só rótulo e
+- **Lista de registros** (contatos, leads, negócios): `DataTable` (nasce
+  `densa`; não passe `layout`), `icone` em cada coluna, com
+  `useAjustesDaTabela` e `DataTableToolbar` (só rótulo e
   total); `BotaoAgrupar` e `BotaoColunas` recolhidos na fileira do Header, ao
   lado de `HeaderBusca recolhida` e `HeaderFiltros recolhido`; `Pagination`
   embaixo; seleção em massa com `useSelecaoDaTabela` + `BarraDeSelecao`;
@@ -142,7 +143,12 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
 ### Telas: densidade (os números que o cliente pediu)
 O cliente comparou com o Twenty e o Attio: "menos gap, menos padding, stroke
 nas divs; o nosso parece gigante". Os números que fecham isso:
-- Linha de tabela: 36px (`densa`), traço entre colunas e entre linhas.
+- Linha de tabela: 36px (`densa`, o padrão da Table), traço entre colunas e entre linhas.
+- Espaço vazio tem critério. É respiro quando separa grupos (`gap-6` entre
+  seções). É desperdício quando fica ENTRE itens do mesmo grupo ou quando o
+  conteúdo estica para preencher a tela: cartão e campo têm a largura do
+  conteúdo (`gradeDeCartoes`), lista com poucos itens termina onde termina — não
+  se centraliza nem se alarga — e o que sobra fica embaixo, uma vez só.
 - Cartão de campo: 68px (rótulo em bold + linha de valor de 24).
 - Cabeçalho e rodapé de Modal: 44px; botões `sm` (28px).
 - Espaço entre cartões e blocos: `gap-3` (12). Recuo do conteúdo da tela: 16
@@ -157,8 +163,9 @@ nas divs; o nosso parece gigante". Os números que fecham isso:
   `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`.
 - `Select` na barra da tabela para filtrar → `HeaderFiltros` no Header; a barra
   da tabela só tem rótulo, total e, no máximo, Button `tertiary` + `Menu`.
-- `DataTable` no `padrao` (64px) para lista de registros → `densa`. O `padrao`
-  é do arquivo, para leitura com respiro (relatório, doc).
+- `DataTable layout="confortavel"` (linha alta, a do arquivo) para lista de
+  registros → tire a prop: a Table nasce `densa`. `confortavel` é para
+  leitura com respiro (relatório, doc).
 - `Tag tom="…"` sorteada para cada etiqueta → `Tag` neutra com `status`; cor só
   quando o produto define a cor daquele dado (etapa do funil, tom do perfil).
   O cliente tirou a variação colorida em 18/09 ("vibe code").

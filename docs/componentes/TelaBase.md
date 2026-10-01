@@ -6,6 +6,12 @@ A casca de toda tela do CRM: Sidebar, Header e conteúdo já ligados, com os
 breakpoints e a memória da sidebar. A tela só preenche os
 encaixes. Instala-se como bloco (`@datacrazy/tela`), que cria a página pronta.
 
+## Quando usar
+
+- **Use** como raiz de toda tela do CRM: Sidebar, Header e conteúdo já ligados, com os breakpoints.
+- **Não use** Sidebar e Header montados à mão.
+- **Não use** dentro de Modal ou Drawer: ela é a tela inteira.
+
 ## Família
 
 `superficie` — define a regra de estado herdada

@@ -74,7 +74,9 @@ export type Tendencia = keyof typeof glifos;
 const cardVariants = cva("w-full", {
   variants: {
     variant: {
-      fill: "gap-3 p-[15px]",
+      // traço visível (`border`): sem ele o cartão some sobre superfície clara
+      // ("não possuem contorno e têm pouca visibilidade", cliente, 2026-09-28)
+      fill: "gap-3 border-border p-[15px]",
       outline: "gap-4 border-2 bg-transparent p-[14px]",
     },
   },

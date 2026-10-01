@@ -6,6 +6,15 @@ Lista os negócios do CRM em colunas, com filtros e paginação — e, com
 `ajustes`, deixa a pessoa ordenar, esconder, reordenar e redimensionar as
 colunas e selecionar a linha (T1, pedido do cliente em 2026-09-18).
 
+## Quando usar
+
+- **Use** para lista de registros (leads, contatos, negócios). Ela nasce `densa`; `confortavel` é só para leitura com respiro; `compacta` é a de dentro do Drawer.
+- **Use** `ajustes`, `selecao` e `CelulaEditavel` em vez de abrir modal para ordenar, agir em massa ou editar um valor.
+- **Use** `icone` em cada coluna quando a grade tem mais de cinco: ajuda a achar o campo sem ler o rótulo.
+- **Não use** para menos de cinco itens com dois campos: é `CardList` dentro de um Card.
+- **Não use** `Select` na barra da tabela para filtrar: busca e filtros ficam no Header; Agrupar e Colunas também.
+- **Não use** `<table>` cru nem tabela dentro de Card.
+
 ## Família
 
 `superficie` — define a regra de estado herdada
@@ -27,8 +36,8 @@ Diff de pixels **não medido**: depende da ponte de escrita do Figma
 
 | Prop | Tipo | Descrição |
 |------|------|-----------|
-| `colunas` | `ColunaTabela[]` | `chave`, `rotulo`, `peso`, `alinharFim`, `ordenavel?`, `ocultavel?`, `minimo?`, `agrupavel?`. |
-| `layout` | `"padrao" \| "compacta" \| "densa"` | `compacta` é o Compact do drawer; `densa` é a grade de lista à la Twenty (cliente, 2026-09-27): linha de 36px, recuo 8, traço entre colunas e linhas, cada célula numa linha só. |
+| `colunas` | `ColunaTabela[]` | `chave`, `rotulo`, `peso`, `alinharFim`, `ordenavel?`, `ocultavel?`, `minimo?`, `agrupavel?`, `icone?` (ícone Phosphor de 14px antes do rótulo, como nas grades do Attio e do Twenty). Na `densa`, a soma dos `minimo` (112 para quem não declara) é o piso da tabela: abaixo dele ela rola na horizontal. |
+| `layout` | `"densa" \| "confortavel" \| "compacta"` | Padrão **`densa`** (ADR-043): a grade de lista à la Twenty — linha de 36px, recuo 8, traço entre colunas e linhas, cada célula numa linha só. `confortavel` é o desenho do arquivo, com linha alta, para leitura com respiro (`padrao` é o nome antigo e continua aceito). `compacta` é o Compact do drawer. |
 | `ajustes` | `AjustesDaTabela` | Liga os comportamentos. Vem de `useAjustesDaTabela`. |
 | `ordem`, `aoOrdenar` | `OrdemTabela`, `(ordem) => void` | Só ordenar, sem o resto; `ajustes` já traz os dois. |
 | `rotulos` | `Partial<RotulosDaTabela>` | Textos dos controles (i18n). Fábrica: `ROTULOS_DA_TABELA`. |
@@ -141,7 +150,7 @@ tela; os ids são da tela, como na ordenação (ADR-031).
 | `rotulo` | `string` | Linha pequena. Ex.: "Total de resultados". |
 | `total` | `string` | Linha em destaque. Ex.: "37 negócios". |
 | `children` | `ReactNode` | Os filtros à direita. |
-| `layout` | `"padrao" \| "compacta"` | `compacta` (597:5983, Negócios no drawer): sem recuo próprio, rótulo em caption e total em h4. |
+| `layout` | `"densa" \| "confortavel" \| "compacta"` | O mesmo da tabela que ela acompanha; padrão `densa`. `compacta` (597:5983, Negócios no drawer): sem recuo próprio, rótulo em caption e total em h4. |
 
 ### Células
 

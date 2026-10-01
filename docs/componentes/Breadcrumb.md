@@ -4,6 +4,12 @@
 
 Mostrar o caminho até a página atual e levar de volta a qualquer nível dele.
 
+## Quando usar
+
+- **Use** no topo da tela, pela `trilha` do Header, para dizer onde a pessoa está: seção > registro, dois níveis à vista.
+- **Não use** para trocar de seção dentro do mesmo registro: é `Tabs`.
+- **Não use** como histórico de navegação nem com mais de dois níveis visíveis: os do meio recolhem.
+
 ## Família
 
 `navegacao` — define a regra de estado herdada

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { Tooltip } from "@/components/ui/tooltip";
 
 /**
  * Card — espelho do component set "Card" do Figma (node 304:5313).
@@ -142,13 +143,16 @@ export type FatiaDaRosca = { nome: string; percentual: number };
 const RAIO = 62.25;
 const ESPESSURA = 25.5;
 const VOLTA = 2 * Math.PI * RAIO;
+/** Fatias no mesmo matiz, separadas pela opacidade: a primeira é a cheia. */
+const OPACIDADE_DA_FATIA = [1, 0.6, 0.35, 0.2];
 
 /**
  * Rosca de distribuição percentual.
  *
- * O gradiente é vertical e vale para o anel inteiro, não por fatia: o arquivo
- * não entrega paleta categórica, então duas fatias com valor saem da mesma cor.
- * Isso é limite do desenho, não do código — ver a divergência aberta na doc.
+ * Cor chapada em `primary`: o gradiente vertical do arquivo saiu (cliente,
+ * 2026-09-28; regra A3). O arquivo não entrega paleta categórica, então as
+ * fatias se distinguem pela opacidade, da maior para a menor (100 · 60 · 35 ·
+ * 20%) — um matiz só, sem inventar cor.
  */
 export function CardDonut({
   fatias,
@@ -161,24 +165,17 @@ export function CardDonut({
   /** A linha pequena sob ele. Ex.: o nome da fatia dominante. */
   rotulo?: string;
 }) {
-  const idGradiente = `rosca-${React.useId().replace(/:/g, "")}`;
   let percorrido = 0;
+  // A legenda repete a intensidade da fatia: é o que liga o nome ao arco.
+  const comValor = fatias.filter((f) => f.percentual > 0);
+  const opacidadeDe = (f: FatiaDaRosca) =>
+    OPACIDADE_DA_FATIA[Math.min(comValor.indexOf(f), OPACIDADE_DA_FATIA.length - 1)];
   return (
     <>
       <div className="flex w-full flex-col items-center overflow-hidden py-1">
         <div className="relative size-[150px] shrink-0">
           <svg viewBox="0 0 150 150" className="size-full" aria-hidden="true">
-            <defs>
-              <linearGradient id={idGradiente} x1="75" y1="0" x2="75" y2="150" gradientUnits="userSpaceOnUse">
-                {/* currentColor + classe do token, e não a variável direto:
-                    assim a cor vale no Tailwind v3 e no v4 (catálogo do shadcn). */}
-                <stop stopColor="currentColor" className="text-primary" />
-                <stop offset="1" stopColor="currentColor" className="text-accent" />
-              </linearGradient>
-            </defs>
-            {fatias
-              .filter((f) => f.percentual > 0)
-              .map((f) => {
+            {comValor.map((f) => {
                 const arco = (f.percentual / 100) * VOLTA;
                 const deslocamento = -(percorrido / 100) * VOLTA;
                 percorrido += f.percentual;
@@ -189,7 +186,9 @@ export function CardDonut({
                     cy="75"
                     r={RAIO}
                     fill="none"
-                    stroke={`url(#${idGradiente})`}
+                    stroke="currentColor"
+                    strokeOpacity={opacidadeDe(f)}
+                    className="text-primary"
                     strokeWidth={ESPESSURA}
                     strokeDasharray={`${arco} ${VOLTA - arco}`}
                     strokeDashoffset={deslocamento}
@@ -215,6 +214,7 @@ export function CardDonut({
                   "size-2 shrink-0 rounded-full",
                   f.percentual > 0 ? "bg-primary" : "bg-subtle-foreground",
                 )}
+                style={f.percentual > 0 ? { opacity: opacidadeDe(f) } : undefined}
                 aria-hidden="true"
               />
               <p className="min-w-0 flex-1 truncate text-body-md text-muted-foreground" title={f.nome}>
@@ -242,46 +242,56 @@ const ALTURA_PLOT = 224;
 const ALTURA_MAXIMA = 218;
 const ALTURA_ZERO = 3;
 
-/** Barras verticais por período. O eixo Y sai pronto de quem chama. */
+/**
+ * Barras verticais por período, em cor chapada: o gradiente primary → accent do
+ * arquivo saiu ("não encaixa com o resto", cliente, 2026-09-28; regra A3). O
+ * valor aparece ao passar o cursor (regra A7); sem `eixoY`, o gráfico fica
+ * minimalista — só barras e rótulos embaixo.
+ */
 export function CardChart({
   barras,
   eixoY,
+  formatar = String,
 }: {
   barras: BarraDoGrafico[];
-  /** Rótulos do eixo Y, do topo para a base, já formatados. */
-  eixoY: string[];
+  /** Rótulos do eixo Y, do topo para a base, já formatados. Sem eles, o gráfico não tem eixo (A7). */
+  eixoY?: string[];
+  /** Como o valor aparece no balão da barra. Ex.: `(v) => moeda(v)`. Padrão: o número. */
+  formatar?: (valor: number) => string;
 }) {
   const maximo = Math.max(...barras.map((b) => b.valor), 0);
   return (
     <div className="flex w-full min-w-0 flex-col gap-5">
       <div className="flex w-full min-w-0 items-end gap-3">
-        <div
-          className="flex w-[66px] shrink-0 flex-col items-end justify-between overflow-hidden text-body-sm tabular-nums text-muted-foreground"
-          style={{ height: ALTURA_PLOT }}
-          aria-hidden="true"
-        >
-          {eixoY.map((r) => (
-            <p key={r}>{r}</p>
-          ))}
-        </div>
+        {eixoY ? (
+          <div
+            className="flex w-[66px] shrink-0 flex-col items-end justify-between overflow-hidden text-body-sm tabular-nums text-muted-foreground"
+            style={{ height: ALTURA_PLOT }}
+            aria-hidden="true"
+          >
+            {eixoY.map((r) => (
+              <p key={r}>{r}</p>
+            ))}
+          </div>
+        ) : null}
         <div className="flex min-w-0 flex-1 items-end gap-[14px]" style={{ height: ALTURA_PLOT }}>
           {barras.map((b) => {
             const cheia = maximo > 0 && b.valor > 0;
             return (
-              <div
-                key={b.rotulo}
-                className={cn(
-                  "min-w-0 flex-1 rounded-t-sm",
-                  cheia ? "bg-gradient-to-b from-primary to-accent" : "bg-background",
-                )}
-                style={{ height: cheia ? (b.valor / maximo) * ALTURA_MAXIMA : ALTURA_ZERO }}
-              />
+              <Tooltip key={b.rotulo} content={`${b.rotulo} · ${formatar(b.valor)}`} delay={0}>
+                <div
+                  role="img"
+                  aria-label={`${b.rotulo}: ${formatar(b.valor)}`}
+                  className={cn("min-w-0 flex-1 rounded-t-sm transition-colors", cheia ? "bg-primary hover:bg-primary-hover" : "bg-background")}
+                  style={{ height: cheia ? (b.valor / maximo) * ALTURA_MAXIMA : ALTURA_ZERO }}
+                />
+              </Tooltip>
             );
           })}
         </div>
       </div>
       <div className="flex w-full min-w-0 items-start gap-3" aria-hidden="true">
-        <span className="w-[66px] shrink-0" />
+        {eixoY ? <span className="w-[66px] shrink-0" /> : null}
         <div className="flex min-w-0 flex-1 gap-[14px]">
           {barras.map((b) => (
             <p

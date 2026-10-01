@@ -4,6 +4,12 @@
 
 Mostrar um texto curto ancorado num gatilho, por cursor ou teclado.
 
+## Quando usar
+
+- **Use** para o nome de um botão só de ícone e para o texto completo de algo truncado.
+- **Não use** para informação essencial: no toque ele não aparece.
+- **Não use** com conteúdo clicável: é `PainelFlutuante`.
+
 ## Família
 
 `overlay` — define a regra de estado herdada

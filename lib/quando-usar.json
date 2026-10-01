@@ -1,0 +1,350 @@
+{
+  "/actions/button": [
+    {
+      "componente": "Button",
+      "usar": [
+        "`primary` para a única ação principal da tela ou do modal; `secondary` ou `outline` para a de apoio; `tertiary` nas barras (Header, tabela); `ghost` para ação discreta; `soft` para destaque secundário; `destructive` só para apagar sem volta.",
+        "`size=\"icon\"` com `aria-label` quando for só ícone; o X de fechar é `BotaoFechar`."
+      ],
+      "naoUsar": [
+        "dois `primary` na mesma fileira.",
+        "para trocar de visualização (`ViewSwitcher`), escolher uma opção (`SegmentedControl`) ou ligar e desligar (`Switch`).",
+        "`<button>` cru: se o caso não cabe em variante nenhuma, use a constante `foco` de `lib/estados`."
+      ]
+    }
+  ],
+  "/data-display/avatar": [
+    {
+      "componente": "Avatar",
+      "usar": [
+        "para identificar pessoa ou empresa pela inicial ou pela foto: perfil do lead, lista de conversas, usuário logado."
+      ],
+      "naoUsar": [
+        "para o atendente numa linha de tabela ou num cartão: ali é `Tag foto` (22px, já com o nome).",
+        "como botão nem como indicador de status: o status é `Tag status`."
+      ]
+    }
+  ],
+  "/data-display/calendario": [
+    {
+      "componente": "Calendário",
+      "usar": [
+        "para ver registros com data (negócios, tarefas) no mês ou na semana, como visão alternativa da lista e do quadro."
+      ],
+      "naoUsar": [
+        "para escolher uma data num campo: é `DatePicker`.",
+        "para agenda com horários de duração variável: o componente mostra o dia, não a hora."
+      ]
+    }
+  ],
+  "/data-display/card": [
+    {
+      "componente": "Card",
+      "usar": [
+        "para um bloco de dados do dashboard com título e ação: lista (`CardList`), rosca (`CardDonut`) ou barras (`CardChart`)."
+      ],
+      "naoUsar": [
+        "para uma métrica só: é `KpiCard`.",
+        "card dentro de card, nem como contêiner de formulário ou de tabela: a Table já é a superfície.",
+        "`CardDonut` com mais de quatro fatias: vire lista ou barras."
+      ]
+    }
+  ],
+  "/data-display/kpi-card": [
+    {
+      "componente": "KPI Card",
+      "usar": [
+        "para uma métrica em destaque no topo do dashboard. `fill` quando é número e contagem; `outline` quando há variação e o que ela significa."
+      ],
+      "naoUsar": [
+        "para lista ou gráfico: é `Card`.",
+        "mais de quatro numa fileira: a grade é `grid-cols-1 sm:grid-cols-2 xl:grid-cols-4`.",
+        "`trend` como enfeite: só quando o dado tem direção de verdade."
+      ]
+    }
+  ],
+  "/data-display/table": [
+    {
+      "componente": "Data Table",
+      "usar": [
+        "para lista de registros (leads, contatos, negócios). Ela nasce `densa`; `confortavel` é só para leitura com respiro; `compacta` é a de dentro do Drawer.",
+        "`ajustes`, `selecao` e `CelulaEditavel` em vez de abrir modal para ordenar, agir em massa ou editar um valor.",
+        "`icone` em cada coluna quando a grade tem mais de cinco: ajuda a achar o campo sem ler o rótulo."
+      ],
+      "naoUsar": [
+        "para menos de cinco itens com dois campos: é `CardList` dentro de um Card.",
+        "`Select` na barra da tabela para filtrar: busca e filtros ficam no Header; Agrupar e Colunas também.",
+        "`<table>` cru nem tabela dentro de Card."
+      ]
+    }
+  ],
+  "/data-display/tag": [
+    {
+      "componente": "Tag",
+      "usar": [
+        "para etiqueta do lead, status com bolinha (`status`), tipo do registro (`tipo`) e atendente (`foto`).",
+        "neutra por padrão; `tom` só quando o produto define a cor daquele dado (etapa do funil, perfil)."
+      ],
+      "naoUsar": [
+        "para selo de situação do sistema (beta, novo): é `Badge`.",
+        "`tom` sorteado para colorir a lista: cor só quando carrega significado.",
+        "como botão: adicionar é `TagAdicionar` ou `SeletorTags`."
+      ]
+    }
+  ],
+  "/exemplos/tela-base": [
+    {
+      "componente": "Tela base",
+      "usar": [
+        "como raiz de toda tela do CRM: Sidebar, Header e conteúdo já ligados, com os breakpoints."
+      ],
+      "naoUsar": [
+        "Sidebar e Header montados à mão.",
+        "dentro de Modal ou Drawer: ela é a tela inteira."
+      ]
+    }
+  ],
+  "/feedback/drawer": [
+    {
+      "componente": "Drawer",
+      "usar": [
+        "para abrir um registro (lead, negócio) sem sair da lista: perfil à esquerda, seções à direita, largura que a pessoa arrasta."
+      ],
+      "naoUsar": [
+        "para decisão curta ou confirmação: é `Modal`.",
+        "para criar com poucos campos: `Modal`.",
+        "com número fixo de colunas no conteúdo: os cartões vão em `gradeDeCartoes`."
+      ]
+    }
+  ],
+  "/feedback/modal": [
+    {
+      "componente": "Modal",
+      "usar": [
+        "para decisão que bloqueia a tela: confirmar exclusão, criar com poucos campos (até ~6), filtros."
+      ],
+      "naoUsar": [
+        "para ver ou editar um registro inteiro: é `Drawer`.",
+        "para avisar que deu certo: é `Toast`.",
+        "modal sobre modal, nem formulário longo com rolagem."
+      ]
+    }
+  ],
+  "/feedback/toast": [
+    {
+      "componente": "Toast",
+      "usar": [
+        "para confirmar o resultado de uma ação sem bloquear: salvo, movido, transferido, erro que dá para tentar de novo."
+      ],
+      "naoUsar": [
+        "para erro de campo: o erro é inline, no próprio campo.",
+        "para pedir decisão: é `Modal`.",
+        "para conteúdo que a pessoa precisa consultar depois: ele some."
+      ]
+    }
+  ],
+  "/feedback/tooltip": [
+    {
+      "componente": "Tooltip",
+      "usar": [
+        "para o nome de um botão só de ícone e para o texto completo de algo truncado."
+      ],
+      "naoUsar": [
+        "para informação essencial: no toque ele não aparece.",
+        "com conteúdo clicável: é `PainelFlutuante`."
+      ]
+    }
+  ],
+  "/forms/checkbox": [
+    {
+      "componente": "Checkbox",
+      "usar": [
+        "para marcar várias opções independentes, confirmar um aceite e selecionar linhas da Table."
+      ],
+      "naoUsar": [
+        "para ligar algo que passa a valer na hora: é `Switch`.",
+        "para escolher uma entre poucas (`RadioGroup`) ou uma entre muitas (`Select`).",
+        "empilhado em sete grupos num modal de filtros: filtro de um valor é `Select`; só o de vários valores é Checkbox."
+      ]
+    }
+  ],
+  "/forms/date-picker": [
+    {
+      "componente": "Date Picker",
+      "usar": [
+        "`DatePicker` para uma data; `DateRangePicker` para período, com atalhos, no Header ou num filtro."
+      ],
+      "naoUsar": [
+        "para data com hora: é `DateTimePicker`, do TimePicker.",
+        "três Selects (dia, mês, ano) nem `Input` com máscara de data."
+      ]
+    }
+  ],
+  "/forms/input": [
+    {
+      "componente": "Input",
+      "usar": [
+        "para um valor curto, de uma linha, com rótulo visível.",
+        "`CampoEditavel` no cartão do drawer: o valor aparece como texto e vira campo no clique."
+      ],
+      "naoUsar": [
+        "para várias linhas (`Textarea`), telefone (`InputTelefone`), escolha em lista (`Select`) ou data (`DatePicker`).",
+        "`<input>` cru nem placeholder no lugar do rótulo."
+      ]
+    },
+    {
+      "componente": "Rating",
+      "usar": [
+        "para nota de 0 a N num campo do lead (score), editável ou só leitura."
+      ],
+      "naoUsar": [
+        "para progresso de etapa: é `CelulaProgresso`.",
+        "para porcentagem ou meta: é número, no `KpiCard`."
+      ]
+    },
+    {
+      "componente": "Telefone",
+      "usar": [
+        "`InputTelefone` para todo telefone: país separado do número, com máscara."
+      ],
+      "naoUsar": [
+        "`Input` com máscara própria, nem dois campos (DDD e número)."
+      ]
+    },
+    {
+      "componente": "Textarea",
+      "usar": [
+        "para texto de várias linhas: observação, nota interna, mensagem. Com `rotuloOculto` e `linhas={1}`, é o compositor do chat."
+      ],
+      "naoUsar": [
+        "para valor curto: é `Input`.",
+        "`<textarea>` cru nem altura fixa em px: use `linhas` e `maximoDeLinhas`."
+      ]
+    }
+  ],
+  "/forms/radio-group": [
+    {
+      "componente": "Radio Group",
+      "usar": [
+        "para uma escolha entre 2 e 5 opções que precisam ficar todas à vista, com descrição quando ajuda."
+      ],
+      "naoUsar": [
+        "com mais de 5 opções: é `Select`.",
+        "para alternar período ou escopo numa barra: é `SegmentedControl`."
+      ]
+    }
+  ],
+  "/forms/select": [
+    {
+      "componente": "Select",
+      "usar": [
+        "para escolher uma opção numa lista curta (até ~10) e fechada.",
+        "`size=\"field\"` ao lado de Input num formulário; `cartao` no drawer; `sm` e `md` em card e barra."
+      ],
+      "naoUsar": [
+        "para ações (`Menu`), para ligar e desligar (`Switch`) ou para 2 a 4 opções que cabem à vista (`SegmentedControl`, `RadioGroup`).",
+        "na barra da tabela para filtrar: filtros ficam no Header.",
+        "para lista longa com busca, grupos ou várias escolhas: esse componente ainda não existe no DS. Para etiquetas, é `SeletorTags`; nos outros casos componha com `PainelFlutuante`, `Input` e a lista, sem adaptar o Select."
+      ]
+    }
+  ],
+  "/forms/switch": [
+    {
+      "componente": "Switch",
+      "usar": [
+        "para ligar e desligar algo que passa a valer na hora, sem botão de salvar. `linha` nas listas de preferências."
+      ],
+      "naoUsar": [
+        "em formulário que só grava no Salvar: é `Checkbox`.",
+        "para escolher entre duas opções com nome: é `SegmentedControl`."
+      ]
+    }
+  ],
+  "/forms/time-picker": [
+    {
+      "componente": "Time Picker",
+      "usar": [
+        "`TimePicker` para hora; `DateTimePicker` para data com hora (agendamento), com `fusos` quando o time atende em mais de um fuso."
+      ],
+      "naoUsar": [
+        "para duração (\"esperar 5 minutos\"): é `Input` numérico com a unidade.",
+        "para só a data: é `DatePicker`."
+      ]
+    }
+  ],
+  "/navigation/breadcrumb": [
+    {
+      "componente": "Breadcrumb",
+      "usar": [
+        "no topo da tela, pela `trilha` do Header, para dizer onde a pessoa está: seção > registro, dois níveis à vista."
+      ],
+      "naoUsar": [
+        "para trocar de seção dentro do mesmo registro: é `Tabs`.",
+        "como histórico de navegação nem com mais de dois níveis visíveis: os do meio recolhem."
+      ]
+    }
+  ],
+  "/navigation/header": [
+    {
+      "componente": "Header",
+      "usar": [
+        "uma vez por tela, pela prop `cabecalho` da `TelaBase`. Busca é `HeaderBusca`, filtros `HeaderFiltros`, sino `Notificacoes`."
+      ],
+      "naoUsar": [
+        "montado à mão, nem um segundo título dentro do conteúdo.",
+        "`subtitulo` decorativo: só quando a frase diz o que o título não diz.",
+        "Button com texto no lugar da busca ou dos filtros."
+      ]
+    },
+    {
+      "componente": "SegmentedControl",
+      "usar": [
+        "para alternar entre 2 e 4 opções à vista que mudam o que a tela mostra (período, escopo).",
+        "`ViewSwitcher` para trocar a visualização do mesmo dado (quadro, lista, calendário), com ícone."
+      ],
+      "naoUsar": [
+        "para seções de um registro: é `Tabs`.",
+        "para valor de formulário: `RadioGroup` ou `Select`.",
+        "com mais de 4 opções: é `Select`."
+      ]
+    }
+  ],
+  "/navigation/pagination": [
+    {
+      "componente": "Pagination",
+      "usar": [
+        "sob a tabela, quando a lista vem paginada do servidor, com o resumo do que está à vista."
+      ],
+      "naoUsar": [
+        "com uma página só.",
+        "junto de rolagem infinita: é uma ou outra."
+      ]
+    }
+  ],
+  "/navigation/sidebar": [
+    {
+      "componente": "Sidebar",
+      "usar": [
+        "uma vez por tela, pela prop `navegacao` da `TelaBase`: é a navegação principal do CRM."
+      ],
+      "naoUsar": [
+        "para as seções de um registro: é `DrawerMenu` ou `Tabs`.",
+        "junto de um menu superior: a navegação é uma só.",
+        "montada à mão ao lado do conteúdo."
+      ]
+    }
+  ],
+  "/navigation/tabs": [
+    {
+      "componente": "Tabs",
+      "usar": [
+        "para as seções de um mesmo registro e para a situação de uma lista (Abertas · Pendentes · Finalizadas), com a contagem no rótulo."
+      ],
+      "naoUsar": [
+        "como navegação principal nem para fazer o menu crescer: a navegação principal é a `Sidebar`.",
+        "para trocar a visualização do mesmo dado: é `ViewSwitcher`.",
+        "com mais de ~6 abas: reveja a estrutura."
+      ]
+    }
+  ]
+}

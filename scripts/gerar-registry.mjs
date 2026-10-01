@@ -44,7 +44,7 @@ const SECAO_FIXA = {
 
 // O que da doc do componente serve a quem USA. Par no Figma, lote e divergências
 // abertas são maquinário do nosso processo — ficam fora.
-const SECOES_UTEIS = ["Props", "Variantes", "Estados", "Composição", "Exemplo de uso", "Acessibilidade"];
+const SECOES_UTEIS = ["Quando usar", "Props", "Variantes", "Estados", "Composição", "Exemplo de uso", "Acessibilidade"];
 
 /* ------------------------------------------------------------------------- */
 
@@ -251,7 +251,9 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    existe. Se o componente existe e não está em \`components/ui/\`, instale:
    \`npx shadcn@latest add ${NAMESPACE}/<nome>\` (ou pela ferramenta MCP do shadcn).
 2. **Leia a referência antes do primeiro uso:** \`componentes/<Nome>.md\`, nesta
-   pasta — props, variantes, estados, exemplos e acessibilidade.
+   pasta. Comece pelo **Quando usar**: ele diz o que o componente resolve e,
+   quando o caso é de outro, qual. Depois props, variantes, estados, exemplos
+   e acessibilidade.
 3. **As props são em português** (\`rotulo\`, \`titulo\`, \`aberto\`, \`aoFechar\`).
    Siga o arquivo do componente, não o costume do shadcn/ui.
 4. **Não existe?** Componha com os componentes e os tokens do DS. Não crie
@@ -577,6 +579,35 @@ const todos = {
   description: "Todos os componentes do DS de uma vez. Rode o setup antes.",
   registryDependencies: componentes.map((c) => urlDoItem(c.name)),
 };
+
+// "Quando usar" de cada doc, por rota do site: a página do componente mostra o
+// mesmo texto que a skill lê. Dono único é o .md; a página não repete à mão.
+const quandoUsar = {};
+for (const c of componentes) {
+  const guia = c.md?.["Quando usar"];
+  if (!guia) throw new Error(`docs/componentes/${pascal(c.name)}.md: sem a seção "Quando usar"`);
+  if (!c.pagina) continue;
+  const itens = (rotulo) =>
+    guia
+      .split("\n")
+      .filter((l) => l.startsWith(`- **${rotulo}** `))
+      .map((l) => l.slice(`- **${rotulo}** `.length).trim());
+  (quandoUsar[c.pagina.href.split("#")[0]] ??= []).push({ componente: c.pagina.href.includes("#") ? pascal(c.name) : c.title, ancora: c.pagina.href.includes("#"), usar: itens("Use"), naoUsar: itens("Não use") });
+}
+// o dono da página vem primeiro; quem vive como seção dela vem depois
+for (const grupos of Object.values(quandoUsar)) grupos.sort((a, b) => a.ancora - b.ancora);
+fs.writeFileSync(
+  path.join(RAIZ, "lib/quando-usar.json"),
+  JSON.stringify(
+    Object.fromEntries(
+      Object.keys(quandoUsar)
+        .sort()
+        .map((rota) => [rota, quandoUsar[rota].map(({ ancora, ...g }) => g)]),
+    ),
+    null,
+    2,
+  ) + "\n",
+);
 
 const base = [itemSetup("v4"), itemSetup("v3"), ...itensDeBloco, todos, itemTokens(ext, "v4"), itemTokens(ext, "v3"), ...itensDeLib];
 const itens = [...base, ...itensDeComponente];

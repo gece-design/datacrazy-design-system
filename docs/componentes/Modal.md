@@ -4,6 +4,13 @@
 
 Pedir uma decisão bloqueando a tela até ela ser tomada.
 
+## Quando usar
+
+- **Use** para decisão que bloqueia a tela: confirmar exclusão, criar com poucos campos (até ~6), filtros.
+- **Não use** para ver ou editar um registro inteiro: é `Drawer`.
+- **Não use** para avisar que deu certo: é `Toast`.
+- **Não use** modal sobre modal, nem formulário longo com rolagem.
+
 ## Família
 
 `overlay` — define a regra de estado herdada

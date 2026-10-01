@@ -6,6 +6,14 @@ A lista de ações e opções que abre de um botão: o menu da coluna e o botão
 Colunas da [Table](DataTable.md), o "personalizar cartão" do pipeline, o menu
 do usuário. Saiu da Table em 2026-09-23 para ser peça.
 
+## Quando usar
+
+- **Use** para ações sobre um item, uma linha ou uma coluna, aberto por um Button: o ⋮ da linha, "Mover para etapa", respostas rápidas.
+- **Use** `tipo: "check"` para ligar e desligar várias coisas sem fechar; `tipo: "radio"` para escolher um modo (Agrupar por).
+- **Não use** para escolher o valor de um campo: é `Select`.
+- **Não use** para navegação principal: é a `Sidebar`.
+- **Não use** com mais de ~10 itens ou com busca: o caso é de seletor com busca, não de menu.
+
 ## Família
 
 `overlay` — define a regra de estado herdada
