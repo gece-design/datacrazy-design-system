@@ -249,6 +249,9 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    Chat, inbox ou qualquer tela de mensagens? \`${NAMESPACE}/atendimento\`
    (\`app/atendimento/\`): conversas, mensagens e o lead em três colunas
    numa superfície só.
+   Fluxo, automação ou qualquer editor em canvas? \`${NAMESPACE}/automacoes\`
+   (\`app/automacoes/\`): blocos ligados por conectores, com o bloco aberto
+   num \`PainelLateral\`.
    Dashboard, painel ou relatório? \`${NAMESPACE}/dashboard\`
    (\`app/dashboard/\`): indicadores, gráfico ao lado da repartição, tabela
    do que precisa de atenção ao lado do ranking, período no Header.
@@ -449,6 +452,19 @@ const BLOCOS = [
     ],
     reescritas: [[' foto="/ds/atendente.png"', ""]],
     docs: `Atendimento: ${URL_DS}/exemplos/atendimento — a tela em app/atendimento; troque os dados de exemplo (dados.ts) pelos da API.`,
+  },
+  {
+    name: "automacoes",
+    title: "Automações",
+    description: "O construtor de automações, pronto: blocos do fluxo num canvas com zoom, conectores medidos na tela, e o bloco aberto num painel ao lado para editar nome, conteúdo e destino de cada saída. A tela de referência para fluxo, canvas e editor visual — copie o padrão dela.",
+    arquivos: [
+      { de: "app/exemplos/automacoes/page.tsx", para: "app/automacoes/page.tsx" },
+      { de: "app/exemplos/automacoes/tela.tsx", para: "app/automacoes/tela.tsx" },
+      { de: "app/exemplos/automacoes/canvas.tsx", para: "app/automacoes/canvas.tsx" },
+      { de: "app/exemplos/automacoes/painel-bloco.tsx", para: "app/automacoes/painel-bloco.tsx" },
+      { de: "app/exemplos/automacoes/dados.ts", para: "app/automacoes/dados.ts" },
+    ],
+    docs: `Automações: ${URL_DS}/exemplos/automacoes — a tela em app/automacoes; troque os dados de exemplo (dados.ts) pelos da API.`,
   },
   {
     name: "dashboard",

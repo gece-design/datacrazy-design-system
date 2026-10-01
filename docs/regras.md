@@ -178,6 +178,16 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   uma linha) e o lead (320, cartões do drawer). Compositor: `Textarea
   rotuloOculto linhas={1}` + `SegmentedControl` Mensagem / Nota interna.
   Abaixo de 1280 o lead abre por cima; abaixo de 768, lista OU conversa.
+- **Fluxo, automação, editor em canvas**: bloco `@datacrazy/automacoes`
+  (`app/automacoes/`). `recuo={false}`; o canvas é `bg-background` dentro do
+  painel da tela e rola nos dois sentidos, com zoom numa caixa `card` no canto.
+  Cada bloco é um cartão com traço (`bg-card border rounded-lg`): cabeçalho com
+  o ícone do tipo, resumo do que está configurado, uma linha por saída e a
+  contagem. Conector é traço em `subtle-foreground`; cor só nas saídas de
+  alerta (`warning`) e de erro (`destructive`). Clicar num bloco abre o
+  `PainelLateral` ao lado — nunca um modal por cima do fluxo —, e o destino de
+  cada saída se escolhe numa lista (`CelulaEscolha`). Liga e desliga é `Switch`
+  no Header; a ação principal é Salvar.
 - **Detalhe de um registro**: `PainelLateral` no encaixe `lateral` da
   `TelaBase` (ADR-056) — 480px ao lado da lista, que continua à vista; `Tabs`
   para as seções; dados em `ListaDeCampos` + `LinhaDeCampo` (rótulo à esquerda,

@@ -185,8 +185,9 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   é o check instalado pelo `setup` (modo `--hook`). Blocos de tela em `BLOCOS` do gerar-registry (`tela`, `pipeline`);
   import de fora de ui/ e lib/ vira vizinho via `reescritas`. Tema: `useTema` de `lib/tema.ts`, nunca cópia local.
   Relatório: `node scripts/gerar-entrega.mjs` → `lib/entrega.json` → `/entrega` (fora do nav).
-  Telas que mais doem (FigJam): Atendimento feito (`app/exemplos/atendimento`, bloco `atendimento`); faltam
-  Automações, Card do lead e mobile. Dashboard feito (`app/exemplos/dashboard`, bloco `dashboard`): três faixas,
+  Telas que mais doem (FigJam): Atendimento feito (`app/exemplos/atendimento`, bloco `atendimento`); Automações feita
+  (`app/exemplos/automacoes`, bloco `automacoes`: canvas próprio da tela, conectores medidos no DOM, bloco aberto no
+  PainelLateral, sem lib de grafo); o card do lead é o `PainelLateral` do pipeline; falta o mobile. Dashboard feito (`app/exemplos/dashboard`, bloco `dashboard`): três faixas,
   só peças do DS; `Card` tem traço `border` (ADR-045), `CardDonut formatar` dá o percentual no idioma. Texto de várias linhas: `Textarea` (ADR-042), nunca `<textarea>` cru.
 - **Quando usar**: toda `docs/componentes/*.md` tem `## Quando usar` ("- **Use** …" / "- **Não use** … → o
   componente certo"); é a primeira seção da skill do cliente e a seção automática da página do componente

@@ -431,6 +431,16 @@ const previews: Record<string, React.ReactNode> = {
       </div>
     </div>
   ),
+  "/exemplos/automacoes": (
+    <div className="flex w-full max-w-full items-center justify-center gap-2">
+      {["Início", "Mensagem", "Condição"].map((bloco, i) => (
+        <div key={bloco} className="flex items-center gap-2">
+          {i > 0 ? <span aria-hidden="true" className="h-px w-4 bg-subtle-foreground" /> : null}
+          <p className="rounded-md border border-border bg-card px-2 py-1.5 text-label-md text-foreground">{bloco}</p>
+        </div>
+      ))}
+    </div>
+  ),
   "/exemplos/dashboard": (
     <div className="flex w-full max-w-full flex-col gap-2">
       <div className="grid grid-cols-3 gap-2">
@@ -516,6 +526,7 @@ const descricoes: Record<string, string> = {
   "Drawer variações": "Tons, menu, linha do tempo, hierarquia, camada e as três propostas.",
   "Dashboard": "Indicadores, receita por dia e os negócios parados, numa tela.",
   "Pipeline": "O funil do CRM: arraste um lead e abra o registro.",
+  "Automações": "O fluxo em blocos ligados; clique num bloco e edite ao lado.",
   "Painel lateral": "O registro ao lado da lista: 480px, campos em linha.",
   "Atendimento": "WhatsApp, Instagram e site numa tela: responda, anote e edite o lead.",
 };

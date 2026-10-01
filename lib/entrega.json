@@ -5,17 +5,17 @@
     "fim": "2026-10-01"
   },
   "git": {
-    "commits": 76,
+    "commits": 77,
     "arquivos": 342,
     "linhasUi": 11244,
     "linhasLib": 796,
-    "linhasDocs": 8446
+    "linhasDocs": 8457
   },
   "catalogo": {
-    "itens": 56,
+    "itens": 57,
     "porTipo": {
       "registry:theme": 4,
-      "registry:block": 4,
+      "registry:block": 5,
       "registry:item": 1,
       "registry:lib": 11,
       "registry:ui": 36
@@ -498,7 +498,7 @@
     "variantes": 103,
     "estados": 131,
     "acessibilidade": 219,
-    "paginas": 42,
+    "paginas": 43,
     "docs": 36
   },
   "tokens": {
@@ -747,8 +747,8 @@
     },
     {
       "titulo": "Telas de exemplo",
-      "total": 5,
-      "prontas": 5,
+      "total": 6,
+      "prontas": 6,
       "itens": [
         {
           "titulo": "Tela base",
@@ -768,6 +768,11 @@
         {
           "titulo": "Atendimento",
           "href": "/exemplos/atendimento",
+          "pronto": true
+        },
+        {
+          "titulo": "Automações",
+          "href": "/exemplos/automacoes",
           "pronto": true
         },
         {
@@ -1134,6 +1139,12 @@
       "resumo": "A tela de Atendimento ainda filtrava num Modal com Checkbox e Switch — o anti-padrão que a regra nova proíbe. Agora o HeaderFiltros mostra e esconde a BarraDeFiltros (Canal e Atendente, este no lugar "
     },
     {
+      "data": "2026-10-01",
+      "origem": "Lote",
+      "titulo": "TELA DE AUTOMAÇÕES (A SEGUNDA DAS QUE MAIS DOEM)",
+      "resumo": "/exemplos/automacoes, publicada como bloco @datacrazy/automacoes. Os blocos da tela atual do CRM, lidos do FigJam (Início/gatilho, Mensagem, Espera, Condição, Ação, Randomizador; saídas \"respondeu / n"
+    },
+    {
       "data": "2026-09-29",
       "origem": "Lote",
       "titulo": "BANCADA: RODADA 1 × RODADA 2, E O QUE ELA ACHOU NO DS",
@@ -1475,7 +1486,7 @@
       "exemplos",
       "regressao"
     ],
-    "capturas": 84,
+    "capturas": 86,
     "temas": 2
   },
   "bancada": {
