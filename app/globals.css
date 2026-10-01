@@ -237,13 +237,13 @@
   }
   [data-tom="rosa"] {
     --tom-anel: 330 100% 95.5%;
-    --tom-texto: 330 85.2% 47.8%;
+    --tom-texto: 330 85.2% 42.5%;
     --tom-tag: 330 100% 60%;
     --tom-brilho: 330 100% 93.9%;
   }
   [data-tom="laranja"] {
     --tom-anel: 24 100% 95.5%;
-    --tom-texto: 24 85.2% 47.8%;
+    --tom-texto: 24 85.2% 37.7%;
     --tom-tag: 24 100% 60%;
     --tom-brilho: 24 100% 93.9%;
   }
@@ -272,6 +272,9 @@
     --tom-tag: 356 100% 60%;
     --tom-brilho: 356 100% 93.9%;
   }
+  /* 2026-10-01: a letra de `rosa` e de `laranja` desce (47,8 → 42,5 e 37,7).
+     No L do azul elas davam 3,7:1 e 3,0:1 sobre o próprio brilho — texto de
+     10px ilegível; agora fecham 4,5:1 (humano, 2026-10-01). */
   /* 2026-10-01: mais seis, a pedido do cliente (paleta de ~15 na criação da
      tag) — `indigo` (240°), `fucsia` (298°), `amarelo` (60°), `lima` (88°),
      `turquesa` (166°) e `marrom` (25°, com menos saturação). Mesma regra dos

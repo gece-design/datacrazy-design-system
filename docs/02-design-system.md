@@ -167,6 +167,9 @@ Em 2026-10-01 entraram mais seis, pela mesma regra, para a paleta de quinze
 cores que o cliente pediu na criação da tag (ADR-051): `indigo` (240°),
 `fucsia` (298°), `amarelo` (60°), `lima` (88°), `turquesa` (166°) e `marrom`
 (25°, com menos saturação). São catorze tons mais a tag sem tom.
+No mesmo dia a letra de `rosa` e de `laranja` desceu de L (47,8 → 42,5 e 37,7):
+no L do azul elas ficavam em 3,7:1 e 3,0:1 sobre o próprio brilho; agora
+fecham 4,5:1.
 
 Os três últimos nascem da mesma causa: o arquivo repete o modo Claro no Escuro
 e o código não pode repetir junto (decisão do humano, 2026-09-18). O `soft`

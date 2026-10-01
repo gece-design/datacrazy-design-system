@@ -3318,7 +3318,7 @@
     {
       "id": "AUD-209",
       "eixo": "fidelidade",
-      "titulo": "Figma atrás do código: seis tons novos da Tag (indigo, fucsia, amarelo, lima, turquesa, marrom); rosa e laranja abaixo de 4,5:1 no claro",
+      "titulo": "Figma atrás do código: seis tons novos da Tag (indigo, fucsia, amarelo, lima, turquesa, marrom); letra de rosa e laranja mais escura",
       "onde": [
         "app/globals.css",
         "components/ui/tag.tsx"
@@ -3329,7 +3329,7 @@
       "verificacao": "manual",
       "status": "adiado",
       "fechadoEm": null,
-      "nota": "**Decisão do humano em 2026-10-01 (ADR-051).** Seis tons derivados pela regra de contraste, sem variável no arquivo: criar as variáveis `tom/*` no Figma e conferir os valores com o humano. Medido na mesma conta: a letra de `rosa` (3,7:1) e de `laranja` (3,0:1) sobre o próprio brilho, no claro, fica abaixo de 4,5:1 — são os valores aprovados em 2026-09-15 (mesmo S/L do azul); baixar o L da letra resolve, e é decisão dele."
+      "nota": "**Decisão do humano em 2026-10-01 (ADR-051).** Seis tons derivados pela regra de contraste, sem variável no arquivo: criar as variáveis `tom/*` no Figma e conferir os valores com o humano. A letra de `rosa` e de `laranja` desceu de L em 2026-10-01 (aprovado pelo humano) para fechar 4,5:1 sobre o próprio brilho. Seguem um fio abaixo, sem mexida: `vermelho` (4,3:1) e `azul` (4,4:1 — é `blue-600`, token do arquivo)."
     },
     {
       "id": "AUD-210",
