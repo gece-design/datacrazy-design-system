@@ -3329,7 +3329,7 @@
       "verificacao": "manual",
       "status": "adiado",
       "fechadoEm": null,
-      "nota": "**Decisão do humano em 2026-10-01 (ADR-051).** Seis tons derivados pela regra de contraste, sem variável no arquivo: criar as variáveis `tom/*` no Figma e conferir os valores com o humano. A letra de `rosa` e de `laranja` desceu de L em 2026-10-01 (aprovado pelo humano) para fechar 4,5:1 sobre o próprio brilho. Seguem um fio abaixo, sem mexida: `vermelho` (4,3:1) e `azul` (4,4:1 — é `blue-600`, token do arquivo)."
+      "nota": "**Decisão do humano em 2026-10-01 (ADR-051).** Seis tons derivados pela regra de contraste, sem variável no arquivo: criar as variáveis `tom/*` no Figma e conferir os valores com o humano. A letra de `rosa` e de `laranja` desceu de L em 2026-10-01 (aprovado pelo humano) para fechar 4,5:1 sobre o próprio brilho. `vermelho` e `azul` desceram depois, pelo mesmo motivo; o `--tom-texto` do azul deixou de ser alias de `blue-600`. No arquivo, a letra do tom azul precisa do valor novo."
     },
     {
       "id": "AUD-210",

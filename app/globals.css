@@ -78,7 +78,8 @@
     /* tom padrão (azul). Os outros tons trocam estes quatro dentro de
        `[data-tom]` — ver o bloco depois do `.dark`. */
     --tom-anel: var(--accent);
-    --tom-texto: var(--blue-600);
+    /* blue-600 com o L em 46,9 (era 47,8): fecha 4,5:1 sobre o próprio brilho (humano, 2026-10-01) */
+    --tom-texto: 215.8 85.2% 46.9%;
     --tom-tag: var(--primary);
     --tom-brilho: var(--blue-100);
 
@@ -215,7 +216,8 @@
      deles precisa de ajuste: o fundo é escuro e todos passam de 6:1. */
   [data-tom] {
     --tom-anel: var(--accent);
-    --tom-texto: var(--blue-600);
+    /* blue-600 com o L em 46,9 (era 47,8): fecha 4,5:1 sobre o próprio brilho (humano, 2026-10-01) */
+    --tom-texto: 215.8 85.2% 46.9%;
     --tom-tag: var(--primary);
     --tom-brilho: var(--blue-100);
   }
@@ -262,13 +264,15 @@
   }
   [data-tom="vermelho"] {
     --tom-anel: 356 100% 95.5%;
-    --tom-texto: 356 85.2% 45.3%;
+    --tom-texto: 356 85.2% 43.7%;
     --tom-tag: 356 100% 60%;
     --tom-brilho: 356 100% 93.9%;
   }
   /* 2026-10-01: a letra de `rosa` e de `laranja` desce (47,8 → 42,5 e 37,7).
      No L do azul elas davam 3,7:1 e 3,0:1 sobre o próprio brilho — texto de
-     10px ilegível; agora fecham 4,5:1 (humano, 2026-10-01). */
+     10px ilegível; agora fecham 4,5:1 (humano, 2026-10-01). Depois, pelo
+     mesmo motivo, `vermelho` (45,3 → 43,7) e o próprio `azul` (47,8 → 46,9):
+     os catorze tons passam de 4,5:1. */
   /* 2026-10-01: mais seis, a pedido do cliente (paleta de ~15 na criação da
      tag) — `indigo` (240°), `fucsia` (298°), `amarelo` (60°), `lima` (88°),
      `turquesa` (166°) e `marrom` (25°, com menos saturação). Mesma regra dos

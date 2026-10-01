@@ -150,7 +150,7 @@ ramificar por tema.
 | `--avatar-md-anel` | anel do Avatar `md` | `card` | `accent` |
 | `--button-soft-bg` · `-foreground` · `-hover` | Button `soft` | `blue-50` · `blue-600` · `blue-100` | `accent` · `blue-300` · `neutral-800` |
 | `--segmented-item-selected` | opção escolhida do Segmented e do View Switcher | `accent` | `background` |
-| `--tom-anel` · `--tom-texto` · `--tom-tag` · `--tom-brilho` | perfil do Drawer, dentro de `[data-tom]` | `accent` · `blue-600` · `primary` · `blue-100` | `accent` · `blue-300` · `primary` · `accent` **(derivado)** |
+| `--tom-anel` · `--tom-texto` · `--tom-tag` · `--tom-brilho` | perfil do Drawer, dentro de `[data-tom]` | `accent` · `blue-600` com L 46,9 (contraste) · `primary` · `blue-100` | `accent` · `blue-300` · `primary` · `accent` **(derivado)** |
 
 Os dois do Avatar `md` são o mesmo caso: o arquivo troca os papéis de disco e
 anel entre as variantes de tema. Os de tom são diferentes: valem só dentro de
@@ -168,7 +168,8 @@ cores que o cliente pediu na criação da tag (ADR-051): `indigo` (240°),
 (25°, com menos saturação). São catorze tons mais a tag sem tom.
 No mesmo dia a letra de `rosa` e de `laranja` desceu de L (47,8 → 42,5 e 37,7):
 no L do azul elas ficavam em 3,7:1 e 3,0:1 sobre o próprio brilho; agora
-fecham 4,5:1.
+fecham 4,5:1. `vermelho` (45,3 → 43,7) e `azul` (47,8 → 46,9, deixando de
+apontar para `blue-600`) seguiram: os catorze tons passam de 4,5:1.
 
 Os três últimos nascem da mesma causa: o arquivo repete o modo Claro no Escuro
 e o código não pode repetir junto (decisão do humano, 2026-09-18). O `soft`
