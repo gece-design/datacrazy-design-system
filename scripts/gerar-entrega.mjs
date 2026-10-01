@@ -91,7 +91,9 @@ for (const m of ler("docs/processo/kfe-state.md").matchAll(/^- (\d{4}-\d{2}-\d{2
   const titulo = texto.match(/\*\*([^*]+)\*\*/)?.[1];
   if (!titulo || m[1] < PRIMEIRA_REUNIAO) continue;
   const origem = /whatsapp/i.test(texto) ? "WhatsApp" : /reuni[ãa]o/i.test(texto) ? "Reunião" : /cliente/i.test(texto) ? "Cliente" : /humano/i.test(texto) ? "Revisão" : "Lote";
-  pedidos.push({ data: m[1], origem, titulo: titulo.replace(/`/g, ""), resumo: texto.replace(/\*\*[^*]+\*\*\s*·?\s*/, "").replace(/`/g, "").replace(/\s+/g, " ").slice(0, 200) });
+  // Só o título vai para a página: o corpo da entrada é anotação de trabalho,
+  // escrita para o time, e a página de entrega é lida pelo cliente.
+  pedidos.push({ data: m[1], origem, titulo: titulo.replace(/`/g, "") });
 }
 pedidos.sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : 0));
 

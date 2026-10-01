@@ -79,7 +79,7 @@ export default function Entrega() {
   const eventos: EventoLinhaDoTempo[] = pedidos.map((p, i) => ({
     id: `${p.data}-${i}`,
     titulo: p.titulo,
-    detalhes: [dataLonga(p.data), p.origem, p.resumo],
+    detalhes: [dataLonga(p.data), p.origem],
     icone: ICONE_DA_ORIGEM[p.origem as keyof typeof ICONE_DA_ORIGEM] ?? ClipboardText,
   }));
   const porOrigem = pedidos.reduce<Record<string, number>>((acc, p) => ({ ...acc, [p.origem]: (acc[p.origem] ?? 0) + 1 }), {});
