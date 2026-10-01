@@ -26,11 +26,12 @@ import { rolagemDiscreta } from "@/lib/estados";
  *   1024–1279    sidebar recolhida em ícones, 48px — a pessoa pode abrir
  *   < 1024 (lg)  sidebar some; o botão de menu no Header abre o painel por
  *                cima, com o Scrim do Modal e a camada (foco preso, Escape)
- * Os recuos do conteúdo e do Header: 16 — o arquivo desenha 32 no Header;
- * foi 24 e "ainda tinha muito espaço" (humano, 2026-09-23, ADR-028). O Header
- * é de uma linha (ADR-053) e tem 8 embaixo: fecha em 56px, com os controles
- * alinhados ao topo do painel da Sidebar. À esquerda, com a sidebar no lugar (lg+), o recuo é 8: a
- * navegação plana já traz 8 do próprio recuo, e os dois somam os 16 do resto.
+ * Uma superfície só (ADR-055): Header e conteúdo ficam no mesmo painel
+ * (`card`, traço `border`, raio `lg`), separados por traço, a 8px da borda da
+ * janela e da navegação. O Header é a primeira faixa: uma linha, 48px, com os
+ * controles alinhados à linha da marca da Sidebar. O conteúdo tem recuo de 16;
+ * tela de lista, quadro ou chat desliga o recuo (`recuo={false}`) e encosta
+ * nas bordas do painel.
  *
  * Instala-se como bloco: `npx shadcn add @datacrazy/tela` cria a página
  * pronta com estes encaixes preenchidos por placeholders.
@@ -67,7 +68,7 @@ export interface TelaBaseProps {
   children: React.ReactNode;
   /** Chave da memória da sidebar (aberta ou recolhida) no navegador. Sem ela, começa pelo breakpoint. */
   memoria?: string;
-  /** Recuo do conteúdo (16). Desligue quando o conteúdo traz o próprio, como o quadro do pipeline. */
+  /** Recuo do conteúdo (16). Desligue quando o conteúdo encosta nas bordas do painel: lista, quadro, chat. */
   recuo?: boolean;
   rotulos?: Partial<RotulosDaTela>;
   className?: string;
@@ -157,18 +158,24 @@ export function TelaBase({
         </Sidebar>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <Header
-          {...cabecalho}
-          className={cn("shrink-0 pl-4 pr-4 pb-2 lg:pl-2", cabecalho.className)}
-          inicio={botaoMenu}
-        />
-        <main
-          aria-label={r.conteudo}
-          className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", rolagemDiscreta, recuo && "p-4 lg:pl-2")}
-        >
-          {children}
-        </main>
+      {/* Uma superfície só (ADR-055): o Header e o conteúdo moram no mesmo
+          painel, separados por traço. `data-superficie` avisa os controles de
+          apoio (tertiary, segmentado, busca) de que estão sobre `card`. Abaixo
+          de 1024 o painel ocupa a tela inteira, sem margem nem raio. */}
+      <div className="flex min-w-0 flex-1 lg:py-2 lg:pr-2">
+        <div data-superficie className="flex min-w-0 flex-1 flex-col overflow-hidden bg-card lg:rounded-lg lg:border lg:border-border">
+          <Header
+            {...cabecalho}
+            className={cn("shrink-0 border-b border-border px-3 py-2", cabecalho.className)}
+            inicio={botaoMenu}
+          />
+          <main
+            aria-label={r.conteudo}
+            className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", rolagemDiscreta, recuo && "p-4")}
+          >
+            {children}
+          </main>
+        </div>
       </div>
 
       {montado && visivel ? (

@@ -85,7 +85,7 @@ export default function NovaTela() {
         <>
           <SidebarTopo>
             <SidebarBrand />
-            <SidebarGrupo recuo>
+            <SidebarGrupo>
               {PRINCIPAIS.map((r) => (
                 <SidebarItem key={r.rotulo} icone={r.icone} componente="button" selecionado={r.rotulo === rota} onClick={() => setRota(r.rotulo)}>
                   {r.rotulo}

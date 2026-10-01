@@ -52,3 +52,14 @@ export const desabilitadoLink = "aria-disabled:pointer-events-none aria-disabled
  *  `[scrollbar-width:thin]` solto num componente. */
 export const rolagemDiscreta =
   "[scrollbar-width:thin] [scrollbar-color:transparent_transparent] hover:[scrollbar-color:hsl(var(--divider))_transparent]";
+
+/**
+ * Controle de apoio — Button `tertiary`, trilho do SegmentedControl e do
+ * ViewSwitcher, busca do Header: a superfície OPOSTA à de onde ele está. Sobre
+ * o fundo da aplicação é `card`; dentro da superfície da tela (o painel da
+ * `TelaBase`, marcado com `data-superficie`) é `background` — branco sobre
+ * branco sumiria. O que abre em portal (Modal, Drawer, menus) fica fora da
+ * marca e continua `card` (ADR-055).
+ */
+export const superficieDeApoio = "bg-card [[data-superficie]_&]:bg-background";
+

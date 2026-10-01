@@ -95,7 +95,7 @@ export function Lista({
   aoExcluirEmMassa: (ids: string[]) => void;
   /** Edita um campo do lead na célula (o valor, por enquanto). */
   aoEditar: (id: string, campos: Partial<Lead>) => void;
-  /** Sem recuo, sem cartão e sem a barra de resumo: a tabela encosta nas bordas de quem a hospeda (proposta visual). */
+  /** Sem a barra de resumo: só a tabela. */
   semMoldura?: boolean;
   /** Classes a mais na tabela. */
   classeDaTabela?: string;
@@ -201,8 +201,9 @@ export function Lista({
             );
   };
   return (
-    <div className={cn("min-h-0 flex-1 overflow-y-auto", !semMoldura && "pb-4 pl-4 pr-4 lg:pl-2", rolagemDiscreta)}>
-      <div className={cn("w-full bg-card", !semMoldura && "overflow-hidden rounded-md")}>
+    // Encosta nas bordas do painel da tela: a lista é a própria superfície, não um cartão dentro dela.
+    <div className={cn("min-h-0 flex-1 overflow-y-auto", rolagemDiscreta)}>
+      <div className="w-full">
         {/* Só o resumo: Agrupar e Colunas estão na fileira do Header (humano, 2026-09-24). */}
         {semMoldura ? null : <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />}
         {/* densa: a grade de lista à la Twenty (cliente, 2026-09-27) */}

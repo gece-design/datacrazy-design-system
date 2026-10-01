@@ -22,7 +22,7 @@ o que dá para fazer nela.
 
 ## Par no Figma
 
-Node: `601:464` (set "Header", 6 variantes) · Lote: `3` · **uma linha**, 64px (56 na `TelaBase`), sem traço embaixo. O arquivo desenha duas linhas, 111px, com traço; o código já tinha fechado em 102 (ADR-029) e passou a uma linha em 2026-10-01, a pedido do cliente (ADR-053) ·
+Node: `601:464` (set "Header", 6 variantes) · Lote: `3` · **uma linha**, 64px sozinho e 48 como primeira faixa do painel da `TelaBase`. Não tem fundo nem traço próprios: fica sobre a superfície de quem o hospeda (ADR-055). O arquivo desenha duas linhas, 111px, com traço; o código já tinha fechado em 102 (ADR-029) e passou a uma linha em 2026-10-01, a pedido do cliente (ADR-053) ·
 Última verificação: ver [processo/kfe-state.md](../processo/kfe-state.md), entrada de 2026-09-15.
 
 **O set está com erro no arquivo.** As seis variantes se chamam

@@ -63,7 +63,8 @@ decisão, não buraco a preencher.
 
 ## Tokens consumidos
 
-`card` · `segmented-item-selected` · `overlay/item-text-selected` · `primary` ·
+`card` (trilho sobre o fundo da aplicação) · `background` (trilho dentro do
+painel da tela, `data-superficie` — ADR-055) · `segmented-item-selected` · `overlay/item-text-selected` · `primary` ·
 `muted-foreground` · `foreground` · `ring` · `radius/md` · `radius/sm` ·
 `text/body-md` · `button inner shadow`
 

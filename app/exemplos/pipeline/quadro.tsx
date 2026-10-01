@@ -54,7 +54,7 @@ function pintura(cor: Etapa["cor"]) {
   // Bolinha e título saem do MESMO token — `tom-texto`, o degrau que se lê
   // sobre o painel claro. `tom-tag` é o cheio: bonito na bolinha, fraco demais
   // no texto (3:1 aos 13px). Igualar os dois é o pedido do humano.
-  if (cor === "neutro") return { tom: undefined, painel: "bg-card/50", ponto: "bg-muted-foreground", texto: "text-muted-foreground" };
+  if (cor === "neutro") return { tom: undefined, painel: "bg-background", ponto: "bg-muted-foreground", texto: "text-muted-foreground" };
   return { tom: cor, painel: "bg-tom-anel", ponto: "bg-tom-texto", texto: "text-tom-texto" };
 }
 
@@ -260,7 +260,7 @@ export function Quadro({
         onPointerUp={soltarPan}
         onPointerCancel={soltarPan}
         className={cn(
-          "flex min-h-0 flex-1 gap-4 overflow-x-auto pl-4 pr-4 pb-4 pt-1 lg:pl-2", rolagemDiscreta,
+          "flex min-h-0 flex-1 gap-3 overflow-x-auto p-3", rolagemDiscreta,
           arrastandoTrilho ? "cursor-grabbing select-none" : "cursor-grab",
         )}
       >
@@ -345,7 +345,7 @@ export function Quadro({
                     {etapa.rotulo}
                   </button>
                 </h2>
-                <span className="shrink-0 rounded-full bg-background px-1.5 py-0.5 text-label-sm tabular-nums text-muted-foreground">
+                <span className="shrink-0 rounded-full bg-card px-1.5 py-0.5 text-label-sm tabular-nums text-muted-foreground">
                   {lista.length}
                 </span>
                 <span

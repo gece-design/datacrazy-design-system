@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
-import { foco, desabilitado } from "@/lib/estados";
+import { foco, desabilitado, superficieDeApoio } from "@/lib/estados";
 const buttonVariants = cva(
   // Base: foco sempre visível (E7) · estados de interação por regra, não por desenho (E-01)
   // Foco por outline, não por ring com offset: o offset do ring é pintado com uma
@@ -32,7 +32,8 @@ const buttonVariants = cva(
         // sombra interna. É o botão de apoio das barras de ferramenta — Pesquisar
         // e Filtros no Header (601:464). Hover derivado (E-01), o mesmo do
         // gatilho do Date Picker.
-        tertiary: "bg-card text-muted-foreground shadow-button-inner enabled:hover:bg-accent",
+        // Dentro da superfície da tela (TelaBase) o fundo vira `background`: ver `superficieDeApoio`.
+        tertiary: `${superficieDeApoio} text-muted-foreground shadow-button-inner enabled:hover:bg-accent`,
       },
       size: {
         sm: "h-7 px-2.5",

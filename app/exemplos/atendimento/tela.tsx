@@ -177,7 +177,7 @@ export function Tela() {
         <>
           <SidebarTopo>
             <SidebarBrand />
-            <SidebarGrupo recuo>
+            <SidebarGrupo>
               {PRINCIPAIS.map((r) => (
                 <SidebarItem key={r.rotulo} icone={r.icone} componente="button" selecionado={r.rotulo === rota} onClick={() => setRota(r.rotulo)}>
                   {r.rotulo}
@@ -237,9 +237,9 @@ export function Tela() {
         ),
       }}
     >
-      <div className="flex min-h-0 flex-1 pb-4 pl-4 pr-4 lg:pl-2">
-        {/* Uma superfície só: as três colunas se separam por traço, não por cartão. */}
-        <div className="relative flex min-h-0 min-w-0 flex-1 overflow-hidden rounded-md border border-border bg-card">
+      <div className="flex min-h-0 flex-1">
+        {/* A superfície é o painel da tela (TelaBase): as três colunas encostam nas bordas dele e se separam por traço. */}
+        <div className="relative flex min-h-0 min-w-0 flex-1 overflow-hidden">
           <ListaDeConversas
             conversas={filtradas.filter((c) => c.situacao === aba)}
             aba={aba}

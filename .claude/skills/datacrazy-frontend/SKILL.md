@@ -203,7 +203,9 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   marca (`SidebarBrand`), recolhida o símbolo é o botão (ADR-052); parte 2 — `Header` de uma linha, 56px na TelaBase,
   `Breadcrumb ancestrais` + título como último nível, `inicio` para o botão de menu (ADR-053); parte 3 — navegação plana
   220/48, item de 32, hover `card`, `SidebarGrupo rotulo/ocultarRecolhida` (Favoritos), recuo esquerdo da TelaBase 8
-  (ADR-054). Faltam: superfície única, registro em painel lateral. Uma parte por commit.
+  (ADR-054); parte 4 — superfície única: a TelaBase põe Header + conteúdo num painel `card` com `data-superficie`;
+  `superficieDeApoio` (lib/estados) troca tertiary/segmentado/busca para `background` ali dentro; Header sem fundo; lista,
+  quadro e chat com `recuo={false}` (ADR-055). Falta: registro em painel lateral. Uma parte por commit.
 - **Tela nova**: `TelaBase` (navegacao, cabecalho = props do Header, children; sem segunda linha;
   breakpoints e memória da sidebar por dentro). Nunca monte Sidebar + Header à mão numa tela;
   o bloco `@datacrazy/tela` publica `/exemplos/tela-base` como página pronta.

@@ -286,3 +286,8 @@ Desvio: o arquivo (124:2114) desenha a Sidebar como um painel em cartão de 282p
 Motivo: proposta visual (referência Twenty e Attio: navegação de 220, item de 32), terceira parte; o humano mandou seguir (2026-10-01: "sim").
 Aprovado por: humano (2026-10-01).
 
+## ADR-055 · Uma superfície só: Header e conteúdo no mesmo painel · 2026-10-01
+Desvio: no arquivo o Header e o conteúdo ficam soltos sobre o fundo da aplicação, e cada bloco é um cartão. Na `TelaBase`, os dois passam a morar num painel só — `card`, traço `border`, raio `lg`, a 8px da janela e da navegação —, com o Header como primeira faixa (48px, traço embaixo) e o conteúdo encostando nas bordas quando a tela é lista, quadro ou chat (`recuo={false}`). O `Header` perde o fundo próprio. Os controles de apoio — Button `tertiary`, trilho do `SegmentedControl` e do `ViewSwitcher`, `HeaderBusca` — usam a superfície oposta à de onde estão (`superficieDeApoio`, lib/estados): `card` sobre o fundo da aplicação, `background` dentro do painel, marcado com `data-superficie`; no escuro, a opção selecionada do segmentado passa a `card` ali dentro (token re-escopado no globals.css, sem ramificar componente). Telas de exemplo: a lista do pipeline e o atendimento deixam de ser cartão; a coluna neutra do quadro vira `background`. Os controles seguem com 32px e a linha da tabela com 36: a proposta desenhava 28 e 32, e isso não entrou.
+Motivo: proposta visual (referência Twenty e Attio: "uma superfície só, separada por traço"), quarta parte; o humano mandou seguir (2026-10-01).
+Aprovado por: humano (2026-10-01).
+

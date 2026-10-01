@@ -390,6 +390,14 @@
     --tom-brilho: 25 18% 18.8%;
   }
 
+  /* Dentro da superfície da tela o trilho do segmentado é `background`; no
+     escuro a opção selecionada era `background` também e sumiria. Ali ela
+     passa a `card` — o token muda de valor pelo lugar, sem ramificar o
+     componente (ADR-055). */
+  .dark [data-superficie] {
+    --segmented-item-selected: var(--card);
+  }
+
   * {
     @apply border-border;
   }

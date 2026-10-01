@@ -99,6 +99,17 @@ function Sino() {
 
 /* --- peças da doc: cada instância guarda o próprio estado ---------------- */
 
+/** O Header como ele aparece na tela: sobre a superfície da TelaBase (`card`,
+ *  marcada com `data-superficie`), que é o que deixa os controles de apoio
+ *  cinza. Vários exemplos na mesma seção se separam por traço. */
+function NaTela({ children }: { children: React.ReactNode }) {
+  return (
+    <div data-superficie className="divide-y divide-border overflow-hidden rounded-2xl bg-card">
+      {children}
+    </div>
+  );
+}
+
 function Trilha({ itens = trilhaDoArquivo }: { itens?: ItemBreadcrumb[] }) {
   return (
     // `ancestrais`: a trilha traz os níveis acima; a página é o título, logo depois dela
@@ -259,7 +270,7 @@ export default function HeaderPage() {
   return (
     <PaginaDS
       titulo="Header"
-      descricao="O topo de cada página, numa linha só: 64px, recuo 32×16, sem traço embaixo. À esquerda a trilha e o título, que é o último nível dela; à direita as ações e o sino, com 32px e vão de 8. Nenhuma prop de variante — o conteúdo entra por encaixes."
+      descricao="O topo de cada página, numa linha só: 64px sozinho, 48 como primeira faixa do painel da tela. À esquerda a trilha e o título, que é o último nível dela; à direita as ações e o sino, com 32px e vão de 8. Nenhuma prop de variante — o conteúdo entra por encaixes."
       secoes={[
         "Como funciona",
         "Default",
@@ -285,6 +296,13 @@ export default function HeaderPage() {
           tela. Agora o título é o último nível da trilha: os níveis acima vêm apagados, o título vem em seguida, com
           peso. Por isso a trilha entra com <Chip>ancestrais</Chip> no <Chip>Breadcrumb</Chip> — ela traz só o caminho
           até a página, e a página é o título.
+        </p>
+        <p>
+          O Header não tem fundo nem traço próprios: fica sobre a superfície de quem o hospeda. Na tela, ele é a
+          primeira faixa do painel branco da <Chip>TelaBase</Chip> — por isso os exemplos desta página aparecem sobre
+          branco, e por isso busca, filtros, sino e seletores são <span className="text-foreground">cinza</span> ali:
+          o controle de apoio usa sempre a superfície oposta à de onde está. Fora do painel, sobre o fundo da
+          aplicação, os mesmos controles são brancos.
         </p>
         <p>
           O subtítulo continua existindo como prop (<Chip>subtitulo</Chip>), mas fora por padrão: título e descrição
@@ -331,7 +349,9 @@ export default function HeaderPage() {
         semCaixa
         semSeletorDeFundo
       >
-        <HeaderDefault />
+        <NaTela>
+          <HeaderDefault />
+        </NaTela>
       </Secao>
 
       <Secao
@@ -348,22 +368,24 @@ export default function HeaderPage() {
           </>
         }
       >
-        <Header
-          titulo="Dashboard"
-          trilha={<Trilha />}
-          utilitarios={<Sino />}
-          acoes={
-            <>
-              <Busca recolhida />
-              <Filtros recolhido />
-              <Visao />
-              <Data />
-              <HeaderDivisor />
-              <NovoLead variant="soft" />
-              <NovoLead variant="primary" />
-            </>
-          }
-        />
+        <NaTela>
+          <Header
+            titulo="Dashboard"
+            trilha={<Trilha />}
+            utilitarios={<Sino />}
+            acoes={
+              <>
+                <Busca recolhida />
+                <Filtros recolhido />
+                <Visao />
+                <Data />
+                <HeaderDivisor />
+                <NovoLead variant="soft" />
+                <NovoLead variant="primary" />
+              </>
+            }
+          />
+        </NaTela>
       </Secao>
 
       <Secao
@@ -373,46 +395,48 @@ export default function HeaderPage() {
         semCaixa
         semSeletorDeFundo
       >
-        <Header
-          titulo="Dashboard"
-          trilha={<Trilha />}
-          utilitarios={<Sino />}
-          acoes={
-            <>
-              <Busca recolhida />
-              <Filtros recolhido />
-              <Visao />
-              <HeaderDivisor />
-              <NovoLead variant="soft" />
-              <NovoLead variant="primary" />
-            </>
-          }
-        />
-        <Header
-          titulo="Dashboard"
-          trilha={<Trilha />}
-          utilitarios={<Sino />}
-          acoes={
-            <>
-              <Busca />
-              <Filtros />
-              <NovoLead variant="soft" />
-              <NovoLead variant="primary" />
-            </>
-          }
-        />
-        <Header
-          titulo="Dashboard"
-          trilha={<Trilha />}
-          utilitarios={<Sino />}
-          acoes={
-            <>
-              <Busca />
-              <Filtros />
-              <NovoLead variant="primary" />
-            </>
-          }
-        />
+        <NaTela>
+          <Header
+            titulo="Dashboard"
+            trilha={<Trilha />}
+            utilitarios={<Sino />}
+            acoes={
+              <>
+                <Busca recolhida />
+                <Filtros recolhido />
+                <Visao />
+                <HeaderDivisor />
+                <NovoLead variant="soft" />
+                <NovoLead variant="primary" />
+              </>
+            }
+          />
+          <Header
+            titulo="Dashboard"
+            trilha={<Trilha />}
+            utilitarios={<Sino />}
+            acoes={
+              <>
+                <Busca />
+                <Filtros />
+                <NovoLead variant="soft" />
+                <NovoLead variant="primary" />
+              </>
+            }
+          />
+          <Header
+            titulo="Dashboard"
+            trilha={<Trilha />}
+            utilitarios={<Sino />}
+            acoes={
+              <>
+                <Busca />
+                <Filtros />
+                <NovoLead variant="primary" />
+              </>
+            }
+          />
+        </NaTela>
       </Secao>
 
       <Secao
@@ -429,32 +453,34 @@ export default function HeaderPage() {
           </>
         }
       >
-        <Header
-          titulo="Dashboard"
-          trilha={<Trilha />}
-          utilitarios={<Sino />}
-          acoes={
-            <>
-              <Busca />
-              <Filtros />
-              <NovoLead variant="primary" />
-            </>
-          }
-        />
-        <Header
-          titulo="Dashboard"
-          trilha={<Trilha />}
-          utilitarios={<Sino />}
-          acoes={
-            <>
-              <Busca recolhida />
-              <Filtros recolhido />
-              <Visao />
-              <HeaderDivisor />
-              <NovoLead variant="primary" />
-            </>
-          }
-        />
+        <NaTela>
+          <Header
+            titulo="Dashboard"
+            trilha={<Trilha />}
+            utilitarios={<Sino />}
+            acoes={
+              <>
+                <Busca />
+                <Filtros />
+                <NovoLead variant="primary" />
+              </>
+            }
+          />
+          <Header
+            titulo="Dashboard"
+            trilha={<Trilha />}
+            utilitarios={<Sino />}
+            acoes={
+              <>
+                <Busca recolhida />
+                <Filtros recolhido />
+                <Visao />
+                <HeaderDivisor />
+                <NovoLead variant="primary" />
+              </>
+            }
+          />
+        </NaTela>
       </Secao>
 
       <Secao
@@ -472,17 +498,19 @@ export default function HeaderPage() {
           </>
         }
       >
-        <Header
-          titulo="Dashboard"
-          trilha={<Trilha />}
-          utilitarios={<Sino />}
-          acoes={
-            <>
-              <Filtros />
-              <NovoLead variant="primary" />
-            </>
-          }
-        />
+        <NaTela>
+          <Header
+            titulo="Dashboard"
+            trilha={<Trilha />}
+            utilitarios={<Sino />}
+            acoes={
+              <>
+                <Filtros />
+                <NovoLead variant="primary" />
+              </>
+            }
+          />
+        </NaTela>
       </Secao>
 
       <Secao
@@ -492,17 +520,19 @@ export default function HeaderPage() {
         semCaixa
         semSeletorDeFundo
       >
-        <Header
-          titulo="Negócio #4821"
-          trilha={<Trilha itens={trilhaLonga.slice(0, -1)} />}
-          utilitarios={<Sino />}
-          acoes={
-            <>
-              <Filtros />
-              <NovoLead variant="primary" />
-            </>
-          }
-        />
+        <NaTela>
+          <Header
+            titulo="Negócio #4821"
+            trilha={<Trilha itens={trilhaLonga.slice(0, -1)} />}
+            utilitarios={<Sino />}
+            acoes={
+              <>
+                <Filtros />
+                <NovoLead variant="primary" />
+              </>
+            }
+          />
+        </NaTela>
       </Secao>
 
       <Secao
@@ -510,7 +540,7 @@ export default function HeaderPage() {
         spec="360px · es"
         descricao="Espanhol, que é 20–30% mais longo, numa coluna de celular. Abaixo de 640 da largura do próprio Header, a trilha sai, o título fica centrado ao lado do sino e as ações vão para a linha de baixo, centradas; o título trunca. Passe o cursor num texto cortado para ler inteiro."
       >
-        <div className="mx-auto w-full max-w-[360px] overflow-hidden rounded-md">
+        <div data-superficie className="mx-auto w-full max-w-[360px] overflow-hidden rounded-md bg-card">
           <Header
             titulo="Panel de indicadores comerciales"
             trilha={<Trilha itens={trilhaEspanhol} />}

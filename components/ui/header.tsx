@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 
-import { foco, focoDentro, focoInterno, rolagemDiscreta } from "@/lib/estados";
+import { foco, focoDentro, focoInterno, rolagemDiscreta, superficieDeApoio } from "@/lib/estados";
 /**
  * Header — o topo de uma página do CRM, numa linha só.
  *
@@ -32,8 +32,9 @@ import { foco, focoDentro, focoInterno, rolagemDiscreta } from "@/lib/estados";
  *   acoes        → à direita: busca, filtros, visão, período, a ação principal
  *   utilitarios  → na ponta direita: o sino
  *
- * Medidas: recuo 32×16, sem traço embaixo ("linha divisória que eu já pedi
- * pra remover", humano, 2026-09-24), controles de 32, vão de 8 entre eles.
+ * Medidas: recuo 32×16, controles de 32, vão de 8 entre eles. Não tem fundo
+ * nem traço próprios: fica sobre a superfície de quem o hospeda. Na `TelaBase`
+ * ele é a primeira faixa do painel da tela e o traço de baixo é dela (ADR-055).
  *
  * O subtítulo fica FORA por padrão (decisão do humano, 2026-09-18): descrição
  * decorativa em toda tela é anti-referência. Quando existe, vem depois do
@@ -68,7 +69,7 @@ export interface HeaderProps extends Omit<React.HTMLAttributes<HTMLElement>, "ti
 export function Header({ titulo, subtitulo, inicio, trilha, utilitarios, acoes, className, ...props }: HeaderProps) {
   return (
     <header
-      className={cn("flex flex-wrap items-center gap-x-4 gap-y-2 bg-background px-8 py-4 [container-type:inline-size]", className)}
+      className={cn("flex flex-wrap items-center gap-x-4 gap-y-2 px-8 py-4 [container-type:inline-size]", className)}
       {...props}
     >
       {/* Trilha e título. O piso de 160px é o que faz as ações descerem de
@@ -245,7 +246,8 @@ export const HeaderBusca = React.forwardRef<HTMLInputElement, HeaderBuscaProps>(
     return (
       <label
         className={cn(
-          "flex h-8 max-w-full items-center gap-0.5 rounded-md bg-card text-muted-foreground shadow-button-inner",
+          "flex h-8 max-w-full items-center gap-0.5 rounded-md text-muted-foreground shadow-button-inner",
+          superficieDeApoio,
           recolhida ? "transition-[width] duration-base ease-enter" : "w-[184px] cursor-text p-2",
           recolhida && (fechada ? "w-8 cursor-pointer justify-center" : "w-[184px] cursor-text p-2"),
           !fechada && `${focoDentro}`,

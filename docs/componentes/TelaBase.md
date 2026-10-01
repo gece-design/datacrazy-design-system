@@ -35,7 +35,7 @@ arquivo acompanha na remedição (AUD-203).
 | `cabecalho` | `HeaderProps` | sim | As props do [Header](Header.md): `titulo`, `subtitulo`, `trilha`, `utilitarios`, `acoes`. O botão de menu entra sozinho antes da trilha (`inicio`); o Header é de uma linha, e os controles da tela são `acoes`. |
 | `children` | `ReactNode` | sim | O conteúdo. Rola por dentro; o cabeçalho fica. |
 | `memoria` | `string` | não | Chave da memória da sidebar (aberta ou recolhida) no navegador, uma por tela. Sem ela, começa pelo breakpoint. |
-| `recuo` | `boolean` | não | Padrão `true`: 16px em toda largura. Desligue quando o conteúdo traz o próprio (o quadro do pipeline). |
+| `recuo` | `boolean` | não | Padrão `true`: 16px em toda largura. Desligue (`recuo={false}`) quando o conteúdo encosta nas bordas do painel: lista, quadro, chat. |
 | `rotulos` | `Partial<RotulosDaTela>` | não | `abrirMenu`, `fecharMenu`, `recolherMenu`, `expandirMenu`, `navegacao`, `conteudo` (i18n). Fábrica: `ROTULOS_DA_TELA`. |
 | `className` | `string` | não | — |
 
@@ -47,12 +47,16 @@ arquivo acompanha na remedição (AUD-203).
 | 1024–1279px (`lg`) | Sidebar nasce recolhida em ícones, 48px. A pessoa pode abrir. |
 | < 1024px | A sidebar some. O botão de menu no Header abre a mesma Sidebar num painel por cima, com o `Scrim` do Modal, foco preso, Escape e o foco de volta ao botão. |
 
-Os recuos do Header e do conteúdo: 16 — o arquivo desenha 32 no Header; foi
-24 e "ainda tinha muito espaço" (humano, 2026-09-23, ADR-028). O Header é de
-uma linha e fecha em 56px (16 em cima, controles de 32, 8 embaixo — ADR-053),
-com os controles alinhados à linha da marca da Sidebar. À esquerda, com a
-sidebar no lugar (≥ 1024), o recuo é 8: a navegação plana já traz 8 do próprio
-recuo (ADR-054). Não há segunda linha de controles: filtros, abas e troca-visão vão
+**Uma superfície só** (ADR-055): Header e conteúdo moram no mesmo painel —
+`card`, traço `border`, raio `lg` —, separados por traço, a 8px da borda da
+janela e da navegação. O Header é a primeira faixa do painel: uma linha, 48px,
+com os controles alinhados à linha da marca da Sidebar. O conteúdo tem recuo
+de 16; tela de lista, quadro ou chat passa `recuo={false}` e encosta nas bordas
+do painel — a lista é a própria superfície, não um cartão dentro dela. Abaixo
+de 1024px o painel ocupa a tela inteira, sem margem nem raio. O painel leva
+`data-superficie`: é o que faz os controles de apoio (Button `tertiary`,
+SegmentedControl, busca do Header) trocarem o fundo de `card` para
+`background` ali dentro. Não há segunda linha de controles: filtros, abas e troca-visão vão
 na fileira de ações do Header ("não ficou legal"). A memória é lida antes da primeira pintura, para a
 sidebar não abrir e recolher na frente da pessoa.
 

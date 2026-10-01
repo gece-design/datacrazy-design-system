@@ -5,11 +5,11 @@
     "fim": "2026-10-01"
   },
   "git": {
-    "commits": 72,
+    "commits": 73,
     "arquivos": 343,
-    "linhasUi": 11055,
-    "linhasLib": 785,
-    "linhasDocs": 8266
+    "linhasUi": 11065,
+    "linhasLib": 796,
+    "linhasDocs": 8290
   },
   "catalogo": {
     "itens": 55,
@@ -85,7 +85,7 @@
       "variantes": 7,
       "estados": 3,
       "acessibilidade": 5,
-      "linhas": 100
+      "linhas": 101
     },
     {
       "name": "calendario",
@@ -189,7 +189,7 @@
       "variantes": 0,
       "estados": 8,
       "acessibilidade": 6,
-      "linhas": 490
+      "linhas": 492
     },
     {
       "name": "icone-de-marca",
@@ -410,7 +410,7 @@
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 5,
-      "linhas": 204
+      "linhas": 211
     },
     {
       "name": "telefone",
@@ -1030,6 +1030,11 @@
       "id": "ADR-054",
       "titulo": "Navegação plana de 220, com Favoritos",
       "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-055",
+      "titulo": "Uma superfície só: Header e conteúdo no mesmo painel",
+      "data": "2026-10-01"
     }
   ],
   "auditoria": {
@@ -1086,6 +1091,12 @@
       "origem": "Revisão",
       "titulo": "CASCA NOVA, PARTE 3: NAVEGAÇÃO PLANA COM FAVORITOS",
       "resumo": "O humano confirmou a leitura de \"por partes\" e mandou seguir com as três que faltavam. Parte 3 (ADR-054): a Sidebar deixa o cartão — sem moldura, gradiente nem marca d'água —, fica direto sobre backgr"
+    },
+    {
+      "data": "2026-10-01",
+      "origem": "Lote",
+      "titulo": "CASCA NOVA, PARTE 4: UMA SUPERFÍCIE SÓ",
+      "resumo": "ADR-055. A TelaBase põe o Header e o conteúdo num painel só (card, traço, raio lg), a 8px da janela e da navegação; o Header é a primeira faixa (48px) e perde o fundo próprio. Os controles de apoio (B"
     },
     {
       "data": "2026-09-29",

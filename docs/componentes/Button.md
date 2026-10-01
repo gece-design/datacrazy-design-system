@@ -60,7 +60,7 @@ O X de fechar de Modal, Toast e painéis: Button `ghost` quadrado com o glifo `X
 | `destructive` | Apagar, cancelar sem volta (Modal) | `destructive`, hover `destructive-hover`, plano (ADR-037) |
 | `soft` | "Secondary" do redesenho: azul-claro | `button-soft-*` (par escuro próprio, ADR-015) |
 | `outline` | "Ghost" do redesenho: só o traço | traço `background`, texto `surface-inverse` |
-| `tertiary` | Barra de ferramentas (Pesquisar, Filtros no Header, gatilho do Date Picker) | `card` + `muted-foreground`, sombra interna, hover `accent` |
+| `tertiary` | Barra de ferramentas (Pesquisar, Filtros no Header, gatilho do Date Picker) | A superfície oposta à de onde está: `card` sobre o fundo da aplicação, `background` dentro do painel da tela (`data-superficie`, a TelaBase — ADR-055). `muted-foreground`, sombra interna, hover `accent` |
 
 Ícone dentro do botão: 16px, `weight="regular"`, `gap-2` (regra A8).
 

@@ -380,7 +380,7 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
         <>
         <SidebarTopo>
           <SidebarBrand />
-          <SidebarGrupo recuo>
+          <SidebarGrupo>
             {PRINCIPAIS.map((r) => (
               <SidebarItem
                 key={r.rotulo}
@@ -542,7 +542,8 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
             abrirAoMontar
             aria-label="Filtros"
             role="group"
-            className="shrink-0 pb-3 pl-4 pr-4 lg:pl-2"
+            // uma faixa do painel, como o Header: recuo 12 e traço embaixo
+            className="shrink-0 border-b border-border px-3 py-2"
             campos={camposDeFiltro(etapas)}
             valor={filtro}
             aoMudar={setFiltro}
@@ -580,7 +581,7 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
           />
         ) : (
           // Calendário: os leads pela próxima ação; clicar abre o mesmo drawer.
-          <div className={cn("min-w-0 min-h-0 flex-1 overflow-y-auto pl-4 pr-4 pb-4 lg:pl-2", rolagemDiscreta)}>
+          <div className={cn("min-w-0 min-h-0 flex-1 overflow-y-auto p-3", rolagemDiscreta)}>
             <Calendario
               locale="pt-BR"
               eventos={todos.filter((l) => l.proximaAcao).map((l) => ({ id: l.id, data: l.proximaAcao, rotulo: l.nome, detalhe: l.empresa, tom: l.tom }))}

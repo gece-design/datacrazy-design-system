@@ -81,6 +81,19 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 10. `hover:` sempre sob `hoverOnlyWhenSupported`; o equivalente para toque é
     decidido explicitamente (G7).
 
+### Uma superfície só
+- A `TelaBase` põe o Header e o conteúdo num painel só (`card`, com traço),
+  sobre o fundo da aplicação (ADR-055). O conteúdo NÃO repete esse painel:
+  nada de `bg-card rounded border` em volta da tela inteira.
+- Tela de lista, quadro ou chat: `recuo={false}` na `TelaBase`, e o conteúdo
+  encosta nas bordas do painel — a `DataTable` vai com `className="rounded-none
+  border-0"`, e faixas (barra de filtros, resumo) se separam por `border-b`.
+  Tela de dashboard ou formulário: recuo padrão, blocos com traço (`Card`,
+  `KpiCard`, `DataTable`).
+- Dentro do painel, o que é cinza é `bg-background` (coluna neutra do quadro,
+  trilho, botão de apoio); o que é branco já é a superfície. Não use
+  `bg-card` para destacar um bloco: use traço.
+
 ### Header de uma linha
 - O Header é uma linha: trilha, título e, à direita, ações e sino (ADR-053). A
   trilha traz só os níveis acima — `Breadcrumb ancestrais` — e o `titulo` é a
@@ -157,8 +170,8 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   `DateRangePicker`), valendo para a tela toda; dashboard não tem ação principal.
   `trend` do KpiCard é a direção literal do número, não "bom" ou "ruim".
 - **Atendimento (chat, inbox, mensagens)**: bloco `@datacrazy/atendimento`
-  (`app/atendimento/`). Três colunas numa superfície só (`bg-card` com
-  `border`), separadas por traço: lista de conversas (320, abas de situação com
+  (`app/atendimento/`). `recuo={false}`: três colunas encostadas nas bordas
+  do painel da tela, separadas por traço: lista de conversas (320, abas de situação com
   `Tabs`), mensagens (`role="log"`, recebida à esquerda em `muted`, enviada à
   direita em `button-soft`, nota interna em `warning/10`, evento do sistema em
   uma linha) e o lead (320, cartões do drawer). Compositor: `Textarea
@@ -180,7 +193,7 @@ nas divs; o nosso parece gigante". Os números que fecham isso:
 - Cartão de campo: 68px (rótulo em bold + linha de valor de 24).
 - Cabeçalho e rodapé de Modal: 44px; botões `sm` (28px).
 - Espaço entre cartões e blocos: `gap-3` (12). Recuo do conteúdo da tela: 16
-  (`p-4`), 4 ao lado da Sidebar. Entre seções: `gap-6`.
+  (`p-4`), dado pela `TelaBase`. Entre seções: `gap-6`.
 - Título de tela uma vez, no Header (é o `h1`, em 13px, ao lado da trilha);
   dentro do conteúdo só `h3`/`h4` e
   `label-*`. Nada de `h2` decorativo, subtítulo explicativo ou texto de apoio

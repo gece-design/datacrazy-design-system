@@ -305,7 +305,8 @@ const previews: Record<string, React.ReactNode> = {
   ),
   "/navigation/header": (
     <Header
-      className="w-full rounded-md border px-4 py-3"
+      data-superficie
+      className="w-full rounded-md border bg-card px-4 py-3"
       titulo="Negócios"
       subtitulo="37 em aberto"
       trilha={<Breadcrumb ancestrais {...rotulosTrilha} itens={[trilhaLonga[0], trilhaLonga[3]]} />}
