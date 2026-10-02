@@ -82,6 +82,9 @@
     --tom-texto: 215.8 85.2% 46.9%;
     --tom-tag: var(--primary);
     --tom-brilho: var(--blue-100);
+    /* a cor da bolinha da Tag e da amostra de cor: nasce igual à `tom-tag`;
+       seis tons têm valor próprio no Claro — ver o fim do bloco `[data-tom]` */
+    --tom-ponto: var(--tom-tag);
 
     /* formulário — coleção "Cor" do Figma. Os onze são alias exato de um
        token semântico que já existe, nos DOIS modos: por isso vivem só aqui.
@@ -220,6 +223,7 @@
     --tom-texto: 215.8 85.2% 46.9%;
     --tom-tag: var(--primary);
     --tom-brilho: var(--blue-100);
+    --tom-ponto: var(--tom-tag);
   }
   .dark [data-tom] {
     --tom-texto: var(--blue-300);
@@ -392,6 +396,41 @@
     --tom-texto: 25 60% 75.1%;
     --tom-tag: 25 55% 62%;
     --tom-brilho: 25 18% 18.8%;
+  }
+
+  /* 2026-10-02: a bolinha da Tag passou a ser o ÚNICO lugar da cor (ADR-059),
+     e a amostra do seletor de cor é essa mesma cor. A `tom-tag` de seis tons
+     tinha o L baixo para servir de TEXTO sobre fundo claro (3:1) — como
+     bolinha, âmbar, amarelo e lima viravam três verdes-oliva iguais. No Claro
+     eles ganham a cor que o nome promete; no Escuro a `tom-tag` já é viva e
+     a bolinha volta a apontar para ela. A `tom-tag` não muda: continua sendo
+     o texto da tag de tipo no perfil do Drawer. Valores derivados; o humano
+     mandou aplicar a recomendação (2026-10-02). */
+  [data-tom="ambar"] {
+    --tom-ponto: 40 100% 50%;
+  }
+  [data-tom="amarelo"] {
+    --tom-ponto: 54 100% 46%;
+  }
+  [data-tom="lima"] {
+    --tom-ponto: 80 85% 43%;
+  }
+  [data-tom="verde"] {
+    --tom-ponto: 142 76% 38%;
+  }
+  [data-tom="turquesa"] {
+    --tom-ponto: 168 84% 36%;
+  }
+  [data-tom="ciano"] {
+    --tom-ponto: 190 95% 42%;
+  }
+  .dark [data-tom="ambar"],
+  .dark [data-tom="amarelo"],
+  .dark [data-tom="lima"],
+  .dark [data-tom="verde"],
+  .dark [data-tom="turquesa"],
+  .dark [data-tom="ciano"] {
+    --tom-ponto: var(--tom-tag);
   }
 
   /* Dentro da superfície da tela o trilho do segmentado é `background`; no

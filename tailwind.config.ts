@@ -54,6 +54,8 @@ const config: Config = {
         "tom-anel": "hsl(var(--tom-anel))",
         "tom-texto": "hsl(var(--tom-texto))",
         "tom-tag": "hsl(var(--tom-tag))",
+        // a bolinha da Tag e a amostra de cor: a cor que o nome do tom promete
+        "tom-ponto": "hsl(var(--tom-ponto))",
         "tom-brilho": "hsl(var(--tom-brilho))",
         // input/* e overlay/* — tokens de componente da coleção "Cor".
         "input-bg": "hsl(var(--input-bg))",

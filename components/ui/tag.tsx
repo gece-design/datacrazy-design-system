@@ -73,7 +73,7 @@ export function Tag({ status, tipo, foto, tom, icone, className, children, ...pr
         <img src={foto} alt="" className="size-[18px] shrink-0 rounded-full object-cover" />
       ) : null}
       {bolinha ? (
-        <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", tom ? "bg-tom-tag" : status ? pontos[status] : "")} />
+        <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", tom ? "bg-tom-ponto" : status ? pontos[status] : "")} />
       ) : null}
       {Icone ? <Icone size={12} weight="regular" className={cn("shrink-0", tom && "text-tom-texto")} aria-hidden="true" /> : null}
       <span className="min-w-0 truncate">{children}</span>
@@ -155,7 +155,7 @@ export function SeletorDeTom({ valor, aoEscolher, rotulo, nomes, comNeutro = fal
               "grid shrink-0 place-items-center rounded-full transition-transform",
               md ? "size-6" : "size-4",
               // o check é branco sobre a cor; na cinza, escuro
-              t ? "bg-tom-tag text-primary-foreground" : "bg-input-bg-disabled text-foreground ring-1 ring-inset ring-border",
+              t ? "bg-tom-ponto text-primary-foreground" : "bg-input-bg-disabled text-foreground ring-1 ring-inset ring-border",
               `${foco}`,
               marcada ? "scale-110 outline outline-2 outline-offset-2 outline-foreground" : "hover:scale-110",
             )}

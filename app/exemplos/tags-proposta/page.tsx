@@ -6,6 +6,24 @@
 import { Fire, Snowflake, ThermometerSimple, User } from "@phosphor-icons/react";
 import { Tag, TONS, tomDe } from "@/components/ui/tag";
 
+/** O nome de cada tom, como a pessoa lê. */
+const NOMES: Record<(typeof TONS)[number], string> = {
+  azul: "Azul",
+  indigo: "Índigo",
+  roxo: "Roxo",
+  fucsia: "Fúcsia",
+  rosa: "Rosa",
+  vermelho: "Vermelho",
+  laranja: "Laranja",
+  ambar: "Âmbar",
+  amarelo: "Amarelo",
+  lima: "Lima",
+  verde: "Verde",
+  turquesa: "Turquesa",
+  ciano: "Ciano",
+  marrom: "Marrom",
+};
+
 function Bloco({ titulo, nota, children }: { titulo: string; nota?: string; children: React.ReactNode }) {
   return (
     <section className="rounded-lg border border-border bg-card p-5">
@@ -94,7 +112,7 @@ export default function Page() {
         <div className="flex flex-wrap items-center gap-1.5">
           {TONS.map((t) => (
             <Tag key={t} tom={t}>
-              {t}
+              {NOMES[t]}
             </Tag>
           ))}
         </div>

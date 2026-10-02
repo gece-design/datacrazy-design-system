@@ -41,7 +41,7 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 | `status` | `"destructive" \| "info" \| "success"` | não | Bolinha de 6px antes do texto, na cor da situação. Com `tom`, a bolinha já vem, na cor do tom. |
 | `tipo` | `"pessoa" \| "empresa"` | não | Ícone de 12px; ícone e texto na cor do lead (`tom/texto`). |
 | `foto` | `string` | não | Foto de 18px encostada à esquerda, por dentro do traço (atendente). |
-| `tom` | `Tom` | não | A cor da tag: um dos catorze tons de `[data-tom]` (`TONS`, na ordem do círculo de cores): `azul` `indigo` `roxo` `fucsia` `rosa` `vermelho` `laranja` `ambar` `amarelo` `lima` `verde` `turquesa` `ciano` `marrom`. Pinta a bolinha — ou o ícone, quando há `icone`; o texto fica sempre em `foreground`. Sem tom, a tag não tem cor; com ela, são quinze cores (ADR-051). `tomDe(chave)` dá um tom estável para um texto, sempre entre os seis de antes (`azul` `roxo` `rosa` `laranja` `ciano` `ambar`): abrir a paleta não troca a cor de lista que já existe. |
+| `tom` | `Tom` | não | A cor da tag: um dos catorze tons de `[data-tom]` (`TONS`, na ordem do círculo de cores): `azul` `indigo` `roxo` `fucsia` `rosa` `vermelho` `laranja` `ambar` `amarelo` `lima` `verde` `turquesa` `ciano` `marrom`. Pinta a bolinha (`tom/ponto`) — ou o ícone, quando há `icone` (`tom/texto`); o texto fica sempre em `foreground`. Sem tom, a tag não tem cor; com ela, são quinze cores (ADR-051). `tomDe(chave)` dá um tom estável para um texto, sempre entre os seis de antes (`azul` `roxo` `rosa` `laranja` `ciano` `ambar`): abrir a paleta não troca a cor de lista que já existe. |
 | `icone` | `ComponentType` | não | Ícone de 12px antes do texto, no lugar da bolinha e na cor do tom — a forma distingue junto com a cor. |
 | `children` | `ReactNode` | sim | O texto, como foi escrito. |
 
@@ -108,7 +108,7 @@ A `Tag` é leitura. Só o `TagAdicionar` é interativo.
 
 ## Tokens consumidos
 
-`card` · `border` · `foreground` · `tom/tag` · `tom/texto` · `primary` ·
+`card` · `border` · `foreground` · `tom/ponto` · `tom/texto` · `primary` ·
 `primary-hover` · `destructive` · `info` · `success` · `radius/md` ·
 `text/label-md` · `input/bg-disabled` (amostra sem cor) · no seletor: `overlay/bg` ·
 `overlay/border` · `overlay/item-hover` · `overlay/item-selected` ·

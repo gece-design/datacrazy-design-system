@@ -83,7 +83,7 @@ e devolve; escolher intervalo é o [DatePicker](DatePicker.md).
 
 `card` · `muted` · `background` · `border` · `primary` · `primary-foreground` ·
 `foreground` · `muted-foreground` · `subtle-foreground` · `overlay/item-hover` ·
-`overlay/bg` · `overlay/border` · `elevation/lg` · `z/popover` · `--tom-tag` ·
+`overlay/bg` · `overlay/border` · `elevation/lg` · `z/popover` · `--tom-ponto` ·
 `radius/md` · `radius/sm` · `radius/full` · `text/heading-3` ·
 `text/label-md` · `text/label-sm` · `text/caption` · `duration/fast`
 

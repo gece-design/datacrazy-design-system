@@ -166,6 +166,11 @@ Em 2026-10-01 entraram mais seis, pela mesma regra, para a paleta de quinze
 cores que o cliente pediu na criação da tag (ADR-051): `indigo` (240°),
 `fucsia` (298°), `amarelo` (60°), `lima` (88°), `turquesa` (166°) e `marrom`
 (25°, com menos saturação). São catorze tons mais a tag sem tom.
+Em 2026-10-02 entrou `--tom-ponto`, a cor da bolinha da Tag e da amostra do
+seletor de cor (ADR-059). Nasce igual à `--tom-tag`; no Claro, `ambar`,
+`amarelo`, `lima`, `verde`, `turquesa` e `ciano` têm valor próprio, mais vivo —
+a `tom-tag` deles é escura para servir de texto, e como bolinha três deles
+viravam o mesmo verde-oliva. No Escuro aponta para a `tom-tag`.
 No mesmo dia a letra de `rosa` e de `laranja` desceu de L (47,8 → 42,5 e 37,7):
 no L do azul elas ficavam em 3,7:1 e 3,0:1 sobre o próprio brilho; agora
 fecham 4,5:1. `vermelho` (45,3 → 43,7) e `azul` (47,8 → 46,9, deixando de

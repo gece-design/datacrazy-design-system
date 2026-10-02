@@ -115,7 +115,7 @@ function Bolinha({ tom }: { tom?: TomDoEvento }) {
     <span
       aria-hidden="true"
       data-tom={tom}
-      className={cn("size-1.5 shrink-0 rounded-full", tom ? "bg-tom-tag" : "bg-primary")}
+      className={cn("size-1.5 shrink-0 rounded-full", tom ? "bg-tom-ponto" : "bg-primary")}
     />
   );
 }

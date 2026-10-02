@@ -2,14 +2,14 @@
   "geradoEm": "2026-10-02",
   "periodo": {
     "inicio": "2026-09-02",
-    "fim": "2026-10-01"
+    "fim": "2026-10-02"
   },
   "git": {
-    "commits": 83,
+    "commits": 84,
     "arquivos": 352,
     "linhasUi": 11467,
     "linhasLib": 849,
-    "linhasDocs": 8564
+    "linhasDocs": 8571
   },
   "catalogo": {
     "itens": 59,
@@ -502,7 +502,7 @@
     "docs": 36
   },
   "tokens": {
-    "cores": 68,
+    "cores": 69,
     "tipografia": 15,
     "raios": 7,
     "sombras": 8,
@@ -1118,6 +1118,11 @@
       "data": "2026-10-02",
       "origem": "Revisão",
       "titulo": "LISTA COM BUSCA: TEXTO DE APOIO, CRIAR E AÇÃO NO PÉ"
+    },
+    {
+      "data": "2026-10-02",
+      "origem": "Revisão",
+      "titulo": "BOLINHA DA TAG NA COR QUE O NOME PROMETE"
     },
     {
       "data": "2026-10-01",
