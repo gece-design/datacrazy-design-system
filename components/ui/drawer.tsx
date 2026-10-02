@@ -199,6 +199,8 @@ export function DrawerPainel({
 
   return (
     <div
+      // dentro do drawer os controles são compactos: Button `md` e `icon` medem 28 (humano, 2026-10-02) — ver `alturaCompacta`
+      data-compacto=""
       className={cn(
         "relative flex h-full max-w-full shrink-0 items-stretch overflow-hidden rounded-l-xl border border-border bg-card shadow-xl",
         className,
@@ -229,7 +231,7 @@ export function DrawerPainel({
   );
 }
 
-/** Botão quadrado de 29px do canto do perfil. Exportado para quem precisar
+/** Botão quadrado de 24px do canto do perfil (eram 29, com caixa `card` sobre o degradê — os dois saíram). Exportado para quem precisar
  *  reabrir o perfil recolhido a partir do conteúdo. */
 export function DrawerBotaoCanto({
   rotulo,
@@ -244,7 +246,7 @@ export function DrawerBotaoCanto({
       title={rotulo}
       // O arquivo tem raio 9,67 — instância escalada. Vai o degrau lg (8px).
       className={cn(
-        "flex size-[29px] shrink-0 items-center justify-center rounded-lg bg-card text-foreground transition-colors hover:bg-accent",
+        "flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
         foco,
         className,
       )}
@@ -389,7 +391,7 @@ export interface DrawerPerfilProps {
   email?: string;
   /** Pessoa ou empresa: muda o ícone da tag sobre o avatar. */
   tipo: "pessoa" | "empresa";
-  /** Cor do anel, da inicial, da tag de tipo e do brilho do topo. Padrão:
+  /** Cor do anel, da inicial e da tag de tipo. Padrão:
    *  `azul` para pessoa e `roxo` para empresa, como o arquivo desenha. */
   tom?: TomPerfil;
   /** O texto da tag de tipo. Vem de fora (i18n). Ex.: "Pessoa". */
@@ -440,19 +442,20 @@ export function DrawerPerfil({
           cabeçalho coubesse. */}
       <div
         data-tom={tom ?? (tipo === "empresa" ? "roxo" : "azul")}
-        className={cn("relative flex w-[320px] shrink-0 border-r border-border bg-drawer-perfil bg-local", className)}
+        // plano: o degradê do topo saiu (humano, 2026-10-02). O tom segue no anel e na letra do avatar e na tag de tipo.
+        className={cn("relative flex w-[320px] shrink-0 border-r border-border bg-card", className)}
       >
       <aside
         ref={coluna}
         aria-label={nome}
         className={cn(
-          // D14: 20px de recuo com o traço direito por dentro — 19 + 1 aqui.
-          "flex w-full flex-col py-5 pl-5 pr-[19px]",
+          // D14: 16px de recuo com o traço direito por dentro — 15 + 1 aqui.
+          "flex w-full flex-col py-4 pl-4 pr-[15px]",
           rolagemDeColuna,
         )}
       >
         <div className="relative flex shrink-0 flex-col items-center">
-          <div className="relative flex w-full flex-col items-center gap-4 pt-2">
+          <div className="relative flex w-full flex-col items-center gap-3 pt-1">
             <div className="flex flex-col items-center gap-1">
               <Avatar nome={nome} size="lg" aria-hidden="true" className="border-tom-anel text-tom-texto" />
               <h2 className="text-center text-h1 text-foreground">{nome}</h2>
@@ -483,7 +486,7 @@ export function DrawerPerfil({
             <div className="absolute left-0 top-0 flex w-full items-center justify-between">
               {aoFechar ? (
                 <DrawerBotaoCanto rotulo={rotuloFechar} onClick={aoFechar}>
-                  <X size={19.33} weight="regular" aria-hidden="true" />
+                  <X size={16} weight="regular" aria-hidden="true" />
                 </DrawerBotaoCanto>
               ) : (
                 <span />
@@ -501,7 +504,7 @@ export function DrawerPerfil({
             cresce e rola por dentro. Se nem o mínimo do menu couber, é esta
             área dos blocos que rola — o cabeçalho com nome e telefone fica. */}
         {children ? (
-          <div className={cn("flex min-h-0 flex-1 flex-col gap-4 pt-4", rolagemDeColuna)}>{children}</div>
+          <div className={cn("flex min-h-0 flex-1 flex-col gap-3 pt-3", rolagemDeColuna)}>{children}</div>
         ) : null}
       </aside>
       <IndicadorDeRolagem acima={acima} abaixo={abaixo} alvo={coluna} rotulos={rotulosRolagem} />
@@ -627,16 +630,16 @@ export function DrawerMetricas({
 }) {
   const e = useEstilo(estilo);
   return (
-    <dl className={cn("grid gap-2", colunas === 4 ? "grid-cols-4" : "grid-cols-2", className)}>
+    <dl className={cn("grid gap-1.5", colunas === 4 ? "grid-cols-4" : "grid-cols-2", className)}>
       {itens.map((m) => (
         <div
           key={m.rotulo}
           data-tom={m.tom}
           className={cn(
-            "flex min-w-0 flex-col gap-0.5 rounded-md px-2 py-3",
-            // Sem traço por decisão do humano (2026-09-17): o que separa o
-            // cartão do fundo é o gradiente, o mesmo do topo do perfil.
-            e === "outline" ? "bg-metrica" : "bg-background",
+            "flex min-w-0 flex-col gap-0.5 rounded-md px-2 py-2",
+            // Plano, com traço: o gradiente que separava o cartão do fundo saiu
+            // com o do topo do perfil (humano, 2026-10-02).
+            e === "outline" ? "border border-border" : "bg-background",
           )}
         >
           <dt className="flex items-center justify-between gap-2 text-caption text-muted-foreground">
@@ -710,8 +713,8 @@ function ItemDoMenu({
         aria-current={selecionado ? "true" : undefined}
         onClick={() => aoEscolher?.(item.id)}
         className={cn(
-          // 36px = 9 + 18 + 9. O recuo de 8 à esquerda é o gap do arquivo.
-          "flex w-full items-center justify-between rounded-md py-[9px] pl-2 pr-2.5 text-left text-label-lg transition-colors",
+          // 32px = 7 + 18 + 7 (eram 36: "gaps menores", humano, 2026-10-02). O recuo de 8 à esquerda é o gap do arquivo.
+          "flex w-full items-center justify-between rounded-md py-[7px] pl-2 pr-2.5 text-left text-label-lg transition-colors",
           foco,
           // com o alfinete à direita, o caret recua para não ficar embaixo dele
           fixacao && "pr-9",
@@ -851,10 +854,10 @@ export function DrawerConteudo({
     <section
       ref={coluna}
       aria-labelledby={`titulo-${id}`}
-      className={cn("flex w-full flex-col gap-4 py-5", rolagemDeColuna)}
+      className={cn("flex w-full flex-col gap-3 py-4", rolagemDeColuna)}
     >
-      <div className="flex shrink-0 flex-col gap-5">
-        <div className="flex items-center justify-between gap-4 px-5">
+      <div className="flex shrink-0 flex-col gap-4">
+        <div className="flex items-center justify-between gap-4 px-4">
           <div className="flex min-w-0 items-center gap-3">
             {antesDoTitulo}
             <div className="flex min-w-0 flex-col gap-0.5">
@@ -868,7 +871,7 @@ export function DrawerConteudo({
         </div>
         <div aria-hidden="true" className="h-px w-full bg-border" />
       </div>
-      {children ? <div className="flex shrink-0 flex-col gap-4 px-5">{children}</div> : null}
+      {children ? <div className="flex shrink-0 flex-col gap-3 px-4">{children}</div> : null}
     </section>
     <IndicadorDeRolagem acima={acima} abaixo={abaixo} alvo={coluna} rotulos={rotulosRolagem} />
     </div>
@@ -886,7 +889,7 @@ export function DrawerSecao({
   className?: string;
 }) {
   return (
-    <section className={cn("flex flex-col gap-3", className)}>
+    <section className={cn("flex flex-col gap-2", className)}>
       {/* sem traço por baixo (decisão do humano, 2026-09-18): os cartões dos
           campos já separam os grupos, e a linha virava um segundo separador */}
       <h3 className="text-body-sm font-semibold leading-[18px] uppercase text-muted-foreground">

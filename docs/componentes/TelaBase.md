@@ -38,7 +38,7 @@ arquivo acompanha na remedição (AUD-203).
 | `lateralCheia` | `boolean` | não | O painel lateral em tela cheia: Header e conteúdo saem de cena. Acompanhe o `telaCheia` do `PainelLateral`. |
 | `memoria` | `string` | não | Chave da memória da sidebar (aberta ou recolhida) no navegador, uma por tela. Sem ela, começa pelo breakpoint. |
 | `recuo` | `boolean` | não | Padrão `true`: 16px em toda largura. Desligue (`recuo={false}`) quando o conteúdo encosta nas bordas do painel: lista, quadro, chat. |
-| `fundo` | `"card" \| "muted"` | não | A cor atrás do conteúdo. Padrão `card`: a própria superfície, para lista, quadro e chat. `muted`: cinza claro, para tela feita de cartões (dashboard) — os cartões brancos se destacam, e o cinza não é o da navegação. |
+| `fundo` | `"card" \| "muted"` | não | A cor atrás do conteúdo. Padrão `muted`: o cinza claro de toda tela — não é o cinza da navegação nem o branco dos blocos, que vão por cima em `card` com traço (`Card`, `blocoDaTela`). `card` só para a tela que é uma folha branca inteira. |
 | `rotulos` | `Partial<RotulosDaTela>` | não | `abrirMenu`, `fecharMenu`, `recolherMenu`, `expandirMenu`, `navegacao`, `conteudo` (i18n). Fábrica: `ROTULOS_DA_TELA`. |
 | `className` | `string` | não | — |
 
@@ -53,9 +53,10 @@ arquivo acompanha na remedição (AUD-203).
 **Uma superfície só** (ADR-055): Header e conteúdo moram no mesmo painel —
 `card`, traço `border`, raio `lg` —, separados por traço, a 8px da borda da
 janela e da navegação. O Header é a primeira faixa do painel: uma linha, 48px,
-com os controles alinhados à linha da marca da Sidebar. O conteúdo tem recuo
-de 16; tela de lista, quadro ou chat passa `recuo={false}` e encosta nas bordas
-do painel — a lista é a própria superfície, não um cartão dentro dela. Abaixo
+com os controles alinhados à linha da marca da Sidebar. O conteúdo fica sobre
+`muted`, o cinza claro, com recuo de 16; os blocos vão por cima em `card` com
+traço (ADR-066). Tela de lista, quadro ou chat passa `recuo={false}` para a
+faixa de filtros encostar nas bordas, e põe o conteúdo num `blocoDaTela`. Abaixo
 de 1024px o painel ocupa a tela inteira, sem margem nem raio. O painel leva
 `data-superficie`: é o que faz os controles de apoio (Button `tertiary`,
 SegmentedControl, busca do Header) trocarem o fundo de `card` para

@@ -56,7 +56,7 @@ conteúdo da coluna direita.
 | `rotuloTipo` | `string` | sim | Texto dessa tag (i18n). A tag fica no fluxo, sob o nome — não flutua mais sobre o avatar (ADR-046). |
 | `telefone`, `email` | `string` | não | Linhas sob o nome. |
 | `estilo` | `"outline" \| "fill"` | não | Padrão `outline`. Desce por contexto aos blocos. |
-| `tom` | `"azul" \| "roxo" \| "rosa" \| "laranja" \| "verde" \| "ciano" \| "ambar" \| "vermelho"` | não | Anel e letra do avatar, tag de tipo e brilho. Padrão: azul para pessoa, roxo para empresa. |
+| `tom` | `"azul" \| "roxo" \| "rosa" \| "laranja" \| "verde" \| "ciano" \| "ambar" \| "vermelho"` | não | Anel e letra do avatar e tag de tipo. Padrão: azul para pessoa, roxo para empresa. |
 | `tags`, `acoes` | `ReactNode` | não | Fileira de tags e os dois botões. |
 | `aoFechar`, `aoRecolher` | `() => void` | não | Sem eles, o botão do canto não aparece. |
 | `rotuloFechar`, `rotuloRecolher` | `string` | não | Nome acessível de cada botão do canto (i18n). |
@@ -83,12 +83,18 @@ conteúdo da coluna direita.
 | `estilo="fill"` | Caixas com fundo `background`, sem traço. |
 | `tom` | Azul e roxo são do arquivo; rosa e laranja giram o matiz do azul (330° e 24°). Verde (142°), ciano (190°), âmbar (45°) e vermelho (356°) entraram em 2026-09-18; os três primeiros baixam a luminosidade da letra e da tag para empatar o contraste do azul. |
 
-O cartão de métrica **não tem traço** (decisão do humano, 2026-09-17): o que o
-separa do fundo é o gradiente `bg-metrica`, a mesma ideia do topo do perfil, e
-cada cartão pode ter o próprio `tom` e um ícone de 16px na cor dele — mas o
-lead do CRM **não usa**: cliente (reunião de 2026-09-18) tirou a variação
-colorida de métricas e tags ("vibe code"); sem `tom`, o ícone herda a cor do
-perfil e a tag fica cinza com a bolinha do status.
+O cartão de métrica é **plano, com traço** (`border`): o gradiente `bg-metrica`
+que o separava do fundo saiu em 2026-10-02, junto com o degradê do topo do
+perfil (ADR-065). Cada cartão pode ter o próprio `tom` e um ícone de 16px na
+cor dele — mas o lead do CRM **não usa**: cliente (reunião de 2026-09-18)
+tirou a variação colorida de métricas e tags ("vibe code"); sem `tom`, o ícone
+herda a cor do perfil.
+
+**Medidas (ADR-065):** recuo 16 no perfil e no conteúdo (eram 20), 12 entre os
+blocos (eram 16), item do menu com 32 (eram 36), cartões do conteúdo a 8 um do
+outro (`gradeDeCartoes`). O `DrawerPainel` se marca com `data-compacto`: o
+`Button` de dentro mede 28 sem a tela passar `size`. Os botões de canto têm 24,
+sem caixa.
 
 Com altura definida (a tela inteira, na camada), **quem rola no perfil é o
 bloco do menu**, não a coluna: nome, telefone, métricas e contato ficam sempre

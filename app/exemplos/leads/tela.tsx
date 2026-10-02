@@ -60,7 +60,7 @@ import { SeletorDeTom, Tag } from "@/components/ui/tag";
 import { TelaBase } from "@/components/ui/tela-base";
 import { Toaster, toast } from "@/components/ui/toast";
 import { rotuloDeCampo } from "@/lib/campo";
-import { rolagemDiscreta } from "@/lib/estados";
+import { blocoDaTela, rolagemDiscreta } from "@/lib/estados";
 import { useTema } from "@/lib/tema";
 import { tomDe, type Tom } from "@/lib/tons";
 import { cn } from "@/lib/utils";
@@ -102,14 +102,14 @@ const NOTIFICACOES: Notificacao[] = [
 /* `minimo` é o piso de cada coluna: abaixo da soma deles a lista rola na
    horizontal em vez de cortar tudo em reticências. */
 const COLUNAS: ColunaTabela[] = [
-  { chave: "nome", rotulo: "Nome", icone: User, peso: 2.2, minimo: 190 },
-  { chave: "telefone", rotulo: "Telefone", icone: Phone, peso: 1.4, minimo: 130 },
-  { chave: "email", rotulo: "E-mail", icone: EnvelopeSimple, peso: 2, minimo: 170 },
-  { chave: "empresa", rotulo: "Empresa", icone: Buildings, peso: 1.7, minimo: 140 },
-  { chave: "documento", rotulo: "Documento", icone: IdentificationCard, peso: 1.5, minimo: 132 },
-  { chave: "tags", rotulo: "Tags", icone: IconeDeTag, peso: 2.4, minimo: 190 },
-  { chave: "origem", rotulo: "Origem", icone: ShareNetwork, peso: 1.2, minimo: 120, agrupavel: true },
-  { chave: "criado", rotulo: "Criado em", icone: CalendarBlank, peso: 1.3, minimo: 116 },
+  { chave: "nome", rotulo: "Nome", icone: User, peso: 2.2, minimo: 180 },
+  { chave: "telefone", rotulo: "Telefone", icone: Phone, peso: 1.4, minimo: 126 },
+  { chave: "email", rotulo: "E-mail", icone: EnvelopeSimple, peso: 2, minimo: 160 },
+  { chave: "empresa", rotulo: "Empresa", icone: Buildings, peso: 1.7, minimo: 130 },
+  { chave: "documento", rotulo: "Documento", icone: IdentificationCard, peso: 1.5, minimo: 128 },
+  { chave: "tags", rotulo: "Tags", icone: IconeDeTag, peso: 2.4, minimo: 180 },
+  { chave: "origem", rotulo: "Origem", icone: ShareNetwork, peso: 1.2, minimo: 116, agrupavel: true },
+  { chave: "criado", rotulo: "Criado em", icone: CalendarBlank, peso: 1.3, minimo: 110 },
 ];
 
 /** O ícone de cada origem. Marca é `IconeDeMarca`, na cor da marca; o que não é marca é Phosphor. */
@@ -327,7 +327,7 @@ export function Tela({
     <>
       <TelaBase
         memoria={memoria}
-        // a lista encosta nas bordas do painel: é a própria superfície, não um cartão dentro dela
+        // o recuo é da tela: a faixa de filtros encosta nas bordas e a lista vai num bloco branco
         recuo={false}
         navegacao={
           <>
@@ -427,8 +427,8 @@ export function Tela({
             abrirAoMontar
             aria-label="Filtros"
             role="group"
-            // uma faixa do painel, como o Header: recuo 12 e traço embaixo
-            className="shrink-0 border-b border-border px-3 py-2"
+            // uma faixa branca sob o Header: recuo 12 e traço embaixo
+            className="shrink-0 border-b border-border bg-card px-3 py-2"
             campos={campos}
             valor={filtro}
             aoMudar={setFiltro}
@@ -442,7 +442,11 @@ export function Tela({
           />
         ) : null}
 
-        <div className={cn("min-h-0 flex-1 overflow-y-auto", rolagemDiscreta)}>
+        {/* O padrão de fundo de toda tela: o conteúdo sobre o cinza claro, a lista num bloco branco com traço.
+            O bloco tem a altura do conteúdo; quando passa da tela, rola por dentro. */}
+        <div className="flex min-h-0 flex-1 flex-col p-3">
+        <div className={cn("flex min-h-0 flex-col", blocoDaTela)}>
+        <div className={cn("min-h-0 overflow-y-auto", rolagemDiscreta)}>
           <DataTableToolbar rotulo="Todos os leads" total={`${visiveis.length} ${visiveis.length === 1 ? "lead" : "leads"}`} />
           <DataTable colunas={COLUNAS} ajustes={ajustes} selecao={selecao} className="rounded-none border-0">
             {grupos
@@ -496,6 +500,8 @@ export function Tela({
               Excluir
             </Button>
           </BarraDeSelecao>
+        </div>
+        </div>
         </div>
       </TelaBase>
 

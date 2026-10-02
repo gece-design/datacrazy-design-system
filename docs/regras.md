@@ -81,21 +81,26 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 10. `hover:` sempre sob `hoverOnlyWhenSupported`; o equivalente para toque é
     decidido explicitamente (G7).
 
-### Uma superfície só
-- A `TelaBase` põe o Header e o conteúdo num painel só (`card`, com traço),
-  sobre o fundo da aplicação (ADR-055). O conteúdo NÃO repete esse painel:
-  nada de `bg-card rounded border` em volta da tela inteira.
-- Tela de lista, quadro ou chat: `recuo={false}` na `TelaBase`, e o conteúdo
-  encosta nas bordas do painel — a `DataTable` vai com `className="rounded-none
-  border-0"`, e faixas (barra de filtros, resumo) se separam por `border-b`.
-  Tela de dashboard ou formulário: recuo padrão, `fundo="muted"` na `TelaBase`
-  (cinza claro atrás dos cartões — não é o cinza da navegação nem o branco dos
-  cartões), blocos com traço (`Card`, `KpiCard`, `DataTable`).
-- Dentro do painel, o que é cinza é `bg-background` (coluna neutra do quadro,
-  trilho, botão de apoio); o fundo de uma área inteira — o canvas, a tela de
-  cartões — é `muted`, mais claro, para não repetir o cinza da navegação; o
-  que é branco já é a superfície. Não use
-  `bg-card` para destacar um bloco: use traço.
+### O padrão de fundo: o mesmo em toda tela
+Quatro tons, sempre nos mesmos lugares (humano, 2026-10-02, ADR-066) — dashboard,
+lista, quadro e chat seguem igual:
+- **Navegação**: `background` (o cinza da aplicação).
+- **Topo** (Header, faixa de filtros): `card`, branco, com traço embaixo.
+- **Conteúdo**: `muted`, o cinza claro — é o padrão da `TelaBase`; não passe
+  `fundo`. Não é o cinza da navegação nem o branco dos blocos.
+- **Blocos**: `card` com traço `border` e raio `md`. `Card` e `KpiCard` quando
+  têm recuo; `blocoDaTela` (lib/estados) quando o conteúdo encosta nas bordas —
+  a tabela, a lista, cada coluna do chat.
+- Tela de dashboard ou formulário: recuo padrão da `TelaBase` (16), blocos em
+  grade. Tela de lista: `recuo={false}`, a faixa de filtros branca encostada
+  nas bordas e, embaixo, `p-3` com a `DataTable` (`rounded-none border-0`)
+  dentro de um `blocoDaTela` — o bloco tem a altura do conteúdo e rola por
+  dentro quando passa da tela. Quadro: as colunas direto sobre o `muted`,
+  com `p-3`. Chat: cada coluna é um `blocoDaTela`, com `gap-3`; no celular a
+  coluna ocupa a tela, sem margem.
+- Dentro de um bloco branco, o que é cinza é `bg-background` (trilho, botão de
+  apoio, coluna neutra do quadro). Nunca bloco branco direto sobre o Header
+  sem o fundo `muted` em volta, nem a tela inteira branca.
 
 ### Header de uma linha
 - O Header é uma linha: trilha, título e, à direita, ações e sino (ADR-053). A
@@ -228,8 +233,8 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   `SeletorDeTom tamanho="md" comNeutro` — as quinze cores, nunca um seletor
   de cor livre.
 - **Atendimento (chat, inbox, mensagens)**: bloco `@datacrazy/atendimento`
-  (`app/atendimento/`). `recuo={false}`: três colunas encostadas nas bordas
-  do painel da tela, separadas por traço: lista de conversas (320, abas de situação com
+  (`app/atendimento/`). `recuo={false}`: três colunas, cada uma num bloco
+  branco (`rounded-md border bg-card`) sobre o fundo `muted`, com `gap-3`: lista de conversas (320, abas de situação com
   `Tabs`), mensagens (`role="log"`, recebida à esquerda em `muted`, enviada à
   direita em `button-soft`, nota interna em `warning/10`, evento do sistema em
   uma linha) e o lead (320, campos em linha: `ListaDeCampos` + `LinhaDeCampo`). Compositor: `Textarea

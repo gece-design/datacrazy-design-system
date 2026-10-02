@@ -131,13 +131,7 @@ const config: Config = {
         // `primary` e `destructive` não o usam: são planos (cliente, 2026-09-24, ADR-037).
         "button-inner": "var(--shadow-button-inner)",
       },
-      backgroundImage: {
-        // cartão de métrica do drawer: mesma ideia do topo do perfil, na diagonal
-        "metrica": "linear-gradient(135deg, hsl(var(--card)) 30%, hsl(var(--tom-brilho)) 100%)",
-        // topo do perfil no drawer (node 565:6447): card até 79,91%, brilho do tom no fim.
-        "drawer-perfil":
-          "linear-gradient(2.2deg, hsl(var(--card)) 79.91%, hsl(var(--tom-brilho)) 96.01%)",
-      },
+      // sem `backgroundImage`: os dois gradientes do Drawer (perfil e métrica) saíram em 2026-10-02 — o DS não tem fundo em degradê (A3)
       // Escala do Figma: 0 · 2 · 4 · 6 · 8 · 12 · 999. `--radius` é o degrau
       // lg (8px) e os outros saem dele, então mudar a base move a escala toda.
       borderRadius: {

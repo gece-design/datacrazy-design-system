@@ -54,7 +54,7 @@ export function ListaDeConversas({
   className?: string;
 }) {
   return (
-    <section aria-label="Conversas" className={cn("flex min-h-0 flex-col border-border md:border-r", className)}>
+    <section aria-label="Conversas" className={cn("flex min-h-0 flex-col bg-card md:overflow-hidden md:rounded-md md:border md:border-border", className)}>
       <Tabs
         id="atendimento-situacao"
         rotulo="Situação das conversas"

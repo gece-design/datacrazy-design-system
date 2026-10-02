@@ -338,3 +338,13 @@ Desvio: três ajustes sobre a Tag do ADR-059, sem par no arquivo. (1) O traço d
 Motivo: pedido do humano (2026-10-02: "tags de lista deve conter ícone cinza escuro e com opção de escolher na hora de criar; sempre deve aparecer a opção de criar uma nova tag ao digitar; cinza do stroke nas tags pode ter mais contraste, em todas").
 Aprovado por: humano (2026-10-02).
 
+## ADR-065 · Drawer plano, com menos respiro e botões de 28 · 2026-10-02
+Desvio: o arquivo (565:6447) desenha o perfil do Drawer com degradê no topo (card → brilho do tom) e os cartões de métrica com degradê na diagonal; eram as duas exceções à regra A3 (sem gradiente de fundo). Os dois saem: o perfil é `card` chapado e a métrica é um cartão com traço `border`. Os tokens `bg-drawer-perfil` e `bg-metrica` deixam de existir. Os respiros descem: recuo do perfil e do conteúdo 20 → 16, entre blocos 16 → 12, item do menu 36 → 32, cartões do conteúdo a 8 (`gradeDeCartoes`), seção com 8. O `DrawerPainel` se marca com `data-compacto`: o `Button` `md` e `icon` de dentro medem 28 sem a tela passar `size` (o mesmo mecanismo do Header, ADR-057). Os botões de canto passam de 29 para 24, sem caixa.
+Motivo: pedido do humano (2026-10-02: "atualizar o drawer de todas as telas, deixar igual a este porém sem gradients, gaps menores e com botões menores"); o gradiente do menu do lead já vinha da crítica de 2026-09-28 (ponto 9).
+Aprovado por: humano (2026-10-02). O Figma acompanha na remedição.
+
+## ADR-066 · O mesmo padrão de fundo em toda tela · 2026-10-02
+Desvio: ajusta a superfície única do ADR-055, em que lista, quadro e chat encostavam direto no painel branco da tela. Agora toda tela tem os mesmos quatro tons: navegação em `background`, topo (Header e faixa de filtros) em `card`, conteúdo em `muted` e blocos em `card` com traço. `TelaBase.fundo` passa a ter `muted` como padrão. A lista de Leads e a do Pipeline vão num bloco branco (`blocoDaTela`, lib/estados) que tem a altura do conteúdo; o quadro fica direto sobre o `muted`; no Atendimento cada coluna é um bloco. O painel da tela (`card` com traço, a 8px da janela) continua.
+Motivo: pedido do humano, mostrando o dashboard (2026-10-02: "este padrão de cores de fundo precisa seguir em todas as telas — chat, leads e pipeline estão diferentes").
+Aprovado por: humano (2026-10-02).
+

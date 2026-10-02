@@ -76,10 +76,11 @@ export interface TelaBaseProps {
   /** Recuo do conteúdo (16). Desligue quando o conteúdo encosta nas bordas do painel: lista, quadro, chat. */
   recuo?: boolean;
   /**
-   * A cor atrás do conteúdo. `card` (padrão) é a própria superfície: lista,
-   * quadro, chat. `muted` é o cinza claro para tela feita de cartões
-   * (dashboard): os cartões brancos se destacam, e o cinza não é o da
-   * navegação nem o dos cartões (humano, 2026-10-02).
+   * A cor atrás do conteúdo. `muted` (padrão) é o cinza claro de toda tela:
+   * não é o cinza da navegação nem o branco dos blocos, que vão por cima em
+   * `card` com traço (`Card`, `blocoDaTela`) — o mesmo padrão em dashboard,
+   * lista, quadro e chat (humano, 2026-10-02). `card` só para a tela que é
+   * uma folha branca inteira (um documento, um formulário longo).
    */
   fundo?: "card" | "muted";
   rotulos?: Partial<RotulosDaTela>;
@@ -100,7 +101,7 @@ export function TelaBase({
   lateralCheia = false,
   memoria,
   recuo = true,
-  fundo = "card",
+  fundo = "muted",
   rotulos,
   className,
 }: TelaBaseProps) {

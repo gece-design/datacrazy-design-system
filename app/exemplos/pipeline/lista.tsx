@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 import { etapaPor, moeda, tagsDe, type Etapa, type EtapaId, type Lead } from "./dados";
 import { IconeDoCanal } from "./quadro";
 
-import { rolagemDiscreta } from "@/lib/estados";
+import { blocoDaTela, rolagemDiscreta } from "@/lib/estados";
 /* A mesma carteira do quadro, na Table do design system. É o argumento de que
    a visão não é a tela: o dado é um só, a leitura é que muda — e por isso a
    linha mostra o que o cartão mostra, do mesmo jeito: as tags com a bolinha
@@ -197,9 +197,11 @@ export function Lista({
             );
   };
   return (
-    // Encosta nas bordas do painel da tela: a lista é a própria superfície, não um cartão dentro dela.
-    <div className={cn("min-h-0 flex-1 overflow-y-auto", rolagemDiscreta)}>
-      <div className="w-full">
+    // O padrão de fundo de toda tela: o conteúdo sobre o cinza claro, a lista num bloco branco com traço.
+    // O bloco tem a altura do conteúdo; quando passa da tela, rola por dentro.
+    <div className="flex min-h-0 flex-1 flex-col p-3">
+      <div className={cn("flex min-h-0 flex-col", blocoDaTela)}>
+      <div className={cn("min-h-0 overflow-y-auto", rolagemDiscreta)}>
         {/* Só o resumo: Agrupar e Colunas estão na fileira do Header (humano, 2026-09-24). */}
         <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />
         {/* densa: a grade de lista à la Twenty (cliente, 2026-09-27) */}
@@ -258,6 +260,7 @@ export function Lista({
             Excluir
           </Button>
         </BarraDeSelecao>
+      </div>
       </div>
     </div>
   );

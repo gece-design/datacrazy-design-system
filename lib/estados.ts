@@ -65,8 +65,8 @@ export const superficieDeApoio = "bg-card [[data-superficie]_&]:bg-background";
 
 
 /**
- * Faixa compacta — o topo da tela. O `Header` se marca com `data-compacto` e
- * os controles de dentro medem 28 em vez de 32: Button `md` e `icon`, trilho
+ * Faixa compacta — o topo da tela e o Drawer. O `Header` e o `DrawerPainel`
+ * se marcam com `data-compacto` e os controles de dentro medem 28 em vez de 32: Button `md` e `icon`, trilho
  * do SegmentedControl e do ViewSwitcher, gatilho de data. A tela não escolhe
  * tamanho: o mesmo `<Button>` mede 32 no conteúdo e 28 no topo (ADR-057). O
  * que abre em portal (menus, painéis) fica fora da marca e não encolhe.
@@ -78,3 +78,12 @@ export const quadradoCompacto = "[[data-compacto]_&]:size-7";
 export const recuoCompacto = "[[data-compacto]_&]:px-2.5";
 /** A opção do SegmentedControl na faixa compacta: 24, para caber no trilho de 28. */
 export const opcaoCompacta = "[[data-compacto]_&]:h-6";
+
+/**
+ * O bloco branco sobre o fundo cinza claro da tela (a `TelaBase` pinta o
+ * conteúdo de `muted`): a tabela, a lista, cada coluna do chat. É o mesmo
+ * desenho do `Card`, sem o recuo de dentro — o conteúdo encosta nas bordas.
+ * Toda tela segue o mesmo padrão de fundo (humano, 2026-10-02): navegação em
+ * `background`, topo em `card`, conteúdo em `muted`, blocos em `card` com traço.
+ */
+export const blocoDaTela = "overflow-hidden rounded-md border border-border bg-card";

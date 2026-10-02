@@ -296,16 +296,17 @@ export function Tela({
           abrirAoMontar
           role="group"
           aria-label="Filtros"
-          className="shrink-0 border-b border-border px-3 py-2"
+          className="shrink-0 border-b border-border bg-card px-3 py-2"
           campos={CAMPOS_DE_FILTRO}
           valor={filtro}
           aoMudar={setFiltro}
           rotulos={{ adicionar: "Filtro", limpar: "Limpar", busca: "Buscar", vazio: "Nada encontrado", remover: (campo) => `Remover filtro ${campo}` }}
         />
       ) : null}
-      <div className="flex min-h-0 flex-1">
-        {/* A superfície é o painel da tela (TelaBase): as três colunas encostam nas bordas dele e se separam por traço. */}
-        <div className="relative flex min-h-0 min-w-0 flex-1 overflow-hidden">
+      {/* O padrão de fundo de toda tela: o conteúdo sobre o cinza claro e cada coluna num bloco branco com traço.
+          No celular a coluna ocupa a tela, sem margem. */}
+      <div className="flex min-h-0 flex-1 md:p-3">
+        <div className="relative flex min-h-0 min-w-0 flex-1 md:gap-3">
           <ListaDeConversas
             conversas={filtradas.filter((c) => c.situacao === aba)}
             aba={aba}

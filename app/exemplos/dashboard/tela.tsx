@@ -137,8 +137,6 @@ export function Tela({
   return (
     <TelaBase
       memoria={memoria}
-      // tela de cartões: o conteúdo fica sobre o cinza claro, e os cartões brancos se destacam
-      fundo="muted"
       navegacao={
         <>
           <SidebarTopo>

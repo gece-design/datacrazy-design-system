@@ -5,11 +5,11 @@
     "fim": "2026-10-02"
   },
   "git": {
-    "commits": 86,
+    "commits": 87,
     "arquivos": 357,
-    "linhasUi": 11616,
-    "linhasLib": 849,
-    "linhasDocs": 8682
+    "linhasUi": 11620,
+    "linhasLib": 858,
+    "linhasDocs": 8706
   },
   "catalogo": {
     "itens": 59,
@@ -176,7 +176,7 @@
       "variantes": 3,
       "estados": 6,
       "acessibilidade": 10,
-      "linhas": 1068
+      "linhas": 1071
     },
     {
       "name": "header",
@@ -423,7 +423,7 @@
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 5,
-      "linhas": 232
+      "linhas": 233
     },
     {
       "name": "telefone",
@@ -1106,6 +1106,16 @@
       "id": "ADR-064",
       "titulo": "Tag: traço mais forte, lista com ícone cinza e criar sempre à mão",
       "data": "2026-10-02"
+    },
+    {
+      "id": "ADR-065",
+      "titulo": "Drawer plano, com menos respiro e botões de 28",
+      "data": "2026-10-02"
+    },
+    {
+      "id": "ADR-066",
+      "titulo": "O mesmo padrão de fundo em toda tela",
+      "data": "2026-10-02"
     }
   ],
   "auditoria": {
@@ -1166,6 +1176,16 @@
       "data": "2026-10-02",
       "origem": "Revisão",
       "titulo": "TAG: TRAÇO MAIS FORTE, LISTA COM ÍCONE E CRIAR SEMPRE"
+    },
+    {
+      "data": "2026-10-02",
+      "origem": "Revisão",
+      "titulo": "DRAWER PLANO E COMPACTO"
+    },
+    {
+      "data": "2026-10-02",
+      "origem": "Revisão",
+      "titulo": "O MESMO FUNDO EM TODA TELA"
     },
     {
       "data": "2026-10-01",

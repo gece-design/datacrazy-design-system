@@ -45,7 +45,7 @@ export default function DrawerVariacoesPage() {
       <Secao
         titulo="Cores do perfil"
         spec="tom · 8"
-        descricao="O tom muda o anel e a letra do avatar, o texto da tag de tipo e o brilho do topo. O resto — botões, tags, menu — continua azul. Sem a prop, pessoa sai azul e empresa sai roxo, como no arquivo."
+        descricao="O tom muda o anel e a letra do avatar e o texto da tag de tipo. O resto — botões, tags, menu — continua azul. Sem a prop, pessoa sai azul e empresa sai roxo, como no arquivo."
         codigo={`<DrawerPerfil tipo="pessoa" …/>              {/* azul */}
 <DrawerPerfil tipo="empresa" …/>             {/* roxo */}
 <DrawerPerfil tipo="pessoa" tom="rosa" …/>

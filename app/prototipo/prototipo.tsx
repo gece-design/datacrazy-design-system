@@ -75,7 +75,6 @@ function EmBreve({ destino, aoNavegar }: { destino: string; aoNavegar: (destino:
   return (
     <TelaBase
       memoria={MEMORIA}
-      fundo="muted"
       navegacao={
         <>
           <SidebarTopo>

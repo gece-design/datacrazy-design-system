@@ -164,7 +164,7 @@ function itemTokens(ext, versao) {
       );
     }
     // o v4 não tem namespace de tema para background-image
-    for (const [nome, imagem] of Object.entries(ext.backgroundImage)) {
+    for (const [nome, imagem] of Object.entries(ext.backgroundImage ?? {})) {
       item.css[`@utility bg-${nome}`] = { "background-image": corInteira(imagem) };
     }
     // nem para opacidade com nome, nem para delay
@@ -300,7 +300,7 @@ padrão (\`bg-blue-500\`, \`text-gray-600\`) estão fora.
   (\`fill\` só no item selecionado); 16px em botão e campo.
 - **Tema escuro:** classe \`dark\` no \`<html>\`. Os tokens trocam sozinhos —
   nunca ramifique código por tema.
-- **Gradiente** (\`bg-\`): ${lista(Object.keys(ext.backgroundImage))}
+- **Gradiente:** não existe. Fundo é sempre cor chapada (\`bg-card\`, \`bg-muted\`, \`bg-background\`); nada de \`bg-gradient-*\`.
 - **Fonte:** Geist, pela variável \`--font-geist-sans\`. O setup instala o pacote
   \`geist\`; a variável só existe se o layout raiz a declarar:
 

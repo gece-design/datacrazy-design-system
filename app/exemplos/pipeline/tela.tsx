@@ -568,8 +568,8 @@ export function Tela({
             abrirAoMontar
             aria-label="Filtros"
             role="group"
-            // uma faixa do painel, como o Header: recuo 12 e traço embaixo
-            className="shrink-0 border-b border-border px-3 py-2"
+            // uma faixa branca sob o Header: recuo 12 e traço embaixo
+            className="shrink-0 border-b border-border bg-card px-3 py-2"
             campos={camposDeFiltro(etapas, grupos)}
             valor={filtro}
             aoMudar={setFiltro}

@@ -209,7 +209,7 @@ export function PropostaTrilhoDeIcones({ className }: { className?: string }) {
           })}
         </nav>
 
-        <div className={cn("flex min-w-0 flex-1 flex-col items-center gap-3 overflow-y-auto bg-drawer-perfil bg-local px-4 py-5", rolagemDiscreta)}>
+        <div className={cn("flex min-w-0 flex-1 flex-col items-center gap-3 overflow-y-auto bg-card px-4 py-5", rolagemDiscreta)}>
           <div className="relative flex flex-col items-center gap-1">
             <Avatar nome={LEAD.nome} size="lg" aria-hidden="true" className="border-tom-anel text-tom-texto" />
             <p className="text-center text-h2 text-foreground">{LEAD.nome}</p>

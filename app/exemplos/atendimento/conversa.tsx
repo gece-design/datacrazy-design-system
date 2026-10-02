@@ -123,7 +123,7 @@ export function ConversaAberta({
   }
 
   return (
-    <section aria-label={`Conversa com ${conversa.nome}`} className={cn("flex min-h-0 min-w-0 flex-1 flex-col", className)}>
+    <section aria-label={`Conversa com ${conversa.nome}`} className={cn("flex min-h-0 min-w-0 flex-1 flex-col bg-card md:overflow-hidden md:rounded-md md:border md:border-border", className)}>
       <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-3">
         <Button variant="ghost" size="icon-sm" aria-label="Voltar para as conversas" onClick={aoVoltar} className="md:hidden">
           <ArrowLeft size={16} weight="regular" />

@@ -41,8 +41,8 @@ export default function DrawerPage() {
           menu, não a coluna</span>: nome, telefone, métricas e contato ficam sempre à vista, e a lista de seções
           ocupa o que sobra e rola por dentro (cliente, 2026-09-18: em notebook de tela baixa, o nome não pode sumir).
           O conteúdo rola por conta própria. Cada área que rola mostra uma seta na borda enquanto continua além dela,
-          e a seta some quando chega ao fim. A cor do topo do perfil é o <Chip>tom</Chip>: anel e letra do avatar, texto da
-          tag de tipo e brilho do degradê. Azul e roxo são do arquivo; rosa e laranja seguem a mesma regra.
+          e a seta some quando chega ao fim. A cor do perfil é o <Chip>tom</Chip>: anel e letra do avatar e texto da tag de
+          tipo. O perfil é plano — o degradê do topo e o das métricas saíram —, com respiros de 16 e botões de 28.
         </p>
       </ComoFunciona>
       <Secao
