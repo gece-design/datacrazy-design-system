@@ -66,7 +66,7 @@ import { BotaoAgrupar, BotaoColunas, useAjustesDaTabela } from "@/components/ui/
 import { Calendario } from "@/components/ui/calendario";
 import { TelaBase } from "@/components/ui/tela-base";
 import { PainelLead } from "./painel-lead";
-import { Quadro, IconeDoCanal, agrupar, CAMPOS_DO_CARTAO, ROTULOS_DOS_CAMPOS, type CampoDoCartao, type Colunas } from "./quadro";
+import { Quadro, IconeDoCanal, agrupar, CAMPOS_DE_FABRICA, CAMPOS_DO_CARTAO, ROTULOS_DOS_CAMPOS, type CampoDoCartao, type Colunas } from "./quadro";
 import { Tag } from "@/components/ui/tag";
 import { Menu } from "@/components/ui/menu";
 
@@ -162,12 +162,12 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
   const [referencia, setReferencia] = React.useState(() => new Date(2026, 8, 1));
   const [visaoDoCalendario, setVisaoDoCalendario] = React.useState<"mes" | "semana">("mes");
   // O que o cartão mostra, campo a campo (tipo Notion): a escolha fica no navegador.
-  const [campos, setCampos] = React.useState<CampoDoCartao[]>([...CAMPOS_DO_CARTAO]);
+  const [campos, setCampos] = React.useState<CampoDoCartao[]>([...CAMPOS_DE_FABRICA]);
   const [personalizando, setPersonalizando] = React.useState(false);
   const botaoPersonalizar = React.useRef<HTMLButtonElement>(null);
   React.useEffect(() => {
     try {
-      const salvos = window.localStorage.getItem("ds:pipeline:cartao");
+      const salvos = window.localStorage.getItem("ds:pipeline:cartao-2");
       if (salvos) {
         const lista = JSON.parse(salvos);
         if (Array.isArray(lista)) setCampos(CAMPOS_DO_CARTAO.filter((c) => lista.includes(c)));
@@ -180,7 +180,7 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
     setCampos((atual) => {
       const novo = atual.includes(c) ? atual.filter((x) => x !== c) : CAMPOS_DO_CARTAO.filter((x) => x === c || atual.includes(x));
       try {
-        window.localStorage.setItem("ds:pipeline:cartao", JSON.stringify(novo));
+        window.localStorage.setItem("ds:pipeline:cartao-2", JSON.stringify(novo));
       } catch {
         /* não poder salvar não quebra */
       }

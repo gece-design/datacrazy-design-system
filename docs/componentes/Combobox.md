@@ -9,6 +9,7 @@ Escolher uma ou várias opções numa lista com busca — o Select para lista lo
 - **Use** `Combobox` para uma escolha numa lista longa (mais de ~10 opções) ou que cresce com o uso: cidade, produto, responsável, origem.
 - **Use** `ComboboxMultiplo` para várias escolhas com caixa de marcar: tags, canais, segmentos.
 - **Use** `ComboboxPainel` quando o gatilho já existe: o chip da `BarraDeFiltros`, a `CelulaEscolha` da tabela.
+- **Use** `detalhe` quando o nome sozinho não distingue (duas empresas parecidas: o domínio desempata); `aoCriar` quando a lista cresce com o uso (empresa, cidade, segmento); `acao` para o caminho de quem quer editar a lista ("Gerenciar etapas") — uma só, nunca um menu de ações.
 - **Não use** para lista curta e fechada (até ~10 opções, sem busca): é `Select`.
 - **Não use** para ações sobre um item: é `Menu`.
 - **Não use** para as etiquetas do lead no drawer: é `SeletorTags`, que cria tag e separa por aba.
@@ -33,9 +34,11 @@ de marcar do `Menu`. Registrado no ADR-049; o Figma acompanha na remedição.
 
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
-| `opcoes` | `OpcaoCombobox[]` | — | sim | `valor`, `rotulo`, `icone?`, `grupo?` (as do `OpcaoSelect`) e `conteudo?`: o que aparece no lugar do rótulo — uma `Tag`, por exemplo. A busca continua pelo `rotulo`. |
+| `opcoes` | `OpcaoCombobox[]` | — | sim | `valor`, `rotulo`, `icone?`, `grupo?` (as do `OpcaoSelect`), `conteudo?` — o que aparece no lugar do rótulo, uma `Tag` por exemplo — e `detalhe?`: texto de apoio à direita, apagado (o domínio da empresa, o e-mail da pessoa). A busca procura no `rotulo` e no `detalhe`. |
 | `rotulo` | `string` | — | sim | Nome do controle para leitor de tela. Ex.: "Origem do lead". |
-| `rotulos` | `RotulosDoCombobox` | — | sim | `busca` (placeholder e nome da busca) e `vazio` (busca sem resultado). Texto nunca dentro do componente. |
+| `rotulos` | `RotulosDoCombobox` | — | sim | `busca` (placeholder e nome da busca), `vazio` (busca sem resultado) e `criar?` — a frase da linha de criar, com o texto digitado: `(t) => \`Criar "${t}"\``. Texto nunca dentro do componente. |
+| `aoCriar` | `(texto: string) => void` | — | não | Com ela, a busca que não acha oferece criar: uma linha no fim da lista. Numa escolha, criar fecha o painel; em várias, limpa a busca e a lista fica aberta. |
+| `acao` | `AcaoDoCombobox` | — | não | Uma ação fixa no pé do painel, fora da lista: `{ rotulo, icone?, aoAtivar }`. Ex.: "Gerenciar etapas". Ativar fecha o painel. |
 | `valor` | `string` | — | não | O valor escolhido. Sem ele, o gatilho mostra `textoVazio`. |
 | `aoEscolher` | `(valor: string) => void` | — | não | Chamado ao escolher; o painel fecha. |
 | `textoVazio` | `string` | `"Selecione"` | não | O que o gatilho mostra sem escolha. |
@@ -65,7 +68,9 @@ Só o painel, controlado, ancorado em qualquer gatilho — como o `Menu`.
 | `selecionados` | `string[]` | — | sim | Os valores escolhidos. |
 | `aoAlternar` | `(valor: string) => void` | — | sim | Clique numa opção. Com `multiplo`, põe ou tira; sem, escolhe e o painel fecha. |
 | `multiplo` | `boolean` | `false` | não | Caixa de marcar em cada opção, e o painel fica aberto. |
-| `rotulos` | `RotulosDoCombobox` | — | sim | `busca` e `vazio`. |
+| `rotulos` | `RotulosDoCombobox` | — | sim | `busca`, `vazio` e `criar?`. |
+| `aoCriar` | `(texto: string) => void` | — | não | A linha de criar no fim da lista (ver `Combobox`). |
+| `acao` | `AcaoDoCombobox` | — | não | A ação fixa no pé do painel (ver `Combobox`). |
 | `largura` | `number` | `256` | não | Largura mínima do painel, em px; nunca menor que o gatilho. |
 
 ## Variantes
@@ -88,6 +93,7 @@ Só o painel, controlado, ancorado em qualquer gatilho — como o `Menu`.
 | aberto | `caret do gatilho girado 180 + text-foreground` | banco | L11 |
 | vazio | `busca sem resultado: rotulos.vazio em muted-foreground` | banco | — |
 | abrindo | `fade-in-fast; sai com fade-out` | banco | L10 |
+| criar | `linha no fim da lista com Plus e a frase de rotulos.criar, em overlay-item-text-selected; último item das setas; Enter cria` | humano | SeletorTags (criar tag) |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -105,7 +111,7 @@ decisão, não buraco a preencher.
 ## Composição
 
 Usa: `SelectTrigger`, `GrupoDeOpcoes` e `agruparOpcoes` do Select, `PainelFlutuante` do Popover,
-`caixaDeCampo` de `lib/campo.ts`, `rolagemDiscreta` de `lib/estados.ts`, `useCliqueFora` e `useSaida` ·
+`buscaDoPainel` de `lib/campo.ts` (a busca sem caixa, com traço embaixo), `rolagemDiscreta` e `focoInterno` de `lib/estados.ts`, `useCliqueFora` e `useSaida` ·
 Usado por: `BarraDeFiltros` (o chip e o "+ Filtro"), `CelulaEscolha` da Table e a tela do Pipeline.
 
 ## Exemplo de uso
@@ -149,7 +155,8 @@ Várias escolhas, cada opção como a Tag que vai aparecer:
 |------|---------------------|
 | Papel | Busca com `role="combobox"`, lista com `role="listbox"` (`aria-multiselectable` no múltiplo), opção com `role="option"` e `aria-selected`; grupo com `role="group"` e nome |
 | Foco | Fica na busca o tempo todo; a opção sob o teclado anda por `aria-activedescendant` e rola para ficar à vista. Ao fechar, volta ao gatilho |
-| Teclado | Setas andam, Enter escolhe, Escape fecha só o painel (o Modal ou o Drawer de trás ficam), Tab fecha e segue |
+| Teclado | Setas andam (a linha de criar é o último item), Enter escolhe ou cria, Escape fecha só o painel (o Modal ou o Drawer de trás ficam), Tab fecha e segue — com `acao`, Tab vai da busca para ela e Shift+Tab volta |
+| Foco na busca | A busca não tem caixa nem anel: o foco fica nela o tempo todo e o cursor do texto é o sinal; a opção sob o teclado tem fundo próprio |
 | Busca | Ignora acento e caixa: "saude" acha "Saúde" |
 | Rótulo | `rotulo` é o nome do gatilho e do painel; a busca tem `<label>` próprio (`sr-only`) |
 | Texto longo | O rótulo da opção trunca com o texto inteiro no `title` |

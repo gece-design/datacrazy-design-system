@@ -3370,6 +3370,21 @@
       "status": "adiado",
       "fechadoEm": null,
       "nota": "**Decisão do humano em 2026-10-01 (ADR-058).** Sem par no arquivo: o disco do Avatar nos catorze tons, o `SeletorDeTom` em 16 e 24px, o \"+N\" da célula de tags e a tela de Leads. Desenhar no arquivo na remedição."
+    },
+    {
+      "id": "AUD-212",
+      "eixo": "fidelidade",
+      "titulo": "Figma atrás do código: a Tag é pílula com traço, texto normal e cor na bolinha",
+      "onde": [
+        "components/ui/tag.tsx"
+      ],
+      "regra": "fidelidade · cliente > arquivo (Figma é rascunho)",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Decisão do humano em 2026-10-02 (ADR-059).** O arquivo (538:197) ainda desenha fundo cinza, raio total e caixa alta. Redesenhar o set Tag e as amostras de cor na remedição."
     }
   ]
 }

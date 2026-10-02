@@ -153,9 +153,19 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   esconde a `BarraDeFiltros` sob o Header; `Pagination` embaixo; seleção em massa com `useSelecaoDaTabela` + `BarraDeSelecao`;
   clique na linha abre o registro no `PainelLateral`, ao lado da lista (encaixe
   `lateral` da `TelaBase`). Células: `CelulaLead` (nome +
-  `Tag` neutra com `status`), `CelulaProgresso` (etapa), `Tag foto` (pessoa),
+  `Tag` sem cor ou com `status`), `CelulaProgresso` (etapa), `Tag foto` (pessoa),
   `CelulaEditavel` (valor editável), `CelulaEscolha` (valor que vem de lista:
   tags, etapa — edita na célula, sem modal), origem com `IconeDeMarca`.
+- **Quadro (kanban)**: o do bloco `@datacrazy/pipeline` (`app/pipeline/quadro.tsx`).
+  É compacto: coluna com piso de 220 que cresce até 300 (`min-w-[220px]
+  max-w-[300px] flex-1 basis-0`), vão de 8, recuo 6; cinco etapas cabem em
+  1440 sem rolar. Cabeçalho da coluna numa linha de 24: bolinha, nome, contagem
+  e o total à direita. Cartão enxuto, com traço e sem sombra (`rounded-md border
+  bg-card p-2`): iniciais coloridas e nome; valor com a origem e os dias à
+  direita; uma linha por detalhe (ícone + valor, o nome do campo no `title`);
+  atendente e tags no fim. O que o cartão mostra é escolha da pessoa; de
+  fábrica vem o essencial. "Novo lead" fica no pé da coluna; criar etapa é um
+  botão estreito no fim do trilho, não uma coluna vazia.
 - **Cadastro / edição** (poucos campos): `Modal size="md"` com `Input`,
   `Select size="field"`, `InputTelefone`, `DatePicker`; rodapé com `Button
   size="sm"` (`outline` cancela, `primary` confirma). Muitos campos ou edição
@@ -261,8 +271,10 @@ O produto é responsivo, não desktop-first. Toda tela é conferida em 390px.
 - `DataTable layout="confortavel"` (linha alta, a do arquivo) para lista de
   registros → tire a prop: a Table nasce `densa`. `confortavel` é para
   leitura com respiro (relatório, doc).
-- `Tag tom="…"` sorteada para cada etiqueta → `Tag` neutra com `status`; cor só
-  quando o produto define a cor daquele dado (etapa do funil, tom do perfil).
+- `Tag tom="…"` sorteada para cada etiqueta → `Tag` sem cor, ou com `status`; `tom` só
+  quando a pessoa escolheu a cor da tag ou o produto define a cor daquele dado
+  (etapa do funil, tom do perfil). A Tag é pílula com traço e texto como foi
+  escrito (ADR-059): nunca `uppercase`, `rounded-full` nem `bg-*` por `className`.
   O cliente tirou a variação colorida em 18/09 ("vibe code").
 - Formulário longo em `Modal` → `PainelLateral` com campos em linha, ou
   `Drawer` com cartões. Modal é decisão curta.

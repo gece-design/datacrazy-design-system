@@ -193,9 +193,7 @@ export function Tela() {
       valor: t.id,
       rotulo: t.rotulo,
       conteudo: (
-        <Tag tom={e.tom} status={e.status}>
-          {t.rotulo}
-        </Tag>
+<Tag tom={e.tom}>{t.rotulo}</Tag>
       ),
     };
   });
@@ -555,9 +553,7 @@ export function Tela() {
               {/* prévia: a tag sai daqui exatamente assim */}
               <div className="flex min-h-[22px] items-center gap-2 text-caption text-muted-foreground">
                 Como fica:
-                <Tag tom={novaTag.tom ?? undefined} status={novaTag.tom ? "info" : undefined}>
-                  {novaTag.nome.trim() || "Nome da tag"}
-                </Tag>
+<Tag tom={novaTag.tom ?? undefined}>{novaTag.nome.trim() || "Nome da tag"}</Tag>
               </div>
             </div>
           </div>

@@ -441,9 +441,7 @@ const previews: Record<string, React.ReactNode> = {
         <div key={nome} className="flex items-center gap-2 border-b border-border px-2 py-1 last:border-b-0">
           <Avatar nome={nome} size="xs" iniciais="duas" tom="auto" aria-hidden="true" />
           <p className="min-w-0 flex-1 truncate text-label-md text-foreground">{nome}</p>
-          <Tag tom={tom as "vermelho" | "verde" | "amarelo"} status="info">
-            {tag}
-          </Tag>
+<Tag tom={tom as "vermelho" | "verde" | "amarelo"}>{tag}</Tag>
         </div>
       ))}
     </div>

@@ -3,15 +3,20 @@
 import * as React from "react";
 import {
   Buildings,
+  CalendarBlank,
   CaretLeft,
   CaretRight,
   Clock,
+  EnvelopeSimple,
   Globe,
   Handshake,
   Plus,
   User,
+  UserCircle,
   WarningCircle,
 } from "@phosphor-icons/react";
+import type { Icon } from "@phosphor-icons/react";
+import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tag } from "@/components/ui/tag";
 import { IconeDeMarca } from "@/components/ui/icone-de-marca";
@@ -37,8 +42,11 @@ export function IconeDoCanal({ canal, tamanho = 14 }: { canal: Canal; tamanho?: 
   return <Glifo size={tamanho} weight="regular" aria-hidden="true" className="shrink-0 text-muted-foreground" />;
 }
 
-/** Largura da coluna + vão. Um clique na seta anda exatamente uma coluna. */
-const PASSO = 316;
+/* O quadro é compacto (cliente, 2026-09-28: "colunas de 220px, cartões mais
+   enxutos"): a coluna tem 220 de piso e cresce até 300 quando sobra tela, o
+   vão é de 8 e o cartão mostra o essencial. Em 1440 as cinco etapas do
+   exemplo cabem sem rolar. */
+const VAO = 8;
 
 export type Colunas = Record<EtapaId, Lead[]>;
 
@@ -63,10 +71,12 @@ type Alvo = { etapa: EtapaId; indice: number };
 /**
  * O que o cartão mostra além de nome e valor — a pessoa escolhe campo a
  * campo, como as propriedades de um card do Notion (humano, 2026-09-23; os
- * três presets do protótipo saíram). Tudo ligado é o estado de fábrica.
+ * três presets do protótipo saíram). De fábrica vem o cartão enxuto
+ * (`CAMPOS_DE_FABRICA`); próxima ação, contato e e-mail entram por escolha.
  */
 export const CAMPOS_DO_CARTAO = ["empresa", "origem", "proximaAcao", "contato", "email", "tags", "atendente", "dias"] as const;
 export type CampoDoCartao = (typeof CAMPOS_DO_CARTAO)[number];
+export const CAMPOS_DE_FABRICA: CampoDoCartao[] = ["empresa", "origem", "tags", "atendente", "dias"];
 export const ROTULOS_DOS_CAMPOS: Record<CampoDoCartao, string> = {
   empresa: "Empresa e cidade",
   origem: "Origem",
@@ -240,7 +250,11 @@ export function Quadro({
     trilho.current?.releasePointerCapture(e.pointerId);
   }
 
-  const rolar = (direcao: -1 | 1) => trilho.current?.scrollBy({ left: direcao * PASSO, behavior: "smooth" });
+  // Um clique na seta anda exatamente uma coluna: a largura dela, hoje, mais o vão.
+  const rolar = (direcao: -1 | 1) => {
+    const coluna = trilho.current?.querySelector<HTMLElement>("[data-coluna]");
+    trilho.current?.scrollBy({ left: direcao * ((coluna?.offsetWidth ?? 220) + VAO), behavior: "smooth" });
+  };
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
@@ -260,7 +274,7 @@ export function Quadro({
         onPointerUp={soltarPan}
         onPointerCancel={soltarPan}
         className={cn(
-          "flex min-h-0 flex-1 gap-3 overflow-x-auto p-3", rolagemDiscreta,
+          "flex min-h-0 flex-1 gap-2 overflow-x-auto p-2", rolagemDiscreta,
           arrastandoTrilho ? "cursor-grabbing select-none" : "cursor-grab",
         )}
       >
@@ -324,11 +338,11 @@ export function Quadro({
                 // O painel da coluna: quase branco no claro, um degrau acima do
                 // fundo no escuro. Separa a coluna do fundo da tela sem competir
                 // com o branco do cartão. Com cor, é o degrau mais claro do tom.
-                "flex h-full w-[300px] shrink-0 flex-col gap-2 rounded-xl p-2 transition-colors",
+                "flex h-full min-w-[220px] max-w-[300px] flex-1 basis-0 flex-col gap-1.5 rounded-lg p-1.5 transition-colors",
                 linhaAqui ? "bg-accent" : cor.painel,
               )}
             >
-              <header className="flex shrink-0 items-center gap-2 px-1 pt-0.5">
+              <header className="flex h-6 shrink-0 items-center gap-1.5 px-1">
                 <span aria-hidden="true" className={cn("size-2 shrink-0 rounded-full", cor.ponto)} />
                 {/* O título é o gesto de editar a etapa: nome e cor. */}
                 <h2 className="min-w-0">
@@ -336,62 +350,49 @@ export function Quadro({
                     type="button"
                     onClick={() => aoEditarEtapa(etapa)}
                     title={`${etapa.descricao} — clique para renomear ou trocar a cor`}
-                    className={cn(
-                      "block w-full truncate rounded-sm text-left text-h4 uppercase transition-colors hover:text-primary",
-                      `${foco}`,
-                      cor.texto,
-                    )}
+                    className={cn("block w-full truncate rounded-sm text-left text-h4 transition-colors hover:text-primary", `${foco}`, cor.texto)}
                   >
                     {etapa.rotulo}
                   </button>
                 </h2>
-                <span className="shrink-0 rounded-full bg-card px-1.5 py-0.5 text-label-sm tabular-nums text-muted-foreground">
-                  {lista.length}
-                </span>
+                <span className="shrink-0 text-label-md tabular-nums text-muted-foreground">{lista.length}</span>
                 <span
                   title={`${moeda(total)} em aberto nesta etapa`}
                   className="ml-auto shrink-0 text-label-md tabular-nums text-muted-foreground"
                 >
                   {moeda(total)}
                 </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label={`Adicionar lead em ${etapa.rotulo}`}
-                  title={`Adicionar lead em ${etapa.rotulo}`}
-                  onClick={() => aoAdicionar(etapa.id)}
-                  className="size-7 shrink-0"
-                >
-                  <Plus size={16} weight="regular" />
-                </Button>
               </header>
 
-              <div className={cn("flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto", rolagemDiscreta)}>
+              <div className={cn("flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto", rolagemDiscreta)}>
                 {nos}
                 {lista.length === 0 && !linhaAqui ? (
-                  <p className="rounded-lg border border-dashed border-border px-3 py-6 text-center text-body-sm text-subtle-foreground">
+                  <p className="rounded-md border border-dashed border-border px-2 py-4 text-center text-body-sm text-subtle-foreground">
                     Nenhum lead nesta etapa. Arraste um cartão para cá.
                   </p>
                 ) : null}
+                {/* Adicionar fica no pé da lista, com rótulo: o cabeçalho de 220 não tem lugar para mais um botão. */}
+                <Button variant="ghost" size="sm" onClick={() => aoAdicionar(etapa.id)} className="shrink-0 justify-start gap-1.5 px-1.5">
+                  <Plus size={16} weight="regular" />
+                  Novo lead
+                  <span className="sr-only"> em {etapa.rotulo}</span>
+                </Button>
               </div>
             </section>
           );
         })}
 
-        {/* A última coluna não é coluna: é o gesto de criar uma. */}
-        <button
-          type="button"
+        {/* Criar etapa: um botão estreito no fim do trilho, não uma coluna inteira de espaço vazio. */}
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label="Nova etapa"
+          title="Nova etapa"
           onClick={aoCriarEtapa}
-          className={cn(
-            "flex h-full w-[300px] shrink-0 flex-col items-center justify-center gap-2 rounded-xl",
-            "border border-dashed border-border bg-card/30 text-muted-foreground transition-colors",
-            "hover:border-primary hover:text-foreground",
-            `${foco}`,
-          )}
+          className="shrink-0 border border-dashed border-border"
         >
-          <Plus size={20} weight="regular" aria-hidden="true" />
-          <span className="text-h4">Nova etapa</span>
-        </button>
+          <Plus size={16} weight="regular" />
+        </Button>
       </div>
 
       {/* As setas dizem que há coluna fora da tela — e rolam uma coluna por
@@ -463,19 +464,18 @@ function Cartao({
   const tags = tagsDe(GRUPOS_TAGS, lead.tags);
   const mostra = (c: CampoDoCartao) => campos.includes(c);
   const proximaAcao = lead.proximaAcao ? lead.proximaAcao.split("-").reverse().slice(0, 2).join("/") : null;
-  // As linhas de detalhe: rótulo à esquerda em muted, valor à direita em
-  // foreground (humano, 2026-09-23). Só as que a pessoa ligou e que têm valor.
+  // As linhas de detalhe: o ícone do campo e o valor, numa linha de 16 — o
+  // nome do campo vai no `title`. Só as que a pessoa ligou e que têm valor.
   const detalhes = (
     [
-      mostra("origem") ? ["Origem", lead.canal] : null,
-      mostra("proximaAcao") ? ["Próxima ação", proximaAcao] : null,
+      mostra("empresa") ? [Tipo, "Empresa", `${lead.empresa} · ${lead.cidade}`] : null,
+      mostra("proximaAcao") ? [CalendarBlank, "Próxima ação", proximaAcao] : null,
       mostra("contato") && lead.contatoPrincipal
-        ? ["Contato", `${lead.contatoPrincipal.nome}${lead.contatoPrincipal.cargo ? ` · ${lead.contatoPrincipal.cargo}` : ""}`]
+        ? [UserCircle, "Contato", `${lead.contatoPrincipal.nome}${lead.contatoPrincipal.cargo ? ` · ${lead.contatoPrincipal.cargo}` : ""}`]
         : null,
-      mostra("email") ? ["E-mail", lead.email] : null,
-    ] as ([string, string | null] | null)[]
-  ).filter((par): par is [string, string] => Boolean(par && par[1]));
-  const rodape = mostra("atendente") || mostra("dias");
+      mostra("email") ? [EnvelopeSimple, "E-mail", lead.email] : null,
+    ] as ([Icon, string, string | null] | null)[]
+  ).filter((linha): linha is [Icon, string, string] => Boolean(linha && linha[2]));
 
   return (
     <article
@@ -491,75 +491,68 @@ function Cartao({
       onDragStart={aoIniciar}
       onDragEnd={aoTerminar}
       className={cn(
-        "shrink-0 cursor-grab select-none rounded-lg bg-card p-3 shadow-sm transition-shadow",
-        "hover:shadow-md active:cursor-grabbing",
+        // cartão enxuto: traço no lugar da sombra, recuo 8, 6 entre os blocos
+        "flex shrink-0 cursor-grab select-none flex-col gap-1.5 rounded-md border border-border bg-card p-2 transition-colors",
+        "hover:border-input-border-hover active:cursor-grabbing",
         `${foco}`,
         emMovimento && !pegoPeloTeclado && "opacity-40",
         pegoPeloTeclado && "shadow-lg outline outline-2 outline-offset-2 outline-primary",
       )}
     >
-      <div className="flex items-start justify-between gap-2">
-        {/* h3 (15px): entre os 16 que o humano pediu antes e os 13 do cartão
-            cheio — um tamanho só, em todo estado (humano, 2026-09-23). */}
-        <p title={lead.nome} className="min-w-0 truncate text-h3 text-foreground">
+      {/* quem é: as iniciais na cor que o nome sorteia, como na lista */}
+      <div className="flex items-center gap-1.5">
+        <Avatar nome={lead.nome} size="xs" iniciais="duas" tom="auto" aria-hidden="true" />
+        <p title={lead.nome} className="min-w-0 flex-1 truncate text-h4 text-foreground">
           {lead.nome}
         </p>
-        <span className="shrink-0 text-label-lg tabular-nums text-foreground">{moeda(lead.valor)}</span>
       </div>
 
-      {mostra("empresa") ? (
-        <p title={`${lead.empresa} · ${lead.cidade}`} className="mt-1 flex items-center gap-1 text-body-sm text-muted-foreground">
-          <Tipo size={14} weight="regular" aria-hidden="true" className="shrink-0" />
-          <span className="min-w-0 truncate">{lead.empresa}</span>
-          <span className="shrink-0 text-subtle-foreground">· {lead.cidade}</span>
-        </p>
-      ) : null}
+      {/* quanto vale, e há quanto tempo está parado */}
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-label-lg tabular-nums text-foreground">{moeda(lead.valor)}</span>
+        <span className="flex shrink-0 items-center gap-2 text-muted-foreground">
+          {mostra("origem") ? (
+            <span title={`Origem: ${lead.canal}`} className="flex items-center">
+              <IconeDoCanal canal={lead.canal} />
+              <span className="sr-only">{lead.canal}</span>
+            </span>
+          ) : null}
+          {mostra("dias") ? (
+            <span
+              title={parado ? `Parado há ${lead.dias} dias nesta etapa` : `${lead.dias} dia(s) nesta etapa`}
+              className={cn("flex items-center gap-1 text-caption tabular-nums", parado && "text-warning")}
+            >
+              {parado ? <WarningCircle size={14} weight="regular" aria-hidden="true" /> : <Clock size={14} weight="regular" aria-hidden="true" />}
+              {lead.dias}d
+            </span>
+          ) : null}
+        </span>
+      </div>
 
       {detalhes.length > 0 ? (
-        <dl className="mt-2.5 flex flex-col gap-1 text-label-lg">
-          {detalhes.map(([rotulo, valor]) => (
-            <div key={rotulo} className="flex items-baseline justify-between gap-3">
-              <dt className="shrink-0 text-muted-foreground">{rotulo}</dt>
-              <dd title={valor} className="min-w-0 truncate text-right tabular-nums text-foreground">
-                {valor}
-              </dd>
+        <dl className="flex flex-col gap-1">
+          {detalhes.map(([Glifo, rotulo, valor]) => (
+            <div key={rotulo} title={`${rotulo}: ${valor}`} className="flex items-center gap-1.5 text-body-sm text-muted-foreground">
+              <dt className="flex shrink-0 items-center">
+                <Glifo size={14} weight="regular" aria-hidden="true" />
+                <span className="sr-only">{rotulo}</span>
+              </dt>
+              <dd className="min-w-0 truncate">{valor}</dd>
             </div>
           ))}
         </dl>
       ) : null}
 
-      {mostra("tags") && tags.length > 0 ? (
-        <div className="mt-2.5 flex flex-wrap items-center gap-1">
-          {tags.map((t) => (
-            <Tag key={t.id} status={t.status}>
-              {t.rotulo}
-            </Tag>
-          ))}
-        </div>
-      ) : null}
-
-      {rodape ? (
-        <div className="mt-3 flex items-center justify-between gap-2 border-t border-background pt-2.5">
-          {mostra("atendente") ? <Tag foto="/ds/atendente.png">{lead.responsavel}</Tag> : <span />}
-          {mostra("dias") ? (
-            <div className="flex shrink-0 items-center gap-2.5 text-muted-foreground">
-              <span title={`Origem: ${lead.canal}`} className="flex items-center">
-                <IconeDoCanal canal={lead.canal} />
-                <span className="sr-only">{lead.canal}</span>
-              </span>
-              <span
-                title={parado ? `Parado há ${lead.dias} dias nesta etapa` : `${lead.dias} dia(s) nesta etapa`}
-                className={cn("flex items-center gap-1 text-caption tabular-nums", parado && "text-warning")}
-              >
-                {parado ? (
-                  <WarningCircle size={14} weight="regular" aria-hidden="true" />
-                ) : (
-                  <Clock size={14} weight="regular" aria-hidden="true" />
-                )}
-                {lead.dias}d
-              </span>
-            </div>
-          ) : null}
+      {(mostra("tags") && tags.length > 0) || mostra("atendente") ? (
+        <div className="flex flex-wrap items-center gap-1">
+          {mostra("atendente") ? <Tag foto="/ds/atendente.png">{lead.responsavel}</Tag> : null}
+          {mostra("tags")
+            ? tags.map((t) => (
+                <Tag key={t.id} status={t.status}>
+                  {t.rotulo}
+                </Tag>
+              ))
+            : null}
         </div>
       ) : null}
     </article>

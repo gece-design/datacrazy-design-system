@@ -1,5 +1,6 @@
 "use client";
 
+import { Fire, Snowflake, ThermometerSimple } from "@phosphor-icons/react";
 import * as React from "react";
 import { SeletorDeTom, Tag, TagAdicionar, TONS, type Tom } from "@/components/ui/tag";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
@@ -32,9 +33,7 @@ function DemoSeletorDeTom() {
       <SeletorDeTom tamanho="md" comNeutro rotulo="Cor da tag" nomes={{ ...NOME_DO_TOM, neutro: "Cinza" }} valor={tom} aoEscolher={setTom} />
       <div className="flex items-center gap-2 text-caption text-muted-foreground">
         Como fica:
-        <Tag tom={tom ?? undefined} status={tom ? "info" : undefined}>
-          Cliente VIP
-        </Tag>
+        <Tag tom={tom ?? undefined}>Cliente VIP</Tag>
       </div>
     </div>
   );
@@ -44,16 +43,16 @@ export default function TagPage() {
   return (
     <PaginaDS
       titulo="Tag"
-      descricao="A etiqueta que o usuário põe no lead: pílula de 22px em caixa alta, com bolinha de status, ícone de tipo ou foto do atendente. O + no fim da fileira abre o seletor, com uma aba por tipo de tag e busca que também cria."
+      descricao="A etiqueta que o usuário põe no lead: pílula de 22px com traço, o texto como foi escrito e a cor numa bolinha. Também leva ícone de tipo ou a foto do atendente. O + no fim da fileira abre o seletor, com uma aba por tipo de tag e busca que também cria."
       secoes={["Como funciona", "Variantes", "Cores", "Seletor de cor", "No perfil", "Seletor de tags", "Outros cenários", "Quando usar"]}
     >
       <ComoFunciona>
         <p>
           A <Chip>Tag</Chip> saiu do drawer do lead (node 538:197). O arquivo desenha oito &ldquo;temas&rdquo; num
           eixo só; em código eles viram três props que se combinam — <Chip>status</Chip> põe a bolinha de 6px,{" "}
-          <Chip>tipo</Chip> põe o ícone de pessoa ou empresa e <Chip>foto</Chip> encosta a foto do atendente. O fundo é{" "}
-          <Chip>input/bg-disabled</Chip> e a caixa alta é CSS: a string chega como veio, e o leitor de tela lê a
-          original.
+          <Chip>tipo</Chip> põe o ícone de pessoa ou empresa e <Chip>foto</Chip> encosta a foto do atendente. A pílula
+          é <Chip>card</Chip> com traço <Chip>border</Chip>, e o texto aparece como foi escrito: o arquivo desenha
+          fundo cinza e caixa alta, e os dois saíram a pedido do time.
         </p>
         <p>
           O <Chip>+</Chip> é outra coisa. Clicável não é tag, então ele é <Chip>TagAdicionar</Chip>, um botão com
@@ -105,10 +104,10 @@ export default function TagPage() {
       <Secao
         titulo="Cores"
         spec="14 tons + neutro"
-        descricao="Quinze cores para quem cria a tag: catorze tons, na ordem do círculo de cores, e a tag sem tom, que é o cinza. Cada tom tem o fundo, a letra e a bolinha medidos para o claro e para o escuro."
+        descricao="Quinze cores para quem cria a tag: catorze tons, na ordem do círculo de cores, e a tag sem cor. A cor mora na bolinha; o texto fica sempre na cor do texto, legível no claro e no escuro."
         codigo={`<Tag tom="turquesa">Turquesa</Tag>
-<Tag tom="fucsia" status="info">Fúcsia</Tag>
-<Tag>Neutro</Tag>`}
+<Tag tom="vermelho" icone={Fire}>Quente</Tag>
+<Tag>Sem cor</Tag>`}
         nota={
           <>
             A cor é escolha de quem cria a tag, não sorteio da tela: lista inteira colorida ao acaso vira ruído.{" "}
@@ -124,14 +123,13 @@ export default function TagPage() {
                 {NOME_DO_TOM[t]}
               </Tag>
             ))}
-            <Tag>Neutro</Tag>
+            <Tag>Sem cor</Tag>
           </div>
+          {/* com ícone, quem leva a cor é ele: a forma distingue junto com a cor */}
           <div className="flex flex-wrap items-center gap-1.5">
-            {TONS.map((t) => (
-              <Tag key={t} tom={t} status="info">
-                {NOME_DO_TOM[t]}
-              </Tag>
-            ))}
+            <Tag tom="ciano" icone={Snowflake}>Frio</Tag>
+            <Tag tom="ambar" icone={ThermometerSimple}>Morno</Tag>
+            <Tag tom="vermelho" icone={Fire}>Quente</Tag>
           </div>
         </div>
       </Secao>
@@ -139,7 +137,7 @@ export default function TagPage() {
       <Secao
         titulo="Seletor de cor"
         spec="15 amostras · 16 ou 24px"
-        descricao="As amostras de quem cria uma tag, uma etapa ou uma lista: as quinze cores, e nenhuma outra. Cada amostra mostra as duas cores que a tag vai ter — o pastel do fundo e a letra, no anel. A marcada ganha contorno e, no tamanho de formulário, o check."
+        descricao="As amostras de quem cria uma tag, uma etapa ou uma lista: as quinze cores, e nenhuma outra. Cada amostra é a cor da bolinha; a cinza é a tag sem cor. A marcada ganha contorno e, no tamanho de formulário, o check."
         codigo={`<SeletorDeTom
   tamanho="md"
   comNeutro

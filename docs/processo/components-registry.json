@@ -568,16 +568,19 @@
         "seletor de cor"
       ],
       "tokens": [
-        "input/bg-disabled",
+        "card",
+        "border",
         "foreground",
+        "tom/tag",
+        "tom/texto",
         "primary",
         "primary-hover",
         "destructive",
         "info",
         "success",
-        "background",
-        "radius/full",
-        "text/label-sm",
+        "radius/md",
+        "text/label-md",
+        "input/bg-disabled",
         "overlay/bg",
         "overlay/border",
         "overlay/item-hover",
@@ -603,11 +606,11 @@
           "approvedIn": "lote-3"
         },
         "selecionada": {
-          "impl": "bg-overlay-item-selected + Check overlay-item-text-selected",
-          "source": "figma",
+          "impl": "caixa de marcar à esquerda, em primary com Check; a linha não muda de fundo",
+          "source": "humano",
           "rule": null,
-          "precedent": "Select Item 544:99",
-          "approvedIn": "lote-3"
+          "precedent": "Combobox de várias escolhas",
+          "approvedIn": "2026-10-02"
         },
         "aberto": {
           "impl": "painel em portal fixo + foco na busca + Escape so no painel",
@@ -617,7 +620,7 @@
           "approvedIn": "lote-3"
         },
         "cor marcada": {
-          "impl": "amostra do SeletorDeTom: scale-110 + outline 2px foreground; no tamanho md, Check de 12 na cor da letra",
+          "impl": "amostra do SeletorDeTom (a cor cheia da bolinha): scale-110 + outline 2px foreground; no tamanho md, Check de 12",
           "source": "humano",
           "rule": null,
           "precedent": "fileira de cores do SeletorTags (2026-09-18)",
@@ -1924,6 +1927,13 @@
           "rule": "L10",
           "precedent": "Select",
           "approvedIn": "C2"
+        },
+        "criar": {
+          "impl": "linha no fim da lista com Plus e a frase de rotulos.criar, em overlay-item-text-selected; último item das setas; Enter cria",
+          "source": "humano",
+          "rule": null,
+          "precedent": "SeletorTags (criar tag)",
+          "approvedIn": "2026-10-02"
         }
       },
       "_states_doc": "Sem par no arquivo: ADR-049. Gatilho do Select, painel do Popover, busca do SeletorTags, caixa de marcar do Menu. Escape fecha so o painel."

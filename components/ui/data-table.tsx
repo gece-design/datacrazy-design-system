@@ -25,7 +25,7 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { Button, BotaoFechar } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Menu, type ItemDoMenu } from "@/components/ui/menu";
-import { ComboboxPainel, type OpcaoCombobox, type RotulosDoCombobox } from "@/components/ui/combobox";
+import { ComboboxPainel, type AcaoDoCombobox, type OpcaoCombobox, type RotulosDoCombobox } from "@/components/ui/combobox";
 import { useSaida } from "@/lib/use-saida";
 
 import { foco, focoInterno } from "@/lib/estados";
@@ -1489,6 +1489,8 @@ export function CelulaEscolha({
   aoAlternar,
   multiplo,
   rotulos,
+  aoCriar,
+  acao,
   children,
   className,
 }: {
@@ -1501,6 +1503,10 @@ export function CelulaEscolha({
   aoAlternar: (valor: string) => void;
   multiplo?: boolean;
   rotulos: RotulosDoCombobox;
+  /** A busca que não acha oferece criar (passe `rotulos.criar` junto). */
+  aoCriar?: (texto: string) => void;
+  /** Uma ação fixa no pé da lista. Ex.: "Gerenciar tags". */
+  acao?: AcaoDoCombobox;
   /** O valor em repouso. */
   children: React.ReactNode;
   className?: string;
@@ -1542,6 +1548,8 @@ export function CelulaEscolha({
         aoAlternar={aoAlternar}
         multiplo={multiplo}
         rotulos={rotulos}
+        aoCriar={aoCriar}
+        acao={acao}
       />
     </div>
   );

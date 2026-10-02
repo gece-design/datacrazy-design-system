@@ -30,7 +30,7 @@ export default function Page() {
     <main className="mx-auto flex max-w-[860px] flex-col gap-6 p-8">
       <h1 className="text-heading-md text-foreground">Tags do drawer · proposta de cor</h1>
 
-      <Bloco titulo="Antes" nota="Tudo cinza, tudo em caixa alta. A fileira do perfil hoje.">
+      <Bloco titulo="Antes" nota="Tudo sem cor: a fileira do perfil, como era.">
         <div className="flex flex-wrap items-center gap-1.5">
           <Tag foto="/ds/atendente.png">Esther</Tag>
           <Tag>Lista de leads</Tag>
@@ -41,7 +41,7 @@ export default function Page() {
         </div>
       </Bloco>
 
-      <Bloco titulo="Depois" nota="A mesma fileira, com a cor vindo da regra de cada grupo. Caixa alta em todas.">
+      <Bloco titulo="Depois" nota="A mesma fileira, com a cor vindo da regra de cada grupo.">
         <div className="flex flex-wrap items-center gap-1.5">
           <Tag foto="/ds/atendente.png">Esther</Tag>
           <Tag tom={tomDe("lista-de-leads")}>Lista de leads</Tag>
@@ -64,7 +64,7 @@ export default function Page() {
           <Tag tom="ambar" icone={ThermometerSimple}>Morno</Tag>
           <Tag tom="vermelho" icone={Fire}>Quente</Tag>
         </Linha>
-        <Linha rotulo="Listas · sem adorno">
+        <Linha rotulo="Listas · cor escolhida">
           <Tag tom={tomDe("lista-de-leads")}>Lista de leads</Tag>
           <Tag tom={tomDe("isaias-123")}>Isaias 123</Tag>
           <Tag tom={tomDe("prospect-list")}>Prospect list</Tag>
@@ -90,7 +90,7 @@ export default function Page() {
         </Linha>
       </Bloco>
 
-      <Bloco titulo="Os catorze tons" nota="Com a tag sem tom, são quinze cores. Ao criar uma tag em Listas, a pessoa escolhe uma delas.">
+      <Bloco titulo="Os catorze tons" nota="Com a tag sem cor, são quinze. Ao criar uma tag em Listas, a pessoa escolhe uma delas.">
         <div className="flex flex-wrap items-center gap-1.5">
           {TONS.map((t) => (
             <Tag key={t} tom={t}>

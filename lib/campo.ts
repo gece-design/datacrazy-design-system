@@ -70,3 +70,9 @@ export const gradeDeCartoes = "grid grid-cols-[repeat(auto-fill,minmax(220px,1fr
 
 /** A mensagem de erro sob o campo (E6: erro inline é o padrão do DS). */
 export const erroDeCampo = "text-caption text-destructive";
+
+/** A busca no topo de um painel flutuante (Combobox, seletor de tags): uma
+ *  faixa de 36 sem caixa, com traço embaixo — o foco está sempre nela, então
+ *  o cursor do texto é o sinal; a caixa com anel pesava a cada lista aberta
+ *  (crítica de 2026-09-28, referência Attio). */
+export const buscaDoPainel = "flex h-9 shrink-0 items-center gap-2 border-b border-overlay-border px-3";

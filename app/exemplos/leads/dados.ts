@@ -41,10 +41,9 @@ export function tagsDe(catalogo: TagDaConta[], ids: string[]): TagDaConta[] {
   return catalogo.filter((t) => ids.includes(t.id));
 }
 
-/** A tag como a célula e o painel a desenham: a cor escolhida e a bolinha da
- *  mesma cor. A cinza (sem tom) vai sem bolinha. */
+/** A tag como a célula e o painel a desenham: a bolinha na cor escolhida. A sem cor vai sem bolinha. */
 export function etiquetaDe(tag: TagDaConta) {
-  return { rotulo: tag.rotulo, tom: tag.tom ?? undefined, status: tag.tom ? ("info" as const) : undefined };
+  return { rotulo: tag.rotulo, tom: tag.tom ?? undefined };
 }
 
 /** O nome de cada cor, para o seletor (leitor de tela e tooltip). */

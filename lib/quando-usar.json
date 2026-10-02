@@ -86,7 +86,7 @@
       "componente": "Tag",
       "usar": [
         "para etiqueta do lead, status com bolinha (`status`), tipo do registro (`tipo`) e atendente (`foto`).",
-        "neutra por padrão; `tom` só quando o produto define a cor daquele dado (etapa do funil, perfil).",
+        "sem cor por padrão; `tom` quando a pessoa escolheu a cor daquela tag ou o produto define a cor daquele dado (etapa do funil, perfil). A cor aparece na bolinha — ou no ícone, quando há `icone`.",
         "`SeletorDeTom` quando a pessoa escolhe a cor de algo que ela cria (tag, etapa, lista): as quinze cores do DS, em amostras. Nunca um seletor de cor livre nem campo de hexadecimal."
       ],
       "naoUsar": [
@@ -196,7 +196,8 @@
       "usar": [
         "`Combobox` para uma escolha numa lista longa (mais de ~10 opções) ou que cresce com o uso: cidade, produto, responsável, origem.",
         "`ComboboxMultiplo` para várias escolhas com caixa de marcar: tags, canais, segmentos.",
-        "`ComboboxPainel` quando o gatilho já existe: o chip da `BarraDeFiltros`, a `CelulaEscolha` da tabela."
+        "`ComboboxPainel` quando o gatilho já existe: o chip da `BarraDeFiltros`, a `CelulaEscolha` da tabela.",
+        "`detalhe` quando o nome sozinho não distingue (duas empresas parecidas: o domínio desempata); `aoCriar` quando a lista cresce com o uso (empresa, cidade, segmento); `acao` para o caminho de quem quer editar a lista (\"Gerenciar etapas\") — uma só, nunca um menu de ações."
       ],
       "naoUsar": [
         "para lista curta e fechada (até ~10 opções, sem busca): é `Select`.",

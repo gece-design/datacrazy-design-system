@@ -1,15 +1,15 @@
 {
-  "geradoEm": "2026-10-01",
+  "geradoEm": "2026-10-02",
   "periodo": {
     "inicio": "2026-09-02",
     "fim": "2026-10-01"
   },
   "git": {
-    "commits": 82,
-    "arquivos": 347,
-    "linhasUi": 11370,
-    "linhasLib": 811,
-    "linhasDocs": 8528
+    "commits": 83,
+    "arquivos": 352,
+    "linhasUi": 11467,
+    "linhasLib": 849,
+    "linhasDocs": 8564
   },
   "catalogo": {
     "itens": 59,
@@ -133,11 +133,11 @@
       "categoria": "Forms",
       "pagina": null,
       "pecas": 3,
-      "props": 20,
+      "props": 24,
       "variantes": 4,
-      "estados": 6,
-      "acessibilidade": 7,
-      "linhas": 390
+      "estados": 7,
+      "acessibilidade": 8,
+      "linhas": 472
     },
     {
       "name": "data-table",
@@ -150,7 +150,7 @@
       "variantes": 7,
       "estados": 4,
       "acessibilidade": 12,
-      "linhas": 1753
+      "linhas": 1761
     },
     {
       "name": "date-picker",
@@ -409,8 +409,8 @@
       "props": 19,
       "variantes": 7,
       "estados": 5,
-      "acessibilidade": 8,
-      "linhas": 465
+      "acessibilidade": 7,
+      "linhas": 472
     },
     {
       "name": "tela-base",
@@ -494,9 +494,9 @@
   "totais": {
     "componentes": 36,
     "pecas": 119,
-    "props": 379,
+    "props": 383,
     "variantes": 105,
-    "estados": 132,
+    "estados": 133,
     "acessibilidade": 220,
     "paginas": 44,
     "docs": 36
@@ -1078,14 +1078,24 @@
       "id": "ADR-058",
       "titulo": "Iniciais coloridas, seletor de cor como peça e a tela de Leads",
       "data": "2026-10-01"
+    },
+    {
+      "id": "ADR-059",
+      "titulo": "Tag: pílula com traço, texto como foi escrito, cor na bolinha",
+      "data": "2026-10-02"
+    },
+    {
+      "id": "ADR-060",
+      "titulo": "Lista com busca: sem caixa na busca, texto de apoio, criar e ação no pé",
+      "data": "2026-10-02"
     }
   ],
   "auditoria": {
-    "total": 211,
+    "total": 212,
     "porStatus": {
       "corrigido": 67,
       "aceito": 12,
-      "adiado": 130,
+      "adiado": 131,
       "aberto": 2
     },
     "porEixo": {
@@ -1095,10 +1105,20 @@
       "paginas": 10,
       "instalacao": 11,
       "docs": 10,
-      "fidelidade": 126
+      "fidelidade": 127
     }
   },
   "pedidos": [
+    {
+      "data": "2026-10-02",
+      "origem": "Revisão",
+      "titulo": "TAG COM TRAÇO E TEXTO NORMAL; QUADRO COMPACTO"
+    },
+    {
+      "data": "2026-10-02",
+      "origem": "Revisão",
+      "titulo": "LISTA COM BUSCA: TEXTO DE APOIO, CRIAR E AÇÃO NO PÉ"
+    },
     {
       "data": "2026-10-01",
       "origem": "Revisão",

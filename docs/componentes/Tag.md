@@ -7,7 +7,7 @@ Mostrar uma etiqueta que o usuário pôs no lead.
 ## Quando usar
 
 - **Use** para etiqueta do lead, status com bolinha (`status`), tipo do registro (`tipo`) e atendente (`foto`).
-- **Use** neutra por padrão; `tom` só quando o produto define a cor daquele dado (etapa do funil, perfil).
+- **Use** sem cor por padrão; `tom` quando a pessoa escolheu a cor daquela tag ou o produto define a cor daquele dado (etapa do funil, perfil). A cor aparece na bolinha — ou no ícone, quando há `icone`.
 - **Não use** para selo de situação do sistema (beta, novo): é `Badge`.
 - **Não use** `tom` sorteado para colorir a lista: cor só quando carrega significado.
 - **Não use** como botão: adicionar é `TagAdicionar` ou `SeletorTags`.
@@ -24,6 +24,12 @@ Node: `538:197` ("Tag", canvas do Drawer) · Lote: `3` · Oito temas: Text,
 Status, theme8, Status 2, Atendente, Empresa, Pessoa, Adicionar. O painel do
 seletor parte do Select Menu `544:122` e do Select Item `544:99`.
 
+**Desvio (ADR-059):** o arquivo desenha a tag com fundo cinza cheio, raio
+total e texto de 10px em caixa alta. No código ela é uma pílula com traço
+(`card` + `border`, raio `md`), texto de 11px como foi escrito, e a cor mora
+na bolinha — pedido do time do cliente (crítica de 2026-09-28), aprovado pelo
+humano em 2026-10-02.
+
 Diff de pixels **não medido** (`figma-console` fora do ar).
 
 ## Props
@@ -32,12 +38,12 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 
 | Prop | Tipo | Obrigatória | Descrição |
 |------|------|-------------|-----------|
-| `status` | `"destructive" \| "info" \| "success"` | não | Bolinha de 6px antes do texto. |
-| `tipo` | `"pessoa" \| "empresa"` | não | Ícone de 12px e texto em `primary`. |
-| `foto` | `string` | não | Foto de 22px encostada à esquerda (atendente). |
-| `tom` | `Tom` | não | Um dos catorze tons de `[data-tom]` (`TONS`, na ordem do círculo de cores): `azul` `indigo` `roxo` `fucsia` `rosa` `vermelho` `laranja` `ambar` `amarelo` `lima` `verde` `turquesa` `ciano` `marrom`. Sem tom, a tag é cinza — o atendente; com ela, são quinze cores (ADR-051). `tomDe(chave)` dá um tom estável para um texto, sempre entre os seis de antes (`azul` `roxo` `rosa` `laranja` `ciano` `ambar`): abrir a paleta não troca a cor de lista que já existe. |
-| `icone` | `ComponentType` | não | Ícone de 12px antes do texto, para quem não distingue as cores. |
-| `children` | `ReactNode` | sim | O texto. A caixa alta é CSS. |
+| `status` | `"destructive" \| "info" \| "success"` | não | Bolinha de 6px antes do texto, na cor da situação. Com `tom`, a bolinha já vem, na cor do tom. |
+| `tipo` | `"pessoa" \| "empresa"` | não | Ícone de 12px; ícone e texto na cor do lead (`tom/texto`). |
+| `foto` | `string` | não | Foto de 18px encostada à esquerda, por dentro do traço (atendente). |
+| `tom` | `Tom` | não | A cor da tag: um dos catorze tons de `[data-tom]` (`TONS`, na ordem do círculo de cores): `azul` `indigo` `roxo` `fucsia` `rosa` `vermelho` `laranja` `ambar` `amarelo` `lima` `verde` `turquesa` `ciano` `marrom`. Pinta a bolinha — ou o ícone, quando há `icone`; o texto fica sempre em `foreground`. Sem tom, a tag não tem cor; com ela, são quinze cores (ADR-051). `tomDe(chave)` dá um tom estável para um texto, sempre entre os seis de antes (`azul` `roxo` `rosa` `laranja` `ciano` `ambar`): abrir a paleta não troca a cor de lista que já existe. |
+| `icone` | `ComponentType` | não | Ícone de 12px antes do texto, no lugar da bolinha e na cor do tom — a forma distingue junto com a cor. |
+| `children` | `ReactNode` | sim | O texto, como foi escrito. |
 
 Mais larga que o lugar (`max-w-full`), a tag trunca o texto com reticências —
 é o que evita a invasão da coluna vizinha na grade densa; ponha `title` quando
@@ -67,7 +73,7 @@ o rótulo inteiro importar.
 | `rotulo` | `string` | — | sim | Nome do grupo para leitor de tela. Ex.: "Cor da tag". |
 | `nomes` | `Partial<Record<Tom \| "neutro", string>>` | — | não | Nome de cada cor, para leitor de tela e tooltip (i18n). Sem ele, a chave do tom. |
 | `comNeutro` | `boolean` | `false` | não | Abre a fileira com a amostra cinza: são as quinze cores. |
-| `tamanho` | `"sm" \| "md"` | `"sm"` | não | 16px na fileira do seletor de tags; 24px, com o check na marcada, em formulário. |
+| `tamanho` | `"sm" \| "md"` | `"sm"` | não | 16px na fileira do seletor de tags; 24px, com o check na marcada, em formulário. Cada amostra é a cor da bolinha; a cinza é a tag sem cor. |
 | `className` | `string` | — | não | — |
 
 Os tons (`TONS`, `Tom`, `tomDe`) moram em `lib/tons.ts` e a Tag os re-exporta.
@@ -90,9 +96,9 @@ Os tons (`TONS`, `Tom`, `tomDe`) moram em `lib/tons.ts` e a Tag os re-exporta.
 |--------|---------------|--------|--------------------|
 | hover | `bg-primary-hover no TagAdicionar; bg-overlay-item-hover no item do seletor` | figma | Select Item 544:99 |
 | focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
-| selecionada | `bg-overlay-item-selected + Check overlay-item-text-selected` | figma | Select Item 544:99 |
+| selecionada | `caixa de marcar à esquerda, em primary com Check; a linha não muda de fundo` | humano | Combobox de várias escolhas |
 | aberto | `painel em portal fixo + foco na busca + Escape so no painel` | humano | L11 |
-| cor marcada | `amostra do SeletorDeTom: scale-110 + outline 2px foreground; no tamanho md, Check de 12 na cor da letra` | humano | fileira de cores do SeletorTags (2026-09-18) |
+| cor marcada | `amostra do SeletorDeTom (a cor cheia da bolinha): scale-110 + outline 2px foreground; no tamanho md, Check de 12` | humano | fileira de cores do SeletorTags (2026-09-18) |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -102,15 +108,15 @@ A `Tag` é leitura. Só o `TagAdicionar` é interativo.
 
 ## Tokens consumidos
 
-`input/bg-disabled` · `foreground` · `primary` · `primary-hover` ·
-`destructive` · `info` · `success` · `background` · `radius/full` ·
-`text/label-sm` · no seletor: `overlay/bg` ·
+`card` · `border` · `foreground` · `tom/tag` · `tom/texto` · `primary` ·
+`primary-hover` · `destructive` · `info` · `success` · `radius/md` ·
+`text/label-md` · `input/bg-disabled` (amostra sem cor) · no seletor: `overlay/bg` ·
 `overlay/border` · `overlay/item-hover` · `overlay/item-selected` ·
 `overlay/item-text-selected` · `elevation/lg` · `radius/lg` · `text/body-md`
 
 ## Composição
 
-Usa: `caixaDeCampo` do [Input](Input.md) na busca, [Tabs](Tabs.md) nas abas do seletor, `PainelFlutuante` do [Popover](Popover.md) em modo `fixo` (portal) e `useCliqueFora` (lib); ícones Phosphor (`User`, `Buildings`, `Plus`, `Check`, `MagnifyingGlass`) ·
+Usa: `buscaDoPainel` de `lib/campo.ts` na busca (sem caixa, com traço embaixo), [Tabs](Tabs.md) nas abas do seletor, `PainelFlutuante` do [Popover](Popover.md) em modo `fixo` (portal) e `useCliqueFora` (lib); ícones Phosphor (`User`, `Buildings`, `Plus`, `Check`, `MagnifyingGlass`) ·
 Usado por: [Drawer](Drawer.md) (perfil, tabela de negócios, nó da hierarquia); o `SeletorDeTom`, pelo `SeletorTags` e pelo modal de criar tag da tela de Leads
 
 ## Exemplo de uso
@@ -134,8 +140,7 @@ filtra) e origem do lead (canal com logo e cor fixa; campanha com cor livre).
 
 | Item | Como está resolvido |
 |------|---------------------|
-| Cor | A bolinha é `aria-hidden`: o sentido está no texto, não na cor |
-| Caixa alta | `uppercase` no CSS — o leitor de tela lê a string original |
+| Cor | A bolinha é `aria-hidden`: o sentido está no texto, não na cor. O texto é sempre `foreground` sobre `card` |
 | Adicionar | `<button>` com `aria-label` e `title` (regra E7) |
 | Seletor de cor | `role="radiogroup"` com o `rotulo`; cada amostra é `role="radio"` com o nome da cor (`nomes`) e `aria-checked`; a marcada tem contorno e, no `md`, o check — não depende só da cor |
 | Seletor | Painel `role="dialog"`; abas do `Tabs`; busca `role="combobox"` com `aria-activedescendant` numa `listbox` multisseleção |

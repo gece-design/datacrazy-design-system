@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Globe, Handshake } from "@phosphor-icons/react";
+import { Gear, Globe, Handshake } from "@phosphor-icons/react";
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
 import { Combobox, ComboboxMultiplo, ComboboxPainel } from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
@@ -87,6 +87,31 @@ const codigoVarias = `<ComboboxMultiplo
   rotulos={{ busca: "Buscar tag", vazio: "Nenhuma tag encontrada" }}
 />`;
 
+const codigoApoio = `<Combobox
+  size="field"
+  rotulo="Empresa"
+  textoVazio="Selecione a empresa"
+  opcoes={empresas.map((e) => ({ valor: e.id, rotulo: e.nome, detalhe: e.dominio }))}
+  valor={empresa}
+  aoEscolher={setEmpresa}
+  aoCriar={(nome) => criarEmpresa(nome)}
+  acao={{ rotulo: "Gerenciar empresas", icone: Gear, aoAtivar: abrirEmpresas }}
+  rotulos={{
+    busca: "Buscar empresa",
+    vazio: "Nenhuma empresa encontrada",
+    criar: (texto) => \`Adicionar "\${texto}" como empresa\`,
+  }}
+/>`;
+
+const EMPRESAS = [
+  { id: "vitalis", nome: "Clínica Vitalis", dominio: "vitalis.com.br" },
+  { id: "horizonte", nome: "Horizonte Engenharia", dominio: "horizonte.eng.br" },
+  { id: "bomdia", nome: "Rede Bom Dia", dominio: "redebomdia.com.br" },
+  { id: "raizes", nome: "Instituto Raízes", dominio: "raizes.org.br" },
+  { id: "serra-azul", nome: "Serra Azul Log", dominio: "serraazul.log.br" },
+  { id: "vale-verde", nome: "Vale Verde Agro", dominio: "valeverde.agr.br" },
+];
+
 const codigoPainel = `const botao = useRef(null as HTMLButtonElement | null);
 const [aberto, setAberto] = useState(false);
 
@@ -120,13 +145,16 @@ export default function ComboboxPage() {
   const [escolhidas, setEscolhidas] = useState(["quente", "saude"]);
   const [atendente, setAtendente] = useState("Esther Lima");
   const [painel, setPainel] = useState(false);
+  const [empresas, setEmpresas] = useState(EMPRESAS);
+  const [empresa, setEmpresa] = useState("vitalis");
+  const [aviso, setAviso] = useState("");
   const botao = useRef<HTMLButtonElement>(null);
 
   return (
     <PaginaDS
       titulo="Combobox"
-      descricao="A lista com busca: o Select para quando as opções passam de dez, têm grupos ou aceitam várias escolhas. Mesmo gatilho do Select, painel de 256px com busca que ignora acento, e teclado completo sem tirar o foco do campo."
-      secoes={["Como funciona", "Uma escolha", "Grupos e ícones", "Várias escolhas", "Só o painel", "Teclado"]}
+      descricao="A lista com busca: o Select para quando as opções passam de dez, têm grupos ou aceitam várias escolhas. Mesmo gatilho do Select, painel de 256px com a busca no topo, que ignora acento, e teclado completo sem tirar o foco do campo. A opção pode levar um texto de apoio, a busca pode criar e o pé do painel pode ter uma ação."
+      secoes={["Como funciona", "Uma escolha", "Grupos e ícones", "Várias escolhas", "Apoio, criar e ação", "Só o painel", "Teclado"]}
     >
       <ComoFunciona>
         <p>
@@ -240,6 +268,49 @@ export default function ComboboxPage() {
           Cada opção aparece como a <Chip>Tag</Chip> que vai para a tela (<Chip>conteudo</Chip>). Ao lado, o que está
           marcado — muda enquanto a lista está aberta, sem botão de confirmar.
         </Legenda>
+      </Secao>
+
+      <Secao
+        titulo="Apoio, criar e ação"
+        spec="detalhe · aoCriar · acao"
+        descricao="Três acabamentos para lista de registros: um texto de apoio à direita de cada opção, a busca que não acha oferecendo criar, e uma ação fixa no pé do painel. Digite um nome que não existe para ver a linha de criar."
+        codigo={codigoApoio}
+        nota={
+          <>
+            <Chip>detalhe</Chip> entra na busca: digitar o domínio acha a empresa. A linha de criar só aparece
+            quando o texto não é o nome de nenhuma opção, e entra na fila das setas como último item. A{" "}
+            <Chip>acao</Chip> fica fora da lista: da busca, <Chip>Tab</Chip> chega nela.
+          </>
+        }
+      >
+        <div className="mx-auto flex w-full max-w-[320px] flex-col gap-3 rounded-md bg-card p-5">
+          <CartaoDeCampo rotulo="Empresa">
+            <Combobox
+              size="field"
+              rotulo="Empresa"
+              textoVazio="Selecione a empresa"
+              opcoes={empresas.map((e) => ({ valor: e.id, rotulo: e.nome, detalhe: e.dominio }))}
+              valor={empresa}
+              aoEscolher={setEmpresa}
+              aoCriar={(nome) => {
+                const id = `nova-${empresas.length}`;
+                setEmpresas((lista) => [...lista, { id, nome, dominio: "" }]);
+                setEmpresa(id);
+                setAviso(`${nome} foi criada e já está escolhida.`);
+              }}
+              acao={{ rotulo: "Gerenciar empresas", icone: Gear, aoAtivar: () => setAviso("No CRM, abre o cadastro de empresas.") }}
+              rotulos={{
+                busca: "Buscar empresa",
+                vazio: "Nenhuma empresa encontrada",
+                criar: (texto) => `Adicionar "${texto}" como empresa`,
+              }}
+              className="block w-full"
+            />
+          </CartaoDeCampo>
+          <p aria-live="polite" className="min-h-4 text-caption text-muted-foreground">
+            {aviso}
+          </p>
+        </div>
       </Secao>
 
       <Secao

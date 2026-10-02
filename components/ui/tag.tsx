@@ -3,7 +3,7 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { Buildings, Check, MagnifyingGlass, Plus, User } from "@phosphor-icons/react";
-import { caixaDeCampo } from "@/lib/campo";
+import { buscaDoPainel } from "@/lib/campo";
 import { Tabs } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useCliqueFora } from "@/lib/use-clique-fora";
@@ -32,13 +32,13 @@ const pontos = {
 export { TONS, tomDe, type Tom } from "@/lib/tons";
 
 export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
-  /** Bolinha de 6px antes do texto. O texto continua sendo o sinal: a cor só reforça. */
+  /** Bolinha de 6px na cor da situação. Com `tom`, a bolinha já vem, na cor do tom. O texto continua sendo o sinal: a cor só reforça. */
   status?: keyof typeof pontos;
   /** Tipo do registro: ícone de 12px e texto em `primary`. */
   tipo?: "pessoa" | "empresa";
   /** Foto de 22px encostada à esquerda — a tag do atendente. */
   foto?: string;
-  /** Um dos catorze tons. Sem tom, a tag é cinza — é assim que o atendente fica. */
+  /** Um dos catorze tons: a cor da bolinha (ou do ícone, quando há `icone`). Sem tom, a tag não tem cor. */
   tom?: Tom;
   /** Ícone de 12px antes do texto, para quem não distingue as cores. */
   icone?: React.ComponentType<{ size?: number; weight?: "regular" | "fill"; className?: string }>;
@@ -46,20 +46,23 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 export function Tag({ status, tipo, foto, tom, icone, className, children, ...props }: TagProps) {
   const Icone = icone ?? (tipo === "pessoa" ? User : tipo === "empresa" ? Buildings : null);
+  // A cor da tag é a bolinha. Com ícone ou foto, quem carrega a cor é ele.
+  const bolinha = Boolean(status) || (Boolean(tom) && !Icone && !foto);
   return (
     <span
       // `data-tom` liga os quatro --tom-* daquele tom neste span (globals.css)
       data-tom={tom}
       className={cn(
-        // 22px = 14 de entrelinha + 4 de respiro em cima e embaixo
+        // 22px = 15 de entrelinha + 2,5 de respiro em cima e embaixo + o traço.
         // `max-w-full` + texto que trunca: mais larga que o lugar (célula da
         // grade densa), a tag corta com reticências em vez de invadir a vizinha.
-        "inline-flex h-[22px] max-w-full shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full px-1.5 text-label-sm uppercase text-foreground",
-        // com tom: pastel por fundo, a mesma cor escura na letra. Sem: o cinza de antes.
-        tom ? "bg-tom-brilho text-tom-texto" : "bg-input-bg-disabled",
-        foto && "pl-0",
-        // a tag de tipo não colore o fundo: fica cinza e pega a cor do lead
-        // (`--tom-texto` do `[data-tom]` que o perfil do drawer já define).
+        // Pílula com traço, texto como foi escrito: a caixa alta e o fundo cheio
+        // do arquivo saíram (cliente, 2026-09-28; humano, 2026-10-02, ADR-059).
+        "inline-flex h-[22px] max-w-full shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-md border border-border bg-card px-1.5 text-label-md text-foreground",
+        // a foto encosta: 1px de folga por dentro do traço, em toda a volta
+        foto && "pl-px",
+        // a tag de tipo pega a cor do lead (`--tom-texto` do `[data-tom]` que
+        // o perfil do drawer já define) no ícone e no texto.
         tipo && !tom && "text-tom-texto",
         className,
       )}
@@ -67,12 +70,12 @@ export function Tag({ status, tipo, foto, tom, icone, className, children, ...pr
     >
       {foto ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={foto} alt="" className="size-[22px] shrink-0 rounded-full object-cover" />
+        <img src={foto} alt="" className="size-[18px] shrink-0 rounded-full object-cover" />
       ) : null}
-      {status ? (
-        <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", tom ? "bg-tom-tag" : pontos[status])} />
+      {bolinha ? (
+        <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", tom ? "bg-tom-tag" : status ? pontos[status] : "")} />
       ) : null}
-      {Icone ? <Icone size={12} weight="regular" className="shrink-0" aria-hidden="true" /> : null}
+      {Icone ? <Icone size={12} weight="regular" className={cn("shrink-0", tom && "text-tom-texto")} aria-hidden="true" /> : null}
       <span className="min-w-0 truncate">{children}</span>
     </span>
   );
@@ -124,8 +127,8 @@ export interface SeletorDeTomProps {
 /**
  * SeletorDeTom — as amostras de cor de quem cria uma tag, uma etapa, uma lista.
  *
- * Cada amostra mostra as duas cores que a peça vai ter: o pastel do fundo e a
- * letra, no anel. São os catorze tons de `TONS` — quinze com `comNeutro` — e
+ * Cada amostra é a cor da bolinha que a tag vai ter; a cinza é "sem cor".
+ * São os catorze tons de `TONS` — quinze com `comNeutro` — e
  * nenhum outro: quem cria escolhe, não inventa (ADR-051). Era a fileira de
  * dentro do `SeletorTags`; virou peça porque o modal de criar tag do cliente
  * precisa dela num formulário (crítica de 2026-09-28).
@@ -149,9 +152,10 @@ export function SeletorDeTom({ valor, aoEscolher, rotulo, nomes, comNeutro = fal
             data-tom={t ?? undefined}
             onClick={() => aoEscolher(t)}
             className={cn(
-              "grid shrink-0 place-items-center rounded-full ring-2 ring-inset transition-transform",
+              "grid shrink-0 place-items-center rounded-full transition-transform",
               md ? "size-6" : "size-4",
-              t ? "bg-tom-brilho text-tom-texto ring-tom-texto" : "bg-input-bg-disabled text-muted-foreground ring-muted-foreground",
+              // o check é branco sobre a cor; na cinza, escuro
+              t ? "bg-tom-tag text-primary-foreground" : "bg-input-bg-disabled text-foreground ring-1 ring-inset ring-border",
               `${foco}`,
               marcada ? "scale-110 outline outline-2 outline-offset-2 outline-foreground" : "hover:scale-110",
             )}
@@ -358,30 +362,28 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                 className="border-b border-border px-3"
               />
 
-              <div className="p-1.5">
-                <label htmlFor={`busca-${id}`} className="sr-only">
-                  {rotulos.busca}
-                </label>
-                <div className={caixaDeCampo()}>
-                  <MagnifyingGlass size={16} weight="regular" aria-hidden="true" className="shrink-0 text-input-placeholder" />
-                  <input
-                    ref={campo}
-                    id={`busca-${id}`}
-                    role="combobox"
-                    aria-expanded="true"
-                    aria-controls={idLista}
-                    aria-autocomplete="list"
-                    aria-activedescendant={total ? `opcao-${id}-${ativo}` : undefined}
-                    autoComplete="off"
-                    value={busca}
-                    onChange={(e) => {
-                      setBusca(e.target.value);
-                      setAtivo(0);
-                    }}
-                    placeholder={rotulos.busca}
-                    className="h-full min-w-0 flex-1 bg-transparent text-body-md text-input-text outline-none placeholder:text-input-placeholder"
-                  />
-                </div>
+              <label htmlFor={`busca-${id}`} className="sr-only">
+                {rotulos.busca}
+              </label>
+              <div className={buscaDoPainel}>
+                <MagnifyingGlass size={16} weight="regular" aria-hidden="true" className="shrink-0 text-input-placeholder" />
+                <input
+                  ref={campo}
+                  id={`busca-${id}`}
+                  role="combobox"
+                  aria-expanded="true"
+                  aria-controls={idLista}
+                  aria-autocomplete="list"
+                  aria-activedescendant={total ? `opcao-${id}-${ativo}` : undefined}
+                  autoComplete="off"
+                  value={busca}
+                  onChange={(e) => {
+                    setBusca(e.target.value);
+                    setAtivo(0);
+                  }}
+                  placeholder={rotulos.busca}
+                  className="h-full min-w-0 flex-1 bg-transparent text-body-md text-input-text outline-none placeholder:text-input-placeholder"
+                />
               </div>
 
               <div
@@ -389,7 +391,7 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                 role="listbox"
                 aria-multiselectable="true"
                 aria-labelledby={grupo ? `${base}-aba-${grupo.id}` : undefined}
-                className={cn("flex max-h-60 flex-col gap-0.5 overflow-y-auto overscroll-contain px-1.5 pb-1.5", rolagemDiscreta)}
+                className={cn("flex max-h-60 flex-col overflow-y-auto overscroll-contain p-1.5", rolagemDiscreta)}
               >
                 {filtradas.map((t, i) => {
                   const escolhida = selecionadas.includes(t.id);
@@ -405,18 +407,23 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => escolher(i)}
                       className={cn(
-                        "flex cursor-pointer items-center justify-between gap-2 rounded-md px-3 py-1.5 transition-colors",
-                        escolhida ? "bg-overlay-item-selected" : emFoco && "bg-overlay-item-hover",
-                        // escolhida E sob o teclado: o fundo já é o de selecionada, então o foco ganha traço
-                        escolhida && emFoco && "ring-1 ring-inset ring-ring",
+                        // a mesma linha do Combobox de várias escolhas: caixa de marcar à esquerda, sem faixa azul
+                        "flex min-h-8 cursor-pointer items-center gap-2 rounded-sm px-2 py-1 transition-colors",
+                        emFoco && "bg-overlay-item-hover",
                       )}
                     >
+                      <span
+                        aria-hidden="true"
+                        className={cn(
+                          "flex size-4 shrink-0 items-center justify-center rounded-sm border",
+                          escolhida ? "border-primary bg-primary text-primary-foreground" : "border-input-border bg-card",
+                        )}
+                      >
+                        {escolhida ? <Check size={12} weight="bold" /> : null}
+                      </span>
                       <Tag status={t.status} foto={t.foto} tom={t.tom} icone={t.icone}>
                         {t.rotulo}
                       </Tag>
-                      {escolhida ? (
-                        <Check size={16} weight="regular" aria-hidden="true" className="shrink-0 text-overlay-item-text-selected" />
-                      ) : null}
                     </div>
                   );
                 })}
@@ -430,7 +437,7 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => escolher(filtradas.length)}
                     className={cn(
-                      "flex cursor-pointer items-center justify-between gap-2 rounded-md px-3 py-2 text-body-md text-overlay-item-text-selected transition-colors",
+                      "flex min-h-8 cursor-pointer items-center justify-between gap-2 rounded-sm px-2 py-1 text-label-lg text-overlay-item-text-selected transition-colors",
                       ativo === filtradas.length && "bg-overlay-item-hover",
                     )}
                   >
@@ -443,7 +450,7 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                   </div>
                 ) : null}
 
-                {total === 0 ? <p className="px-3 py-2 text-body-md text-muted-foreground">{rotulos.vazio}</p> : null}
+                {total === 0 ? <p className="px-2 py-2 text-body-md text-muted-foreground">{rotulos.vazio}</p> : null}
               </div>
 
               {/* Fileira de cores — fora do listbox, porque amostra não é opção

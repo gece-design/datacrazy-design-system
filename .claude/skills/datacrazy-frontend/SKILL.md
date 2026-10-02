@@ -210,6 +210,9 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   quadro e chat com `recuo={false}` (ADR-055); parte 5 — `PainelLateral` (+ `PainelLateralCorpo`, `ListaDeCampos`,
   `LinhaDeCampo`) nos encaixes `lateral`/`lateralCheia` da TelaBase: o registro abre ao lado e empurra a lista; o Drawer
   fica para o registro completo (ADR-056). As cinco partes estão no DS; `/exemplos/proposta-visual` saiu.
+- **Tag e quadro (2026-10-02)**: a `Tag` é pílula com traço, texto como foi escrito e cor na bolinha
+  (`tom` → bolinha; com `icone`, o ícone leva a cor) — ADR-059; nunca `uppercase` nem fundo por `className`.
+  O quadro do funil é compacto: coluna 220–300, cartão com traço e sem sombra (receita em `docs/regras.md`).
 - **Cor que a pessoa escolhe e cor do nome**: os tons moram em `lib/tons.ts` (`TONS`, `Tom`, `tomDe`).
   Escolher cor é `SeletorDeTom` (as quinze, nunca cor livre); lista de pessoas usa `CelulaLead avatar aoAbrir`
   (ou `Avatar tom="auto"`); `CelulaTags` mostra "+N" do que não coube. Tela de referência para lista de

@@ -87,7 +87,7 @@ export function PainelLead({
           <span className="truncate">{lead.empresa}</span>
         </>
       }
-      inicio={<Avatar nome={lead.nome} size="sm" aria-hidden="true" className="shrink-0" />}
+      inicio={<Avatar nome={lead.nome} size="sm" iniciais="duas" tom="auto" aria-hidden="true" className="shrink-0" />}
       telaCheia={telaCheia}
       aoAlternarTelaCheia={aoAlternarTelaCheia}
       aoFechar={aoFechar}

@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Check, MagnifyingGlass } from "@phosphor-icons/react";
+import { Check, MagnifyingGlass, Plus, type Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import { caixaDeCampo } from "@/lib/campo";
-import { rolagemDiscreta } from "@/lib/estados";
+import { buscaDoPainel } from "@/lib/campo";
+import { focoInterno, rolagemDiscreta } from "@/lib/estados";
 import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
@@ -31,22 +31,33 @@ import {
  * O foco fica na busca o tempo todo; as setas andam pela lista por
  * `aria-activedescendant` (padrão combobox do WAI-ARIA). Escape fecha só o
  * painel — o Modal ou o Drawer de trás não fecham junto.
+ *
+ * Três acabamentos vieram da referência do time (Attio, crítica de
+ * 2026-09-28): `detalhe` na opção (texto de apoio à direita), `aoCriar` (a
+ * busca que não acha oferece criar) e `acao` (uma ação fixa no pé do painel).
  */
 
 export type OpcaoCombobox = OpcaoSelect & {
   /** O que aparece no lugar do rótulo — uma `Tag`, por exemplo. A busca continua pelo `rotulo`. */
   conteudo?: React.ReactNode;
+  /** Texto de apoio à direita, apagado: o domínio da empresa, o e-mail da pessoa. A busca também procura nele. */
+  detalhe?: string;
 };
+
+/** A ação fixa no pé do painel. Ex.: "Gerenciar etapas". */
+export type AcaoDoCombobox = { rotulo: string; icone?: Icon; aoAtivar: () => void };
 
 export type RotulosDoCombobox = {
   /** Placeholder e nome da busca. Ex.: "Buscar etapa". */
   busca: string;
   /** Busca sem resultado. Ex.: "Nada encontrado". */
   vazio: string;
+  /** A linha de criar, com o texto digitado. Ex.: (t) => `Criar "${t}"`. Passe junto com `aoCriar`. */
+  criar?: (texto: string) => string;
 };
 
-/** Busca + lista (max-h-80: dez opções à vista) + recuos: entra na medida de "cabe embaixo?". */
-const ALTURA_DO_PAINEL = 384;
+/** Busca + lista (max-h-80: dez opções à vista) + a ação do pé: entra na medida de "cabe embaixo?". */
+const ALTURA_DO_PAINEL = 408;
 const LARGURA_DO_PAINEL = 256;
 
 /* Buscar "saude" tem que achar "Saúde": quem digita rápido não põe acento. */
@@ -74,6 +85,10 @@ export interface ComboboxPainelProps {
   rotulos: RotulosDoCombobox;
   /** Largura mínima do painel, em px. Padrão 256; nunca menor que o gatilho. */
   largura?: number;
+  /** Com ela, a busca que não acha oferece criar: uma linha no fim da lista, com o texto digitado. */
+  aoCriar?: (texto: string) => void;
+  /** Uma ação fixa no pé do painel, fora da lista. Ativar fecha o painel. */
+  acao?: AcaoDoCombobox;
 }
 
 export function ComboboxPainel({
@@ -87,6 +102,8 @@ export function ComboboxPainel({
   multiplo = false,
   rotulos,
   largura = LARGURA_DO_PAINEL,
+  aoCriar,
+  acao,
 }: ComboboxPainelProps) {
   const painel = React.useRef<HTMLDivElement>(null);
   const campo = React.useRef<HTMLInputElement>(null);
@@ -97,7 +114,11 @@ export function ComboboxPainel({
   const { saindo, visivel } = useSaida(aberto);
 
   const termo = semAcento(busca.trim());
-  const filtradas = termo ? opcoes.filter((o) => semAcento(o.rotulo).includes(termo)) : opcoes;
+  const filtradas = termo ? opcoes.filter((o) => semAcento(`${o.rotulo} ${o.detalhe ?? ""}`).includes(termo)) : opcoes;
+  // Criar só aparece quando o texto não é o nome de nenhuma opção; entra na
+  // fila das setas como o último item.
+  const podeCriar = Boolean(aoCriar && termo && !opcoes.some((o) => semAcento(o.rotulo) === termo));
+  const total = filtradas.length + (podeCriar ? 1 : 0);
 
   /* Portal `fixed`, medido a partir do gatilho: o painel abre dentro de Modal,
      de célula de tabela e de barra que rola sem ser cortado (como o Select). */
@@ -148,26 +169,41 @@ export function ComboboxPainel({
     if (!multiplo) aoFechar();
   }
 
+  function criar() {
+    aoCriar?.(busca.trim());
+    if (multiplo) {
+      setBusca("");
+      setAtivo(0);
+    } else aoFechar();
+  }
+
   function teclado(e: React.KeyboardEvent) {
+    // setas e Enter são da busca; na ação do pé, o botão responde por si
+    const naBusca = e.target === campo.current;
     if (e.key === "Escape") {
       e.preventDefault();
       // a camada de trás (Modal, Drawer) também escuta Escape: aqui ele fecha só o painel
       e.stopPropagation();
       e.nativeEvent.stopImmediatePropagation();
       aoFechar();
-    } else if (e.key === "ArrowDown" && filtradas.length) {
+    } else if (e.key === "ArrowDown" && naBusca && total) {
       e.preventDefault();
-      setAtivo((a) => (a + 1) % filtradas.length);
-    } else if (e.key === "ArrowUp" && filtradas.length) {
+      setAtivo((a) => (a + 1) % total);
+    } else if (e.key === "ArrowUp" && naBusca && total) {
       e.preventDefault();
-      setAtivo((a) => (a - 1 + filtradas.length) % filtradas.length);
-    } else if (e.key === "Enter") {
+      setAtivo((a) => (a - 1 + total) % total);
+    } else if (e.key === "Enter" && naBusca) {
       e.preventDefault();
-      escolher(filtradas[ativo]);
+      if (ativo < filtradas.length) escolher(filtradas[ativo]);
+      else if (podeCriar) criar();
     } else if (e.key === "Tab") {
+      // com ação no pé, Tab vai da busca para ela e Shift+Tab volta; fora isso, Tab sai do painel
+      if (acao && (naBusca ? !e.shiftKey : e.shiftKey)) return;
       aoFechar(false);
     }
   }
+
+  const IconeDaAcao = acao?.icone;
 
   if (!visivel || !pos || typeof document === "undefined") return null;
   return createPortal(
@@ -181,30 +217,28 @@ export function ComboboxPainel({
       style={{ top: pos.top, bottom: pos.bottom, left: pos.left, width: pos.width }}
       className="flex flex-col overflow-hidden"
     >
-      <div className="p-1.5">
-        <label htmlFor={`busca-${id}`} className="sr-only">
-          {rotulos.busca}
-        </label>
-        <div className={caixaDeCampo()}>
-          <MagnifyingGlass size={16} weight="regular" aria-hidden="true" className="shrink-0 text-input-placeholder" />
-          <input
-            ref={campo}
-            id={`busca-${id}`}
-            role="combobox"
-            aria-expanded="true"
-            aria-controls={`lista-${id}`}
-            aria-autocomplete="list"
-            aria-activedescendant={filtradas.length ? `opcao-${id}-${ativo}` : undefined}
-            autoComplete="off"
-            value={busca}
-            onChange={(e) => {
-              setBusca(e.target.value);
-              setAtivo(0);
-            }}
-            placeholder={rotulos.busca}
-            className="h-full min-w-0 flex-1 bg-transparent text-body-md text-input-text outline-none placeholder:text-input-placeholder"
-          />
-        </div>
+      <label htmlFor={`busca-${id}`} className="sr-only">
+        {rotulos.busca}
+      </label>
+      <div className={buscaDoPainel}>
+        <MagnifyingGlass size={16} weight="regular" aria-hidden="true" className="shrink-0 text-input-placeholder" />
+        <input
+          ref={campo}
+          id={`busca-${id}`}
+          role="combobox"
+          aria-expanded="true"
+          aria-controls={`lista-${id}`}
+          aria-autocomplete="list"
+          aria-activedescendant={total ? `opcao-${id}-${ativo}` : undefined}
+          autoComplete="off"
+          value={busca}
+          onChange={(e) => {
+            setBusca(e.target.value);
+            setAtivo(0);
+          }}
+          placeholder={rotulos.busca}
+          className="h-full min-w-0 flex-1 bg-transparent text-body-md text-input-text outline-none placeholder:text-input-placeholder"
+        />
       </div>
 
       <div
@@ -212,7 +246,7 @@ export function ComboboxPainel({
         role="listbox"
         aria-label={rotulo}
         aria-multiselectable={multiplo || undefined}
-        className={cn("max-h-80 overflow-y-auto overscroll-contain px-1.5 pb-1.5", rolagemDiscreta)}
+        className={cn("max-h-80 overflow-y-auto overscroll-contain p-1.5", rolagemDiscreta)}
       >
         {agruparOpcoes(filtradas).map((bloco, b) => (
           <GrupoDeOpcoes key={bloco.grupo ?? `sem-grupo-${b}`} grupo={bloco.grupo} primeiro={b === 0}>
@@ -261,14 +295,56 @@ export function ComboboxPainel({
                       {o.rotulo}
                     </span>
                   )}
+                  {o.detalhe ? (
+                    <span title={o.detalhe} className="max-w-[45%] shrink-0 truncate text-caption text-subtle-foreground">
+                      {o.detalhe}
+                    </span>
+                  ) : null}
                   {!multiplo && escolhida ? <Check size={16} weight="regular" aria-hidden="true" className="shrink-0" /> : null}
                 </div>
               );
             })}
           </GrupoDeOpcoes>
         ))}
-        {filtradas.length === 0 ? <p className="px-2 py-2 text-body-md text-muted-foreground">{rotulos.vazio}</p> : null}
+        {podeCriar ? (
+          <div
+            id={`opcao-${id}-${filtradas.length}`}
+            role="option"
+            aria-selected={false}
+            onMouseEnter={() => setAtivo(filtradas.length)}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={criar}
+            className={cn(
+              "flex min-h-8 cursor-pointer items-center gap-2 rounded-sm px-2 py-1 text-label-lg text-overlay-item-text-selected transition-colors",
+              ativo === filtradas.length && "bg-overlay-item-hover",
+            )}
+          >
+            <Plus size={16} weight="regular" aria-hidden="true" className="shrink-0" />
+            <span className="min-w-0 truncate">{rotulos.criar ? rotulos.criar(busca.trim()) : busca.trim()}</span>
+          </div>
+        ) : null}
+        {total === 0 ? <p className="px-2 py-2 text-body-md text-muted-foreground">{rotulos.vazio}</p> : null}
       </div>
+
+      {acao ? (
+        // fora da lista: ação não é opção
+        <div className="shrink-0 border-t border-overlay-border p-1.5">
+          <button
+            type="button"
+            onClick={() => {
+              aoFechar();
+              acao.aoAtivar();
+            }}
+            className={cn(
+              "flex min-h-8 w-full items-center gap-2 rounded-sm px-2 py-1 text-left text-label-lg text-foreground transition-colors hover:bg-overlay-item-hover",
+              focoInterno,
+            )}
+          >
+            {IconeDaAcao ? <IconeDaAcao size={16} weight="regular" aria-hidden="true" className="shrink-0 text-muted-foreground" /> : null}
+            <span className="min-w-0 truncate">{acao.rotulo}</span>
+          </button>
+        </div>
+      ) : null}
     </PainelFlutuante>,
     document.body,
   );
@@ -289,6 +365,10 @@ export interface ComboboxProps {
   /** Os tamanhos do gatilho do Select: `md` (card), `sm` (barra), `field` (formulário). */
   size?: SelectTriggerProps["size"];
   rotulos: RotulosDoCombobox;
+  /** A busca que não acha oferece criar, com o texto digitado. Passe `rotulos.criar` junto. */
+  aoCriar?: (texto: string) => void;
+  /** Uma ação fixa no pé do painel. Ex.: "Gerenciar origens". */
+  acao?: AcaoDoCombobox;
   className?: string;
 }
 
@@ -305,7 +385,7 @@ function GatilhoDoCombobox({
   multiplo: boolean;
   aoAlternar: (valor: string) => void;
 }) {
-  const { opcoes, textoVazio = "Selecione", rotulo, size, rotulos, className } = base;
+  const { opcoes, textoVazio = "Selecione", rotulo, size, rotulos, aoCriar, acao, className } = base;
   const [aberto, setAberto] = React.useState(false);
   const gatilho = React.useRef<HTMLButtonElement>(null);
   // na ordem da lista, não na ordem do clique: o resumo não pula de lugar
@@ -353,6 +433,8 @@ function GatilhoDoCombobox({
         aoAlternar={aoAlternar}
         multiplo={multiplo}
         rotulos={rotulos}
+        aoCriar={aoCriar}
+        acao={acao}
       />
     </div>
   );
