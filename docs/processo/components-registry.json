@@ -565,11 +565,12 @@
         "foto",
         "adicionar",
         "seletor",
-        "seletor de cor"
+        "seletor de cor",
+        "seletor de ícone"
       ],
       "tokens": [
         "card",
-        "border",
+        "divider",
         "foreground",
         "tom/ponto",
         "tom/texto",
@@ -587,7 +588,8 @@
         "overlay/item-selected",
         "overlay/item-text-selected",
         "elevation/lg",
-        "radius/lg"
+        "radius/lg",
+        "muted-foreground"
       ],
       "motion": "seletor: fade-in-fast / fade-out (Popover)",
       "states": {
@@ -625,6 +627,13 @@
           "rule": null,
           "precedent": "fileira de cores do SeletorTags (2026-09-18)",
           "approvedIn": "2026-10-01"
+        },
+        "ícone marcado": {
+          "impl": "botão do SeletorDeIcone: bg-accent + ícone em primary; os outros, muted-foreground com hover overlay-item-hover",
+          "source": "humano",
+          "rule": null,
+          "precedent": "SeletorDeTom",
+          "approvedIn": "2026-10-02"
         }
       },
       "_states_doc": "Tag e leitura. TagAdicionar e SeletorTags sao interativos; abas e busca do seletor foram pedido do humano (2026-09-15)."

@@ -333,3 +333,8 @@ Desvio: o Select Item do arquivo (544:99) é texto. Agora, quando o que a pessoa
 Motivo: regra pedida pelo humano para o design system inteiro (2026-10-02: "sempre que aparecer um dropdown com itens de tag, eles já devem aparecer com a mesma aparência da visualização final… ajuda na UX em saber exatamente como vai ficar").
 Aprovado por: humano (2026-10-02).
 
+## ADR-064 · Tag: traço mais forte, lista com ícone cinza e criar sempre à mão · 2026-10-02
+Desvio: três ajustes sobre a Tag do ADR-059, sem par no arquivo. (1) O traço da pílula passa de `border` para `divider` — um degrau acima, para a tag se ler sobre branco e sobre cinza. (2) A tag de lista deixa a cor: leva um ícone cinza (`muted-foreground`), um dos doze do conjunto fechado `ICONES_DE_TAG`, escolhido por quem cria — `GrupoTags.iconeLivre` mostra a fileira de ícones no `SeletorTags`, `aoCriar` recebe a chave, e o `SeletorDeIcone` fica disponível para formulário. (3) Digitar um nome que não existe sempre oferece criar: os `SeletorTags` das telas passam `aoCriar` (o do Atendimento só filtrava), a célula de tags cria pela `CelulaEscolha`, e o catálogo de tags vira estado da tela para a tag nova valer na lista, no cartão, no filtro e no drawer. `rotulos.icone` passa a ser obrigatório no `SeletorTags`.
+Motivo: pedido do humano (2026-10-02: "tags de lista deve conter ícone cinza escuro e com opção de escolher na hora de criar; sempre deve aparecer a opção de criar uma nova tag ao digitar; cinza do stroke nas tags pode ter mais contraste, em todas").
+Aprovado por: humano (2026-10-02).
+

@@ -38,7 +38,7 @@ import {
   Wallet,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-import { Tag, SeletorTags, type GrupoTags, type OpcaoTag } from "@/components/ui/tag";
+import { ICONES_DE_TAG, SeletorTags, Tag, type GrupoTags, type OpcaoTag } from "@/components/ui/tag";
 import { Avatar } from "@/components/ui/avatar";
 import { Input, AcaoCampo, AcaoCopiar, CampoEditavel, CartaoDeCampo } from "@/components/ui/input";
 import { InputTelefone, telefoneCompleto } from "@/components/ui/telefone";
@@ -94,11 +94,13 @@ export const CATALOGO_TAGS: GrupoTags[] = [
   {
     id: "listas",
     rotulo: "Listas",
+    // tag de lista: sem cor, com um ícone cinza que quem cria escolhe
+    iconeLivre: true,
     tags: [
-      { id: "lista-de-leads", rotulo: "Lista de leads" },
-      { id: "isaias-123", rotulo: "Isaias 123" },
-      { id: "prospect-list", rotulo: "Prospect list" },
-      { id: "premium", rotulo: "Premium" },
+      { id: "lista-de-leads", rotulo: "Lista de leads", icone: ICONES_DE_TAG.lista },
+      { id: "isaias-123", rotulo: "Isaias 123", icone: ICONES_DE_TAG.lista },
+      { id: "prospect-list", rotulo: "Prospect list", icone: ICONES_DE_TAG.bandeira },
+      { id: "premium", rotulo: "Premium", icone: ICONES_DE_TAG.estrela },
     ],
   },
   {
@@ -747,9 +749,9 @@ export function TagsDoLead({ iniciais }: { iniciais: string[] }) {
         grupos={grupos}
         selecionadas={escolhidas}
         aoAlternar={(t) => setEscolhidas((ids) => (ids.includes(t.id) ? ids.filter((x) => x !== t.id) : [...ids, t.id]))}
-        aoCriar={(rotulo, grupoId, tom) => {
+        aoCriar={(rotulo, grupoId, tom, icone) => {
           const id = `${grupoId}-${Date.now()}`;
-          setGrupos((gs) => gs.map((g) => (g.id === grupoId ? { ...g, tags: [...g.tags, { id, rotulo, tom }] } : g)));
+          setGrupos((gs) => gs.map((g) => (g.id === grupoId ? { ...g, tags: [...g.tags, { id, rotulo, tom, icone: icone ? ICONES_DE_TAG[icone] : undefined }] } : g)));
           setEscolhidas((ids) => [...ids, id]);
         }}
         rotulos={{
@@ -758,6 +760,7 @@ export function TagsDoLead({ iniciais }: { iniciais: string[] }) {
           vazio: "Nenhuma tag nesta aba",
           criar: (texto, grupo) => `Criar "${texto}" em ${grupo}`,
           cor: "Cor",
+          icone: "Ícone",
         }}
       />
     </>

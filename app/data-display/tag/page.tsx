@@ -2,7 +2,7 @@
 
 import { Fire, Snowflake, ThermometerSimple } from "@phosphor-icons/react";
 import * as React from "react";
-import { SeletorDeTom, Tag, TagAdicionar, TONS, type Tom } from "@/components/ui/tag";
+import { ICONES_DE_TAG, SeletorDeIcone, SeletorDeTom, Tag, TagAdicionar, TONS, type IconeDeTag, type Tom } from "@/components/ui/tag";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
 import { TagsDoLead } from "@/app/feedback/drawer/drawer-lead";
 import { FileiraDeTags, PRODUTOS, ROTULOS_PRODUTOS, RESPONSAVEIS, ROTULOS_RESPONSAVEIS, ORIGEM, ROTULOS_ORIGEM } from "./cenarios";
@@ -39,12 +39,42 @@ function DemoSeletorDeTom() {
   );
 }
 
+/** O nome de cada ícone, para leitor de tela e tooltip. No CRM, vem do next-intl. */
+const NOME_DO_ICONE: Record<IconeDeTag, string> = {
+  lista: "Lista",
+  estrela: "Estrela",
+  coracao: "Coração",
+  loja: "Loja",
+  escola: "Escola",
+  empresa: "Empresa",
+  balanca: "Balança",
+  planta: "Planta",
+  aperto: "Aperto de mão",
+  bandeira: "Bandeira",
+  pasta: "Pasta",
+  megafone: "Megafone",
+};
+
+/** O seletor de ícone num formulário: o escolhido aparece na prévia ao lado. */
+function DemoSeletorDeIcone() {
+  const [icone, setIcone] = React.useState<IconeDeTag>("lista");
+  return (
+    <div className="flex w-full max-w-[420px] flex-col gap-3 rounded-md bg-card p-4">
+      <SeletorDeIcone rotulo="Ícone da tag" nomes={NOME_DO_ICONE} valor={icone} aoEscolher={setIcone} />
+      <div className="flex items-center gap-2 text-caption text-muted-foreground">
+        Como fica:
+        <Tag icone={ICONES_DE_TAG[icone]}>Clientes de maio</Tag>
+      </div>
+    </div>
+  );
+}
+
 export default function TagPage() {
   return (
     <PaginaDS
       titulo="Tag"
       descricao="A etiqueta que o usuário põe no lead: pílula de 22px com traço, o texto como foi escrito e a cor numa bolinha. Também leva ícone de tipo ou a foto do atendente. O + no fim da fileira abre o seletor, com uma aba por tipo de tag e busca que também cria."
-      secoes={["Como funciona", "Variantes", "Cores", "Seletor de cor", "No perfil", "Seletor de tags", "Outros cenários", "Quando usar"]}
+      secoes={["Como funciona", "Variantes", "Cores", "Seletor de cor", "Ícone da lista", "No perfil", "Seletor de tags", "Outros cenários", "Quando usar"]}
     >
       <ComoFunciona>
         <p>
@@ -161,6 +191,25 @@ export default function TagPage() {
       </Secao>
 
       <Secao
+        titulo="Ícone da lista"
+        novidade="2026-10-02"
+        spec="12 ícones · cinza"
+        descricao="A tag de lista não tem cor: tem um ícone cinza, que quem cria escolhe entre doze. No seletor de tags, a fileira de ícones aparece ao digitar um nome novo na aba das listas."
+        codigo={`<SeletorDeIcone rotulo="Ícone da tag" nomes={nomesDosIcones} valor={icone} aoEscolher={setIcone} />
+
+<Tag icone={ICONES_DE_TAG[icone]}>Clientes de maio</Tag>`}
+        nota={
+          <>
+            O que se guarda é a chave (<Chip>lista</Chip>, <Chip>estrela</Chip>…); <Chip>ICONES_DE_TAG[chave]</Chip>{" "}
+            devolve o ícone para a <Chip>Tag</Chip>. No <Chip>SeletorTags</Chip>, a aba com{" "}
+            <Chip>iconeLivre</Chip> mostra a fileira e entrega a chave em <Chip>aoCriar</Chip>.
+          </>
+        }
+      >
+        <DemoSeletorDeIcone />
+      </Secao>
+
+      <Secao
         titulo="No perfil"
         spec="gap 4 · centralizado"
         descricao="A fileira do topo do perfil no drawer: atendente primeiro, depois listas, status e temperatura, e o + no fim. Quebra em quantas linhas precisar, sempre centralizada. Clique no + para abrir o seletor."
@@ -194,6 +243,7 @@ export default function TagPage() {
     vazio: "Nenhuma tag nesta aba",
     criar: (texto, grupo) => \`Criar "\${texto}" em \${grupo}\`,
     cor: "Cor da tag",
+    icone: "Ícone",
   }}
 />`}
         nota={
@@ -224,7 +274,7 @@ export default function TagPage() {
   selecionadas={ids}
   aoAlternar={(tag) => alternar(tag.id)}
   aoCriar={(rotulo, grupoId, tom) => criar(rotulo, grupoId, tom)}
-  rotulos={{ gatilho: "Adicionar produto", busca: "Buscar ou criar produto", vazio: "Nenhum produto nesta aba", criar: (t, g) => \`Criar "\${t}" em \${g}\`, cor: "Cor" }}
+  rotulos={{ gatilho: "Adicionar produto", busca: "Buscar ou criar produto", vazio: "Nenhum produto nesta aba", criar: (t, g) => \`Criar "\${t}" em \${g}\`, icone: "Ícone", cor: "Cor" }}
 />
 
 {/* Responsáveis: foto no lugar da cor, e sem aoCriar — a busca só filtra */}
@@ -232,7 +282,7 @@ export default function TagPage() {
   grupos={[{ id: "vendas", rotulo: "Vendas", tags: [{ id: "esther", rotulo: "Esther", foto: "/fotos/esther.png" }] }]}
   selecionadas={ids}
   aoAlternar={(tag) => alternar(tag.id)}
-  rotulos={{ gatilho: "Adicionar responsável", busca: "Buscar pessoa", vazio: "Ninguém neste time", criar: (t) => \`Convidar "\${t}"\`, cor: "Cor" }}
+  rotulos={{ gatilho: "Adicionar responsável", busca: "Buscar pessoa", vazio: "Ninguém neste time", criar: (t) => \`Convidar "\${t}"\`, cor: "Cor", icone: "Ícone" }}
 />`}
         nota={
           <>

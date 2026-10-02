@@ -152,6 +152,7 @@ export function PainelLead({
               vazio: "Nenhuma tag encontrada",
               criar: (texto) => `Criar "${texto}"`,
               cor: "Cor",
+              icone: "Ícone",
             }}
           />
         </>

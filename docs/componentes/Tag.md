@@ -11,6 +11,8 @@ Mostrar uma etiqueta que o usuário pôs no lead.
 - **Não use** para selo de situação do sistema (beta, novo): é `Badge`.
 - **Não use** `tom` sorteado para colorir a lista: cor só quando carrega significado.
 - **Não use** como botão: adicionar é `TagAdicionar` ou `SeletorTags`.
+- **Use** `icone` sem cor para a tag de lista (segmento, lista de leads): ícone cinza, um dos doze de `ICONES_DE_TAG`, escolhido por quem cria (`SeletorDeIcone`, ou `iconeLivre` na aba do `SeletorTags`).
+- **Use** `aoCriar` em todo `SeletorTags` e em toda célula de tags: digitar um nome que não existe sempre oferece criar. Só fica de fora quando a lista é de gente.
 - **Use** `SeletorDeTom` quando a pessoa escolhe a cor de algo que ela cria (tag, etapa, lista): as quinze cores do DS, em amostras. Nunca um seletor de cor livre nem campo de hexadecimal.
 
 ## Família
@@ -26,7 +28,7 @@ seletor parte do Select Menu `544:122` e do Select Item `544:99`.
 
 **Desvio (ADR-059):** o arquivo desenha a tag com fundo cinza cheio, raio
 total e texto de 10px em caixa alta. No código ela é uma pílula com traço
-(`card` + `border`, raio `md`), texto de 11px como foi escrito, e a cor mora
+(`card` + traço `divider`, raio `md`), texto de 11px como foi escrito, e a cor mora
 na bolinha — pedido do time do cliente (crítica de 2026-09-28), aprovado pelo
 humano em 2026-10-02.
 
@@ -42,7 +44,7 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 | `tipo` | `"pessoa" \| "empresa"` | não | Ícone de 12px; ícone e texto na cor do lead (`tom/texto`). |
 | `foto` | `string` | não | Foto de 18px encostada à esquerda, por dentro do traço (atendente). |
 | `tom` | `Tom` | não | A cor da tag: um dos catorze tons de `[data-tom]` (`TONS`, na ordem do círculo de cores): `azul` `indigo` `roxo` `fucsia` `rosa` `vermelho` `laranja` `ambar` `amarelo` `lima` `verde` `turquesa` `ciano` `marrom`. Pinta a bolinha (`tom/ponto`) — ou o ícone, quando há `icone` (`tom/texto`); o texto fica sempre em `foreground`. Sem tom, a tag não tem cor; com ela, são quinze cores (ADR-051). `tomDe(chave)` dá um tom estável para um texto, sempre entre os seis de antes (`azul` `roxo` `rosa` `laranja` `ciano` `ambar`): abrir a paleta não troca a cor de lista que já existe. |
-| `icone` | `ComponentType` | não | Ícone de 12px antes do texto, no lugar da bolinha. Leva a cor do `tom` ou, sem tom, a do `status` — a forma distingue junto com a cor. Use quando o grupo é uma escala (temperatura: frio, morno, quente): todas as tags do grupo levam ícone, não só uma. |
+| `icone` | `ComponentType` | não | Ícone de 12px antes do texto, no lugar da bolinha. Leva a cor do `tom` ou, sem tom, a do `status`; sem os dois — a tag de lista — fica cinza (`muted-foreground`). Use quando o grupo é uma escala (temperatura: frio, morno, quente) ou uma lista: todas as tags do grupo levam ícone, não só uma. |
 | `children` | `ReactNode` | sim | O texto, como foi escrito. |
 
 Mais larga que o lugar (`max-w-full`), a tag trunca o texto com reticências —
@@ -57,11 +59,11 @@ o rótulo inteiro importar.
 
 | Prop | Tipo | Obrigatória | Descrição |
 |------|------|-------------|-----------|
-| `grupos` | `GrupoTags[]` | sim | Uma aba por grupo: `id`, `rotulo`, `tags` (`OpcaoTag`: `id`, `rotulo`, `status?`, `foto?`, `tom?`, `icone?`) e `corLivre?` — nesta aba a cor é escolha de quem cria (Listas); nas outras é regra. |
+| `grupos` | `GrupoTags[]` | sim | Uma aba por grupo: `id`, `rotulo`, `tags` (`OpcaoTag`: `id`, `rotulo`, `status?`, `foto?`, `tom?`, `icone?`), `corLivre?` — nesta aba a cor é escolha de quem cria — e `iconeLivre?` — nesta aba quem cria escolhe o ícone (Listas): a tag sai sem cor, com o ícone cinza. |
 | `selecionadas` | `string[]` | sim | Ids das tags do lead. |
 | `aoAlternar` | `(tag) => void` | sim | Põe ou tira a tag. |
-| `aoCriar` | `(rotulo, grupoId, tom?) => void` | não | Sem ela, a busca só filtra. O `tom` só vem quando a aba tem `corLivre`. |
-| `rotulos` | `{ gatilho, busca, vazio, criar, cor }` | sim | Textos (i18n), **os cinco obrigatórios**. `criar(texto, grupo)` devolve a frase da opção; `cor` é o rótulo da fileira de cores. |
+| `aoCriar` | `(rotulo, grupoId, tom?, icone?) => void` | não | Catálogo de tags sempre passa: digitar um nome que não existe oferece criar. Só fica de fora quando a lista é de gente. O `tom` só vem quando a aba tem `corLivre`; o `icone` (a chave de `ICONES_DE_TAG`), quando tem `iconeLivre`. |
+| `rotulos` | `{ gatilho, busca, vazio, criar, cor, icone }` | sim | Textos (i18n), **os seis obrigatórios**. `criar(texto, grupo)` devolve a frase da opção; `cor` e `icone` são os rótulos das fileiras de cores e de ícones. |
 | `className` | `string` | não | — |
 
 ### `SeletorDeTom`
@@ -78,6 +80,21 @@ o rótulo inteiro importar.
 
 Os tons (`TONS`, `Tom`, `tomDe`) moram em `lib/tons.ts` e a Tag os re-exporta.
 
+### `SeletorDeIcone`
+
+| Prop | Tipo | Padrão | Obrigatória | Descrição |
+|------|------|--------|-------------|-----------|
+| `valor` | `IconeDeTag` | — | sim | A chave do ícone marcado. |
+| `aoEscolher` | `(icone: IconeDeTag) => void` | — | sim | Clique num ícone. |
+| `rotulo` | `string` | — | sim | Nome do grupo para leitor de tela. Ex.: "Ícone da tag". |
+| `nomes` | `Partial<Record<IconeDeTag, string>>` | — | não | Nome de cada ícone, para leitor de tela e tooltip (i18n). Sem ele, a chave. |
+| `className` | `string` | — | não | — |
+
+`ICONES_DE_TAG` é o conjunto fechado — doze ícones Phosphor por chave (`lista`
+`estrela` `coracao` `loja` `escola` `empresa` `balanca` `planta` `aperto`
+`bandeira` `pasta` `megafone`). Guarde a chave (`IconeDeTag`) e passe
+`ICONES_DE_TAG[chave]` em `<Tag icone>`.
+
 ## Variantes
 
 | Arquivo | Código |
@@ -88,6 +105,7 @@ Os tons (`TONS`, `Tom`, `tomDe`) moram em `lib/tons.ts` e a Tag os re-exporta.
 | Atendente | `foto` |
 | Adicionar | `<TagAdicionar>` |
 | — (sem par) | `<SeletorDeTom>`: as amostras de cor, de 16 ou 24px |
+| — (sem par) | `<SeletorDeIcone>`: os doze ícones da tag de lista, em botões de 24px |
 
 ## Estados
 
@@ -99,6 +117,7 @@ Os tons (`TONS`, `Tom`, `tomDe`) moram em `lib/tons.ts` e a Tag os re-exporta.
 | selecionada | `caixa de marcar à esquerda, em primary com Check; a linha não muda de fundo` | humano | Combobox de várias escolhas |
 | aberto | `painel em portal fixo + foco na busca + Escape so no painel` | humano | L11 |
 | cor marcada | `amostra do SeletorDeTom (a cor cheia da bolinha): scale-110 + outline 2px foreground; no tamanho md, Check de 12` | humano | fileira de cores do SeletorTags (2026-09-18) |
+| ícone marcado | `botão do SeletorDeIcone: bg-accent + ícone em primary; os outros, muted-foreground com hover overlay-item-hover` | humano | SeletorDeTom |
 <!-- kfe:estados:end -->
 
 Estado que não está nesta tabela **o componente não tem**. Ausência é
@@ -108,7 +127,7 @@ A `Tag` é leitura. Só o `TagAdicionar` é interativo.
 
 ## Tokens consumidos
 
-`card` · `border` · `foreground` · `tom/ponto` · `tom/texto` · `primary` ·
+`card` · `divider` (traço) · `foreground` · `muted-foreground` (ícone sem cor) · `tom/ponto` · `tom/texto` · `primary` ·
 `primary-hover` · `destructive` · `info` · `success` · `radius/md` ·
 `text/label-md` · `input/bg-disabled` (amostra sem cor) · no seletor: `overlay/bg` ·
 `overlay/border` · `overlay/item-hover` · `overlay/item-selected` ·

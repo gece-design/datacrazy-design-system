@@ -63,7 +63,7 @@ export const ROTULOS_PRODUTOS: SeletorTagsProps["rotulos"] = {
   busca: "Buscar ou criar produto",
   vazio: "Nenhum produto nesta aba",
   criar: (texto, grupo) => `Criar "${texto}" em ${grupo}`,
-  cor: "Cor",
+  cor: "Cor", icone: "Ícone"
 };
 
 /* ----------------------------------------------- 2 · Responsáveis -- */
@@ -100,7 +100,7 @@ export const ROTULOS_RESPONSAVEIS: SeletorTagsProps["rotulos"] = {
   vazio: "Ninguém neste time",
   // nunca aparece: responsável não se cria aqui (sem `aoCriar`)
   criar: (texto) => `Convidar "${texto}"`,
-  cor: "Cor",
+  cor: "Cor", icone: "Ícone"
 };
 
 /* ----------------------------------------------------- 3 · Origem -- */
@@ -135,7 +135,7 @@ export const ROTULOS_ORIGEM: SeletorTagsProps["rotulos"] = {
   busca: "Buscar ou criar campanha",
   vazio: "Nada nesta aba",
   criar: (texto, grupo) => `Criar "${texto}" em ${grupo}`,
-  cor: "Cor",
+  cor: "Cor", icone: "Ícone"
 };
 
 /* ------------------------------------------------------- Fileira -- */

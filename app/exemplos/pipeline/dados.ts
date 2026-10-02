@@ -1,5 +1,5 @@
 import { Fire, Snowflake, ThermometerSimple } from "@phosphor-icons/react";
-import type { GrupoTags, OpcaoTag } from "@/components/ui/tag";
+import { ICONES_DE_TAG, type GrupoTags, type OpcaoTag } from "@/components/ui/tag";
 import type { TomPerfil } from "@/components/ui/drawer";
 
 /* Funil de mentira para a demonstração. Nomes, valores, telefones e histórico
@@ -92,14 +92,16 @@ export const GRUPOS_TAGS: GrupoTags[] = [
   {
     id: "segmento",
     rotulo: "Segmento",
+    // tag de lista: sem cor, com um ícone cinza que quem cria escolhe
+    iconeLivre: true,
     tags: [
-      { id: "saude", rotulo: "Saúde" },
-      { id: "educacao", rotulo: "Educação" },
-      { id: "enterprise", rotulo: "Enterprise" },
-      { id: "juridico", rotulo: "Jurídico" },
-      { id: "agro", rotulo: "Agro" },
-      { id: "varejo", rotulo: "Varejo" },
-      { id: "desconto", rotulo: "Desconto" },
+      { id: "saude", rotulo: "Saúde", icone: ICONES_DE_TAG.coracao },
+      { id: "educacao", rotulo: "Educação", icone: ICONES_DE_TAG.escola },
+      { id: "enterprise", rotulo: "Enterprise", icone: ICONES_DE_TAG.empresa },
+      { id: "juridico", rotulo: "Jurídico", icone: ICONES_DE_TAG.balanca },
+      { id: "agro", rotulo: "Agro", icone: ICONES_DE_TAG.planta },
+      { id: "varejo", rotulo: "Varejo", icone: ICONES_DE_TAG.loja },
+      { id: "desconto", rotulo: "Desconto", icone: ICONES_DE_TAG.bandeira },
     ],
   },
 ];

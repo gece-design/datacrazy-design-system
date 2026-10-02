@@ -5,11 +5,11 @@
     "fim": "2026-10-02"
   },
   "git": {
-    "commits": 85,
-    "arquivos": 352,
-    "linhasUi": 11509,
+    "commits": 86,
+    "arquivos": 357,
+    "linhasUi": 11616,
     "linhasLib": 849,
-    "linhasDocs": 8643
+    "linhasDocs": 8682
   },
   "catalogo": {
     "itens": 59,
@@ -405,12 +405,12 @@
       "descricao": "Mostrar uma etiqueta que o usuário pôs no lead.",
       "categoria": "Data Display",
       "pagina": null,
-      "pecas": 4,
-      "props": 19,
-      "variantes": 7,
-      "estados": 5,
+      "pecas": 5,
+      "props": 24,
+      "variantes": 8,
+      "estados": 6,
       "acessibilidade": 7,
-      "linhas": 482
+      "linhas": 589
     },
     {
       "name": "tela-base",
@@ -493,10 +493,10 @@
   ],
   "totais": {
     "componentes": 36,
-    "pecas": 119,
-    "props": 384,
-    "variantes": 105,
-    "estados": 133,
+    "pecas": 120,
+    "props": 389,
+    "variantes": 106,
+    "estados": 134,
     "acessibilidade": 220,
     "paginas": 45,
     "docs": 36
@@ -1101,6 +1101,11 @@
       "id": "ADR-063",
       "titulo": "A opção da lista é a peça final",
       "data": "2026-10-02"
+    },
+    {
+      "id": "ADR-064",
+      "titulo": "Tag: traço mais forte, lista com ícone cinza e criar sempre à mão",
+      "data": "2026-10-02"
     }
   ],
   "auditoria": {
@@ -1156,6 +1161,11 @@
       "data": "2026-10-02",
       "origem": "Revisão",
       "titulo": "PROTÓTIPO SYSTEMCRAZY E SELO NEW POR SEMANA"
+    },
+    {
+      "data": "2026-10-02",
+      "origem": "Revisão",
+      "titulo": "TAG: TRAÇO MAIS FORTE, LISTA COM ÍCONE E CRIAR SEMPRE"
     },
     {
       "data": "2026-10-01",

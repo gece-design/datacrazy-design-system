@@ -15,12 +15,12 @@ import {
 import type { Icon } from "@phosphor-icons/react";
 import { AcaoCopiar, CampoEditavel } from "@/components/ui/input";
 import { Select, type OpcaoSelect } from "@/components/ui/select";
-import { SeletorTags, Tag } from "@/components/ui/tag";
+import { SeletorTags, Tag, type GrupoTags, type IconeDeTag } from "@/components/ui/tag";
 import { DrawerSecao, LinhaDoTempo } from "@/components/ui/drawer";
 // O drawer é UM: o mesmo `DrawerLead` da página do Drawer no design system,
 // aberto com o lead clicado no quadro. Nada aqui é uma segunda versão dele.
 import { DrawerLead, cabecalhos, type LeadDoDrawer, type SecaoDoDrawer } from "@/app/feedback/drawer/drawer-lead";
-import { GRUPOS_TAGS, moeda, tagsDe, type Etapa, type EtapaId, type Lead, type TipoEvento } from "./dados";
+import { moeda, tagsDe, type Etapa, type EtapaId, type Lead, type TipoEvento } from "./dados";
 import { gradeDeCartoes } from "@/lib/campo";
 
 const glifos: Record<TipoEvento, Icon> = {
@@ -39,6 +39,8 @@ const glifos: Record<TipoEvento, Icon> = {
  */
 export function PainelLead({
   etapas,
+  grupos,
+  aoCriarTag,
   atendentes,
   origens,
   lead,
@@ -48,6 +50,9 @@ export function PainelLead({
   aoTrocarTags,
 }: {
   etapas: Etapa[];
+  /** O catálogo de tags da conta, e como criar uma: quem guarda é a tela. */
+  grupos: GrupoTags[];
+  aoCriarTag: (rotulo: string, grupoId?: string, icone?: IconeDeTag) => string;
   /** Os atendentes e as origens como opções: as mesmas do filtro e do "Novo lead". */
   atendentes: OpcaoSelect[];
   origens: OpcaoSelect[];
@@ -57,9 +62,6 @@ export function PainelLead({
   aoEditar: (campos: Partial<Lead>) => void;
   aoTrocarTags: (ids: string[]) => void;
 }) {
-  // Tag criada no seletor entra no catálogo da conta e já sai marcada.
-  const [grupos, setGrupos] = React.useState(GRUPOS_TAGS);
-
   // As seções são componentes: ficam estáveis entre renders (senão remontam a
   // cada tecla) e leem o lead e os callbacks atuais por ref.
   const atual = React.useRef({ lead, etapas, atendentes, origens, aoEditar, aoMudarEtapa });
@@ -172,17 +174,15 @@ export function PainelLead({
             aoAlternar={(t) =>
               aoTrocarTags(lead.tags.includes(t.id) ? lead.tags.filter((x) => x !== t.id) : [...lead.tags, t.id])
             }
-            aoCriar={(rotulo, grupoId) => {
-              const id = `${grupoId}-${Date.now()}`;
-              setGrupos((gs) => gs.map((g) => (g.id === grupoId ? { ...g, tags: [...g.tags, { id, rotulo }] } : g)));
-              aoTrocarTags([...lead.tags, id]);
-            }}
+            // tag criada no seletor entra no catálogo da conta e já sai marcada
+            aoCriar={(rotulo, grupoId, _tom, icone) => aoTrocarTags([...lead.tags, aoCriarTag(rotulo, grupoId, icone)])}
             rotulos={{
               gatilho: "Adicionar tag",
               busca: "Buscar ou criar tag",
               vazio: "Nenhuma tag nesta aba",
               criar: (texto, grupo) => `Criar "${texto}" em ${grupo}`,
               cor: "Cor",
+              icone: "Ícone",
             }}
           />
         </>

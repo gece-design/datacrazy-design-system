@@ -1,5 +1,5 @@
 import { Fire, Snowflake, ThermometerSimple } from "@phosphor-icons/react";
-import type { GrupoTags } from "@/components/ui/tag";
+import { ICONES_DE_TAG, type GrupoTags } from "@/components/ui/tag";
 
 /* Dados de exemplo da tela de Atendimento. No CRM, tudo isto vem da API: as
    conversas por conexão (WhatsApp, Instagram, site), as mensagens paginadas e
@@ -82,16 +82,19 @@ export const GRUPOS_TAGS: GrupoTags[] = [
   {
     id: "listas",
     rotulo: "Listas",
+    // tag de lista: sem cor, com um ícone cinza que quem cria escolhe
+    iconeLivre: true,
     tags: [
-      { id: "saude", rotulo: "Saúde" },
-      { id: "varejo", rotulo: "Varejo" },
-      { id: "indicacao", rotulo: "Indicação" },
+      { id: "saude", rotulo: "Saúde", icone: ICONES_DE_TAG.coracao },
+      { id: "varejo", rotulo: "Varejo", icone: ICONES_DE_TAG.loja },
+      { id: "indicacao", rotulo: "Indicação", icone: ICONES_DE_TAG.aperto },
     ],
   },
 ];
 
-export const tagsDe = (ids: string[]) =>
-  GRUPOS_TAGS.flatMap((g) => g.tags).filter((t) => ids.includes(t.id));
+/** Resolve os ids na ordem do catálogo. O catálogo é estado da tela (dá para criar tag): passe o atual. */
+export const tagsDe = (ids: string[], grupos: GrupoTags[] = GRUPOS_TAGS) =>
+  grupos.flatMap((g) => g.tags).filter((t) => ids.includes(t.id));
 
 export const moeda = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });

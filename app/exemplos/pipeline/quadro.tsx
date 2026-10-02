@@ -18,10 +18,10 @@ import {
 import type { Icon } from "@phosphor-icons/react";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Tag } from "@/components/ui/tag";
+import { Tag, type GrupoTags } from "@/components/ui/tag";
 import { IconeDeMarca } from "@/components/ui/icone-de-marca";
 import { cn } from "@/lib/utils";
-import { GRUPOS_TAGS, etapaPor, moeda, tagsDe, type Canal, type Etapa, type EtapaId, type Lead } from "./dados";
+import { etapaPor, moeda, tagsDe, type Canal, type Etapa, type EtapaId, type Lead } from "./dados";
 
 import { foco, rolagemDiscreta } from "@/lib/estados";
 /* O quadro do funil. Arrastar é HTML5 puro — `draggable` + os eventos de drag
@@ -90,6 +90,7 @@ export const ROTULOS_DOS_CAMPOS: Record<CampoDoCartao, string> = {
 
 export function Quadro({
   etapas,
+  grupos,
   colunas,
   campos = CAMPOS_DO_CARTAO,
   aoMover,
@@ -99,6 +100,8 @@ export function Quadro({
   aoCriarEtapa,
 }: {
   etapas: Etapa[];
+  /** O catálogo de tags da conta: é estado da tela, porque dá para criar tag. */
+  grupos: GrupoTags[];
   colunas: Colunas;
   /** Os campos visíveis no cartão. Padrão: todos. */
   campos?: readonly CampoDoCartao[];
@@ -296,6 +299,7 @@ export function Quadro({
               <Cartao
                 key={lead.id}
                 lead={lead}
+                grupos={grupos}
                 campos={campos}
                 emMovimento={emMovimento}
                 pegoPeloTeclado={emMovimento && porTeclado}
@@ -440,6 +444,7 @@ function Linha() {
 
 function Cartao({
   lead,
+  grupos,
   campos,
   emMovimento,
   pegoPeloTeclado,
@@ -450,6 +455,7 @@ function Cartao({
   aoTerminar,
 }: {
   lead: Lead;
+  grupos: GrupoTags[];
   campos: readonly CampoDoCartao[];
   emMovimento: boolean;
   pegoPeloTeclado: boolean;
@@ -461,7 +467,7 @@ function Cartao({
 }) {
   const Tipo = lead.tipo === "empresa" ? Buildings : User;
   const parado = lead.dias >= 7;
-  const tags = tagsDe(GRUPOS_TAGS, lead.tags);
+  const tags = tagsDe(grupos, lead.tags);
   const mostra = (c: CampoDoCartao) => campos.includes(c);
   const proximaAcao = lead.proximaAcao ? lead.proximaAcao.split("-").reverse().slice(0, 2).join("/") : null;
   // As linhas de detalhe: o ícone do campo e o valor, numa linha de 16 — o

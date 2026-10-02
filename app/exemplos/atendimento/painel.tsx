@@ -7,10 +7,10 @@ import { BotaoFechar, Button } from "@/components/ui/button";
 import { CelulaEditavel, CelulaEscolha } from "@/components/ui/data-table";
 import { AcaoCopiar } from "@/components/ui/input";
 import { LinhaDeCampo, ListaDeCampos } from "@/components/ui/painel-lateral";
-import { SeletorTags, Tag } from "@/components/ui/tag";
+import { SeletorTags, Tag, type GrupoTags, type IconeDeTag } from "@/components/ui/tag";
 import { rolagemDiscreta } from "@/lib/estados";
 import { cn } from "@/lib/utils";
-import { ATENDENTES, ETAPAS, GRUPOS_TAGS, moeda, tagsDe, type Conversa, type EtapaId } from "./dados";
+import { ATENDENTES, ETAPAS, moeda, tagsDe, type Conversa, type EtapaId } from "./dados";
 
 /* A coluna do lead: quem é, em que etapa está, quanto vale — ao lado da
    conversa, sem abrir outra tela. Os campos vêm em linha, como no
@@ -26,12 +26,17 @@ const linha = "[&>dt]:w-24";
 
 export function PainelDoLead({
   conversa,
+  grupos,
+  aoCriarTag,
   aoEditar,
   aoAbrirCompleto,
   aoFechar,
   className,
 }: {
   conversa: Conversa;
+  /** O catálogo de tags da conta, e como criar uma: quem guarda é a tela. */
+  grupos: GrupoTags[];
+  aoCriarTag: (rotulo: string, grupoId: string, icone?: IconeDeTag) => string;
   aoEditar: (campos: Partial<Conversa>) => void;
   /** Abre o lead inteiro no Drawer do design system: perfil, histórico e as outras seções. */
   aoAbrirCompleto: () => void;
@@ -59,21 +64,24 @@ export function PainelDoLead({
         </div>
 
         <div className="flex flex-wrap items-center gap-1">
-          {tagsDe(conversa.tags).map((t) => (
+          {tagsDe(conversa.tags, grupos).map((t) => (
             <Tag key={t.id} status={t.status} tom={t.tom} icone={t.icone}>
               {t.rotulo}
             </Tag>
           ))}
           <SeletorTags
-            grupos={GRUPOS_TAGS}
+            grupos={grupos}
             selecionadas={conversa.tags}
             aoAlternar={(t) => aoEditar({ tags: conversa.tags.includes(t.id) ? conversa.tags.filter((x) => x !== t.id) : [...conversa.tags, t.id] })}
+            // digitou um nome que não existe: o seletor oferece criar, e a tag nova já entra no lead
+            aoCriar={(rotulo, grupoId, _tom, icone) => aoEditar({ tags: [...conversa.tags, aoCriarTag(rotulo, grupoId, icone)] })}
             rotulos={{
               gatilho: "Adicionar tag",
-              busca: "Buscar tag",
+              busca: "Buscar ou criar tag",
               vazio: "Nenhuma tag nesta aba",
               criar: (t, g) => `Criar "${t}" em ${g}`,
               cor: "Cor da tag",
+              icone: "Ícone",
             }}
           />
         </div>

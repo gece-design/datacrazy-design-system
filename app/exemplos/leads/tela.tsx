@@ -62,7 +62,7 @@ import { Toaster, toast } from "@/components/ui/toast";
 import { rotuloDeCampo } from "@/lib/campo";
 import { rolagemDiscreta } from "@/lib/estados";
 import { useTema } from "@/lib/tema";
-import type { Tom } from "@/lib/tons";
+import { tomDe, type Tom } from "@/lib/tons";
 import { cn } from "@/lib/utils";
 import { LEADS, NOMES_DAS_CORES, ORIGENS, TAGS, dataCurta, etiquetaDe, tagsDe, type Lead, type Origem, type TagDaConta } from "./dados";
 import { PainelLead } from "./painel-lead";
@@ -229,6 +229,13 @@ export function Tela({
   const editar = (id: string, campos: Partial<Lead>) => setLeads((lista) => lista.map((l) => (l.id === id ? { ...l, ...campos } : l)));
   const fechar = () => setAbertoId(null);
 
+  /** Tag criada na célula ou no drawer: entra no catálogo com a cor que o nome sorteia (ou a escolhida) e devolve o id. */
+  function criarTagRapida(rotulo: string, tom: Tom | null = tomDe(rotulo)) {
+    const id = `tag-${Date.now()}`;
+    setTags((lista) => [...lista, { id, rotulo, tom }]);
+    return id;
+  }
+
   function criarTag() {
     if (!novaTag) return;
     const nome = novaTag.nome.trim();
@@ -287,7 +294,9 @@ export function Tela({
             opcoes={opcoesDeTag}
             selecionados={lead.tags}
             aoAlternar={(id) => editar(lead.id, { tags: lead.tags.includes(id) ? lead.tags.filter((t) => t !== id) : [...lead.tags, id] })}
-            rotulos={{ busca: "Buscar tag", vazio: "Nenhuma tag encontrada" }}
+            // digitou um nome que não existe: a lista oferece criar, e a tag nova já entra no lead
+            aoCriar={(texto) => editar(lead.id, { tags: [...lead.tags, criarTagRapida(texto)] })}
+            rotulos={{ busca: "Buscar ou criar tag", vazio: "Nenhuma tag encontrada", criar: (texto) => `Criar "${texto}"` }}
           >
             {doLead.length ? <CelulaTags etiquetas={doLead.map(etiquetaDe)} /> : <Vazio />}
           </CelulaEscolha>
@@ -499,11 +508,7 @@ export function Tela({
             opcoesDeOrigem={OPCOES_DE_ORIGEM}
             aoFechar={fechar}
             aoEditar={(campos) => editar(aberto.id, campos)}
-            aoCriarTag={(rotulo, tom) => {
-              const id = `tag-${Date.now()}`;
-              setTags((lista) => [...lista, { id, rotulo, tom }]);
-              return id;
-            }}
+            aoCriarTag={criarTagRapida}
           />
         ) : null}
       </Drawer>

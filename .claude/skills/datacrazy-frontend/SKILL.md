@@ -217,6 +217,9 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   (atendente com foto, tag com cor) leva `conteudo: <Tag …>` — em Select, Combobox, CelulaEscolha e filtros; o
   gatilho mostra a mesma peça. Lista de atendente ou tag nunca é `Menu`: é `ComboboxPainel`. Com `icone`, a Tag
   troca a bolinha pelo ícone colorido (temperatura: frio, morno, quente).
+- **Tags (2026-10-02)**: traço em `divider`; tag de lista sem cor, com ícone cinza de `ICONES_DE_TAG` escolhido ao criar
+  (`iconeLivre` / `SeletorDeIcone`); `aoCriar` sempre presente onde se digita para achar tag (seletor e célula); catálogo
+  de tags como estado da tela. Item de `Menu` de ações sempre com `icone`.
 - **Cor que a pessoa escolhe e cor do nome**: os tons moram em `lib/tons.ts` (`TONS`, `Tom`, `tomDe`).
   Escolher cor é `SeletorDeTom` (as quinze, nunca cor livre); lista de pessoas usa `CelulaLead avatar aoAbrir`
   (ou `Avatar tom="auto"`); `CelulaTags` mostra "+N" do que não coube. Tela de referência para lista de

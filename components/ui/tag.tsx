@@ -2,7 +2,24 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Buildings, Check, MagnifyingGlass, Plus, User } from "@phosphor-icons/react";
+import {
+  Briefcase,
+  Buildings,
+  Check,
+  Flag,
+  GraduationCap,
+  Handshake,
+  Heart,
+  ListBullets,
+  MagnifyingGlass,
+  Megaphone,
+  Plant,
+  Plus,
+  Scales,
+  Star,
+  Storefront,
+  User,
+} from "@phosphor-icons/react";
 import { buscaDoPainel } from "@/lib/campo";
 import { Tabs } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
@@ -66,7 +83,8 @@ export function Tag({ status, tipo, foto, tom, icone, className, children, ...pr
         // grade densa), a tag corta com reticências em vez de invadir a vizinha.
         // Pílula com traço, texto como foi escrito: a caixa alta e o fundo cheio
         // do arquivo saíram (cliente, 2026-09-28; humano, 2026-10-02, ADR-059).
-        "inline-flex h-[22px] max-w-full shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-md border border-border bg-card px-1.5 text-label-md text-foreground",
+        // traço em `divider`, um degrau acima de `border`: a pílula precisa se ler sobre branco e sobre cinza (humano, 2026-10-02)
+        "inline-flex h-[22px] max-w-full shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-md border border-divider bg-card px-1.5 text-label-md text-foreground",
         // a foto encosta: 1px de folga por dentro do traço, em toda a volta
         foto && "pl-px",
         // a tag de tipo pega a cor do lead (`--tom-texto` do `[data-tom]` que
@@ -84,7 +102,8 @@ export function Tag({ status, tipo, foto, tom, icone, className, children, ...pr
         <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", tom ? "bg-tom-ponto" : status ? pontos[status] : "")} />
       ) : null}
       {Icone ? (
-        <Icone size={12} weight="regular" className={cn("shrink-0", tom ? "text-tom-texto" : icone && status ? iconesDoStatus[status] : undefined)} aria-hidden="true" />
+        <Icone size={12} weight="regular" // com tom ou status, a cor deles; sem nenhum (a tag de lista), cinza escuro
+          className={cn("shrink-0", tom ? "text-tom-texto" : icone && status ? iconesDoStatus[status] : icone ? "text-muted-foreground" : undefined)} aria-hidden="true" />
       ) : null}
       <span className="min-w-0 truncate">{children}</span>
     </span>
@@ -178,6 +197,75 @@ export function SeletorDeTom({ valor, aoEscolher, rotulo, nomes, comNeutro = fal
   );
 }
 
+/* ------------------------------------------------------ Seletor de ícone -- */
+
+/**
+ * Os ícones que uma tag de lista pode ter. Conjunto fechado, como as cores:
+ * quem cria escolhe um, não traz o seu. A chave é o que se guarda no banco;
+ * `ICONES_DE_TAG[chave]` é o componente que vai em `<Tag icone>`.
+ */
+export const ICONES_DE_TAG = {
+  lista: ListBullets,
+  estrela: Star,
+  coracao: Heart,
+  loja: Storefront,
+  escola: GraduationCap,
+  empresa: Buildings,
+  balanca: Scales,
+  planta: Plant,
+  aperto: Handshake,
+  bandeira: Flag,
+  pasta: Briefcase,
+  megafone: Megaphone,
+} as const;
+export type IconeDeTag = keyof typeof ICONES_DE_TAG;
+
+export interface SeletorDeIconeProps {
+  /** O ícone marcado. */
+  valor: IconeDeTag;
+  aoEscolher: (icone: IconeDeTag) => void;
+  /** Nome do grupo para leitor de tela. Ex.: "Ícone da tag". */
+  rotulo: string;
+  /** Nome de cada ícone, para leitor de tela e tooltip (i18n). Sem ele, a chave. */
+  nomes?: Partial<Record<IconeDeTag, string>>;
+  className?: string;
+}
+
+/**
+ * SeletorDeIcone — os ícones de quem cria uma tag de lista. A tag de lista
+ * não tem cor: tem um ícone cinza, escolhido na hora de criar (humano,
+ * 2026-10-02). Par do `SeletorDeTom`, com a mesma mecânica.
+ */
+export function SeletorDeIcone({ valor, aoEscolher, rotulo, nomes, className }: SeletorDeIconeProps) {
+  return (
+    <div role="radiogroup" aria-label={rotulo} className={cn("flex flex-wrap items-center gap-0.5", className)}>
+      {(Object.keys(ICONES_DE_TAG) as IconeDeTag[]).map((chave) => {
+        const Icone = ICONES_DE_TAG[chave];
+        const marcado = valor === chave;
+        const nome = nomes?.[chave] ?? chave;
+        return (
+          <button
+            key={chave}
+            type="button"
+            role="radio"
+            aria-checked={marcado}
+            aria-label={nome}
+            title={nome}
+            onClick={() => aoEscolher(chave)}
+            className={cn(
+              "grid size-6 shrink-0 place-items-center rounded-sm transition-colors",
+              `${foco}`,
+              marcado ? "bg-accent text-primary" : "text-muted-foreground hover:bg-overlay-item-hover hover:text-foreground",
+            )}
+          >
+            <Icone size={14} weight="regular" aria-hidden="true" />
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ------------------------------------------------------------ Seletor -- */
 
 export type OpcaoTag = {
@@ -192,8 +280,10 @@ export type GrupoTags = {
   id: string;
   rotulo: string;
   tags: OpcaoTag[];
-  /** Nesta aba a cor é escolha de quem cria (Listas). Nas outras ela é regra. */
+  /** Nesta aba a cor é escolha de quem cria. Nas outras ela é regra. */
   corLivre?: boolean;
+  /** Nesta aba quem cria escolhe o ícone, entre os de `ICONES_DE_TAG` (Listas): a tag sai sem cor, com o ícone cinza. */
+  iconeLivre?: boolean;
 };
 
 export interface SeletorTagsProps {
@@ -203,9 +293,12 @@ export interface SeletorTagsProps {
   selecionadas: string[];
   /** Clique numa tag da lista: põe ou tira. */
   aoAlternar: (tag: OpcaoTag) => void;
-  /** Sem esta prop, a busca só filtra — não oferece criar. O `tom` só vem
-      quando a aba tem `corLivre`; nas outras a cor é da regra do grupo. */
-  aoCriar?: (rotulo: string, grupoId: string, tom?: Tom) => void;
+  /** Catálogo de tags sempre passa: digitar um nome que não existe oferece
+      criar (humano, 2026-10-02). Só fica de fora quando a lista é de gente —
+      pessoa não nasce num campo de busca. O `tom` só vem quando a aba tem
+      `corLivre`, e o `icone` (a chave de `ICONES_DE_TAG`) quando tem
+      `iconeLivre`; nas outras, cor e ícone são da regra do grupo. */
+  aoCriar?: (rotulo: string, grupoId: string, tom?: Tom, icone?: IconeDeTag) => void;
   rotulos: {
     /** Nome do botão "+" e do painel. Ex.: "Adicionar tag". */
     gatilho: string;
@@ -217,6 +310,8 @@ export interface SeletorTagsProps {
     criar: (texto: string, grupo: string) => string;
     /** Rótulo da fileira de cores. Ex.: "Cor da tag". */
     cor: string;
+    /** Rótulo da fileira de ícones. Ex.: "Ícone". */
+    icone: string;
   };
   className?: string;
 }
@@ -246,6 +341,7 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
   const [ativo, setAtivo] = React.useState(0);
   // `null` = ninguém escolheu ainda: vale o tom que `tomDe` dá ao texto digitado.
   const [tomNovo, setTomNovo] = React.useState<Tom | null>(null);
+  const [iconeNovo, setIconeNovo] = React.useState<IconeDeTag>("lista");
   const [pos, setPos] = React.useState<{ top?: number; bottom?: number; left: number } | null>(null);
   const gatilho = React.useRef<HTMLButtonElement>(null);
   const painel = React.useRef<HTMLDivElement>(null);
@@ -306,7 +402,7 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
     if (i < filtradas.length) {
       aoAlternar(filtradas[i]);
     } else if (podeCriar && grupo) {
-      aoCriar?.(termo, grupo.id, grupo.corLivre ? (tomNovo ?? tomDe(termo)) : undefined);
+      aoCriar?.(termo, grupo.id, grupo.corLivre ? (tomNovo ?? tomDe(termo)) : undefined, grupo.iconeLivre ? iconeNovo : undefined);
       setBusca("");
       setAtivo(0);
       setTomNovo(null);
@@ -456,7 +552,11 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                       <span className="min-w-0 truncate">{rotulos.criar(termo, grupo.rotulo)}</span>
                     </span>
                     {/* prévia: a tag sai daqui exatamente assim */}
-                    {grupo.corLivre ? <Tag tom={tomNovo ?? tomDe(termo)}>{termo}</Tag> : null}
+                    {grupo.corLivre || grupo.iconeLivre ? (
+                      <Tag tom={grupo.corLivre ? (tomNovo ?? tomDe(termo)) : undefined} icone={grupo.iconeLivre ? ICONES_DE_TAG[iconeNovo] : undefined}>
+                        {termo}
+                      </Tag>
+                    ) : null}
                   </div>
                 ) : null}
 
@@ -470,6 +570,13 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                 <div onMouseDown={(e) => e.preventDefault()} className="flex items-center gap-2 border-t border-border px-3 py-2">
                   <span aria-hidden="true" className="shrink-0 text-label-sm uppercase text-muted-foreground">{rotulos.cor}</span>
                   <SeletorDeTom rotulo={rotulos.cor} valor={tomNovo ?? tomDe(termo)} aoEscolher={(tom) => setTomNovo(tom)} />
+                </div>
+              ) : null}
+              {/* Fileira de ícones — nas abas em que quem cria escolhe o ícone (Listas). */}
+              {podeCriar && grupo?.iconeLivre ? (
+                <div onMouseDown={(e) => e.preventDefault()} className="flex items-center gap-2 border-t border-border px-3 py-1.5">
+                  <span aria-hidden="true" className="shrink-0 text-label-sm uppercase text-muted-foreground">{rotulos.icone}</span>
+                  <SeletorDeIcone rotulo={rotulos.icone} valor={iconeNovo} aoEscolher={setIconeNovo} />
                 </div>
               ) : null}
             </PainelFlutuante>,

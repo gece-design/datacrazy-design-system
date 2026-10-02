@@ -68,7 +68,7 @@ import { Calendario } from "@/components/ui/calendario";
 import { TelaBase } from "@/components/ui/tela-base";
 import { PainelLead } from "./painel-lead";
 import { Quadro, IconeDoCanal, agrupar, CAMPOS_DE_FABRICA, CAMPOS_DO_CARTAO, ROTULOS_DOS_CAMPOS, type CampoDoCartao, type Colunas } from "./quadro";
-import { Tag } from "@/components/ui/tag";
+import { ICONES_DE_TAG, Tag, type GrupoTags, type IconeDeTag as ChaveDeIcone } from "@/components/ui/tag";
 import { Menu } from "@/components/ui/menu";
 
 import { foco, rolagemDiscreta } from "@/lib/estados";
@@ -129,7 +129,7 @@ const OPCOES_DE_ORIGEM = CANAIS.map((c) => ({
 const OPCOES_DE_ATENDENTE = ATENDENTES.map((a) => ({ valor: a, rotulo: a, conteudo: <Tag foto="/ds/atendente.png">{a}</Tag> }));
 
 /** Os campos que a tela deixa filtrar. Etapa depende das etapas do funil, que a pessoa edita. */
-const camposDeFiltro = (etapas: Etapa[]): CampoDeFiltro[] => [
+const camposDeFiltro = (etapas: Etapa[], grupos: GrupoTags[]): CampoDeFiltro[] => [
   { id: "etapas", rotulo: "Etapa", icone: FunnelSimple, opcoes: etapas.map((e) => ({ valor: e.id, rotulo: e.rotulo })) },
   { id: "atendentes", rotulo: "Atendente", icone: Headset, opcoes: OPCOES_DE_ATENDENTE },
   { id: "canais", rotulo: "Origem", icone: ShareNetwork, opcoes: OPCOES_DE_ORIGEM },
@@ -137,7 +137,7 @@ const camposDeFiltro = (etapas: Etapa[]): CampoDeFiltro[] => [
     id: "tags",
     rotulo: "Tags",
     icone: IconeDeTag,
-    opcoes: GRUPOS_TAGS.flatMap((g) =>
+    opcoes: grupos.flatMap((g) =>
       g.tags.map((x) => ({ valor: x.id, rotulo: x.rotulo, grupo: g.rotulo, conteudo: <Tag status={x.status} tom={x.tom} icone={x.icone}>{x.rotulo}</Tag> })),
     ),
   },
@@ -169,6 +169,15 @@ export function Tela({
 } = {}) {
   const [etapas, setEtapas] = React.useState<Etapa[]>(ETAPAS);
   const [colunas, setColunas] = React.useState<Colunas>(() => agrupar(ETAPAS, LEADS));
+  // O catálogo de tags é estado da tela: dá para criar tag na célula e no drawer, e ela vale em todo lugar.
+  const [grupos, setGrupos] = React.useState<GrupoTags[]>(GRUPOS_TAGS);
+  /** Cria a tag no catálogo e devolve o id. Sem grupo, entra em Segmento — a aba das listas —, com o ícone de lista. */
+  function criarTag(rotulo: string, grupoId = "segmento", icone: ChaveDeIcone = "lista") {
+    const id = `${grupoId}-${Date.now()}`;
+    const alvo = grupos.find((g) => g.id === grupoId);
+    setGrupos((gs) => gs.map((g) => (g.id === grupoId ? { ...g, tags: [...g.tags, { id, rotulo, icone: alvo?.iconeLivre ? ICONES_DE_TAG[icone] : undefined }] } : g)));
+    return id;
+  }
   const [busca, setBusca] = React.useState("");
   const [filtro, setFiltro] = React.useState<FiltrosAtivos>({});
   const [visao, setVisao] = React.useState<string>(visaoInicial);
@@ -231,10 +240,10 @@ export function Tela({
       if (de("sinais").length && !de("sinais").every((id) => SINAIS.find((x) => x.id === id)?.vale(l))) return false;
       const t = semAcento(busca);
       if (t === "") return true;
-      const campos = [l.nome, l.empresa, l.responsavel, l.cidade, l.canal, ...tagsDe(GRUPOS_TAGS, l.tags).map((x) => x.rotulo)];
+      const campos = [l.nome, l.empresa, l.responsavel, l.cidade, l.canal, ...tagsDe(grupos, l.tags).map((x) => x.rotulo)];
       return semAcento(campos.join(" ")).includes(t);
     },
-    [busca, filtro],
+    [busca, filtro, grupos],
   );
 
   const quantosFiltros = contarFiltros(filtro);
@@ -561,7 +570,7 @@ export function Tela({
             role="group"
             // uma faixa do painel, como o Header: recuo 12 e traço embaixo
             className="shrink-0 border-b border-border px-3 py-2"
-            campos={camposDeFiltro(etapas)}
+            campos={camposDeFiltro(etapas, grupos)}
             valor={filtro}
             aoMudar={setFiltro}
             rotulos={{
@@ -577,6 +586,7 @@ export function Tela({
         {visao === "quadro" ? (
           <Quadro
             etapas={etapas}
+            grupos={grupos}
             colunas={visiveis}
             campos={campos}
             aoMover={mover}
@@ -588,6 +598,8 @@ export function Tela({
         ) : visao === "lista" ? (
           <Lista
             etapas={etapas}
+            grupos={grupos}
+            aoCriarTag={criarTag}
             leads={etapas.flatMap((e) => visiveis[e.id] ?? [])}
             aberto={abertoId}
             aoAbrir={(l) => setAbertoId(l.id)}
@@ -775,6 +787,8 @@ export function Tela({
         {aberto ? (
           <PainelLead
             etapas={etapas}
+            grupos={grupos}
+            aoCriarTag={criarTag}
             atendentes={OPCOES_DE_ATENDENTE}
             origens={OPCOES_DE_ORIGEM}
             lead={aberto}

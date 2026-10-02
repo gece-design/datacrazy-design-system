@@ -23,9 +23,9 @@ import {
 } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/ui/menu";
-import { Tag } from "@/components/ui/tag";
+import { Tag, type GrupoTags } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
-import { GRUPOS_TAGS, etapaPor, moeda, tagsDe, type Etapa, type EtapaId, type Lead } from "./dados";
+import { etapaPor, moeda, tagsDe, type Etapa, type EtapaId, type Lead } from "./dados";
 import { IconeDoCanal } from "./quadro";
 
 import { rolagemDiscreta } from "@/lib/estados";
@@ -35,11 +35,6 @@ import { rolagemDiscreta } from "@/lib/estados";
    de status, a etapa na cor da coluna, o atendente com foto, a origem com o
    ícone, os dias com o relógio ou o aviso (humano, 2026-09-24: "a tabela está
    super diferente do kanban"). */
-
-/** O catálogo de tags como opções da célula: agrupadas, cada uma como a Tag que vai aparecer. */
-const OPCOES_DE_TAG = GRUPOS_TAGS.flatMap((g) =>
-  g.tags.map((t) => ({ valor: t.id, rotulo: t.rotulo, grupo: g.rotulo, conteudo: <Tag status={t.status} tom={t.tom} icone={t.icone}>{t.rotulo}</Tag> })),
-);
 
 /** As colunas da lista. Ficam aqui, exportadas, porque os botões Agrupar e
  *  Colunas moram na fileira do Header da tela, não na barra da tabela. */
@@ -75,6 +70,8 @@ function valorDe(etapas: Etapa[]) {
 
 export function Lista({
   etapas,
+  grupos: catalogo,
+  aoCriarTag,
   leads,
   aberto,
   aoAbrir,
@@ -84,6 +81,10 @@ export function Lista({
   ajustes,
 }: {
   etapas: Etapa[];
+  /** O catálogo de tags da conta: é estado da tela, porque dá para criar tag. */
+  grupos: GrupoTags[];
+  /** Cria a tag no catálogo e devolve o id: ela já sai marcada no lead. */
+  aoCriarTag: (rotulo: string) => string;
   leads: Lead[];
   /** Os ajustes vivem na tela: os botões Agrupar e Colunas ficam no Header. */
   ajustes: AjustesDaTabela;
@@ -97,6 +98,10 @@ export function Lista({
   aoEditar: (id: string, campos: Partial<Lead>) => void;
 }) {
   const total = leads.reduce((n, l) => n + l.valor, 0);
+  // O catálogo de tags como opções da célula: agrupadas, cada uma como a Tag que vai aparecer.
+  const opcoesDeTag = catalogo.flatMap((g) =>
+    g.tags.map((t) => ({ valor: t.id, rotulo: t.rotulo, grupo: g.rotulo, conteudo: <Tag status={t.status} tom={t.tom} icone={t.icone}>{t.rotulo}</Tag> })),
+  );
   // Seleção em massa: a tela guarda os ids; a tabela desenha as caixas (2026-09-24).
   const selecao = useSelecaoDaTabela();
   const [menuEtapa, setMenuEtapa] = useState(false);
@@ -132,15 +137,17 @@ export function Lista({
                   <CelulaEscolha
                     multiplo
                     rotulo={`Editar tags de ${lead.nome}`}
-                    opcoes={OPCOES_DE_TAG}
+                    opcoes={opcoesDeTag}
+                    // digitou um nome que não existe: a lista oferece criar, e a tag nova já entra no lead
+                    aoCriar={(texto) => aoEditar(lead.id, { tags: [...lead.tags, aoCriarTag(texto)] })}
                     selecionados={lead.tags}
                     aoAlternar={(id) =>
                       aoEditar(lead.id, { tags: lead.tags.includes(id) ? lead.tags.filter((t) => t !== id) : [...lead.tags, id] })
                     }
-                    rotulos={{ busca: "Buscar tag", vazio: "Nenhuma tag encontrada" }}
+                    rotulos={{ busca: "Buscar ou criar tag", vazio: "Nenhuma tag encontrada", criar: (texto) => `Criar "${texto}"` }}
                   >
                     {lead.tags.length ? (
-                      <CelulaTags etiquetas={tagsDe(GRUPOS_TAGS, lead.tags).map((t) => ({ rotulo: t.rotulo, status: t.status, tom: t.tom, icone: t.icone }))} />
+                      <CelulaTags etiquetas={tagsDe(catalogo, lead.tags).map((t) => ({ rotulo: t.rotulo, status: t.status, tom: t.tom, icone: t.icone }))} />
                     ) : (
                       <span className="text-label-lg text-subtle-foreground">Adicionar</span>
                     )}

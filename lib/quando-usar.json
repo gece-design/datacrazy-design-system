@@ -87,6 +87,8 @@
       "usar": [
         "para etiqueta do lead, status com bolinha (`status`), tipo do registro (`tipo`) e atendente (`foto`).",
         "sem cor por padrão; `tom` quando a pessoa escolheu a cor daquela tag ou o produto define a cor daquele dado (etapa do funil, perfil). A cor aparece na bolinha — ou no ícone, quando há `icone`.",
+        "`icone` sem cor para a tag de lista (segmento, lista de leads): ícone cinza, um dos doze de `ICONES_DE_TAG`, escolhido por quem cria (`SeletorDeIcone`, ou `iconeLivre` na aba do `SeletorTags`).",
+        "`aoCriar` em todo `SeletorTags` e em toda célula de tags: digitar um nome que não existe sempre oferece criar. Só fica de fora quando a lista é de gente.",
         "`SeletorDeTom` quando a pessoa escolhe a cor de algo que ela cria (tag, etapa, lista): as quinze cores do DS, em amostras. Nunca um seletor de cor livre nem campo de hexadecimal."
       ],
       "naoUsar": [

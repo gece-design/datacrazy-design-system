@@ -4,7 +4,7 @@
    por decisão do humano em 2026-09-19 — o cliente vê o antes e o depois. */
 
 import { Fire, Snowflake, ThermometerSimple, User } from "@phosphor-icons/react";
-import { Tag, TONS, tomDe } from "@/components/ui/tag";
+import { ICONES_DE_TAG, Tag, TONS } from "@/components/ui/tag";
 
 /** O nome de cada tom, como a pessoa lê. */
 const NOMES: Record<(typeof TONS)[number], string> = {
@@ -62,8 +62,8 @@ export default function Page() {
       <Bloco titulo="Depois" nota="A mesma fileira, com a cor vindo da regra de cada grupo.">
         <div className="flex flex-wrap items-center gap-1.5">
           <Tag foto="/ds/atendente.png">Esther</Tag>
-          <Tag tom={tomDe("lista-de-leads")}>Lista de leads</Tag>
-          <Tag tom="ambar">Premium</Tag>
+          <Tag icone={ICONES_DE_TAG.lista}>Lista de leads</Tag>
+          <Tag icone={ICONES_DE_TAG.estrela}>Premium</Tag>
           <Tag status="info" tom="azul">Em aberto</Tag>
           <Tag status="success" tom="verde">Agendado</Tag>
           <Tag tom="vermelho" icone={Fire}>Quente</Tag>
@@ -82,11 +82,11 @@ export default function Page() {
           <Tag tom="laranja" icone={ThermometerSimple}>Morno</Tag>
           <Tag tom="vermelho" icone={Fire}>Quente</Tag>
         </Linha>
-        <Linha rotulo="Listas · cor escolhida">
-          <Tag tom={tomDe("lista-de-leads")}>Lista de leads</Tag>
-          <Tag tom={tomDe("isaias-123")}>Isaias 123</Tag>
-          <Tag tom={tomDe("prospect-list")}>Prospect list</Tag>
-          <Tag tom="ambar">Premium</Tag>
+        <Linha rotulo="Listas · ícone cinza">
+          <Tag icone={ICONES_DE_TAG.lista}>Lista de leads</Tag>
+          <Tag icone={ICONES_DE_TAG.lista}>Isaias 123</Tag>
+          <Tag icone={ICONES_DE_TAG.bandeira}>Prospect list</Tag>
+          <Tag icone={ICONES_DE_TAG.estrela}>Premium</Tag>
         </Linha>
         <Linha rotulo="Atendentes · foto">
           <Tag foto="/ds/atendente.png">Esther</Tag>
@@ -108,7 +108,7 @@ export default function Page() {
         </Linha>
       </Bloco>
 
-      <Bloco titulo="Os catorze tons" nota="Com a tag sem cor, são quinze. Ao criar uma tag em Listas, a pessoa escolhe uma delas.">
+      <Bloco titulo="Os catorze tons" nota="Com a tag sem cor, são quinze: é a paleta de quem cria uma tag com cor. As tags de lista não usam cor — levam um ícone cinza, escolhido ao criar.">
         <div className="flex flex-wrap items-center gap-1.5">
           {TONS.map((t) => (
             <Tag key={t} tom={t}>

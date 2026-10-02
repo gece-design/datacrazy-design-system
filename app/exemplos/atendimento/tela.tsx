@@ -28,13 +28,13 @@ import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos }
 import { HeaderBusca, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
 import { Drawer } from "@/components/ui/drawer";
-import { Tag } from "@/components/ui/tag";
+import { ICONES_DE_TAG, Tag, type IconeDeTag } from "@/components/ui/tag";
 import { TelaBase } from "@/components/ui/tela-base";
 import { Toaster, toast } from "@/components/ui/toast";
 import { useTema } from "@/lib/tema";
 import { cn } from "@/lib/utils";
 import { ConversaAberta } from "./conversa";
-import { CONVERSAS, EU, type Canal, type Conversa, type Mensagem, type Situacao } from "./dados";
+import { CONVERSAS, EU, GRUPOS_TAGS, type Canal, type Conversa, type Mensagem, type Situacao } from "./dados";
 import { IconeDoCanal, ListaDeConversas } from "./lista";
 import { LeadCompleto } from "./lead-completo";
 import { PainelDoLead } from "./painel";
@@ -116,6 +116,15 @@ export function Tela({
   const [busca, setBusca] = React.useState("");
   const [filtro, setFiltro] = React.useState<FiltrosAtivos>({});
   const [filtros, setFiltros] = React.useState(false);
+  // O catálogo de tags é estado da tela: dá para criar tag no seletor, e ela vale na coluna e no drawer.
+  const [grupos, setGrupos] = React.useState(GRUPOS_TAGS);
+  /** Cria a tag no catálogo e devolve o id. Na aba de listas ela leva o ícone escolhido. */
+  function criarTag(rotulo: string, grupoId: string, icone: IconeDeTag = "lista") {
+    const id = `${grupoId}-${Date.now()}`;
+    const alvo = grupos.find((g) => g.id === grupoId);
+    setGrupos((gs) => gs.map((g) => (g.id === grupoId ? { ...g, tags: [...g.tags, { id, rotulo, icone: alvo?.iconeLivre ? ICONES_DE_TAG[icone] : undefined }] } : g)));
+    return id;
+  }
   const [painelAberto, setPainelAberto] = React.useState(true);
   // o lead inteiro, no Drawer do design system
   const [leadCompleto, setLeadCompleto] = React.useState(false);
@@ -325,6 +334,8 @@ export function Tela({
           {aberta && painelAberto ? (
             <PainelDoLead
               conversa={aberta}
+              grupos={grupos}
+              aoCriarTag={criarTag}
               aoEditar={(campos) => mudar_(aberta.id, (c) => ({ ...c, ...campos }))}
               aoAbrirCompleto={() => setLeadCompleto(true)}
               aoFechar={() => setPainelAberto(false)}
@@ -338,7 +349,7 @@ export function Tela({
       {/* O lead inteiro abre no Drawer do design system — o mesmo da página do Drawer. */}
       <Drawer aberto={Boolean(aberta) && leadCompleto} aoFechar={() => setLeadCompleto(false)} rotulo={`Lead ${aberta?.nome ?? ""}`}>
         {aberta ? (
-          <LeadCompleto conversa={aberta} aoEditar={(campos) => mudar_(aberta.id, (c) => ({ ...c, ...campos }))} aoFechar={() => setLeadCompleto(false)} />
+          <LeadCompleto conversa={aberta} grupos={grupos} aoCriarTag={criarTag} aoEditar={(campos) => mudar_(aberta.id, (c) => ({ ...c, ...campos }))} aoFechar={() => setLeadCompleto(false)} />
         ) : null}
       </Drawer>
       <Toaster />

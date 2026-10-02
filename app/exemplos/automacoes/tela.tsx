@@ -5,12 +5,15 @@ import Link from "next/link";
 import {
   ArrowLeft,
   ChatCircleDots,
+  Copy,
   DotsThree,
+  Export,
   FlowArrow,
   Gear,
   House,
   Kanban,
   Lightning,
+  NotePencil,
   Plus,
   Question,
   Robot,
@@ -353,9 +356,17 @@ export function Tela({
               aberto={maisAcoes}
               gatilho={botaoMais}
               rotulo="Mais ações"
-              itens={["Duplicar automação", "Exportar automação", "Adicionar anotação"].map((rotulo) => ({
+              // menu de ações: todo item com ícone
+              itens={(
+                [
+                  ["Duplicar automação", Copy],
+                  ["Exportar automação", Export],
+                  ["Adicionar anotação", NotePencil],
+                ] as const
+              ).map(([rotulo, icone]) => ({
                 id: rotulo,
                 rotulo,
+                icone,
                 aoAtivar: () => toast({ variant: "info", titulo: rotulo, descricao: "No CRM: a ação da automação." }),
               }))}
               aoFechar={(devolver = true) => {

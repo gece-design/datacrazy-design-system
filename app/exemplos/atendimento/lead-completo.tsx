@@ -5,14 +5,14 @@ import { ArrowsClockwise, CalendarCheck, ChatCircleDots, CurrencyCircleDollar, M
 import { DrawerSecao, LinhaDoTempo } from "@/components/ui/drawer";
 import { AcaoCopiar, CampoEditavel } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { SeletorTags, Tag } from "@/components/ui/tag";
+import { SeletorTags, Tag, type GrupoTags, type IconeDeTag } from "@/components/ui/tag";
 // O drawer é UM: o mesmo `DrawerLead` da página do Drawer no design system,
 // aberto com o lead da conversa. Nada aqui é uma segunda versão dele.
 import { DrawerLead, cabecalhos, type LeadDoDrawer, type SecaoDoDrawer } from "@/app/feedback/drawer/drawer-lead";
 import { gradeDeCartoes } from "@/lib/campo";
 import { tomDe } from "@/lib/tons";
 import { OPCOES_DE_ATENDENTE } from "./painel";
-import { ETAPAS, GRUPOS_TAGS, moeda, tagsDe, type Conversa, type EtapaId } from "./dados";
+import { ETAPAS, moeda, tagsDe, type Conversa, type EtapaId } from "./dados";
 
 /**
  * O lead da conversa, inteiro: `DrawerLead` do design system. A coluna ao
@@ -21,10 +21,15 @@ import { ETAPAS, GRUPOS_TAGS, moeda, tagsDe, type Conversa, type EtapaId } from 
  */
 export function LeadCompleto({
   conversa,
+  grupos,
+  aoCriarTag,
   aoEditar,
   aoFechar,
 }: {
   conversa: Conversa;
+  /** O catálogo de tags da conta, e como criar uma: quem guarda é a tela. */
+  grupos: GrupoTags[];
+  aoCriarTag: (rotulo: string, grupoId: string, icone?: IconeDeTag) => string;
   aoEditar: (campos: Partial<Conversa>) => void;
   aoFechar: () => void;
 }) {
@@ -138,21 +143,24 @@ export function LeadCompleto({
       tags={
         <>
           {conversa.atendente ? <Tag foto="/ds/atendente.png">{conversa.atendente}</Tag> : null}
-          {tagsDe(conversa.tags).map((t) => (
+          {tagsDe(conversa.tags, grupos).map((t) => (
             <Tag key={t.id} status={t.status} tom={t.tom} icone={t.icone}>
               {t.rotulo}
             </Tag>
           ))}
           <SeletorTags
-            grupos={GRUPOS_TAGS}
+            grupos={grupos}
             selecionadas={conversa.tags}
             aoAlternar={(t) => aoEditar({ tags: conversa.tags.includes(t.id) ? conversa.tags.filter((x) => x !== t.id) : [...conversa.tags, t.id] })}
+            // digitou um nome que não existe: o seletor oferece criar, e a tag nova já entra no lead
+            aoCriar={(rotulo, grupoId, _tom, icone) => aoEditar({ tags: [...conversa.tags, aoCriarTag(rotulo, grupoId, icone)] })}
             rotulos={{
               gatilho: "Adicionar tag",
-              busca: "Buscar tag",
+              busca: "Buscar ou criar tag",
               vazio: "Nenhuma tag nesta aba",
               criar: (t, g) => `Criar "${t}" em ${g}`,
               cor: "Cor da tag",
+              icone: "Ícone",
             }}
           />
         </>

@@ -139,6 +139,20 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 - Escolher um atendente ou uma tag numa lista não é `Menu`: `Menu` é para
   ações, e só tem texto. É `ComboboxPainel` (ancorado no botão) com as Tags.
 
+### Tags: cor, ícone e criar
+- A cor de uma tag é a bolinha (`tom` ou `status`). Grupo que é uma escala
+  (temperatura) leva ícone colorido nas três: `icone` + `tom`.
+- Tag de LISTA (segmento, lista de leads) não tem cor: leva um ícone cinza,
+  um dos doze de `ICONES_DE_TAG`, que quem cria escolhe — `iconeLivre` na aba
+  do `SeletorTags`, ou `SeletorDeIcone` num formulário. Nunca um ícone de fora
+  do conjunto.
+- Onde a pessoa digita para achar uma tag, digitar um nome que não existe
+  SEMPRE oferece criar: `aoCriar` no `SeletorTags` e na `CelulaEscolha` de
+  tags. O catálogo de tags é estado da tela (um só para a lista, o cartão, o
+  filtro e o drawer), para a tag criada aparecer em todo lugar na hora.
+- Menu de ações (`Menu`): todo item com `icone`. Menu só de texto é lista de
+  marcar (`tipo: "check"`).
+
 ### Formulário, rolagem e relevo
 - Select ao lado de Input é sempre `size="field"` (a caixa do Input). O `md` é
   de card e, num formulário, parece desabilitado (ADR-038).

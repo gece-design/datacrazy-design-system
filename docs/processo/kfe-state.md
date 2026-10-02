@@ -373,6 +373,7 @@ Fica suspenso.
 - 2026-10-02 · **AUTOMAÇÕES COM CANVAS DE VERDADE; DASHBOARD SOBRE CINZA CLARO** · ADR-062. Canvas: mover a tela, zoom por roda e pinça, ligar por arrasto, remover ligação, vários marcados, menu no botão direito, desfazer e refazer, organizar, mapa, atalhos; fundo `muted` pontilhado. `TelaBase fundo="muted"` no dashboard. Tag: ícone colorido no lugar da bolinha nas tags de temperatura. Origem: humano.
 - 2026-10-02 · **A OPÇÃO DA LISTA É A PEÇA FINAL** · ADR-063. `conteudo` na opção de `Select`, `Combobox`, `CelulaEscolha` e filtros: atendente aparece como Tag com foto, tag com a cor; o gatilho mostra a mesma peça. "Transferir" e "Aplicar tag" viram `ComboboxPainel`. Origem: humano.
 - 2026-10-02 · **PROTÓTIPO SYSTEMCRAZY E SELO NEW POR SEMANA** · As telas de exemplo viram uma só, navegável, em `/prototipo` (terceiro item de Getting Started); a categoria sai do menu e as rotas ficam em `telasDoPrototipo`. O selo "new" passa a apontar só o que mudou nos últimos sete dias, no menu e ao lado do título da seção. Origem: humano.
+- 2026-10-02 · **TAG: TRAÇO MAIS FORTE, LISTA COM ÍCONE E CRIAR SEMPRE** · ADR-064. Traço em `divider`; tags de lista com ícone cinza escolhido ao criar (`ICONES_DE_TAG`, `SeletorDeIcone`, `iconeLivre`); criar tag sempre disponível no seletor e na célula; catálogo de tags como estado da tela. Menu "mais ações" das Automações com ícones. Origem: humano.
 
 ## Mapa de equivalência (layout antigo → v3.2)
 
