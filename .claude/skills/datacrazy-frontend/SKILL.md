@@ -228,6 +228,11 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
 - **Tags (2026-10-02)**: traço em `divider`; tag de lista sem cor, com ícone cinza de `ICONES_DE_TAG` escolhido ao criar
   (`iconeLivre` / `SeletorDeIcone`); `aoCriar` sempre presente onde se digita para achar tag (seletor e célula); catálogo
   de tags como estado da tela. Item de `Menu` de ações sempre com `icone`.
+- **Agentes de IA (2026-10-02)**: `app/exemplos/agentes`, bloco `agentes`, no protótipo em `?tela=agentes`. A tela de
+  referência para catálogo em cartões com cadastros ao lado: agentes em `Card` (`gradeDeCartoes`, score · modelo em `Tag` ·
+  ferramentas no pé) e, num `blocoDaTela`, `Tabs` com as bases de conhecimento e os servidores MCP em Table densa; uma
+  `HeaderBusca` filtra tudo; criar e editar em `Modal`. Receita em "Telas: receitas" (docs/regras.md). Enter num campo de
+  modal que salva e fecha leva `e.preventDefault()` — senão o Enter chega ao botão que recebe o foco de volta e reabre o modal.
 - **Cor que a pessoa escolhe e cor do nome**: os tons moram em `lib/tons.ts` (`TONS`, `Tom`, `tomDe`).
   Escolher cor é `SeletorDeTom` (as quinze, nunca cor livre); lista de pessoas usa `CelulaLead avatar aoAbrir`
   (ou `Avatar tom="auto"`); `CelulaTags` mostra "+N" do que não coube. Tela de referência para lista de

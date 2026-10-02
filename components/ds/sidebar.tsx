@@ -14,7 +14,7 @@ import {
   Tag, UserCircle, Table, ChartBar, ChatTeardropText, Tray, Browsers, ArrowLineLeft,
   Cards, RadioButton, ToggleRight, Bell, Tabs, Browser, Flask, Kanban,
   Waveform, CalendarDots,
-  ChatCircleDots, ListMagnifyingGlass, FunnelSimple, SquareSplitHorizontal, FlowArrow,
+  ChatCircleDots, ListMagnifyingGlass, FunnelSimple, SquareSplitHorizontal, FlowArrow, Robot,
 } from "@phosphor-icons/react";
 import { navegacao } from "./nav";
 import { SeloNovo } from "@/components/ds/novidade";
@@ -76,6 +76,7 @@ const icones: Record<string, Glifo> = {
   funil: FunnelSimple,
   lateral: SquareSplitHorizontal,
   fluxo: FlowArrow,
+  robo: Robot,
   contatos: UsersThree,
 };
 

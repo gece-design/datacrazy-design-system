@@ -258,6 +258,10 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    Dashboard, painel ou relatório? \`${NAMESPACE}/dashboard\`
    (\`app/dashboard/\`, \`fundo="muted"\` na TelaBase): indicadores, gráfico ao lado da repartição, tabela
    do que precisa de atenção ao lado do ranking, período no Header.
+   Catálogo em cartões (agentes de IA, modelos, integrações) com cadastros
+   ao lado? \`${NAMESPACE}/agentes\` (\`app/agentes/\`): os itens em \`Card\`
+   numa grade que se ajusta, e as listas de apoio em \`Tabs\` + Table densa
+   num bloco só; uma busca no Header filtra tudo.
 1. **Procure antes de criar.** O catálogo no fim deste arquivo lista tudo o que
    existe. Se o componente existe e não está em \`components/ui/\`, instale:
    \`npx shadcn@latest add ${NAMESPACE}/<nome>\` (ou pela ferramenta MCP do shadcn).
@@ -513,6 +517,20 @@ const BLOCOS = [
       ['foto: "/ds/atendente.png"', "foto: undefined"],
     ],
     docs: `Dashboard: ${URL_DS}/exemplos/dashboard — a tela em app/dashboard; troque os dados de exemplo (dados.ts) pelos da API.`,
+  },
+  {
+    name: "agentes",
+    title: "Agentes de IA",
+    description: "Os agentes de IA do CRM, prontos: cada agente num cartão com score, modelo de IA e quantidade de ferramentas, e, ao lado, as bases de conhecimento e os servidores MCP em abas, com uma busca só no Header e criar, editar e excluir em modal. A tela de referência para catálogo em cartões com cadastros ao lado — copie o padrão dela.",
+    arquivos: [
+      { de: "app/exemplos/agentes/page.tsx", para: "app/agentes/page.tsx" },
+      { de: "app/exemplos/agentes/tela.tsx", para: "app/agentes/tela.tsx" },
+      { de: "app/exemplos/agentes/cartao-agente.tsx", para: "app/agentes/cartao-agente.tsx" },
+      { de: "app/exemplos/agentes/cadastros.tsx", para: "app/agentes/cadastros.tsx" },
+      { de: "app/exemplos/agentes/acoes.tsx", para: "app/agentes/acoes.tsx" },
+      { de: "app/exemplos/agentes/dados.ts", para: "app/agentes/dados.ts" },
+    ],
+    docs: `Agentes de IA: ${URL_DS}/exemplos/agentes — a tela em app/agentes; troque os dados de exemplo (dados.ts) pelos da API.`,
   },
 ];
 

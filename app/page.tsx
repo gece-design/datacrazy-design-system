@@ -558,7 +558,7 @@ const descricoes: Record<string, string> = {
   "Modal": "Grupos à esquerda, conteúdo à direita, botões à parte (G10).",
   "Drawer": "O lead pela direita: perfil, menu e cinco seções (G1).",
   "Drawer variações": "Tons, menu, linha do tempo, hierarquia, camada e as três propostas.",
-  "Protótipo SystemCrazy": "O CRM navegável: dashboard, pipeline, leads, atendimento e automações.",
+  "Protótipo SystemCrazy": "O CRM navegável: dashboard, pipeline, leads, atendimento, automações e agentes de IA.",
   "Dashboard": "Indicadores, receita por dia e os negócios parados, numa tela.",
   "Pipeline": "O funil do CRM: arraste um lead e abra o registro.",
   "Leads": "A lista de contatos: edite tags e origem na célula e crie uma tag.",

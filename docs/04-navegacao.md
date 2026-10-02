@@ -25,7 +25,7 @@ Ordem de construção: [processo/roadmap-componentes.md](processo/roadmap-compon
 
 As telas de exemplo não ficam no menu uma a uma (humano, 2026-10-02): o
 terceiro item de Getting Started é o **Protótipo SystemCrazy** (`/prototipo`),
-que junta as cinco — Início, Pipelines, Leads, Automações e Chat ao vivo — com
+que junta as seis — Início, Pipelines, Leads, Automações, Chat ao vivo e Agentes de IA — com
 a navegação ligada; `?tela=pipeline` abre direto numa delas. As rotas
 `/exemplos/*` continuam existindo, porque cada uma é a página que um bloco
 instala: estão em `telasDoPrototipo`, no `nav.ts`, fora do menu.

@@ -3,7 +3,7 @@ import { Prototipo } from "./prototipo";
 
 export const metadata: Metadata = {
   title: "Protótipo SystemCrazy",
-  description: "O CRM navegável, montado só com o design system: dashboard, pipeline, leads, atendimento e automações numa tela só",
+  description: "O CRM navegável, montado só com o design system: dashboard, pipeline, leads, atendimento, automações e agentes de IA numa tela só",
 };
 
 /**

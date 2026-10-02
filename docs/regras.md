@@ -277,6 +277,21 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   `PainelLateral` ao lado — nunca um modal por cima do fluxo —, e o destino de
   cada saída se escolhe numa lista (`CelulaEscolha`). Liga e desliga é `Switch`
   no Header; a ação principal é Salvar.
+- **Catálogo em cartões com cadastros ao lado** (agentes de IA, modelos,
+  integrações): bloco `@datacrazy/agentes` (`app/agentes/`). Recuo padrão da
+  `TelaBase`; dois lados a partir de 1280 (`grid-cols-1 xl:grid-cols-2
+  items-start`), um sobre o outro abaixo disso. De um lado, os itens em `Card`
+  (`p-3`) direto sobre o `muted`, em `gradeDeCartoes` com `gap-3` e a contagem
+  em cima: `Avatar md` com as iniciais na cor do nome, nome com `title`,
+  descrição em duas linhas e, sob um traço, os números que se comparam (rótulo
+  em `caption`, valor em `h4`; o que é escolha de lista vai em `Tag`). Do
+  outro, o que os itens usam num `blocoDaTela` só: `Tabs` e, em cada aba,
+  `DataTableToolbar` (total + Button `tertiary` de criar) e a `DataTable`
+  densa — clicar na linha abre o cadastro. Uma busca só, `HeaderBusca` aberta,
+  filtra os dois lados; com texto na busca, cada aba mostra quantos achou. A
+  ação principal do Header cria o item do catálogo. Ações de cada item num
+  Button `ghost icon-xs` com `DotsThree` + `Menu` (Editar, Duplicar, Excluir);
+  excluir confirma em `Modal variant="destructive"`.
 - **Detalhe de um registro**: o lead — e todo registro do CRM com perfil
   (pessoa, empresa, negócio) — abre no `Drawer` do lead, o mesmo em toda tela
   (humano, 2026-10-02, ADR-061): `<Drawer>` com o `DrawerLead` que vem nos

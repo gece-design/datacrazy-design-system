@@ -7,6 +7,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
 import { TelaBase } from "@/components/ui/tela-base";
 import { useTema } from "@/lib/tema";
+import { Tela as Agentes } from "@/app/exemplos/agentes/tela";
 import { Tela as Atendimento } from "@/app/exemplos/atendimento/tela";
 import { Tela as Automacoes } from "@/app/exemplos/automacoes/tela";
 import { Tela as Dashboard } from "@/app/exemplos/dashboard/tela";
@@ -29,6 +30,7 @@ const TELAS = {
   leads: { destino: "Leads", Tela: Leads },
   automacoes: { destino: "Automações", Tela: Automacoes },
   atendimento: { destino: "Chat ao vivo", Tela: Atendimento },
+  agentes: { destino: "Agentes de IA", Tela: Agentes },
 } as const;
 type IdDaTela = keyof typeof TELAS;
 
@@ -50,7 +52,7 @@ const APOIO = [
 const MEMORIA = "prototipo";
 
 export function Prototipo({ telaInicial }: { telaInicial?: string }) {
-  // o que está na tela: uma das cinco, ou o nome de um destino que ainda não tem exemplo
+  // o que está na tela: uma das seis, ou o nome de um destino que ainda não tem exemplo
   const [atual, setAtual] = React.useState<string>(telaInicial && telaInicial in TELAS ? telaInicial : "dashboard");
 
   /** Clique num item da navegação principal: troca de tela e guarda na URL, para o link abrir direto nela. */
@@ -113,7 +115,7 @@ function EmBreve({ destino, aoNavegar }: { destino: string; aoNavegar: (destino:
       <div className="flex min-h-64 flex-1 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border bg-card p-6 text-center">
         <p className="text-label-lg text-foreground">{destino} ainda não tem tela no protótipo</p>
         <p className="max-w-md text-body-sm text-muted-foreground">
-          As telas prontas estão no menu ao lado: Início, Pipelines, Leads, Automações e Chat ao vivo.
+          As telas prontas estão no menu ao lado: Início, Pipelines, Leads, Automações, Chat ao vivo e Agentes de IA.
         </p>
       </div>
     </TelaBase>
