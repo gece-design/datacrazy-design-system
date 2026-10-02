@@ -72,6 +72,7 @@ export default function TagPage() {
 
       <Secao
         titulo="Variantes"
+        novidade="2026-10-02"
         spec="22px · pílula"
         descricao="Texto, três status, dois tipos, atendente e o botão de adicionar. Todas com 22px de altura."
         codigo={`<Tag>Lista de leads</Tag>
@@ -103,6 +104,7 @@ export default function TagPage() {
 
       <Secao
         titulo="Cores"
+        novidade="2026-10-02"
         spec="14 tons + neutro"
         descricao="Quinze cores para quem cria a tag: catorze tons, na ordem do círculo de cores, e a tag sem cor. A cor mora na bolinha; o texto fica sempre na cor do texto, legível no claro e no escuro."
         codigo={`<Tag tom="turquesa">Turquesa</Tag>
@@ -128,7 +130,7 @@ export default function TagPage() {
           {/* com ícone, quem leva a cor é ele: a forma distingue junto com a cor */}
           <div className="flex flex-wrap items-center gap-1.5">
             <Tag tom="ciano" icone={Snowflake}>Frio</Tag>
-            <Tag tom="ambar" icone={ThermometerSimple}>Morno</Tag>
+            <Tag tom="laranja" icone={ThermometerSimple}>Morno</Tag>
             <Tag tom="vermelho" icone={Fire}>Quente</Tag>
           </div>
         </div>
@@ -136,6 +138,7 @@ export default function TagPage() {
 
       <Secao
         titulo="Seletor de cor"
+        novidade="2026-10-02"
         spec="15 amostras · 16 ou 24px"
         descricao="As amostras de quem cria uma tag, uma etapa ou uma lista: as quinze cores, e nenhuma outra. Cada amostra é a cor da bolinha; a cinza é a tag sem cor. A marcada ganha contorno e, no tamanho de formulário, o check."
         codigo={`<SeletorDeTom
@@ -173,6 +176,7 @@ export default function TagPage() {
 
       <Secao
         titulo="Seletor de tags"
+        novidade="2026-10-02"
         spec="360px · abas + busca"
         descricao="Escolha a aba do tipo, digite para filtrar e aperte Enter para pôr a tag no lead. Um texto que não existe em nenhuma aba vira a opção de criar, na aba aberta."
         codigo={`<SeletorTags

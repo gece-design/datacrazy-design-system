@@ -127,16 +127,22 @@ const [aberto, setAberto] = useState(false);
     }}
     gatilho={botao}
     rotulo="Atribuir atendente"
-    opcoes={atendentes}
+    opcoes={atendentes.map((a) => ({
+      valor: a.id,
+      rotulo: a.nome,
+      conteudo: <Tag foto={a.foto}>{a.nome}</Tag>,
+    }))}
     selecionados={[atendente]}
     aoAlternar={setAtendente}
     rotulos={{ busca: "Buscar atendente", vazio: "Ninguém encontrado" }}
   />
 </>`;
 
+// a opção aparece como aparece na tela: a Tag do atendente, com a foto
 const atendentes = ["Breno Ramos", "Esther Lima", "Junior Santos", "Liam Costa", "Marina Prado", "Millena Aragão"].map((a) => ({
   valor: a,
   rotulo: a,
+  conteudo: <Tag foto="/ds/atendente.png">{a}</Tag>,
 }));
 
 export default function ComboboxPage() {
@@ -153,6 +159,7 @@ export default function ComboboxPage() {
   return (
     <PaginaDS
       titulo="Combobox"
+      novidade="2026-10-01"
       descricao="A lista com busca: o Select para quando as opções passam de dez, têm grupos ou aceitam várias escolhas. Mesmo gatilho do Select, painel de 256px com a busca no topo, que ignora acento, e teclado completo sem tirar o foco do campo. A opção pode levar um texto de apoio, a busca pode criar e o pé do painel pode ter uma ação."
       secoes={["Como funciona", "Uma escolha", "Grupos e ícones", "Várias escolhas", "Apoio, criar e ação", "Só o painel", "Teclado"]}
     >
@@ -171,9 +178,10 @@ export default function ComboboxPage() {
           trás.
         </p>
         <p>
-          A armadilha: a busca procura no <Chip>rotulo</Chip>, sempre. Com <Chip>conteudo</Chip> a opção pode mostrar
-          uma Tag ou outra peça no lugar do texto, mas o <Chip>rotulo</Chip> continua obrigatório — é ele que a busca
-          lê e que o gatilho mostra.
+          A regra: quando o que a pessoa escolhe aparece na tela como uma Tag — o atendente com a foto, a tag com a
+          cor —, a opção da lista é essa mesma Tag, passada em <Chip>conteudo</Chip>. Quem abre a lista vê exatamente
+          como vai ficar. O <Chip>rotulo</Chip> continua obrigatório: é ele que a busca lê e que o leitor de tela
+          anuncia.
         </p>
       </ComoFunciona>
 
@@ -272,6 +280,7 @@ export default function ComboboxPage() {
 
       <Secao
         titulo="Apoio, criar e ação"
+        novidade="2026-10-02"
         spec="detalhe · aoCriar · acao"
         descricao="Três acabamentos para lista de registros: um texto de apoio à direita de cada opção, a busca que não acha oferecendo criar, e uma ação fixa no pé do painel. Digite um nome que não existe para ver a linha de criar."
         codigo={codigoApoio}

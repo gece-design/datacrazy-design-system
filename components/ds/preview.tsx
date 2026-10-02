@@ -1,5 +1,6 @@
 "use client";
 
+import { SeloNovo } from "@/components/ds/novidade";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Check, Eye, Code as CodeIcon, X } from "@phosphor-icons/react";
@@ -44,8 +45,15 @@ export function Chip({ children }: { children: React.ReactNode }) {
 }
 
 export function PaginaDS({
-  titulo, descricao, secoes: declaradas = [], children,
-}: { titulo: string; descricao: string; secoes?: string[]; children: React.ReactNode }) {
+  titulo, descricao, secoes: declaradas = [], novidade, children,
+}: {
+  titulo: string;
+  descricao: string;
+  secoes?: string[];
+  /** O dia em que a página inteira entrou ou mudou (AAAA-MM-DD): o selo "new" fica ao lado do título por sete dias. */
+  novidade?: string;
+  children: React.ReactNode;
+}) {
   const rota = usePathname();
   const grupos = (guia as Record<string, GuiaDeUso[]>)[rota] ?? [];
   // página que já escreveu o seu "Quando usar" (com exemplo vivo) fica com ele
@@ -57,7 +65,10 @@ export function PaginaDS({
   );
   return (
     <Colunas trilho={<Indice secoes={secoes} />}>
-      <h1 className="chrome-h1 text-foreground">{titulo}</h1>
+      <div className="flex items-center gap-3">
+        <h1 className="chrome-h1 text-foreground">{titulo}</h1>
+        <SeloNovo data={novidade} />
+      </div>
       <p className="mt-3 chrome-lead text-muted-foreground">{descricao}</p>
       <IndiceCompacto secoes={secoes} />
       <div className="mt-8 space-y-10 sm:mt-10 sm:space-y-12">
@@ -129,9 +140,11 @@ export function ComoFunciona({ children }: { children: React.ReactNode }) {
 }
 
 export function Secao({
-  titulo, spec, descricao, codigo, lang = "tsx", nota, children, className, semCaixa, fundo, semSeletorDeFundo,
+  titulo, spec, descricao, codigo, lang = "tsx", nota, children, className, semCaixa, fundo, semSeletorDeFundo, novidade,
 }: {
   titulo: string;
+  /** O dia em que ESTA seção entrou ou mudou (AAAA-MM-DD): o selo "new" fica ao lado do título dela por sete dias. */
+  novidade?: string;
   spec?: string;
   descricao?: string;
   /** Só passe quando houver código de verdade a copiar. Sem isto, a seção não
@@ -199,6 +212,7 @@ export function Secao({
     <section id={slug(titulo)} className="scroll-mt-6">
       <div className="flex items-baseline gap-3">
         <h2 className="chrome-h2 text-foreground">{titulo}</h2>
+        <SeloNovo data={novidade} className="self-center" />
         {spec && <span className="font-mono chrome-meta text-subtle-foreground">{spec}</span>}
       </div>
       {descricao && <p className="mt-2 chrome-prose text-muted-foreground">{descricao}</p>}

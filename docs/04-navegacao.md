@@ -21,6 +21,24 @@ As categorias seguem o contrato das 5 categorias de componente mais Getting
 Started e Foundations: [02-design-system.md](02-design-system.md).
 Ordem de construção: [processo/roadmap-componentes.md](processo/roadmap-componentes.md).
 
+### O protótipo e as telas dele
+
+As telas de exemplo não ficam no menu uma a uma (humano, 2026-10-02): o
+terceiro item de Getting Started é o **Protótipo SystemCrazy** (`/prototipo`),
+que junta as cinco — Início, Pipelines, Leads, Automações e Chat ao vivo — com
+a navegação ligada; `?tela=pipeline` abre direto numa delas. As rotas
+`/exemplos/*` continuam existindo, porque cada uma é a página que um bloco
+instala: estão em `telasDoPrototipo`, no `nav.ts`, fora do menu.
+
+### O selo "new"
+
+Aponta só para o que mudou nesta semana (humano, 2026-10-02). No menu, ao lado
+do item que tem `atualizado: "AAAA-MM-DD"` no `nav.ts`; dentro da página, ao
+lado do título da seção que mudou (`<Secao novidade="AAAA-MM-DD">`) ou do
+título da página, quando ela inteira é nova (`<PaginaDS novidade=…>`). Sete
+dias depois da data o selo some sozinho. Ao mudar um componente de um jeito
+que a pessoa VÊ na página, atualize as duas datas no mesmo commit.
+
 ## Fluxos
 
 Não há jornada de usuário a diagramar: o site é navegação por catálogo, sem

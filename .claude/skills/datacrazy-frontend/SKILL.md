@@ -187,7 +187,7 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   Relatório: `node scripts/gerar-entrega.mjs` → `lib/entrega.json` → `/entrega` (fora do nav).
   Telas que mais doem (FigJam): Atendimento feito (`app/exemplos/atendimento`, bloco `atendimento`); Automações feita
   (`app/exemplos/automacoes`, bloco `automacoes`: canvas próprio da tela, conectores medidos no DOM, bloco aberto no
-  PainelLateral, sem lib de grafo); o card do lead é o `PainelLateral` do pipeline; mobile: as cinco telas conferidas
+  PainelLateral, sem lib de grafo); o lead abre no `Drawer` do lead em toda tela (ADR-061; `PainelLateral` só para o bloco da automação); mobile: as cinco telas conferidas
   em 390px sem rolagem lateral, regras em "Telas: no celular" (docs/regras.md). Dashboard feito (`app/exemplos/dashboard`, bloco `dashboard`): três faixas,
   só peças do DS; `Card` tem traço `border` (ADR-045), `CardDonut formatar` dá o percentual no idioma. Texto de várias linhas: `Textarea` (ADR-042), nunca `<textarea>` cru.
 - **Quando usar**: toda `docs/componentes/*.md` tem `## Quando usar` ("- **Use** …" / "- **Não use** … → o
@@ -208,11 +208,15 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   (ADR-054); parte 4 — superfície única: a TelaBase põe Header + conteúdo num painel `card` com `data-superficie`;
   `superficieDeApoio` (lib/estados) troca tertiary/segmentado/busca para `background` ali dentro; Header sem fundo; lista,
   quadro e chat com `recuo={false}` (ADR-055); parte 5 — `PainelLateral` (+ `PainelLateralCorpo`, `ListaDeCampos`,
-  `LinhaDeCampo`) nos encaixes `lateral`/`lateralCheia` da TelaBase: o registro abre ao lado e empurra a lista; o Drawer
-  fica para o registro completo (ADR-056). As cinco partes estão no DS; `/exemplos/proposta-visual` saiu.
+  `LinhaDeCampo`) nos encaixes `lateral`/`lateralCheia` da TelaBase: o painel abre ao lado e empurra o conteúdo (ADR-056).
+  Desde 2026-10-02 o LEAD voltou ao `Drawer` do lead em todas as telas de exemplo (ADR-061); o `PainelLateral` fica para o bloco da automação. As cinco partes estão no DS; `/exemplos/proposta-visual` saiu.
 - **Tag e quadro (2026-10-02)**: a `Tag` é pílula com traço, texto como foi escrito e cor na bolinha
   (`tom` → bolinha; com `icone`, o ícone leva a cor) — ADR-059; nunca `uppercase` nem fundo por `className`.
   O quadro do funil é compacto: coluna 220–300, cartão com traço e sem sombra (receita em `docs/regras.md`).
+- **Lista de escolha mostra a peça final (regra do DS inteiro, 2026-10-02)**: opção que na tela é uma `Tag`
+  (atendente com foto, tag com cor) leva `conteudo: <Tag …>` — em Select, Combobox, CelulaEscolha e filtros; o
+  gatilho mostra a mesma peça. Lista de atendente ou tag nunca é `Menu`: é `ComboboxPainel`. Com `icone`, a Tag
+  troca a bolinha pelo ícone colorido (temperatura: frio, morno, quente).
 - **Cor que a pessoa escolhe e cor do nome**: os tons moram em `lib/tons.ts` (`TONS`, `Tom`, `tomDe`).
   Escolher cor é `SeletorDeTom` (as quinze, nunca cor livre); lista de pessoas usa `CelulaLead avatar aoAbrir`
   (ou `Avatar tom="auto"`); `CelulaTags` mostra "+N" do que não coube. Tela de referência para lista de

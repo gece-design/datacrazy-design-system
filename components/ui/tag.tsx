@@ -28,6 +28,13 @@ const pontos = {
   success: "bg-success",
 } as const;
 
+/** A cor do ícone quando a tag tem `icone` e `status`, sem tom: a mesma que a bolinha teria. */
+const iconesDoStatus = {
+  destructive: "text-destructive",
+  info: "text-info",
+  success: "text-success",
+} as const;
+
 // Os tons moram em lib/tons.ts (o Avatar também usa); a Tag continua exportando.
 export { TONS, tomDe, type Tom } from "@/lib/tons";
 
@@ -40,14 +47,15 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   foto?: string;
   /** Um dos catorze tons: a cor da bolinha (ou do ícone, quando há `icone`). Sem tom, a tag não tem cor. */
   tom?: Tom;
-  /** Ícone de 12px antes do texto, para quem não distingue as cores. */
+  /** Ícone de 12px antes do texto, no lugar da bolinha: leva a cor do `tom` ou do `status`. A forma distingue junto com a cor. */
   icone?: React.ComponentType<{ size?: number; weight?: "regular" | "fill"; className?: string }>;
 }
 
 export function Tag({ status, tipo, foto, tom, icone, className, children, ...props }: TagProps) {
   const Icone = icone ?? (tipo === "pessoa" ? User : tipo === "empresa" ? Buildings : null);
-  // A cor da tag é a bolinha. Com ícone ou foto, quem carrega a cor é ele.
-  const bolinha = Boolean(status) || (Boolean(tom) && !Icone && !foto);
+  // A cor da tag é a bolinha. Com `icone`, o ícone entra NO LUGAR dela e leva
+  // a cor — do tom, ou do status (humano, 2026-10-02). Com foto, a foto basta.
+  const bolinha = icone ? false : Boolean(status) || (Boolean(tom) && !Icone && !foto);
   return (
     <span
       // `data-tom` liga os quatro --tom-* daquele tom neste span (globals.css)
@@ -75,7 +83,9 @@ export function Tag({ status, tipo, foto, tom, icone, className, children, ...pr
       {bolinha ? (
         <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", tom ? "bg-tom-ponto" : status ? pontos[status] : "")} />
       ) : null}
-      {Icone ? <Icone size={12} weight="regular" className={cn("shrink-0", tom && "text-tom-texto")} aria-hidden="true" /> : null}
+      {Icone ? (
+        <Icone size={12} weight="regular" className={cn("shrink-0", tom ? "text-tom-texto" : icone && status ? iconesDoStatus[status] : undefined)} aria-hidden="true" />
+      ) : null}
       <span className="min-w-0 truncate">{children}</span>
     </span>
   );

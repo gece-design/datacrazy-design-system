@@ -113,6 +113,25 @@ const previews: Record<string, React.ReactNode> = {
       </p>
     </div>
   ),
+  "/prototipo": (
+    // o protótipo em miniatura: a navegação à esquerda e a tela à direita
+    <div className="flex h-24 w-64 max-w-full overflow-hidden rounded-md border border-border bg-background">
+      <div className="flex w-20 shrink-0 flex-col gap-1 p-2">
+        {["Início", "Pipelines", "Leads", "Automações"].map((item, i) => (
+          <p key={item} className={`truncate rounded-sm px-1.5 py-0.5 text-caption ${i === 1 ? "bg-accent text-primary" : "text-muted-foreground"}`}>
+            {item}
+          </p>
+        ))}
+      </div>
+      <div className="m-1 flex min-w-0 flex-1 gap-1 rounded-md border border-border bg-card p-1.5">
+        {["h-8", "h-12", "h-6"].map((altura, i) => (
+          <div key={i} className="flex flex-1 flex-col gap-1 rounded-sm bg-background p-1">
+            <span className={`rounded-sm border border-border bg-card ${altura}`} />
+          </div>
+        ))}
+      </div>
+    </div>
+  ),
   "/getting-started/installation": (
     <div className="w-60 max-w-full rounded-md border border-border bg-card p-3 font-mono text-body-sm">
       <p className="text-subtle-foreground">
@@ -539,6 +558,7 @@ const descricoes: Record<string, string> = {
   "Modal": "Grupos à esquerda, conteúdo à direita, botões à parte (G10).",
   "Drawer": "O lead pela direita: perfil, menu e cinco seções (G1).",
   "Drawer variações": "Tons, menu, linha do tempo, hierarquia, camada e as três propostas.",
+  "Protótipo SystemCrazy": "O CRM navegável: dashboard, pipeline, leads, atendimento e automações.",
   "Dashboard": "Indicadores, receita por dia e os negócios parados, numa tela.",
   "Pipeline": "O funil do CRM: arraste um lead e abra o registro.",
   "Leads": "A lista de contatos: edite tags e origem na célula e crie uma tag.",

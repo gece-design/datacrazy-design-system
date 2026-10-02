@@ -1,9 +1,9 @@
 "use client";
 
-import { Buildings, CurrencyDollar, EnvelopeSimple, FunnelSimple, Headset, MapPin, Phone, User } from "@phosphor-icons/react";
+import { ArrowsOutSimple, Buildings, CurrencyDollar, EnvelopeSimple, FunnelSimple, Headset, MapPin, Phone, User } from "@phosphor-icons/react";
 
 import { Avatar } from "@/components/ui/avatar";
-import { BotaoFechar } from "@/components/ui/button";
+import { BotaoFechar, Button } from "@/components/ui/button";
 import { CelulaEditavel, CelulaEscolha } from "@/components/ui/data-table";
 import { AcaoCopiar } from "@/components/ui/input";
 import { LinhaDeCampo, ListaDeCampos } from "@/components/ui/painel-lateral";
@@ -18,17 +18,23 @@ import { ATENDENTES, ETAPAS, GRUPOS_TAGS, moeda, tagsDe, type Conversa, type Eta
    texto com `CelulaEditavel`, valor de lista com `CelulaEscolha`. */
 
 const ROTULOS_DA_LISTA = { busca: "Buscar", vazio: "Nada encontrado" };
+
+/** Os atendentes como opções: cada um aparece na lista como aparece na tela — a Tag com a foto. */
+export const OPCOES_DE_ATENDENTE = ATENDENTES.map((a) => ({ valor: a, rotulo: a, conteudo: <Tag foto="/ds/atendente.png">{a}</Tag> }));
 /** A coluna tem 320: o rótulo fica com 96 em vez dos 144 do painel de 480. */
 const linha = "[&>dt]:w-24";
 
 export function PainelDoLead({
   conversa,
   aoEditar,
+  aoAbrirCompleto,
   aoFechar,
   className,
 }: {
   conversa: Conversa;
   aoEditar: (campos: Partial<Conversa>) => void;
+  /** Abre o lead inteiro no Drawer do design system: perfil, histórico e as outras seções. */
+  aoAbrirCompleto: () => void;
   /** Abaixo de 1280 o painel abre por cima da conversa e cobre o botão que o abriu: o X fecha. */
   aoFechar: () => void;
   className?: string;
@@ -46,12 +52,15 @@ export function PainelDoLead({
               <span className="truncate">{conversa.empresa}</span>
             </p>
           </div>
+          <Button variant="ghost" size="icon-sm" aria-label="Abrir o lead completo" title="Abrir o lead completo" onClick={aoAbrirCompleto} className="shrink-0 self-start">
+            <ArrowsOutSimple size={16} weight="regular" aria-hidden="true" />
+          </Button>
           <BotaoFechar rotulo="Fechar o lead" onClick={aoFechar} className="shrink-0 self-start xl:hidden" />
         </div>
 
         <div className="flex flex-wrap items-center gap-1">
           {tagsDe(conversa.tags).map((t) => (
-            <Tag key={t.id} status={t.status}>
+            <Tag key={t.id} status={t.status} tom={t.tom} icone={t.icone}>
               {t.rotulo}
             </Tag>
           ))}
@@ -97,12 +106,12 @@ export function PainelDoLead({
             <LinhaDeCampo icone={Headset} rotulo="Atendente" className={linha}>
               <CelulaEscolha
                 rotulo={`Mudar atendente de ${conversa.nome}`}
-                opcoes={ATENDENTES.map((a) => ({ valor: a, rotulo: a }))}
+                opcoes={OPCOES_DE_ATENDENTE}
                 selecionados={conversa.atendente ? [conversa.atendente] : []}
                 aoAlternar={(v) => aoEditar({ atendente: v })}
                 rotulos={ROTULOS_DA_LISTA}
               >
-                {conversa.atendente ?? <span className="text-subtle-foreground">Sem atendente</span>}
+                {conversa.atendente ? <Tag foto="/ds/atendente.png">{conversa.atendente}</Tag> : <span className="text-subtle-foreground">Sem atendente</span>}
               </CelulaEscolha>
             </LinhaDeCampo>
           </ListaDeCampos>

@@ -75,6 +75,13 @@ export interface TelaBaseProps {
   memoria?: string;
   /** Recuo do conteúdo (16). Desligue quando o conteúdo encosta nas bordas do painel: lista, quadro, chat. */
   recuo?: boolean;
+  /**
+   * A cor atrás do conteúdo. `card` (padrão) é a própria superfície: lista,
+   * quadro, chat. `muted` é o cinza claro para tela feita de cartões
+   * (dashboard): os cartões brancos se destacam, e o cinza não é o da
+   * navegação nem o dos cartões (humano, 2026-10-02).
+   */
+  fundo?: "card" | "muted";
   rotulos?: Partial<RotulosDaTela>;
   className?: string;
 }
@@ -93,6 +100,7 @@ export function TelaBase({
   lateralCheia = false,
   memoria,
   recuo = true,
+  fundo = "card",
   rotulos,
   className,
 }: TelaBaseProps) {
@@ -182,7 +190,7 @@ export function TelaBase({
             />
             <main
               aria-label={r.conteudo}
-              className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", rolagemDiscreta, recuo && "p-4")}
+              className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", rolagemDiscreta, recuo && "p-4", fundo === "muted" && "bg-muted")}
             >
               {children}
             </main>

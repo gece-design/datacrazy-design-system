@@ -132,6 +132,7 @@ export default function PainelLateralPage() {
   return (
     <PaginaDS
       titulo="Painel lateral"
+      novidade="2026-10-01"
       descricao="O registro aberto ao lado da lista, sem cobri-la: 480px com um traço à esquerda, cabeçalho de 48 e os campos em linha — rótulo à esquerda, valor à direita, 32px por campo. A lista continua à vista, e clicar em outra linha troca o registro."
       secoes={["Como funciona", "Ao lado da lista", "Campos em linha", "Na tela"]}
     >

@@ -1,3 +1,4 @@
+import { Fire, Snowflake, ThermometerSimple } from "@phosphor-icons/react";
 import type { GrupoTags, OpcaoTag } from "@/components/ui/tag";
 import type { TomPerfil } from "@/components/ui/drawer";
 
@@ -64,9 +65,10 @@ export const GRUPOS_TAGS: GrupoTags[] = [
     id: "temperatura",
     rotulo: "Temperatura",
     tags: [
-      { id: "frio", rotulo: "Frio" },
-      { id: "warm", rotulo: "Warm" },
-      { id: "quente", rotulo: "Quente", status: "destructive" },
+      // Escala, não categoria: o ícone diz o degrau, na cor dele.
+      { id: "frio", rotulo: "Frio", icone: Snowflake, tom: "ciano" },
+      { id: "warm", rotulo: "Warm", icone: ThermometerSimple, tom: "laranja" },
+      { id: "quente", rotulo: "Quente", icone: Fire, tom: "vermelho" },
     ],
   },
   {

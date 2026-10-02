@@ -11,6 +11,7 @@ Escolher uma opção numa lista curta.
 - **Não use** para ações (`Menu`), para ligar e desligar (`Switch`) ou para 2 a 4 opções que cabem à vista (`SegmentedControl`, `RadioGroup`).
 - **Não use** na barra da tabela para filtrar: filtros são a `BarraDeFiltros`, sob o Header.
 - **Use** `grupo` quando a lista tem mais de um assunto ("Redes sociais" / "Outras") e `icone` quando a opção tem marca ou símbolo.
+- **Use** `conteudo` quando a opção aparece na tela como uma `Tag` (atendente com foto, tag com cor): a lista e o gatilho mostram a mesma Tag, não o nome escrito. É regra do DS inteiro.
 - **Não use** para lista longa (mais de ~10 opções), com busca ou com várias escolhas: é `Combobox` ou `ComboboxMultiplo`.
 
 ## Família
@@ -35,7 +36,7 @@ página de Elevation reserva a popover e menu de contexto).
 
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
-| `opcoes` | `OpcaoSelect[]` | — | sim | `valor`, `rotulo`, `icone?` (ícone de 16px antes do rótulo, na lista e no gatilho: Phosphor ou `IconeDeMarca`) e `grupo?` (cabeçalho do bloco: opções seguidas com o mesmo `grupo` ficam sob ele). |
+| `opcoes` | `OpcaoSelect[]` | — | sim | `valor`, `rotulo`, `icone?` (ícone de 16px antes do rótulo, na lista e no gatilho: Phosphor ou `IconeDeMarca`) `grupo?` (cabeçalho do bloco: opções seguidas com o mesmo `grupo` ficam sob ele) e `conteudo?` (a opção como ela aparece na tela — uma `Tag` —, no lugar do ícone e do rótulo, na lista e no gatilho; o `rotulo` continua sendo o nome acessível). |
 | `rotulo` | `string` | — | sim | Nome do controle para leitor de tela. Ex.: "Filtrar por etapa". |
 | `valor` | `string` | — | sim | O valor escolhido (controlado). Vazio = o gatilho mostra `textoVazio`. |
 | `aoEscolher` | `(v: string) => void` | — | não | Chamado ao escolher. |

@@ -79,6 +79,7 @@ export default function Pagina() {
 
       <Secao
         titulo="Fill e Outline"
+        novidade="2026-10-01"
         spec="2 leituras"
         descricao="Não é o mesmo card com e sem fundo. Fill mostra um número e uma contagem. Outline mostra o número, a variação dele e o que a variação significa — por isso tem divisória, rodapé e 33px a mais de altura."
         codigo={`<KpiCard

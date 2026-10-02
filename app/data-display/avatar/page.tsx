@@ -92,6 +92,7 @@ export default function AvatarPage() {
 
       <Secao
         titulo="Cores"
+        novidade="2026-10-01"
         spec="tom · 14 tons"
         descricao="Numa lista de pessoas sem foto, o disco ganha cor: pastel no fundo e a mesma cor, escura, na letra. Com tom automático a cor sai do nome — a mesma pessoa tem sempre a mesma cor, em qualquer tela."
         codigo={`<Avatar nome="Ana Beatriz Ferreira" size="xs" iniciais="duas" tom="auto" />

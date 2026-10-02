@@ -17,6 +17,7 @@ import {
   ChatCircleDots, ListMagnifyingGlass, FunnelSimple, SquareSplitHorizontal, FlowArrow,
 } from "@phosphor-icons/react";
 import { navegacao } from "./nav";
+import { SeloNovo } from "@/components/ds/novidade";
 import { Logo, LogoSimbolo } from "./logo";
 import { Tree } from "./tree";
 import { SidebarToggle } from "@/components/ui/sidebar";
@@ -294,9 +295,8 @@ export function Sidebar({ rail = false, onColapsarChange, aoNavegar, onFechar, c
                           >
                             {Icone && <Icone size={16} weight="regular" className={cn("shrink-0", tomDoGlifo)} />}
                             <span className="flex-1 truncate">{item.titulo}</span>
-                            <span className="chrome-selo flex h-[18px] items-center rounded-[4px] bg-accent px-1 text-primary">
-                              new
-                            </span>
+                            {/* só no que mudou nesta semana (a data está no nav.ts) */}
+                            <SeloNovo data={item.atualizado} />
                           </Link>
                         </li>
                       );

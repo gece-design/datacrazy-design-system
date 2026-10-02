@@ -38,7 +38,7 @@ import { rolagemDiscreta } from "@/lib/estados";
 
 /** O catálogo de tags como opções da célula: agrupadas, cada uma como a Tag que vai aparecer. */
 const OPCOES_DE_TAG = GRUPOS_TAGS.flatMap((g) =>
-  g.tags.map((t) => ({ valor: t.id, rotulo: t.rotulo, grupo: g.rotulo, conteudo: <Tag status={t.status}>{t.rotulo}</Tag> })),
+  g.tags.map((t) => ({ valor: t.id, rotulo: t.rotulo, grupo: g.rotulo, conteudo: <Tag status={t.status} tom={t.tom} icone={t.icone}>{t.rotulo}</Tag> })),
 );
 
 /** As colunas da lista. Ficam aqui, exportadas, porque os botões Agrupar e
@@ -140,7 +140,7 @@ export function Lista({
                     rotulos={{ busca: "Buscar tag", vazio: "Nenhuma tag encontrada" }}
                   >
                     {lead.tags.length ? (
-                      <CelulaTags etiquetas={tagsDe(GRUPOS_TAGS, lead.tags).map((t) => ({ rotulo: t.rotulo, status: t.status }))} />
+                      <CelulaTags etiquetas={tagsDe(GRUPOS_TAGS, lead.tags).map((t) => ({ rotulo: t.rotulo, status: t.status, tom: t.tom, icone: t.icone }))} />
                     ) : (
                       <span className="text-label-lg text-subtle-foreground">Adicionar</span>
                     )}

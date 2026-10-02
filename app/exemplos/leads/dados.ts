@@ -79,6 +79,19 @@ export type Lead = {
   criadoEm: string;
 };
 
+/* Intl.NumberFormat formata diferente no Node e no navegador (o espaço depois
+   do R$) e a diferença vira erro de hidratação. Conta na mão. */
+export function moeda(valor: number) {
+  return `R$ ${Math.round(valor).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+}
+
+/** O que o lead já comprou: as quatro métricas do topo do drawer. No CRM vem da API; aqui sai das tags. */
+export function comprasDe(lead: Lead) {
+  const pedidos = lead.tags.includes("recorrente") ? 4 : lead.tags.includes("vip") ? 2 : lead.tags.includes("primeira") ? 1 : 0;
+  const ticket = lead.tags.includes("vip") ? 6400 : 1850;
+  return { pedidos, ticket: pedidos ? ticket : 0, total: pedidos * ticket, cicloDias: pedidos > 1 ? 38 : 0 };
+}
+
 const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
 
 /** "2026-01-16" → "16 jan 2026". À mão, e não por `Intl`: servidor e navegador escrevem igual. */

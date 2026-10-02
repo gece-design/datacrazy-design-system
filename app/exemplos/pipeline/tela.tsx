@@ -29,6 +29,7 @@ import {
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos } from "@/components/ui/barra-de-filtros";
 import { Button } from "@/components/ui/button";
+import { Drawer } from "@/components/ui/drawer";
 import { Header, HeaderBusca, HeaderDivisor, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
@@ -124,17 +125,20 @@ const OPCOES_DE_ORIGEM = CANAIS.map((c) => ({
   icone: <IconeDoCanal canal={c} tamanho={16} />,
 }));
 
+/** Os atendentes como opções: cada um aparece na lista como aparece na tela — a Tag com a foto. */
+const OPCOES_DE_ATENDENTE = ATENDENTES.map((a) => ({ valor: a, rotulo: a, conteudo: <Tag foto="/ds/atendente.png">{a}</Tag> }));
+
 /** Os campos que a tela deixa filtrar. Etapa depende das etapas do funil, que a pessoa edita. */
 const camposDeFiltro = (etapas: Etapa[]): CampoDeFiltro[] => [
   { id: "etapas", rotulo: "Etapa", icone: FunnelSimple, opcoes: etapas.map((e) => ({ valor: e.id, rotulo: e.rotulo })) },
-  { id: "atendentes", rotulo: "Atendente", icone: Headset, opcoes: ATENDENTES.map((a) => ({ valor: a, rotulo: a })) },
+  { id: "atendentes", rotulo: "Atendente", icone: Headset, opcoes: OPCOES_DE_ATENDENTE },
   { id: "canais", rotulo: "Origem", icone: ShareNetwork, opcoes: OPCOES_DE_ORIGEM },
   {
     id: "tags",
     rotulo: "Tags",
     icone: IconeDeTag,
     opcoes: GRUPOS_TAGS.flatMap((g) =>
-      g.tags.map((x) => ({ valor: x.id, rotulo: x.rotulo, grupo: g.rotulo, conteudo: <Tag status={x.status}>{x.rotulo}</Tag> })),
+      g.tags.map((x) => ({ valor: x.id, rotulo: x.rotulo, grupo: g.rotulo, conteudo: <Tag status={x.status} tom={x.tom} icone={x.icone}>{x.rotulo}</Tag> })),
     ),
   },
   { id: "sinais", rotulo: "Situação", icone: WarningCircle, opcoes: SINAIS.map((s) => ({ valor: s.id, rotulo: s.rotulo })) },
@@ -152,7 +156,17 @@ const leadVazio = { nome: "", empresa: "", valor: "", atendente: ATENDENTES[0], 
 const etapaVazia = { modo: "criar" as "criar" | "editar", id: "", rotulo: "", cor: "neutro" as CorColuna };
 
 /** `visaoInicial`: a tela abre no quadro; a página de comparação visual abre direto na lista. */
-export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "lista" | "calendario" } = {}) {
+export function Tela({
+  visaoInicial = "quadro",
+  aoNavegar,
+  memoria = "pipeline",
+}: {
+  visaoInicial?: "quadro" | "lista" | "calendario";
+  /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
+  aoNavegar?: (destino: string) => boolean;
+  /** Chave da memória da sidebar. No protótipo é uma só, para ela não mudar de estado entre as telas. */
+  memoria?: string;
+} = {}) {
   const [etapas, setEtapas] = React.useState<Etapa[]>(ETAPAS);
   const [colunas, setColunas] = React.useState<Colunas>(() => agrupar(ETAPAS, LEADS));
   const [busca, setBusca] = React.useState("");
@@ -195,12 +209,6 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
     { id: "3", icone: Handshake, titulo: "Negócio ganho", detalhe: "Rede Bom Dia assinou o plano anual — R$ 145.000.", quando: "ontem", lida: false },
   ]);
   const [abertoId, setAbertoId] = React.useState<string | null>(null);
-  const [leadEmTelaCheia, setLeadEmTelaCheia] = React.useState(false);
-  // fechar sempre volta ao painel ao lado: o próximo lead não abre em tela cheia
-  const fecharLead = () => {
-    setAbertoId(null);
-    setLeadEmTelaCheia(false);
-  };
   const [rota, setRota] = React.useState("Pipelines");
   const [novo, setNovo] = React.useState<typeof leadVazio | null>(null);
   const [filtros, setFiltros] = React.useState(false);
@@ -379,29 +387,10 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
 
   return (
     <TelaBase
-      memoria="pipeline"
+      memoria={memoria}
       recuo={false}
       // O lead abre AO LADO, dentro do painel da tela, e empurra o quadro ou a
       // lista: clicar em outra linha troca o registro sem fechar nada.
-      lateral={
-        aberto ? (
-          <PainelLead
-            etapas={etapas}
-            atendentes={ATENDENTES}
-            origens={OPCOES_DE_ORIGEM}
-            lead={aberto}
-            telaCheia={leadEmTelaCheia}
-            aoAlternarTelaCheia={() => setLeadEmTelaCheia((v) => !v)}
-            aoFechar={fecharLead}
-            aoMudarEtapa={(etapa) => {
-              if (etapa !== aberto.etapa) mover(aberto.id, etapa, 0);
-            }}
-            aoEditar={(campos) => editar(aberto.id, campos)}
-            aoTrocarTags={(ids) => editar(aberto.id, { tags: ids })}
-          />
-        ) : null
-      }
-      lateralCheia={Boolean(aberto) && leadEmTelaCheia}
       navegacao={
         <>
         <SidebarTopo>
@@ -413,7 +402,9 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
                 icone={r.icone}
                 componente="button"
                 selecionado={r.rotulo === rota}
-                onClick={() => setRota(r.rotulo)}
+                onClick={() => {
+                  if (!aoNavegar?.(r.rotulo)) setRota(r.rotulo);
+                }}
               >
                 {r.rotulo}
               </SidebarItem>
@@ -678,7 +669,7 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
               rotulo="Atendente"
               valor={novo.atendente}
               aoEscolher={(v) => setNovo({ ...novo, atendente: v })}
-              opcoes={ATENDENTES.map((a) => ({ valor: a, rotulo: a }))}
+              opcoes={OPCOES_DE_ATENDENTE}
             />
             {/* grupos com cabeçalho e ícone por opção; marca é `IconeDeMarca` */}
             <Select
@@ -777,6 +768,25 @@ export function Tela({ visaoInicial = "quadro" }: { visaoInicial?: "quadro" | "l
           </div>
         ) : null}
       </Modal>
+
+      {/* O lead abre no Drawer do design system — o mesmo da página do Drawer,
+          com o lead clicado no quadro, na lista ou no calendário. */}
+      <Drawer aberto={Boolean(aberto)} aoFechar={() => setAbertoId(null)} rotulo={`Lead ${aberto?.nome ?? ""}`}>
+        {aberto ? (
+          <PainelLead
+            etapas={etapas}
+            atendentes={OPCOES_DE_ATENDENTE}
+            origens={OPCOES_DE_ORIGEM}
+            lead={aberto}
+            aoFechar={() => setAbertoId(null)}
+            aoMudarEtapa={(etapa) => {
+              if (etapa !== aberto.etapa) mover(aberto.id, etapa, 0);
+            }}
+            aoEditar={(campos) => editar(aberto.id, campos)}
+            aoTrocarTags={(ids) => editar(aberto.id, { tags: ids })}
+          />
+        ) : null}
+      </Drawer>
 
       <Toaster />
     </TelaBase>

@@ -132,6 +132,7 @@ export default function SelectPage() {
 
       <Secao
         titulo="Grupos e ícones"
+        novidade="2026-10-01"
         spec="grupo · icone"
         descricao="Lista com mais de um assunto ganha cabeçalho por grupo; opção com marca ou símbolo ganha ícone, que aparece também no gatilho. O cabeçalho não é opção: o teclado passa direto por ele."
         codigo={codigoGrupos}

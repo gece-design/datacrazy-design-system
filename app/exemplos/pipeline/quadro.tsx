@@ -548,7 +548,7 @@ function Cartao({
           {mostra("atendente") ? <Tag foto="/ds/atendente.png">{lead.responsavel}</Tag> : null}
           {mostra("tags")
             ? tags.map((t) => (
-                <Tag key={t.id} status={t.status}>
+                <Tag key={t.id} status={t.status} tom={t.tom} icone={t.icone}>
                   {t.rotulo}
                 </Tag>
               ))

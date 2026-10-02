@@ -27,6 +27,8 @@ import { Button } from "@/components/ui/button";
 import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos } from "@/components/ui/barra-de-filtros";
 import { HeaderBusca, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
+import { Drawer } from "@/components/ui/drawer";
+import { Tag } from "@/components/ui/tag";
 import { TelaBase } from "@/components/ui/tela-base";
 import { Toaster, toast } from "@/components/ui/toast";
 import { useTema } from "@/lib/tema";
@@ -34,6 +36,7 @@ import { cn } from "@/lib/utils";
 import { ConversaAberta } from "./conversa";
 import { CONVERSAS, EU, type Canal, type Conversa, type Mensagem, type Situacao } from "./dados";
 import { IconeDoCanal, ListaDeConversas } from "./lista";
+import { LeadCompleto } from "./lead-completo";
 import { PainelDoLead } from "./painel";
 
 /**
@@ -80,7 +83,8 @@ const CAMPOS_DE_FILTRO: CampoDeFiltro[] = [
     rotulo: "Atendente",
     icone: Headset,
     opcoes: [
-      ...["Esther", "Liam", "Marina"].map((a) => ({ valor: a, rotulo: a === EU ? `${a} (eu)` : a })),
+      // cada atendente aparece na lista como aparece na tela: a Tag com a foto
+      ...["Esther", "Liam", "Marina"].map((a) => ({ valor: a, rotulo: a === EU ? `${a} (eu)` : a, conteudo: <Tag foto="/ds/atendente.png">{a === EU ? `${a} (eu)` : a}</Tag> })),
       { valor: SEM_ATENDENTE, rotulo: "Sem atendente" },
     ],
   },
@@ -95,7 +99,15 @@ const NOTIFICACOES: Notificacao[] = [
 const agora = () => new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 const semAcento = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
-export function Tela() {
+export function Tela({
+  aoNavegar,
+  memoria = "atendimento",
+}: {
+  /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
+  aoNavegar?: (destino: string) => boolean;
+  /** Chave da memória da sidebar. No protótipo é uma só, para ela não mudar de estado entre as telas. */
+  memoria?: string;
+} = {}) {
   const { tema, mudar } = useTema();
   const [rota, setRota] = React.useState("Chat ao vivo");
   const [conversas, setConversas] = React.useState<Conversa[]>(CONVERSAS);
@@ -105,6 +117,8 @@ export function Tela() {
   const [filtro, setFiltro] = React.useState<FiltrosAtivos>({});
   const [filtros, setFiltros] = React.useState(false);
   const [painelAberto, setPainelAberto] = React.useState(true);
+  // o lead inteiro, no Drawer do design system
+  const [leadCompleto, setLeadCompleto] = React.useState(false);
   // só no celular: a tela mostra a lista OU a conversa
   const [naConversa, setNaConversa] = React.useState(false);
   const [notificacoes, setNotificacoes] = React.useState(NOTIFICACOES);
@@ -192,7 +206,7 @@ export function Tela() {
 
   return (
     <TelaBase
-      memoria="atendimento"
+      memoria={memoria}
       recuo={false}
       navegacao={
         <>
@@ -200,7 +214,15 @@ export function Tela() {
             <SidebarBrand />
             <SidebarGrupo>
               {PRINCIPAIS.map((r) => (
-                <SidebarItem key={r.rotulo} icone={r.icone} componente="button" selecionado={r.rotulo === rota} onClick={() => setRota(r.rotulo)}>
+                <SidebarItem
+                  key={r.rotulo}
+                  icone={r.icone}
+                  componente="button"
+                  selecionado={r.rotulo === rota}
+                  onClick={() => {
+                    if (!aoNavegar?.(r.rotulo)) setRota(r.rotulo);
+                  }}
+                >
                   {r.rotulo}
                 </SidebarItem>
               ))}
@@ -304,6 +326,7 @@ export function Tela() {
             <PainelDoLead
               conversa={aberta}
               aoEditar={(campos) => mudar_(aberta.id, (c) => ({ ...c, ...campos }))}
+              aoAbrirCompleto={() => setLeadCompleto(true)}
               aoFechar={() => setPainelAberto(false)}
               // abaixo de 1280 abre por cima da conversa; acima, é a terceira coluna
               className="absolute inset-y-0 right-0 z-dropdown w-[320px] max-w-full shadow-lg xl:static xl:z-auto xl:shadow-none"
@@ -312,6 +335,12 @@ export function Tela() {
         </div>
       </div>
 
+      {/* O lead inteiro abre no Drawer do design system — o mesmo da página do Drawer. */}
+      <Drawer aberto={Boolean(aberta) && leadCompleto} aoFechar={() => setLeadCompleto(false)} rotulo={`Lead ${aberta?.nome ?? ""}`}>
+        {aberta ? (
+          <LeadCompleto conversa={aberta} aoEditar={(campos) => mudar_(aberta.id, (c) => ({ ...c, ...campos }))} aoFechar={() => setLeadCompleto(false)} />
+        ) : null}
+      </Drawer>
       <Toaster />
     </TelaBase>
   );

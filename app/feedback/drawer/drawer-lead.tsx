@@ -118,10 +118,10 @@ export const CATALOGO_TAGS: GrupoTags[] = [
     id: "temperatura",
     rotulo: "Temperatura",
     tags: [
-      // Escala, não categoria: o ícone diz o degrau.
-      { id: "frio", rotulo: "Frio", icone: Snowflake },
-      { id: "morno", rotulo: "Morno", icone: ThermometerSimple },
-      { id: "quente", rotulo: "Quente", icone: Fire },
+      // Escala, não categoria: o ícone diz o degrau, na cor dele.
+      { id: "frio", rotulo: "Frio", icone: Snowflake, tom: "ciano" },
+      { id: "morno", rotulo: "Morno", icone: ThermometerSimple, tom: "laranja" },
+      { id: "quente", rotulo: "Quente", icone: Fire, tom: "vermelho" },
     ],
   },
 ];

@@ -42,7 +42,7 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 | `tipo` | `"pessoa" \| "empresa"` | não | Ícone de 12px; ícone e texto na cor do lead (`tom/texto`). |
 | `foto` | `string` | não | Foto de 18px encostada à esquerda, por dentro do traço (atendente). |
 | `tom` | `Tom` | não | A cor da tag: um dos catorze tons de `[data-tom]` (`TONS`, na ordem do círculo de cores): `azul` `indigo` `roxo` `fucsia` `rosa` `vermelho` `laranja` `ambar` `amarelo` `lima` `verde` `turquesa` `ciano` `marrom`. Pinta a bolinha (`tom/ponto`) — ou o ícone, quando há `icone` (`tom/texto`); o texto fica sempre em `foreground`. Sem tom, a tag não tem cor; com ela, são quinze cores (ADR-051). `tomDe(chave)` dá um tom estável para um texto, sempre entre os seis de antes (`azul` `roxo` `rosa` `laranja` `ciano` `ambar`): abrir a paleta não troca a cor de lista que já existe. |
-| `icone` | `ComponentType` | não | Ícone de 12px antes do texto, no lugar da bolinha e na cor do tom — a forma distingue junto com a cor. |
+| `icone` | `ComponentType` | não | Ícone de 12px antes do texto, no lugar da bolinha. Leva a cor do `tom` ou, sem tom, a do `status` — a forma distingue junto com a cor. Use quando o grupo é uma escala (temperatura: frio, morno, quente): todas as tags do grupo levam ícone, não só uma. |
 | `children` | `ReactNode` | sim | O texto, como foi escrito. |
 
 Mais larga que o lugar (`max-w-full`), a tag trunca o texto com reticências —

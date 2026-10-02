@@ -1,3 +1,4 @@
+import { Fire, Snowflake, ThermometerSimple } from "@phosphor-icons/react";
 import type { GrupoTags } from "@/components/ui/tag";
 
 /* Dados de exemplo da tela de Atendimento. No CRM, tudo isto vem da API: as
@@ -63,9 +64,10 @@ export const GRUPOS_TAGS: GrupoTags[] = [
     id: "temperatura",
     rotulo: "Temperatura",
     tags: [
-      { id: "frio", rotulo: "Frio" },
-      { id: "morno", rotulo: "Morno" },
-      { id: "quente", rotulo: "Quente", status: "destructive" },
+      // Escala, não categoria: o ícone diz o degrau, na cor dele.
+      { id: "frio", rotulo: "Frio", icone: Snowflake, tom: "ciano" },
+      { id: "morno", rotulo: "Morno", icone: ThermometerSimple, tom: "laranja" },
+      { id: "quente", rotulo: "Quente", icone: Fire, tom: "vermelho" },
     ],
   },
   {

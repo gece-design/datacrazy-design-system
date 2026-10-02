@@ -38,6 +38,7 @@ arquivo acompanha na remedição (AUD-203).
 | `lateralCheia` | `boolean` | não | O painel lateral em tela cheia: Header e conteúdo saem de cena. Acompanhe o `telaCheia` do `PainelLateral`. |
 | `memoria` | `string` | não | Chave da memória da sidebar (aberta ou recolhida) no navegador, uma por tela. Sem ela, começa pelo breakpoint. |
 | `recuo` | `boolean` | não | Padrão `true`: 16px em toda largura. Desligue (`recuo={false}`) quando o conteúdo encosta nas bordas do painel: lista, quadro, chat. |
+| `fundo` | `"card" \| "muted"` | não | A cor atrás do conteúdo. Padrão `card`: a própria superfície, para lista, quadro e chat. `muted`: cinza claro, para tela feita de cartões (dashboard) — os cartões brancos se destacam, e o cinza não é o da navegação. |
 | `rotulos` | `Partial<RotulosDaTela>` | não | `abrirMenu`, `fecharMenu`, `recolherMenu`, `expandirMenu`, `navegacao`, `conteudo` (i18n). Fábrica: `ROTULOS_DA_TELA`. |
 | `className` | `string` | não | — |
 

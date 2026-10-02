@@ -1391,9 +1391,9 @@ export function CelulaLead({
           </p>
         )}
         {etiquetas.map((e) => {
-          const { rotulo, tom, status } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined } : e;
+          const { rotulo, tom, status, icone } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined, icone: undefined } : e;
           return (
-            <Tag key={rotulo} tom={tom} status={status}>
+            <Tag key={rotulo} tom={tom} status={status} icone={icone}>
               {rotulo}
             </Tag>
           );
@@ -1420,9 +1420,9 @@ export function CelulaLead({
            estreita — antes vazavam por cima da coluna vizinha. */
         <div className="flex w-full min-w-0 flex-wrap items-start gap-1">
           {etiquetas.map((e) => {
-            const { rotulo, tom, status } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined } : e;
+            const { rotulo, tom, status, icone } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined, icone: undefined } : e;
             return (
-              <Tag key={rotulo} tom={tom} status={status} className="max-w-full" title={rotulo}>
+              <Tag key={rotulo} tom={tom} status={status} icone={icone} className="max-w-full" title={rotulo}>
                 {rotulo}
               </Tag>
             );
@@ -1462,9 +1462,9 @@ export function CelulaTags({ etiquetas, className }: { etiquetas: EtiquetaDaCelu
     <div className={cn("flex min-w-0 items-center gap-1", className)} title={nomes.join(", ")}>
       <div ref={fileira} className="flex max-h-[22px] min-w-0 flex-wrap items-center gap-1 overflow-hidden">
         {etiquetas.map((e) => {
-          const { rotulo, tom, status } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined } : e;
+          const { rotulo, tom, status, icone } = typeof e === "string" ? { rotulo: e, tom: undefined, status: undefined, icone: undefined } : e;
           return (
-            <Tag key={rotulo} tom={tom} status={status} className="shrink-0">
+            <Tag key={rotulo} tom={tom} status={status} icone={icone} className="shrink-0">
               {rotulo}
             </Tag>
           );
@@ -1556,7 +1556,7 @@ export function CelulaEscolha({
 }
 
 /** Uma etiqueta da `CelulaLead`: só o texto (cinza), com um dos tons da Tag ou com a bolinha de `status`. */
-export type EtiquetaDaCelula = string | { rotulo: string; tom?: Tom; status?: TagProps["status"] };
+export type EtiquetaDaCelula = string | { rotulo: string; tom?: Tom; status?: TagProps["status"]; icone?: TagProps["icone"] };
 
 /**
  * A célula que edita no lugar (cliente, 2026-09-26: "ter a opção de editar os

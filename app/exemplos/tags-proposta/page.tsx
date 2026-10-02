@@ -79,7 +79,7 @@ export default function Page() {
         </Linha>
         <Linha rotulo="Temperatura · ícone">
           <Tag tom="ciano" icone={Snowflake}>Frio</Tag>
-          <Tag tom="ambar" icone={ThermometerSimple}>Morno</Tag>
+          <Tag tom="laranja" icone={ThermometerSimple}>Morno</Tag>
           <Tag tom="vermelho" icone={Fire}>Quente</Tag>
         </Linha>
         <Linha rotulo="Listas · cor escolhida">

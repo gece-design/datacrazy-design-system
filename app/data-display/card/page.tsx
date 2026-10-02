@@ -164,6 +164,7 @@ export default function Pagina() {
 
       <Secao
         titulo="Rosca"
+        novidade="2026-10-01"
         spec="distribuição"
         descricao="Um número no centro, o anel em volta e a legenda embaixo. Serve para distribuição percentual entre poucas categorias — com muitas, a legenda vira uma lista e o anel para de informar."
         codigo={`<Card className="min-h-[452px] justify-between">
@@ -197,6 +198,7 @@ export default function Pagina() {
 
       <Secao
         titulo="Barras"
+        novidade="2026-10-01"
         spec="por período"
         descricao="Uma barra por dia, em cor chapada, com as datas embaixo. Sem eixo: o valor de cada barra aparece ao passar o cursor."
         codigo={`<Card className="min-h-[452px] gap-5">

@@ -88,10 +88,13 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 - Tela de lista, quadro ou chat: `recuo={false}` na `TelaBase`, e o conteúdo
   encosta nas bordas do painel — a `DataTable` vai com `className="rounded-none
   border-0"`, e faixas (barra de filtros, resumo) se separam por `border-b`.
-  Tela de dashboard ou formulário: recuo padrão, blocos com traço (`Card`,
-  `KpiCard`, `DataTable`).
+  Tela de dashboard ou formulário: recuo padrão, `fundo="muted"` na `TelaBase`
+  (cinza claro atrás dos cartões — não é o cinza da navegação nem o branco dos
+  cartões), blocos com traço (`Card`, `KpiCard`, `DataTable`).
 - Dentro do painel, o que é cinza é `bg-background` (coluna neutra do quadro,
-  trilho, botão de apoio); o que é branco já é a superfície. Não use
+  trilho, botão de apoio); o fundo de uma área inteira — o canvas, a tela de
+  cartões — é `muted`, mais claro, para não repetir o cinza da navegação; o
+  que é branco já é a superfície. Não use
   `bg-card` para destacar um bloco: use traço.
 
 ### Header de uma linha
@@ -118,6 +121,23 @@ contexto em `docs/processo/ux-direcao-visual.md`.
   própria lista com busca. O `HeaderFiltros` mostra e esconde a barra e exibe
   `contarFiltros(valor)`. Campo de um valor só leva `unico`. Aplica na hora:
   sem botão de confirmar, sem modal (ADR-050).
+
+### Listas de escolha: a opção já é a peça final
+- Regra do design system inteiro (humano, 2026-10-02): quando o que a pessoa
+  escolhe aparece na tela como uma `Tag`, a lista mostra essa MESMA Tag em cada
+  opção — o atendente com a foto, a tag com a bolinha ou o ícone na cor, a
+  etapa com a cor dela. Nunca só o nome escrito: quem abre a lista vê
+  exatamente como vai ficar.
+- Como: `conteudo` na opção — `{ valor, rotulo, conteudo: <Tag foto={a.foto}>{a.nome}</Tag> }`.
+  Vale para `Select`, `Combobox`, `ComboboxMultiplo`, `ComboboxPainel`,
+  `CelulaEscolha` e os campos da `BarraDeFiltros`; o gatilho mostra a mesma
+  peça depois de escolhida. O `rotulo` continua obrigatório: é o que a busca
+  procura e o que o leitor de tela lê.
+- Monte a lista de opções UMA vez por tela (`OPCOES_DE_ATENDENTE`,
+  `OPCOES_DE_TAG`) e use a mesma no filtro, na célula, no formulário e no
+  drawer: a peça não pode mudar de um lugar para outro.
+- Escolher um atendente ou uma tag numa lista não é `Menu`: `Menu` é para
+  ações, e só tem texto. É `ComboboxPainel` (ancorado no botão) com as Tags.
 
 ### Formulário, rolagem e relevo
 - Select ao lado de Input é sempre `size="field"` (a caixa do Input). O `md` é
@@ -151,8 +171,7 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   total); `BotaoAgrupar` e `BotaoColunas` recolhidos na fileira do Header, ao
   lado de `HeaderBusca recolhida` e `HeaderFiltros recolhido`, que mostra e
   esconde a `BarraDeFiltros` sob o Header; `Pagination` embaixo; seleção em massa com `useSelecaoDaTabela` + `BarraDeSelecao`;
-  clique na linha abre o registro no `PainelLateral`, ao lado da lista (encaixe
-  `lateral` da `TelaBase`). Células: `CelulaLead` (nome +
+  clique na linha abre o lead no `Drawer` do lead (ver "Detalhe de um registro"). Células: `CelulaLead` (nome +
   `Tag` sem cor ou com `status`), `CelulaProgresso` (etapa), `Tag foto` (pessoa),
   `CelulaEditavel` (valor editável), `CelulaEscolha` (valor que vem de lista:
   tags, etapa — edita na célula, sem modal), origem com `IconeDeMarca`.
@@ -187,9 +206,9 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   `CelulaLead avatar aoAbrir` — o nome com as iniciais na cor que ele sorteia,
   e o nome é o botão que abre o registro (nunca um `<button>` à mão na célula). Valor de lista edita na célula com
   `CelulaEscolha` (tags com `multiplo`; origem com `grupo` e `icone` por
-  opção, marca em `IconeDeMarca`); célula sem valor mostra um traço.
-  `HeaderBusca recolhida`, `HeaderFiltros recolhido`, `BotaoAgrupar` e
-  `BotaoColunas` recolhidos no Header (a tela abre o registro ao lado);
+  opção, marca em `IconeDeMarca`); célula sem valor mostra um traço. Busca
+  aberta e `HeaderFiltros` com rótulo no Header, `BotaoAgrupar` e
+  `BotaoColunas` recolhidos ao lado; o nome abre o `Drawer` do lead;
   filtros em `BarraDeFiltros`; ações em
   massa na `BarraDeSelecao`. Criar tag é `Modal size="sm"` com `Input` e
   `SeletorDeTom tamanho="md" comNeutro` — as quinze cores, nunca um seletor
@@ -203,8 +222,15 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   rotuloOculto linhas={1}` + `SegmentedControl` Mensagem / Nota interna.
   Abaixo de 1280 o lead abre por cima; abaixo de 768, lista OU conversa.
 - **Fluxo, automação, editor em canvas**: bloco `@datacrazy/automacoes`
-  (`app/automacoes/`). `recuo={false}`; o canvas é `bg-background` dentro do
-  painel da tela e rola nos dois sentidos, com zoom numa caixa `card` no canto.
+  (`app/automacoes/`). `recuo={false}`; o canvas é `bg-muted` com fundo
+  pontilhado — o cinza claro que não é o da navegação nem o branco dos blocos
+  — e funciona como canvas de verdade (o `canvas.tsx` do bloco, sem lib de
+  grafo): arrastar o fundo move a tela, rolar ou pinçar dá zoom no cursor,
+  arrastar da bolinha de uma saída liga a outro bloco, clicar na ligação e
+  Delete desfaz, dois cliques no fundo adicionam um bloco, Shift + arrastar
+  marca vários, botão direito abre as ações; barra `card` no canto com
+  desfazer, refazer, zoom, enquadrar, organizar, mapa e a lista de gestos. A
+  tela guarda o fluxo e o histórico; o canvas só pede (`aoMover`, `aoLigar`…).
   Cada bloco é um cartão com traço (`bg-card border rounded-lg`): cabeçalho com
   o ícone do tipo, resumo do que está configurado, uma linha por saída e a
   contagem. Conector é traço em `subtle-foreground`; cor só nas saídas de
@@ -212,14 +238,17 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   `PainelLateral` ao lado — nunca um modal por cima do fluxo —, e o destino de
   cada saída se escolhe numa lista (`CelulaEscolha`). Liga e desliga é `Switch`
   no Header; a ação principal é Salvar.
-- **Detalhe de um registro**: `PainelLateral` no encaixe `lateral` da
-  `TelaBase` (ADR-056) — 480px ao lado da lista, que continua à vista; `Tabs`
-  para as seções; dados em `ListaDeCampos` + `LinhaDeCampo` (rótulo à esquerda,
-  valor à direita), editando no lugar com `CelulaEditavel` e `CelulaEscolha`;
-  `aoAlternarTelaCheia` + `lateralCheia` para a tela cheia. O `Drawer`
-  (`DrawerPainel`, `DrawerPerfil`, `DrawerMetricas`, `DrawerMenu`,
-  `DrawerConteudo`, `DrawerSecao`) fica para o registro completo, com perfil e
-  muitas seções, que não cabe em 480px.
+- **Detalhe de um registro**: o lead — e todo registro do CRM com perfil
+  (pessoa, empresa, negócio) — abre no `Drawer` do lead, o mesmo em toda tela
+  (humano, 2026-10-02, ADR-061): `<Drawer>` com o `DrawerLead` que vem nos
+  blocos (`drawer-lead.tsx`), recebendo `dados` (nome, tipo, contato, as
+  quatro métricas), `tags` (a fileira do perfil, com `SeletorTags`), `tom` e
+  `secoes` — o conteúdo de Histórico e de Perfil com o dado do registro, em
+  cartões (`CampoEditavel`, `Select cartao`) dentro de `gradeDeCartoes`. Nunca
+  monte um segundo drawer nem um painel próprio para o lead. O `PainelLateral`
+  (encaixe `lateral` da `TelaBase`) fica para o que não é registro com perfil e
+  se edita olhando para a tela de trás: o bloco de uma automação, um item de
+  configuração — com `ListaDeCampos` + `LinhaDeCampo`.
 
 ### Telas: densidade (os números que o cliente pediu)
 O cliente comparou com o Twenty e o Attio: "menos gap, menos padding, stroke
@@ -276,10 +305,10 @@ O produto é responsivo, não desktop-first. Toda tela é conferida em 390px.
   (etapa do funil, tom do perfil). A Tag é pílula com traço e texto como foi
   escrito (ADR-059): nunca `uppercase`, `rounded-full` nem `bg-*` por `className`.
   O cliente tirou a variação colorida em 18/09 ("vibe code").
-- Formulário longo em `Modal` → `PainelLateral` com campos em linha, ou
-  `Drawer` com cartões. Modal é decisão curta.
-- `Drawer` ou `Modal` para abrir o registro clicado numa lista → `PainelLateral`:
-  a lista não pode sumir atrás do registro.
+- Formulário longo em `Modal` → `Drawer` com cartões, ou `PainelLateral` com
+  campos em linha. Modal é decisão curta.
+- `Modal` ou painel próprio para abrir o lead clicado numa lista → o `Drawer`
+  do lead: um só, igual em toda tela.
 - Sidebar ou Header montados à mão, ou tela sem `TelaBase`.
 - Card dentro de card, frame dentro de frame, tabela dentro de `Card`: uma
   superfície por bloco, e toda superfície tem traço (`border`).

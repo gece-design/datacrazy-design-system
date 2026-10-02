@@ -199,6 +199,7 @@ export default function Icones() {
 
       <Secao
         titulo="Marcas"
+        novidade="2026-10-01"
         spec="IconeDeMarca · 9 marcas"
         descricao="De onde o lead veio e por onde a conversa acontece. É um conjunto fechado, com o logo de verdade de cada marca: a tela nunca cola um SVG nem pinta um glifo por conta própria."
         codigo={CODIGO_MARCA}

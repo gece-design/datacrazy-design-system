@@ -6,11 +6,11 @@ Mostrar um registro aberto ao lado da lista, sem cobri-la: o lead, o negócio ou
 
 ## Quando usar
 
-- **Use** para abrir um registro a partir de uma lista, de um quadro ou de um calendário, no encaixe `lateral` da `TelaBase`: a lista continua à vista e clicar em outra linha troca o registro.
+- **Use** para editar, no encaixe `lateral` da `TelaBase`, algo que a pessoa precisa continuar vendo na tela de trás e que não é um registro com perfil: o bloco de uma automação, um item de configuração. A tela continua à vista e clicar em outro item troca o painel.
 - **Use** `ListaDeCampos` com `LinhaDeCampo` para os dados do registro: rótulo à esquerda, valor à direita. Valor que edita no lugar é `CelulaEditavel` (texto) ou `CelulaEscolha` (lista).
 - **Use** `Tabs` para separar as seções (visão geral, histórico, arquivos) e `aoAlternarTelaCheia` quando o registro merece a tela toda.
 - **Não use** para decisão que bloqueia a tela (confirmar, criar com poucos campos): é `Modal`.
-- **Não use** `Drawer` para o registro que abre de uma lista: o Drawer cobre a lista. Ele fica para o registro com perfil, métricas e muitas seções que precisa de mais de 480px.
+- **Não use** para o lead nem para outro registro do CRM com perfil (pessoa, empresa, negócio): ele abre no `Drawer` do lead, o mesmo em toda tela (ADR-061).
 - **Não use** fora do encaixe `lateral`, solto no conteúdo: é a `TelaBase` que encolhe a lista e, abaixo de 1024px, dá a tela ao painel.
 
 ## Família

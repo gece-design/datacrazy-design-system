@@ -1,4 +1,12 @@
-export type ItemNav = { titulo: string; href: string; pronto?: boolean; icone?: string; descricao?: string };
+export type ItemNav = {
+  titulo: string;
+  href: string;
+  pronto?: boolean;
+  icone?: string;
+  descricao?: string;
+  /** O dia da última mudança que a pessoa VÊ na página (AAAA-MM-DD). O selo "new" do menu aparece por sete dias a partir dele. */
+  atualizado?: string;
+};
 export type CategoriaNav = { titulo: string; descricao: string; itens: ItemNav[] };
 
 // Títulos em inglês: é nomenclatura de front-end (decisão do humano, 2026-09-01).
@@ -15,6 +23,7 @@ export const navegacao: CategoriaNav[] = [
     itens: [
       { titulo: "Let's begin", href: "/", icone: "foguete", pronto: true , descricao: "O que é e a regra que sustenta"},
       { titulo: "SystemCrazy", href: "/getting-started/installation", icone: "download", pronto: true, descricao: "Usar o DS no Claude Code"},
+      { titulo: "Protótipo SystemCrazy", href: "/prototipo", atualizado: "2026-10-02", icone: "tela", pronto: true, descricao: "O CRM navegável, montado só com o design system" },
     ],
   },
   {
@@ -23,7 +32,7 @@ export const navegacao: CategoriaNav[] = [
     itens: [
       { titulo: "Color", href: "/foundations/color", icone: "paleta", pronto: true , descricao: "Paleta e tokens semânticos"},
       { titulo: "Typography", href: "/foundations/typography", icone: "texto", pronto: true , descricao: "Escala, pesos e estilos"},
-      { titulo: "Icons", href: "/foundations/icons", icone: "formas", pronto: true , descricao: "Phosphor, peso e tamanhos"},
+      { titulo: "Icons", href: "/foundations/icons", atualizado: "2026-10-01", icone: "formas", pronto: true , descricao: "Phosphor, peso e tamanhos"},
       { titulo: "Spacing", href: "/foundations/spacing", icone: "espaco", pronto: true , descricao: "Catorze degraus, de 0 a 80"},
       { titulo: "Radius", href: "/foundations/radius", icone: "raio", pronto: true , descricao: "Sete degraus, todos de --radius"},
       { titulo: "Elevation", href: "/foundations/elevation", icone: "elevacao", pronto: true , descricao: "Quatro alturas de flutuação"},
@@ -43,8 +52,8 @@ export const navegacao: CategoriaNav[] = [
     descricao: "Entrada e edição de dados.",
     itens: [
       { titulo: "Input", href: "/forms/input", icone: "campo", pronto: true , descricao: "Campo de texto de uma linha"},
-      { titulo: "Select", href: "/forms/select", icone: "selecao", pronto: true, descricao: "Escolha numa lista, com a lista aberta"},
-      { titulo: "Combobox", href: "/forms/combobox", icone: "lupa", pronto: true, descricao: "Lista com busca, uma ou várias escolhas"},
+      { titulo: "Select", href: "/forms/select", atualizado: "2026-10-02", icone: "selecao", pronto: true, descricao: "Escolha numa lista, com a lista aberta"},
+      { titulo: "Combobox", href: "/forms/combobox", atualizado: "2026-10-02", icone: "lupa", pronto: true, descricao: "Lista com busca, uma ou várias escolhas"},
       { titulo: "Checkbox", href: "/forms/checkbox", icone: "caixa", pronto: true , descricao: "Marcação, com indeterminado"},
       { titulo: "Radio Group", href: "/forms/radio-group", icone: "radio", pronto: true , descricao: "Escolha exclusiva por setas"},
       { titulo: "Switch", href: "/forms/switch", icone: "interruptor", pronto: true , descricao: "Liga e desliga na hora"},
@@ -56,14 +65,14 @@ export const navegacao: CategoriaNav[] = [
     titulo: "Navigation",
     descricao: "Como o usuário se move pelo produto.",
     itens: [
-      { titulo: "Sidebar", href: "/navigation/sidebar", icone: "painel", pronto: true, descricao: "Navegação principal"},
-      { titulo: "Header", href: "/navigation/header", icone: "cabecalho", pronto: true, descricao: "Topo da página: trilha, título e ações"},
+      { titulo: "Sidebar", href: "/navigation/sidebar", atualizado: "2026-10-01", icone: "painel", pronto: true, descricao: "Navegação principal"},
+      { titulo: "Header", href: "/navigation/header", atualizado: "2026-10-01", icone: "cabecalho", pronto: true, descricao: "Topo da página: trilha, título e ações"},
       { titulo: "Breadcrumb", href: "/navigation/breadcrumb", icone: "trilha", pronto: true, descricao: "Trilha que recolhe os níveis do meio"},
       { titulo: "Pagination", href: "/navigation/pagination", icone: "paginas", pronto: true , descricao: "Controles de página de uma lista"},
       // Estava no escopo negativo do roadmap (anti-referência nº 11). Entrou por
       // decisão do humano em 2026-09-15, com fileira que rola em vez de quebrar.
       { titulo: "Tabs", href: "/navigation/tabs", icone: "abas", pronto: true , descricao: "Seções do mesmo registro"},
-      { titulo: "Filtros", href: "/navigation/barra-de-filtros", icone: "funil", pronto: true, descricao: "Cada filtro ativo é um chip" },
+      { titulo: "Filtros", href: "/navigation/barra-de-filtros", atualizado: "2026-10-01", icone: "funil", pronto: true, descricao: "Cada filtro ativo é um chip" },
     ],
   },
   {
@@ -72,11 +81,11 @@ export const navegacao: CategoriaNav[] = [
     itens: [
       // Nome do component set no Figma (269:53). O slot nasceu no roadmap como
       // "Stat Card"; quem batiza é o arquivo.
-      { titulo: "Card", href: "/data-display/card", icone: "cartao", pronto: true , descricao: "Lista, rosca e barras"},
-      { titulo: "KPI Card", href: "/data-display/kpi-card", icone: "metrica", pronto: true , descricao: "Métrica em destaque"},
-      { titulo: "Tag", href: "/data-display/tag", icone: "etiqueta", pronto: true, descricao: "Etiqueta do lead e seletor"},
-      { titulo: "Avatar", href: "/data-display/avatar", icone: "pessoa", pronto: true , descricao: "Identificação de pessoa"},
-      { titulo: "Table", href: "/data-display/table", icone: "tabela", pronto: true , descricao: "A tabela de negócios do CRM"},
+      { titulo: "Card", href: "/data-display/card", atualizado: "2026-10-01", icone: "cartao", pronto: true , descricao: "Lista, rosca e barras"},
+      { titulo: "KPI Card", href: "/data-display/kpi-card", atualizado: "2026-10-01", icone: "metrica", pronto: true , descricao: "Métrica em destaque"},
+      { titulo: "Tag", href: "/data-display/tag", atualizado: "2026-10-02", icone: "etiqueta", pronto: true, descricao: "Etiqueta do lead e seletor"},
+      { titulo: "Avatar", href: "/data-display/avatar", atualizado: "2026-10-01", icone: "pessoa", pronto: true , descricao: "Identificação de pessoa"},
+      { titulo: "Table", href: "/data-display/table", atualizado: "2026-10-02", icone: "tabela", pronto: true , descricao: "A tabela de negócios do CRM"},
       { titulo: "Calendário", href: "/data-display/calendario", icone: "agenda", pronto: true, descricao: "Os negócios no mês ou na semana, pela próxima ação" },
     ],
   },
@@ -87,29 +96,9 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Tooltip", href: "/feedback/tooltip", icone: "balao", pronto: true , descricao: "Conteúdo de texto truncado"},
       { titulo: "Toast", href: "/feedback/toast", icone: "sino", pronto: true , descricao: "Confirmação que não bloqueia"},
       { titulo: "Modal", href: "/feedback/modal", icone: "camada", pronto: true , descricao: "Camada que exige decisão"},
-      { titulo: "Painel lateral", href: "/feedback/painel-lateral", icone: "lateral", pronto: true, descricao: "O registro aberto ao lado da lista" },
-      { titulo: "Drawer", href: "/feedback/drawer", icone: "gaveta", pronto: true , descricao: "O registro completo, por cima da tela"},
+      { titulo: "Painel lateral", href: "/feedback/painel-lateral", atualizado: "2026-10-01", icone: "lateral", pronto: true, descricao: "O registro aberto ao lado da lista" },
+      { titulo: "Drawer", href: "/feedback/drawer", atualizado: "2026-10-02", icone: "gaveta", pronto: true , descricao: "O registro completo, por cima da tela"},
 { titulo: "Drawer variações", href: "/feedback/drawer-variacoes", icone: "proposta", pronto: true, descricao: "Cores, menu, linha do tempo e propostas"},
-    ],
-  },
-  {
-    // Não é categoria de componente: são TELAS montadas só com o que a
-    // biblioteca já entrega. Existe para o cliente testar o resultado, e é a
-    // primeira coisa que sai do repo quando o DS entrar no CRM de verdade.
-    //
-    // ATENÇÃO: título e descrição aparecem na sidebar e nos cards da home — o
-    // CLIENTE lê. Nada de linguagem interna.
-    titulo: "Telas de exemplo",
-    descricao: "O design system montado em tela de produto, para usar de verdade.",
-    itens: [
-      { titulo: "Tela base", href: "/exemplos/tela-base", icone: "tela", pronto: true, descricao: "A casca de toda tela nova: Sidebar, Header, subcabeçalho e breakpoints" },
-      { titulo: "Dashboard", href: "/exemplos/dashboard", icone: "progresso", pronto: true, descricao: "Indicadores, gráfico e o que precisa de atenção" },
-      { titulo: "Pipeline", href: "/exemplos/pipeline", icone: "kanban", pronto: true, descricao: "Funil em kanban, com arrastar e soltar" },
-      { titulo: "Leads", href: "/exemplos/leads", icone: "contatos", pronto: true, descricao: "A lista de contatos: grade densa, edição na célula e criar tag" },
-      { titulo: "Atendimento", href: "/exemplos/atendimento", icone: "conversa", pronto: true, descricao: "Conversas, mensagens e o lead na mesma tela" },
-      { titulo: "Automações", href: "/exemplos/automacoes", icone: "fluxo", pronto: true, descricao: "O fluxo em blocos, com o bloco aberto ao lado" },
-      // Decisão do humano em 2026-09-19: a proposta de cor das tags fica pública.
-      { titulo: "Tags coloridas", href: "/exemplos/tags-proposta", icone: "etiqueta", pronto: true, descricao: "Antes e depois: a cor da tag vem da regra do grupo" },
     ],
   },
 ];
@@ -133,3 +122,22 @@ export function vizinhos(href: string) {
     proxima: i < ordemDasPaginas.length - 1 ? ordemDasPaginas[i + 1] : null,
   };
 }
+
+/**
+ * As telas do protótipo, uma a uma. Saíram do menu em 2026-10-02 (humano:
+ * "junte todas as telas de exemplo em uma só") — o menu leva ao Protótipo
+ * SystemCrazy, que liga todas pela navegação. Continuam sendo rotas: cada uma
+ * é a página que um bloco instala, e os scripts de rota e de regressão as
+ * leem daqui.
+ *
+ * ATENÇÃO: o cliente lê título e descrição. Nada de linguagem interna.
+ */
+export const telasDoPrototipo: ItemNav[] = [
+  { titulo: "Tela base", href: "/exemplos/tela-base", icone: "tela", pronto: true, descricao: "A casca de toda tela nova: Sidebar, Header, subcabeçalho e breakpoints" },
+  { titulo: "Dashboard", href: "/exemplos/dashboard", icone: "progresso", pronto: true, descricao: "Indicadores, gráfico e o que precisa de atenção" },
+  { titulo: "Pipeline", href: "/exemplos/pipeline", icone: "kanban", pronto: true, descricao: "Funil em kanban, com arrastar e soltar" },
+  { titulo: "Leads", href: "/exemplos/leads", icone: "contatos", pronto: true, descricao: "A lista de contatos: grade densa, edição na célula e criar tag" },
+  { titulo: "Atendimento", href: "/exemplos/atendimento", icone: "conversa", pronto: true, descricao: "Conversas, mensagens e o lead na mesma tela" },
+  { titulo: "Automações", href: "/exemplos/automacoes", icone: "fluxo", pronto: true, descricao: "O fluxo em blocos, com o bloco aberto ao lado" },
+  { titulo: "Tags coloridas", href: "/exemplos/tags-proposta", icone: "etiqueta", pronto: true, descricao: "Antes e depois: a cor da tag vem da regra do grupo" },
+];

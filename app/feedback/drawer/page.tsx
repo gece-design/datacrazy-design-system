@@ -47,6 +47,7 @@ export default function DrawerPage() {
       </ComoFunciona>
       <Secao
         titulo="Drawer do lead"
+        novidade="2026-10-02"
         spec="840px · arrastável até 1080 · 5 seções desenhadas"
         descricao="Troque o lead e a seção no menu. O + no fim das tags abre o seletor; os dois quadrados de um campo copiam o valor; o botão do canto direito do perfil recolhe a coluna."
         codigo={`<DrawerPainel className="h-[760px]">

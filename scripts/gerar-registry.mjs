@@ -244,19 +244,19 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    \`npx shadcn@latest add ${NAMESPACE}/pipeline\` e copie o padrão de lá
    (\`app/pipeline/\`): é a tela do funil inteira, feita pelo time do DS —
    Header de uma linha com busca, filtros em chips (\`BarraDeFiltros\`), Table
-   densa com seleção em massa e edição na célula, e o registro aberto num
-   \`PainelLateral\` ao lado da lista. É a referência de densidade e composição; não invente layout.
+   densa com seleção em massa e edição na célula, e o lead aberto no
+   \`Drawer\` do lead (\`drawer-lead.tsx\`, o mesmo em toda tela). É a referência de densidade e composição; não invente layout.
    Lista de registros (contatos, empresas, produtos)? \`${NAMESPACE}/leads\`
    (\`app/leads/\`): grade densa com ícone por coluna, edição na célula,
-   filtros em chips, seleção em massa e o registro num \`PainelLateral\`.
+   filtros em chips, seleção em massa e o lead no \`Drawer\` do lead.
    Chat, inbox ou qualquer tela de mensagens? \`${NAMESPACE}/atendimento\`
    (\`app/atendimento/\`): conversas, mensagens e o lead em três colunas
    numa superfície só.
    Fluxo, automação ou qualquer editor em canvas? \`${NAMESPACE}/automacoes\`
-   (\`app/automacoes/\`): blocos ligados por conectores, com o bloco aberto
-   num \`PainelLateral\`.
+   (\`app/automacoes/\`): canvas com mover, zoom, ligar por arrasto,
+   desfazer e mapa; o bloco aberto num \`PainelLateral\`.
    Dashboard, painel ou relatório? \`${NAMESPACE}/dashboard\`
-   (\`app/dashboard/\`): indicadores, gráfico ao lado da repartição, tabela
+   (\`app/dashboard/\`, \`fundo="muted"\` na TelaBase): indicadores, gráfico ao lado da repartição, tabela
    do que precisa de atenção ao lado do ranking, período no Header.
 1. **Procure antes de criar.** O catálogo no fim deste arquivo lista tudo o que
    existe. Se o componente existe e não está em \`components/ui/\`, instale:
@@ -425,7 +425,7 @@ const BLOCOS = [
   {
     name: "pipeline",
     title: "Pipeline",
-    description: "O funil do CRM inteiro, pronto: quadro com arrastar e soltar, lista densa com seleção em massa e edição na célula, calendário, filtros em chips e o lead aberto num painel ao lado. A tela de referência para lista, quadro e detalhe — copie o padrão dela.",
+    description: "O funil do CRM inteiro, pronto: quadro com arrastar e soltar, lista densa com seleção em massa e edição na célula, calendário, filtros em chips e o lead aberto no Drawer do lead. A tela de referência para lista, quadro e detalhe — copie o padrão dela.",
     arquivos: [
       { de: "app/exemplos/pipeline/page.tsx", para: "app/pipeline/page.tsx" },
       { de: "app/exemplos/pipeline/tela.tsx", para: "app/pipeline/tela.tsx" },
@@ -433,9 +433,12 @@ const BLOCOS = [
       { de: "app/exemplos/pipeline/quadro.tsx", para: "app/pipeline/quadro.tsx" },
       { de: "app/exemplos/pipeline/painel-lead.tsx", para: "app/pipeline/painel-lead.tsx" },
       { de: "app/exemplos/pipeline/dados.ts", para: "app/pipeline/dados.ts" },
+      // o Drawer do lead é o da página do Drawer: vai junto, como vizinho
+      { de: "app/feedback/drawer/drawer-lead.tsx", para: "app/pipeline/drawer-lead.tsx" },
     ],
     // a foto do atendente é do site (/ds/…): no projeto de quem instala a Tag fica só com o nome
     reescritas: [
+      ["@/app/feedback/drawer/drawer-lead", "./drawer-lead"],
       [' foto="/ds/atendente.png"', ""],
       ['foto: "/ds/atendente.png"', "foto: undefined"],
     ],
@@ -444,12 +447,18 @@ const BLOCOS = [
   {
     name: "leads",
     title: "Leads",
-    description: "A lista de contatos do CRM, pronta: grade densa com ícone por coluna e iniciais coloridas, tags e origem editadas na célula, filtros em chips, agrupar, seleção em massa, o lead aberto num painel ao lado e o modal de criar tag com as quinze cores. A tela de referência para lista de registros — copie o padrão dela.",
+    description: "A lista de contatos do CRM, pronta: grade densa com ícone por coluna e iniciais coloridas, tags e origem editadas na célula, filtros em chips, agrupar, seleção em massa, o lead aberto no Drawer do lead e o modal de criar tag com as quinze cores. A tela de referência para lista de registros — copie o padrão dela.",
     arquivos: [
       { de: "app/exemplos/leads/page.tsx", para: "app/leads/page.tsx" },
       { de: "app/exemplos/leads/tela.tsx", para: "app/leads/tela.tsx" },
       { de: "app/exemplos/leads/painel-lead.tsx", para: "app/leads/painel-lead.tsx" },
       { de: "app/exemplos/leads/dados.ts", para: "app/leads/dados.ts" },
+      { de: "app/feedback/drawer/drawer-lead.tsx", para: "app/leads/drawer-lead.tsx" },
+    ],
+    reescritas: [
+      ["@/app/feedback/drawer/drawer-lead", "./drawer-lead"],
+      [' foto="/ds/atendente.png"', ""],
+      ['foto: "/ds/atendente.png"', "foto: undefined"],
     ],
     docs: `Leads: ${URL_DS}/exemplos/leads — a tela em app/leads; troque os dados de exemplo (dados.ts) pelos do CRM.`,
   },
@@ -463,15 +472,21 @@ const BLOCOS = [
       { de: "app/exemplos/atendimento/lista.tsx", para: "app/atendimento/lista.tsx" },
       { de: "app/exemplos/atendimento/conversa.tsx", para: "app/atendimento/conversa.tsx" },
       { de: "app/exemplos/atendimento/painel.tsx", para: "app/atendimento/painel.tsx" },
+      { de: "app/exemplos/atendimento/lead-completo.tsx", para: "app/atendimento/lead-completo.tsx" },
       { de: "app/exemplos/atendimento/dados.ts", para: "app/atendimento/dados.ts" },
+      { de: "app/feedback/drawer/drawer-lead.tsx", para: "app/atendimento/drawer-lead.tsx" },
     ],
-    reescritas: [[' foto="/ds/atendente.png"', ""]],
+    reescritas: [
+      ["@/app/feedback/drawer/drawer-lead", "./drawer-lead"],
+      [' foto="/ds/atendente.png"', ""],
+      ['foto: "/ds/atendente.png"', "foto: undefined"],
+    ],
     docs: `Atendimento: ${URL_DS}/exemplos/atendimento — a tela em app/atendimento; troque os dados de exemplo (dados.ts) pelos da API.`,
   },
   {
     name: "automacoes",
     title: "Automações",
-    description: "O construtor de automações, pronto: blocos do fluxo num canvas com zoom, conectores medidos na tela, e o bloco aberto num painel ao lado para editar nome, conteúdo e destino de cada saída. A tela de referência para fluxo, canvas e editor visual — copie o padrão dela.",
+    description: "O construtor de automações, pronto: um canvas de verdade, sem biblioteca de grafo — arrastar o fundo move a tela, rolar ou pinçar dá zoom, arrastar de uma saída liga os blocos; com desfazer, organizar, mapa, seleção de vários e menu no botão direito — e o bloco aberto num painel ao lado para editar nome, conteúdo e destino de cada saída. A tela de referência para fluxo, canvas e editor visual — copie o padrão dela.",
     arquivos: [
       { de: "app/exemplos/automacoes/page.tsx", para: "app/automacoes/page.tsx" },
       { de: "app/exemplos/automacoes/tela.tsx", para: "app/automacoes/tela.tsx" },
@@ -488,7 +503,14 @@ const BLOCOS = [
     arquivos: [
       { de: "app/exemplos/dashboard/page.tsx", para: "app/dashboard/page.tsx" },
       { de: "app/exemplos/dashboard/tela.tsx", para: "app/dashboard/tela.tsx" },
+      { de: "app/exemplos/dashboard/lead-parado.tsx", para: "app/dashboard/lead-parado.tsx" },
       { de: "app/exemplos/dashboard/dados.ts", para: "app/dashboard/dados.ts" },
+      { de: "app/feedback/drawer/drawer-lead.tsx", para: "app/dashboard/drawer-lead.tsx" },
+    ],
+    reescritas: [
+      ["@/app/feedback/drawer/drawer-lead", "./drawer-lead"],
+      [' foto="/ds/atendente.png"', ""],
+      ['foto: "/ds/atendente.png"', "foto: undefined"],
     ],
     docs: `Dashboard: ${URL_DS}/exemplos/dashboard — a tela em app/dashboard; troque os dados de exemplo (dados.ts) pelos da API.`,
   },

@@ -37,9 +37,8 @@ import {
  * busca que não acha oferece criar) e `acao` (uma ação fixa no pé do painel).
  */
 
+/** As do Select — inclusive `conteudo`, a opção como ela aparece na tela (uma `Tag`) —, mais o texto de apoio. */
 export type OpcaoCombobox = OpcaoSelect & {
-  /** O que aparece no lugar do rótulo — uma `Tag`, por exemplo. A busca continua pelo `rotulo`. */
-  conteudo?: React.ReactNode;
   /** Texto de apoio à direita, apagado: o domínio da empresa, o e-mail da pessoa. A busca também procura nele. */
   detalhe?: string;
 };
@@ -259,6 +258,7 @@ export function ComboboxPainel({
                   id={`opcao-${id}-${i}`}
                   role="option"
                   aria-selected={escolhida}
+                  aria-label={o.conteudo ? o.rotulo : undefined}
                   onMouseEnter={() => setAtivo(i)}
                   // o foco fica na busca: clicar não tira o cursor de lá
                   onMouseDown={(e) => e.preventDefault()}
@@ -287,7 +287,7 @@ export function ComboboxPainel({
                       {escolhida ? <Check size={12} weight="bold" /> : null}
                     </span>
                   ) : null}
-                  {o.icone}
+                  {o.conteudo ? null : o.icone}
                   {o.conteudo ? (
                     <span className="flex min-w-0 flex-1 items-center">{o.conteudo}</span>
                   ) : (
@@ -412,8 +412,13 @@ function GatilhoDoCombobox({
       >
         {primeira ? (
           <span className="flex min-w-0 items-center gap-1.5">
-            {primeira.icone}
-            <span className="min-w-0 truncate">{primeira.rotulo}</span>
+            {/* a escolhida aparece como aparece na lista: a mesma peça */}
+            {primeira.conteudo ?? (
+              <>
+                {primeira.icone}
+                <span className="min-w-0 truncate">{primeira.rotulo}</span>
+              </>
+            )}
             {escolhidas.length > 1 ? <span className="shrink-0 tabular-nums text-muted-foreground">+{escolhidas.length - 1}</span> : null}
           </span>
         ) : (

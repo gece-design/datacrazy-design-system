@@ -27,8 +27,8 @@ import { Switch } from "@/components/ui/switch";
 import { TelaBase } from "@/components/ui/tela-base";
 import { Toaster, toast } from "@/components/ui/toast";
 import { useTema } from "@/lib/tema";
-import { Canvas, ICONES_DOS_BLOCOS } from "./canvas";
-import { AUTOMACAO, TIPOS, saidasDe, type Bloco, type TipoDeBloco } from "./dados";
+import { Canvas, ICONES_DOS_BLOCOS, type CanvasRef, type RotulosDoCanvas } from "./canvas";
+import { AUTOMACAO, LARGURA_DO_BLOCO, TIPOS, saidasDe, type Bloco, type TipoDeBloco } from "./dados";
 import { PainelDoBloco } from "./painel-bloco";
 
 /* ---------------------------------------------------------------------------
@@ -42,7 +42,74 @@ import { PainelDoBloco } from "./painel-bloco";
    Peças do DS: TelaBase, Header de uma linha, PainelLateral, Input, Textarea,
    Select, ComboboxPainel, Menu, Switch, Button, IconeDeMarca. O canvas é o
    arranjo desta tela (./canvas), como o quadro é o do pipeline.
+
+   Quem guarda o fluxo é esta tela: o canvas só pede (mover, ligar, adicionar,
+   remover) e ela aplica — por isso o desfazer mora aqui, num histórico só.
 --------------------------------------------------------------------------- */
+
+/** Tudo o que o canvas escreve. No CRM, vem do next-intl. */
+const ROTULOS_DO_CANVAS: RotulosDoCanvas = {
+  canvas: "Fluxo da automação",
+  aproximar: "Aproximar (+)",
+  afastar: "Afastar (−)",
+  ajustar: "Ver o fluxo inteiro (1)",
+  organizar: "Organizar os blocos",
+  desfazer: "Desfazer (Ctrl ou ⌘ + Z)",
+  refazer: "Refazer (Ctrl ou ⌘ + Shift + Z)",
+  mapa: "Mapa do fluxo",
+  ajuda: "Gestos e atalhos",
+  sucessos: "Sucessos",
+  alertas: "Alertas",
+  erros: "Erros",
+  adicionarBloco: "Adicionar bloco",
+  buscarBloco: "Buscar bloco",
+  nenhumBloco: "Nenhum bloco encontrado",
+  adicionarAqui: "Adicionar bloco aqui",
+  selecionarTudo: "Selecionar tudo",
+  duplicar: "Duplicar",
+  desligar: "Desligar as saídas",
+  remover: "Remover",
+  removerLigacao: "Remover a ligação",
+  maisAcoes: "Ações",
+  atalhos: [
+    { gesto: "Arrastar o fundo", efeito: "move a tela" },
+    { gesto: "Rolar ou pinçar", efeito: "aproxima e afasta" },
+    { gesto: "Arrastar um bloco", efeito: "muda de lugar" },
+    { gesto: "Arrastar da bolinha de uma saída", efeito: "liga a outro bloco" },
+    { gesto: "Clicar numa ligação + Delete", efeito: "desfaz a ligação" },
+    { gesto: "Dois cliques no fundo", efeito: "adiciona um bloco ali" },
+    { gesto: "Shift + arrastar", efeito: "marca vários" },
+    { gesto: "Botão direito", efeito: "mais ações" },
+    { gesto: "Setas", efeito: "movem o bloco marcado" },
+    { gesto: "Ctrl ou ⌘ + D · Delete", efeito: "duplica · remove" },
+  ],
+};
+
+/** Um histórico só para o fluxo: cada mudança guarda o estado anterior, até cinquenta. */
+function useHistorico<T>(inicial: T) {
+  const [estado, setEstado] = React.useState({ passado: [] as T[], atual: inicial, futuro: [] as T[] });
+  // digitar no painel muda o bloco a cada tecla: mudanças seguidas com a mesma chave viram um passo só
+  const ultima = React.useRef({ chave: "", quando: 0 });
+  const mudar = React.useCallback((fn: (valor: T) => T, chave = "") => {
+    const agora = Date.now();
+    const junta = chave !== "" && chave === ultima.current.chave && agora - ultima.current.quando < 1000;
+    ultima.current = { chave, quando: agora };
+    setEstado((e) => {
+      const novo = fn(e.atual);
+      if (novo === e.atual) return e;
+      return { passado: junta ? e.passado : [...e.passado.slice(-49), e.atual], atual: novo, futuro: [] };
+    });
+  }, []);
+  const desfazer = React.useCallback(() => {
+    ultima.current = { chave: "", quando: 0 };
+    setEstado((e) => (e.passado.length ? { passado: e.passado.slice(0, -1), atual: e.passado[e.passado.length - 1], futuro: [e.atual, ...e.futuro] } : e));
+  }, []);
+  const refazer = React.useCallback(() => {
+    ultima.current = { chave: "", quando: 0 };
+    setEstado((e) => (e.futuro.length ? { passado: [...e.passado, e.atual], atual: e.futuro[0], futuro: e.futuro.slice(1) } : e));
+  }, []);
+  return { valor: estado.atual, mudar, desfazer, refazer, podeDesfazer: estado.passado.length > 0, podeRefazer: estado.futuro.length > 0 };
+}
 
 const PRINCIPAIS = [
   { rotulo: "Início", icone: House },
@@ -73,51 +140,99 @@ const BLOCOS_PARA_ADICIONAR = (Object.keys(TIPOS) as TipoDeBloco[])
     return { valor: t, rotulo: TIPOS[t].rotulo, icone: <Icone size={16} weight="regular" aria-hidden="true" className="shrink-0" /> };
   });
 
-export function Tela() {
+export function Tela({
+  aoNavegar,
+  memoria = "automacoes",
+}: {
+  /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
+  aoNavegar?: (destino: string) => boolean;
+  /** Chave da memória da sidebar. No protótipo é uma só, para ela não mudar de estado entre as telas. */
+  memoria?: string;
+} = {}) {
   const [rota, setRota] = React.useState("Automações");
-  const [blocos, setBlocos] = React.useState<Bloco[]>(AUTOMACAO);
-  const [selecionado, setSelecionado] = React.useState<string | null>(null);
+  const fluxo = useHistorico<Bloco[]>(AUTOMACAO);
+  const blocos = fluxo.valor;
+  const [selecionados, setSelecionados] = React.useState<string[]>([]);
   const [ativa, setAtiva] = React.useState(true);
   const [adicionando, setAdicionando] = React.useState(false);
   const [maisAcoes, setMaisAcoes] = React.useState(false);
   const [notificacoes, setNotificacoes] = React.useState(NOTIFICACOES);
   const botaoAdicionar = React.useRef<HTMLButtonElement>(null);
   const botaoMais = React.useRef<HTMLButtonElement>(null);
+  const canvas = React.useRef<CanvasRef>(null);
   const { tema, mudar } = useTema();
 
-  const aberto = blocos.find((b) => b.id === selecionado) ?? null;
-  const editar = (id: string, campos: Partial<Bloco>) => setBlocos((bs) => bs.map((b) => (b.id === id ? { ...b, ...campos } : b)));
+  // o painel abre com um bloco marcado; com vários, a tela é do canvas
+  const aberto = selecionados.length === 1 ? (blocos.find((b) => b.id === selecionados[0]) ?? null) : null;
+  // digitar no painel agrupa por bloco: um Ctrl+Z desfaz a frase, não a letra
+  const editar = (id: string, campos: Partial<Bloco>) => fluxo.mudar((bs) => bs.map((b) => (b.id === id ? { ...b, ...campos } : b)), `editar:${id}`);
 
-  function adicionar(tipo: TipoDeBloco) {
+  function adicionar(tipo: TipoDeBloco, x: number, y: number, ligar?: { bloco: string; saida: string }) {
     const id = `${tipo}-${Date.now()}`;
-    // o bloco novo nasce à direita de tudo, sem ligação: quem liga é a saída de outro bloco
-    const x = Math.max(...blocos.map((b) => b.x)) + 336;
     const itens = tipo === "randomizador" ? ["Oferta A", "Oferta B"] : [];
     const novo: Bloco = {
       id,
       tipo,
       titulo: TIPOS[tipo].rotulo,
       x,
-      y: 24,
+      y,
       itens,
       saidas: saidasDe(tipo, itens),
       ...(tipo === "mensagem" ? { canal: "WhatsApp" as const, texto: "" } : {}),
       ...(tipo === "espera" ? { espera: { valor: 1, unidade: "horas" as const } } : {}),
     };
-    setBlocos((bs) => [...bs, novo]);
-    setSelecionado(id);
+    fluxo.mudar((bs) => [
+      // veio de uma saída arrastada até o vazio: ela já aponta para o bloco novo
+      ...bs.map((b) => (ligar && b.id === ligar.bloco ? { ...b, saidas: b.saidas.map((s) => (s.id === ligar.saida ? { ...s, para: id } : s)) } : b)),
+      novo,
+    ]);
+    setSelecionados([id]);
   }
 
-  function remover(id: string) {
-    // quem apontava para o bloco fica sem destino
-    setBlocos((bs) => bs.filter((b) => b.id !== id).map((b) => ({ ...b, saidas: b.saidas.map((s) => (s.para === id ? { ...s, para: undefined } : s)) })));
-    setSelecionado(null);
-    toast({ variant: "info", titulo: "Bloco removido", descricao: "As saídas que chegavam nele ficaram sem destino." });
+  /** Pelo botão do Header: o bloco nasce no meio do que a pessoa está vendo. */
+  function adicionarNoMeio(tipo: TipoDeBloco) {
+    const c = canvas.current?.centro() ?? { x: 24, y: 24 };
+    let x = Math.round((c.x - LARGURA_DO_BLOCO / 2) / 8) * 8;
+    let y = Math.round((c.y - 80) / 8) * 8;
+    // não nasce exatamente em cima de outro
+    while (blocos.some((b) => Math.abs(b.x - x) < 16 && Math.abs(b.y - y) < 16)) {
+      x += 24;
+      y += 24;
+    }
+    adicionar(tipo, x, y);
   }
+
+  function remover(ids: string[]) {
+    // o gatilho é o começo do fluxo: não se remove
+    const alvos = ids.filter((id) => blocos.find((b) => b.id === id)?.tipo !== "gatilho");
+    if (!alvos.length) return;
+    // quem apontava para um bloco removido fica sem destino
+    fluxo.mudar((bs) => bs.filter((b) => !alvos.includes(b.id)).map((b) => ({ ...b, saidas: b.saidas.map((s) => (s.para && alvos.includes(s.para) ? { ...s, para: undefined } : s)) })));
+    setSelecionados([]);
+    toast({
+      variant: "info",
+      titulo: alvos.length === 1 ? "Bloco removido" : `${alvos.length} blocos removidos`,
+      descricao: "As saídas que chegavam neles ficaram sem destino. Ctrl ou ⌘ + Z desfaz.",
+    });
+  }
+
+  function duplicar(ids: string[]) {
+    const originais = blocos.filter((b) => ids.includes(b.id) && b.tipo !== "gatilho");
+    if (!originais.length) return;
+    const agora = Date.now();
+    // a cópia nasce um passo ao lado, com as saídas soltas: ligar é decisão de quem copia
+    const copias = originais.map((b, i) => ({ ...b, id: `${b.tipo}-${agora}-${i}`, titulo: `${b.titulo} (cópia)`, x: b.x + 32, y: b.y + 32, contagem: undefined, saidas: b.saidas.map((s) => ({ ...s, para: undefined })) }));
+    fluxo.mudar((bs) => [...bs, ...copias]);
+    setSelecionados(copias.map((c) => c.id));
+  }
+
+  const mover = (posicoes: Record<string, { x: number; y: number }>) => fluxo.mudar((bs) => bs.map((b) => (posicoes[b.id] ? { ...b, ...posicoes[b.id] } : b)), "mover");
+  const ligar = (bloco: string, saida: string, para: string | undefined) =>
+    fluxo.mudar((bs) => bs.map((b) => (b.id === bloco ? { ...b, saidas: b.saidas.map((s) => (s.id === saida ? { ...s, para } : s)) } : b)));
 
   return (
     <TelaBase
-      memoria="automacoes"
+      memoria={memoria}
       recuo={false}
       lateral={
         aberto ? (
@@ -125,8 +240,8 @@ export function Tela() {
             bloco={aberto}
             blocos={blocos}
             aoEditar={(campos) => editar(aberto.id, campos)}
-            aoRemover={() => remover(aberto.id)}
-            aoFechar={() => setSelecionado(null)}
+            aoRemover={() => remover([aberto.id])}
+            aoFechar={() => setSelecionados([])}
           />
         ) : null
       }
@@ -136,7 +251,15 @@ export function Tela() {
             <SidebarBrand />
             <SidebarGrupo>
               {PRINCIPAIS.map((r) => (
-                <SidebarItem key={r.rotulo} icone={r.icone} componente="button" selecionado={r.rotulo === rota} onClick={() => setRota(r.rotulo)}>
+                <SidebarItem
+                  key={r.rotulo}
+                  icone={r.icone}
+                  componente="button"
+                  selecionado={r.rotulo === rota}
+                  onClick={() => {
+                    if (!aoNavegar?.(r.rotulo)) setRota(r.rotulo);
+                  }}
+                >
                   {r.rotulo}
                 </SidebarItem>
               ))}
@@ -211,7 +334,7 @@ export function Tela() {
               rotulo="Adicionar bloco"
               opcoes={BLOCOS_PARA_ADICIONAR}
               selecionados={[]}
-              aoAlternar={(tipo) => adicionar(tipo as TipoDeBloco)}
+              aoAlternar={(tipo) => adicionarNoMeio(tipo as TipoDeBloco)}
               rotulos={{ busca: "Buscar bloco", vazio: "Nenhum bloco encontrado" }}
             />
             <Button
@@ -247,18 +370,20 @@ export function Tela() {
       }}
     >
       <Canvas
+        ref={canvas}
         blocos={blocos}
-        selecionado={selecionado}
-        aoSelecionar={setSelecionado}
-        aoMover={(id, x, y) => editar(id, { x, y })}
-        rotulos={{
-          aproximar: "Aproximar",
-          afastar: "Afastar",
-          ajustar: "Ajustar à tela",
-          sucessos: "Sucessos",
-          alertas: "Alertas",
-          erros: "Erros",
-        }}
+        selecionados={selecionados}
+        aoSelecionar={setSelecionados}
+        aoMover={mover}
+        aoLigar={ligar}
+        aoAdicionar={adicionar}
+        aoRemover={remover}
+        aoDuplicar={duplicar}
+        aoDesfazer={fluxo.desfazer}
+        aoRefazer={fluxo.refazer}
+        podeDesfazer={fluxo.podeDesfazer}
+        podeRefazer={fluxo.podeRefazer}
+        rotulos={ROTULOS_DO_CANVAS}
       />
       <Toaster />
     </TelaBase>

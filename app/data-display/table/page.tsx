@@ -598,6 +598,7 @@ export default function Pagina() {
     >
       <Secao
         titulo="Completa"
+        novidade="2026-10-02"
         spec="7 colunas · linha de 32px"
         descricao="Barra com o total, cabeçalho com ícone por coluna, linhas de uma linha só e paginação — a unidade inteira. Busca e filtros não moram na barra da tabela: ficam no Header da tela."
         codigo={`const colunas = [
@@ -747,6 +748,7 @@ export default function Pagina() {
 
       <Secao
         titulo="Edição na célula"
+        novidade="2026-10-01"
         spec="texto: Enter salva · lista: clique escolhe"
         descricao="Valor e atividades editam no lugar: em repouso é o texto com o lápis no hover; clicar vira um campo na própria célula, sem trocar de tela nem de linha. Enter e sair do campo salvam; Escape desfaz. A etapa vem de lista: o clique abre as opções ali mesmo, com busca."
         codigo={codigoEdicao}

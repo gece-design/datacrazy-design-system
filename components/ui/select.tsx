@@ -96,6 +96,14 @@ export type OpcaoSelect = {
   icone?: React.ReactNode;
   /** Cabeçalho do grupo. Opções seguidas com o mesmo `grupo` ficam sob ele. Ex.: "Redes sociais". */
   grupo?: string;
+  /**
+   * A opção como ela aparece na tela depois de escolhida — a `Tag` do
+   * atendente com a foto, a tag com a cor. Entra no lugar do ícone e do
+   * rótulo, na lista e no gatilho: quem abre a lista vê exatamente como vai
+   * ficar (humano, 2026-10-02). O `rotulo` continua obrigatório: é o nome
+   * que o leitor de tela lê e o texto que a busca procura.
+   */
+  conteudo?: React.ReactNode;
 };
 
 /** Opções na ordem em que chegam, repartidas em blocos pelo `grupo` — cada
@@ -267,8 +275,12 @@ export function Select({
           <span className={rotuloDoBloco}>{rotulo}</span>
           <span className={cn("flex items-center justify-between gap-2", linhaDoCartao)}>
             <span className={cn("flex min-w-0 items-center gap-1.5 text-body-md", escolhido ? "text-input-text" : "text-input-placeholder")}>
-              {escolhido?.icone}
-              <span className="min-w-0 truncate">{escolhido?.rotulo ?? textoVazio}</span>
+              {escolhido?.conteudo ?? (
+                <>
+                  {escolhido?.icone}
+                  <span className="min-w-0 truncate">{escolhido?.rotulo ?? textoVazio}</span>
+                </>
+              )}
             </span>
             <CaretDown
               size={16}
@@ -291,7 +303,9 @@ export function Select({
           onClick={() => (aberto ? fechar(false) : abrir())}
           onKeyDown={tecladoDoGatilho}
         >
-          {escolhido?.icone ? (
+          {escolhido?.conteudo ? (
+            <span className="flex min-w-0 items-center">{escolhido.conteudo}</span>
+          ) : escolhido?.icone ? (
             <span className="flex min-w-0 items-center gap-1.5">
               {escolhido.icone}
               <span className="min-w-0 truncate">{escolhido.rotulo}</span>
@@ -327,11 +341,12 @@ export function Select({
                     id={`opcao-${id}-${i}`}
                     role="option"
                     aria-selected={selecionado}
+                    aria-label={o.conteudo ? o.rotulo : undefined}
                     onMouseEnter={() => setEmFoco(i)}
                     onClick={() => escolher(o)}
                     className={cn(
                       "cursor-pointer whitespace-nowrap rounded-sm px-3 py-1.5 text-label-lg transition-colors",
-                      o.icone && "flex items-center gap-2",
+                      (o.icone || o.conteudo) && "flex items-center gap-2",
                       selecionado
                         ? "bg-overlay-item-selected text-overlay-item-text-selected"
                         : "text-muted-foreground",
@@ -340,8 +355,12 @@ export function Select({
                       i === emFoco && !selecionado && "bg-overlay-item-hover text-foreground",
                     )}
                   >
-                    {o.icone}
-                    {o.rotulo}
+                    {o.conteudo ?? (
+                      <>
+                        {o.icone}
+                        {o.rotulo}
+                      </>
+                    )}
                   </div>
                 );
               })}

@@ -6,8 +6,8 @@ Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida
 
 ## Quando usar
 
-- **Use** para o registro completo, que pede mais que um painel de 480px: perfil e métricas à esquerda, um menu de seções (histórico, negócios, hierarquia) à direita, largura que a pessoa arrasta.
-- **Não use** para o registro que abre de uma lista ou de um quadro: é `PainelLateral`, que fica ao lado e não cobre a lista.
+- **Use** para o lead e para todo registro do CRM com perfil (pessoa, empresa, negócio), em qualquer tela — lista, quadro, calendário, chat, dashboard: perfil e métricas à esquerda, um menu de seções (histórico, negócios, hierarquia) à direita, largura que a pessoa arrasta. É um só: as telas abrem o mesmo drawer com o registro clicado (ADR-061).
+- **Não use** para editar algo sem perfil que a pessoa precisa ver na tela de trás (o bloco de uma automação): é `PainelLateral`, que fica ao lado.
 - **Não use** para decisão curta ou confirmação: é `Modal`.
 - **Não use** para criar com poucos campos: `Modal`.
 - **Não use** com número fixo de colunas no conteúdo: os cartões vão em `gradeDeCartoes`.

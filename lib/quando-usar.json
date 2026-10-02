@@ -112,10 +112,10 @@
     {
       "componente": "Drawer",
       "usar": [
-        "para o registro completo, que pede mais que um painel de 480px: perfil e métricas à esquerda, um menu de seções (histórico, negócios, hierarquia) à direita, largura que a pessoa arrasta."
+        "para o lead e para todo registro do CRM com perfil (pessoa, empresa, negócio), em qualquer tela — lista, quadro, calendário, chat, dashboard: perfil e métricas à esquerda, um menu de seções (histórico, negócios, hierarquia) à direita, largura que a pessoa arrasta. É um só: as telas abrem o mesmo drawer com o registro clicado (ADR-061)."
       ],
       "naoUsar": [
-        "para o registro que abre de uma lista ou de um quadro: é `PainelLateral`, que fica ao lado e não cobre a lista.",
+        "para editar algo sem perfil que a pessoa precisa ver na tela de trás (o bloco de uma automação): é `PainelLateral`, que fica ao lado.",
         "para decisão curta ou confirmação: é `Modal`.",
         "para criar com poucos campos: `Modal`.",
         "com número fixo de colunas no conteúdo: os cartões vão em `gradeDeCartoes`."
@@ -140,13 +140,13 @@
     {
       "componente": "Painel lateral",
       "usar": [
-        "para abrir um registro a partir de uma lista, de um quadro ou de um calendário, no encaixe `lateral` da `TelaBase`: a lista continua à vista e clicar em outra linha troca o registro.",
+        "para editar, no encaixe `lateral` da `TelaBase`, algo que a pessoa precisa continuar vendo na tela de trás e que não é um registro com perfil: o bloco de uma automação, um item de configuração. A tela continua à vista e clicar em outro item troca o painel.",
         "`ListaDeCampos` com `LinhaDeCampo` para os dados do registro: rótulo à esquerda, valor à direita. Valor que edita no lugar é `CelulaEditavel` (texto) ou `CelulaEscolha` (lista).",
         "`Tabs` para separar as seções (visão geral, histórico, arquivos) e `aoAlternarTelaCheia` quando o registro merece a tela toda."
       ],
       "naoUsar": [
         "para decisão que bloqueia a tela (confirmar, criar com poucos campos): é `Modal`.",
-        "`Drawer` para o registro que abre de uma lista: o Drawer cobre a lista. Ele fica para o registro com perfil, métricas e muitas seções que precisa de mais de 480px.",
+        "para o lead nem para outro registro do CRM com perfil (pessoa, empresa, negócio): ele abre no `Drawer` do lead, o mesmo em toda tela (ADR-061).",
         "fora do encaixe `lateral`, solto no conteúdo: é a `TelaBase` que encolhe a lista e, abaixo de 1024px, dá a tela ao painel."
       ]
     }
@@ -197,9 +197,11 @@
         "`Combobox` para uma escolha numa lista longa (mais de ~10 opções) ou que cresce com o uso: cidade, produto, responsável, origem.",
         "`ComboboxMultiplo` para várias escolhas com caixa de marcar: tags, canais, segmentos.",
         "`ComboboxPainel` quando o gatilho já existe: o chip da `BarraDeFiltros`, a `CelulaEscolha` da tabela.",
-        "`detalhe` quando o nome sozinho não distingue (duas empresas parecidas: o domínio desempata); `aoCriar` quando a lista cresce com o uso (empresa, cidade, segmento); `acao` para o caminho de quem quer editar a lista (\"Gerenciar etapas\") — uma só, nunca um menu de ações."
+        "`detalhe` quando o nome sozinho não distingue (duas empresas parecidas: o domínio desempata); `aoCriar` quando a lista cresce com o uso (empresa, cidade, segmento); `acao` para o caminho de quem quer editar a lista (\"Gerenciar etapas\") — uma só, nunca um menu de ações.",
+        "`conteudo` quando a opção aparece na tela como uma `Tag` (atendente com foto, tag com cor): a lista e o gatilho mostram a mesma Tag, não o nome escrito. É regra do DS inteiro."
       ],
       "naoUsar": [
+        "`Menu` para escolher atendente ou tag: `Menu` é para ações; a lista de Tags é `ComboboxPainel`.",
         "para lista curta e fechada (até ~10 opções, sem busca): é `Select`.",
         "para ações sobre um item: é `Menu`.",
         "para as etiquetas do lead no drawer: é `SeletorTags`, que cria tag e separa por aba.",
@@ -279,7 +281,8 @@
       "usar": [
         "para escolher uma opção numa lista curta (até ~10) e fechada.",
         "`size=\"field\"` ao lado de Input num formulário; `cartao` no drawer; `sm` e `md` em card e barra.",
-        "`grupo` quando a lista tem mais de um assunto (\"Redes sociais\" / \"Outras\") e `icone` quando a opção tem marca ou símbolo."
+        "`grupo` quando a lista tem mais de um assunto (\"Redes sociais\" / \"Outras\") e `icone` quando a opção tem marca ou símbolo.",
+        "`conteudo` quando a opção aparece na tela como uma `Tag` (atendente com foto, tag com cor): a lista e o gatilho mostram a mesma Tag, não o nome escrito. É regra do DS inteiro."
       ],
       "naoUsar": [
         "para ações (`Menu`), para ligar e desligar (`Switch`) ou para 2 a 4 opções que cabem à vista (`SegmentedControl`, `RadioGroup`).",

@@ -116,6 +116,7 @@ export default function PaginaSidebar() {
   return (
     <PaginaDS
       titulo="Sidebar"
+      novidade="2026-10-01"
       descricao="A navegação principal do CRM: plana, direto no fundo da aplicação, com 220px que viram 48. Destinos em dois blocos, um grupo de Favoritos e um item de 32px que é o componente de verdade."
       secoes={[
         "Como funciona",

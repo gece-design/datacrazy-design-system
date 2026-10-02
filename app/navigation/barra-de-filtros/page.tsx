@@ -117,6 +117,7 @@ export default function BarraDeFiltrosPage() {
   return (
     <PaginaDS
       titulo="Filtros"
+      novidade="2026-10-01"
       descricao="A barra de filtros: cada filtro ativo é um chip de 28px com o campo e o que ele filtra, e o “+ Filtro” lista os campos que ainda não entraram. Só o que está ativo ocupa espaço, cada campo abre a própria lista com busca, e tudo vale na hora."
       secoes={["Como funciona", "A barra", "Com o botão do Header"]}
     >

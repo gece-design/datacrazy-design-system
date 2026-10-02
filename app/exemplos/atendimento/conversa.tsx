@@ -17,6 +17,7 @@ import {
 
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { ComboboxPainel } from "@/components/ui/combobox";
 import { Menu } from "@/components/ui/menu";
 import { SegmentedControl } from "@/components/ui/segmented-control";
 import { Tag } from "@/components/ui/tag";
@@ -26,6 +27,7 @@ import { rolagemDiscreta } from "@/lib/estados";
 import { cn } from "@/lib/utils";
 import { ATENDENTES, EU, RESPOSTAS_RAPIDAS, type Conversa, type Mensagem } from "./dados";
 import { IconeDoCanal } from "./lista";
+import { OPCOES_DE_ATENDENTE } from "./painel";
 
 /* A coluna do meio: cabeçalho da conversa, mensagens e o compositor. Mensagem
    recebida à esquerda, enviada à direita; a nota interna é do time (o contato
@@ -150,7 +152,7 @@ export function ConversaAberta({
           ref={botaoTransferir}
           variant="tertiary"
           size="sm"
-          aria-haspopup="menu"
+          aria-haspopup="dialog"
           aria-expanded={menuTransferir}
           onClick={() => setMenuTransferir((a) => !a)}
           className="hidden sm:inline-flex"
@@ -158,11 +160,15 @@ export function ConversaAberta({
           <ArrowsLeftRight size={16} weight="regular" />
           Transferir
         </Button>
-        <Menu
+        {/* quem recebe a conversa: lista de atendentes, cada um como a Tag que aparece no topo — não é menu de ações */}
+        <ComboboxPainel
           aberto={menuTransferir}
           gatilho={botaoTransferir}
           rotulo="Transferir para"
-          itens={ATENDENTES.filter((a) => a !== conversa.atendente).map((a) => ({ id: a, rotulo: a, aoAtivar: () => aoTransferir(a) }))}
+          opcoes={OPCOES_DE_ATENDENTE.filter((a) => a.valor !== conversa.atendente)}
+          selecionados={[]}
+          aoAlternar={(a) => aoTransferir(a)}
+          rotulos={{ busca: "Buscar atendente", vazio: "Ninguém encontrado" }}
           aoFechar={(devolver = true) => {
             setMenuTransferir(false);
             if (devolver) botaoTransferir.current?.focus();

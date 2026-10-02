@@ -124,16 +124,18 @@ export type NegocioParado = {
   atendente: string;
   valor: number;
   dias: number;
+  telefone: string;
+  email: string;
 };
 
 /** O que precisa de atenção hoje: parado há mais tempo primeiro. Não muda com o período. */
 export const PARADOS: NegocioParado[] = [
-  { id: "p1", nome: "Transportes Serra Azul", empresa: "Serra Azul Log", etapa: "Proposta", percentual: 60, tom: "azul", canal: "Site", atendente: "Marina", valor: 78000, dias: 11 },
-  { id: "p2", nome: "Pedro Nakamura", empresa: "Nakamura Contabilidade", etapa: "Qualificação", percentual: 30, tom: "ciano", canal: "WhatsApp", atendente: "Marina", valor: 21000, dias: 9 },
-  { id: "p3", nome: "Rede Sorriso", empresa: "Sorriso Odonto", etapa: "Negociação", percentual: 80, tom: "ambar", canal: "Indicação", atendente: "Liam", valor: 63500, dias: 7 },
-  { id: "p4", nome: "Supermercados Bom Dia", empresa: "Rede Bom Dia", etapa: "Qualificação", percentual: 30, tom: "ciano", canal: "Site", atendente: "Liam", valor: 145000, dias: 6 },
-  { id: "p5", nome: "Escola Raízes", empresa: "Instituto Raízes", etapa: "Proposta", percentual: 60, tom: "azul", canal: "Indicação", atendente: "Esther", valor: 54000, dias: 5 },
-  { id: "p6", nome: "Henrique Salles", empresa: "Salles Fotografia", etapa: "Novo lead", percentual: 10, tom: "neutro", canal: "WhatsApp", atendente: "Liam", valor: 7600, dias: 5 },
-  { id: "p7", nome: "Rafael Pinto", empresa: "Pinto Advocacia", etapa: "Novo lead", percentual: 10, tom: "neutro", canal: "Indicação", atendente: "Marina", valor: 12500, dias: 4 },
-  { id: "p8", nome: "Júlia Bastos", empresa: "Bastos Odontologia", etapa: "Qualificação", percentual: 30, tom: "ciano", canal: "Instagram", atendente: "Esther", valor: 9800, dias: 3 },
+  { id: "p1", nome: "Transportes Serra Azul", empresa: "Serra Azul Log", etapa: "Proposta", percentual: 60, tom: "azul", canal: "Site", atendente: "Marina", valor: 78000, dias: 11, telefone: "+55 (62) 3321-4400", email: "contato@serraazul.log.br" },
+  { id: "p2", nome: "Pedro Nakamura", empresa: "Nakamura Contabilidade", etapa: "Qualificação", percentual: 30, tom: "ciano", canal: "WhatsApp", atendente: "Marina", valor: 21000, dias: 9, telefone: "+55 (11) 98112-7730", email: "pedro@nakamura.cnt.br" },
+  { id: "p3", nome: "Rede Sorriso", empresa: "Sorriso Odonto", etapa: "Negociação", percentual: 80, tom: "ambar", canal: "Indicação", atendente: "Liam", valor: 63500, dias: 7, telefone: "+55 (51) 3222-9010", email: "compras@sorrisoodonto.com.br" },
+  { id: "p4", nome: "Supermercados Bom Dia", empresa: "Rede Bom Dia", etapa: "Qualificação", percentual: 30, tom: "ciano", canal: "Site", atendente: "Liam", valor: 145000, dias: 6, telefone: "+55 (31) 3344-1200", email: "compras@redebomdia.com.br" },
+  { id: "p5", nome: "Escola Raízes", empresa: "Instituto Raízes", etapa: "Proposta", percentual: 60, tom: "azul", canal: "Indicação", atendente: "Esther", valor: 54000, dias: 5, telefone: "+55 (85) 3255-6677", email: "secretaria@raizes.org.br" },
+  { id: "p6", nome: "Henrique Salles", empresa: "Salles Fotografia", etapa: "Novo lead", percentual: 10, tom: "neutro", canal: "WhatsApp", atendente: "Liam", valor: 7600, dias: 5, telefone: "+55 (27) 99812-4455", email: "henrique@sallesfoto.com.br" },
+  { id: "p7", nome: "Rafael Pinto", empresa: "Pinto Advocacia", etapa: "Novo lead", percentual: 10, tom: "neutro", canal: "Indicação", atendente: "Marina", valor: 12500, dias: 4, telefone: "+55 (54) 99604-2218", email: "rafael@pintoadvocacia.com.br" },
+  { id: "p8", nome: "Júlia Bastos", empresa: "Bastos Odontologia", etapa: "Qualificação", percentual: 30, tom: "ciano", canal: "Instagram", atendente: "Esther", valor: 9800, dias: 3, telefone: "+55 (21) 98730-1166", email: "julia@bastosodonto.com.br" },
 ];

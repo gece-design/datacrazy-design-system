@@ -30,6 +30,7 @@ import {
 import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos } from "@/components/ui/barra-de-filtros";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import { ComboboxPainel } from "@/components/ui/combobox";
 import {
   BarraDeSelecao,
   BotaoAgrupar,
@@ -48,10 +49,10 @@ import {
   useSelecaoDaTabela,
   type ColunaTabela,
 } from "@/components/ui/data-table";
+import { Drawer } from "@/components/ui/drawer";
 import { HeaderBusca, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { IconeDeMarca } from "@/components/ui/icone-de-marca";
 import { Input } from "@/components/ui/input";
-import { Menu } from "@/components/ui/menu";
 import { Modal } from "@/components/ui/modal";
 import { Select } from "@/components/ui/select";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
@@ -72,7 +73,7 @@ import { PainelLead } from "./painel-lead";
    A lista de contatos do CRM, só com peças do DS. É a tela de referência para
    LISTA DE REGISTROS: grade densa com ícone por coluna, a pessoa com as
    iniciais coloridas, tags e origem editadas na própria célula, filtros em
-   chips, agrupar, seleção em massa e o registro aberto ao lado. Criar tag é
+   chips, agrupar, seleção em massa e o lead aberto no Drawer. Criar tag é
    um modal curto com as quinze cores do DS.
 --------------------------------------------------------------------------- */
 
@@ -98,8 +99,8 @@ const NOTIFICACOES: Notificacao[] = [
   { id: "2", icone: IconeDeTag, titulo: "Tag aplicada em massa", detalhe: "12 leads receberam a tag Carrinho abandonado.", quando: "há 3 h", lida: true },
 ];
 
-/* `minimo` é o piso de cada coluna: com o lead aberto ao lado a lista encolhe,
-   e abaixo da soma deles ela rola na horizontal em vez de cortar tudo. */
+/* `minimo` é o piso de cada coluna: abaixo da soma deles a lista rola na
+   horizontal em vez de cortar tudo em reticências. */
 const COLUNAS: ColunaTabela[] = [
   { chave: "nome", rotulo: "Nome", icone: User, peso: 2.2, minimo: 190 },
   { chave: "telefone", rotulo: "Telefone", icone: Phone, peso: 1.4, minimo: 130 },
@@ -164,7 +165,15 @@ function Vazio() {
   return <span className="text-label-lg text-subtle-foreground">—</span>;
 }
 
-export function Tela() {
+export function Tela({
+  aoNavegar,
+  memoria = "leads",
+}: {
+  /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
+  aoNavegar?: (destino: string) => boolean;
+  /** Chave da memória da sidebar. No protótipo é uma só, para ela não mudar de estado entre as telas. */
+  memoria?: string;
+} = {}) {
   const [rota, setRota] = React.useState("Leads");
   const [leads, setLeads] = React.useState(LEADS);
   const [tags, setTags] = React.useState(TAGS);
@@ -172,7 +181,6 @@ export function Tela() {
   const [filtro, setFiltro] = React.useState<FiltrosAtivos>({});
   const [filtros, setFiltros] = React.useState(false);
   const [abertoId, setAbertoId] = React.useState<string | null>(null);
-  const [telaCheia, setTelaCheia] = React.useState(false);
   const [novaTag, setNovaTag] = React.useState<typeof tagVazia | null>(null);
   const [erroTag, setErroTag] = React.useState<string | undefined>();
   const [novoLead, setNovoLead] = React.useState<typeof leadVazio | null>(null);
@@ -219,11 +227,7 @@ export function Tela() {
   const aberto = leads.find((l) => l.id === abertoId) ?? null;
 
   const editar = (id: string, campos: Partial<Lead>) => setLeads((lista) => lista.map((l) => (l.id === id ? { ...l, ...campos } : l)));
-  // fechar sempre volta ao painel ao lado: o próximo lead não abre em tela cheia
-  const fechar = () => {
-    setAbertoId(null);
-    setTelaCheia(false);
-  };
+  const fechar = () => setAbertoId(null);
 
   function criarTag() {
     if (!novaTag) return;
@@ -253,7 +257,7 @@ export function Tela() {
   const linha = (lead: Lead) => {
     const doLead = tagsDe(tags, lead.tags);
     return (
-      // Selecionar a linha abre o lead ao lado: mestre-detalhe.
+      // Selecionar a linha abre o lead no Drawer.
       <DataTableRow key={lead.id} chave={lead.id} nome={lead.nome} selecionada={lead.id === abertoId} aoSelecionar={() => setAbertoId(lead.id)}>
         <DataTableCell coluna="nome">
           {/* O nome é o botão que abre o lead; as iniciais vêm na cor que o nome sorteia. */}
@@ -313,7 +317,7 @@ export function Tela() {
   return (
     <>
       <TelaBase
-        memoria="leads"
+        memoria={memoria}
         // a lista encosta nas bordas do painel: é a própria superfície, não um cartão dentro dela
         recuo={false}
         navegacao={
@@ -322,7 +326,15 @@ export function Tela() {
               <SidebarBrand />
               <SidebarGrupo>
                 {PRINCIPAIS.map((r) => (
-                  <SidebarItem key={r.rotulo} icone={r.icone} componente="button" selecionado={r.rotulo === rota} onClick={() => setRota(r.rotulo)}>
+                  <SidebarItem
+                  key={r.rotulo}
+                  icone={r.icone}
+                  componente="button"
+                  selecionado={r.rotulo === rota}
+                  onClick={() => {
+                    if (!aoNavegar?.(r.rotulo)) setRota(r.rotulo);
+                  }}
+                >
                     {r.rotulo}
                   </SidebarItem>
                 ))}
@@ -377,11 +389,9 @@ export function Tela() {
           ),
           acoes: (
             <>
-              {/* Só a lupa e só o ícone: a tela abre o lead ao lado, e com ele aberto a
-                  fileira tem metade da largura (regra da HeaderBusca). */}
-              <HeaderBusca recolhida rotulo="Pesquisar leads" placeholder="Pesquisar leads" value={busca} onChange={(e) => setBusca(e.target.value)} />
+              {/* A fileira só tem botões: busca aberta e filtros com rótulo (regra da HeaderBusca). */}
+              <HeaderBusca rotulo="Pesquisar leads" placeholder="Pesquisar leads" value={busca} onChange={(e) => setBusca(e.target.value)} />
               <HeaderFiltros
-                recolhido
                 rotulo="Filtros"
                 contagem={contarFiltros(filtro)}
                 rotuloComContagem={(n) => `Filtros: ${n} ativos`}
@@ -401,22 +411,6 @@ export function Tela() {
             </>
           ),
         }}
-        lateral={
-          aberto ? (
-            <PainelLead
-              lead={aberto}
-              tags={tags}
-              opcoesDeTag={opcoesDeTag}
-              opcoesDeOrigem={OPCOES_DE_ORIGEM}
-              iconeDaOrigem={<IconeDaOrigem origem={aberto.origem} />}
-              telaCheia={telaCheia}
-              aoAlternarTelaCheia={() => setTelaCheia((v) => !v)}
-              aoFechar={fechar}
-              aoEditar={(campos) => editar(aberto.id, campos)}
-            />
-          ) : null
-        }
-        lateralCheia={Boolean(aberto) && telaCheia}
       >
         {/* Os filtros em chips: só o que está ativo ocupa espaço, e cada campo abre a própria lista com busca. */}
         {filtros ? (
@@ -461,21 +455,21 @@ export function Tela() {
           ) : null}
           {/* A barra sobe quando há linha marcada: aplicar tag em todas, ou excluir. */}
           <BarraDeSelecao selecao={selecao}>
-            <Button ref={botaoTags} variant="tertiary" size="sm" aria-haspopup="menu" aria-expanded={menuTags} onClick={() => setMenuTags((a) => !a)}>
+            <Button ref={botaoTags} variant="tertiary" size="sm" aria-haspopup="dialog" aria-expanded={menuTags} onClick={() => setMenuTags((a) => !a)}>
               Aplicar tag
             </Button>
-            <Menu
+            {/* a lista de tags mostra cada uma como ela aparece na coluna — não é menu de texto */}
+            <ComboboxPainel
               aberto={menuTags}
               gatilho={botaoTags}
               rotulo="Aplicar tag"
-              itens={tags.map((t) => ({
-                id: t.id,
-                rotulo: t.rotulo,
-                aoAtivar: () => {
-                  setLeads((lista) => lista.map((l) => (selecao.selecionados.includes(l.id) && !l.tags.includes(t.id) ? { ...l, tags: [...l.tags, t.id] } : l)));
-                  selecao.limpar();
-                },
-              }))}
+              opcoes={opcoesDeTag}
+              selecionados={[]}
+              aoAlternar={(id) => {
+                setLeads((lista) => lista.map((l) => (selecao.selecionados.includes(l.id) && !l.tags.includes(id) ? { ...l, tags: [...l.tags, id] } : l)));
+                selecao.limpar();
+              }}
+              rotulos={{ busca: "Buscar tag", vazio: "Nenhuma tag encontrada" }}
               aoFechar={(devolver = true) => {
                 setMenuTags(false);
                 if (devolver) botaoTags.current?.focus();
@@ -495,6 +489,24 @@ export function Tela() {
           </BarraDeSelecao>
         </div>
       </TelaBase>
+
+      {/* O lead abre no Drawer do design system — o mesmo da página do Drawer, com o lead clicado na lista. */}
+      <Drawer aberto={Boolean(aberto)} aoFechar={fechar} rotulo={`Lead ${aberto?.nome ?? ""}`}>
+        {aberto ? (
+          <PainelLead
+            lead={aberto}
+            tags={tags}
+            opcoesDeOrigem={OPCOES_DE_ORIGEM}
+            aoFechar={fechar}
+            aoEditar={(campos) => editar(aberto.id, campos)}
+            aoCriarTag={(rotulo, tom) => {
+              const id = `tag-${Date.now()}`;
+              setTags((lista) => [...lista, { id, rotulo, tom }]);
+              return id;
+            }}
+          />
+        ) : null}
+      </Drawer>
 
       {/* Criar tag: nome, descrição e uma das quinze cores. Modal curto — é decisão de poucos campos. */}
       <Modal

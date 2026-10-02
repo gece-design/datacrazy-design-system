@@ -5,11 +5,11 @@
     "fim": "2026-10-02"
   },
   "git": {
-    "commits": 84,
+    "commits": 85,
     "arquivos": 352,
-    "linhasUi": 11467,
+    "linhasUi": 11509,
     "linhasLib": 849,
-    "linhasDocs": 8571
+    "linhasDocs": 8643
   },
   "catalogo": {
     "itens": 59,
@@ -137,7 +137,7 @@
       "variantes": 4,
       "estados": 7,
       "acessibilidade": 8,
-      "linhas": 472
+      "linhas": 477
     },
     {
       "name": "data-table",
@@ -358,7 +358,7 @@
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 7,
-      "linhas": 357
+      "linhas": 376
     },
     {
       "name": "sidebar",
@@ -410,20 +410,20 @@
       "variantes": 7,
       "estados": 5,
       "acessibilidade": 7,
-      "linhas": 472
+      "linhas": 482
     },
     {
       "name": "tela-base",
       "titulo": "TelaBase",
       "descricao": "A casca de toda tela do CRM: Sidebar, Header e conteúdo já ligados, com os breakpoints e a memória da sidebar. A tela só preenche os encaixes. Instala-se como bloco (`@datacrazy/tela`), que cria a página pronta.",
-      "categoria": "Telas de exemplo",
+      "categoria": "Feedback & Overlays",
       "pagina": null,
       "pecas": 1,
-      "props": 9,
+      "props": 10,
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 5,
-      "linhas": 224
+      "linhas": 232
     },
     {
       "name": "telefone",
@@ -494,11 +494,11 @@
   "totais": {
     "componentes": 36,
     "pecas": 119,
-    "props": 383,
+    "props": 384,
     "variantes": 105,
     "estados": 133,
     "acessibilidade": 220,
-    "paginas": 44,
+    "paginas": 45,
     "docs": 36
   },
   "tokens": {
@@ -513,8 +513,8 @@
   "categorias": [
     {
       "titulo": "Getting Started",
-      "total": 2,
-      "prontas": 2,
+      "total": 3,
+      "prontas": 3,
       "itens": [
         {
           "titulo": "Let's begin",
@@ -524,6 +524,11 @@
         {
           "titulo": "SystemCrazy",
           "href": "/getting-started/installation",
+          "pronto": true
+        },
+        {
+          "titulo": "Protótipo SystemCrazy",
+          "href": "/prototipo",
           "pronto": true
         }
       ]
@@ -710,8 +715,8 @@
     },
     {
       "titulo": "Feedback & Overlays",
-      "total": 6,
-      "prontas": 6,
+      "total": 13,
+      "prontas": 13,
       "itens": [
         {
           "titulo": "Tooltip",
@@ -742,14 +747,7 @@
           "titulo": "Drawer variações",
           "href": "/feedback/drawer-variacoes",
           "pronto": true
-        }
-      ]
-    },
-    {
-      "titulo": "Telas de exemplo",
-      "total": 7,
-      "prontas": 7,
-      "itens": [
+        },
         {
           "titulo": "Tela base",
           "href": "/exemplos/tela-base",
@@ -1088,6 +1086,21 @@
       "id": "ADR-060",
       "titulo": "Lista com busca: sem caixa na busca, texto de apoio, criar e ação no pé",
       "data": "2026-10-02"
+    },
+    {
+      "id": "ADR-061",
+      "titulo": "O lead abre no Drawer do lead em toda tela",
+      "data": "2026-10-02"
+    },
+    {
+      "id": "ADR-062",
+      "titulo": "Fundo `muted` para canvas e tela de cartões; o canvas das Automações vira canvas",
+      "data": "2026-10-02"
+    },
+    {
+      "id": "ADR-063",
+      "titulo": "A opção da lista é a peça final",
+      "data": "2026-10-02"
     }
   ],
   "auditoria": {
@@ -1123,6 +1136,26 @@
       "data": "2026-10-02",
       "origem": "Revisão",
       "titulo": "BOLINHA DA TAG NA COR QUE O NOME PROMETE"
+    },
+    {
+      "data": "2026-10-02",
+      "origem": "Revisão",
+      "titulo": "O LEAD ABRE NO DRAWER EM TODAS AS TELAS"
+    },
+    {
+      "data": "2026-10-02",
+      "origem": "Revisão",
+      "titulo": "AUTOMAÇÕES COM CANVAS DE VERDADE; DASHBOARD SOBRE CINZA CLARO"
+    },
+    {
+      "data": "2026-10-02",
+      "origem": "Revisão",
+      "titulo": "A OPÇÃO DA LISTA É A PEÇA FINAL"
+    },
+    {
+      "data": "2026-10-02",
+      "origem": "Revisão",
+      "titulo": "PROTÓTIPO SYSTEMCRAZY E SELO NEW POR SEMANA"
     },
     {
       "data": "2026-10-01",
@@ -1476,7 +1509,7 @@
       "exemplos",
       "regressao"
     ],
-    "capturas": 88,
+    "capturas": 90,
     "temas": 2
   },
   "bancada": {

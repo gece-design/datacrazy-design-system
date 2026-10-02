@@ -35,6 +35,7 @@ import {
   DataTableToolbar,
   type ColunaTabela,
 } from "@/components/ui/data-table";
+import { Drawer } from "@/components/ui/drawer";
 import { Notificacoes, type Notificacao } from "@/components/ui/header";
 import { IconeDeMarca } from "@/components/ui/icone-de-marca";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -46,6 +47,7 @@ import { TelaBase } from "@/components/ui/tela-base";
 import { Toaster, toast } from "@/components/ui/toast";
 import { useTema } from "@/lib/tema";
 import { cn } from "@/lib/utils";
+import { LeadParado } from "./lead-parado";
 import { PARADOS, PERIODOS, RECORTES, moeda, moedaCurta, percentual, type Canal, type Periodo } from "./dados";
 
 /* ---------------------------------------------------------------------------
@@ -106,7 +108,15 @@ const RECORTES_DO_GRAFICO = [
   { valor: "quantidade", rotulo: "Quantidade" },
 ];
 
-export function Tela() {
+export function Tela({
+  aoNavegar,
+  memoria = "dashboard",
+}: {
+  /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
+  aoNavegar?: (destino: string) => boolean;
+  /** Chave da memória da sidebar. No protótipo é uma só, para ela não mudar de estado entre as telas. */
+  memoria?: string;
+} = {}) {
   const [rota, setRota] = React.useState("Início");
   const [periodo, setPeriodo] = React.useState<Periodo>("30");
   const [recorte, setRecorte] = React.useState("valor");
@@ -118,18 +128,32 @@ export function Tela() {
   // por quantidade, a mesma série em negócios: o ticket médio do exemplo é de ~R$ 5,8 mil
   const barras = recorte === "valor" ? dados.receita : dados.receita.map((b) => ({ ...b, valor: Math.round(b.valor / 5800) }));
   const principal = dados.origens[0];
-  const emRisco = PARADOS.reduce((n, p) => n + p.valor, 0);
+  // os negócios parados são estado da tela: o Drawer edita a linha
+  const [parados, setParados] = React.useState(PARADOS);
+  const [abertoId, setAbertoId] = React.useState<string | null>(null);
+  const aberto = parados.find((p) => p.id === abertoId) ?? null;
+  const emRisco = parados.reduce((n, p) => n + p.valor, 0);
 
   return (
     <TelaBase
-      memoria="dashboard"
+      memoria={memoria}
+      // tela de cartões: o conteúdo fica sobre o cinza claro, e os cartões brancos se destacam
+      fundo="muted"
       navegacao={
         <>
           <SidebarTopo>
             <SidebarBrand />
             <SidebarGrupo>
               {PRINCIPAIS.map((r) => (
-                <SidebarItem key={r.rotulo} icone={r.icone} componente="button" selecionado={r.rotulo === rota} onClick={() => setRota(r.rotulo)}>
+                <SidebarItem
+                  key={r.rotulo}
+                  icone={r.icone}
+                  componente="button"
+                  selecionado={r.rotulo === rota}
+                  onClick={() => {
+                    if (!aoNavegar?.(r.rotulo)) setRota(r.rotulo);
+                  }}
+                >
                   {r.rotulo}
                 </SidebarItem>
               ))}
@@ -223,12 +247,13 @@ export function Tela() {
             dentro de Card. `items-start`: cada bloco termina onde o conteúdo termina, sem esticar para igualar. */}
         <div className="grid grid-cols-1 items-start gap-3 xl:grid-cols-3">
           <div className="min-w-0 overflow-hidden rounded-md border border-border bg-card xl:col-span-2">
-            <DataTableToolbar rotulo="Precisam de atenção" total={`${PARADOS.length} negócios parados · ${moeda(emRisco)}`} />
+            <DataTableToolbar rotulo="Precisam de atenção" total={`${parados.length} negócios parados · ${moeda(emRisco)}`} />
             <DataTable colunas={COLUNAS} className="rounded-none border-0 border-t">
-              {PARADOS.map((p) => (
-                <DataTableRow key={p.id}>
+              {parados.map((p) => (
+                <DataTableRow key={p.id} selecionada={p.id === abertoId} aoSelecionar={() => setAbertoId(p.id)}>
                   <DataTableCell coluna="lead">
-                    <CelulaLead nome={p.nome} />
+                    {/* o nome abre o lead no Drawer */}
+                    <CelulaLead nome={p.nome} avatar aoAbrir={() => setAbertoId(p.id)} />
                   </DataTableCell>
                   <DataTableCell coluna="etapa">
                     <CelulaProgresso etapa={p.etapa} percentual={p.percentual} tom={p.tom} />
@@ -265,6 +290,16 @@ export function Tela() {
           </Card>
         </div>
       </div>
+      {/* O lead abre no Drawer do design system — o mesmo da página do Drawer. */}
+      <Drawer aberto={Boolean(aberto)} aoFechar={() => setAbertoId(null)} rotulo={`Lead ${aberto?.nome ?? ""}`}>
+        {aberto ? (
+          <LeadParado
+            negocio={aberto}
+            aoEditar={(campos) => setParados((lista) => lista.map((p) => (p.id === aberto.id ? { ...p, ...campos } : p)))}
+            aoFechar={() => setAbertoId(null)}
+          />
+        ) : null}
+      </Drawer>
       <Toaster />
     </TelaBase>
   );
