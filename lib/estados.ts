@@ -63,6 +63,16 @@ export const rolagemDiscreta =
  */
 export const superficieDeApoio = "bg-card [[data-superficie]_&]:bg-background";
 
+/**
+ * O hover dos controles de apoio e da navegação: branco a 50% — o fundo
+ * clareia meio degrau, sem trocar de cor (humano, 2026-10-02). Sobre o fundo
+ * da aplicação é `card/50`; dentro da superfície da tela, onde o controle é
+ * cinza sobre branco, é o próprio cinza a 50%: dá no mesmo tom.
+ */
+export const hoverDeApoio = "enabled:hover:bg-card/50 [[data-superficie]_&]:enabled:hover:bg-background/50";
+/** O mesmo hover para a opção DENTRO de um trilho (SegmentedControl, ViewSwitcher): o trilho é a superfície oposta. */
+export const hoverNoTrilho = "enabled:hover:bg-background/50 [[data-superficie]_&]:enabled:hover:bg-card/50";
+
 
 /**
  * Faixa compacta — o topo da tela e o Drawer. O `Header` e o `DrawerPainel`

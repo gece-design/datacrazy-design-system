@@ -289,7 +289,7 @@ gates (ADR-010, ADR-019, ADR-021), não desenhados no Figma.
 | `ease-settle` | `cubic-bezier(0.32, 0.72, 0, 1)` | Painel que desliza e assenta (Drawer) |
 | `ease-pop` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Overshoot (estrela do Rating) |
 
-Animações nomeadas (`animate-*`): `fade-in` · `fade-in-fast` · `fade-out` ·
+Animações nomeadas (`animate-*`): `fade-in` · `fade-in-fast` · `surgir` (entra subindo 4px, `base`) · `crescer` (barra do gráfico, `slow` + `settle`) · `fade-out` ·
 `drawer-entra` · `drawer-sai` · `toast-open` · `estrela-pop` (420ms) ·
 `estrela-brilho` (480ms). Os nomes são públicos no registry: só se acrescenta.
 

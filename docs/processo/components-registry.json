@@ -981,7 +981,7 @@
           "approvedIn": null
         },
         "hover (sino)": {
-          "impl": "hover:bg-accent do Button tertiary",
+          "impl": "branco a 50% do Button tertiary (hoverDeApoio)",
           "source": "inferido",
           "rule": null,
           "precedent": "gatilho do Date Picker",
@@ -1109,15 +1109,15 @@
       "motion": "transition-colors",
       "states": {
         "selecionada": {
-          "impl": "Segmented: bg-segmented-item-selected text-overlay-item-text-selected · View: + text-primary e sombra interna (só no Claro) · aria-checked",
+          "impl": "Segmented: bg-segmented-item-selected (card dentro da superfície da tela) + text-overlay-item-text-selected · View: text-primary, ícone fill e sombra interna (só no Claro) · aria-checked",
           "source": "figma",
           "rule": null,
           "precedent": "Selected=Mês (269:54) · View=Chart (471:2940)",
           "approvedIn": null
         },
         "hover": {
-          "impl": "text-foreground",
-          "source": "inferido",
+          "impl": "fundo clareia meio degrau (hoverNoTrilho); texto já em foreground no repouso",
+          "source": "humano",
           "rule": "L2",
           "precedent": "Tabs",
           "approvedIn": "B0"
@@ -1305,7 +1305,7 @@
       "motion": "fast",
       "states": {
         "hover": {
-          "impl": "primary→primary-hover · destructive→destructive-hover · soft→button-soft-hover · secondary/ghost/tertiary→bg-accent · outline→bg-background",
+          "impl": "primary→primary-hover · destructive→destructive-hover · soft→button-soft-hover · secondary/ghost→bg-accent · tertiary→branco a 50% (hoverDeApoio) · outline→bg-background",
           "source": "banco",
           "rule": "L3",
           "precedent": null,
@@ -1392,15 +1392,15 @@
       "motion": "largura em base (200, ADR-022) · rótulo fade-in-fast ao expandir",
       "states": {
         "hover": {
-          "impl": "bg-card + text-foreground no item (a navegação é plana, sobre background)",
+          "impl": "bg-card/50 no item (branco a 50% sobre background); texto e ícone em foreground no repouso",
           "source": "humano",
           "rule": "L2",
           "precedent": "proposta visual (Twenty)",
           "approvedIn": "C3"
         },
         "selected": {
-          "impl": "bg-nav-item-selected + texto nav-item-selected-foreground + ícone fill em nav-item-selected-icon",
-          "source": "figma",
+          "impl": "bg-card (branco) + texto nav-item-selected-foreground + ícone fill em nav-item-selected-icon",
+          "source": "humano",
           "rule": "L7",
           "precedent": "nav/item/bg-selected",
           "approvedIn": null

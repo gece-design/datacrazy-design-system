@@ -348,3 +348,13 @@ Desvio: ajusta a superfície única do ADR-055, em que lista, quadro e chat enco
 Motivo: pedido do humano, mostrando o dashboard (2026-10-02: "este padrão de cores de fundo precisa seguir em todas as telas — chat, leads e pipeline estão diferentes").
 Aprovado por: humano (2026-10-02).
 
+## ADR-067 · Mais contraste na navegação e nos controles de apoio · 2026-10-02
+Desvio: no arquivo o item da navegação e os controles de apoio têm texto e ícone em `muted-foreground`, e o selecionado é o azul clarinho (`blue-50` / `accent`). Agora, na `Sidebar`, no Button `tertiary`, no `SegmentedControl`, no `ViewSwitcher`, na `HeaderBusca` e no gatilho de data: texto e ícone em `foreground` no repouso; hover = branco a 50% (o fundo clareia meio degrau — `hoverDeApoio` e `hoverNoTrilho`, lib/estados); selecionado = fundo `card` (branco), com o ícone preenchido e o texto em azul. O token `--segmented-item-selected` passa a ser a superfície oposta à do trilho nos dois temas (`background` fora da tela, `card` dentro de `data-superficie`). Os tokens `nav-item-*` não mudam de valor: o menu do Drawer, que fica sobre branco, continua com o selecionado em azul claro.
+Motivo: pedido do humano (2026-10-02: "precisamos de mais contraste aqui… onde está cinza nos ícones e nos textos deixar preto, onde está azul clarinho deixar branco, padroniza o hover com branco 50% e no ativo o ícone preenchido azul").
+Aprovado por: humano (2026-10-02). O Figma acompanha na remedição.
+
+## ADR-068 · Movimento nas telas: duas entradas novas na escala · 2026-10-02
+Desvio: acréscimo à escala de movimento (ADR-021), sem par no arquivo. Duas animações nomeadas — `surgir` (opacidade + 4px para cima, `base` · `enter`) e `crescer` (scaleY do chão, `slow` · `settle`). Onde entram: o conteúdo da `TelaBase` e a `BarraDeFiltros` entram em `fade-in-fast`; o cartão do quadro e a mensagem do chat, em `surgir`; as barras do `CardChart` crescem em sequência (30ms entre uma e outra) e deslizam a altura quando o valor muda — exceção registrada à regra de não animar altura, como o Toast; trocar de seção no Drawer do lead entra em fade. No canvas das Automações, o que a pessoa conduz (arrasto, roda, pinça) segue o dedo, e o que ela pede por botão ou tecla (zoom, enquadrar, organizar) desliza em `base`, com os conectores remedidos a cada quadro. Voltam o levantar do cartão do quadro no hover e a transição do zoom, que tinham saído na reescrita. Tudo sob `motion-safe`; a redução continua global.
+Motivo: pedido do humano (2026-10-02: "precisa aplicar os motions na tela que parece que você tirou… aplique novamente e melhore ainda mais onde não tinha").
+Aprovado por: humano (2026-10-02).
+

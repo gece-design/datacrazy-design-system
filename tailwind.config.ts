@@ -164,6 +164,10 @@ const config: Config = {
       keyframes: {
         "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
         "fade-out": { from: { opacity: "1" }, to: { opacity: "0" } },
+        // o que entra na tela e assenta: cartão do quadro, mensagem do chat, bloco do fluxo
+        "surgir": { from: { opacity: "0", transform: "translateY(4px)" }, to: { opacity: "1", transform: "translateY(0)" } },
+        // a barra do gráfico: cresce do chão
+        "crescer": { from: { transform: "scaleY(0)" }, to: { transform: "scaleY(1)" } },
         // Drawer: entra deslizando da direita, sai pelo mesmo caminho.
         "drawer-entra": { from: { transform: "translateX(100%)" }, to: { transform: "translateX(0)" } },
         "drawer-sai": { from: { transform: "translateX(0)" }, to: { transform: "translateX(100%)" } },
@@ -191,6 +195,10 @@ const config: Config = {
         // fade-in é a entrada do Toast: 250 → 280 (slow) no gate B0
         "fade-in": `fade-in ${DURACAO.slow}ms ${CURVA.enter}`,
         "fade-in-fast": `fade-in ${DURACAO.fast}ms ${CURVA.enter}`,
+        // entra subindo 4px: quem aparece numa lista que já está na tela
+        "surgir": `surgir ${DURACAO.base}ms ${CURVA.enter} both`,
+        // a barra do gráfico cresce e assenta, como o Drawer
+        "crescer": `crescer ${DURACAO.slow}ms ${CURVA.settle} both`,
         // 180 → 200 (base): a saída ganha o mesmo tempo das outras saídas
         "fade-out": `fade-out ${DURACAO.base}ms ${CURVA.exit} forwards`,
         // o balão do Tooltip: some rápido, senão fica por cima do próximo gatilho

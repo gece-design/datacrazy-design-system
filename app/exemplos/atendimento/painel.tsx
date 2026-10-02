@@ -46,7 +46,7 @@ export function PainelDoLead({
 }) {
   const Tipo = conversa.tipo === "empresa" ? Buildings : User;
   return (
-    <aside aria-label={`Lead ${conversa.nome}`} className={cn("flex min-h-0 flex-col overflow-hidden rounded-md border border-border bg-card", className)}>
+    <aside aria-label={`Lead ${conversa.nome}`} className={cn("flex min-h-0 flex-col overflow-hidden rounded-md border border-border bg-card motion-safe:animate-fade-in-fast", className)}>
       <div className={cn("flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto p-4", rolagemDiscreta)}>
         <div className="flex items-center gap-3">
           <Avatar nome={conversa.nome} size="md" iniciais="duas" className="shrink-0" aria-hidden="true" />

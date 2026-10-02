@@ -24,6 +24,8 @@ const curvas = [
 const animacoes = [
   { nome: "fade-in", tempo: `${DURACAO.slow}ms · enter`, onde: "Toast entrando" },
   { nome: "fade-in-fast", tempo: `${DURACAO.fast}ms · enter`, onde: "Tooltip, Modal, scrim, painéis" },
+  { nome: "surgir", tempo: `${DURACAO.base}ms · enter`, onde: "Cartão do quadro, mensagem do chat: entra subindo 4px" },
+  { nome: "crescer", tempo: `${DURACAO.slow}ms · settle`, onde: "Barra do gráfico, do chão para cima" },
   { nome: "fade-out", tempo: `${DURACAO.base}ms · exit`, onde: "Scrim do Drawer saindo" },
   { nome: "drawer-entra", tempo: `${DURACAO.slow}ms · settle`, onde: "Drawer" },
   { nome: "drawer-sai", tempo: `${DURACAO.base}ms · exit`, onde: "Drawer" },
@@ -104,6 +106,7 @@ export default function Pagina() {
 
       <Secao
         titulo="Animações nomeadas"
+        novidade="2026-10-02"
         spec="8 nomes"
         descricao="Keyframes com nome no config, montados a partir das durações e curvas acima. Os nomes são públicos no registry: só se acrescenta, nunca se renomeia."
         codigo={`<div className="motion-safe:animate-fade-in-fast" />`}

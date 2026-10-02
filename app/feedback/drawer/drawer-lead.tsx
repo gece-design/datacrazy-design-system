@@ -904,7 +904,10 @@ export function DrawerLead({
         }
       >
         {Corpo ? (
-          <Corpo />
+          // a seção nova entra em fade; `key` remonta ao trocar no menu
+          <div key={menu} className="flex flex-col gap-3 motion-safe:animate-fade-in-fast">
+            <Corpo />
+          </div>
         ) : (
           <p className="text-body-md text-muted-foreground">
             O arquivo ainda não desenha o conteúdo de {item.rotulo}.

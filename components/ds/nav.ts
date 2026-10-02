@@ -36,14 +36,14 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Spacing", href: "/foundations/spacing", icone: "espaco", pronto: true , descricao: "Catorze degraus, de 0 a 80"},
       { titulo: "Radius", href: "/foundations/radius", icone: "raio", pronto: true , descricao: "Sete degraus, todos de --radius"},
       { titulo: "Elevation", href: "/foundations/elevation", icone: "elevacao", pronto: true , descricao: "Quatro alturas de flutuação"},
-      { titulo: "Motion", href: "/foundations/motion", icone: "movimento", pronto: true, descricao: "Três durações, quatro curvas"},
+      { titulo: "Motion", href: "/foundations/motion", atualizado: "2026-10-02", icone: "movimento", pronto: true, descricao: "Três durações, quatro curvas"},
     ],
   },
   {
     titulo: "Actions",
     descricao: "O que o usuário aciona.",
     itens: [
-      { titulo: "Button", href: "/actions/button", icone: "clique", pronto: true , descricao: "Ação do usuário, quatro variantes"},
+      { titulo: "Button", href: "/actions/button", atualizado: "2026-10-02", icone: "clique", pronto: true , descricao: "Ação do usuário, quatro variantes"},
       { titulo: "Icon Button", href: "/actions/icon-button", icone: "toque", pronto: true, descricao: "Ação só de ícone, em quatro tamanhos"},
     ],
   },
@@ -65,8 +65,8 @@ export const navegacao: CategoriaNav[] = [
     titulo: "Navigation",
     descricao: "Como o usuário se move pelo produto.",
     itens: [
-      { titulo: "Sidebar", href: "/navigation/sidebar", atualizado: "2026-10-01", icone: "painel", pronto: true, descricao: "Navegação principal"},
-      { titulo: "Header", href: "/navigation/header", atualizado: "2026-10-01", icone: "cabecalho", pronto: true, descricao: "Topo da página: trilha, título e ações"},
+      { titulo: "Sidebar", href: "/navigation/sidebar", atualizado: "2026-10-02", icone: "painel", pronto: true, descricao: "Navegação principal"},
+      { titulo: "Header", href: "/navigation/header", atualizado: "2026-10-02", icone: "cabecalho", pronto: true, descricao: "Topo da página: trilha, título e ações"},
       { titulo: "Breadcrumb", href: "/navigation/breadcrumb", icone: "trilha", pronto: true, descricao: "Trilha que recolhe os níveis do meio"},
       { titulo: "Pagination", href: "/navigation/pagination", icone: "paginas", pronto: true , descricao: "Controles de página de uma lista"},
       // Estava no escopo negativo do roadmap (anti-referência nº 11). Entrou por

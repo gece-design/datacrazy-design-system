@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
-import { alturaCompacta, desabilitado, foco, quadradoCompacto, recuoCompacto, superficieDeApoio } from "@/lib/estados";
+import { alturaCompacta, desabilitado, foco, hoverDeApoio, quadradoCompacto, recuoCompacto, superficieDeApoio } from "@/lib/estados";
 const buttonVariants = cva(
   // Base: foco sempre visível (E7) · estados de interação por regra, não por desenho (E-01)
   // Foco por outline, não por ring com offset: o offset do ring é pintado com uma
@@ -33,7 +33,8 @@ const buttonVariants = cva(
         // e Filtros no Header (601:464). Hover derivado (E-01), o mesmo do
         // gatilho do Date Picker.
         // Dentro da superfície da tela (TelaBase) o fundo vira `background`: ver `superficieDeApoio`.
-        tertiary: `${superficieDeApoio} text-muted-foreground shadow-button-inner enabled:hover:bg-accent`,
+        // Texto e ícone em `foreground` (eram cinza) e hover branco a 50% — mais contraste (humano, 2026-10-02).
+        tertiary: `${superficieDeApoio} text-foreground shadow-button-inner ${hoverDeApoio}`,
       },
       size: {
         sm: "h-7 px-2.5",

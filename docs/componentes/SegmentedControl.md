@@ -52,8 +52,8 @@ Picker, que já existe.
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| selecionada | `Segmented: bg-segmented-item-selected text-overlay-item-text-selected · View: + text-primary e sombra interna (só no Claro) · aria-checked` | figma | Selected=Mês (269:54) · View=Chart (471:2940) |
-| hover | `text-foreground` | inferido | L2 |
+| selecionada | `Segmented: bg-segmented-item-selected (card dentro da superfície da tela) + text-overlay-item-text-selected · View: text-primary, ícone fill e sombra interna (só no Claro) · aria-checked` | figma | Selected=Mês (269:54) · View=Chart (471:2940) |
+| hover | `fundo clareia meio degrau (hoverNoTrilho); texto já em foreground no repouso` | humano | L2 |
 | focus | `outline-2 outline-offset-2 outline-ring` | declarado | D6 |
 | disabled | `opacity-50 pointer-events-none, pulada pelas setas` | banco | I5 |
 <!-- kfe:estados:end -->

@@ -270,7 +270,7 @@ export default function HeaderPage() {
   return (
     <PaginaDS
       titulo="Header"
-      novidade="2026-10-01"
+      novidade="2026-10-02"
       descricao="O topo de cada página, numa linha só: 60px sozinho, 48 como primeira faixa do painel da tela, com os controles em 28. À esquerda a trilha e o título, que é o último nível dela; à direita as ações e o sino, com 32px e vão de 8. Nenhuma prop de variante — o conteúdo entra por encaixes."
       secoes={[
         "Como funciona",

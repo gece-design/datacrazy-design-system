@@ -114,7 +114,7 @@ Não tem. Ver "Par no Figma".
 | repouso | `px-8 py-4 bg-background, sem traço embaixo · linha de cima min-h-8 · 6 até o título (gap-1.5), h1 no topo da fileira (items-start) · ações gap-2` | humano | ADR-029 |
 | sem espaço | `ações descem para linha própria (flex-wrap + ml-auto) e quebram entre si; abaixo de 640 da largura do Header (container query) trilha, título e ações centrados` | humano | E3 · ADR-032 |
 | texto longo | `título, subtítulo e níveis da trilha truncate + title` | declarado | D12 |
-| hover (sino) | `hover:bg-accent do Button tertiary` | inferido | gatilho do Date Picker |
+| hover (sino) | `branco a 50% do Button tertiary (hoverDeApoio)` | inferido | gatilho do Date Picker |
 | focus (busca) | `focus-within:outline-2 outline-offset-2 outline-ring` | declarado | D6 |
 | notificações | `sino abre painel da tela (portal, overlay/*, shadow-lg); Escape devolve o foco` | declarado | L11 |
 | painel de notificações | `sino com aria-expanded + PainelFlutuante role=dialog abaixo dele, fade-in-fast; sai com fade-out` | humano | L10 |

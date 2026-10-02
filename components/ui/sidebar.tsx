@@ -108,8 +108,8 @@ export function SidebarToggle({
       title={nome}
       aria-expanded={!colapsada}
       className={cn(
-        "grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors",
-        "hover:bg-nav-item-hover hover:text-foreground",
+        "grid size-7 shrink-0 place-items-center rounded-md text-foreground transition-colors",
+        "hover:bg-card/50",
         `${foco}`,
         className
       )}
@@ -234,10 +234,11 @@ const itemVariants = cva(
   {
     variants: {
       selecionado: {
-        true: "bg-nav-item-selected text-nav-item-selected-foreground",
-        // `card`, não `nav-item-hover`: o painel é plano, direto sobre `background`,
-        // e o hover do arquivo é `background` — sumiria. `card` aparece nos dois temas.
-        false: "text-nav-item hover:bg-card hover:text-foreground",
+        // Contraste (humano, 2026-10-02): o selecionado é BRANCO (`card`), não o azul
+        // clarinho do arquivo, com o texto e o ícone preenchido em azul; em repouso,
+        // texto e ícone em `foreground` (eram cinza); o hover é branco a 50%.
+        true: "bg-card text-nav-item-selected-foreground",
+        false: "text-foreground hover:bg-card/50",
       },
       colapsada: {
         true: "justify-center",
@@ -349,12 +350,11 @@ export function SidebarThemeSwitch({ tema, onTemaChange, className }: SidebarThe
             className={cn(
               "grid size-7 place-items-center rounded-sm transition-colors",
               `${foco}`,
-              ativo
-                ? "bg-nav-item-selected text-nav-item-selected-icon"
-                : "text-muted-foreground hover:bg-nav-item-hover hover:text-foreground"
+              // o mesmo padrão do item: ativo branco com o ícone preenchido em azul; hover branco a 50%
+              ativo ? "bg-card text-nav-item-selected-icon" : "text-foreground hover:bg-card/50"
             )}
           >
-            <Icone size={16} weight="regular" />
+            <Icone size={16} weight={ativo ? "fill" : "regular"} />
           </button>
         );
       })}
@@ -389,7 +389,7 @@ export function SidebarUser({ nome, email, avatar, className, ...props }: Sideba
         aria-label={nome}
         title={`${nome} · ${email}`}
         className={cn(
-          "flex h-8 w-full items-center justify-center rounded-md transition-colors hover:bg-card",
+          "flex h-8 w-full items-center justify-center rounded-md transition-colors hover:bg-card/50",
           `${foco}`,
           className
         )}
@@ -405,7 +405,7 @@ export function SidebarUser({ nome, email, avatar, className, ...props }: Sideba
       type="button"
       className={cn(
         "flex h-10 w-full items-center justify-between gap-2 rounded-md px-2 text-left transition-colors",
-        "hover:bg-card",
+        "hover:bg-card/50",
         `${foco}`,
         className
       )}

@@ -5,7 +5,7 @@ import type { Icon } from "@phosphor-icons/react";
 import { Tooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-import { alturaCompacta, desabilitado, foco, opcaoCompacta, superficieDeApoio } from "@/lib/estados";
+import { alturaCompacta, desabilitado, foco, hoverNoTrilho, opcaoCompacta, superficieDeApoio } from "@/lib/estados";
 /**
  * Segmented Control e View Switcher — escolha exclusiva à vista, numa trilha
  * de `card` (nodes 269:68 e 471:2947).
@@ -94,8 +94,8 @@ export function SegmentedControl({ itens, atual, aoEscolher, rotulo, className }
               opcaoCompacta,
               selecionada
                 ? "bg-segmented-item-selected text-overlay-item-text-selected"
-                // hover derivado (E-01), o mesmo do Tabs
-                : "text-muted-foreground enabled:hover:text-foreground",
+                // em repouso o texto é `foreground` (era cinza); o hover clareia o fundo meio degrau (humano, 2026-10-02)
+                : cn("text-foreground", hoverNoTrilho),
             )}
           >
             <span className="truncate" title={item.rotulo}>
@@ -140,10 +140,11 @@ export function ViewSwitcher({ itens, atual, aoEscolher, rotulo, className }: Gr
                 "h-full flex-1 rounded-sm px-2.5",
                 selecionada
                   ? "bg-segmented-item-selected text-primary shadow-button-inner"
-                  : "text-muted-foreground enabled:hover:text-foreground",
+                  : cn("text-foreground", hoverNoTrilho),
               )}
             >
-              <Icone size={16} weight="regular" aria-hidden="true" />
+              {/* a visão ativa: ícone preenchido, em azul */}
+              <Icone size={16} weight={selecionada ? "fill" : "regular"} aria-hidden="true" />
             </button>
           </Tooltip>
         );

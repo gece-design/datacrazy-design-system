@@ -191,7 +191,8 @@ export function TelaBase({
             />
             <main
               aria-label={r.conteudo}
-              className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", rolagemDiscreta, recuo && "p-4", fundo === "muted" && "bg-muted")}
+              // o conteúdo entra em fade: trocar de tela não é um corte seco
+              className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto motion-safe:animate-fade-in-fast", rolagemDiscreta, recuo && "p-4", fundo === "muted" && "bg-muted")}
             >
               {children}
             </main>

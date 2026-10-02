@@ -107,6 +107,7 @@ export default function Botao() {
 
       <Secao
         titulo="Variantes"
+        novidade="2026-10-02"
         spec="7 · variant"
         descricao="Cor não preenche superfície: das sete, só duas carregam cor cheia. soft e outline chegaram com o redesenho do Button no Figma (269:32), usados no drawer do lead; tertiary chegou com o Header."
         codigo={`<Button variant="primary">Nova campanha</Button>

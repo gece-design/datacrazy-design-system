@@ -499,8 +499,9 @@ function Cartao({
       onDragEnd={aoTerminar}
       className={cn(
         // cartão enxuto: traço no lugar da sombra, recuo 8, 6 entre os blocos
-        "flex shrink-0 cursor-grab select-none flex-col gap-1.5 rounded-md border border-border bg-card p-2 transition-colors",
-        "hover:border-input-border-hover active:cursor-grabbing",
+        // levanta no hover (sombra) e assenta ao entrar na coluna — ao soltar, o cartão "chega"
+        "flex shrink-0 cursor-grab select-none flex-col gap-1.5 rounded-md border border-border bg-card p-2 transition-[border-color,box-shadow] motion-safe:animate-surgir",
+        "hover:border-input-border-hover hover:shadow-sm active:cursor-grabbing",
         `${foco}`,
         emMovimento && !pegoPeloTeclado && "opacity-40",
         pegoPeloTeclado && "shadow-lg outline outline-2 outline-offset-2 outline-primary",

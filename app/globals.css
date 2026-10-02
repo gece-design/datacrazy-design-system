@@ -127,11 +127,12 @@
     --button-soft-foreground: var(--blue-600);
     --button-soft-hover: var(--blue-100);
 
-    /* Opção selecionada do Segmented Control e do View Switcher. No claro é o
-       `accent` do arquivo; no escuro `accent` (#232C3D) é quase o `card`
-       (#25252D) da trilha e o selecionado somia — vira o fundo da página,
-       que afunda a opção em vez de clareá-la. Mesmo caso do `nav/item`. */
-    --segmented-item-selected: var(--accent);
+    /* Opção selecionada do Segmented Control e do View Switcher: a superfície
+       OPOSTA à do trilho. Fora da tela o trilho é `card` e a opção é
+       `background`; dentro da superfície da tela (`data-superficie`) o trilho
+       é `background` e a opção é `card` — branca. O `accent` azul clarinho do
+       arquivo saiu, por contraste (humano, 2026-10-02). */
+    --segmented-item-selected: var(--background);
 
     --radius: 0.5rem;
   }
@@ -433,11 +434,10 @@
     --tom-ponto: var(--tom-tag);
   }
 
-  /* Dentro da superfície da tela o trilho do segmentado é `background`; no
-     escuro a opção selecionada era `background` também e sumiria. Ali ela
-     passa a `card` — o token muda de valor pelo lugar, sem ramificar o
-     componente (ADR-055). */
-  .dark [data-superficie] {
+  /* Dentro da superfície da tela o trilho do segmentado é `background`, e a
+     opção selecionada é `card` — o token muda de valor pelo lugar, sem
+     ramificar o componente (ADR-055). Nos dois temas desde 2026-10-02. */
+  [data-superficie] {
     --segmented-item-selected: var(--card);
   }
 

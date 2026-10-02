@@ -69,8 +69,8 @@ Peças:
 <!-- kfe:estados:start -->
 | Estado | Implementação | Origem | Precedente / regra |
 |--------|---------------|--------|--------------------|
-| hover | `bg-card + text-foreground no item (a navegação é plana, sobre background)` | humano | L2 |
-| selected | `bg-nav-item-selected + texto nav-item-selected-foreground + ícone fill em nav-item-selected-icon` | figma | L7 |
+| hover | `bg-card/50 no item (branco a 50% sobre background); texto e ícone em foreground no repouso` | humano | L2 |
+| selected | `bg-card (branco) + texto nav-item-selected-foreground + ícone fill em nav-item-selected-icon` | humano | L7 |
 | focus | `outline outline-2 outline-offset-2 outline-ring` | banco | D6 |
 | disabled | `aria-disabled:opacity-50 aria-disabled:pointer-events-none no item` | banco | I5 |
 | recolhida | `220→48px, rótulos e nome de grupo somem, title/aria-label sobem para a raiz (D12), grupo com ocultarRecolhida sai, o símbolo da marca vira o botão de expandir` | humano | padrão G4 do FigJam |
@@ -78,7 +78,7 @@ Peças:
 
 ## Tokens consumidos
 
-`background` · `card` · `nav-item-hover` · `nav-item-selected` ·
+`background` · `card` (item selecionado e, a 50%, o hover) · `foreground` (texto e ícone em repouso) ·
 `nav-item-selected-icon` · `nav-item-selected-foreground` · `nav-item-text` ·
 `sidebar-avatar` · `muted-foreground` · `foreground` · `surface-inverse` ·
 `ring` · `radius/md` · `radius/sm` · `radius/full` · `text/body-lg` ·

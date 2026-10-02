@@ -376,6 +376,7 @@ Fica suspenso.
 - 2026-10-02 · **TAG: TRAÇO MAIS FORTE, LISTA COM ÍCONE E CRIAR SEMPRE** · ADR-064. Traço em `divider`; tags de lista com ícone cinza escolhido ao criar (`ICONES_DE_TAG`, `SeletorDeIcone`, `iconeLivre`); criar tag sempre disponível no seletor e na célula; catálogo de tags como estado da tela. Menu "mais ações" das Automações com ícones. Origem: humano.
 - 2026-10-02 · **DRAWER PLANO E COMPACTO** · ADR-065. Sem gradiente no perfil nem nas métricas (os tokens saíram), respiros de 16/12, item de menu de 32, botões de 28 por `data-compacto`. Vale em todas as telas, porque o drawer é um só. Origem: humano.
 - 2026-10-02 · **O MESMO FUNDO EM TODA TELA** · ADR-066. Navegação `background`, topo `card`, conteúdo `muted` (padrão da `TelaBase`), blocos `card` com traço: Leads, Pipeline e Atendimento passam a seguir o dashboard. `blocoDaTela` em lib/estados. Origem: humano.
+- 2026-10-02 · **MAIS CONTRASTE NA NAVEGAÇÃO E NO TOPO; MOVIMENTO NAS TELAS** · ADR-067 e 068. Texto e ícone pretos, hover branco a 50%, ativo branco com ícone preenchido azul (Sidebar, tertiary, Segmented, ViewSwitcher, busca). Movimento: troca de tela, filtros, quadro, chat, gráfico, drawer e canvas; `surgir` e `crescer` entram na escala. Origem: humano.
 
 ## Mapa de equivalência (layout antigo → v3.2)
 

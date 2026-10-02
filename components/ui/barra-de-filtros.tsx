@@ -96,7 +96,7 @@ export function BarraDeFiltros({ campos, valor, aoMudar, rotulos, abrirAoMontar 
   }
 
   return (
-    <div className={cn("flex min-w-0 flex-wrap items-center gap-1.5", className)} {...props}>
+    <div className={cn("flex min-w-0 flex-wrap items-center gap-1.5 motion-safe:animate-fade-in-fast", className)} {...props}>
       {naBarra.map((campo) => (
         <ChipDeFiltro
           key={campo.id}
@@ -195,7 +195,7 @@ function ChipDeFiltro({
   const resumo = resumoDe(campo, valores);
   return (
     // dois botões colados: o que abre a lista e o X — clicável dentro de clicável não existe
-    <div className="inline-flex min-w-0 max-w-full items-stretch gap-px">
+    <div className="inline-flex min-w-0 max-w-full items-stretch gap-px motion-safe:animate-fade-in-fast">
       <Button
         ref={gatilho}
         variant="soft"

@@ -20,7 +20,7 @@ import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
 
-import { alturaCompacta, desabilitado, foco, focoInterno } from "@/lib/estados";
+import { alturaCompacta, desabilitado, foco, focoInterno, hoverDeApoio, superficieDeApoio } from "@/lib/estados";
 /* ---------------------------------------------------------------------------
    Date Range Picker — seleção de período com dois meses e atalhos.
 
@@ -293,7 +293,8 @@ const GatilhoDeData = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttrib
           ? "bg-accent text-primary"
           // hover derivado (E-01): empresta a superfície do Active, que é
           // token que já existe, e mantém o texto em `muted-foreground`.
-          : "bg-card text-muted-foreground enabled:hover:bg-accent",
+          // o mesmo do Button `tertiary`: texto em `foreground`, hover branco a 50%
+          : cn(superficieDeApoio, "text-foreground", hoverDeApoio),
         className,
       )}
       {...props}

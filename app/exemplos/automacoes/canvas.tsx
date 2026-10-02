@@ -28,6 +28,7 @@ import { ComboboxPainel } from "@/components/ui/combobox";
 import { IconeDeMarca } from "@/components/ui/icone-de-marca";
 import { Menu, type ItemDoMenu } from "@/components/ui/menu";
 import { foco, focoInterno } from "@/lib/estados";
+import { DURACAO } from "@/lib/movimento";
 import { cn } from "@/lib/utils";
 import { LARGURA_DO_BLOCO, TIPOS, type Bloco, type Saida, type TipoDeBloco } from "./dados";
 
@@ -44,6 +45,9 @@ import { LARGURA_DO_BLOCO, TIPOS, type Bloco, type Saida, type TipoDeBloco } fro
    - o bloco arrasta pelo corpo todo; com vários marcados, vão juntos;
    - a ligação se faz arrastando da bolinha de uma saída até outro bloco, e se
      desfaz marcando o conector e apertando Delete;
+   - o que a pessoa conduz com a mão (arrasto, roda, pinça) segue o dedo, sem
+     transição; o que ela pede por botão ou tecla (zoom, enquadrar, organizar)
+     desliza até o lugar, com a duração `base` do design system;
    - o que muda os blocos é sempre um pedido para a tela (`aoMover`,
      `aoLigar`…): quem guarda o fluxo — e o desfazer — é ela.
 
@@ -256,6 +260,16 @@ export const Canvas = React.forwardRef<CanvasRef, CanvasProps>(function Canvas(
   const [ajuda, setAjuda] = React.useState(false);
   const [mapa, setMapa] = React.useState(true);
   const enquadrarDepois = React.useRef(false);
+  /** Uma mudança pedida por botão ou tecla está deslizando até o lugar. */
+  const [animando, setAnimando] = React.useState(false);
+  const fimDaAnimacao = React.useRef<number | undefined>(undefined);
+  /** Roda a mudança com transição: a vista (e os blocos, ao organizar) deslizam em vez de pular. */
+  const comAnimacao = (mudanca: () => void) => {
+    setAnimando(true);
+    mudanca();
+    window.clearTimeout(fimDaAnimacao.current);
+    fimDaAnimacao.current = window.setTimeout(() => setAnimando(false), DURACAO.base + 40);
+  };
 
   const marcados = marca ? marca.ids : selecionados;
 
@@ -313,7 +327,8 @@ export const Canvas = React.forwardRef<CanvasRef, CanvasProps>(function Canvas(
     const el = folha.current;
     if (!el) return;
     const base = el.getBoundingClientRect();
-    const k = vistaAtual.current.k;
+    // a escala REAL da folha agora — no meio de uma transição ela ainda não é a da vista
+    const k = new DOMMatrixReadOnly(getComputedStyle(el).transform).a || 1;
     const centro = (alvo: Element): Ponto => {
       const r = alvo.getBoundingClientRect();
       return { x: (r.left + r.width / 2 - base.left) / k, y: (r.top + r.height / 2 - base.top) / k };
@@ -362,6 +377,17 @@ export const Canvas = React.forwardRef<CanvasRef, CanvasProps>(function Canvas(
     // `arrasto` entra para o conector seguir o bloco enquanto ele anda
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [medir, arrasto]);
+
+  // enquanto algo desliza, os conectores são remedidos a cada quadro: acompanham os blocos
+  React.useEffect(() => {
+    if (!animando) return;
+    let quadro = requestAnimationFrame(function passo() {
+      medir();
+      quadro = requestAnimationFrame(passo);
+    });
+    return () => cancelAnimationFrame(quadro);
+  }, [animando, medir]);
+  React.useEffect(() => () => window.clearTimeout(fimDaAnimacao.current), []);
 
   /* O tamanho da janela (para o mapa e para o centro) e os gestos que o React
      não deixa cancelar: a roda e a pinça precisam de `preventDefault`, senão o
@@ -618,8 +644,10 @@ export const Canvas = React.forwardRef<CanvasRef, CanvasProps>(function Canvas(
       posicoes[id] = { x: 24 + c * (LARGURA_DO_BLOCO + VAO_DA_COLUNA), y };
       topo.set(c, y + (alturas[id] ?? 160) + VAO_DA_LINHA);
     }
-    enquadrarDepois.current = true;
-    aoMover(posicoes);
+    comAnimacao(() => {
+      enquadrarDepois.current = true;
+      aoMover(posicoes);
+    });
   }
 
   function teclar(e: React.KeyboardEvent) {
@@ -672,13 +700,13 @@ export const Canvas = React.forwardRef<CanvasRef, CanvasProps>(function Canvas(
         setVista((v) => ({ ...v, x: v.x - dx * 6, y: v.y - dy * 6 }));
       }
     } else if (!comando && (e.key === "+" || e.key === "=")) {
-      zoomNoMeio((k) => k + 0.1);
+      comAnimacao(() => zoomNoMeio((k) => k + 0.1));
     } else if (!comando && e.key === "-") {
-      zoomNoMeio((k) => k - 0.1);
+      comAnimacao(() => zoomNoMeio((k) => k - 0.1));
     } else if (!comando && e.key === "0") {
-      zoomNoMeio(() => 1);
+      comAnimacao(() => zoomNoMeio(() => 1));
     } else if (!comando && e.key === "1") {
-      enquadrar();
+      comAnimacao(() => enquadrar());
     } else if (e.key === " " && alvo === janela.current) {
       // Espaço segurado: qualquer arrasto move a tela, mesmo em cima de um bloco
       e.preventDefault();
@@ -712,7 +740,7 @@ export const Canvas = React.forwardRef<CanvasRef, CanvasProps>(function Canvas(
         { id: "adicionar", rotulo: rotulos.adicionarAqui, icone: Plus, aoAtivar: () => setLista({}) },
         { id: "tudo", rotulo: rotulos.selecionarTudo, icone: SelectionAll, aoAtivar: () => aoSelecionar(blocos.map((b) => b.id)) },
         { id: "organizar", rotulo: rotulos.organizar, icone: TreeStructure, separadorAntes: true, aoAtivar: organizar },
-        { id: "ajustar", rotulo: rotulos.ajustar, icone: CornersOut, aoAtivar: () => enquadrar() },
+        { id: "ajustar", rotulo: rotulos.ajustar, icone: CornersOut, aoAtivar: () => comAnimacao(() => enquadrar()) },
       ];
 
   // o pontilhado anda e escala com a vista; muito afastado, dobra o vão para não virar ruído
@@ -753,13 +781,15 @@ export const Canvas = React.forwardRef<CanvasRef, CanvasProps>(function Canvas(
         "relative min-h-0 min-w-0 flex-1 touch-none select-none overflow-hidden bg-muted",
         "[background-image:radial-gradient(circle,hsl(var(--divider))_1px,transparent_1.5px)] [background-position:var(--px)_var(--py)] [background-size:var(--vao)_var(--vao)]",
         movendoTela ? "cursor-grabbing" : "cursor-grab",
+        // o pontilhado desliza junto com a folha
+        animando && "transition-[background-position,background-size] duration-base ease-enter",
         focoInterno,
         className,
       )}
     >
       <div
         ref={folha}
-        className={cn("absolute left-0 top-0 origin-top-left", !pronto && "invisible")}
+        className={cn("absolute left-0 top-0 origin-top-left", !pronto && "invisible", animando && "transition-transform duration-base ease-enter")}
         style={{ transform: `translate(${vista.x}px, ${vista.y}px) scale(${vista.k})` }}
       >
         <svg aria-hidden="true" width={1} height={1} className="pointer-events-none absolute left-0 top-0 overflow-visible">
@@ -797,7 +827,10 @@ export const Canvas = React.forwardRef<CanvasRef, CanvasProps>(function Canvas(
               aria-label={`${tipo.rotulo}: ${b.titulo}`}
               style={{ left: b.x + (andando ? arrasto!.dx : 0), top: b.y + (andando ? arrasto!.dy : 0), width: LARGURA_DO_BLOCO }}
               className={cn(
-                "absolute flex cursor-grab flex-col rounded-lg border border-border bg-card shadow-sm active:cursor-grabbing",
+                // o bloco novo entra em fade; a sombra cresce enquanto ele é arrastado
+                "absolute flex cursor-grab flex-col rounded-lg border border-border bg-card shadow-sm transition-shadow active:cursor-grabbing motion-safe:animate-fade-in-fast",
+                // organizar: os blocos deslizam até a coluna nova
+                animando && "transition-[left,top,box-shadow] duration-base ease-enter",
                 // marcado: contorno de 2, como toda seleção do DS — não ring com offset
                 marcado && "outline outline-2 outline-primary",
                 // o destino da ligação que está sendo arrastada
@@ -938,7 +971,7 @@ export const Canvas = React.forwardRef<CanvasRef, CanvasProps>(function Canvas(
       {/* A barra do canvas: uma caixa `card` com traço e sombra, sobre o cinza */}
       <div data-fixo className="absolute bottom-3 left-3 flex cursor-default flex-col items-start gap-2">
         {ajuda ? (
-          <dl className="flex w-[300px] max-w-[calc(100vw-24px)] flex-col gap-1.5 rounded-md border border-border bg-card p-3 shadow-md">
+          <dl className="flex w-[300px] max-w-[calc(100vw-24px)] flex-col gap-1.5 rounded-md border border-border bg-card p-3 shadow-md motion-safe:animate-surgir">
             {rotulos.atalhos.map((a) => (
               <div key={a.gesto} className="flex items-baseline justify-between gap-3">
                 <dt className="text-label-md text-foreground">{a.gesto}</dt>
@@ -955,16 +988,16 @@ export const Canvas = React.forwardRef<CanvasRef, CanvasProps>(function Canvas(
             <ArrowClockwise size={16} weight="regular" aria-hidden="true" />
           </Button>
           <span aria-hidden="true" className="mx-1 h-5 w-px bg-divider" />
-          <Button variant="ghost" size="icon-sm" aria-label={rotulos.afastar} title={rotulos.afastar} disabled={vista.k <= ZOOM_MINIMO} onClick={() => zoomNoMeio((k) => k - 0.1)}>
+          <Button variant="ghost" size="icon-sm" aria-label={rotulos.afastar} title={rotulos.afastar} disabled={vista.k <= ZOOM_MINIMO} onClick={() => comAnimacao(() => zoomNoMeio((k) => k - 0.1))}>
             <Minus size={16} weight="regular" aria-hidden="true" />
           </Button>
           <span aria-live="polite" className="w-10 text-center text-label-md tabular-nums text-muted-foreground">
             {Math.round(vista.k * 100)}%
           </span>
-          <Button variant="ghost" size="icon-sm" aria-label={rotulos.aproximar} title={rotulos.aproximar} disabled={vista.k >= ZOOM_MAXIMO} onClick={() => zoomNoMeio((k) => k + 0.1)}>
+          <Button variant="ghost" size="icon-sm" aria-label={rotulos.aproximar} title={rotulos.aproximar} disabled={vista.k >= ZOOM_MAXIMO} onClick={() => comAnimacao(() => zoomNoMeio((k) => k + 0.1))}>
             <Plus size={16} weight="regular" aria-hidden="true" />
           </Button>
-          <Button variant="ghost" size="icon-sm" aria-label={rotulos.ajustar} title={rotulos.ajustar} onClick={() => enquadrar()}>
+          <Button variant="ghost" size="icon-sm" aria-label={rotulos.ajustar} title={rotulos.ajustar} onClick={() => comAnimacao(() => enquadrar())}>
             <CornersOut size={16} weight="regular" aria-hidden="true" />
           </Button>
           <span aria-hidden="true" className="mx-1 h-5 w-px bg-divider" />

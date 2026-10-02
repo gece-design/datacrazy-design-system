@@ -5,11 +5,11 @@
     "fim": "2026-10-02"
   },
   "git": {
-    "commits": 87,
+    "commits": 88,
     "arquivos": 357,
-    "linhasUi": 11620,
-    "linhasLib": 858,
-    "linhasDocs": 8706
+    "linhasUi": 11632,
+    "linhasLib": 868,
+    "linhasDocs": 8737
   },
   "catalogo": {
     "itens": 59,
@@ -85,7 +85,7 @@
       "variantes": 7,
       "estados": 3,
       "acessibilidade": 5,
-      "linhas": 102
+      "linhas": 103
     },
     {
       "name": "calendario",
@@ -111,7 +111,7 @@
       "variantes": 4,
       "estados": 2,
       "acessibilidade": 5,
-      "linhas": 330
+      "linhas": 337
     },
     {
       "name": "checkbox",
@@ -163,7 +163,7 @@
       "variantes": 5,
       "estados": 6,
       "acessibilidade": 6,
-      "linhas": 866
+      "linhas": 867
     },
     {
       "name": "drawer",
@@ -189,7 +189,7 @@
       "variantes": 0,
       "estados": 8,
       "acessibilidade": 6,
-      "linhas": 498
+      "linhas": 499
     },
     {
       "name": "icone-de-marca",
@@ -345,7 +345,7 @@
       "variantes": 3,
       "estados": 4,
       "acessibilidade": 5,
-      "linhas": 154
+      "linhas": 155
     },
     {
       "name": "select",
@@ -423,7 +423,7 @@
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 5,
-      "linhas": 233
+      "linhas": 234
     },
     {
       "name": "telefone",
@@ -507,7 +507,7 @@
     "raios": 7,
     "sombras": 8,
     "camadas": 7,
-    "animacoes": 9,
+    "animacoes": 11,
     "duracoes": 3
   },
   "categorias": [
@@ -1116,6 +1116,16 @@
       "id": "ADR-066",
       "titulo": "O mesmo padrão de fundo em toda tela",
       "data": "2026-10-02"
+    },
+    {
+      "id": "ADR-067",
+      "titulo": "Mais contraste na navegação e nos controles de apoio",
+      "data": "2026-10-02"
+    },
+    {
+      "id": "ADR-068",
+      "titulo": "Movimento nas telas: duas entradas novas na escala",
+      "data": "2026-10-02"
     }
   ],
   "auditoria": {
@@ -1186,6 +1196,11 @@
       "data": "2026-10-02",
       "origem": "Revisão",
       "titulo": "O MESMO FUNDO EM TODA TELA"
+    },
+    {
+      "data": "2026-10-02",
+      "origem": "Revisão",
+      "titulo": "MAIS CONTRASTE NA NAVEGAÇÃO E NO TOPO; MOVIMENTO NAS TELAS"
     },
     {
       "data": "2026-10-01",

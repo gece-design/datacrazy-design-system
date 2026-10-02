@@ -217,6 +217,10 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   (atendente com foto, tag com cor) leva `conteudo: <Tag …>` — em Select, Combobox, CelulaEscolha e filtros; o
   gatilho mostra a mesma peça. Lista de atendente ou tag nunca é `Menu`: é `ComboboxPainel`. Com `icone`, a Tag
   troca a bolinha pelo ícone colorido (temperatura: frio, morno, quente).
+- **Contraste e movimento (2026-10-02)**: item da Sidebar, Button `tertiary`, Segmented, ViewSwitcher e busca do Header
+  têm texto e ícone em `foreground`, hover branco a 50% (`hoverDeApoio` / `hoverNoTrilho`) e ativo branco com ícone
+  `fill` em azul — ADR-067. Movimento: `animate-surgir` (entra subindo 4px) e `animate-crescer` (barra de gráfico)
+  entraram na escala; o conteúdo da `TelaBase` entra em fade; no canvas, o que é pedido por botão desliza — ADR-068.
 - **Fundo e Drawer (2026-10-02)**: toda tela tem o mesmo padrão de fundo — navegação `background`, topo `card`,
   conteúdo `muted` (padrão da `TelaBase`), blocos `card` com traço (`Card` ou `blocoDaTela` de lib/estados) — ADR-066.
   O Drawer é plano (sem `bg-metrica` nem `bg-drawer-perfil`: os tokens saíram), com recuo 16, item de menu de 32 e

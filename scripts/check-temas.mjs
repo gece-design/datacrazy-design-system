@@ -34,6 +34,10 @@ const INTENCIONAL = new Set([
   // destructive do escuro desceram de lightness para segurar o rótulo branco.
   "primary-foreground",
   "primary",
+  // Alias de `background` nos dois modos (2026-10-02): a opção selecionada é a
+  // superfície oposta à do trilho. O alias repete; o valor não — `background`
+  // já inverte entre Claro e Escuro.
+  "segmented-item-selected",
 ]);
 
 const semantico = Object.keys(escuro);

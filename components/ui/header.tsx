@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 
-import { foco, focoDentro, focoInterno, rolagemDiscreta, superficieDeApoio } from "@/lib/estados";
+import { foco, focoDentro, focoInterno, hoverDeApoio, rolagemDiscreta, superficieDeApoio } from "@/lib/estados";
 /**
  * Header — o topo de uma página do CRM, numa linha só.
  *
@@ -252,7 +252,8 @@ export const HeaderBusca = React.forwardRef<HTMLInputElement, HeaderBuscaProps>(
       <label
         className={cn(
           // 28 de altura, como os botões do topo (ADR-057)
-          "flex h-7 max-w-full items-center gap-0.5 rounded-md text-muted-foreground shadow-button-inner",
+          // a lupa em `foreground`, como os botões de apoio ao lado; o texto de exemplo continua cinza
+          "flex h-7 max-w-full items-center gap-0.5 rounded-md text-foreground shadow-button-inner",
           superficieDeApoio,
           recolhida ? "transition-[width] duration-base ease-enter" : "w-[184px] cursor-text px-2 py-1.5",
           recolhida && (fechada ? "w-7 cursor-pointer justify-center" : "w-[184px] cursor-text px-2 py-1.5"),
@@ -266,7 +267,7 @@ export const HeaderBusca = React.forwardRef<HTMLInputElement, HeaderBuscaProps>(
             aria-label={rotulo}
             title={rotulo}
             onClick={() => setAberta(true)}
-            className={cn("flex size-7 shrink-0 items-center justify-center rounded-md transition-colors hover:text-foreground", foco)}
+            className={cn("flex size-7 shrink-0 items-center justify-center rounded-md transition-colors", hoverDeApoio, foco)}
           >
             <MagnifyingGlass size={16} weight="regular" aria-hidden="true" />
           </button>

@@ -42,7 +42,8 @@ function Balao({ m }: { m: Mensagem }) {
   const minha = m.de === "atendente";
   const nota = m.de === "nota";
   return (
-    <div className={cn("flex max-w-[72%] flex-col gap-0.5", minha || nota ? "self-end items-end" : "self-start items-start")}>
+    // a mensagem chega subindo 4px: nova ou ao abrir a conversa
+    <div className={cn("flex max-w-[72%] flex-col gap-0.5 motion-safe:animate-surgir", minha || nota ? "self-end items-end" : "self-start items-start")}>
       <div
         className={cn(
           "whitespace-pre-wrap break-words rounded-lg px-3 py-2 text-body-lg text-foreground",

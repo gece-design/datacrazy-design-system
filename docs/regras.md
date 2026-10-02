@@ -102,6 +102,26 @@ lista, quadro e chat seguem igual:
   apoio, coluna neutra do quadro). Nunca bloco branco direto sobre o Header
   sem o fundo `muted` em volta, nem a tela inteira branca.
 
+### Contraste na navegação e nos controles de apoio
+Vale para o item da `Sidebar`, o Button `tertiary`, o `SegmentedControl`, o
+`ViewSwitcher`, a `HeaderBusca` e o gatilho de data (humano, 2026-10-02, ADR-067):
+- **Repouso**: texto e ícone em `foreground` — preto, não cinza.
+- **Hover**: o fundo clareia meio degrau — branco a 50% (`hoverDeApoio` e
+  `hoverNoTrilho`, lib/estados). Não troca de cor nem vai para o azul.
+- **Ativo / selecionado**: fundo branco (`card`), com o ícone PREENCHIDO
+  (`weight="fill"`) e o texto em azul. O azul clarinho de fundo saiu.
+- Não reescreva essas cores por `className`: as peças já saem assim.
+
+### Movimento nas telas
+- Trocar de tela, abrir filtro, trocar de seção no drawer: `animate-fade-in-fast`.
+  O conteúdo da `TelaBase` já entra em fade sozinho.
+- O que entra numa lista que já está na tela (cartão do quadro, mensagem do
+  chat): `animate-surgir` — sobe 4px. Barra de gráfico: `animate-crescer`.
+- O que a pessoa conduz com a mão (arrastar, rolar, pinçar) segue o dedo, sem
+  transição; o que ela pede por botão ou tecla desliza até o lugar.
+- Sempre com `motion-safe:`; duração e curva só as da escala (`duration-fast`,
+  `-base`, `-slow`; `ease-enter`, `-exit`, `-settle`). Nada de `duration-200`.
+
 ### Header de uma linha
 - O Header é uma linha: trilha, título e, à direita, ações e sino (ADR-053). A
   trilha traz só os níveis acima — `Breadcrumb ancestrais` — e o `titulo` é a

@@ -1,5 +1,6 @@
 "use client";
 
+import { DURACAO } from "@/lib/movimento";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -250,6 +251,8 @@ const ALTURA_MAXIMA = 218;
 const ALTURA_ZERO = 3;
 /** Espaço que um rótulo do eixo de baixo precisa para aparecer inteiro ("28/09", "Sem 38"). */
 const LARGURA_DO_ROTULO = 48;
+/** O degrau entre uma barra e a seguinte ao crescer: um quinto da duração rápida (30ms). */
+const ATRASO_DA_BARRA = DURACAO.fast / 5;
 
 /**
  * Barras verticais por período, em cor chapada: o gradiente primary → accent do
@@ -298,15 +301,19 @@ export function CardChart({
           </div>
         ) : null}
         <div className="flex min-w-0 flex-1 items-end gap-[14px]" style={{ height: ALTURA_PLOT }}>
-          {barras.map((b) => {
+          {barras.map((b, i) => {
             const cheia = maximo > 0 && b.valor > 0;
             return (
               <Tooltip key={b.rotulo} content={`${b.rotulo} · ${formatar(b.valor)}`} delay={0}>
                 <div
                   role="img"
                   aria-label={`${b.rotulo}: ${formatar(b.valor)}`}
-                  className={cn("min-w-0 flex-1 rounded-t-sm transition-colors", cheia ? "bg-primary hover:bg-primary-hover" : "bg-background")}
-                  style={{ height: cheia ? (b.valor / maximo) * ALTURA_MAXIMA : ALTURA_ZERO }}
+                  // cresce do chão ao entrar, uma barra depois da outra; mudou o valor, a altura desliza
+                  className={cn(
+                    "min-w-0 flex-1 origin-bottom rounded-t-sm transition-[height,background-color] duration-base ease-enter motion-safe:animate-crescer",
+                    cheia ? "bg-primary hover:bg-primary-hover" : "bg-background",
+                  )}
+                  style={{ height: cheia ? (b.valor / maximo) * ALTURA_MAXIMA : ALTURA_ZERO, animationDelay: `${i * ATRASO_DA_BARRA}ms` }}
                 />
               </Tooltip>
             );
