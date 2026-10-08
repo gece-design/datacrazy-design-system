@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useRef, useState, type ReactNode } from "react";
 import { Buildings, Clock, CurrencyDollar, FunnelSimple, Headset, ShareNetwork, Tag as IconeDeTag, User, WarningCircle } from "@phosphor-icons/react";
 
 import {
@@ -79,8 +79,11 @@ export function Lista({
   aoExcluirEmMassa,
   aoEditar,
   ajustes,
+  vazio,
 }: {
   etapas: Etapa[];
+  /** O que aparece sob a tabela sem linhas: um `EstadoVazio` que a tela escolhe (sem negócio, ou busca sem resultado). */
+  vazio?: ReactNode;
   /** O catálogo de tags da conta: é estado da tela, porque dá para criar tag. */
   grupos: GrupoTags[];
   /** Cria a tag no catálogo e devolve o id: ela já sai marcada no lead. */
@@ -221,6 +224,7 @@ export function Lista({
               ))
             : linhas.map(linha)}
         </DataTable>
+        {leads.length === 0 ? vazio : null}
         <BarraDeSelecao selecao={selecao}>
           <Button
             ref={botaoEtapa}

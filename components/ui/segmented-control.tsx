@@ -17,6 +17,10 @@ import { alturaCompacta, desabilitado, foco, hoverNoTrilho, opcaoCompacta, super
  * com setas — e mora em `useGrupoPorSetas`.
  *
  * O arquivo pede de 2 a 4 opções. Acima disso, Select.
+ *
+ * Entre as opções há 2px de trilho (ADR-075, pedido do cliente em 2026-10-08):
+ * a selecionada não encosta nas vizinhas. Vale para todo toggle do DS — o
+ * tema da Sidebar segue o mesmo vão.
  */
 
 export type OpcaoSegmentada = { valor: string; rotulo: string; disabled?: boolean };
@@ -71,7 +75,8 @@ export function SegmentedControl({ itens, atual, aoEscolher, rotulo, className }
       role="radiogroup"
       aria-label={rotulo}
       onKeyDown={teclado}
-      className={cn("inline-flex h-8 max-w-full items-center rounded-md p-1", alturaCompacta, superficieDeApoio, className)}
+      // 2px entre as opções (ADR-075): o trilho aparece entre a selecionada e as vizinhas
+      className={cn("inline-flex h-8 max-w-full items-center gap-0.5 rounded-md p-1", alturaCompacta, superficieDeApoio, className)}
     >
       {itens.map((item) => {
         const selecionada = item.valor === atual;
@@ -119,7 +124,7 @@ export function ViewSwitcher({ itens, atual, aoEscolher, rotulo, className }: Gr
       onKeyDown={teclado}
       // min-w e não w: com três opções fecha nos 116 do arquivo; com quatro,
       // cresce em vez de espremer o ícone.
-      className={cn("inline-flex h-8 min-w-[116px] items-center rounded-md p-0.5", alturaCompacta, superficieDeApoio, className)}
+      className={cn("inline-flex h-8 min-w-[116px] items-center gap-0.5 rounded-md p-0.5", alturaCompacta, superficieDeApoio, className)}
     >
       {itens.map((item) => {
         const selecionada = item.valor === atual;

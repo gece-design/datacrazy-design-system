@@ -112,14 +112,18 @@ const BLOCOS_PARA_ADICIONAR = (Object.keys(TIPOS) as TipoDeBloco[])
 export function Tela({
   aoNavegar,
   memoria = "automacoes",
+  vazio = false,
 }: {
   /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
   aoNavegar?: (destino: string) => boolean;
   /** Chave da memória da sidebar. No protótipo é uma só, para ela não mudar de estado entre as telas. */
   memoria?: string;
+  /** A variação sem nada: a automação recém-criada, só com o gatilho (ADR-077). */
+  vazio?: boolean;
 } = {}) {
   const [rota, setRota] = React.useState("Automações");
-  const fluxo = useHistorico<Bloco[]>(AUTOMACAO);
+  // vazia, a automação é só o gatilho, sem ligação: o canvas convida a adicionar o primeiro passo
+  const fluxo = useHistorico<Bloco[]>(vazio ? AUTOMACAO.slice(0, 1).map((b) => ({ ...b, saidas: b.saidas.map((s) => ({ ...s, para: undefined })) })) : AUTOMACAO);
   const blocos = fluxo.valor;
   const [selecionados, setSelecionados] = React.useState<string[]>([]);
   const [ativa, setAtiva] = React.useState(true);

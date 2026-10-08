@@ -564,7 +564,7 @@ export default function HeaderPage() {
       <Secao
         titulo="Segmented Control e View Switcher"
         spec="269:68 · 471:2947"
-        descricao="As duas peças novas, soltas. Um grupo de rádio cada: Tab entra na opção selecionada, as setas trocam."
+        descricao="As duas peças novas, soltas. Um grupo de rádio cada: Tab entra na opção selecionada, as setas trocam. Entre as opções, 2px de trilho — a selecionada não encosta nas vizinhas (pedido do cliente, 2026-10-08)."
         codigo={codigoControles}
         nota={
           <>

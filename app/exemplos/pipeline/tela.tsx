@@ -26,11 +26,13 @@ import {
   Tag as IconeDeTag,
   UsersThree,
   WarningCircle,
+  MagnifyingGlass,
 } from "@phosphor-icons/react";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos } from "@/components/ui/barra-de-filtros";
 import { Button } from "@/components/ui/button";
 import { Drawer } from "@/components/ui/drawer";
+import { EstadoVazio } from "@/components/ui/estado-vazio";
 import { Header, HeaderBusca, HeaderDivisor, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
@@ -162,15 +164,18 @@ export function Tela({
   visaoInicial = "quadro",
   aoNavegar,
   memoria = "pipeline",
+  vazio = false,
 }: {
   visaoInicial?: "quadro" | "lista" | "calendario";
   /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
   aoNavegar?: (destino: string) => boolean;
   /** Chave da memória da sidebar. No protótipo é uma só, para ela não mudar de estado entre as telas. */
   memoria?: string;
+  /** A variação sem nada: as etapas existem, mas nenhum negócio entrou (ADR-077). */
+  vazio?: boolean;
 } = {}) {
   const [etapas, setEtapas] = React.useState<Etapa[]>(ETAPAS);
-  const [colunas, setColunas] = React.useState<Colunas>(() => agrupar(ETAPAS, LEADS));
+  const [colunas, setColunas] = React.useState<Colunas>(() => agrupar(ETAPAS, vazio ? [] : LEADS));
   // O catálogo de tags é estado da tela: dá para criar tag na célula e no drawer, e ela vale em todo lugar.
   const [grupos, setGrupos] = React.useState<GrupoTags[]>(GRUPOS_TAGS);
   /** Cria a tag no catálogo e devolve o id. Sem grupo, entra em Segmento — a aba das listas —, com o ícone de lista. */
@@ -609,6 +614,38 @@ export function Tela({
             aoExcluirEmMassa={excluirEmMassa}
             aoEditar={editar}
             ajustes={ajustesDaLista}
+            vazio={
+              todos.length === 0 ? (
+                <EstadoVazio
+                  icone={Kanban}
+                  titulo="Nenhum negócio no funil"
+                  descricao="Os negócios entram pela primeira etapa e andam até Ganho ou Perdido. Crie o primeiro."
+                  acao={
+                    <Button onClick={() => setNovo({ ...leadVazio })}>
+                      <Plus size={16} weight="regular" />
+                      Novo negócio
+                    </Button>
+                  }
+                />
+              ) : (
+                <EstadoVazio
+                  icone={MagnifyingGlass}
+                  titulo="Nenhum negócio com essa busca e esses filtros"
+                  descricao="Confira a grafia ou tire um filtro."
+                  acao={
+                    <Button
+                      variant="tertiary"
+                      onClick={() => {
+                        setBusca("");
+                        setFiltro({});
+                      }}
+                    >
+                      Limpar busca e filtros
+                    </Button>
+                  }
+                />
+              )
+            }
           />
         ) : (
           // Calendário: os leads pela próxima ação; clicar abre o mesmo drawer.

@@ -7,6 +7,7 @@ Navegar entre as páginas de uma lista longa.
 ## Quando usar
 
 - **Use** sob a tabela, quando a lista vem paginada do servidor, com o resumo do que está à vista.
+- **Use** em toda lista de registros com mais de uma página: 20 por página, o resumo "Mostrando 1–20 de 84 leads", a busca e os filtros voltam para a primeira (ADR-076; a tela de Leads é a referência).
 - **Não use** com uma página só.
 - **Não use** junto de rolagem infinita: é uma ou outra.
 

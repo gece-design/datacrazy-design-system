@@ -388,3 +388,23 @@ Desvio: componente novo sem par no arquivo. `Upload` é um campo como o Input (r
 Motivo: reunião de 2026-10-02 (Gava: "falta um componente de upload de arquivo", na base de conhecimento dos agentes).
 Aprovado por: humano (2026-10-07, "pode iniciar" sobre a lista; a peça é do lote 2).
 
+## ADR-075 · Toggles com 2px de trilho entre as opções · 2026-10-08
+Desvio: o `SegmentedControl` (269:68) e o `ViewSwitcher` (471:2947) do arquivo têm as opções coladas; o código ganha `gap-0.5` (2px) entre elas, e o tema da `Sidebar` segue o mesmo vão. A opção selecionada não encosta nas vizinhas; a largura da trilha cresce 2px por vão.
+Motivo: pedido do cliente em 2026-10-08 ("colocar 2px de divisão no componente", sobre o ViewSwitcher); o humano estendeu a todo toggle ("a divisão do componente é em todos os toggles/botões").
+Aprovado por: humano (2026-10-08).
+
+## ADR-076 · Lista de registros pagina em 20 · 2026-10-08
+Desvio: nenhum (a `Pagination` já existia, só a página da Table a usava). A tela de Leads passa de 20 para 84 leads e pagina em 20: `Pagination` sob a tabela, dentro do bloco, com "Mostrando 1–20 de 84 leads"; busca e filtros voltam para a primeira página; sem registro visível, sem paginação. Os grupos (Agrupar) são da página à vista. Regra 13 de Estados.
+Motivo: pedido do cliente em 2026-10-08 ("adicionar mais lead e criar a paginação").
+Aprovado por: humano (2026-10-08).
+
+## ADR-077 · Estado vazio: com ícone e sem · 2026-10-08
+Desvio: componente novo sem par no arquivo. `EstadoVazio` (`role="status"`): com `icone` quando a área inteira está vazia — disco de 48 em `muted`, título em `heading-4`, descrição em `body-md`, a ação que tira do vazio — e sem ícone (`tamanho="sm"`) dentro de lista, aba, coluna ou cartão, onde vira a frase apagada. As telas do protótipo trocam os `<p>` soltos pela peça e ganham a variação `vazio` (`?vazio=1`): a conta nova em cada uma. A `ListaDeConversas` usa a peça no vazio de uma aba. A coluna do Quadro mantém o próprio vazio tracejado, porque é alvo de soltar.
+Motivo: pedido do cliente em 2026-10-08 ("variações de telas sem nada — ícone e nada").
+Aprovado por: humano (2026-10-08).
+
+## ADR-078 · Skeleton: o modelo de carregamento de página · 2026-10-08
+Desvio: componente novo sem par no arquivo, e dois tokens novos na escala de movimento — `duration/ciclo` (1400 ms, o tempo de uma onda contínua, não de uma transição) e `ease/vaivem` (`cubic-bezier(0.45, 0, 0.55, 1)`, a curva simétrica). `Skeleton` é o bloco (`background` — o cinza da página, porque `muted` some sobre o cartão — com uma banda de `card` a 60% de 200% de largura que desliza em `animate-brilho`, `infinite alternate`); as montagens copiam as medidas das peças (36 por linha, 240 por coluna, 264 por bloco); `SkeletonDaTela` é o conteúdo inteiro no padrão de fundo, com `role="status"` e `aria-busy`. O protótipo mostra o Skeleton da tela que vem por 600 ms ao trocar pelo menu e segura nele com `?carregando=1`. Nunca spinner de página.
+Motivo: pedido do cliente em 2026-10-08 ("modelo de carregamento de página"); forma definida pelo humano ("skeleton loading com animação de gradient indo e voltando").
+Aprovado por: humano (2026-10-08).
+

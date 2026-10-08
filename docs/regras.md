@@ -86,6 +86,21 @@ contexto em `docs/processo/ux-direcao-visual.md`.
    disabled e — quando aplicável — loading, empty e error.
 10. `hover:` sempre sob `hoverOnlyWhenSupported`; o equivalente para toque é
     decidido explicitamente (G7).
+11. **Vazio** é `EstadoVazio` (ADR-077): com ícone quando a área inteira da
+    tela está vazia (a conta nova, a busca que não achou), sem ícone e
+    `tamanho="sm"` dentro de lista, aba, coluna ou cartão. O título diz o que
+    não há e por quê; a ação tira do vazio. Nunca um `<p>` solto com "Nada
+    encontrado". Toda tela do protótipo aceita `vazio` (`?vazio=1`).
+12. **Carregando** é `Skeleton` (ADR-078): `SkeletonDaTela` com o `modelo` da
+    tela que vem (tabela, cartões, quadro, conversa, painel, canvas) no lugar
+    do conteúdo, enquanto a API responde. O brilho vai e volta em
+    `duration/ciclo` com `ease/vaivem`. Nunca um spinner no meio da página.
+13. **Lista longa pagina** (ADR-076): 20 por página, `Pagination` sob a
+    tabela com "Mostrando 1–20 de 84 leads"; busca e filtros voltam para a
+    primeira; sem registro visível, sem paginação.
+14. **Toggles com vão** (ADR-075): `SegmentedControl`, `ViewSwitcher` e o tema
+    da `Sidebar` têm 2px de trilho entre as opções — a selecionada não encosta
+    nas vizinhas.
 
 ### O padrão de fundo: o mesmo em toda tela
 Quatro tons, sempre nos mesmos lugares (humano, 2026-10-02, ADR-066) — dashboard,

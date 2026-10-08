@@ -180,6 +180,21 @@
       ]
     }
   ],
+  "/feedback/carregamento": [
+    {
+      "componente": "Carregamento",
+      "usar": [
+        "`SkeletonDaTela` no lugar do conteúdo enquanto a tela espera a API: `modelo` com a forma da tela que vem (`tabela`, `cartoes`, `quadro`, `conversa`, `painel`, `canvas`).",
+        "os blocos soltos (`Skeleton`, `SkeletonDeTexto`) para uma parte que carrega sozinha: o gráfico de um cartão, o painel do lead.",
+        "a montagem com a forma certa: a lista carrega como `SkeletonDaTabela`, não como `SkeletonDeCartoes` — senão o conteúdo pula ao chegar."
+      ],
+      "naoUsar": [
+        "para uma ação curta (salvar, enviar): é o `Button` desabilitado e o `Toast`.",
+        "quando a resposta já veio vazia: é o `EstadoVazio`.",
+        "spinner no meio da página: a pessoa precisa ver onde cada coisa vai aparecer."
+      ]
+    }
+  ],
   "/feedback/drawer": [
     {
       "componente": "Drawer",
@@ -191,6 +206,21 @@
         "para decisão curta ou confirmação: é `Modal`.",
         "para criar com poucos campos: `Modal`.",
         "com número fixo de colunas no conteúdo: os cartões vão em `gradeDeCartoes`."
+      ]
+    }
+  ],
+  "/feedback/estado-vazio": [
+    {
+      "componente": "Estado vazio",
+      "usar": [
+        "com `icone` quando a área inteira da tela está vazia: a conta nova, a busca que não achou, o período sem negócio.",
+        "sem ícone e com `tamanho=\"sm\"` dentro de uma lista, aba, coluna ou cartão, onde a tela em volta já situa a pessoa.",
+        "`acao` para o que tira do vazio: criar o primeiro, importar, limpar a busca. `primary` quando é o caminho principal da tela; `tertiary` quando só desfaz um filtro."
+      ],
+      "naoUsar": [
+        "enquanto os dados ainda estão chegando: é o `Skeleton`.",
+        "para erro (a API falhou): é o `Toast`, ou o erro do campo.",
+        "um `<p>` solto com \"Nada encontrado\": o título precisa dizer o porquê, e a região é `status`."
       ]
     }
   ],
@@ -478,7 +508,8 @@
     {
       "componente": "Pagination",
       "usar": [
-        "sob a tabela, quando a lista vem paginada do servidor, com o resumo do que está à vista."
+        "sob a tabela, quando a lista vem paginada do servidor, com o resumo do que está à vista.",
+        "em toda lista de registros com mais de uma página: 20 por página, o resumo \"Mostrando 1–20 de 84 leads\", a busca e os filtros voltam para a primeira (ADR-076; a tela de Leads é a referência)."
       ],
       "naoUsar": [
         "com uma página só.",

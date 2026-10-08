@@ -9,9 +9,10 @@ export const metadata: Metadata = {
 /**
  * O protótipo: as telas de exemplo juntas, com a navegação ligada. Roda fora
  * da moldura do site e ocupa a janela inteira, como o CRM. `?tela=` abre
- * direto numa delas.
+ * direto numa delas; `&vazio=1` mostra a variação sem nada (a conta nova) e
+ * `&carregando=1` segura a tela no modelo de carregamento.
  */
-export default async function PrototipoPage({ searchParams }: { searchParams: Promise<{ tela?: string }> }) {
-  const { tela } = await searchParams;
-  return <Prototipo telaInicial={tela} />;
+export default async function PrototipoPage({ searchParams }: { searchParams: Promise<{ tela?: string; vazio?: string; carregando?: string }> }) {
+  const { tela, vazio, carregando } = await searchParams;
+  return <Prototipo telaInicial={tela} variacao={carregando ? "carregando" : vazio ? "vazio" : undefined} />;
 }

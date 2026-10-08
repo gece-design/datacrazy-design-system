@@ -3,6 +3,8 @@
 ## Responsabilidade
 
 Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualização.
+Entre as opções há um vão de 2px de trilho (ADR-075): a selecionada não encosta
+nas vizinhas. O mesmo vão vale para todo toggle do DS (o tema da `Sidebar`).
 
 ## Quando usar
 
@@ -41,8 +43,8 @@ geometria muda, o comportamento não.
 
 | Exportação | Geometria |
 |---|---|
-| `SegmentedControl` | trilha `card` h32 recuo 4 · opção h28 px10 raio 6 · `body-md`. No `Header`: trilha h28, opção h24 (ADR-057) |
-| `ViewSwitcher` | trilha `card` h32 recuo 2, mínimo 116 · opções dividem a largura, raio 4 · ícone 16. No `Header`: trilha h28 (ADR-057) |
+| `SegmentedControl` | trilha `card` h32 recuo 4 · vão de 2 entre opções (ADR-075) · opção h28 px10 raio 6 · `body-md`. No `Header`: trilha h28, opção h24 (ADR-057) |
+| `ViewSwitcher` | trilha `card` h32 recuo 2, mínimo 116 · vão de 2 entre opções (ADR-075) · opções dividem a largura, raio 4 · ícone 16. No `Header`: trilha h28 (ADR-057) |
 
 As variantes `Selected=Default/Active` do set 269:68 são o gatilho do Date
 Picker, que já existe.

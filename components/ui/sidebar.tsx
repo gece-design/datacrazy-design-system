@@ -319,7 +319,8 @@ export function SidebarThemeSwitch({ tema, onTemaChange, className }: SidebarThe
       role={colapsada ? undefined : "radiogroup"}
       aria-label="Tema"
       className={cn(
-        "inline-flex w-fit items-center rounded-md bg-card p-0.5",
+        // 2px entre as opções, como no SegmentedControl (ADR-075)
+        "inline-flex w-fit items-center gap-0.5 rounded-md bg-card p-0.5",
         className
       )}
     >

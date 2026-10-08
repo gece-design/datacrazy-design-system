@@ -16,6 +16,7 @@ import {
   IdentificationCard,
   Kanban,
   Lightning,
+  MagnifyingGlass,
   Phone,
   Plus,
   Question,
@@ -50,10 +51,12 @@ import {
   type ColunaTabela,
 } from "@/components/ui/data-table";
 import { Drawer } from "@/components/ui/drawer";
+import { EstadoVazio } from "@/components/ui/estado-vazio";
 import { HeaderBusca, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { IconeDeMarca } from "@/components/ui/icone-de-marca";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
+import { Pagination } from "@/components/ui/pagination";
 import { Select } from "@/components/ui/select";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
 import { SeletorDeTom, Tag } from "@/components/ui/tag";
@@ -137,6 +140,9 @@ const PERIODOS: { id: string; rotulo: string; vale: (l: Lead) => boolean }[] = [
   { id: "2025", rotulo: "Em 2025", vale: (l) => l.criadoEm < "2026-01-01" },
 ];
 
+/** A lista pagina em 20 (ADR-076): a tela não rola por 84 leads, e o resumo diz onde se está. */
+const POR_PAGINA = 20;
+
 /* Buscar "olivia" tem que achar "Olívia": quem digita rápido não põe acento. */
 function semAcento(texto: string) {
   return texto.normalize("NFD").replace(/\p{Diacritic}/gu, "").trim().toLowerCase();
@@ -168,14 +174,18 @@ function Vazio() {
 export function Tela({
   aoNavegar,
   memoria = "leads",
+  vazio = false,
 }: {
   /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
   aoNavegar?: (destino: string) => boolean;
   /** Chave da memória da sidebar. No protótipo é uma só, para ela não mudar de estado entre as telas. */
   memoria?: string;
+  /** A variação sem nada: a conta ainda não tem lead (ADR-077). */
+  vazio?: boolean;
 } = {}) {
   const [rota, setRota] = React.useState("Leads");
-  const [leads, setLeads] = React.useState(LEADS);
+  const [leads, setLeads] = React.useState(vazio ? [] : LEADS);
+  const [pagina, setPagina] = React.useState(1);
   const [tags, setTags] = React.useState(TAGS);
   const [busca, setBusca] = React.useState("");
   const [filtro, setFiltro] = React.useState<FiltrosAtivos>({});
@@ -214,7 +224,12 @@ export function Tela({
     return semAcento([l.nome, l.email, l.telefone, l.empresa, l.documento].join(" ")).includes(termo);
   });
   const linhas = ordenarPor(visiveis, ajustes.ordem, valorDe);
-  const grupos = ajustes.grupo ? agruparPor(linhas, (l) => ({ id: l.origem, rotulo: l.origem }), ORIGENS.map((o) => o.valor)) : null;
+  // a página atual: a busca e os filtros voltam para a primeira; o fim da lista não passa da última
+  const totalDePaginas = Math.max(1, Math.ceil(linhas.length / POR_PAGINA));
+  const paginaAtual = Math.min(pagina, totalDePaginas);
+  const daPagina = linhas.slice((paginaAtual - 1) * POR_PAGINA, paginaAtual * POR_PAGINA);
+  React.useEffect(() => setPagina(1), [busca, filtro]);
+  const grupos = ajustes.grupo ? agruparPor(daPagina, (l) => ({ id: l.origem, rotulo: l.origem }), ORIGENS.map((o) => o.valor)) : null;
   const aberto = leads.find((l) => l.id === abertoId) ?? null;
 
   const editar = (id: string, campos: Partial<Lead>) => setLeads((lista) => lista.map((l) => (l.id === id ? { ...l, ...campos } : l)));
@@ -452,10 +467,38 @@ export function Tela({
                     {ajustes.recolhidos.includes(g.id) ? null : g.itens.map(linha)}
                   </React.Fragment>
                 ))
-              : linhas.map(linha)}
+              : daPagina.map(linha)}
           </DataTable>
-          {visiveis.length === 0 ? (
-            <p className="px-3 py-6 text-center text-body-md text-muted-foreground">Nenhum lead com essa busca e esses filtros.</p>
+          {/* Sem nada: com ícone quando a conta não tem lead; a busca que não acha nada diz como sair dela (ADR-077). */}
+          {leads.length === 0 ? (
+            <EstadoVazio
+              icone={UsersThree}
+              titulo="Nenhum lead ainda"
+              descricao="Os leads que chegam pelos canais conectados aparecem aqui. Crie o primeiro ou importe uma planilha."
+              acao={
+                <Button onClick={() => setNovoLead({ ...leadVazio })}>
+                  <Plus size={16} weight="regular" />
+                  Novo lead
+                </Button>
+              }
+            />
+          ) : visiveis.length === 0 ? (
+            <EstadoVazio
+              icone={MagnifyingGlass}
+              titulo="Nenhum lead com essa busca e esses filtros"
+              descricao="Confira a grafia ou tire um filtro."
+              acao={
+                <Button
+                  variant="tertiary"
+                  onClick={() => {
+                    setBusca("");
+                    setFiltro({});
+                  }}
+                >
+                  Limpar busca e filtros
+                </Button>
+              }
+            />
           ) : null}
           {/* A barra sobe quando há linha marcada: aplicar tag em todas, ou excluir. */}
           <BarraDeSelecao selecao={selecao}>
@@ -492,6 +535,15 @@ export function Tela({
             </Button>
           </BarraDeSelecao>
         </div>
+        {visiveis.length > 0 ? (
+          <Pagination
+            className="shrink-0 border-t border-border px-3 py-2.5"
+            resumo={`Mostrando ${(paginaAtual - 1) * POR_PAGINA + 1}–${Math.min(paginaAtual * POR_PAGINA, linhas.length)} de ${linhas.length} ${linhas.length === 1 ? "lead" : "leads"}`}
+            paginas={totalDePaginas}
+            atual={paginaAtual}
+            onIr={setPagina}
+          />
+        ) : null}
         </div>
         </div>
       </TelaBase>

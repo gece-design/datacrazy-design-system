@@ -28,6 +28,7 @@ import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos }
 import { HeaderBusca, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
 import { Drawer } from "@/components/ui/drawer";
+import { EstadoVazio } from "@/components/ui/estado-vazio";
 import { ICONES_DE_TAG, type IconeDeTag } from "@/components/ui/tag";
 import { TelaBase } from "@/components/ui/tela-base";
 import { Toaster, toast } from "@/components/ui/toast";
@@ -102,16 +103,19 @@ const semAcento = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLo
 export function Tela({
   aoNavegar,
   memoria = "atendimento",
+  vazio = false,
 }: {
   /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
   aoNavegar?: (destino: string) => boolean;
   /** Chave da memória da sidebar. No protótipo é uma só, para ela não mudar de estado entre as telas. */
   memoria?: string;
+  /** A variação sem nada: nenhuma conversa chegou ainda (ADR-077). */
+  vazio?: boolean;
 } = {}) {
   const { tema, mudar } = useTema();
   const [rota, setRota] = React.useState("Chat ao vivo");
-  const [conversas, setConversas] = React.useState<Conversa[]>(CONVERSAS);
-  const [abertaId, setAbertaId] = React.useState<string | null>("c1");
+  const [conversas, setConversas] = React.useState<Conversa[]>(vazio ? [] : CONVERSAS);
+  const [abertaId, setAbertaId] = React.useState<string | null>(vazio ? null : "c1");
   const [aba, setAba] = React.useState<Situacao>("aberta");
   const [busca, setBusca] = React.useState("");
   const [filtro, setFiltro] = React.useState<FiltrosAtivos>({});
@@ -330,7 +334,13 @@ export function Tela({
               className={cn(!naConversa && "hidden md:flex")}
             />
           ) : (
-            <p className="hidden flex-1 items-center justify-center p-6 text-body-sm text-muted-foreground md:flex">Escolha uma conversa na lista.</p>
+            // a coluna do meio sem conversa aberta: com ícone, porque a área inteira está vazia (ADR-077)
+            <EstadoVazio
+              icone={ChatCircleDots}
+              titulo={conversas.length === 0 ? "Nenhuma conversa ainda" : "Escolha uma conversa na lista"}
+              descricao={conversas.length === 0 ? "As mensagens dos canais conectados — WhatsApp, Instagram, site — chegam aqui." : "A conversa abre aqui; o lead, ao lado."}
+              className="hidden flex-1 md:flex"
+            />
           )}
           {aberta && painelAberto ? (
             <PainelDoLead

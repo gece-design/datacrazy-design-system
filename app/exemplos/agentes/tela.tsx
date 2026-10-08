@@ -17,9 +17,11 @@ import {
   Star,
   Trash,
   UsersThree,
+  MagnifyingGlass,
 } from "@phosphor-icons/react";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import { EstadoVazio } from "@/components/ui/estado-vazio";
 import { HeaderBusca, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
@@ -30,6 +32,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Toaster, toast } from "@/components/ui/toast";
 import { Upload } from "@/components/ui/upload";
 import { formulario, gradeDeCartoes } from "@/lib/campo";
+import { blocoDaTela } from "@/lib/estados";
 import { useTema } from "@/lib/tema";
 import { cn } from "@/lib/utils";
 import { Cadastros, type Aba } from "./cadastros";
@@ -99,16 +102,19 @@ const NOME_DO_TIPO = { agente: "agente", base: "base de conhecimento", servidor:
 export function Tela({
   aoNavegar,
   memoria = "agentes",
+  vazio = false,
 }: {
   /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
   aoNavegar?: (destino: string) => boolean;
   /** Chave da memória da sidebar. No protótipo é uma só, para ela não mudar de estado entre as telas. */
   memoria?: string;
+  /** A variação sem nada: nenhum agente, base ou servidor ainda (ADR-077). */
+  vazio?: boolean;
 } = {}) {
   const [rota, setRota] = React.useState("Agentes de IA");
-  const [agentes, setAgentes] = React.useState(AGENTES);
-  const [bases, setBases] = React.useState(BASES);
-  const [servidores, setServidores] = React.useState(SERVIDORES);
+  const [agentes, setAgentes] = React.useState(vazio ? [] : AGENTES);
+  const [bases, setBases] = React.useState(vazio ? [] : BASES);
+  const [servidores, setServidores] = React.useState(vazio ? [] : SERVIDORES);
   const [busca, setBusca] = React.useState("");
   const [aba, setAba] = React.useState<Aba>("bases");
   const [formAgente, setFormAgente] = React.useState<FormDeAgente | null>(null);
@@ -320,10 +326,32 @@ export function Tela({
                   </li>
                 ))}
               </ul>
+            ) : termo ? (
+              <EstadoVazio
+                icone={MagnifyingGlass}
+                titulo="Nenhum agente com essa busca"
+                descricao="Confira a grafia ou limpe a busca."
+                acao={
+                  <Button variant="tertiary" onClick={() => setBusca("")}>
+                    Limpar busca
+                  </Button>
+                }
+                className={cn(blocoDaTela, "min-h-64")}
+              />
             ) : (
-              <p className="py-6 text-center text-body-md text-muted-foreground">
-                {termo ? "Nenhum agente com essa busca." : "Nenhum agente ainda."}
-              </p>
+              // a conta sem agente: a área inteira vazia, com o caminho para o primeiro (ADR-077)
+              <EstadoVazio
+                icone={Robot}
+                titulo="Nenhum agente ainda"
+                descricao="Um agente responde pelos canais conectados, com a base de conhecimento e as ferramentas que você der a ele."
+                acao={
+                  <Button onClick={() => setFormAgente({ ...agenteVazio })}>
+                    <Plus size={16} weight="regular" />
+                    Novo agente
+                  </Button>
+                }
+                className={cn(blocoDaTela, "min-h-64")}
+              />
             )}
           </section>
 

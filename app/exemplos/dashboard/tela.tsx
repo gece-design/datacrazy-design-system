@@ -36,6 +36,7 @@ import {
   type ColunaTabela,
 } from "@/components/ui/data-table";
 import { Drawer } from "@/components/ui/drawer";
+import { EstadoVazio } from "@/components/ui/estado-vazio";
 import { Notificacoes, type Notificacao } from "@/components/ui/header";
 import { IconeDeOrigem } from "@/components/ui/icone-de-marca";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -98,6 +99,19 @@ const COLUNAS: ColunaTabela[] = [
 /** O que não é marca: o ícone Phosphor de cada origem (marca é `IconeDeOrigem` que resolve). */
 const OUTRAS_ORIGENS = { Site: Globe, Indicação: Handshake };
 
+/** A conta sem negócio no período: os números em zero, e cada cartão diz que não há o que mostrar (ADR-077). */
+const RECORTE_VAZIO: (typeof RECORTES)[Periodo] = {
+  indicadores: [
+    { titulo: "Receita ganha", valor: "R$ 0", apoio: "Nenhum negócio ganho", tendencia: "neutral" },
+    { titulo: "Negócios criados", valor: "0", apoio: "Nenhum em aberto", tendencia: "neutral" },
+    { titulo: "Taxa de conversão", valor: "—", apoio: "Sem negócios no período", tendencia: "neutral" },
+    { titulo: "Ciclo médio", valor: "—", apoio: "Sem negócios fechados", tendencia: "neutral" },
+  ],
+  receita: [],
+  origens: [],
+  ranking: [],
+};
+
 const RECORTES_DO_GRAFICO = [
   { valor: "valor", rotulo: "Valor" },
   { valor: "quantidade", rotulo: "Quantidade" },
@@ -106,11 +120,14 @@ const RECORTES_DO_GRAFICO = [
 export function Tela({
   aoNavegar,
   memoria = "dashboard",
+  vazio = false,
 }: {
   /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
   aoNavegar?: (destino: string) => boolean;
   /** Chave da memória da sidebar. No protótipo é uma só, para ela não mudar de estado entre as telas. */
   memoria?: string;
+  /** A variação sem nada: a conta nova, sem negócio no período (ADR-077). */
+  vazio?: boolean;
 } = {}) {
   const [rota, setRota] = React.useState("Início");
   const [periodo, setPeriodo] = React.useState<Periodo>("30");
@@ -118,13 +135,13 @@ export function Tela({
   const [notificacoes, setNotificacoes] = React.useState(NOTIFICACOES);
   const { tema, mudar } = useTema();
 
-  const dados = RECORTES[periodo];
+  const dados = vazio ? RECORTE_VAZIO : RECORTES[periodo];
   const receita = dados.receita.reduce((n, b) => n + b.valor, 0);
   // por quantidade, a mesma série em negócios: o ticket médio do exemplo é de ~R$ 5,8 mil
   const barras = recorte === "valor" ? dados.receita : dados.receita.map((b) => ({ ...b, valor: Math.round(b.valor / 5800) }));
   const principal = dados.origens[0];
   // os negócios parados são estado da tela: o Drawer edita a linha
-  const [parados, setParados] = React.useState(PARADOS);
+  const [parados, setParados] = React.useState(vazio ? [] : PARADOS);
   const [abertoId, setAbertoId] = React.useState<string | null>(null);
   const aberto = parados.find((p) => p.id === abertoId) ?? null;
   const emRisco = parados.reduce((n, p) => n + p.valor, 0);
@@ -227,12 +244,20 @@ export function Tela({
               subtitle="Negócios ganhos no período, por data de fechamento"
               action={<Select rotulo="Ver por" opcoes={RECORTES_DO_GRAFICO} valor={recorte} aoEscolher={setRecorte} />}
             />
-            <CardChart barras={barras} formatar={recorte === "valor" ? moeda : (v) => `${v} negócio(s)`} />
+            {barras.length ? (
+              <CardChart barras={barras} formatar={recorte === "valor" ? moeda : (v) => `${v} negócio(s)`} />
+            ) : (
+              <EstadoVazio tamanho="sm" titulo="Nenhum negócio ganho no período" descricao="O gráfico aparece com o primeiro fechamento." className="flex-1" />
+            )}
           </Card>
 
           <Card className="justify-between gap-5">
             <CardHeader title="Negócios por origem" subtitle="De onde vieram os negócios criados no período" />
-            <CardDonut fatias={dados.origens} destaque={percentual(principal.percentual)} rotulo={principal.nome} formatar={percentual} />
+            {principal ? (
+              <CardDonut fatias={dados.origens} destaque={percentual(principal.percentual)} rotulo={principal.nome} formatar={percentual} />
+            ) : (
+              <EstadoVazio tamanho="sm" titulo="Nenhum negócio criado no período" className="flex-1" />
+            )}
           </Card>
         </div>
 
@@ -275,11 +300,12 @@ export function Tela({
                 </DataTableRow>
               ))}
             </DataTable>
+            {parados.length === 0 ? <EstadoVazio tamanho="sm" titulo="Nenhum negócio parado" descricao="Quando um negócio passa dias sem andar, ele aparece aqui." /> : null}
           </div>
 
           <Card className="gap-2">
             <CardHeader title="Quem está fechando" subtitle="Negócios ganhos por atendente no período" />
-            <CardList linhas={dados.ranking} />
+            {dados.ranking.length ? <CardList linhas={dados.ranking} /> : <EstadoVazio tamanho="sm" titulo="Ninguém fechou negócio no período" />}
           </Card>
         </div>
       </div>

@@ -9,7 +9,15 @@
 // hover), base 200 (Toast abre e sai, Drawer sai), slow 280 (Drawer entra).
 // Desvio da I10 do kit (120/200/320) registrado em ADR-021.
 
-export const DURACAO = { fast: 150, base: 200, slow: 280 } as const;
+export const DURACAO = {
+  fast: 150,
+  base: 200,
+  slow: 280,
+  /** Um ciclo de animação contínua — a ida do brilho do Skeleton; a volta é o
+   *  `alternate` do CSS. Não é transição de estado: é o tempo de uma onda que
+   *  diz "ainda estou carregando" sem cansar (ADR-078). */
+  ciclo: 1400,
+} as const;
 
 export const CURVA = {
   /** Entrada: desacelera no fim (o `ease-out` do Tailwind). */
@@ -20,6 +28,9 @@ export const CURVA = {
   settle: "cubic-bezier(0.32, 0.72, 0, 1)",
   /** Overshoot: o pulo da estrela do Rating. */
   pop: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+  /** Vai e volta: simétrica, para a onda do Skeleton ir e voltar sem solavanco
+   *  nas pontas (o `ease-in-out` do CSS). */
+  vaivem: "cubic-bezier(0.45, 0, 0.55, 1)",
 } as const;
 
 /** Quanto tempo a tela espera antes de desfazer um feedback. Não é animação:

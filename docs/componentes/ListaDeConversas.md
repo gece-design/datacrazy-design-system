@@ -99,6 +99,7 @@ linha abre a conversa e só.
 ## Composição
 
 Usa: [Tabs](Tabs.md) nas abas de situação · [Avatar](Avatar.md) `sm` na linha ·
+[EstadoVazio](EstadoVazio.md) `sm` no vazio de uma aba (ADR-077) ·
 `focoInterno` e `rolagemDiscreta` de `lib/estados.ts`.
 Usado por: a tela de Atendimento (`/prototipo?tela=atendimento`), com o
 [IconeDeMarca](IconeDeMarca.md) do canal em cada linha.

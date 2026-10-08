@@ -190,6 +190,9 @@ const config: Config = {
           from: { transform: "scale(0.4)", opacity: "0.55" },
           to: { transform: "scale(2.2)", opacity: "0" },
         },
+        // Skeleton: o degradê de 200% de largura desliza de uma ponta à outra;
+        // o `alternate` da animação traz de volta
+        "brilho": { from: { backgroundPosition: "100% 0" }, to: { backgroundPosition: "0 0" } },
       },
       animation: {
         // fade-in é a entrada do Toast: 250 → 280 (slow) no gate B0
@@ -212,6 +215,8 @@ const config: Config = {
         // transição de estado. Literal no config é token; literal em componente não.
         "estrela-pop": `estrela-pop 420ms ${CURVA.pop} both`,
         "estrela-brilho": `estrela-brilho 480ms ${CURVA.enter} forwards`,
+        // o brilho do Skeleton vai e volta sem parar, enquanto a tela carrega (ADR-078)
+        "brilho": `brilho ${DURACAO.ciclo}ms ${CURVA.vaivem} infinite alternate`,
       },
     },
   },

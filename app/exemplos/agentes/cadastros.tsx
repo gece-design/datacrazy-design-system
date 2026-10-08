@@ -2,6 +2,7 @@
 
 import { BookOpen, Files, LinkSimple, PencilSimple, Plugs, Plus, TextAlignLeft, Trash } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { EstadoVazio } from "@/components/ui/estado-vazio";
 import { DataTable, DataTableCell, DataTableRow, DataTableToolbar, type ColunaTabela } from "@/components/ui/data-table";
 import { TabPanel, Tabs } from "@/components/ui/tabs";
 import { blocoDaTela } from "@/lib/estados";
@@ -130,10 +131,9 @@ export function Cadastros({
             </DataTableRow>
           ))}
         </DataTable>
+        {/* dentro do bloco, sem ícone: a frase basta (ADR-077) */}
         {bases.length === 0 ? (
-          <p className="px-3 py-6 text-center text-body-md text-muted-foreground">
-            {buscando ? "Nenhuma base com essa busca." : "Nenhuma base de conhecimento ainda."}
-          </p>
+          <EstadoVazio tamanho="sm" titulo={buscando ? "Nenhuma base com essa busca." : "Nenhuma base de conhecimento ainda."} descricao={buscando ? undefined : "Os arquivos que o agente lê para responder."} />
         ) : null}
       </TabPanel>
 
@@ -168,9 +168,7 @@ export function Cadastros({
           ))}
         </DataTable>
         {servidores.length === 0 ? (
-          <p className="px-3 py-6 text-center text-body-md text-muted-foreground">
-            {buscando ? "Nenhum servidor com essa busca." : "Nenhum servidor MCP ainda."}
-          </p>
+          <EstadoVazio tamanho="sm" titulo={buscando ? "Nenhum servidor com essa busca." : "Nenhum servidor MCP ainda."} descricao={buscando ? undefined : "As ferramentas externas que o agente pode usar."} />
         ) : null}
       </TabPanel>
     </section>

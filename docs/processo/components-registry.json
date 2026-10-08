@@ -1,7 +1,7 @@
 {
   "product": "DataCrazy",
   "kit": "3.2",
-  "updated": "2026-10-07",
+  "updated": "2026-10-08",
   "_doc": "Registro vivo de componentes — a memoria que alimenta a inferencia por analogia. Escrito pela fw-doc ao fim de CADA lote, nunca a mao. source de cada estado: figma | declarado | banco | inferido | humano.",
   "_divida": "Quitada em 2026-09-19 (lote B1): os seis componentes escritos antes do registro (Button, Badge, Sidebar, DatePicker, Rating, LogoDatacrazy) ganharam entrada lida do código.",
   "components": [
@@ -1137,7 +1137,7 @@
           "approvedIn": null
         }
       },
-      "_states_doc": "Grupo de rádio com setas e ativação automática. Dois sets no Figma, duas exportações no mesmo arquivo.",
+      "_states_doc": "Grupo de rádio com setas e ativação automática. Dois sets no Figma, duas exportações no mesmo arquivo. Desde 2026-10-08, 2px de trilho entre as opções (ADR-075).",
       "_family_doc": "Era `entrada`. Movido para `navegacao` no lote B0: escolhe a vista (como Tabs), não recebe dado (como Input); os estados seguem a família de navegação (L2)."
     },
     {
@@ -2569,6 +2569,68 @@
         }
       },
       "_states_doc": "Sem par no Figma: pedido do cliente (2026-10-02) para a base de conhecimento dos agentes; entrou em 2026-10-08 (ADR-074). AUD-203."
+    },
+    {
+      "name": "EstadoVazio",
+      "family": "feedback",
+      "figmaNode": null,
+      "batch": "C2",
+      "variants": [
+        "com ícone",
+        "sem ícone",
+        "sm"
+      ],
+      "tokens": [
+        "muted",
+        "muted-foreground",
+        "foreground",
+        "radius/full",
+        "text/h4",
+        "text/body-md",
+        "text/body-sm"
+      ],
+      "motion": "nenhum",
+      "states": {},
+      "_states_doc": "Sem par no Figma: pedido do cliente (2026-10-08, \"variações de telas sem nada — ícone e nada\"); ADR-077. Peça estática: o único estado é o anúncio (role=status). AUD-213."
+    },
+    {
+      "name": "Skeleton",
+      "family": "feedback",
+      "figmaNode": null,
+      "batch": "C2",
+      "variants": [
+        "bloco",
+        "montagem",
+        "tela"
+      ],
+      "tokens": [
+        "background",
+        "card",
+        "border",
+        "radius/md",
+        "radius/lg",
+        "radius/full",
+        "duration/ciclo",
+        "ease/vaivem"
+      ],
+      "motion": "ciclo",
+      "states": {
+        "carregando": {
+          "impl": "banda card/60 de 200% desliza em animate-brilho sobre o bloco background: ciclo de 1400 ms, curva vaivem, infinite alternate",
+          "source": "humano",
+          "rule": "ADR-078",
+          "precedent": "—",
+          "approvedIn": "C2"
+        },
+        "reduzido": {
+          "impl": "a redução global do globals.css para o degradê; o bloco cinza fica parado",
+          "source": "banco",
+          "rule": "I12",
+          "precedent": "Toast",
+          "approvedIn": "C2"
+        }
+      },
+      "_states_doc": "Sem par no Figma: pedido do cliente (2026-10-08, \"modelo de carregamento de página\"), forma do humano (\"skeleton loading com animação de gradient indo e voltando\"); ADR-078. AUD-214."
     }
   ]
 }

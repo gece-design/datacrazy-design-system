@@ -32,7 +32,7 @@ const urlDoItem = (nome) => `${URL_DS}/r/${nome}.json`;
 const DESCRICAO_FIXA = {};
 const TITULO_FIXO = { "data-table": "Data Table", "logo-datacrazy": "Logo DataCrazy", "icone-de-marca": "Ícone de marca", "barra-de-filtros": "Barra de filtros", "painel-lateral": "Painel lateral" };
 // Slug da página no site quando difere do nome do arquivo.
-const PAGINA_FIXA = { "data-table": "table" };
+const PAGINA_FIXA = { "data-table": "table", skeleton: "carregamento" };
 // Componente que vive como SEÇÃO de outra página (decisão do humano, 2026-09-19):
 // o `docs:` aponta para a âncora da seção, não para uma página própria.
 const SECAO_FIXA = {

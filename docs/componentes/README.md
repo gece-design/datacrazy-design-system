@@ -37,6 +37,7 @@ markdown é a vista dele.
 | [DatePicker.md](DatePicker.md) | Período em dois meses, com atalhos: um gatilho no estilo do Button `tertiary` |
 | [Drawer.md](Drawer.md) | Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida. |
 | [DrawerDoLead.md](DrawerDoLead.md) | O lead do CRM inteiro, aberto por cima da tela: as peças do [Drawer](Drawer.md) |
+| [EstadoVazio.md](EstadoVazio.md) | A tela, ou a área, quando não há nada para mostrar: o que não há, por que, e |
 | [Header.md](Header.md) | O topo de uma página do CRM, numa linha só: onde a pessoa está, que página é e |
 | [IconeDeMarca.md](IconeDeMarca.md) | Mostrar a marca de um canal ou integração — WhatsApp, Instagram, Google — num conjunto fechado, com o logo de  |
 | [Input.md](Input.md) | Receber um valor curto digitado, com rótulo visível e erro inline. |
@@ -54,6 +55,7 @@ markdown é a vista dele.
 | [SegmentedControl.md](SegmentedControl.md) | Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualização. |
 | [Select.md](Select.md) | Escolher uma opção numa lista curta. |
 | [Sidebar.md](Sidebar.md) | Navegação principal do CRM: marca, grupos de itens com ícone e rótulo, |
+| [Skeleton.md](Skeleton.md) | O modelo de carregamento de página: blocos cinza (o `background` da página) |
 | [Switch.md](Switch.md) | Ligar ou desligar algo que passa a valer na hora, sem botão de salvar. |
 | [Tabs.md](Tabs.md) | Alternar entre as seções de um mesmo registro. |
 | [Tag.md](Tag.md) | Mostrar uma etiqueta que o usuário pôs no lead. |

@@ -5,20 +5,20 @@
     "fim": "2026-10-08"
   },
   "git": {
-    "commits": 93,
+    "commits": 94,
     "arquivos": 382,
-    "linhasUi": 15384,
-    "linhasLib": 915,
-    "linhasDocs": 10008
+    "linhasUi": 15391,
+    "linhasLib": 926,
+    "linhasDocs": 10053
   },
   "catalogo": {
-    "itens": 68,
+    "itens": 70,
     "porTipo": {
       "registry:theme": 4,
       "registry:block": 7,
       "registry:item": 1,
       "registry:lib": 13,
-      "registry:ui": 43
+      "registry:ui": 45
     }
   },
   "componentes": [
@@ -231,6 +231,19 @@
       "linhas": 927
     },
     {
+      "name": "estado-vazio",
+      "titulo": "EstadoVazio",
+      "descricao": "A tela, ou a área, quando não há nada para mostrar: o que não há, por que, e a ação que tira do vazio. Duas variações — com ícone (a área inteira vazia) e sem ícone (o \"nada\" dentro de uma lista, coluna ou cartão). Quem escreve o texto é a tela.",
+      "categoria": "Feedback & Overlays",
+      "pagina": null,
+      "pecas": 1,
+      "props": 6,
+      "variantes": 3,
+      "estados": 0,
+      "acessibilidade": 4,
+      "linhas": 54
+    },
+    {
       "name": "header",
       "titulo": "Header",
       "descricao": "O topo de uma página do CRM, numa linha só: onde a pessoa está, que página é e o que dá para fazer nela.",
@@ -293,7 +306,7 @@
       "variantes": 3,
       "estados": 5,
       "acessibilidade": 8,
-      "linhas": 140
+      "linhas": 141
     },
     {
       "name": "logo-datacrazy",
@@ -415,7 +428,7 @@
     {
       "name": "segmented-control",
       "titulo": "SegmentedControl",
-      "descricao": "Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualização.",
+      "descricao": "Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualização. Entre as opções há um vão de 2px de trilho (ADR-075): a selecionada não encosta nas vizinhas. O mesmo vão vale para todo toggle do DS (o tema da `Sidebar`).",
       "categoria": "Navigation",
       "pagina": null,
       "pecas": 2,
@@ -423,7 +436,7 @@
       "variantes": 3,
       "estados": 4,
       "acessibilidade": 5,
-      "linhas": 155
+      "linhas": 160
     },
     {
       "name": "select",
@@ -449,7 +462,20 @@
       "variantes": 4,
       "estados": 5,
       "acessibilidade": 8,
-      "linhas": 415
+      "linhas": 416
+    },
+    {
+      "name": "skeleton",
+      "titulo": "Skeleton",
+      "descricao": "O modelo de carregamento de página: blocos cinza (o `background` da página) com a forma do que vai chegar e uma banda clara que vai de uma ponta à outra e volta. `Skeleton` é o bloco; as montagens dão a forma de cada peça do DS (texto, tabela, cartão, quadro, conversa, painel, canvas); `SkeletonDaTela` é a tela inteira carregando, no padrão de fundo.",
+      "categoria": "Feedback & Overlays",
+      "pagina": null,
+      "pecas": 10,
+      "props": 13,
+      "variantes": 3,
+      "estados": 2,
+      "acessibilidade": 4,
+      "linhas": 289
     },
     {
       "name": "switch",
@@ -583,14 +609,14 @@
     }
   ],
   "totais": {
-    "componentes": 43,
-    "pecas": 146,
-    "props": 577,
-    "variantes": 127,
-    "estados": 171,
-    "acessibilidade": 266,
-    "paginas": 52,
-    "docs": 43
+    "componentes": 45,
+    "pecas": 157,
+    "props": 596,
+    "variantes": 133,
+    "estados": 173,
+    "acessibilidade": 274,
+    "paginas": 54,
+    "docs": 45
   },
   "tokens": {
     "cores": 69,
@@ -598,7 +624,7 @@
     "raios": 7,
     "sombras": 8,
     "camadas": 7,
-    "animacoes": 11,
+    "animacoes": 12,
     "duracoes": 3
   },
   "categorias": [
@@ -836,8 +862,8 @@
     },
     {
       "titulo": "Feedback & Overlays",
-      "total": 14,
-      "prontas": 14,
+      "total": 16,
+      "prontas": 16,
       "itens": [
         {
           "titulo": "Tooltip",
@@ -867,6 +893,16 @@
         {
           "titulo": "Drawer variações",
           "href": "/feedback/drawer-variacoes",
+          "pronto": true
+        },
+        {
+          "titulo": "Estado vazio",
+          "href": "/feedback/estado-vazio",
+          "pronto": true
+        },
+        {
+          "titulo": "Carregamento",
+          "href": "/feedback/carregamento",
           "pronto": true
         },
         {
@@ -1282,14 +1318,34 @@
       "id": "ADR-074",
       "titulo": "Upload: a zona de soltar e a lista dos arquivos",
       "data": "2026-10-08"
+    },
+    {
+      "id": "ADR-075",
+      "titulo": "Toggles com 2px de trilho entre as opções",
+      "data": "2026-10-08"
+    },
+    {
+      "id": "ADR-076",
+      "titulo": "Lista de registros pagina em 20",
+      "data": "2026-10-08"
+    },
+    {
+      "id": "ADR-077",
+      "titulo": "Estado vazio: com ícone e sem",
+      "data": "2026-10-08"
+    },
+    {
+      "id": "ADR-078",
+      "titulo": "Skeleton: o modelo de carregamento de página",
+      "data": "2026-10-08"
     }
   ],
   "auditoria": {
-    "total": 212,
+    "total": 214,
     "porStatus": {
       "corrigido": 67,
       "aceito": 12,
-      "adiado": 131,
+      "adiado": 133,
       "aberto": 2
     },
     "porEixo": {
@@ -1299,7 +1355,7 @@
       "paginas": 10,
       "instalacao": 11,
       "docs": 10,
-      "fidelidade": 127
+      "fidelidade": 129
     }
   },
   "pedidos": [
@@ -1317,6 +1373,26 @@
       "data": "2026-10-08",
       "origem": "Revisão",
       "titulo": "PÁGINAS DOS COMPONENTES NOVOS NO PADRÃO DAS ANTIGAS"
+    },
+    {
+      "data": "2026-10-08",
+      "origem": "WhatsApp",
+      "titulo": "TOGGLES COM 2PX DE TRILHO ENTRE AS OPÇÕES"
+    },
+    {
+      "data": "2026-10-08",
+      "origem": "Cliente",
+      "titulo": "LEADS: 84 REGISTROS E PAGINAÇÃO"
+    },
+    {
+      "data": "2026-10-08",
+      "origem": "Cliente",
+      "titulo": "ESTADO VAZIO: COM ÍCONE E SEM"
+    },
+    {
+      "data": "2026-10-08",
+      "origem": "Cliente",
+      "titulo": "SKELETON: O MODELO DE CARREGAMENTO DE PÁGINA"
     },
     {
       "data": "2026-10-07",
@@ -1750,7 +1826,7 @@
       "exemplos",
       "regressao"
     ],
-    "capturas": 104,
+    "capturas": 108,
     "temas": 2
   },
   "bancada": {

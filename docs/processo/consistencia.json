@@ -3385,6 +3385,38 @@
       "status": "adiado",
       "fechadoEm": null,
       "nota": "**Decisão do humano em 2026-10-02 (ADR-059).** O arquivo (538:197) ainda desenha fundo cinza, raio total e caixa alta. Redesenhar o set Tag e as amostras de cor na remedição."
+    },
+    {
+      "id": "AUD-213",
+      "eixo": "fidelidade",
+      "titulo": "EstadoVazio não tem par no arquivo",
+      "onde": [
+        "components/ui/estado-vazio.tsx"
+      ],
+      "regra": "fidelidade · código antes do arquivo (Figma é rascunho)",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Nasceu do pedido do cliente (2026-10-08, \"variações de telas sem nada — ícone e nada\"), sem desenho.** Duas variações (com ícone e sem) construídas com os tokens existentes (ADR-077). Na remedição, o arquivo é desenhado a partir do código."
+    },
+    {
+      "id": "AUD-214",
+      "eixo": "fidelidade",
+      "titulo": "Skeleton não tem par no arquivo",
+      "onde": [
+        "components/ui/skeleton.tsx",
+        "lib/movimento.ts",
+        "tailwind.config.ts"
+      ],
+      "regra": "fidelidade · código antes do arquivo (Figma é rascunho)",
+      "gravidade": "media",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**Nasceu do pedido do cliente (2026-10-08, \"modelo de carregamento de página\"), com a forma do humano (\"skeleton loading com animação de gradient indo e voltando\").** O bloco, as montagens e a tela (ADR-078), mais dois tokens de movimento (`duration/ciclo`, `ease/vaivem`). Na remedição, o arquivo é desenhado a partir do código; o brilho não se desenha, se descreve."
     }
   ]
 }

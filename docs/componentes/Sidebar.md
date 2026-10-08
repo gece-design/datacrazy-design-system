@@ -52,7 +52,7 @@ Peças:
 | `SidebarGrupo` | `rotulo?`, `ocultarRecolhida?`, `children` | `<ul>` com 2px entre linhas. Com `rotulo`, é uma seção com nome ("Favoritos"): o nome some quando recolhe. `ocultarRecolhida` tira o grupo inteiro do painel recolhido. `recuo` não tem mais efeito |
 | `SidebarItem` | `icone` (Phosphor, 16px, obrigatório; `fill` no selecionado), `children` (o rótulo), `selecionado?`, `href?`, `componente?`, `disabled?` | Raiz `a` com `href`, `span` sem; passe `Link` em `componente` para navegação client-side |
 | `SidebarToggle` | `colapsada?`, `rotulos?` + props de botão | O botão de recolher: 28px, quadrado, sem relevo, com o ícone do painel; `aria-expanded`. A `SidebarBrand` já o traz — exportado para quem monta o topo de outro jeito. O arquivo desenha um disco flutuando na borda; saiu a pedido do cliente (ADR-052) |
-| `SidebarThemeSwitch` | `tema`, `onTemaChange`, `className?` | Trilho claro/escuro; colapsada vira um botão só que alterna |
+| `SidebarThemeSwitch` | `tema`, `onTemaChange`, `className?` | Trilho claro/escuro com 2px entre as opções (ADR-075); colapsada vira um botão só que alterna |
 | `SidebarUser` | `nome`, `email`, `avatar?` | Rodapé com disco `sidebar-avatar` (sem foto: círculo cheio, como o arquivo) |
 
 ## Variantes

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Avatar } from "@/components/ui/avatar";
+import { EstadoVazio } from "@/components/ui/estado-vazio";
 import { Tabs } from "@/components/ui/tabs";
 import { focoInterno, rolagemDiscreta } from "@/lib/estados";
 import { cn } from "@/lib/utils";
@@ -87,7 +88,7 @@ export function ListaDeConversas({ abas, aba, aoMudarAba, itens, abertaId, aoAbr
         className="shrink-0 border-b border-border px-3"
       />
       {itens.length === 0 ? (
-        <p className="p-4 text-body-sm text-muted-foreground">{r.vazio}</p>
+        <EstadoVazio tamanho="sm" titulo={r.vazio} />
       ) : (
         <ul className={cn("min-h-0 flex-1 overflow-y-auto", rolagemDiscreta)}>
           {itens.map((item) => {
