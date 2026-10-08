@@ -28,6 +28,7 @@ import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwi
 import { TelaBase } from "@/components/ui/tela-base";
 import { Textarea } from "@/components/ui/textarea";
 import { Toaster, toast } from "@/components/ui/toast";
+import { Upload } from "@/components/ui/upload";
 import { formulario, gradeDeCartoes } from "@/lib/campo";
 import { useTema } from "@/lib/tema";
 import { cn } from "@/lib/utils";
@@ -84,13 +85,13 @@ function useUltimo<T>(valor: T | null) {
 
 /* Os três formulários. Com `id`, é edição; sem, é um registro novo. */
 type FormDeAgente = { id?: string; nome: string; descricao: string; modelo: string };
-type FormDeBase = { id?: string; nome: string; descricao: string };
+type FormDeBase = { id?: string; nome: string; descricao: string; arquivos: string[] };
 type FormDeServidor = { id?: string; nome: string; url: string };
 /** O que está para ser excluído, à espera da confirmação. */
 type Exclusao = { tipo: "agente" | "base" | "servidor"; id: string; nome: string };
 
 const agenteVazio: FormDeAgente = { nome: "", descricao: "", modelo: MODELOS[0] };
-const baseVazia: FormDeBase = { nome: "", descricao: "" };
+const baseVazia: FormDeBase = { nome: "", descricao: "", arquivos: [] };
 const servidorVazio: FormDeServidor = { nome: "", url: "" };
 
 const NOME_DO_TIPO = { agente: "agente", base: "base de conhecimento", servidor: "servidor MCP" } as const;
@@ -172,12 +173,12 @@ export function Tela({
     if (!formBase) return;
     const nome = formBase.nome.trim();
     if (!nome) return setErro({ campo: "nome", texto: "Dê um nome para a base" });
-    const campos = { nome, descricao: formBase.descricao.trim() };
+    const campos = { nome, descricao: formBase.descricao.trim(), arquivos: formBase.arquivos };
     if (formBase.id) {
       setBases((lista) => lista.map((b) => (b.id === formBase.id ? { ...b, ...campos } : b)));
       toast({ variant: "success", titulo: "Base atualizada", descricao: `${nome} já está com os dados novos.` });
     } else {
-      setBases((lista) => [{ id: `b-${Date.now()}`, ...campos, arquivos: [] }, ...lista]);
+      setBases((lista) => [{ id: `b-${Date.now()}`, ...campos }, ...lista]);
       toast({ variant: "success", titulo: "Base criada", descricao: `${nome} entrou no começo da lista.` });
     }
     setAba("bases");
@@ -333,7 +334,7 @@ export function Tela({
             servidores={servidoresVisiveis}
             buscando={Boolean(termo)}
             aoCriarBase={() => setFormBase({ ...baseVazia })}
-            aoEditarBase={(b: BaseDeConhecimento) => setFormBase({ id: b.id, nome: b.nome, descricao: b.descricao })}
+            aoEditarBase={(b: BaseDeConhecimento) => setFormBase({ id: b.id, nome: b.nome, descricao: b.descricao, arquivos: b.arquivos })}
             aoExcluirBase={(b) => setExclusao({ tipo: "base", id: b.id, nome: b.nome })}
             aoCriarServidor={() => setFormServidor({ ...servidorVazio })}
             aoEditarServidor={(s: ServidorMcp) => setFormServidor({ id: s.id, nome: s.nome, url: s.url })}
@@ -398,7 +399,7 @@ export function Tela({
         ) : null}
       </Modal>
 
-      {/* Base de conhecimento: nome e descrição. Os arquivos entram depois, na própria base. */}
+      {/* Base de conhecimento: nome, descrição e os arquivos que o agente lê. */}
       <Modal
         aberto={Boolean(formBase)}
         aoFechar={fecharBase}
@@ -436,10 +437,23 @@ export function Tela({
             />
             <Textarea
               rotulo="Descrição"
-              ajuda="Os arquivos entram depois, na própria base."
+              ajuda="O que o agente encontra nesta base."
               value={baseNoModal.descricao}
               placeholder="O que os agentes encontram nesta base"
               onChange={(e) => setFormBase({ ...baseNoModal, descricao: e.target.value })}
+            />
+            {/* o Upload devolve os File; aqui só o nome entra na base (o envio é da API do CRM) */}
+            <Upload
+              rotulo="Arquivos"
+              ajuda="O agente lê estes arquivos para responder."
+              aceita=".pdf,.docx,.txt,.xlsx"
+              multiplo
+              rotulos={{ apoio: "PDF, DOCX, TXT ou XLSX até 10 MB" }}
+              arquivos={baseNoModal.arquivos.map((nome) => ({ id: nome, nome }))}
+              aoAdicionar={(novos) =>
+                setFormBase({ ...baseNoModal, arquivos: [...baseNoModal.arquivos, ...novos.map((f) => f.name).filter((n) => !baseNoModal.arquivos.includes(n))] })
+              }
+              aoRemover={(id) => setFormBase({ ...baseNoModal, arquivos: baseNoModal.arquivos.filter((n) => n !== id) })}
             />
           </div>
         ) : null}

@@ -383,3 +383,8 @@ Desvio: regra 9 de composição, nova. As peças que nasceram nas telas do prot�
 Motivo: pedido do cliente na reunião de 2026-10-02 (Gava: "aquilo ali não são componentes… não tem componente dos blocos de automação"; "as pipelines não têm componente") e do humano em 2026-10-07: "componentize tudo… para que, quando for utilizado a geração de novas telas, você utilize esses componentes". Sem a peça no DS, cada tela nova reinventava o quadro, o chat e o canvas.
 Aprovado por: humano (2026-10-07).
 
+## ADR-074 · Upload: a zona de soltar e a lista dos arquivos · 2026-10-08
+Desvio: componente novo sem par no arquivo. `Upload` é um campo como o Input (rótulo, `ajuda`, `obrigatorio`, `erro`): a zona é um `<label>` em volta de um `<input type="file">` escondido (o truque do Checkbox: foco pelo `peer`, Enter e Espaço abrem o seletor), acende em `accent` com traço `primary` ao arrastar por cima, e cada arquivo entra numa linha de 36 com nome, tamanho (`tamanhoLegivel`, por `Intl`), barra de progresso de 4px e remover. O componente não envia: devolve os `File` em `aoAdicionar` e a tela põe cada um em `arquivos` com `progresso` e `erro`. A base de conhecimento da tela de Agentes passa a receber os arquivos no próprio modal.
+Motivo: reunião de 2026-10-02 (Gava: "falta um componente de upload de arquivo", na base de conhecimento dos agentes).
+Aprovado por: humano (2026-10-07, "pode iniciar" sobre a lista; a peça é do lote 2).
+

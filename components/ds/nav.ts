@@ -59,6 +59,7 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Switch", href: "/forms/switch", icone: "interruptor", pronto: true , descricao: "Liga e desliga na hora"},
       { titulo: "Date Picker", href: "/forms/date-picker", icone: "calendario", pronto: true , descricao: "Período em dois meses, com atalhos"},
       { titulo: "Time Picker", href: "/forms/time-picker", icone: "relogio", pronto: true , descricao: "Hora e data-hora, cientes de fuso"},
+      { titulo: "Upload", href: "/forms/upload", atualizado: "2026-10-08", icone: "anexo", pronto: true, descricao: "Zona de soltar e a lista dos arquivos" },
     ],
   },
   {

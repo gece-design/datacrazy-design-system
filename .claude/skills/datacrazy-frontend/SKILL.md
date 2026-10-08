@@ -234,6 +234,7 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
 - **Tags (2026-10-02)**: traço em `divider`; tag de lista sem cor, com ícone cinza de `ICONES_DE_TAG` escolhido ao criar
   (`iconeLivre` / `SeletorDeIcone`); `aoCriar` sempre presente onde se digita para achar tag (seletor e célula); catálogo
   de tags como estado da tela. Item de `Menu` de ações sempre com `icone`.
+- **Arquivo num formulário é `Upload`** (2026-10-08, ADR-074): zona de soltar + lista com `progresso`/`erro`; a tela envia e guarda. Nunca `<input type="file">` cru.
 - **Tudo o que o protótipo mostra é componente (2026-10-07, ADR-073)**: `Quadro` + `QuadroCartao`, `Conversa` (sete
   peças) + `ListaDeConversas`, `Canvas`, `CartaoDeCatalogo`, `BotaoDeAcoes` (Menu), `IconeDeOrigem` (IconeDeMarca) e
   `DrawerLead` (`components/ui/drawer-do-lead`) são peças de `components/ui`, cada uma com página e doc. A tela só

@@ -270,8 +270,9 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   fábrica vem o essencial. "Novo lead" fica no pé da coluna; criar etapa é um
   botão estreito no fim do trilho, não uma coluna vazia.
 - **Cadastro / edição** (poucos campos): `Modal size="md"` com `Input`,
-  `Select size="field"`, `InputTelefone`, `DatePicker`; rodapé com `Button
-  size="sm"` (`outline` cancela, `primary` confirma). Muitos campos ou edição
+  `Select size="field"`, `InputTelefone`, `DatePicker` e, quando o registro
+  guarda arquivos, `Upload`; rodapé com `Button size="sm"` (`outline` cancela,
+  `primary` confirma). O conteúdo segue a receita de "Conteúdo do modal". Muitos campos ou edição
   de um registro existente: não é modal — é o `Drawer` com cartões
   (`CampoEditavel`, `Select cartao`, `Rating`) em `gradeDeCartoes`.
 - **Dashboard**: bloco `@datacrazy/dashboard` (`app/dashboard/`). Três faixas,

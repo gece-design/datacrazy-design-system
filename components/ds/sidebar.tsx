@@ -8,6 +8,7 @@ import {
   SquaresFour,
   ChatsCircle,
   TreeStructure,
+  Paperclip,
   MagnifyingGlass, CaretDown, CaretRight, Lock, X,
   // um por item da navegação — Phosphor, peso regular, a mesma biblioteca do
   // design system (regra A8: um peso só na interface inteira).
@@ -84,6 +85,7 @@ const icones: Record<string, Glifo> = {
   catalogo: SquaresFour,
   conversas: ChatsCircle,
   canvas: TreeStructure,
+  anexo: Paperclip,
 };
 
 const glifo = (chave?: string): Glifo | null => (chave ? icones[chave] ?? null : null);

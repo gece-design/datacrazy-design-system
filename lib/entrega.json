@@ -2,23 +2,23 @@
   "geradoEm": "2026-10-08",
   "periodo": {
     "inicio": "2026-09-02",
-    "fim": "2026-10-07"
+    "fim": "2026-10-08"
   },
   "git": {
-    "commits": 91,
-    "arquivos": 364,
-    "linhasUi": 12794,
+    "commits": 92,
+    "arquivos": 379,
+    "linhasUi": 15153,
     "linhasLib": 915,
-    "linhasDocs": 8901
+    "linhasDocs": 9873
   },
   "catalogo": {
-    "itens": 67,
+    "itens": 68,
     "porTipo": {
       "registry:theme": 4,
       "registry:block": 7,
       "registry:item": 1,
       "registry:lib": 13,
-      "registry:ui": 42
+      "registry:ui": 43
     }
   },
   "componentes": [
@@ -567,17 +567,30 @@
       "estados": 2,
       "acessibilidade": 7,
       "linhas": 263
+    },
+    {
+      "name": "upload",
+      "titulo": "Upload",
+      "descricao": "Receber arquivos num formulário: a zona de soltar (ou clicar para escolher) e a lista do que entrou, com tamanho, progresso, erro e remover. Quem envia e quem guarda é a tela.",
+      "categoria": "Forms",
+      "pagina": null,
+      "pecas": 2,
+      "props": 19,
+      "variantes": 2,
+      "estados": 6,
+      "acessibilidade": 7,
+      "linhas": 228
     }
   ],
   "totais": {
-    "componentes": 42,
-    "pecas": 144,
-    "props": 558,
-    "variantes": 125,
-    "estados": 165,
-    "acessibilidade": 259,
-    "paginas": 51,
-    "docs": 42
+    "componentes": 43,
+    "pecas": 146,
+    "props": 577,
+    "variantes": 127,
+    "estados": 171,
+    "acessibilidade": 266,
+    "paginas": 52,
+    "docs": 43
   },
   "tokens": {
     "cores": 69,
@@ -672,8 +685,8 @@
     },
     {
       "titulo": "Forms",
-      "total": 8,
-      "prontas": 8,
+      "total": 9,
+      "prontas": 9,
       "itens": [
         {
           "titulo": "Input",
@@ -713,6 +726,11 @@
         {
           "titulo": "Time Picker",
           "href": "/forms/time-picker",
+          "pronto": true
+        },
+        {
+          "titulo": "Upload",
+          "href": "/forms/upload",
           "pronto": true
         }
       ]
@@ -1259,6 +1277,11 @@
       "id": "ADR-073",
       "titulo": "Tudo o que o protótipo mostra é componente do design system",
       "data": "2026-10-07"
+    },
+    {
+      "id": "ADR-074",
+      "titulo": "Upload: a zona de soltar e a lista dos arquivos",
+      "data": "2026-10-08"
     }
   ],
   "auditoria": {
@@ -1280,6 +1303,11 @@
     }
   },
   "pedidos": [
+    {
+      "data": "2026-10-08",
+      "origem": "Lote",
+      "titulo": "UPLOAD DE ARQUIVOS"
+    },
     {
       "data": "2026-10-08",
       "origem": "Lote",
@@ -1717,7 +1745,7 @@
       "exemplos",
       "regressao"
     ],
-    "capturas": 102,
+    "capturas": 104,
     "temas": 2
   },
   "bancada": {

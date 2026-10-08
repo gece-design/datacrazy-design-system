@@ -2488,6 +2488,87 @@
         }
       },
       "_states_doc": "Sem par no Figma: nasceu da tela de Automações (2026-10-01) e virou peça em 2026-10-07 (ADR-073). AUD-203."
+    },
+    {
+      "name": "Upload",
+      "family": "entrada",
+      "figmaNode": null,
+      "batch": "C2",
+      "variants": [
+        "um arquivo",
+        "varios"
+      ],
+      "tokens": [
+        "input/bg",
+        "input/bg-disabled",
+        "input/border",
+        "input/border-hover",
+        "input/border-error",
+        "input/label",
+        "input/text-disabled",
+        "card",
+        "border",
+        "muted",
+        "accent",
+        "primary",
+        "destructive",
+        "foreground",
+        "muted-foreground",
+        "radius/md",
+        "radius/full",
+        "text/label-md",
+        "text/label-lg",
+        "text/body-md",
+        "text/caption",
+        "duration/base",
+        "ease/enter"
+      ],
+      "motion": "base",
+      "states": {
+        "hover": {
+          "impl": "traço input/border-hover na zona",
+          "source": "banco",
+          "rule": "L2",
+          "precedent": "Input",
+          "approvedIn": "C2"
+        },
+        "focus": {
+          "impl": "outline 2px com respiro na zona, lendo o foco do input (focoPeer)",
+          "source": "banco",
+          "rule": "D6",
+          "precedent": "Checkbox",
+          "approvedIn": "C2"
+        },
+        "arrastando por cima": {
+          "impl": "traço primary + fundo accent; o ícone fica primary",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "C2"
+        },
+        "erro": {
+          "impl": "zona e linha em input/border-error; mensagem em destructive",
+          "source": "banco",
+          "rule": "E6",
+          "precedent": "Input",
+          "approvedIn": "C2"
+        },
+        "enviando": {
+          "impl": "barra de 4px em primary, width anima em base",
+          "source": "humano",
+          "rule": "ADR-068",
+          "precedent": "—",
+          "approvedIn": "C2"
+        },
+        "desabilitado": {
+          "impl": "fundo input/bg-disabled, cursor not-allowed, sem soltar",
+          "source": "banco",
+          "rule": "I5",
+          "precedent": "Input",
+          "approvedIn": "C2"
+        }
+      },
+      "_states_doc": "Sem par no Figma: pedido do cliente (2026-10-02) para a base de conhecimento dos agentes; entrou em 2026-10-08 (ADR-074). AUD-203."
     }
   ]
 }

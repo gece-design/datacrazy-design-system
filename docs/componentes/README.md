@@ -63,6 +63,7 @@ markdown é a vista dele.
 | [TimePicker.md](TimePicker.md) | Escolher uma hora, e uma data com hora, sabendo de fuso. |
 | [Toast.md](Toast.md) | Confirmar o resultado de uma ação sem bloquear a tela. |
 | [Tooltip.md](Tooltip.md) | Mostrar um texto curto ancorado num gatilho, por cursor ou teclado. |
+| [Upload.md](Upload.md) | Receber arquivos num formulário: a zona de soltar (ou clicar para escolher) e |
 <!-- kfe:index:end -->
 
 ## Como ler a coluna "origem" dos estados

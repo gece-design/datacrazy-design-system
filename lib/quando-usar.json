@@ -389,6 +389,20 @@
       ]
     }
   ],
+  "/forms/upload": [
+    {
+      "componente": "Upload",
+      "usar": [
+        "quando o registro guarda arquivos: a base de conhecimento do agente, os documentos de um negócio, a importação de uma planilha.",
+        "`aceita` e `rotulos.apoio` juntos: o seletor filtra e a zona diz o que entra (\"PDF, DOCX ou TXT até 10 MB\")."
+      ],
+      "naoUsar": [
+        "para a foto de uma pessoa: é o `Avatar` com um botão de trocar.",
+        "para anexar numa mensagem: é o clipe do `Compositor` da `Conversa`, que abre o seletor direto.",
+        "`<input type=\"file\">` cru: a zona, o foco, o arrastar e a lista já estão aqui."
+      ]
+    }
+  ],
   "/foundations/icons": [
     {
       "componente": "IconeDeMarca",
