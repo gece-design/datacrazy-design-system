@@ -10,7 +10,8 @@ Escolher uma ou várias opções numa lista com busca — o Select para lista lo
 - **Use** `ComboboxMultiplo` para várias escolhas com caixa de marcar: tags, canais, segmentos.
 - **Use** `ComboboxPainel` quando o gatilho já existe: o chip da `BarraDeFiltros`, a `CelulaEscolha` da tabela.
 - **Use** `detalhe` quando o nome sozinho não distingue (duas empresas parecidas: o domínio desempata); `aoCriar` quando a lista cresce com o uso (empresa, cidade, segmento); `acao` para o caminho de quem quer editar a lista ("Gerenciar etapas") — uma só, nunca um menu de ações.
-- **Use** `conteudo` quando a opção aparece na tela como uma `Tag` (atendente com foto, tag com cor): a lista e o gatilho mostram a mesma Tag, não o nome escrito. É regra do DS inteiro.
+- **Use** `foto`, `tom`, `status` ou `icone` na opção quando ela aparece na tela como uma `Tag` (atendente com foto, tag com cor): a lista e o gatilho mostram o mesmo sinal antes do nome, sem a pílula (ADR-069). `sinaisDaTag(t)` da Tag monta os quatro de uma vez.
+- **Use** `size="field"` com o `rotulo` à vista (ele já desenha), `ajuda` e `obrigatorio` num formulário (ADR-071).
 - **Não use** `Menu` para escolher atendente ou tag: `Menu` é para ações; a lista de Tags é `ComboboxPainel`.
 - **Não use** para lista curta e fechada (até ~10 opções, sem busca): é `Select`.
 - **Não use** para ações sobre um item: é `Menu`.
@@ -36,8 +37,12 @@ de marcar do `Menu`. Registrado no ADR-049; o Figma acompanha na remedição.
 
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
-| `opcoes` | `OpcaoCombobox[]` | — | sim | `valor`, `rotulo`, `icone?`, `grupo?`, `conteudo?` (as do `OpcaoSelect`: `conteudo` é a opção como ela aparece na tela — a `Tag` do atendente com a foto, a tag com a cor —, na lista e no gatilho) e `detalhe?`: texto de apoio à direita, apagado (o domínio da empresa, o e-mail da pessoa). A busca procura no `rotulo` e no `detalhe`. |
-| `rotulo` | `string` | — | sim | Nome do controle para leitor de tela. Ex.: "Origem do lead". |
+| `opcoes` | `OpcaoCombobox[]` | — | sim | `valor`, `rotulo`, `icone?`, `grupo?`, `foto?`, `tom?`, `status?`, `conteudo?` (as do `OpcaoSelect`: a foto num disco de 20px, a bolinha ou o ícone na cor da tag, antes do nome — sem a pílula, ADR-069) e `detalhe?`: texto de apoio à direita, apagado (o domínio da empresa, o e-mail da pessoa). A busca procura no `rotulo` e no `detalhe`. |
+| `rotulo` | `string` | — | sim | Nome do controle. No `field` é o rótulo visível, como o do Input ao lado; em `md` e `sm`, só o leitor de tela o lê. Ex.: "Origem do lead". |
+| `rotuloOculto` | `boolean` | `false` | não | `field`: tira o rótulo da tela e o mantém para o leitor de tela. |
+| `ajuda` | `string` | — | não | `field`: texto de apoio sob o campo. Some enquanto há `erro`. |
+| `obrigatorio` | `boolean` | `false` | não | `field`: asterisco depois do rótulo e `aria-required`. |
+| `erro` | `string` | — | não | `field`: mensagem sob o campo e o traço de erro. |
 | `rotulos` | `RotulosDoCombobox` | — | sim | `busca` (placeholder e nome da busca), `vazio` (busca sem resultado) e `criar?` — a frase da linha de criar, com o texto digitado: `(t) => \`Criar "${t}"\``. Texto nunca dentro do componente. |
 | `aoCriar` | `(texto: string) => void` | — | não | Com ela, a busca que não acha oferece criar: uma linha no fim da lista. Numa escolha, criar fecha o painel; em várias, limpa a busca e a lista fica aberta. |
 | `acao` | `AcaoDoCombobox` | — | não | Uma ação fixa no pé do painel, fora da lista: `{ rotulo, icone?, aoAtivar }`. Ex.: "Gerenciar etapas". Ativar fecha o painel. |

@@ -78,7 +78,14 @@ o rótulo inteiro importar.
 | `tamanho` | `"sm" \| "md"` | `"sm"` | não | 16px na fileira do seletor de tags; 24px, com o check na marcada, em formulário. Cada amostra é a cor da bolinha; a cinza é a tag sem cor. |
 | `className` | `string` | — | não | — |
 
-Os tons (`TONS`, `Tom`, `tomDe`) moram em `lib/tons.ts` e a Tag os re-exporta.
+Os tons (`TONS`, `Tom`, `tomDe`) moram em `lib/tons.ts` e a Tag os re-exporta. A
+cor da bolinha por `status` mora em `lib/sinais.ts` (`PONTO_DO_STATUS`,
+`TEXTO_DO_STATUS`, `StatusDaTag`): o Select e o Combobox pintam o mesmo sinal.
+
+`sinaisDaTag(t)` devolve `{ status, tom, foto, icone }` de uma tag do catálogo
+como a opção de uma lista os leva — o ícone já em 12px, sem a pílula. É o que
+vai em `opcoes` do Select, do Combobox e da BarraDeFiltros:
+`{ valor, rotulo, ...sinaisDaTag(t) }` (ADR-069).
 
 ### `SeletorDeIcone`
 

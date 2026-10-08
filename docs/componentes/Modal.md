@@ -11,6 +11,7 @@ Pedir uma decisão bloqueando a tela até ela ser tomada.
 - **Não use** para filtrar uma lista: é `BarraDeFiltros`.
 - **Não use** para avisar que deu certo: é `Toast`.
 - **Não use** modal sobre modal, nem formulário longo com rolagem.
+- **O conteúdo segue a receita** de `docs/regras.md` § "Conteúdo do modal" (ADR-071): todo campo com rótulo visível (`Select size="field"` já o desenha), `ajuda` onde o rótulo não basta, `obrigatorio` marcado, pares curtos lado a lado (`linhaDeCampos`), prefixo ou ícone dentro do campo quando diz o tipo, corpo em `formulario`.
 
 ## Família
 

@@ -1,23 +1,23 @@
 {
-  "geradoEm": "2026-10-02",
+  "geradoEm": "2026-10-07",
   "periodo": {
     "inicio": "2026-09-02",
     "fim": "2026-10-02"
   },
   "git": {
-    "commits": 88,
-    "arquivos": 357,
-    "linhasUi": 11632,
-    "linhasLib": 868,
-    "linhasDocs": 8737
+    "commits": 90,
+    "arquivos": 363,
+    "linhasUi": 11765,
+    "linhasLib": 894,
+    "linhasDocs": 8847
   },
   "catalogo": {
-    "itens": 59,
+    "itens": 61,
     "porTipo": {
       "registry:theme": 4,
-      "registry:block": 6,
+      "registry:block": 7,
       "registry:item": 1,
-      "registry:lib": 12,
+      "registry:lib": 13,
       "registry:ui": 36
     }
   },
@@ -124,7 +124,7 @@
       "variantes": 3,
       "estados": 5,
       "acessibilidade": 6,
-      "linhas": 83
+      "linhas": 86
     },
     {
       "name": "combobox",
@@ -133,11 +133,11 @@
       "categoria": "Forms",
       "pagina": null,
       "pecas": 3,
-      "props": 24,
+      "props": 28,
       "variantes": 4,
       "estados": 7,
       "acessibilidade": 8,
-      "linhas": 477
+      "linhas": 508
     },
     {
       "name": "data-table",
@@ -211,11 +211,11 @@
       "categoria": "Forms",
       "pagina": null,
       "pecas": 5,
-      "props": 13,
+      "props": 16,
       "variantes": 0,
       "estados": 4,
       "acessibilidade": 6,
-      "linhas": 358
+      "linhas": 380
     },
     {
       "name": "kpi-card",
@@ -254,7 +254,7 @@
       "variantes": 3,
       "estados": 5,
       "acessibilidade": 5,
-      "linhas": 185
+      "linhas": 180
     },
     {
       "name": "modal",
@@ -353,12 +353,12 @@
       "descricao": "Escolher uma opção numa lista curta.",
       "categoria": "Forms",
       "pagina": null,
-      "pecas": 4,
-      "props": 8,
+      "pecas": 6,
+      "props": 12,
       "variantes": 4,
       "estados": 3,
       "acessibilidade": 7,
-      "linhas": 376
+      "linhas": 452
     },
     {
       "name": "sidebar",
@@ -371,7 +371,7 @@
       "variantes": 4,
       "estados": 5,
       "acessibilidade": 8,
-      "linhas": 428
+      "linhas": 415
     },
     {
       "name": "switch",
@@ -405,12 +405,12 @@
       "descricao": "Mostrar uma etiqueta que o usuário pôs no lead.",
       "categoria": "Data Display",
       "pagina": null,
-      "pecas": 5,
+      "pecas": 6,
       "props": 24,
       "variantes": 8,
       "estados": 6,
       "acessibilidade": 7,
-      "linhas": 589
+      "linhas": 593
     },
     {
       "name": "tela-base",
@@ -445,11 +445,11 @@
       "categoria": "Forms",
       "pagina": null,
       "pecas": 1,
-      "props": 6,
+      "props": 8,
       "variantes": 2,
       "estados": 4,
       "acessibilidade": 6,
-      "linhas": 99
+      "linhas": 114
     },
     {
       "name": "time-picker",
@@ -493,12 +493,12 @@
   ],
   "totais": {
     "componentes": 36,
-    "pecas": 120,
-    "props": 389,
+    "pecas": 123,
+    "props": 402,
     "variantes": 106,
     "estados": 134,
     "acessibilidade": 220,
-    "paginas": 45,
+    "paginas": 46,
     "docs": 36
   },
   "tokens": {
@@ -715,8 +715,8 @@
     },
     {
       "titulo": "Feedback & Overlays",
-      "total": 13,
-      "prontas": 13,
+      "total": 14,
+      "prontas": 14,
       "itens": [
         {
           "titulo": "Tooltip",
@@ -776,6 +776,11 @@
         {
           "titulo": "Automações",
           "href": "/exemplos/automacoes",
+          "pronto": true
+        },
+        {
+          "titulo": "Agentes de IA",
+          "href": "/exemplos/agentes",
           "pronto": true
         },
         {
@@ -1126,6 +1131,26 @@
       "id": "ADR-068",
       "titulo": "Movimento nas telas: duas entradas novas na escala",
       "data": "2026-10-02"
+    },
+    {
+      "id": "ADR-069",
+      "titulo": "A opção da lista leva os sinais da Tag, sem a pílula",
+      "data": "2026-10-07"
+    },
+    {
+      "id": "ADR-070",
+      "titulo": "Uma caixa de marcar só: raio 4, traço de 1,5",
+      "data": "2026-10-07"
+    },
+    {
+      "id": "ADR-071",
+      "titulo": "Conteúdo do modal: rótulo em todo campo, apoio, obrigatório, pares",
+      "data": "2026-10-07"
+    },
+    {
+      "id": "ADR-072",
+      "titulo": "Sidebar recolhida: símbolo de 20px e botão de expandir à vista",
+      "data": "2026-10-07"
     }
   ],
   "auditoria": {
@@ -1147,6 +1172,26 @@
     }
   },
   "pedidos": [
+    {
+      "data": "2026-10-07",
+      "origem": "Reunião",
+      "titulo": "A OPÇÃO DA LISTA LEVA OS SINAIS DA TAG, SEM A PÍLULA"
+    },
+    {
+      "data": "2026-10-07",
+      "origem": "Lote",
+      "titulo": "UMA CAIXA DE MARCAR SÓ"
+    },
+    {
+      "data": "2026-10-07",
+      "origem": "Lote",
+      "titulo": "CONTEÚDO DO MODAL: RÓTULO, APOIO, OBRIGATÓRIO E PARES"
+    },
+    {
+      "data": "2026-10-07",
+      "origem": "Lote",
+      "titulo": "SIDEBAR RECOLHIDA: SÍMBOLO DE 20 E BOTÃO À VISTA"
+    },
     {
       "data": "2026-10-02",
       "origem": "Revisão",
@@ -1201,6 +1246,11 @@
       "data": "2026-10-02",
       "origem": "Revisão",
       "titulo": "MAIS CONTRASTE NA NAVEGAÇÃO E NO TOPO; MOVIMENTO NAS TELAS"
+    },
+    {
+      "data": "2026-10-02",
+      "origem": "Cliente",
+      "titulo": "TELA DE AGENTES DE IA NO PROTÓTIPO"
     },
     {
       "data": "2026-10-01",
@@ -1554,7 +1604,7 @@
       "exemplos",
       "regressao"
     ],
-    "capturas": 90,
+    "capturas": 92,
     "temas": 2
   },
   "bancada": {

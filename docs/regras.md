@@ -111,6 +111,10 @@ Vale para o item da `Sidebar`, o Button `tertiary`, o `SegmentedControl`, o
 - **Ativo / selecionado**: fundo branco (`card`), com o ícone PREENCHIDO
   (`weight="fill"`) e o texto em azul. O azul clarinho de fundo saiu.
 - Não reescreva essas cores por `className`: as peças já saem assim.
+- Sidebar recolhida: o símbolo da marca fica em cima, com 20px (o tamanho de
+  um ícone de item), e o botão de expandir embaixo dele, sempre à vista.
+  Nunca o símbolo grande que vira botão sob o cursor (cliente, 2026-10-02,
+  ADR-072).
 
 ### Movimento nas telas
 - Trocar de tela, abrir filtro, trocar de seção no drawer: `animate-fade-in-fast`.
@@ -147,17 +151,23 @@ Vale para o item da `Sidebar`, o Button `tertiary`, o `SegmentedControl`, o
   `contarFiltros(valor)`. Campo de um valor só leva `unico`. Aplica na hora:
   sem botão de confirmar, sem modal (ADR-050).
 
-### Listas de escolha: a opção já é a peça final
-- Regra do design system inteiro (humano, 2026-10-02): quando o que a pessoa
-  escolhe aparece na tela como uma `Tag`, a lista mostra essa MESMA Tag em cada
-  opção — o atendente com a foto, a tag com a bolinha ou o ícone na cor, a
-  etapa com a cor dela. Nunca só o nome escrito: quem abre a lista vê
-  exatamente como vai ficar.
-- Como: `conteudo` na opção — `{ valor, rotulo, conteudo: <Tag foto={a.foto}>{a.nome}</Tag> }`.
-  Vale para `Select`, `Combobox`, `ComboboxMultiplo`, `ComboboxPainel`,
-  `CelulaEscolha` e os campos da `BarraDeFiltros`; o gatilho mostra a mesma
-  peça depois de escolhida. O `rotulo` continua obrigatório: é o que a busca
-  procura e o que o leitor de tela lê.
+### Listas de escolha: a opção leva os sinais da peça, sem a pílula
+- Regra do design system inteiro (humano, 2026-10-02; cliente, 2026-10-02,
+  ADR-069): quando o que a pessoa escolhe aparece na tela como uma `Tag`, cada
+  opção da lista mostra os MESMOS sinais antes do nome — a foto do atendente
+  num disco de 20px, a bolinha na cor da tag, o ícone da temperatura na cor —
+  mas NÃO a pílula. A Tag inteira dentro de um campo ou de uma lista lia como
+  "campo dentro de campo" (reunião de 02/10). Nunca só o nome escrito: quem
+  abre a lista vê a cor e a foto que vão para a tela.
+- Como: `foto`, `tom`, `status` e `icone` na opção — `{ valor, rotulo, foto: a.foto }`,
+  ou `{ valor, rotulo, ...sinaisDaTag(t) }` para uma tag do catálogo. Vale para
+  `Select`, `Combobox`, `ComboboxMultiplo`, `ComboboxPainel`, `CelulaEscolha` e
+  os campos da `BarraDeFiltros`; o gatilho mostra o mesmo sinal depois de
+  escolhida. `conteudo` fica para conteúdo que não é tag nem pessoa. O
+  `rotulo` continua obrigatório: é o que a busca procura e o que o leitor de
+  tela lê.
+- A pílula da Tag é peça solta: cartão do quadro, célula da tabela, perfil do
+  drawer e o `SeletorTags` (que é o seletor DE tags, não um campo).
 - Monte a lista de opções UMA vez por tela (`OPCOES_DE_ATENDENTE`,
   `OPCOES_DE_TAG`) e use a mesma no filtro, na célula, no formulário e no
   drawer: a peça não pode mudar de um lugar para outro.
@@ -193,6 +203,33 @@ Vale para o item da `Sidebar`, o Button `tertiary`, o `SegmentedControl`, o
   (`shadow-button-inner`) fica em `tertiary`, `soft` e na busca do Header, e
   some no escuro.
 - Cabeçalho do Modal: 12 em cima, 8 embaixo, título `h4`, X de 24 (ADR-039).
+- Caixa de marcar é uma só: o `Checkbox` (18px, raio 4, traço de 1,5) e, nas
+  listas (Combobox de várias escolhas, seletor de tags, item `check` do Menu),
+  `caixaDeMarcar` de lib/campo.ts em 16px — a mesma caixa, não uma mais
+  redonda que a da tabela (cliente, 2026-10-02, ADR-070).
+
+### Conteúdo do modal (e de todo formulário curto)
+A casca do Modal já estava fechada (ADR-039); o que vai dentro não tinha regra,
+e cada tela empilhava campos sem rótulo nos selects (reunião de 02/10, ADR-071).
+- **Todo campo tem rótulo visível.** `Input`, `Textarea`, `Select size="field"`
+  e `Combobox size="field"` já o desenham a partir de `rotulo`; nunca um `<p>`
+  por cima nem `rotuloOculto` num formulário.
+- **Apoio onde o rótulo não basta**: `ajuda` sob o campo diz para que ele serve
+  ("Como o lead aparece na lista"). Uma frase. Some enquanto há `erro`.
+- **Obrigatório marcado**: `obrigatorio` põe o asterisco e o `aria-required`;
+  o erro vem inline, no próprio campo (`erro`), nunca num Toast.
+- **Pares lado a lado**: dois campos curtos que se leem juntos ocupam a mesma
+  linha (`linhaDeCampos`): empresa e valor, telefone e e-mail, etapa e
+  atendente. Texto longo, lista de escolha com busca e descrição ocupam a
+  linha inteira. Nunca três por linha num modal `sm`.
+- **O tipo do campo aparece dentro dele**: `prefixo="R$"` no valor,
+  `iconeInicio` (empresa, telefone, e-mail, calendário). É sinal, não enfeite:
+  só quando ajuda a ler o que vai ali.
+- **Ordem**: identificação (nome) → contato → classificação (etapa, atendente,
+  origem) → observações. O corpo é `formulario` (16px entre campos).
+- **Rodapé**: `Cancelar` em `secondary` e a ação em `primary`, os dois
+  `size="sm"`; a `descricao` do Modal diz o que acontece ao confirmar.
+- Vale igual no `PainelLateral` e no cartão do drawer que vira formulário.
 - Alça da coluna da tabela: dois cliques ou Enter ajustam ao conteúdo.
 - Cartão do drawer: rótulo em bold e valor numa linha de 24 (`linhaDoCartao`).
   Select dentro do cartão é `cartao`, nunca `field` dentro de `CartaoDeCampo`.

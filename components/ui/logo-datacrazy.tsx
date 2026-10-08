@@ -54,13 +54,13 @@ export function LogoDataCrazy({
   simbolo = false,
   className,
 }: {
-  /** Só o símbolo — o estado colapsado da sidebar. */
+  /** Só o símbolo — o estado colapsado da sidebar. 32px; `[&>svg]:size-5` no `className` encolhe para 20. */
   simbolo?: boolean;
   className?: string;
 }) {
   if (simbolo) {
     return (
-      <span className={className} role="img" aria-label="DataCrazy">
+      <span className={["inline-flex", className].filter(Boolean).join(" ")} role="img" aria-label="DataCrazy">
         <SimboloDataCrazy className="size-8" />
       </span>
     );

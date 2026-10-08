@@ -213,10 +213,16 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
 - **Tag e quadro (2026-10-02)**: a `Tag` é pílula com traço, texto como foi escrito e cor na bolinha
   (`tom` → bolinha; com `icone`, o ícone leva a cor) — ADR-059; nunca `uppercase` nem fundo por `className`.
   O quadro do funil é compacto: coluna 220–300, cartão com traço e sem sombra (receita em `docs/regras.md`).
-- **Lista de escolha mostra a peça final (regra do DS inteiro, 2026-10-02)**: opção que na tela é uma `Tag`
-  (atendente com foto, tag com cor) leva `conteudo: <Tag …>` — em Select, Combobox, CelulaEscolha e filtros; o
-  gatilho mostra a mesma peça. Lista de atendente ou tag nunca é `Menu`: é `ComboboxPainel`. Com `icone`, a Tag
-  troca a bolinha pelo ícone colorido (temperatura: frio, morno, quente).
+- **Lista de escolha leva os sinais da Tag, sem a pílula (2026-10-07, ADR-069)**: opção que na tela é uma `Tag`
+  (atendente com foto, tag com cor) leva `foto` / `tom` / `status` / `icone` — `{ valor, rotulo, ...sinaisDaTag(t) }`,
+  `{ valor, rotulo, foto }` — em Select, Combobox, CelulaEscolha e filtros; nunca `conteudo: <Tag …>` (a Tag
+  dentro de um campo é "campo dentro de campo"). O gatilho mostra o mesmo sinal. Lista de atendente ou tag nunca
+  é `Menu`: é `ComboboxPainel`. Com `icone`, a Tag troca a bolinha pelo ícone colorido (temperatura).
+- **Conteúdo do modal (2026-10-07, ADR-071)**: todo campo com rótulo visível (`Select`/`Combobox size="field"`
+  já desenham o `rotulo`; nunca um `<p>` por cima), `ajuda` onde o rótulo não basta, `obrigatorio` no que não pode
+  faltar, pares curtos em `linhaDeCampos`, `prefixo="R$"`/`iconeInicio` quando dizem o tipo, corpo em `formulario`.
+  Receita completa em `docs/regras.md` § "Conteúdo do modal". Caixa de marcar de lista é `caixaDeMarcar`
+  (lib/campo), a mesma do Checkbox (ADR-070). Sidebar recolhida: símbolo de 20 e botão à vista (ADR-072).
 - **Contraste e movimento (2026-10-02)**: item da Sidebar, Button `tertiary`, Segmented, ViewSwitcher e busca do Header
   têm texto e ícone em `foreground`, hover branco a 50% (`hoverDeApoio` / `hoverNoTrilho`) e ativo branco com ícone
   `fill` em azul — ADR-067. Movimento: `animate-surgir` (entra subindo 4px) e `animate-crescer` (barra de gráfico)

@@ -51,10 +51,10 @@ export const navegacao: CategoriaNav[] = [
     titulo: "Forms",
     descricao: "Entrada e edição de dados.",
     itens: [
-      { titulo: "Input", href: "/forms/input", icone: "campo", pronto: true , descricao: "Campo de texto de uma linha"},
-      { titulo: "Select", href: "/forms/select", atualizado: "2026-10-02", icone: "selecao", pronto: true, descricao: "Escolha numa lista, com a lista aberta"},
-      { titulo: "Combobox", href: "/forms/combobox", atualizado: "2026-10-02", icone: "lupa", pronto: true, descricao: "Lista com busca, uma ou várias escolhas"},
-      { titulo: "Checkbox", href: "/forms/checkbox", icone: "caixa", pronto: true , descricao: "Marcação, com indeterminado"},
+      { titulo: "Input", href: "/forms/input", atualizado: "2026-10-07", icone: "campo", pronto: true , descricao: "Campo de texto de uma linha"},
+      { titulo: "Select", href: "/forms/select", atualizado: "2026-10-07", icone: "selecao", pronto: true, descricao: "Escolha numa lista, com a lista aberta"},
+      { titulo: "Combobox", href: "/forms/combobox", atualizado: "2026-10-07", icone: "lupa", pronto: true, descricao: "Lista com busca, uma ou várias escolhas"},
+      { titulo: "Checkbox", href: "/forms/checkbox", atualizado: "2026-10-07", icone: "caixa", pronto: true , descricao: "Marcação, com indeterminado"},
       { titulo: "Radio Group", href: "/forms/radio-group", icone: "radio", pronto: true , descricao: "Escolha exclusiva por setas"},
       { titulo: "Switch", href: "/forms/switch", icone: "interruptor", pronto: true , descricao: "Liga e desliga na hora"},
       { titulo: "Date Picker", href: "/forms/date-picker", icone: "calendario", pronto: true , descricao: "Período em dois meses, com atalhos"},
@@ -65,7 +65,7 @@ export const navegacao: CategoriaNav[] = [
     titulo: "Navigation",
     descricao: "Como o usuário se move pelo produto.",
     itens: [
-      { titulo: "Sidebar", href: "/navigation/sidebar", atualizado: "2026-10-02", icone: "painel", pronto: true, descricao: "Navegação principal"},
+      { titulo: "Sidebar", href: "/navigation/sidebar", atualizado: "2026-10-07", icone: "painel", pronto: true, descricao: "Navegação principal"},
       { titulo: "Header", href: "/navigation/header", atualizado: "2026-10-02", icone: "cabecalho", pronto: true, descricao: "Topo da página: trilha, título e ações"},
       { titulo: "Breadcrumb", href: "/navigation/breadcrumb", icone: "trilha", pronto: true, descricao: "Trilha que recolhe os níveis do meio"},
       { titulo: "Pagination", href: "/navigation/pagination", icone: "paginas", pronto: true , descricao: "Controles de página de uma lista"},
@@ -83,7 +83,7 @@ export const navegacao: CategoriaNav[] = [
       // "Stat Card"; quem batiza é o arquivo.
       { titulo: "Card", href: "/data-display/card", atualizado: "2026-10-01", icone: "cartao", pronto: true , descricao: "Lista, rosca e barras"},
       { titulo: "KPI Card", href: "/data-display/kpi-card", atualizado: "2026-10-01", icone: "metrica", pronto: true , descricao: "Métrica em destaque"},
-      { titulo: "Tag", href: "/data-display/tag", atualizado: "2026-10-02", icone: "etiqueta", pronto: true, descricao: "Etiqueta do lead e seletor"},
+      { titulo: "Tag", href: "/data-display/tag", atualizado: "2026-10-07", icone: "etiqueta", pronto: true, descricao: "Etiqueta do lead e seletor"},
       { titulo: "Avatar", href: "/data-display/avatar", atualizado: "2026-10-01", icone: "pessoa", pronto: true , descricao: "Identificação de pessoa"},
       { titulo: "Table", href: "/data-display/table", atualizado: "2026-10-02", icone: "tabela", pronto: true , descricao: "A tabela de negócios do CRM"},
       { titulo: "Calendário", href: "/data-display/calendario", icone: "agenda", pronto: true, descricao: "Os negócios no mês ou na semana, pela próxima ação" },
@@ -95,7 +95,7 @@ export const navegacao: CategoriaNav[] = [
     itens: [
       { titulo: "Tooltip", href: "/feedback/tooltip", icone: "balao", pronto: true , descricao: "Conteúdo de texto truncado"},
       { titulo: "Toast", href: "/feedback/toast", icone: "sino", pronto: true , descricao: "Confirmação que não bloqueia"},
-      { titulo: "Modal", href: "/feedback/modal", icone: "camada", pronto: true , descricao: "Camada que exige decisão"},
+      { titulo: "Modal", href: "/feedback/modal", atualizado: "2026-10-07", icone: "camada", pronto: true , descricao: "Camada que exige decisão"},
       { titulo: "Painel lateral", href: "/feedback/painel-lateral", atualizado: "2026-10-01", icone: "lateral", pronto: true, descricao: "O registro aberto ao lado da lista" },
       { titulo: "Drawer", href: "/feedback/drawer", atualizado: "2026-10-02", icone: "gaveta", pronto: true , descricao: "O registro completo, por cima da tela"},
 { titulo: "Drawer variações", href: "/feedback/drawer-variacoes", icone: "proposta", pronto: true, descricao: "Cores, menu, linha do tempo e propostas"},

@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { FunnelSimple, Globe, Handshake, Headset, ShareNetwork, Tag as IconeDeTag, WarningCircle } from "@phosphor-icons/react";
+import { Fire, FunnelSimple, Globe, GraduationCap, Handshake, Headset, Heart, ShareNetwork, Snowflake, Tag as IconeDeTag, ThermometerSimple, WarningCircle } from "@phosphor-icons/react";
 import { PaginaDS, Secao, ComoFunciona, Chip, Legenda } from "@/components/ds/preview";
 import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos } from "@/components/ui/barra-de-filtros";
 import { HeaderFiltros } from "@/components/ui/header";
 import { IconeDeMarca } from "@/components/ui/icone-de-marca";
-import { Tag } from "@/components/ui/tag";
 
 const campos: CampoDeFiltro[] = [
   {
@@ -42,13 +41,14 @@ const campos: CampoDeFiltro[] = [
     rotulo: "Tags",
     icone: IconeDeTag,
     opcoes: [
-      { valor: "quente", rotulo: "Quente", grupo: "Temperatura", conteudo: <Tag status="destructive">Quente</Tag> },
-      { valor: "warm", rotulo: "Warm", grupo: "Temperatura", conteudo: <Tag>Warm</Tag> },
-      { valor: "frio", rotulo: "Frio", grupo: "Temperatura", conteudo: <Tag>Frio</Tag> },
-      { valor: "agendado", rotulo: "Agendado", grupo: "Status", conteudo: <Tag status="success">Agendado</Tag> },
-      { valor: "sem-retorno", rotulo: "Sem retorno", grupo: "Status", conteudo: <Tag status="destructive">Sem retorno</Tag> },
-      { valor: "saude", rotulo: "Saúde", grupo: "Segmento", conteudo: <Tag>Saúde</Tag> },
-      { valor: "educacao", rotulo: "Educação", grupo: "Segmento", conteudo: <Tag>Educação</Tag> },
+      // os sinais da tag, sem a pílula (ADR-069): temperatura com ícone na cor, status com a bolinha, lista com o ícone cinza
+      { valor: "quente", rotulo: "Quente", grupo: "Temperatura", tom: "vermelho", icone: <Fire size={12} weight="regular" aria-hidden="true" /> },
+      { valor: "warm", rotulo: "Warm", grupo: "Temperatura", tom: "laranja", icone: <ThermometerSimple size={12} weight="regular" aria-hidden="true" /> },
+      { valor: "frio", rotulo: "Frio", grupo: "Temperatura", tom: "ciano", icone: <Snowflake size={12} weight="regular" aria-hidden="true" /> },
+      { valor: "agendado", rotulo: "Agendado", grupo: "Status", status: "success" },
+      { valor: "sem-retorno", rotulo: "Sem retorno", grupo: "Status", status: "destructive" },
+      { valor: "saude", rotulo: "Saúde", grupo: "Segmento", icone: <Heart size={12} weight="regular" aria-hidden="true" /> },
+      { valor: "educacao", rotulo: "Educação", grupo: "Segmento", icone: <GraduationCap size={12} weight="regular" aria-hidden="true" /> },
     ],
   },
   {

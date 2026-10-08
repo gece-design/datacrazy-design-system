@@ -29,6 +29,12 @@ entrelinha nos 4 estados × 2 temas, em densidade 1× e 2×. Zero divergência.
 Diff de pixels **não medido**, pelo mesmo motivo dos lotes anteriores: a ponte
 de exportação do Figma (`figma-console`) não estava de pé.
 
+**Desde 2026-10-07 o raio é 4, não os 2 do arquivo** (ADR-070): a caixa das
+listas (Combobox de várias escolhas, seletor de tags, item `check` do Menu) era
+mais redonda que a da tabela, o cliente preferiu a redonda, e as duas viraram
+uma só — `caixaDeMarcar` em `lib/campo.ts` desenha a de 16px das listas com o
+mesmo traço de 1,5, o mesmo fundo e o mesmo raio desta.
+
 ## Props
 
 | Prop | Tipo | Padrão | Obrigatória | Descrição |

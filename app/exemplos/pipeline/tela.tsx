@@ -4,27 +4,28 @@ import * as React from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
+  Buildings,
   CalendarBlank,
   ChatCircleDots,
+  Clock,
   FlowArrow,
-  Gear,
-  House,
-  Kanban,
-  SlidersHorizontal,
   FunnelSimple,
+  Gear,
   Handshake,
   Headset,
-  ShareNetwork,
-  Tag as IconeDeTag,
-  WarningCircle,
-  Clock,
+  House,
+  Kanban,
   Lightning,
   Plus,
   Question,
   Robot,
   Rows,
-  UsersThree,
+  ShareNetwork,
+  SlidersHorizontal,
   Star,
+  Tag as IconeDeTag,
+  UsersThree,
+  WarningCircle,
 } from "@phosphor-icons/react";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos } from "@/components/ui/barra-de-filtros";
@@ -47,6 +48,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Toaster, toast } from "@/components/ui/toast";
 import { useTema } from "@/lib/tema";
+import { formulario, linhaDeCampos } from "@/lib/campo";
 import { cn } from "@/lib/utils";
 import {
   CORES_COLUNA,
@@ -68,7 +70,7 @@ import { Calendario } from "@/components/ui/calendario";
 import { TelaBase } from "@/components/ui/tela-base";
 import { PainelLead } from "./painel-lead";
 import { Quadro, IconeDoCanal, agrupar, CAMPOS_DE_FABRICA, CAMPOS_DO_CARTAO, ROTULOS_DOS_CAMPOS, type CampoDoCartao, type Colunas } from "./quadro";
-import { ICONES_DE_TAG, Tag, type GrupoTags, type IconeDeTag as ChaveDeIcone } from "@/components/ui/tag";
+import { ICONES_DE_TAG, sinaisDaTag, type GrupoTags, type IconeDeTag as ChaveDeIcone } from "@/components/ui/tag";
 import { Menu } from "@/components/ui/menu";
 
 import { foco, rolagemDiscreta } from "@/lib/estados";
@@ -125,8 +127,8 @@ const OPCOES_DE_ORIGEM = CANAIS.map((c) => ({
   icone: <IconeDoCanal canal={c} tamanho={16} />,
 }));
 
-/** Os atendentes como opções: cada um aparece na lista como aparece na tela — a Tag com a foto. */
-const OPCOES_DE_ATENDENTE = ATENDENTES.map((a) => ({ valor: a, rotulo: a, conteudo: <Tag foto="/ds/atendente.png">{a}</Tag> }));
+/** Os atendentes como opções: a foto antes do nome, sem a pílula (ADR-069). */
+const OPCOES_DE_ATENDENTE = ATENDENTES.map((a) => ({ valor: a, rotulo: a, foto: "/ds/atendente.png" }));
 
 /** Os campos que a tela deixa filtrar. Etapa depende das etapas do funil, que a pessoa edita. */
 const camposDeFiltro = (etapas: Etapa[], grupos: GrupoTags[]): CampoDeFiltro[] => [
@@ -138,7 +140,7 @@ const camposDeFiltro = (etapas: Etapa[], grupos: GrupoTags[]): CampoDeFiltro[] =
     rotulo: "Tags",
     icone: IconeDeTag,
     opcoes: grupos.flatMap((g) =>
-      g.tags.map((x) => ({ valor: x.id, rotulo: x.rotulo, grupo: g.rotulo, conteudo: <Tag status={x.status} tom={x.tom} icone={x.icone}>{x.rotulo}</Tag> })),
+      g.tags.map((x) => ({ valor: x.id, rotulo: x.rotulo, grupo: g.rotulo, ...sinaisDaTag(x) })),
     ),
   },
   { id: "sinais", rotulo: "Situação", icone: WarningCircle, opcoes: SINAIS.map((s) => ({ valor: s.id, rotulo: s.rotulo })) },
@@ -642,9 +644,13 @@ export function Tela({
         }
       >
         {novo ? (
-          <div className="flex flex-col gap-4">
+          // a receita do conteúdo do modal (ADR-071): rótulo em todo campo,
+          // apoio onde o rótulo não basta, obrigatório marcado, pares lado a lado
+          <div className={formulario}>
             <Input
               rotulo="Nome"
+              obrigatorio
+              ajuda="Como o lead aparece no quadro e na lista."
               value={novo.nome}
               erro={erroNome}
               placeholder="Nome de quem entrou no funil"
@@ -656,37 +662,45 @@ export function Tela({
                 if (e.key === "Enter") criarLead();
               }}
             />
-            <Input
-              rotulo="Empresa"
-              value={novo.empresa}
-              placeholder="Onde a pessoa trabalha"
-              onChange={(e) => setNovo({ ...novo, empresa: e.target.value })}
-            />
-            <Input
-              rotulo="Valor"
-              value={novo.valor}
-              inputMode="numeric"
-              placeholder="R$ 0"
-              onChange={(e) => setNovo({ ...novo, valor: e.target.value })}
-            />
-            <Select
-              size="field"
-              rotulo="Etapa"
-              valor={novo.etapa}
-              aoEscolher={(v) => setNovo({ ...novo, etapa: v as EtapaId })}
-              opcoes={etapas.map((e) => ({ valor: e.id, rotulo: e.rotulo }))}
-            />
-            <Select
-              size="field"
-              rotulo="Atendente"
-              valor={novo.atendente}
-              aoEscolher={(v) => setNovo({ ...novo, atendente: v })}
-              opcoes={OPCOES_DE_ATENDENTE}
-            />
+            <div className={linhaDeCampos}>
+              <Input
+                rotulo="Empresa"
+                iconeInicio={Buildings}
+                value={novo.empresa}
+                placeholder="Onde a pessoa trabalha"
+                onChange={(e) => setNovo({ ...novo, empresa: e.target.value })}
+              />
+              <Input
+                rotulo="Valor"
+                prefixo="R$"
+                value={novo.valor}
+                inputMode="numeric"
+                placeholder="0"
+                onChange={(e) => setNovo({ ...novo, valor: e.target.value })}
+              />
+            </div>
+            <div className={linhaDeCampos}>
+              <Select
+                size="field"
+                rotulo="Etapa"
+                obrigatorio
+                valor={novo.etapa}
+                aoEscolher={(v) => setNovo({ ...novo, etapa: v as EtapaId })}
+                opcoes={etapas.map((e) => ({ valor: e.id, rotulo: e.rotulo }))}
+              />
+              <Select
+                size="field"
+                rotulo="Atendente"
+                valor={novo.atendente}
+                aoEscolher={(v) => setNovo({ ...novo, atendente: v })}
+                opcoes={OPCOES_DE_ATENDENTE}
+              />
+            </div>
             {/* grupos com cabeçalho e ícone por opção; marca é `IconeDeMarca` */}
             <Select
               size="field"
               rotulo="Origem"
+              ajuda="Por onde o lead chegou."
               valor={novo.canal}
               aoEscolher={(v) => setNovo({ ...novo, canal: v as Canal })}
               opcoes={OPCOES_DE_ORIGEM}

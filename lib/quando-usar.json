@@ -200,7 +200,8 @@
         "`ComboboxMultiplo` para várias escolhas com caixa de marcar: tags, canais, segmentos.",
         "`ComboboxPainel` quando o gatilho já existe: o chip da `BarraDeFiltros`, a `CelulaEscolha` da tabela.",
         "`detalhe` quando o nome sozinho não distingue (duas empresas parecidas: o domínio desempata); `aoCriar` quando a lista cresce com o uso (empresa, cidade, segmento); `acao` para o caminho de quem quer editar a lista (\"Gerenciar etapas\") — uma só, nunca um menu de ações.",
-        "`conteudo` quando a opção aparece na tela como uma `Tag` (atendente com foto, tag com cor): a lista e o gatilho mostram a mesma Tag, não o nome escrito. É regra do DS inteiro."
+        "`foto`, `tom`, `status` ou `icone` na opção quando ela aparece na tela como uma `Tag` (atendente com foto, tag com cor): a lista e o gatilho mostram o mesmo sinal antes do nome, sem a pílula (ADR-069). `sinaisDaTag(t)` da Tag monta os quatro de uma vez.",
+        "`size=\"field\"` com o `rotulo` à vista (ele já desenha), `ajuda` e `obrigatorio` num formulário (ADR-071)."
       ],
       "naoUsar": [
         "`Menu` para escolher atendente ou tag: `Menu` é para ações; a lista de Tags é `ComboboxPainel`.",
@@ -284,7 +285,8 @@
         "para escolher uma opção numa lista curta (até ~10) e fechada.",
         "`size=\"field\"` ao lado de Input num formulário; `cartao` no drawer; `sm` e `md` em card e barra.",
         "`grupo` quando a lista tem mais de um assunto (\"Redes sociais\" / \"Outras\") e `icone` quando a opção tem marca ou símbolo.",
-        "`conteudo` quando a opção aparece na tela como uma `Tag` (atendente com foto, tag com cor): a lista e o gatilho mostram a mesma Tag, não o nome escrito. É regra do DS inteiro."
+        "`foto`, `tom`, `status` ou `icone` na opção quando ela aparece na tela como uma `Tag` (atendente com foto, tag com cor): a lista e o gatilho mostram o mesmo sinal antes do nome, sem a pílula — a Tag inteira dentro de um campo lia como campo dentro de campo (ADR-069). `sinaisDaTag(t)` da Tag monta os quatro de uma vez.",
+        "`size=\"field\"` com o `rotulo` à vista (ele já desenha), `ajuda` quando o rótulo não basta e `obrigatorio` no que não pode faltar: é a receita do conteúdo do modal (ADR-071)."
       ],
       "naoUsar": [
         "para ações (`Menu`), para ligar e desligar (`Switch`) ou para 2 a 4 opções que cabem à vista (`SegmentedControl`, `RadioGroup`).",

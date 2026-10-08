@@ -20,7 +20,7 @@ import { ATENDENTES, ETAPAS, moeda, tagsDe, type Conversa, type EtapaId } from "
 const ROTULOS_DA_LISTA = { busca: "Buscar", vazio: "Nada encontrado" };
 
 /** Os atendentes como opções: cada um aparece na lista como aparece na tela — a Tag com a foto. */
-export const OPCOES_DE_ATENDENTE = ATENDENTES.map((a) => ({ valor: a, rotulo: a, conteudo: <Tag foto="/ds/atendente.png">{a}</Tag> }));
+export const OPCOES_DE_ATENDENTE = ATENDENTES.map((a) => ({ valor: a, rotulo: a, foto: "/ds/atendente.png" }));
 /** A coluna tem 320: o rótulo fica com 96 em vez dos 144 do painel de 480. */
 const linha = "[&>dt]:w-24";
 

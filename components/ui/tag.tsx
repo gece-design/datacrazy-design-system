@@ -20,7 +20,8 @@ import {
   Storefront,
   User,
 } from "@phosphor-icons/react";
-import { buscaDoPainel } from "@/lib/campo";
+import { buscaDoPainel, caixaDeMarcar } from "@/lib/campo";
+import { PONTO_DO_STATUS, TEXTO_DO_STATUS, type StatusDaTag } from "@/lib/sinais";
 import { Tabs } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useCliqueFora } from "@/lib/use-clique-fora";
@@ -39,25 +40,17 @@ import { TONS, tomDe, type Tom } from "@/lib/tons";
  * tags para escolher, em `SeletorTags`.
  */
 
-const pontos = {
-  destructive: "bg-destructive",
-  info: "bg-info",
-  success: "bg-success",
-} as const;
-
-/** A cor do ícone quando a tag tem `icone` e `status`, sem tom: a mesma que a bolinha teria. */
-const iconesDoStatus = {
-  destructive: "text-destructive",
-  info: "text-info",
-  success: "text-success",
-} as const;
+// A bolinha e a cor do ícone por status moram em lib/sinais.ts: a opção de
+// uma lista pinta o mesmo sinal sem a pílula (ADR-069).
+const pontos = PONTO_DO_STATUS;
+const iconesDoStatus = TEXTO_DO_STATUS;
 
 // Os tons moram em lib/tons.ts (o Avatar também usa); a Tag continua exportando.
 export { TONS, tomDe, type Tom } from "@/lib/tons";
 
 export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Bolinha de 6px na cor da situação. Com `tom`, a bolinha já vem, na cor do tom. O texto continua sendo o sinal: a cor só reforça. */
-  status?: keyof typeof pontos;
+  status?: StatusDaTag;
   /** Tipo do registro: ícone de 12px e texto em `primary`. */
   tipo?: "pessoa" | "empresa";
   /** Foto de 22px encostada à esquerda — a tag do atendente. */
@@ -108,6 +101,23 @@ export function Tag({ status, tipo, foto, tom, icone, className, children, ...pr
       <span className="min-w-0 truncate">{children}</span>
     </span>
   );
+}
+
+/**
+ * Os sinais de uma tag do catálogo como a opção de uma lista os leva: foto,
+ * tom, status e o ícone de 12px — sem a pílula. É o que vai em `opcoes` do
+ * Select, do Combobox e da BarraDeFiltros (`{ valor, rotulo, ...sinaisDaTag(t) }`),
+ * para quem abre a lista ver a cor e o ícone da tag sem um campo dentro do
+ * campo (cliente, 2026-10-02, ADR-069).
+ */
+export function sinaisDaTag(t: { status?: StatusDaTag; tom?: Tom; icone?: TagProps["icone"]; foto?: string }) {
+  const Icone = t.icone;
+  return {
+    status: t.status,
+    tom: t.tom,
+    foto: t.foto,
+    icone: Icone ? <Icone size={12} weight="regular" aria-hidden="true" className="shrink-0" /> : undefined,
+  };
 }
 
 export interface TagAdicionarProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -518,14 +528,8 @@ export function SeletorTags({ grupos, selecionadas, aoAlternar, aoCriar, rotulos
                         emFoco && "bg-overlay-item-hover",
                       )}
                     >
-                      <span
-                        aria-hidden="true"
-                        className={cn(
-                          "flex size-4 shrink-0 items-center justify-center rounded-sm border",
-                          escolhida ? "border-primary bg-primary text-primary-foreground" : "border-input-border bg-card",
-                        )}
-                      >
-                        {escolhida ? <Check size={12} weight="bold" /> : null}
+                      <span aria-hidden="true" className={caixaDeMarcar(escolhida)}>
+                        {escolhida ? <Check size={12} weight="regular" /> : null}
                       </span>
                       <Tag status={t.status} foto={t.foto} tom={t.tom} icone={t.icone}>
                         {t.rotulo}

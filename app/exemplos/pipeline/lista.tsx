@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/ui/menu";
-import { Tag, type GrupoTags } from "@/components/ui/tag";
+import { Tag, sinaisDaTag, type GrupoTags } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
 import { etapaPor, moeda, tagsDe, type Etapa, type EtapaId, type Lead } from "./dados";
 import { IconeDoCanal } from "./quadro";
@@ -98,9 +98,9 @@ export function Lista({
   aoEditar: (id: string, campos: Partial<Lead>) => void;
 }) {
   const total = leads.reduce((n, l) => n + l.valor, 0);
-  // O catálogo de tags como opções da célula: agrupadas, cada uma como a Tag que vai aparecer.
+  // O catálogo de tags como opções da célula: agrupadas, cada uma com os sinais da Tag (ADR-069).
   const opcoesDeTag = catalogo.flatMap((g) =>
-    g.tags.map((t) => ({ valor: t.id, rotulo: t.rotulo, grupo: g.rotulo, conteudo: <Tag status={t.status} tom={t.tom} icone={t.icone}>{t.rotulo}</Tag> })),
+    g.tags.map((t) => ({ valor: t.id, rotulo: t.rotulo, grupo: g.rotulo, ...sinaisDaTag(t) })),
   );
   // Seleção em massa: a tela guarda os ids; a tabela desenha as caixas (2026-09-24).
   const selecao = useSelecaoDaTabela();

@@ -41,7 +41,7 @@ const opcoesDeTag = tags.map((t) => ({
   valor: t.id,
   rotulo: t.rotulo,
   grupo: t.grupo,
-  conteudo: <Tag status={t.status}>{t.rotulo}</Tag>,
+  status: t.status,
 }));
 
 const rotulos = { busca: "Buscar", vazio: "Nada encontrado" };
@@ -80,7 +80,7 @@ const codigoVarias = `<ComboboxMultiplo
     valor: t.id,
     rotulo: t.rotulo,
     grupo: t.grupo,
-    conteudo: <Tag status={t.status}>{t.rotulo}</Tag>,
+    status: t.status,
   }))}
   valores={escolhidas}
   aoMudar={setEscolhidas}
@@ -130,7 +130,7 @@ const [aberto, setAberto] = useState(false);
     opcoes={atendentes.map((a) => ({
       valor: a.id,
       rotulo: a.nome,
-      conteudo: <Tag foto={a.foto}>{a.nome}</Tag>,
+      foto: a.foto,
     }))}
     selecionados={[atendente]}
     aoAlternar={setAtendente}
@@ -138,11 +138,11 @@ const [aberto, setAberto] = useState(false);
   />
 </>`;
 
-// a opção aparece como aparece na tela: a Tag do atendente, com a foto
+// a opção leva a foto do atendente antes do nome, sem a pílula (ADR-069)
 const atendentes = ["Breno Ramos", "Esther Lima", "Junior Santos", "Liam Costa", "Marina Prado", "Millena Aragão"].map((a) => ({
   valor: a,
   rotulo: a,
-  conteudo: <Tag foto="/ds/atendente.png">{a}</Tag>,
+  foto: "/ds/atendente.png",
 }));
 
 export default function ComboboxPage() {
@@ -179,9 +179,10 @@ export default function ComboboxPage() {
         </p>
         <p>
           A regra: quando o que a pessoa escolhe aparece na tela como uma Tag — o atendente com a foto, a tag com a
-          cor —, a opção da lista é essa mesma Tag, passada em <Chip>conteudo</Chip>. Quem abre a lista vê exatamente
-          como vai ficar. O <Chip>rotulo</Chip> continua obrigatório: é ele que a busca lê e que o leitor de tela
-          anuncia.
+          cor —, a opção leva os mesmos sinais antes do nome (<Chip>foto</Chip>, <Chip>tom</Chip>,{" "}
+          <Chip>status</Chip>, <Chip>icone</Chip>), sem a pílula: a Tag inteira dentro de um campo lia como campo
+          dentro de campo. Quem abre a lista vê a cor e a foto que vão para a tela. O <Chip>rotulo</Chip> continua
+          obrigatório: é ele que a busca lê e que o leitor de tela anuncia.
         </p>
       </ComoFunciona>
 
@@ -273,7 +274,7 @@ export default function ComboboxPage() {
           </div>
         </div>
         <Legenda>
-          Cada opção aparece como a <Chip>Tag</Chip> que vai para a tela (<Chip>conteudo</Chip>). Ao lado, o que está
+          Cada opção leva a bolinha na cor da tag (<Chip>status</Chip>), sem a pílula. Ao lado, o que está
           marcado — muda enquanto a lista está aberta, sem botão de confirmar.
         </Legenda>
       </Secao>

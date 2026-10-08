@@ -5,7 +5,10 @@ import { createPortal } from "react-dom";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CaretDown } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import { blocoDeCampo, caixaDeCampo, linhaDoCartao, rotuloDoBloco } from "@/lib/campo";
+import { ajudaDeCampo, asteriscoDeCampo, blocoDeCampo, caixaDeCampo, erroDeCampo, linhaDoCartao, rotuloDeCampo, rotuloDoBloco } from "@/lib/campo";
+import { PONTO_DO_STATUS, TEXTO_DO_STATUS, type StatusDaTag } from "@/lib/sinais";
+import type { Tom } from "@/lib/tons";
+import { Avatar } from "@/components/ui/avatar";
 import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
 import { PainelFlutuante } from "@/components/ui/popover";
@@ -42,6 +45,8 @@ const triggerVariants = cva(
         field: cn(
           caixaDeCampo(),
           "gap-1 justify-between text-body-md text-input-text hover:text-input-text focus-visible:outline-none data-[aberto=true]:border-input-border-focus data-[aberto=true]:text-input-text data-[vazio=true]:text-input-placeholder",
+          // erro: o mesmo traço do Input (a classe do campo está na cva, então entra por data-*)
+          "data-[erro=true]:border-input-border-error data-[erro=true]:hover:border-input-border-error data-[erro=true]:data-[aberto=true]:border-input-border-error",
         ),
       },
     },
@@ -92,19 +97,52 @@ SelectTrigger.displayName = "SelectTrigger";
 export type OpcaoSelect = {
   valor: string;
   rotulo: string;
-  /** Ícone de 16px antes do rótulo: Phosphor ou `IconeDeMarca`. Aparece na lista e no gatilho. */
+  /** Ícone antes do rótulo: 16px (Phosphor, `IconeDeMarca`) ou o ícone de 12px da tag. Com `tom` ou `status`, leva a cor deles. */
   icone?: React.ReactNode;
   /** Cabeçalho do grupo. Opções seguidas com o mesmo `grupo` ficam sob ele. Ex.: "Redes sociais". */
   grupo?: string;
+  /** A foto de quem a opção representa (atendente): um disco de 20px antes do nome. */
+  foto?: string;
+  /** A cor da tag que a opção representa: bolinha de 6px (ou a cor do `icone`) antes do nome. */
+  tom?: Tom;
+  /** O status da tag que a opção representa: a bolinha na cor do status. */
+  status?: StatusDaTag;
   /**
-   * A opção como ela aparece na tela depois de escolhida — a `Tag` do
-   * atendente com a foto, a tag com a cor. Entra no lugar do ícone e do
-   * rótulo, na lista e no gatilho: quem abre a lista vê exatamente como vai
-   * ficar (humano, 2026-10-02). O `rotulo` continua obrigatório: é o nome
-   * que o leitor de tela lê e o texto que a busca procura.
+   * Um conteúdo próprio no lugar do sinal e do rótulo, na lista e no gatilho.
+   * Para tag e atendente NÃO use: a opção leva os sinais da peça (`foto`,
+   * `tom`, `status`, `icone`) sem a pílula — a Tag inteira dentro de um campo
+   * lia como campo dentro de campo (cliente, 2026-10-02, ADR-069). O `rotulo`
+   * continua obrigatório: é o nome que o leitor de tela lê e que a busca procura.
    */
   conteudo?: React.ReactNode;
 };
+
+/** A opção tem algo antes do nome? */
+export function temSinal(o: OpcaoSelect) {
+  return Boolean(o.foto || o.tom || o.status || o.icone);
+}
+
+/**
+ * O sinal da opção — o que a Tag mostraria, sem a pílula: a foto num disco de
+ * 20px, a bolinha na cor do tom ou do status, ou o ícone (na cor do tom ou do
+ * status, quando há). É o que o Select, o Combobox e a BarraDeFiltros põem
+ * antes do nome, na lista e no gatilho (ADR-069).
+ */
+export function SinalDaOpcao({ opcao: o }: { opcao: OpcaoSelect }) {
+  if (o.foto) return <Avatar nome={o.rotulo} src={o.foto} size="xs" aria-hidden="true" />;
+  if (o.icone) {
+    if (!o.tom && !o.status) return <>{o.icone}</>;
+    return (
+      <span aria-hidden="true" data-tom={o.tom} className={cn("flex shrink-0 items-center", o.tom ? "text-tom-texto" : TEXTO_DO_STATUS[o.status!])}>
+        {o.icone}
+      </span>
+    );
+  }
+  if (o.tom || o.status) {
+    return <span aria-hidden="true" data-tom={o.tom} className={cn("size-1.5 shrink-0 rounded-full", o.tom ? "bg-tom-ponto" : PONTO_DO_STATUS[o.status!])} />;
+  }
+  return null;
+}
 
 /** Opções na ordem em que chegam, repartidas em blocos pelo `grupo` — cada
  *  uma com o índice que tem na lista inteira (é o que o teclado percorre). */
@@ -143,8 +181,16 @@ export interface SelectProps extends VariantProps<typeof triggerVariants> {
   aoEscolher?: (valor: string) => void;
   /** O que o gatilho mostra quando nada foi escolhido. */
   textoVazio?: string;
-  /** Nome do controle para leitor de tela. Ex.: "Filtrar por etapa". No `cartao`, é o rótulo visível. */
+  /** Nome do controle. No `field` e no `cartao` é o rótulo visível; em `md` e `sm`, só o leitor de tela o lê. Ex.: "Filtrar por etapa". */
   rotulo: string;
+  /** `field`: tira o rótulo da tela e o mantém para o leitor de tela — quando outro texto já diz o que é. */
+  rotuloOculto?: boolean;
+  /** `field`: texto de apoio sob o campo. Some enquanto há `erro`. */
+  ajuda?: string;
+  /** `field`: campo obrigatório — asterisco e `aria-required`. */
+  obrigatorio?: boolean;
+  /** `field`: mensagem de erro sob o campo, com o traço de erro. */
+  erro?: string;
   /** O cartão do drawer: o cartão inteiro é o gatilho, com o rótulo em bold, o
    *  valor na linha de 24 e o caret — a casca do `CampoEditavel` ao lado
    *  (cliente, 2026-09-28, ADR-041). Ignora `size`. */
@@ -158,10 +204,16 @@ export function Select({
   aoEscolher,
   textoVazio = "Selecione",
   rotulo,
+  rotuloOculto,
+  ajuda,
+  obrigatorio,
+  erro,
   size,
   cartao,
   className,
 }: SelectProps) {
+  // o campo de formulário tem rótulo visível, como o Input ao lado (ADR-071)
+  const campo = size === "field" && !cartao;
   const [aberto, setAberto] = React.useState(false);
   const [emFoco, setEmFoco] = React.useState(0);
   const caixa = React.useRef<HTMLDivElement>(null);
@@ -257,7 +309,17 @@ export function Select({
   }
 
   return (
-    <div ref={caixa} className={cn("relative", cartao ? "block" : "inline-block", className)}>
+    <div ref={caixa} className={cn("relative", cartao ? "block" : campo ? "flex min-w-0 flex-col gap-1" : "inline-block", className)}>
+      {campo ? (
+        <span id={`rotulo-${id}`} className={cn(rotuloDeCampo(), rotuloOculto && "sr-only")}>
+          {rotulo}
+          {obrigatorio ? (
+            <span aria-hidden="true" className={asteriscoDeCampo}>
+              {" *"}
+            </span>
+          ) : null}
+        </span>
+      ) : null}
       {cartao ? (
         // O cartão inteiro é o gatilho. O nome lido é "rótulo + valor", como no
         // CampoEditavel — por isso sem aria-label. Aberto, fica no realce do hover.
@@ -277,7 +339,7 @@ export function Select({
             <span className={cn("flex min-w-0 items-center gap-1.5 text-body-md", escolhido ? "text-input-text" : "text-input-placeholder")}>
               {escolhido?.conteudo ?? (
                 <>
-                  {escolhido?.icone}
+                  {escolhido ? <SinalDaOpcao opcao={escolhido} /> : null}
                   <span className="min-w-0 truncate">{escolhido?.rotulo ?? textoVazio}</span>
                 </>
               )}
@@ -299,15 +361,20 @@ export function Select({
           aria-haspopup="listbox"
           aria-expanded={aberto}
           aria-controls={aberto ? `lista-${id}` : undefined}
-          aria-label={rotulo}
+          aria-label={campo ? undefined : rotulo}
+          aria-labelledby={campo ? `rotulo-${id}` : undefined}
+          aria-required={campo && obrigatorio ? true : undefined}
+          aria-invalid={campo && erro ? true : undefined}
+          aria-describedby={campo ? (erro ? `erro-${id}` : ajuda ? `ajuda-${id}` : undefined) : undefined}
+          data-erro={campo && erro ? "true" : undefined}
           onClick={() => (aberto ? fechar(false) : abrir())}
           onKeyDown={tecladoDoGatilho}
         >
           {escolhido?.conteudo ? (
             <span className="flex min-w-0 items-center">{escolhido.conteudo}</span>
-          ) : escolhido?.icone ? (
+          ) : escolhido && temSinal(escolhido) ? (
             <span className="flex min-w-0 items-center gap-1.5">
-              {escolhido.icone}
+              <SinalDaOpcao opcao={escolhido} />
               <span className="min-w-0 truncate">{escolhido.rotulo}</span>
             </span>
           ) : (
@@ -315,6 +382,15 @@ export function Select({
           )}
         </SelectTrigger>
       )}
+      {campo && erro ? (
+        <p id={`erro-${id}`} className={erroDeCampo}>
+          {erro}
+        </p>
+      ) : campo && ajuda ? (
+        <p id={`ajuda-${id}`} className={ajudaDeCampo}>
+          {ajuda}
+        </p>
+      ) : null}
 
       {visivel && pos
         ? createPortal(
@@ -346,7 +422,7 @@ export function Select({
                     onClick={() => escolher(o)}
                     className={cn(
                       "cursor-pointer whitespace-nowrap rounded-sm px-3 py-1.5 text-label-lg transition-colors",
-                      (o.icone || o.conteudo) && "flex items-center gap-2",
+                      (temSinal(o) || o.conteudo) && "flex items-center gap-2",
                       selecionado
                         ? "bg-overlay-item-selected text-overlay-item-text-selected"
                         : "text-muted-foreground",
@@ -357,7 +433,7 @@ export function Select({
                   >
                     {o.conteudo ?? (
                       <>
-                        {o.icone}
+                        <SinalDaOpcao opcao={o} />
                         {o.rotulo}
                       </>
                     )}

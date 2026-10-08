@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { caixaDeCampo, erroDeCampo, rotuloDeCampo } from "@/lib/campo";
+import { ajudaDeCampo, asteriscoDeCampo, caixaDeCampo, erroDeCampo, rotuloDeCampo } from "@/lib/campo";
 import { rolagemDiscreta } from "@/lib/estados";
 
 /**
@@ -18,6 +18,10 @@ export interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTex
   rotuloOculto?: boolean;
   /** Mensagem de erro. Presente = estado de erro. */
   erro?: string;
+  /** Texto de apoio sob o campo: para que ele serve, quando o rótulo não basta. Some enquanto há `erro`. */
+  ajuda?: string;
+  /** Campo obrigatório: asterisco depois do rótulo e `aria-required`. */
+  obrigatorio?: boolean;
   /** Linhas em repouso. Padrão 3. */
   linhas?: number;
   /** Cresce com o texto até este número de linhas; depois rola. Padrão 8. */
@@ -28,10 +32,11 @@ export interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTex
 const ENTRELINHA = 17;
 
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ rotulo, rotuloOculto, erro, linhas = 3, maximoDeLinhas = 8, className, id, disabled, value, onInput, ...props }, ref) => {
+  ({ rotulo, rotuloOculto, erro, ajuda, obrigatorio, linhas = 3, maximoDeLinhas = 8, className, id, disabled, value, onInput, ...props }, ref) => {
     const gerado = React.useId().replace(/:/g, "");
     const campoId = id ?? `texto-${gerado}`;
     const erroId = `${campoId}-erro`;
+    const ajudaId = `${campoId}-ajuda`;
     const campo = React.useRef<HTMLTextAreaElement>(null);
     React.useImperativeHandle(ref, () => campo.current!);
 
@@ -64,6 +69,11 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <div className={cn("flex w-full flex-col gap-1", className)}>
         <label htmlFor={campoId} className={cn(rotuloDeCampo(), rotuloOculto && "sr-only")}>
           {rotulo}
+          {obrigatorio ? (
+            <span aria-hidden="true" className={asteriscoDeCampo}>
+              {" *"}
+            </span>
+          ) : null}
         </label>
         {/* a caixa do Input, com altura livre: o texto começa no topo */}
         <div className={cn(caixaDeCampo({ erro: Boolean(erro), disabled }), "h-auto items-start py-2")}>
@@ -73,8 +83,9 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             rows={linhas}
             disabled={disabled}
             value={value}
+            aria-required={obrigatorio || undefined}
             aria-invalid={erro ? true : undefined}
-            aria-describedby={erro ? erroId : undefined}
+            aria-describedby={erro ? erroId : ajuda ? ajudaId : undefined}
             onInput={(e) => {
               ajustar();
               onInput?.(e);
@@ -89,6 +100,10 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {erro ? (
           <p id={erroId} className={erroDeCampo}>
             {erro}
+          </p>
+        ) : ajuda ? (
+          <p id={ajudaId} className={ajudaDeCampo}>
+            {ajuda}
           </p>
         ) : null}
       </div>

@@ -4,7 +4,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { Check, MagnifyingGlass, Plus, type Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import { buscaDoPainel } from "@/lib/campo";
+import { ajudaDeCampo, asteriscoDeCampo, buscaDoPainel, caixaDeMarcar, erroDeCampo, rotuloDeCampo } from "@/lib/campo";
 import { focoInterno, rolagemDiscreta } from "@/lib/estados";
 import { useCliqueFora } from "@/lib/use-clique-fora";
 import { useSaida } from "@/lib/use-saida";
@@ -12,7 +12,9 @@ import { PainelFlutuante } from "@/components/ui/popover";
 import {
   GrupoDeOpcoes,
   SelectTrigger,
+  SinalDaOpcao,
   agruparOpcoes,
+  temSinal,
   type OpcaoSelect,
   type SelectTriggerProps,
 } from "@/components/ui/select";
@@ -37,7 +39,7 @@ import {
  * busca que não acha oferece criar) e `acao` (uma ação fixa no pé do painel).
  */
 
-/** As do Select — inclusive `conteudo`, a opção como ela aparece na tela (uma `Tag`) —, mais o texto de apoio. */
+/** As do Select — com os sinais da peça (`foto`, `tom`, `status`, `icone`), sem a pílula (ADR-069) —, mais o texto de apoio. */
 export type OpcaoCombobox = OpcaoSelect & {
   /** Texto de apoio à direita, apagado: o domínio da empresa, o e-mail da pessoa. A busca também procura nele. */
   detalhe?: string;
@@ -276,18 +278,12 @@ export function ComboboxPainel({
                   )}
                 >
                   {multiplo ? (
-                    // a mesma caixa do item `check` do Menu
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        "flex size-4 shrink-0 items-center justify-center rounded-sm border",
-                        escolhida ? "border-primary bg-primary text-primary-foreground" : "border-input-border bg-card",
-                      )}
-                    >
-                      {escolhida ? <Check size={12} weight="bold" /> : null}
+                    // a caixa do Checkbox, em 16px (ADR-070)
+                    <span aria-hidden="true" className={caixaDeMarcar(escolhida)}>
+                      {escolhida ? <Check size={12} weight="regular" /> : null}
                     </span>
                   ) : null}
-                  {o.conteudo ? null : o.icone}
+                  {o.conteudo ? null : <SinalDaOpcao opcao={o} />}
                   {o.conteudo ? (
                     <span className="flex min-w-0 flex-1 items-center">{o.conteudo}</span>
                   ) : (
@@ -360,8 +356,16 @@ export interface ComboboxProps {
   aoEscolher?: (valor: string) => void;
   /** O que o gatilho mostra quando nada foi escolhido. */
   textoVazio?: string;
-  /** Nome do controle para leitor de tela. Ex.: "Origem do lead". */
+  /** Nome do controle. No `field` é o rótulo visível, como o do Input ao lado; em `md` e `sm`, só o leitor de tela o lê. Ex.: "Origem do lead". */
   rotulo: string;
+  /** `field`: tira o rótulo da tela e o mantém para o leitor de tela. */
+  rotuloOculto?: boolean;
+  /** `field`: texto de apoio sob o campo. Some enquanto há `erro`. */
+  ajuda?: string;
+  /** `field`: campo obrigatório — asterisco e `aria-required`. */
+  obrigatorio?: boolean;
+  /** `field`: mensagem de erro sob o campo, com o traço de erro. */
+  erro?: string;
   /** Os tamanhos do gatilho do Select: `md` (card), `sm` (barra), `field` (formulário). */
   size?: SelectTriggerProps["size"];
   rotulos: RotulosDoCombobox;
@@ -385,15 +389,28 @@ function GatilhoDoCombobox({
   multiplo: boolean;
   aoAlternar: (valor: string) => void;
 }) {
-  const { opcoes, textoVazio = "Selecione", rotulo, size, rotulos, aoCriar, acao, className } = base;
+  const { opcoes, textoVazio = "Selecione", rotulo, rotuloOculto, ajuda, obrigatorio, erro, size, rotulos, aoCriar, acao, className } = base;
   const [aberto, setAberto] = React.useState(false);
   const gatilho = React.useRef<HTMLButtonElement>(null);
+  const id = React.useId().replace(/:/g, "");
+  // o campo de formulário tem rótulo visível, como o Input ao lado (ADR-071)
+  const campo = size === "field";
   // na ordem da lista, não na ordem do clique: o resumo não pula de lugar
   const escolhidas = opcoes.filter((o) => selecionados.includes(o.valor));
   const primeira = escolhidas[0];
 
   return (
-    <div className={cn("relative inline-block", className)}>
+    <div className={cn("relative", campo ? "flex min-w-0 flex-col gap-1" : "inline-block", className)}>
+      {campo ? (
+        <span id={`rotulo-${id}`} className={cn(rotuloDeCampo(), rotuloOculto && "sr-only")}>
+          {rotulo}
+          {obrigatorio ? (
+            <span aria-hidden="true" className={asteriscoDeCampo}>
+              {" *"}
+            </span>
+          ) : null}
+        </span>
+      ) : null}
       <SelectTrigger
         ref={gatilho}
         size={size}
@@ -401,7 +418,12 @@ function GatilhoDoCombobox({
         vazio={!primeira}
         aria-haspopup="dialog"
         aria-expanded={aberto}
-        aria-label={rotulo}
+        aria-label={campo ? undefined : rotulo}
+        aria-labelledby={campo ? `rotulo-${id}` : undefined}
+        aria-required={campo && obrigatorio ? true : undefined}
+        aria-invalid={campo && erro ? true : undefined}
+        aria-describedby={campo ? (erro ? `erro-${id}` : ajuda ? `ajuda-${id}` : undefined) : undefined}
+        data-erro={campo && erro ? "true" : undefined}
         onClick={() => setAberto((a) => !a)}
         onKeyDown={(e) => {
           if (e.key === "ArrowDown" || e.key === "ArrowUp") {
@@ -412,10 +434,10 @@ function GatilhoDoCombobox({
       >
         {primeira ? (
           <span className="flex min-w-0 items-center gap-1.5">
-            {/* a escolhida aparece como aparece na lista: a mesma peça */}
+            {/* a escolhida aparece como aparece na lista: o mesmo sinal antes do nome */}
             {primeira.conteudo ?? (
               <>
-                {primeira.icone}
+                {temSinal(primeira) ? <SinalDaOpcao opcao={primeira} /> : null}
                 <span className="min-w-0 truncate">{primeira.rotulo}</span>
               </>
             )}
@@ -425,6 +447,15 @@ function GatilhoDoCombobox({
           textoVazio
         )}
       </SelectTrigger>
+      {campo && erro ? (
+        <p id={`erro-${id}`} className={erroDeCampo}>
+          {erro}
+        </p>
+      ) : campo && ajuda ? (
+        <p id={`ajuda-${id}`} className={ajudaDeCampo}>
+          {ajuda}
+        </p>
+      ) : null}
       <ComboboxPainel
         aberto={aberto}
         aoFechar={(devolver = true) => {

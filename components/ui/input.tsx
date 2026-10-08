@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Check, Copy, PencilSimple, type Icon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import { caixaDeCampo, blocoDeCampo, rotuloDoBloco, rotuloDeCampo, caixaNoCartao, erroDeCampo, linhaDoCartao } from "@/lib/campo";
+import { caixaDeCampo, blocoDeCampo, rotuloDoBloco, rotuloDeCampo, caixaNoCartao, erroDeCampo, ajudaDeCampo, asteriscoDeCampo, linhaDoCartao } from "@/lib/campo";
 
 // As classes do campo moram em lib/campo.ts (D21) e seguem exportadas daqui
 // por compatibilidade com quem já importava do Input.
@@ -30,6 +30,12 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   rotulo: string;
   /** Mensagem de erro. Presente = estado de erro. */
   erro?: string;
+  /** Texto de apoio sob o campo: para que ele serve, quando o rótulo não basta. Some enquanto há `erro`. */
+  ajuda?: string;
+  /** Campo obrigatório: asterisco depois do rótulo e `aria-required`. */
+  obrigatorio?: boolean;
+  /** Texto fixo antes do valor, apagado: "R$", "+55", "https://". Diz o tipo do campo sem ocupar o rótulo. */
+  prefixo?: string;
   /** Ícone de 16px antes do texto. Ex.: `CalendarBlank`. */
   iconeInicio?: Icon;
   /** Ações de 16px depois do texto. Use `AcaoCampo` ou `AcaoCopiar`. */
@@ -40,10 +46,11 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ rotulo, erro, iconeInicio: IconeInicio, acoes, cartao, className, id, disabled, ...props }, ref) => {
+  ({ rotulo, erro, ajuda, obrigatorio, prefixo, iconeInicio: IconeInicio, acoes, cartao, className, id, disabled, ...props }, ref) => {
     const gerado = React.useId().replace(/:/g, "");
     const campoId = id ?? `campo-${gerado}`;
     const erroId = `${campoId}-erro`;
+    const ajudaId = `${campoId}-ajuda`;
     const campo = React.useRef<HTMLInputElement>(null);
     React.useImperativeHandle(ref, () => campo.current!);
 
@@ -51,17 +58,28 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <div className={cn(cartao ? blocoDeCampo() : "flex min-w-0 flex-col gap-1", className)}>
         <label htmlFor={campoId} className={rotuloDeCampo(cartao)}>
           {rotulo}
+          {obrigatorio ? (
+            <span aria-hidden="true" className={asteriscoDeCampo}>
+              {" *"}
+            </span>
+          ) : null}
         </label>
         <div className={cn(caixaDeCampo({ erro: Boolean(erro), disabled }), cartao && caixaNoCartao)}>
           {IconeInicio ? (
             <IconeInicio size={16} weight="regular" aria-hidden="true" className="shrink-0 text-input-placeholder" />
           ) : null}
+          {prefixo ? (
+            <span aria-hidden="true" className="shrink-0 text-body-md text-input-placeholder">
+              {prefixo}
+            </span>
+          ) : null}
           <input
             ref={campo}
             id={campoId}
             disabled={disabled}
+            aria-required={obrigatorio || undefined}
             aria-invalid={erro ? true : undefined}
-            aria-describedby={erro ? erroId : undefined}
+            aria-describedby={erro ? erroId : ajuda ? ajudaId : undefined}
             className="h-full min-w-0 flex-1 truncate bg-transparent text-body-md text-input-text outline-none placeholder:text-input-placeholder disabled:cursor-not-allowed disabled:text-input-text-disabled"
             {...props}
           />
@@ -74,6 +92,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {erro ? (
           <p id={erroId} className={erroDeCampo}>
             {erro}
+          </p>
+        ) : ajuda ? (
+          <p id={ajudaId} className={ajudaDeCampo}>
+            {ajuda}
           </p>
         ) : null}
       </div>

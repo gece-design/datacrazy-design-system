@@ -11,7 +11,8 @@ Escolher uma opção numa lista curta.
 - **Não use** para ações (`Menu`), para ligar e desligar (`Switch`) ou para 2 a 4 opções que cabem à vista (`SegmentedControl`, `RadioGroup`).
 - **Não use** na barra da tabela para filtrar: filtros são a `BarraDeFiltros`, sob o Header.
 - **Use** `grupo` quando a lista tem mais de um assunto ("Redes sociais" / "Outras") e `icone` quando a opção tem marca ou símbolo.
-- **Use** `conteudo` quando a opção aparece na tela como uma `Tag` (atendente com foto, tag com cor): a lista e o gatilho mostram a mesma Tag, não o nome escrito. É regra do DS inteiro.
+- **Use** `foto`, `tom`, `status` ou `icone` na opção quando ela aparece na tela como uma `Tag` (atendente com foto, tag com cor): a lista e o gatilho mostram o mesmo sinal antes do nome, sem a pílula — a Tag inteira dentro de um campo lia como campo dentro de campo (ADR-069). `sinaisDaTag(t)` da Tag monta os quatro de uma vez.
+- **Use** `size="field"` com o `rotulo` à vista (ele já desenha), `ajuda` quando o rótulo não basta e `obrigatorio` no que não pode faltar: é a receita do conteúdo do modal (ADR-071).
 - **Não use** para lista longa (mais de ~10 opções), com busca ou com várias escolhas: é `Combobox` ou `ComboboxMultiplo`.
 
 ## Família
@@ -36,8 +37,12 @@ página de Elevation reserva a popover e menu de contexto).
 
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
-| `opcoes` | `OpcaoSelect[]` | — | sim | `valor`, `rotulo`, `icone?` (ícone de 16px antes do rótulo, na lista e no gatilho: Phosphor ou `IconeDeMarca`) `grupo?` (cabeçalho do bloco: opções seguidas com o mesmo `grupo` ficam sob ele) e `conteudo?` (a opção como ela aparece na tela — uma `Tag` —, no lugar do ícone e do rótulo, na lista e no gatilho; o `rotulo` continua sendo o nome acessível). |
-| `rotulo` | `string` | — | sim | Nome do controle para leitor de tela. Ex.: "Filtrar por etapa". |
+| `opcoes` | `OpcaoSelect[]` | — | sim | `valor`, `rotulo`, `icone?` (ícone antes do rótulo, na lista e no gatilho: 16px do Phosphor ou `IconeDeMarca`, ou o de 12px da tag), `grupo?` (cabeçalho do bloco: opções seguidas com o mesmo `grupo` ficam sob ele), `foto?` (a foto de quem a opção representa, num disco de 20px), `tom?` e `status?` (a bolinha na cor da tag — ou a cor do `icone`, quando há) e `conteudo?` (um conteúdo próprio no lugar do sinal e do rótulo; para tag e atendente não use — ADR-069). O `rotulo` é sempre o nome acessível. |
+| `rotulo` | `string` | — | sim | Nome do controle. No `field` e no `cartao` é o rótulo visível; em `md` e `sm`, só o leitor de tela o lê. Ex.: "Filtrar por etapa". |
+| `rotuloOculto` | `boolean` | `false` | não | `field`: tira o rótulo da tela e o mantém para o leitor de tela — só quando outro texto já diz o que é (o cartão do drawer). |
+| `ajuda` | `string` | — | não | `field`: texto de apoio sob o campo, para que ele serve. Some enquanto há `erro`. |
+| `obrigatorio` | `boolean` | `false` | não | `field`: asterisco depois do rótulo e `aria-required`. |
+| `erro` | `string` | — | não | `field`: mensagem sob o campo e o traço de erro, como no Input. |
 | `valor` | `string` | — | sim | O valor escolhido (controlado). Vazio = o gatilho mostra `textoVazio`. |
 | `aoEscolher` | `(v: string) => void` | — | não | Chamado ao escolher. |
 | `textoVazio` | `string` | `"Selecione"` | não | O que o gatilho mostra sem escolha. |
@@ -52,6 +57,10 @@ outro componente.
 
 `agruparOpcoes` e `GrupoDeOpcoes` (`grupo`, `primeiro`) são as duas peças da lista com
 grupos; o `Combobox` usa as mesmas. Quem só usa o Select não precisa delas.
+
+`SinalDaOpcao` (`opcao`) desenha o que vem antes do nome — a foto, a bolinha ou o
+ícone na cor — e `temSinal(opcao)` diz se há algo a desenhar. O `Combobox` e a
+`BarraDeFiltros` usam os dois; quem só usa o Select não precisa deles.
 
 ## Variantes
 

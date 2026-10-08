@@ -28,7 +28,7 @@ import { BarraDeFiltros, contarFiltros, type CampoDeFiltro, type FiltrosAtivos }
 import { HeaderBusca, HeaderFiltros, Notificacoes, type Notificacao } from "@/components/ui/header";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
 import { Drawer } from "@/components/ui/drawer";
-import { ICONES_DE_TAG, Tag, type IconeDeTag } from "@/components/ui/tag";
+import { ICONES_DE_TAG, type IconeDeTag } from "@/components/ui/tag";
 import { TelaBase } from "@/components/ui/tela-base";
 import { Toaster, toast } from "@/components/ui/toast";
 import { useTema } from "@/lib/tema";
@@ -83,8 +83,8 @@ const CAMPOS_DE_FILTRO: CampoDeFiltro[] = [
     rotulo: "Atendente",
     icone: Headset,
     opcoes: [
-      // cada atendente aparece na lista como aparece na tela: a Tag com a foto
-      ...["Esther", "Liam", "Marina"].map((a) => ({ valor: a, rotulo: a === EU ? `${a} (eu)` : a, conteudo: <Tag foto="/ds/atendente.png">{a === EU ? `${a} (eu)` : a}</Tag> })),
+      // a foto antes do nome, sem a pílula (ADR-069)
+      ...["Esther", "Liam", "Marina"].map((a) => ({ valor: a, rotulo: a === EU ? `${a} (eu)` : a, foto: "/ds/atendente.png" })),
       { valor: SEM_ATENDENTE, rotulo: "Sem atendente" },
     ],
   },

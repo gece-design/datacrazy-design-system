@@ -3,6 +3,7 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { Check, type Icon } from "@phosphor-icons/react";
+import { caixaDeMarcar } from "@/lib/campo";
 import { cn } from "@/lib/utils";
 import { PainelFlutuante } from "@/components/ui/popover";
 import { useCliqueFora } from "@/lib/use-clique-fora";
@@ -151,14 +152,8 @@ export function Menu({ aberto, aoFechar, gatilho, rotulo, itens }: MenuProps) {
               )}
             >
               {item.tipo === "check" ? (
-                <span
-                  aria-hidden="true"
-                  className={cn(
-                    "flex size-4 shrink-0 items-center justify-center rounded-sm border",
-                    item.marcado ? "border-primary bg-primary text-primary-foreground" : "border-input-border bg-card",
-                  )}
-                >
-                  {item.marcado ? <Check size={12} weight="bold" /> : null}
+                <span aria-hidden="true" className={caixaDeMarcar(Boolean(item.marcado))}>
+                  {item.marcado ? <Check size={12} weight="regular" /> : null}
                 </span>
               ) : item.tipo === "radio" ? (
                 <span

@@ -358,3 +358,23 @@ Desvio: acréscimo à escala de movimento (ADR-021), sem par no arquivo. Duas an
 Motivo: pedido do humano (2026-10-02: "precisa aplicar os motions na tela que parece que você tirou… aplique novamente e melhore ainda mais onde não tinha").
 Aprovado por: humano (2026-10-02).
 
+## ADR-069 · A opção da lista leva os sinais da Tag, sem a pílula · 2026-10-07
+Desvio: ajusta a ADR-063. A opção de `Select`, `Combobox`, `ComboboxMultiplo`, `ComboboxPainel`, `CelulaEscolha` e `BarraDeFiltros` deixa de levar `conteudo: <Tag …>` e passa a levar os sinais da peça — `foto` (um disco de 20px, o `Avatar xs`), `tom` ou `status` (a bolinha de 6px, ou a cor do `icone`) e `icone` — antes do nome, na lista e no gatilho (`SinalDaOpcao`, `temSinal`; `sinaisDaTag(t)` monta os quatro). `conteudo` continua existindo para o que não é tag nem pessoa. O `SeletorTags` segue mostrando a pílula: é o seletor DE tags, não um campo. A cor da bolinha por status sai da Tag para `lib/sinais.ts`.
+Motivo: na reunião de 2026-10-02 a Tag do atendente dentro do Select do "Novo lead" leu como "campo dentro de campo" (Angélica, Gava); o lead (Avatar com iniciais) e o atendente (foto na pílula) pareciam peças de sistemas diferentes (Ryan). O sinal sem a pílula mantém o que a ADR-063 queria — ver a cor e a foto antes de escolher — e harmoniza as duas pessoas no mesmo disco de 20px.
+Aprovado por: humano (2026-10-07, "pode iniciar" sobre a lista de 2026-10-07).
+
+## ADR-070 · Uma caixa de marcar só: raio 4, traço de 1,5 · 2026-10-07
+Desvio: o `Checkbox` passa de `rounded-xs` (2px, o do arquivo) para `rounded-sm` (4px); as caixas das listas (Combobox de várias escolhas, seletor de tags, item `check` do Menu) deixam de ser uma caixa própria de `border` e passam a `caixaDeMarcar` (lib/campo.ts): 16px, o mesmo fundo, o mesmo traço de 1,5 por `ring-inset` e o mesmo raio do Checkbox. O glifo é o `Check` regular de 12px nos dois.
+Motivo: Angélica notou na reunião de 2026-10-02 que a caixa do seletor de tags era mais redonda que a da tabela e preferiu a redonda; Gava leu a diferença como "alguma coisa não está pegando o mesmo componente". Eram três desenhos da mesma caixa.
+Aprovado por: humano (2026-10-07).
+
+## ADR-071 · Conteúdo do modal: rótulo em todo campo, apoio, obrigatório, pares · 2026-10-07
+Desvio: regra nova, sem par no arquivo (a casca do Modal é a ADR-039; o que vai dentro não tinha regra). `Select size="field"` e `Combobox size="field"` passam a desenhar o `rotulo` (era só `aria-label`; `rotuloOculto` tira da tela quando outro texto já o diz). `Input`, `Textarea`, `Select field` e `Combobox field` ganham `ajuda` (texto de apoio sob o campo, some com `erro`) e `obrigatorio` (asterisco + `aria-required`); `Input` ganha `prefixo` ("R$"). `lib/campo.ts` ganha `ajudaDeCampo`, `asteriscoDeCampo`, `linhaDeCampos` (dois campos lado a lado) e `formulario` (o corpo, 16px). A receita inteira está em `docs/regras.md` § "Conteúdo do modal": ordem, pares, prefixo e ícone, rodapé. Os formulários do protótipo (Novo lead do Pipeline e de Leads, Nova tag, Agentes, bloco da Automação) seguem a receita.
+Motivo: reunião de 2026-10-02 — o "Novo lead" tinha três campos com rótulo e três selects sem (Gava: "parece que tem três campos e depois três jogados embaixo"); Ryan: "a única diretriz é a estrutura do modal, não como os componentes se comportam dentro"; Bryan: sem padrão escrito, a IA monta "o melhor jeito", não o jeito padronizado. Referência citada: o modal do Attio.
+Aprovado por: humano (2026-10-07).
+
+## ADR-072 · Sidebar recolhida: símbolo de 20px e botão de expandir à vista · 2026-10-07
+Desvio: ajusta a ADR-052. Recolhida, a `SidebarBrand` mostra o símbolo com 20px (o tamanho de um ícone de item, `[&>svg]:size-5`) numa linha de 32 e, embaixo, o `SidebarToggle` — sempre à vista. Sai o símbolo de 32 que virava botão de expandir sob o cursor ou o foco.
+Motivo: Gava, na reunião de 2026-10-02: "achei grande o ícone da DataCrazy" e "esse efeito de hover para expandir, não gostei"; sem referência, a proposta é minha.
+Aprovado por: humano (2026-10-07).
+

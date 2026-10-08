@@ -247,6 +247,7 @@ function CampoSelect({ rotulo, valor, aoEscolher }: { rotulo: string; valor?: st
       <Select
         size="field"
         rotulo={rotulo}
+        rotuloOculto
         textoVazio="Selecione uma opção"
         opcoes={reclamacoes}
         valor={valor}

@@ -59,7 +59,7 @@ import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwi
 import { SeletorDeTom, Tag } from "@/components/ui/tag";
 import { TelaBase } from "@/components/ui/tela-base";
 import { Toaster, toast } from "@/components/ui/toast";
-import { rotuloDeCampo } from "@/lib/campo";
+import { formulario, linhaDeCampos, rotuloDeCampo } from "@/lib/campo";
 import { blocoDaTela, rolagemDiscreta } from "@/lib/estados";
 import { useTema } from "@/lib/tema";
 import { tomDe, type Tom } from "@/lib/tons";
@@ -194,17 +194,8 @@ export function Tela({
   // Seleção em massa: a tela guarda os ids; a tabela desenha as caixas.
   const selecao = useSelecaoDaTabela();
 
-  /** O catálogo de tags como opções: cada uma como a Tag que vai aparecer. */
-  const opcoesDeTag = tags.map((t) => {
-    const e = etiquetaDe(t);
-    return {
-      valor: t.id,
-      rotulo: t.rotulo,
-      conteudo: (
-<Tag tom={e.tom}>{t.rotulo}</Tag>
-      ),
-    };
-  });
+  /** O catálogo de tags como opções: a bolinha na cor da tag antes do nome (ADR-069). */
+  const opcoesDeTag = tags.map((t) => ({ valor: t.id, rotulo: t.rotulo, tom: etiquetaDe(t).tom }));
 
   const campos: CampoDeFiltro[] = [
     { id: "origens", rotulo: "Origem", icone: ShareNetwork, opcoes: OPCOES_DE_ORIGEM },
@@ -541,9 +532,11 @@ export function Tela({
         }
       >
         {novaTag ? (
-          <div className="flex flex-col gap-4">
+          <div className={formulario}>
             <Input
               rotulo="Nome"
+              obrigatorio
+              ajuda="Curto: é o que cabe na pílula."
               value={novaTag.nome}
               erro={erroTag}
               placeholder="Ex.: Cliente VIP"
@@ -557,6 +550,7 @@ export function Tela({
             />
             <Input
               rotulo="Descrição"
+              ajuda="Aparece para quem vai escolher a tag."
               value={novaTag.descricao}
               placeholder="Quando usar esta tag"
               onChange={(e) => setNovaTag({ ...novaTag, descricao: e.target.value })}
@@ -604,9 +598,13 @@ export function Tela({
         }
       >
         {novoLead ? (
-          <div className="flex flex-col gap-4">
+          // a receita do conteúdo do modal (ADR-071): rótulo em todo campo,
+          // apoio onde o rótulo não basta, obrigatório marcado, pares lado a lado
+          <div className={formulario}>
             <Input
               rotulo="Nome"
+              obrigatorio
+              ajuda="Como o lead aparece na lista e no painel."
               value={novoLead.nome}
               erro={erroLead}
               placeholder="Nome de quem entrou em contato"
@@ -618,24 +616,29 @@ export function Tela({
                 if (e.key === "Enter") criarLead();
               }}
             />
-            <Input
-              rotulo="Telefone"
-              value={novoLead.telefone}
-              inputMode="tel"
-              placeholder="(00) 00000-0000"
-              onChange={(e) => setNovoLead({ ...novoLead, telefone: e.target.value })}
-            />
-            <Input
-              rotulo="E-mail"
-              value={novoLead.email}
-              inputMode="email"
-              placeholder="nome@empresa.com"
-              onChange={(e) => setNovoLead({ ...novoLead, email: e.target.value })}
-            />
+            <div className={linhaDeCampos}>
+              <Input
+                rotulo="Telefone"
+                iconeInicio={Phone}
+                value={novoLead.telefone}
+                inputMode="tel"
+                placeholder="(00) 00000-0000"
+                onChange={(e) => setNovoLead({ ...novoLead, telefone: e.target.value })}
+              />
+              <Input
+                rotulo="E-mail"
+                iconeInicio={EnvelopeSimple}
+                value={novoLead.email}
+                inputMode="email"
+                placeholder="nome@empresa.com"
+                onChange={(e) => setNovoLead({ ...novoLead, email: e.target.value })}
+              />
+            </div>
             {/* grupos com cabeçalho e ícone por opção; marca é `IconeDeMarca` */}
             <Select
               size="field"
               rotulo="Origem"
+              ajuda="Por onde o lead chegou."
               valor={novoLead.origem}
               aoEscolher={(v) => setNovoLead({ ...novoLead, origem: v as Origem })}
               opcoes={OPCOES_DE_ORIGEM}

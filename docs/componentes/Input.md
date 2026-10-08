@@ -31,6 +31,9 @@ Diff de pixels **não medido** (`figma-console` fora do ar).
 |------|------|-------------|-----------|
 | `rotulo` | `string` | sim | Rótulo sempre visível, ligado ao campo por `htmlFor`. |
 | `erro` | `string` | não | Presente = estado de erro, com a mensagem embaixo. |
+| `ajuda` | `string` | não | Texto de apoio sob o campo: para que ele serve, quando o rótulo não basta. Some enquanto há `erro` (ADR-071). |
+| `obrigatorio` | `boolean` | não | Asterisco depois do rótulo e `aria-required`. O erro continua vindo por `erro`. |
+| `prefixo` | `string` | não | Texto fixo antes do valor, apagado: "R$", "+55". Diz o tipo do campo sem ocupar o rótulo. |
 | `iconeInicio` | `Icon` | não | Ícone de 16px antes do texto. |
 | `acoes` | `ReactNode` | não | Ações de 16px depois do texto (`AcaoCampo`). |
 | `cartao` | `boolean` | não | Põe o campo no cartão do drawer: rótulo em bold, superfície própria, caixa sangrando 8px para os lados. Em formulário aberto não use. |

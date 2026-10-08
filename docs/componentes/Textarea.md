@@ -29,6 +29,8 @@ desabilitado são os dele. Registrado no ADR-042; o Figma acompanha na remediç�
 | `rotulo` | `string` | — | sim | Texto do rótulo. Visível, salvo com `rotuloOculto`. |
 | `rotuloOculto` | `boolean` | `false` | não | Tira o rótulo da tela e o mantém para o leitor de tela: o compositor do chat. |
 | `erro` | `string` | — | não | Mensagem de erro. Presente = estado de erro. |
+| `ajuda` | `string` | — | não | Texto de apoio sob o campo, para que ele serve. Some enquanto há `erro` (ADR-071). |
+| `obrigatorio` | `boolean` | `false` | não | Asterisco depois do rótulo e `aria-required`. |
 | `linhas` | `number` | `3` | não | Linhas em repouso. |
 | `maximoDeLinhas` | `number` | `8` | não | Cresce com o texto até este número de linhas; depois rola por dentro. |
 | `value`, `onChange`, `placeholder`, `disabled`, `name`… | nativos | — | não | Repassados ao `<textarea>`. `rows` não: use `linhas`. |

@@ -96,7 +96,7 @@ export default function CheckboxPage() {
 
       <Secao
         titulo="Estados"
-        spec="18px · raio 2 · traço 1.5"
+        spec="18px · raio 4 · traço 1.5"
         descricao="Os quatro estados do arquivo e o indeterminado, que o arquivo não desenha. Todos clicáveis, menos os desabilitados. Troque o tema no topo: o escuro sai dos mesmos tokens."
         nota={
           <p>

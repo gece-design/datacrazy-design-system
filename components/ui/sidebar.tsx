@@ -127,30 +127,17 @@ export function SidebarToggle({
 export function SidebarBrand({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   const { colapsada, aoColapsar, rotulos } = useSidebar();
 
-  // Recolhida, não há lugar para marca e botão lado a lado: o símbolo É o
-  // botão de expandir. Sob o cursor ou o foco, dá lugar ao ícone do painel.
-  if (colapsada && aoColapsar) {
+  // Recolhida, não há lugar para marca e botão lado a lado: o símbolo fica em
+  // cima, do tamanho de um ícone de item, e o botão de expandir embaixo, sempre
+  // à vista — o símbolo de 32 que virava botão sob o cursor era grande demais e
+  // escondia o controle (cliente, 2026-10-02, ADR-072).
+  if (colapsada) {
     return (
-      <div className={cn("flex h-8 items-center justify-center", className)} {...props}>
-        <button
-          type="button"
-          aria-label={rotulos.expandir}
-          title={rotulos.expandir}
-          aria-expanded={false}
-          onClick={() => aoColapsar(false)}
-          className={cn(
-            "group/marca grid size-8 place-items-center rounded-md text-surface-inverse transition-colors hover:bg-nav-item-hover",
-            `${foco}`
-          )}
-        >
-          <LogoDataCrazy simbolo className="group-hover/marca:hidden group-focus-visible/marca:hidden" />
-          <SidebarSimple
-            size={16}
-            weight="regular"
-            aria-hidden="true"
-            className="hidden text-foreground group-hover/marca:block group-focus-visible/marca:block"
-          />
-        </button>
+      <div className={cn("flex flex-col items-center gap-0.5 text-surface-inverse", className)} {...props}>
+        <span className="grid h-8 place-items-center">
+          <LogoDataCrazy simbolo className="[&>svg]:size-5" />
+        </span>
+        {aoColapsar ? <SidebarToggle colapsada rotulos={rotulos} onClick={() => aoColapsar(false)} /> : null}
       </div>
     );
   }
@@ -160,7 +147,7 @@ export function SidebarBrand({ className, ...props }: React.HTMLAttributes<HTMLD
       className={cn("flex h-8 items-center justify-between pl-2 text-surface-inverse", className)}
       {...props}
     >
-      <LogoDataCrazy simbolo={colapsada} />
+      <LogoDataCrazy />
       {aoColapsar ? <SidebarToggle rotulos={rotulos} onClick={() => aoColapsar(true)} /> : null}
     </div>
   );

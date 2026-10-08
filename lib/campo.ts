@@ -71,6 +71,32 @@ export const gradeDeCartoes = "grid grid-cols-[repeat(auto-fill,minmax(220px,1fr
 /** A mensagem de erro sob o campo (E6: erro inline é o padrão do DS). */
 export const erroDeCampo = "text-caption text-destructive";
 
+/** O texto de apoio sob o campo: diz para que o campo serve quando o rótulo
+ *  não basta ("como você identifica o lead"). Some quando há erro — os dois
+ *  no mesmo lugar brigariam (cliente, 2026-10-02, ADR-071). */
+export const ajudaDeCampo = "text-caption text-muted-foreground";
+
+/** O asterisco do campo obrigatório, depois do rótulo. Só sinal: o `aria-required` é quem avisa o leitor de tela. */
+export const asteriscoDeCampo = "text-destructive";
+
+/** Dois campos curtos lado a lado — valor e data, etapa e atendente. Texto
+ *  longo e lista de escolha ocupam a linha inteira (ADR-071). */
+export const linhaDeCampos = "grid grid-cols-2 gap-3";
+
+/** O corpo de um formulário (modal, painel lateral): 16px entre campos. */
+export const formulario = "flex flex-col gap-4";
+
+/** A caixa de marcar de uma lista — o Combobox de várias escolhas, o seletor
+ *  de tags, o item `check` do Menu: a mesma caixa do Checkbox (raio 4, traço
+ *  de 1,5), em 16px. Eram duas caixas, uma mais redonda que a da tabela
+ *  (cliente, 2026-10-02, ADR-070). */
+export function caixaDeMarcar(marcada: boolean) {
+  return cn(
+    "grid size-4 shrink-0 place-items-center rounded-sm transition-[color,background-color,box-shadow]",
+    marcada ? "bg-primary text-primary-foreground" : "bg-input-bg ring-1.5 ring-inset ring-input-border",
+  );
+}
+
 /** A busca no topo de um painel flutuante (Combobox, seletor de tags): uma
  *  faixa de 36 sem caixa, com traço embaixo — o foco está sempre nela, então
  *  o cursor do texto é o sinal; a caixa com anel pesava a cada lista aberta

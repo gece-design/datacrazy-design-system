@@ -38,7 +38,7 @@ CRM do Twenty e do Attio, aplicada por partes; o Figma acompanha na remedição
 | Prop | Tipo | Padrão | Obrigatória | Descrição |
 |------|------|--------|-------------|-----------|
 | `colapsada` | `boolean` | `false` | não | 220px viram 48 e todo rótulo sai de cena; o `title` sobe para a raiz do item (D12). |
-| `onColapsarChange` | `(colapsada: boolean) => void` | — | não | Passe para ganhar o botão de recolher na linha da marca (`SidebarBrand`). Recolhida, o símbolo da marca é o botão de expandir. |
+| `onColapsarChange` | `(colapsada: boolean) => void` | — | não | Passe para ganhar o botão de recolher na linha da marca (`SidebarBrand`). Recolhida, o botão de expandir fica embaixo do símbolo, sempre à vista. |
 | `rotulos` | `Partial<RotulosDaSidebar>` | `ROTULOS_DA_SIDEBAR` | não | `recolher` e `expandir`: os nomes do botão (i18n). |
 | `rotulo` | `string` | — | não | Rótulo acessível da região de navegação. |
 | `children` | `ReactNode` | — | sim | `SidebarTopo` e `SidebarRodape`. |
@@ -48,7 +48,7 @@ Peças:
 | Peça | Props | O que é |
 |------|-------|---------|
 | `SidebarTopo` · `SidebarRodape` | `children` | Bloco de cima (marca, destinos, favoritos; 16px entre filhos) e de baixo (tema, atalhos, usuário; 8px) |
-| `SidebarBrand` | — | `LogoDataCrazy` e, quando a Sidebar pode recolher, o `SidebarToggle` à direita. Recolhida, o símbolo é o botão de expandir: sob o cursor ou o foco, dá lugar ao ícone do painel |
+| `SidebarBrand` | — | `LogoDataCrazy` e, quando a Sidebar pode recolher, o `SidebarToggle` à direita. Recolhida, o símbolo encolhe para 20px (o tamanho de um ícone de item) e o `SidebarToggle` fica embaixo dele, sempre à vista — o símbolo de 32 que virava botão sob o cursor era grande e escondia o controle (cliente, 2026-10-02, ADR-072) |
 | `SidebarGrupo` | `rotulo?`, `ocultarRecolhida?`, `children` | `<ul>` com 2px entre linhas. Com `rotulo`, é uma seção com nome ("Favoritos"): o nome some quando recolhe. `ocultarRecolhida` tira o grupo inteiro do painel recolhido. `recuo` não tem mais efeito |
 | `SidebarItem` | `icone` (Phosphor, 16px, obrigatório; `fill` no selecionado), `children` (o rótulo), `selecionado?`, `href?`, `componente?`, `disabled?` | Raiz `a` com `href`, `span` sem; passe `Link` em `componente` para navegação client-side |
 | `SidebarToggle` | `colapsada?`, `rotulos?` + props de botão | O botão de recolher: 28px, quadrado, sem relevo, com o ícone do painel; `aria-expanded`. A `SidebarBrand` já o traz — exportado para quem monta o topo de outro jeito. O arquivo desenha um disco flutuando na borda; saiu a pedido do cliente (ADR-052) |

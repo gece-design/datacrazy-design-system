@@ -25,11 +25,10 @@ import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { Select } from "@/components/ui/select";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
-import { Tag } from "@/components/ui/tag";
 import { TelaBase } from "@/components/ui/tela-base";
 import { Textarea } from "@/components/ui/textarea";
 import { Toaster, toast } from "@/components/ui/toast";
-import { gradeDeCartoes, rotuloDeCampo } from "@/lib/campo";
+import { formulario, gradeDeCartoes } from "@/lib/campo";
 import { useTema } from "@/lib/tema";
 import { cn } from "@/lib/utils";
 import { Cadastros, type Aba } from "./cadastros";
@@ -69,7 +68,7 @@ const NOTIFICACOES: Notificacao[] = [
 ];
 
 /** Os modelos como opções: cada um como a Tag que aparece no cartão do agente. */
-const OPCOES_DE_MODELO = MODELOS.map((m) => ({ valor: m, rotulo: m, conteudo: <Tag>{m}</Tag> }));
+const OPCOES_DE_MODELO = MODELOS.map((m) => ({ valor: m, rotulo: m }));
 
 /* Buscar "pos-venda" tem que achar "Pós-venda": quem digita rápido não põe acento. */
 function semAcento(texto: string) {
@@ -361,9 +360,11 @@ export function Tela({
         }
       >
         {agenteNoModal ? (
-          <div className="flex flex-col gap-4">
+          <div className={formulario}>
             <Input
               rotulo="Nome"
+              obrigatorio
+              ajuda="Como o agente aparece na lista e nas conversas."
               value={agenteNoModal.nome}
               erro={erroDe("nome")}
               placeholder="Ex.: Qualificador de leads"
@@ -380,23 +381,19 @@ export function Tela({
             />
             <Textarea
               rotulo="Descrição"
+              ajuda="O que ele faz e quando entra em ação."
               value={agenteNoModal.descricao}
               placeholder="O que este agente faz"
               onChange={(e) => setFormAgente({ ...agenteNoModal, descricao: e.target.value })}
             />
-            <div className="flex flex-col gap-1">
-              <p aria-hidden="true" className={rotuloDeCampo()}>
-                Modelo de IA
-              </p>
-              {/* a opção já é a Tag do cartão: quem escolhe vê como vai ficar */}
-              <Select
-                size="field"
-                rotulo="Modelo de IA"
-                valor={agenteNoModal.modelo}
-                aoEscolher={(v) => setFormAgente({ ...agenteNoModal, modelo: v })}
-                opcoes={OPCOES_DE_MODELO}
-              />
-            </div>
+            <Select
+              size="field"
+              rotulo="Modelo de IA"
+              ajuda="O modelo que responde por este agente."
+              valor={agenteNoModal.modelo}
+              aoEscolher={(v) => setFormAgente({ ...agenteNoModal, modelo: v })}
+              opcoes={OPCOES_DE_MODELO}
+            />
           </div>
         ) : null}
       </Modal>
@@ -419,9 +416,10 @@ export function Tela({
         }
       >
         {baseNoModal ? (
-          <div className="flex flex-col gap-4">
+          <div className={formulario}>
             <Input
               rotulo="Nome"
+              obrigatorio
               value={baseNoModal.nome}
               erro={erroDe("nome")}
               placeholder="Ex.: Central de ajuda"
@@ -438,6 +436,7 @@ export function Tela({
             />
             <Textarea
               rotulo="Descrição"
+              ajuda="Os arquivos entram depois, na própria base."
               value={baseNoModal.descricao}
               placeholder="O que os agentes encontram nesta base"
               onChange={(e) => setFormBase({ ...baseNoModal, descricao: e.target.value })}
@@ -464,9 +463,10 @@ export function Tela({
         }
       >
         {servidorNoModal ? (
-          <div className="flex flex-col gap-4">
+          <div className={formulario}>
             <Input
               rotulo="Nome"
+              obrigatorio
               value={servidorNoModal.nome}
               erro={erroDe("nome")}
               placeholder="Ex.: Agenda da equipe"
@@ -483,6 +483,8 @@ export function Tela({
             />
             <Input
               rotulo="URL do servidor"
+              obrigatorio
+              ajuda="O endereço que o agente chama para usar as ferramentas."
               value={servidorNoModal.url}
               erro={erroDe("url")}
               inputMode="url"

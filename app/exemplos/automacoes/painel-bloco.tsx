@@ -65,20 +65,16 @@ export function PainelDoBloco({
 
         {bloco.tipo === "mensagem" ? (
           <>
-            <div className="flex flex-col gap-1.5">
-              <span className="text-label-md text-input-label">Canal</span>
-              <Select
-                size="field"
-                rotulo="Canal"
-                className="block w-full"
-                valor={bloco.canal}
-                aoEscolher={(v) => aoEditar({ canal: v as Canal })}
-                opcoes={[
-                  { valor: "WhatsApp", rotulo: "WhatsApp", icone: <IconeDeMarca marca="whatsapp" /> },
-                  { valor: "Instagram", rotulo: "Instagram", icone: <IconeDeMarca marca="instagram" /> },
-                ]}
-              />
-            </div>
+            <Select
+              size="field"
+              rotulo="Canal"
+              valor={bloco.canal}
+              aoEscolher={(v) => aoEditar({ canal: v as Canal })}
+              opcoes={[
+                { valor: "WhatsApp", rotulo: "WhatsApp", icone: <IconeDeMarca marca="whatsapp" /> },
+                { valor: "Instagram", rotulo: "Instagram", icone: <IconeDeMarca marca="instagram" /> },
+              ]}
+            />
             <Textarea
               rotulo="Mensagem"
               linhas={4}
@@ -97,21 +93,17 @@ export function PainelDoBloco({
               value={String(bloco.espera.valor)}
               onChange={(e) => aoEditar({ espera: { ...bloco.espera!, valor: Number(e.target.value.replace(/\D/g, "")) || 0 } })}
             />
-            <div className="flex flex-col gap-1.5">
-              <span className="text-label-md text-input-label">Unidade</span>
-              <Select
-                size="field"
-                rotulo="Unidade"
-                className="block w-full"
-                valor={bloco.espera.unidade}
-                aoEscolher={(v) => aoEditar({ espera: { ...bloco.espera!, unidade: v as Unidade } })}
-                opcoes={[
-                  { valor: "minutos", rotulo: "Minutos" },
-                  { valor: "horas", rotulo: "Horas" },
-                  { valor: "dias", rotulo: "Dias" },
-                ]}
-              />
-            </div>
+            <Select
+              size="field"
+              rotulo="Unidade"
+              valor={bloco.espera.unidade}
+              aoEscolher={(v) => aoEditar({ espera: { ...bloco.espera!, unidade: v as Unidade } })}
+              opcoes={[
+                { valor: "minutos", rotulo: "Minutos" },
+                { valor: "horas", rotulo: "Horas" },
+                { valor: "dias", rotulo: "Dias" },
+              ]}
+            />
           </div>
         ) : null}
 

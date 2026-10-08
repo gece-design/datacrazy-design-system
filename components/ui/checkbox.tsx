@@ -62,7 +62,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             // `border-width` para pixel inteiro de tela, e 1.5px vira 1px em
             // monitor sem retina. Sombra não é arredondada — e, por dentro, é o
             // mesmo traço interno do Figma, sem somar na caixa (D14).
-            "grid size-[18px] shrink-0 place-items-center rounded-xs bg-input-bg text-transparent ring-1.5 ring-inset ring-input-border transition-[color,background-color,box-shadow]",
+            // raio 4 (era o 2 do arquivo): a caixa das listas era mais redonda
+            // que a da tabela, e o cliente preferiu a redonda — uma caixa só,
+            // `caixaDeMarcar` em lib/campo.ts (2026-10-02, ADR-070)
+            "grid size-[18px] shrink-0 place-items-center rounded-sm bg-input-bg text-transparent ring-1.5 ring-inset ring-input-border transition-[color,background-color,box-shadow]",
             "group-hover:ring-input-border-hover",
             "peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:ring-0",
             "peer-indeterminate:bg-primary peer-indeterminate:text-primary-foreground peer-indeterminate:ring-0",
