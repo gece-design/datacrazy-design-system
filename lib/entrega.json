@@ -5,11 +5,11 @@
     "fim": "2026-10-08"
   },
   "git": {
-    "commits": 95,
-    "arquivos": 388,
+    "commits": 96,
+    "arquivos": 389,
     "linhasUi": 15840,
-    "linhasLib": 926,
-    "linhasDocs": 10399
+    "linhasLib": 1038,
+    "linhasDocs": 10405
   },
   "catalogo": {
     "itens": 71,
@@ -1343,6 +1343,11 @@
       "id": "ADR-079",
       "titulo": "Regras de paginação: quando aparece, quanto, onde",
       "data": "2026-10-08"
+    },
+    {
+      "id": "ADR-080",
+      "titulo": "O contrato e a memória do DS instalados no projeto do cliente",
+      "data": "2026-10-08"
     }
   ],
   "auditoria": {
@@ -1403,6 +1408,11 @@
       "data": "2026-10-08",
       "origem": "Revisão",
       "titulo": "REGRAS DE PAGINAÇÃO"
+    },
+    {
+      "data": "2026-10-08",
+      "origem": "Cliente",
+      "titulo": "CONTRATO E MEMÓRIA DO DS NO PROJETO DO CLIENTE"
     },
     {
       "data": "2026-10-07",

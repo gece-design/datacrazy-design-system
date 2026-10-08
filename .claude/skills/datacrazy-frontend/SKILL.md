@@ -180,7 +180,9 @@ Backlog e regras: `docs/processo/consistencia.md` · `interactions.md` (L1–L14
   X `icon-xs` (ADR-039). Alça da coluna: dois cliques ou Enter ajustam ao conteúdo. Cartão do drawer:
   `CampoEditavel` e `Select cartao`, linha de 24 (ADR-041). `DrawerPainel` abre com 840 e arrasta pela borda
   esquerda (720–1080), `memoria="<tela>"` lembra (ADR-040); cartões do conteúdo em `gradeDeCartoes`, nunca `grid-cols-N`.
-- **O Claude no projeto do cliente**: bancada em `scripts/bancada/` (preparar → rodar → pontuar; rodadas em
+- **O Claude no projeto do cliente**: o `setup` instala a skill, o contrato `.claude/datacrazy-ds/CLAUDE.md` e a
+  `MEMORIA.md` (gerados pelo `gerar-registry` das regras e ADRs; ADR-080) e `scripts/ds-setup.mjs` (liga o CLAUDE.md da
+  raiz por `@import`, mescla o hook). Bancada em `scripts/bancada/` (preparar → rodar → pontuar; rodadas em
   `~/datacrazy-bancada/rodadas/`); regras de token e de tela em `scripts/lib/regras-tokens.mjs`; `scripts/ds-check.mjs`
   é o check instalado pelo `setup` (modo `--hook`). Blocos de tela em `BLOCOS` do gerar-registry (`tela`, `pipeline`);
   import de fora de ui/ e lib/ vira vizinho via `reescritas`. Tema: `useTema` de `lib/tema.ts`, nunca cópia local.

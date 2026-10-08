@@ -211,6 +211,180 @@ function regrasParaQuemUsa() {
   ].join("\n");
 }
 
+
+/** O texto de uma seção do regras.md (## ou ###), sem o título, até a próxima do mesmo nível ou acima. */
+function secaoDasRegras(md, titulo) {
+  const linhas = md.split("\n");
+  const i = linhas.findIndex((l) => /^#{2,3} /.test(l) && l.includes(titulo));
+  if (i < 0) throw new Error(`docs/regras.md: sem a seção "${titulo}"`);
+  const nivel = linhas[i].match(/^#+/)[0].length;
+  const corpo = [];
+  for (const l of linhas.slice(i + 1)) {
+    const m = l.match(/^(#+) /);
+    if (m && m[1].length <= nivel) break;
+    corpo.push(l);
+  }
+  return corpo.join("\n").trim();
+}
+
+/**
+ * O contrato do Claude no projeto de quem instala: `.claude/datacrazy-ds/CLAUDE.md`,
+ * importado pelo CLAUDE.md da raiz (o `scripts/ds-setup.mjs` faz a ligação).
+ * Lido em TODA sessão, ao contrário da skill, que o agente abre quando acha
+ * que precisa — e era aí que a tela saía sem componente (cliente, 2026-10-08;
+ * ADR-080). Curto de propósito: o que não pode faltar, e onde está o resto.
+ */
+function contratoInstalavel(componentes) {
+  const nomes = componentes.map((c) => c.title).join(" · ");
+  return `# SystemCrazy — o contrato do Claude neste projeto
+
+Este projeto usa o design system do DataCrazy (\`${NAMESPACE}\`, ${URL_DS}).
+Toda tela, componente e estilo de interface é construído **só com ele**. Este
+arquivo vale em toda sessão. A referência completa — tokens, regras, o catálogo
+e a doc de cada componente — está na skill \`.claude/skills/datacrazy-ds/\`; as
+decisões do cliente estão em \`.claude/datacrazy-ds/MEMORIA.md\`.
+
+## Antes de escrever qualquer tela
+
+1. **Leia** \`.claude/skills/datacrazy-ds/SKILL.md\` e \`.claude/datacrazy-ds/MEMORIA.md\`.
+   Não comece sem. Se o pedido cita uma tela que existe no CRM, leia a tela de
+   referência correspondente abaixo antes de propor qualquer coisa.
+2. **Descubra que tipo de tela é e instale o bloco de referência.** Copie o
+   padrão dele — não invente layout:
+
+   | O pedido é… | Instale | Referência |
+   |---|---|---|
+   | lista de registros (contatos, leads, empresas, produtos) | \`npx shadcn@latest add ${NAMESPACE}/leads\` | \`app/leads/\` |
+   | funil, quadro (kanban), calendário, negócios | \`${NAMESPACE}/pipeline\` | \`app/pipeline/\` |
+   | chat, inbox, atendimento, mensagens | \`${NAMESPACE}/atendimento\` | \`app/atendimento/\` |
+   | fluxo, automação, editor em canvas | \`${NAMESPACE}/automacoes\` | \`app/automacoes/\` |
+   | dashboard, painel, relatório, indicadores | \`${NAMESPACE}/dashboard\` | \`app/dashboard/\` |
+   | catálogo em cartões com cadastros ao lado | \`${NAMESPACE}/agentes\` | \`app/agentes/\` |
+   | qualquer outra | \`${NAMESPACE}/tela\` (a \`TelaBase\`) | \`app/nova-tela/\` |
+
+3. **Liste os componentes que a tela precisa** e confira no catálogo da skill.
+   Instale os que faltam (\`npx shadcn@latest add ${NAMESPACE}/<nome>\` ou pela
+   ferramenta MCP do shadcn) e leia \`componentes/<Nome>.md\` antes do primeiro
+   uso — a seção **Quando usar** primeiro.
+
+## O que nunca entra numa tela (o \`ds-check\` reprova)
+
+- **Elemento cru onde o DS tem componente**: \`<button>\`, \`<input>\`,
+  \`<select>\`, \`<textarea>\`, \`<table>\`, \`<dialog>\`, \`<a>\` estilizado →
+  \`Button\`, \`Input\`, \`Select\`/\`Combobox\`, \`Textarea\`, \`DataTable\`,
+  \`Modal\`/\`Drawer\`, \`Button asChild\`.
+- **Sidebar e Header montados à mão** → \`TelaBase\` (o bloco \`${NAMESPACE}/tela\`).
+- **Estilo fora dos tokens**: hex, \`rgb()\`, \`hsl(var(--…))\`, \`text-sm\`,
+  \`text-gray-600\`, \`bg-blue-500\`, \`shadow-md\`, \`z-50\`, \`duration-200\`,
+  \`px\` solto, gradiente. Só as classes listadas na skill (seção Tokens).
+- **Ícone de outra biblioteca** (lucide, heroicons, react-icons, svg colado) →
+  \`@phosphor-icons/react\`, \`weight="regular"\`, 16px em botão e campo; marcas
+  pelo \`IconeDeMarca\`.
+- **Texto fixo dentro de componente** → toda string entra por prop (o produto é
+  multi-idioma).
+- **Variante nova, ou edição em \`components/ui/\`, para encaixar um caso** →
+  não. Componha com o que existe e diga o que faltou.
+- **O que faz "parecer o DataCrazy antigo"**: tabela \`confortavel\` em lista de
+  registros, \`Select\` na barra da tabela para filtrar, tags coloridas
+  sorteadas, \`grid-cols-N\` fixo, modal de checkboxes para filtrar. A lista
+  inteira está na skill (Telas: anti-padrões) e em MEMORIA.md.
+
+## Como toda tela do CRM é montada
+
+- \`TelaBase\` com Header de uma linha: trilha + título à esquerda; busca
+  (\`HeaderBusca\`), filtros (\`HeaderFiltros\` + \`BarraDeFiltros\` em chips) e a
+  ação principal à direita. O conteúdo no padrão de fundo: bloco branco
+  (\`blocoDaTela\`) sobre o cinza da página, recuo 12.
+- Lista: \`DataTable\` densa com ícone por coluna, \`useAjustesDaTabela\`
+  (ordenar, colunas, agrupar), seleção em massa (\`useSelecaoDaTabela\` +
+  \`BarraDeSelecao\`), \`Pagination\` com \`usePaginacao\` (20 por página); o clique
+  abre o registro no \`Drawer\` do lead (\`DrawerLead\`).
+- Sem nada: \`EstadoVazio\` (com ícone na área inteira, sem ícone dentro de um
+  bloco). Carregando: \`SkeletonDaTela\` com o modelo da tela. Excluir:
+  \`Modal variant="destructive"\`. Formulário curto: \`Modal\` com \`formulario\`
+  e \`linhaDeCampos\`, rótulo visível, ajuda e obrigatório.
+- Catálogo do DS: ${nomes}.
+
+## Antes de dizer "pronto"
+
+1. \`node scripts/ds-check.mjs\` → **zero violação**. O hook roda a cada arquivo
+   que você escreve; corrija na hora, não no fim.
+2. \`npx tsc --noEmit\` → zero erro.
+3. Confira em 390px: a página não rola de lado; o que é largo rola por dentro.
+4. Na resposta, liste os componentes do DS usados e o que **não existia** no
+   DS. Nunca invente em silêncio.
+
+## Quando o DS não tem o que a tela pede
+
+Diga isso na resposta, componha com o que existe e deixe um comentário
+\`// DS: falta <peça>\` no código, para o time de design ver. Nunca crie um
+componente novo em \`components/ui/\`, nunca copie um de outra biblioteca.
+`;
+}
+
+/**
+ * A memória do design system no projeto de quem instala: o que o cliente já
+ * decidiu, para o agente aplicar sem reabrir. Gerada das regras e das ADRs;
+ * importada pelo contrato (ADR-080).
+ */
+function memoriaInstalavel() {
+  const regras = ler("docs/regras.md");
+  const adrs = ler("docs/processo/adr.md")
+    .split("\n")
+    .map((l) => l.match(/^## (ADR-\d+) · (.+?) · (\d{4}-\d{2}-\d{2})$/))
+    .filter(Boolean)
+    .map(([, id, titulo, data]) => `- ${id} (${data}): ${titulo}`);
+  return `# Memória do design system — o que o cliente já decidiu
+
+Lida junto com o contrato (\`.claude/datacrazy-ds/CLAUDE.md\`). O que está
+aqui foi decidido com o cliente: **não reabra, aplique**. Quando um pedido
+contraria uma decisão daqui, diga qual e proponha o caminho do DS.
+
+## O que o Claude já errou neste tipo de projeto (bancada, 2026-09-29)
+
+Medido num projeto limpo, com a instalação feita e o pedido em linguagem
+normal. Cada item abaixo virou regra; nenhum pode voltar:
+
+- Tabela de registros no layout \`confortavel\` (linha alta) → a \`DataTable\`
+  nasce \`densa\`; não passe \`layout\`.
+- Filtros como \`Select\` na barra da tabela → \`HeaderFiltros\` + \`BarraDeFiltros\`
+  em chips, sob o Header.
+- Tags com cor sorteada → \`Tag\` sem cor, ou com \`status\`; cor só quando o
+  dado tem cor (etapa do funil, cor escolhida pela pessoa).
+- Sidebar e Header montados à mão → \`TelaBase\`.
+- Busca, Agrupar e Colunas espalhados → todos na fileira do Header
+  (\`HeaderBusca\`, \`BotaoAgrupar\`, \`BotaoColunas\`).
+- Lead aberto numa página ou num painel próprio → o \`Drawer\` do lead
+  (\`DrawerLead\`), o mesmo em toda tela.
+- Grade de cartões com \`grid-cols-3\` fixo → \`gradeDeCartoes\`.
+- Tela sem o que fazer quando não há dado → \`EstadoVazio\`; sem o que mostrar
+  enquanto carrega → \`SkeletonDaTela\`.
+
+## O que o time do cliente quer (do "o que mais gosta")
+
+${secaoDasRegras(regras, "Padrões que o time quer")}
+
+## Os números da densidade
+
+${secaoDasRegras(regras, "Telas: densidade")}
+
+## No celular
+
+${secaoDasRegras(regras, "Telas: no celular")}
+
+## O que faz "parecer o DataCrazy antigo"
+
+${secaoDasRegras(regras, "Telas: anti-padrões")}
+
+## Decisões registradas (ADRs)
+
+Cada uma tem o desvio, o motivo e quem aprovou em ${URL_DS}/entrega. Aqui, só o
+que foi decidido:
+
+${adrs.join("\n")}
+`;
+}
+
 function skill(ext, componentes) {
   const lista = (nomes) => nomes.map((n) => `\`${n}\``).join(" · ");
   const cores = [];
@@ -235,6 +409,11 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
 \`${NAMESPACE}\` (shadcn). Todos os componentes, vivos: ${URL_DS}
 
 ## Como trabalhar
+
+O contrato que vale em toda sessão está em \`.claude/datacrazy-ds/CLAUDE.md\`
+(importado pelo CLAUDE.md da raiz, pelo \`node scripts/ds-setup.mjs\`) e as
+decisões do cliente em \`.claude/datacrazy-ds/MEMORIA.md\`. Esta skill é a
+referência completa: tokens, regras e a doc de cada componente.
 
 0. **Tela nova começa pela tela base.** \`npx shadcn@latest add ${NAMESPACE}/tela\`
    cria \`app/nova-tela/page.tsx\` com Sidebar, Header e conteúdo
@@ -602,6 +781,9 @@ const itensDeComponente = componentes.map((c) => ({
 
 const arquivosDaSkill = [
   { path: "skill/SKILL.md", type: "registry:file", target: `${PASTA_SKILL}/SKILL.md`, content: skill(ext, itensDeComponente) },
+  // o contrato e a memória: lidos em toda sessão pelo CLAUDE.md da raiz (ADR-080)
+  { path: "claude/CLAUDE.md", type: "registry:file", target: "~/.claude/datacrazy-ds/CLAUDE.md", content: contratoInstalavel(itensDeComponente) },
+  { path: "claude/MEMORIA.md", type: "registry:file", target: "~/.claude/datacrazy-ds/MEMORIA.md", content: memoriaInstalavel() },
   ...componentes.map((c) => ({
     path: `skill/componentes/${pascal(c.name)}.md`,
     type: "registry:file",
@@ -643,8 +825,12 @@ const itemSetup = (versao) => ({
   // tudo cai na fonte de sistema em silêncio (AUD-067).
   dependencies: ["geist"],
   registryDependencies: [urlDoItem(versao === "v4" ? "tokens" : "tokens-v3"), urlDoItem("utils")],
-  files: [...arquivosDaSkill, { path: "scripts/ds-check.mjs", type: "registry:file", target: "scripts/ds-check.mjs", content: checkInstalavel() }],
-  docs: "Skill instalada em .claude/skills/datacrazy-ds (reinicie o Claude Code) e o check do DS em scripts/ds-check.mjs — rode `node scripts/ds-check.mjs` depois de cada tela, ou ligue o hook em .claude/settings.json (ver a página de instalação).",
+  files: [
+    ...arquivosDaSkill,
+    { path: "scripts/ds-check.mjs", type: "registry:file", target: "scripts/ds-check.mjs", content: checkInstalavel() },
+    { path: "scripts/ds-setup.mjs", type: "registry:file", target: "scripts/ds-setup.mjs", content: ler("scripts/ds-setup.mjs") },
+  ],
+  docs: "Agora rode `node scripts/ds-setup.mjs`: liga o CLAUDE.md da raiz ao contrato do DS (.claude/datacrazy-ds/CLAUDE.md + MEMORIA.md), põe o hook do ds-check em .claude/settings.json e confere o que falta. Depois reinicie o Claude Code.",
 });
 
 const todos = {
@@ -723,8 +909,8 @@ fs.writeFileSync(
 ## Instalar
 
 1. \`npx shadcn@latest registry add ${NAMESPACE}=${URL_DS}/r/{name}.json\`
-2. \`npx shadcn@latest add ${NAMESPACE}/setup\` — tokens, cn(), a skill datacrazy-ds para o Claude Code e o check do DS (scripts/ds-check.mjs) (Tailwind v3: \`${NAMESPACE}/setup-v3\`)
-3. \`npx shadcn@latest mcp init --client claude\`
+2. \`npx shadcn@latest add ${NAMESPACE}/setup\` — tokens, cn(), a skill datacrazy-ds para o Claude Code, o contrato (.claude/datacrazy-ds/CLAUDE.md + MEMORIA.md) e os checks (scripts/ds-check.mjs, scripts/ds-setup.mjs) (Tailwind v3: \`${NAMESPACE}/setup-v3\`)
+3. \`node scripts/ds-setup.mjs\` — o CLAUDE.md da raiz importa o contrato, o hook do ds-check entra em .claude/settings.json; depois \`npx shadcn@latest mcp init --client claude\`
 4. \`npx shadcn@latest add ${NAMESPACE}/tela\` — a tela base: toda tela nova começa por ela; \`${NAMESPACE}/pipeline\` traz o funil inteiro (quadro, lista, calendário, drawer) e \`${NAMESPACE}/atendimento\` o multiatendimento (conversas, mensagens, lead) como referência de tela real
 
 ## Verificar

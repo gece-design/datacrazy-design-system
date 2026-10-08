@@ -413,3 +413,8 @@ Desvio: nenhum no arquivo (a `Pagination` é o nó 261:790); regras novas de uso
 Motivo: humano, 2026-10-08 ("precisa criar e documentar as regras de paginação, quando aparece, porque e etc... pensando na melhor ux"), depois do pedido do cliente de paginar os leads (ADR-076).
 Aprovado por: humano (2026-10-08).
 
+## ADR-080 · O contrato e a memória do DS instalados no projeto do cliente · 2026-10-08
+Desvio: o `setup` do catálogo passa a instalar, além da skill, dois arquivos lidos em toda sessão do Claude Code — `.claude/datacrazy-ds/CLAUDE.md` (o contrato: ler a skill e a memória antes de qualquer tela, o bloco de referência por tipo de tela, o que nunca entra, como toda tela é montada, o que fazer antes de dizer "pronto", o que dizer quando o DS não tem a peça) e `.claude/datacrazy-ds/MEMORIA.md` (o que o cliente já decidiu: os erros da bancada que viraram regra, o que o time gosta, densidade, celular, anti-padrões e as ADRs) — e `scripts/ds-setup.mjs`, que liga o CLAUDE.md da raiz ao contrato por `@import` sem apagar o que é do cliente, mescla o hook PostToolUse do `ds-check` em `.claude/settings.json` e confere o que o instalador não faz (content do Tailwind, Geist, .mcp.json). A skill continua a referência completa, aberta sob demanda; o contrato é o que não pode depender de o agente abrir a skill. Os dois são gerados pelo `gerar-registry` das regras e das ADRs: um fato, um dono.
+Motivo: cliente, 2026-10-08 — "pedem algo e não está sendo construído do jeito correto, telas sem componentes e sem fidelidade ao design system". A skill é lida quando o agente acha que precisa; a tela saía sem componente antes disso.
+Aprovado por: humano (2026-10-08, "cria um claude.md e ou memory.md na parte de instalação").
+

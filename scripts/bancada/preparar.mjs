@@ -24,11 +24,12 @@ rodar(`npx --yes shadcn@latest init -d -y`, BASE);
 // 3 · os quatro passos da página de instalação
 rodar(`npx --yes shadcn@latest registry add @datacrazy=${DS_URL}/r/{name}.json`, BASE);
 rodar(`npx --yes shadcn@latest add @datacrazy/setup-v3 -y -o`, BASE);
+rodar(`node scripts/ds-setup.mjs`, BASE);
 rodar(`npx --yes shadcn@latest mcp init --client claude`, BASE);
 rodar(`npx --yes shadcn@latest add @datacrazy/tela -y -o`, BASE);
 
 // o que a instalação deixou
-const esperados = ["components.json", ".mcp.json", ".claude/skills/datacrazy-ds/SKILL.md", "components/ui/tela-base.tsx", "app/nova-tela/page.tsx", "lib/utils.ts"];
+const esperados = ["components.json", ".mcp.json", ".claude/skills/datacrazy-ds/SKILL.md", ".claude/datacrazy-ds/CLAUDE.md", ".claude/datacrazy-ds/MEMORIA.md", "CLAUDE.md", ".claude/settings.json", "scripts/ds-check.mjs", "components/ui/tela-base.tsx", "app/nova-tela/page.tsx", "lib/utils.ts"];
 const faltam = esperados.filter((f) => !fs.existsSync(path.join(BASE, f)));
 console.log(`\nbase em ${BASE}`);
 console.log(faltam.length ? `✗ faltam: ${faltam.join(", ")}` : "✓ instalação deixou tudo que a página promete");
