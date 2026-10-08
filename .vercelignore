@@ -2,9 +2,9 @@ node_modules
 .next
 .git
 .kfe-kit
-# docs/ sobe inteira: o gerador do catálogo lê docs/componentes e
-# docs/regras.md no build, e a Vercel não re-inclui pasta excluída por `docs/*`.
-docs/processo
+# docs/ sobe inteira: o gerador do catálogo lê docs/componentes, docs/regras.md
+# e docs/processo/adr.md (a MEMORIA.md do setup, ADR-080) no build, e a Vercel
+# não re-inclui pasta excluída por `docs/*`.
 docs/objetos
 docs/features
 # scripts/ sobe quase inteira: o gerador importa scripts/lib/fonte.mjs, e
