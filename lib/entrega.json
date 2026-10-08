@@ -5,11 +5,11 @@
     "fim": "2026-10-08"
   },
   "git": {
-    "commits": 92,
-    "arquivos": 379,
-    "linhasUi": 15153,
+    "commits": 93,
+    "arquivos": 382,
+    "linhasUi": 15384,
     "linhasLib": 915,
-    "linhasDocs": 9873
+    "linhasDocs": 10008
   },
   "catalogo": {
     "itens": 68,
@@ -384,7 +384,7 @@
       "variantes": 4,
       "estados": 7,
       "acessibilidade": 8,
-      "linhas": 601
+      "linhas": 604
     },
     {
       "name": "radio-group",
@@ -1312,6 +1312,11 @@
       "data": "2026-10-08",
       "origem": "Lote",
       "titulo": "TUDO O QUE O PROTÓTIPO MOSTRA É COMPONENTE"
+    },
+    {
+      "data": "2026-10-08",
+      "origem": "Revisão",
+      "titulo": "PÁGINAS DOS COMPONENTES NOVOS NO PADRÃO DAS ANTIGAS"
     },
     {
       "data": "2026-10-07",

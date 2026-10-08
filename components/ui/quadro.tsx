@@ -326,7 +326,10 @@ export function Quadro<T>({
           onPointerUp={soltarPan}
           onPointerCancel={soltarPan}
           className={cn(
-            "flex min-h-0 flex-1 gap-2 overflow-x-auto p-3",
+            // `relative`: os textos só para o leitor de tela (sr-only, absolutos) ficam
+            // presos ao trilho e recortados por ele — sem isso, os das colunas escondidas
+            // à direita alargam a página inteira
+            "relative flex min-h-0 flex-1 gap-2 overflow-x-auto p-3",
             rolagemDiscreta,
             arrastandoTrilho ? "cursor-grabbing select-none" : "cursor-grab",
           )}
