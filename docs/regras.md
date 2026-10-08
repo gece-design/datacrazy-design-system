@@ -74,6 +74,12 @@ contexto em `docs/processo/ux-direcao-visual.md`.
 7. Antes de criar componente, procure no showcase — duplicata é proibida.
 8. Componente do DS não conhece domínio: `<LeadCard>` é componente de produto,
    não do DS.
+9. Tudo o que uma tela do protótipo mostra é componente do design system
+   (cliente, reunião de 2026-10-02; ADR-073). A tela só monta: dados, palavras
+   (`rotulos`) e o que vai dentro de cada encaixe. Peça que nasce numa tela
+   (um cartão, uma lista, um canvas) sai dela para `components/ui` com página
+   e doc antes de a tela ser entregue — senão a geração de uma tela nova
+   reinventa a peça.
 
 ### Estados
 9. Todo componente interativo define default, hover, focus-visible, active,
@@ -251,8 +257,10 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   `Tag` sem cor ou com `status`), `CelulaProgresso` (etapa), `Tag foto` (pessoa),
   `CelulaEditavel` (valor editável), `CelulaEscolha` (valor que vem de lista:
   tags, etapa — edita na célula, sem modal), origem com `IconeDeMarca`.
-- **Quadro (kanban)**: o do bloco `@datacrazy/pipeline` (`app/pipeline/quadro.tsx`).
-  É compacto: coluna com piso de 220 que cresce até 300 (`min-w-[220px]
+- **Quadro (kanban)**: o componente `Quadro` (`components/ui/quadro.tsx`, página
+  `/data-display/quadro`) com `QuadroCartao` em `renderizar`; a tela só dá as
+  colunas, os itens e as palavras (`rotulos`) — ver `QuadroDoFunil` em
+  `app/pipeline/quadro.tsx`. É compacto: coluna com piso de 220 que cresce até 300 (`min-w-[220px]
   max-w-[300px] flex-1 basis-0`), vão de 8, recuo 6; cinco etapas cabem em
   1440 sem rolar. Cabeçalho da coluna numa linha de 24: bolinha, nome, contagem
   e o total à direita. Cartão enxuto, com traço e sem sombra (`rounded-md border
@@ -291,16 +299,18 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   de cor livre.
 - **Atendimento (chat, inbox, mensagens)**: bloco `@datacrazy/atendimento`
   (`app/atendimento/`). `recuo={false}`: três colunas, cada uma num bloco
-  branco (`rounded-md border bg-card`) sobre o fundo `muted`, com `gap-3`: lista de conversas (320, abas de situação com
-  `Tabs`), mensagens (`role="log"`, recebida à esquerda em `muted`, enviada à
-  direita em `button-soft`, nota interna em `warning/10`, evento do sistema em
-  uma linha) e o lead (320, campos em linha: `ListaDeCampos` + `LinhaDeCampo`). Compositor: `Textarea
-  rotuloOculto linhas={1}` + `SegmentedControl` Mensagem / Nota interna.
+  branco (`rounded-md border bg-card`) sobre o fundo `muted`, com `gap-3`: a
+  `ListaDeConversas` (320, abas de situação e uma linha por conversa), a
+  `Conversa` (`ConversaCabecalho` + `Mensagens` com `Balao`, `EventoDaConversa`
+  e `DivisorDeDia` + `Compositor` Mensagem / Nota interna) e o lead (320,
+  campos em linha: `ListaDeCampos` + `LinhaDeCampo`). As peças são de
+  `components/ui/conversa.tsx` e `lista-de-conversas.tsx`; a tela monta.
   Abaixo de 1280 o lead abre por cima; abaixo de 768, lista OU conversa.
 - **Fluxo, automação, editor em canvas**: bloco `@datacrazy/automacoes`
   (`app/automacoes/`). `recuo={false}`; o canvas é `bg-muted` com fundo
   pontilhado — o cinza claro que não é o da navegação nem o branco dos blocos
-  — e funciona como canvas de verdade (o `canvas.tsx` do bloco, sem lib de
+  — e funciona como canvas de verdade (o componente `Canvas`,
+  `components/ui/canvas.tsx`, página `/data-display/canvas`, sem lib de
   grafo): arrastar o fundo move a tela, rolar ou pinçar dá zoom no cursor,
   arrastar da bolinha de uma saída liga a outro bloco, clicar na ligação e
   Delete desfaz, dois cliques no fundo adicionam um bloco, Shift + arrastar

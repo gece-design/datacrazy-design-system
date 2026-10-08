@@ -30,8 +30,9 @@ import { Switch } from "@/components/ui/switch";
 import { TelaBase } from "@/components/ui/tela-base";
 import { Toaster, toast } from "@/components/ui/toast";
 import { useTema } from "@/lib/tema";
-import { Canvas, ICONES_DOS_BLOCOS, type CanvasRef, type RotulosDoCanvas } from "./canvas";
-import { AUTOMACAO, LARGURA_DO_BLOCO, TIPOS, saidasDe, type Bloco, type TipoDeBloco } from "./dados";
+import { LARGURA_DO_BLOCO, type CanvasRef, type RotulosDoCanvas } from "@/components/ui/canvas";
+import { CanvasDaAutomacao, ICONES_DOS_BLOCOS } from "./canvas";
+import { AUTOMACAO, TIPOS, saidasDe, type Bloco, type TipoDeBloco } from "./dados";
 import { PainelDoBloco } from "./painel-bloco";
 
 /* ---------------------------------------------------------------------------
@@ -42,51 +43,16 @@ import { PainelDoBloco } from "./painel-bloco";
    cada bloco por cima do fluxo; aqui o fluxo continua à vista enquanto a
    pessoa edita, e clicar em outro bloco troca o painel sem fechar nada.
 
-   Peças do DS: TelaBase, Header de uma linha, PainelLateral, Input, Textarea,
-   Select, ComboboxPainel, Menu, Switch, Button, IconeDeMarca. O canvas é o
-   arranjo desta tela (./canvas), como o quadro é o do pipeline.
+   Peças do DS: TelaBase, Header de uma linha, Canvas, PainelLateral, Input,
+   Textarea, Select, ComboboxPainel, Menu, Switch, Button, IconeDeMarca. O que
+   é da automação no canvas (ícones, início, corpo dos blocos) está em ./canvas.
 
    Quem guarda o fluxo é esta tela: o canvas só pede (mover, ligar, adicionar,
    remover) e ela aplica — por isso o desfazer mora aqui, num histórico só.
 --------------------------------------------------------------------------- */
 
-/** Tudo o que o canvas escreve. No CRM, vem do next-intl. */
-const ROTULOS_DO_CANVAS: RotulosDoCanvas = {
-  canvas: "Fluxo da automação",
-  aproximar: "Aproximar (+)",
-  afastar: "Afastar (−)",
-  ajustar: "Ver o fluxo inteiro (1)",
-  organizar: "Organizar os blocos",
-  desfazer: "Desfazer (Ctrl ou ⌘ + Z)",
-  refazer: "Refazer (Ctrl ou ⌘ + Shift + Z)",
-  mapa: "Mapa do fluxo",
-  ajuda: "Gestos e atalhos",
-  sucessos: "Sucessos",
-  alertas: "Alertas",
-  erros: "Erros",
-  adicionarBloco: "Adicionar bloco",
-  buscarBloco: "Buscar bloco",
-  nenhumBloco: "Nenhum bloco encontrado",
-  adicionarAqui: "Adicionar bloco aqui",
-  selecionarTudo: "Selecionar tudo",
-  duplicar: "Duplicar",
-  desligar: "Desligar as saídas",
-  remover: "Remover",
-  removerLigacao: "Remover a ligação",
-  maisAcoes: "Ações",
-  atalhos: [
-    { gesto: "Arrastar o fundo", efeito: "move a tela" },
-    { gesto: "Rolar ou pinçar", efeito: "aproxima e afasta" },
-    { gesto: "Arrastar um bloco", efeito: "muda de lugar" },
-    { gesto: "Arrastar da bolinha de uma saída", efeito: "liga a outro bloco" },
-    { gesto: "Clicar numa ligação + Delete", efeito: "desfaz a ligação" },
-    { gesto: "Dois cliques no fundo", efeito: "adiciona um bloco ali" },
-    { gesto: "Shift + arrastar", efeito: "marca vários" },
-    { gesto: "Botão direito", efeito: "mais ações" },
-    { gesto: "Setas", efeito: "movem o bloco marcado" },
-    { gesto: "Ctrl ou ⌘ + D · Delete", efeito: "duplica · remove" },
-  ],
-};
+/** O que o canvas escreve e é desta tela; o resto vem de `ROTULOS_DO_CANVAS`. No CRM, tudo vem do next-intl. */
+const ROTULOS_DO_CANVAS: Partial<RotulosDoCanvas> = { canvas: "Fluxo da automação" };
 
 /** Um histórico só para o fluxo: cada mudança guarda o estado anterior, até cinquenta. */
 function useHistorico<T>(inicial: T) {
@@ -380,7 +346,7 @@ export function Tela({
         ),
       }}
     >
-      <Canvas
+      <CanvasDaAutomacao
         ref={canvas}
         blocos={blocos}
         selecionados={selecionados}

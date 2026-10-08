@@ -4,7 +4,7 @@ import { Fire, Snowflake, ThermometerSimple } from "@phosphor-icons/react";
 import * as React from "react";
 import { ICONES_DE_TAG, SeletorDeIcone, SeletorDeTom, Tag, TagAdicionar, TONS, type IconeDeTag, type Tom } from "@/components/ui/tag";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
-import { TagsDoLead } from "@/app/feedback/drawer/drawer-lead";
+import { TagsDoLead } from "@/components/ui/drawer-do-lead";
 import { FileiraDeTags, PRODUTOS, ROTULOS_PRODUTOS, RESPONSAVEIS, ROTULOS_RESPONSAVEIS, ORIGEM, ROTULOS_ORIGEM } from "./cenarios";
 
 /** Como cada tom se chama na tela. No CRM, o nome vem do next-intl. */

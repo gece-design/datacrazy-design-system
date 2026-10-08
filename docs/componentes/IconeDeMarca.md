@@ -40,6 +40,24 @@ o Figma acompanha na remedição.
 
 `MARCAS_DISPONIVEIS` lista as marcas do conjunto, na ordem em que aparecem num seletor.
 
+### `IconeDeOrigem`
+
+A origem de um lead como ícone, pelo nome que o CRM escreve: a marca de verdade
+quando é marca (`marcaDe("WhatsApp")` → `whatsapp`), senão o ícone Phosphor que a
+tela passa em `outros`, em `muted-foreground`. Era uma função copiada em quatro
+telas; virou peça em 2026-10-07 (ADR-073).
+
+| Prop | Tipo | Padrão | Obrigatória | Descrição |
+|------|------|--------|-------------|-----------|
+| `origem` | `string` | — | sim | O nome como vem do CRM: "WhatsApp", "Instagram", "Site", "Indicação", "Google Ads". |
+| `outros` | `Record<string, Icon>` | — | não | O ícone do que não é marca, por nome (`{ Site: Globe, Indicação: Handshake }`). Sem par: `Globe`. |
+| `tamanho` | `12 \| 14 \| 16` | `14` | não | 12 na linha de apoio, 14 na célula e no cartão, 16 em lista e campo. |
+| `rotulo` | `string` | — | não | Nome da origem para leitor de tela. Só quando o ícone aparece sem o nome ao lado. |
+| `className` | `string` | — | não | — |
+
+`marcaDe(origem)` devolve a chave da marca para um nome (sem acento, espaço nem
+caixa; "Google Ads" → `google`) ou `null`.
+
 ## Variantes
 
 | Variante | Quando usar |

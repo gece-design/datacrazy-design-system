@@ -39,6 +39,20 @@
       ]
     }
   ],
+  "/data-display/canvas": [
+    {
+      "componente": "Canvas",
+      "usar": [
+        "para editar um fluxo com ramificações: automação, jornada do lead, árvore de decisão de um agente de IA.",
+        "`tipos` para dizer o ícone e o rótulo de cada tipo de bloco e qual é o `inicio` (não se remove nem duplica; o organizar parte dele); `corpo` no bloco quando o tipo pede um resumo próprio no lugar da lista de itens."
+      ],
+      "naoUsar": [
+        "para uma sequência sem ramificação: é uma lista ordenada, ou os passos de um formulário.",
+        "para mover registros entre estágios: é o `Quadro`.",
+        "para desenhar livremente (formas, texto solto): o canvas só conhece blocos e ligações."
+      ]
+    }
+  ],
   "/data-display/card": [
     {
       "componente": "Card",
@@ -52,6 +66,34 @@
       ]
     }
   ],
+  "/data-display/cartao-de-catalogo": [
+    {
+      "componente": "Cartão de catálogo",
+      "usar": [
+        "para um catálogo em que cada item tem nome, descrição e 2 a 3 números que se comparam entre itens: agentes de IA, modelos de mensagem, produtos.",
+        "numa grade `gradeDeCartoes` (lib/campo): os cartões da mesma fileira ficam com a mesma altura e as métricas alinham no pé."
+      ],
+      "naoUsar": [
+        "para listar muitos registros com várias colunas: é a `Table` densa.",
+        "para um número em destaque de um painel: é o `KpiCard`.",
+        "para o cartão do funil, que se arrasta: é o cartão do quadro do Pipeline."
+      ]
+    }
+  ],
+  "/data-display/conversa": [
+    {
+      "componente": "Conversa",
+      "usar": [
+        "para o chat de um atendimento: `Conversa` é a casca, `ConversaCabecalho` o contato e as ações, `Mensagens` o log, `Balao` cada fala, `EventoDaConversa` o que o sistema registrou, `DivisorDeDia` a troca de dia e `Compositor` o rodapé que escreve.",
+        "`Compositor` sozinho onde se responde em linha — a nota de um lead no `Drawer`, um comentário."
+      ],
+      "naoUsar": [
+        "para a lista de conversas ao lado: é `ListaDeConversas`.",
+        "para o histórico de um lead (ligações, e-mails, etapas): é a linha do tempo do `Drawer`, não um chat.",
+        "`<textarea>` cru nem `<button>` cru no rodapé: o `Compositor` já traz `Textarea`, `SegmentedControl` e `Button`."
+      ]
+    }
+  ],
   "/data-display/kpi-card": [
     {
       "componente": "KPI Card",
@@ -62,6 +104,34 @@
         "para lista ou gráfico: é `Card`.",
         "mais de quatro numa fileira: a grade é `grid-cols-1 sm:grid-cols-2 xl:grid-cols-4`.",
         "`trend` como enfeite: só quando o dado tem direção de verdade."
+      ]
+    }
+  ],
+  "/data-display/lista-de-conversas": [
+    {
+      "componente": "Lista de conversas",
+      "usar": [
+        "para a coluna de conversas de um chat: a tela filtra e ordena, o componente mostra e devolve o id.",
+        "`contagem` em cada aba para dizer quantas conversas há nela, já com busca e filtros aplicados."
+      ],
+      "naoUsar": [
+        "para a conversa aberta: é `Conversa`.",
+        "para lista de registros com colunas (leads, negócios): é `DataTable`.",
+        "para busca e filtros dentro da coluna: ficam no `Header` da tela (`HeaderBusca`, `HeaderFiltros`, `BarraDeFiltros`)."
+      ]
+    }
+  ],
+  "/data-display/quadro": [
+    {
+      "componente": "Quadro",
+      "usar": [
+        "para mover registros entre estágios de um fluxo — o funil de vendas, uma fila de atendimento, um pipeline de contratação — quando a pergunta é \"em que etapa está\".",
+        "com `QuadroCartao` dentro de `renderizar`: é a única casca de cartão do quadro, e a tela só escolhe o que vai em cada bloco."
+      ],
+      "naoUsar": [
+        "para ver muitos registros com várias colunas de dados: é a `Table` densa.",
+        "para a pergunta \"quando\": é o `Calendario`.",
+        "para um catálogo em cartões que não se arrastam (agentes, modelos): é o `CartaoDeCatalogo` numa grade."
       ]
     }
   ],

@@ -6,7 +6,7 @@ import { DataTable, DataTableCell, DataTableRow, DataTableToolbar, type ColunaTa
 import { TabPanel, Tabs } from "@/components/ui/tabs";
 import { blocoDaTela } from "@/lib/estados";
 import { cn } from "@/lib/utils";
-import { AcoesDoItem } from "./acoes";
+import { BotaoDeAcoes } from "@/components/ui/menu";
 import { contar, type BaseDeConhecimento, type ServidorMcp } from "./dados";
 
 /* ---------------------------------------------------------------------------
@@ -118,7 +118,7 @@ export function Cadastros({
               </DataTableCell>
               <DataTableCell coluna="acoes">
                 <div className="flex justify-end">
-                  <AcoesDoItem
+                  <BotaoDeAcoes
                     rotulo={`Ações de ${b.nome}`}
                     itens={[
                       { id: "editar", rotulo: "Editar", icone: PencilSimple, aoAtivar: () => aoEditarBase(b) },
@@ -155,7 +155,7 @@ export function Cadastros({
               </DataTableCell>
               <DataTableCell coluna="acoes">
                 <div className="flex justify-end">
-                  <AcoesDoItem
+                  <BotaoDeAcoes
                     rotulo={`Ações de ${s.nome}`}
                     itens={[
                       { id: "editar", rotulo: "Editar", icone: PencilSimple, aoAtivar: () => aoEditarServidor(s) },

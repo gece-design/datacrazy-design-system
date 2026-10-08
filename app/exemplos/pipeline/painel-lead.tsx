@@ -19,7 +19,7 @@ import { SeletorTags, Tag, type GrupoTags, type IconeDeTag } from "@/components/
 import { DrawerSecao, LinhaDoTempo } from "@/components/ui/drawer";
 // O drawer é UM: o mesmo `DrawerLead` da página do Drawer no design system,
 // aberto com o lead clicado no quadro. Nada aqui é uma segunda versão dele.
-import { DrawerLead, cabecalhos, type LeadDoDrawer, type SecaoDoDrawer } from "@/app/feedback/drawer/drawer-lead";
+import { DrawerLead, cabecalhos, type LeadDoDrawer, type SecaoDoDrawer } from "@/components/ui/drawer-do-lead";
 import { moeda, tagsDe, type Etapa, type EtapaId, type Lead, type TipoEvento } from "./dados";
 import { gradeDeCartoes } from "@/lib/campo";
 

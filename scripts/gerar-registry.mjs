@@ -245,7 +245,7 @@ Componentes React + Tailwind do CRM DataCrazy, instalados pelo registry
    (\`app/pipeline/\`): é a tela do funil inteira, feita pelo time do DS —
    Header de uma linha com busca, filtros em chips (\`BarraDeFiltros\`), Table
    densa com seleção em massa e edição na célula, e o lead aberto no
-   \`Drawer\` do lead (\`drawer-lead.tsx\`, o mesmo em toda tela). É a referência de densidade e composição; não invente layout.
+   \`Drawer\` do lead (\`DrawerLead\`, de \`@/components/ui/drawer-do-lead\`, o mesmo em toda tela). É a referência de densidade e composição; não invente layout.
    Lista de registros (contatos, empresas, produtos)? \`${NAMESPACE}/leads\`
    (\`app/leads/\`): grade densa com ícone por coluna, edição na célula,
    filtros em chips, seleção em massa e o lead no \`Drawer\` do lead.
@@ -437,12 +437,10 @@ const BLOCOS = [
       { de: "app/exemplos/pipeline/quadro.tsx", para: "app/pipeline/quadro.tsx" },
       { de: "app/exemplos/pipeline/painel-lead.tsx", para: "app/pipeline/painel-lead.tsx" },
       { de: "app/exemplos/pipeline/dados.ts", para: "app/pipeline/dados.ts" },
-      // o Drawer do lead é o da página do Drawer: vai junto, como vizinho
-      { de: "app/feedback/drawer/drawer-lead.tsx", para: "app/pipeline/drawer-lead.tsx" },
     ],
-    // a foto do atendente é do site (/ds/…): no projeto de quem instala a Tag fica só com o nome
+    // a foto do atendente é do site (/ds/…): no projeto de quem instala a Tag fica só com o nome.
+    // O Drawer do lead chega como item do registry (@datacrazy/drawer-do-lead), pelo import.
     reescritas: [
-      ["@/app/feedback/drawer/drawer-lead", "./drawer-lead"],
       [' foto="/ds/atendente.png"', ""],
       ['foto: "/ds/atendente.png"', "foto: undefined"],
     ],
@@ -457,10 +455,8 @@ const BLOCOS = [
       { de: "app/exemplos/leads/tela.tsx", para: "app/leads/tela.tsx" },
       { de: "app/exemplos/leads/painel-lead.tsx", para: "app/leads/painel-lead.tsx" },
       { de: "app/exemplos/leads/dados.ts", para: "app/leads/dados.ts" },
-      { de: "app/feedback/drawer/drawer-lead.tsx", para: "app/leads/drawer-lead.tsx" },
     ],
     reescritas: [
-      ["@/app/feedback/drawer/drawer-lead", "./drawer-lead"],
       [' foto="/ds/atendente.png"', ""],
       ['foto: "/ds/atendente.png"', "foto: undefined"],
     ],
@@ -478,10 +474,8 @@ const BLOCOS = [
       { de: "app/exemplos/atendimento/painel.tsx", para: "app/atendimento/painel.tsx" },
       { de: "app/exemplos/atendimento/lead-completo.tsx", para: "app/atendimento/lead-completo.tsx" },
       { de: "app/exemplos/atendimento/dados.ts", para: "app/atendimento/dados.ts" },
-      { de: "app/feedback/drawer/drawer-lead.tsx", para: "app/atendimento/drawer-lead.tsx" },
     ],
     reescritas: [
-      ["@/app/feedback/drawer/drawer-lead", "./drawer-lead"],
       [' foto="/ds/atendente.png"', ""],
       ['foto: "/ds/atendente.png"', "foto: undefined"],
     ],
@@ -509,10 +503,8 @@ const BLOCOS = [
       { de: "app/exemplos/dashboard/tela.tsx", para: "app/dashboard/tela.tsx" },
       { de: "app/exemplos/dashboard/lead-parado.tsx", para: "app/dashboard/lead-parado.tsx" },
       { de: "app/exemplos/dashboard/dados.ts", para: "app/dashboard/dados.ts" },
-      { de: "app/feedback/drawer/drawer-lead.tsx", para: "app/dashboard/drawer-lead.tsx" },
     ],
     reescritas: [
-      ["@/app/feedback/drawer/drawer-lead", "./drawer-lead"],
       [' foto="/ds/atendente.png"', ""],
       ['foto: "/ds/atendente.png"', "foto: undefined"],
     ],
@@ -527,7 +519,6 @@ const BLOCOS = [
       { de: "app/exemplos/agentes/tela.tsx", para: "app/agentes/tela.tsx" },
       { de: "app/exemplos/agentes/cartao-agente.tsx", para: "app/agentes/cartao-agente.tsx" },
       { de: "app/exemplos/agentes/cadastros.tsx", para: "app/agentes/cadastros.tsx" },
-      { de: "app/exemplos/agentes/acoes.tsx", para: "app/agentes/acoes.tsx" },
       { de: "app/exemplos/agentes/dados.ts", para: "app/agentes/dados.ts" },
     ],
     docs: `Agentes de IA: ${URL_DS}/exemplos/agentes — a tela em app/agentes; troque os dados de exemplo (dados.ts) pelos da API.`,

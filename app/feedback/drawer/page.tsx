@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ArrowLineLeft } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { PaginaDS, Secao, ComoFunciona, Chip } from "@/components/ds/preview";
-import { DrawerLead, LEADS } from "./drawer-lead";
+import { DrawerLead, LEADS } from "@/components/ui/drawer-do-lead";
 
 const leadsDoPreview = [
   { id: "rafael" as const, rotulo: "Rafael · pessoa" },

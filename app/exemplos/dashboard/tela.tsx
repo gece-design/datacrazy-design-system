@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/data-table";
 import { Drawer } from "@/components/ui/drawer";
 import { Notificacoes, type Notificacao } from "@/components/ui/header";
-import { IconeDeMarca } from "@/components/ui/icone-de-marca";
+import { IconeDeOrigem } from "@/components/ui/icone-de-marca";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { SegmentedControl } from "@/components/ui/segmented-control";
 import { Select } from "@/components/ui/select";
@@ -48,7 +48,7 @@ import { Toaster, toast } from "@/components/ui/toast";
 import { useTema } from "@/lib/tema";
 import { cn } from "@/lib/utils";
 import { LeadParado } from "./lead-parado";
-import { PARADOS, PERIODOS, RECORTES, moeda, moedaCurta, percentual, type Canal, type Periodo } from "./dados";
+import { PARADOS, PERIODOS, RECORTES, moeda, moedaCurta, percentual, type Periodo } from "./dados";
 
 /* ---------------------------------------------------------------------------
    Tela de exemplo — NÃO é componente do design system.
@@ -95,13 +95,8 @@ const COLUNAS: ColunaTabela[] = [
   { chave: "dias", rotulo: "Parado", icone: Clock, peso: 1, minimo: 85, alinharFim: true },
 ];
 
-/** Marca é `IconeDeMarca`; o que não é marca é Phosphor. */
-function IconeDoCanal({ canal }: { canal: Canal }) {
-  if (canal === "WhatsApp") return <IconeDeMarca marca="whatsapp" tamanho={14} />;
-  if (canal === "Instagram") return <IconeDeMarca marca="instagram" tamanho={14} />;
-  const Glifo = canal === "Site" ? Globe : Handshake;
-  return <Glifo size={14} weight="regular" aria-hidden="true" className="shrink-0 text-muted-foreground" />;
-}
+/** O que não é marca: o ícone Phosphor de cada origem (marca é `IconeDeOrigem` que resolve). */
+const OUTRAS_ORIGENS = { Site: Globe, Indicação: Handshake };
 
 const RECORTES_DO_GRAFICO = [
   { valor: "valor", rotulo: "Valor" },
@@ -258,7 +253,7 @@ export function Tela({
                   </DataTableCell>
                   <DataTableCell coluna="origem">
                     <p className="flex min-w-0 items-center gap-1.5 text-label-lg text-foreground" title={`Origem: ${p.canal}`}>
-                      <IconeDoCanal canal={p.canal} />
+                      <IconeDeOrigem origem={p.canal} outros={OUTRAS_ORIGENS} />
                       <span className="min-w-0 truncate">{p.canal}</span>
                     </p>
                   </DataTableCell>

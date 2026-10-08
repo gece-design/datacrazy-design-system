@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Check, type Icon } from "@phosphor-icons/react";
+import { Check, DotsThree, type Icon } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
 import { caixaDeMarcar } from "@/lib/campo";
 import { cn } from "@/lib/utils";
 import { PainelFlutuante } from "@/components/ui/popover";
@@ -175,5 +176,56 @@ export function Menu({ aberto, aoFechar, gatilho, rotulo, itens }: MenuProps) {
       })}
     </PainelFlutuante>,
     document.body,
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   Botão de ações — o ⋮ que abre um Menu
+--------------------------------------------------------------------------- */
+
+export interface BotaoDeAcoesProps {
+  /** Nome do botão e do menu. Ex.: "Ações de Suporte nível 1". */
+  rotulo: string;
+  itens: ItemDoMenu[];
+  /** O tamanho do botão de ícone: `icon-xs` (24, o da célula e do cartão) ou `icon-sm` (28). */
+  size?: "icon-xs" | "icon-sm";
+  className?: string;
+}
+
+/**
+ * As ações de um item — o cartão de um catálogo, a linha de um cadastro: o
+ * botão de três pontos e o `Menu` que ele abre, com o estado de aberto e o
+ * foco de volta já resolvidos. Menu de ações: todo item com ícone. Nasceu na
+ * tela de Agentes de IA (2026-10-02) e virou peça em 2026-10-07.
+ */
+export function BotaoDeAcoes({ rotulo, itens, size = "icon-xs", className }: BotaoDeAcoesProps) {
+  const [aberto, setAberto] = React.useState(false);
+  const botao = React.useRef<HTMLButtonElement>(null);
+  return (
+    <>
+      <Button
+        ref={botao}
+        variant="ghost"
+        size={size}
+        aria-label={rotulo}
+        title={rotulo}
+        aria-haspopup="menu"
+        aria-expanded={aberto}
+        onClick={() => setAberto((a) => !a)}
+        className={className}
+      >
+        <DotsThree size={16} weight="bold" aria-hidden="true" />
+      </Button>
+      <Menu
+        aberto={aberto}
+        gatilho={botao}
+        rotulo={rotulo}
+        itens={itens}
+        aoFechar={(devolver = true) => {
+          setAberto(false);
+          if (devolver) botao.current?.focus();
+        }}
+      />
+    </>
   );
 }

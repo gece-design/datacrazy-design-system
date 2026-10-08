@@ -75,8 +75,13 @@ import {
 import { cn } from "@/lib/utils";
 import { gradeDeCartoes } from "@/lib/campo";
 
-/* Composição do showcase: os dados do arquivo (Figma 565:5959) montados com os
-   componentes do DS. Nada aqui é componente — é a tela de exemplo. */
+/* O Drawer do lead: as peças do Drawer (perfil, métricas, menu, conteúdo)
+   montadas no lead do CRM — as cinco seções do arquivo (Figma 565:5959), o
+   seletor de tags e os cartões editáveis. É UM em toda tela: Leads, Pipeline,
+   Atendimento e Dashboard abrem este, com os dados do lead clicado (`dados`,
+   `tags`, `secoes`). Sem eles, mostra os dois leads do arquivo — é o que a
+   página do Drawer exibe. Morava em app/feedback/drawer e virou peça em
+   2026-10-07 (ADR-073): tudo o que o protótipo mostra é componente do DS. */
 
 /** O catálogo de tags da conta, por aba do seletor. */
 export const CATALOGO_TAGS: GrupoTags[] = [

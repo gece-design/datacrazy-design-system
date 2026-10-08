@@ -378,3 +378,8 @@ Desvio: ajusta a ADR-052. Recolhida, a `SidebarBrand` mostra o símbolo com 20px
 Motivo: Gava, na reunião de 2026-10-02: "achei grande o ícone da DataCrazy" e "esse efeito de hover para expandir, não gostei"; sem referência, a proposta é minha.
 Aprovado por: humano (2026-10-07).
 
+## ADR-073 · Tudo o que o protótipo mostra é componente do design system · 2026-10-07
+Desvio: regra 9 de composição, nova. As peças que nasceram nas telas do protótipo saem delas para `components/ui`, genéricas (sem domínio, texto por `rotulos`), com página no site e doc: `Quadro` + `QuadroCartao` (do Pipeline), `Conversa` (casca, cabeçalho, mensagens, balão, evento, divisor, compositor) + `ListaDeConversas` (do Atendimento), `Canvas` (das Automações), `CartaoDeCatalogo` + `BotaoDeAcoes` (dos Agentes), `IconeDeOrigem` (as quatro cópias do ícone do canal) e o `DrawerLead`, que morava em `app/feedback/drawer` e vira `components/ui/drawer-do-lead` — item instalável, não mais vizinho copiado pelos blocos. A tela fica só com o que é dela: dados, palavras e o que vai em cada encaixe (`QuadroDoFunil`, `CanvasDaAutomacao`, `CartaoAgente`). Aparência e gestos iguais aos de antes.
+Motivo: pedido do cliente na reunião de 2026-10-02 (Gava: "aquilo ali não são componentes… não tem componente dos blocos de automação"; "as pipelines não têm componente") e do humano em 2026-10-07: "componentize tudo… para que, quando for utilizado a geração de novas telas, você utilize esses componentes". Sem a peça no DS, cada tela nova reinventava o quadro, o chat e o canvas.
+Aprovado por: humano (2026-10-07).
+

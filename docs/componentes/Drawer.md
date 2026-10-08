@@ -157,7 +157,7 @@ lib/estados.ts) — "visível no hover" (cliente, 2026-09-24).
 ## Composição
 
 Usa: [Avatar](Avatar.md) · [Tag](Tag.md) (com `SeletorTags`) · [Input](Input.md) · [Select](Select.md) · [DataTable](DataTable.md) (layout compacto) · [Button](Button.md) (`soft` e `outline`) · Phosphor · `Scrim` do [Modal](Modal.md) · `useCamada` (lib/use-camada.ts — foco preso, Escape, rolagem travada, pilha com o Modal) · `useSaida` e `useMontado` (lib/use-saida.ts). O botão do canto é próprio: 29px com fundo `card`, medido no arquivo ·
-Usado por: tela de leads (ainda não construída)
+Usado por: [DrawerDoLead](DrawerDoLead.md) — o lead montado com estas peças, o mesmo em Leads, Pipeline, Atendimento e Dashboard
 
 ## Exemplo de uso
 

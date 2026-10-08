@@ -87,6 +87,11 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Avatar", href: "/data-display/avatar", atualizado: "2026-10-01", icone: "pessoa", pronto: true , descricao: "Identificação de pessoa"},
       { titulo: "Table", href: "/data-display/table", atualizado: "2026-10-02", icone: "tabela", pronto: true , descricao: "A tabela de negócios do CRM"},
       { titulo: "Calendário", href: "/data-display/calendario", icone: "agenda", pronto: true, descricao: "Os negócios no mês ou na semana, pela próxima ação" },
+      { titulo: "Cartão de catálogo", href: "/data-display/cartao-de-catalogo", atualizado: "2026-10-07", icone: "catalogo", pronto: true, descricao: "Nome, descrição, ações e 2 a 3 métricas no pé" },
+      { titulo: "Quadro", href: "/data-display/quadro", atualizado: "2026-10-07", icone: "kanban", pronto: true, descricao: "O kanban: colunas de 220 a 300 e cartões que se arrastam" },
+      { titulo: "Conversa", href: "/data-display/conversa", atualizado: "2026-10-07", icone: "conversa", pronto: true, descricao: "O chat: balões, eventos e o compositor" },
+      { titulo: "Lista de conversas", href: "/data-display/lista-de-conversas", atualizado: "2026-10-07", icone: "conversas", pronto: true, descricao: "Abas de situação e uma linha por conversa" },
+      { titulo: "Canvas", href: "/data-display/canvas", atualizado: "2026-10-07", icone: "canvas", pronto: true, descricao: "Blocos ligados numa folha com zoom de 25% a 200%" },
     ],
   },
   {

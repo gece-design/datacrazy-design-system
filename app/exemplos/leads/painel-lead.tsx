@@ -9,7 +9,7 @@ import { Select } from "@/components/ui/select";
 import { SeletorTags, Tag } from "@/components/ui/tag";
 // O drawer é UM: o mesmo `DrawerLead` da página do Drawer no design system,
 // aberto com o lead clicado na lista. Nada aqui é uma segunda versão dele.
-import { DrawerLead, cabecalhos, type LeadDoDrawer, type SecaoDoDrawer } from "@/app/feedback/drawer/drawer-lead";
+import { DrawerLead, cabecalhos, type LeadDoDrawer, type SecaoDoDrawer } from "@/components/ui/drawer-do-lead";
 import { gradeDeCartoes } from "@/lib/campo";
 import { tomDe, type Tom } from "@/lib/tons";
 import { comprasDe, dataCurta, moeda, tagsDe, type Lead, type Origem, type TagDaConta } from "./dados";

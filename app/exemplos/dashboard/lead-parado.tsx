@@ -7,7 +7,7 @@ import { AcaoCopiar, CampoEditavel } from "@/components/ui/input";
 import { Tag } from "@/components/ui/tag";
 // O drawer é UM: o mesmo `DrawerLead` da página do Drawer no design system,
 // aberto com o negócio clicado na tabela. Nada aqui é uma segunda versão dele.
-import { DrawerLead, cabecalhos, type LeadDoDrawer, type SecaoDoDrawer } from "@/app/feedback/drawer/drawer-lead";
+import { DrawerLead, cabecalhos, type LeadDoDrawer, type SecaoDoDrawer } from "@/components/ui/drawer-do-lead";
 import { gradeDeCartoes } from "@/lib/campo";
 import { tomDe } from "@/lib/tons";
 import { moeda, type NegocioParado } from "./dados";

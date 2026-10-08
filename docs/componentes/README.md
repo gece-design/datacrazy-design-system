@@ -27,22 +27,28 @@ markdown é a vista dele.
 | [Breadcrumb.md](Breadcrumb.md) | Mostrar o caminho até a página atual e levar de volta a qualquer nível dele. |
 | [Button.md](Button.md) | Ação do usuário: sete variantes de peso visual e quatro tamanhos, com o mesmo |
 | [Calendario.md](Calendario.md) | Mostrar os negócios (ou qualquer evento datado) no mês ou na semana, pela |
+| [Canvas.md](Canvas.md) | O editor visual de fluxo: blocos numa folha sem tamanho, ligados por curvas |
 | [Card.md](Card.md) | Superfície que carrega um bloco de dados do dashboard. |
+| [CartaoDeCatalogo.md](CartaoDeCatalogo.md) | Um registro num catálogo em cartões: quem é (iniciais na cor que o nome |
 | [Checkbox.md](Checkbox.md) | Marcar ou desmarcar uma opção independente, inclusive o "parte marcada" de |
 | [Combobox.md](Combobox.md) | Escolher uma ou várias opções numa lista com busca — o Select para lista longa, com grupos ou com várias escol |
+| [Conversa.md](Conversa.md) | Mostrar uma conversa do atendimento e deixar responder: o contato no cabeçalho, as mensagens em balões (recebi |
 | [DataTable.md](DataTable.md) | Lista os negócios do CRM em colunas, com filtros e paginação — e, com |
 | [DatePicker.md](DatePicker.md) | Período em dois meses, com atalhos: um gatilho no estilo do Button `tertiary` |
 | [Drawer.md](Drawer.md) | Abrir um lead pela direita, com o perfil fixo e o conteúdo da seção escolhida. |
+| [DrawerDoLead.md](DrawerDoLead.md) | O lead do CRM inteiro, aberto por cima da tela: as peças do [Drawer](Drawer.md) |
 | [Header.md](Header.md) | O topo de uma página do CRM, numa linha só: onde a pessoa está, que página é e |
 | [IconeDeMarca.md](IconeDeMarca.md) | Mostrar a marca de um canal ou integração — WhatsApp, Instagram, Google — num conjunto fechado, com o logo de  |
 | [Input.md](Input.md) | Receber um valor curto digitado, com rótulo visível e erro inline. |
 | [KpiCard.md](KpiCard.md) | Exibe uma métrica única — número em destaque, rótulo do que ele mede e uma |
+| [ListaDeConversas.md](ListaDeConversas.md) | Listar as conversas do atendimento numa coluna: abas de situação em cima e, embaixo, uma linha por conversa co |
 | [LogoDatacrazy.md](LogoDatacrazy.md) | Símbolo e logotipo do DataCrazy (`LogoDataCrazy` no código), em `currentColor` para acompanhar o tema. É a |
 | [Menu.md](Menu.md) | A lista de ações e opções que abre de um botão: o menu da coluna e o botão |
 | [Modal.md](Modal.md) | Pedir uma decisão bloqueando a tela até ela ser tomada. |
 | [Pagination.md](Pagination.md) | Navegar entre as páginas de uma lista longa. |
 | [PainelLateral.md](PainelLateral.md) | Mostrar um registro aberto ao lado da lista, sem cobri-la: o lead, o negócio ou o contato num painel de 480px  |
 | [Popover.md](Popover.md) | A casca de todo painel flutuante do DS — lista do Select, calendário, hora, |
+| [Quadro.md](Quadro.md) | O kanban do produto: colunas num trilho que rola e cartões que se arrastam |
 | [RadioGroup.md](RadioGroup.md) | Escolher exatamente uma opção entre poucas, todas visíveis ao mesmo tempo. |
 | [Rating.md](Rating.md) | Avaliação de 0 a 10 estrelas (o máximo é prop): editável por clique e setas, |
 | [SegmentedControl.md](SegmentedControl.md) | Escolha exclusiva à vista entre 2 e 4 opções — período, escopo, visualização. |

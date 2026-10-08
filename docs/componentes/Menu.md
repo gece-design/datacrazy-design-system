@@ -40,6 +40,20 @@ separador não estão desenhados (AUD-203, lote `figma`).
 O gatilho leva `aria-haspopup="menu"` e `aria-expanded`; o painel tem 240px,
 abre abaixo do gatilho em portal fixo e vira para cima quando não cabe.
 
+### `BotaoDeAcoes`
+
+O ⋮ que abre um `Menu`, com o estado de aberto e o foco de volta já
+resolvidos — as ações de um item: o cartão de um catálogo, a linha de um
+cadastro. Nasceu na tela de Agentes de IA (2026-10-02) e virou peça em
+2026-10-07 (ADR-073).
+
+| Prop | Tipo | Obrigatória | Descrição |
+|------|------|-------------|-----------|
+| `rotulo` | `string` | sim | Nome do botão e do menu. Ex.: "Ações de Suporte nível 1". |
+| `itens` | `ItemDoMenu[]` | sim | Os mesmos do `Menu`. Menu de ações: todo item com `icone`. |
+| `size` | `"icon-xs" \| "icon-sm"` | não | 24 (padrão: célula e cartão) ou 28. |
+| `className` | `string` | não | — |
+
 ## Variantes
 
 | Item | Quando usar |
@@ -73,7 +87,7 @@ decisão, não buraco a preencher.
 ## Composição
 
 Usa: `PainelFlutuante` do [Popover](Popover.md) · `useCliqueFora` e `useSaida` (lib).
-Usado por: [Table](DataTable.md) (menu da coluna, botões Colunas e Agrupar, ações da barra de seleção) · tela de leads (`/exemplos/pipeline`, personalizar cartão)
+Usado por: [Table](DataTable.md) (menu da coluna, botões Colunas e Agrupar, ações da barra de seleção) · tela de leads (`/exemplos/pipeline`, personalizar cartão) · [CartaoDeCatalogo](CartaoDeCatalogo.md) e os cadastros da tela de Agentes (`BotaoDeAcoes`)
 
 ## Exemplo de uso
 

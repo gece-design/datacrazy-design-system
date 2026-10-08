@@ -9,6 +9,7 @@ import {
   TiktokLogo,
   WhatsappLogo,
   YoutubeLogo,
+  Globe,
   type Icon,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
@@ -214,5 +215,54 @@ export function IconeDeMarca({ marca, tamanho = 16, mono = false, rotulo, classN
     >
       {desenho(u)}
     </svg>
+  );
+}
+
+/* ------------------------------------------------------------- Origem -- */
+
+/** A chave da marca para um nome como o CRM escreve ("WhatsApp", "Google Ads"): sem acento, espaço nem caixa. `null` quando não é marca. */
+export function marcaDe(origem: string): Marca | null {
+  const chave = origem
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z]/g, "");
+  if (chave in MARCAS) return chave as Marca;
+  // "Google Ads", "Meta Ads": a marca é a primeira palavra
+  const primeira = origem.split(/\s+/)[0]?.toLowerCase() ?? "";
+  return primeira in MARCAS ? (primeira as Marca) : null;
+}
+
+export interface IconeDeOrigemProps {
+  /** O nome da origem como vem do CRM: "WhatsApp", "Instagram", "Site", "Indicação". */
+  origem: string;
+  /** O ícone Phosphor do que não é marca, por nome ("Site" → `Globe`, "Indicação" → `Handshake`). Sem par: `Globe`. */
+  outros?: Record<string, Icon>;
+  /** 12 na linha de apoio, 14 na célula e no cartão (padrão), 16 em lista e campo. */
+  tamanho?: 12 | 14 | 16;
+  /** Nome da origem para leitor de tela. Só quando o ícone aparece SEM o nome ao lado. */
+  rotulo?: string;
+  className?: string;
+}
+
+/**
+ * A origem de um lead como ícone: a marca de verdade quando o nome é uma
+ * marca do conjunto (`marcaDe`), senão o ícone Phosphor que a tela passa em
+ * `outros`, em `muted-foreground`. Era uma função copiada em quatro telas
+ * (quadro, lista, dashboard, atendimento); virou peça em 2026-10-07 (ADR-073).
+ */
+export function IconeDeOrigem({ origem, outros, tamanho = 14, rotulo, className }: IconeDeOrigemProps) {
+  const marca = marcaDe(origem);
+  if (marca) return <IconeDeMarca marca={marca} tamanho={tamanho} rotulo={rotulo} className={className} />;
+  const Glifo = outros?.[origem] ?? Globe;
+  return (
+    <Glifo
+      size={tamanho}
+      weight="regular"
+      role={rotulo ? "img" : undefined}
+      aria-label={rotulo}
+      aria-hidden={rotulo ? undefined : true}
+      className={cn("shrink-0 text-muted-foreground", className)}
+    />
   );
 }

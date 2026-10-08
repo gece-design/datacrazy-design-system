@@ -1,7 +1,7 @@
 {
   "product": "DataCrazy",
   "kit": "3.2",
-  "updated": "2026-10-01",
+  "updated": "2026-10-07",
   "_doc": "Registro vivo de componentes — a memoria que alimenta a inferencia por analogia. Escrito pela fw-doc ao fim de CADA lote, nunca a mao. source de cada estado: figma | declarado | banco | inferido | humano.",
   "_divida": "Quitada em 2026-09-19 (lote B1): os seis componentes escritos antes do registro (Button, Badge, Sidebar, DatePicker, Rating, LogoDatacrazy) ganharam entrada lida do código.",
   "components": [
@@ -2077,6 +2077,417 @@
         }
       },
       "_states_doc": "Sem par no arquivo: ADR-056. Nao e dialogo: nao prende o foco nem escurece. Escape com o foco dentro fecha. Abaixo de 1024 ocupa a tela."
+    },
+    {
+      "name": "CartaoDeCatalogo",
+      "family": "superficie",
+      "figmaNode": null,
+      "batch": "C1",
+      "variants": [
+        "com metricas",
+        "sem metricas"
+      ],
+      "tokens": [
+        "card",
+        "border",
+        "foreground",
+        "muted-foreground",
+        "subtle-foreground",
+        "--tom-brilho",
+        "--tom-texto",
+        "radius/md",
+        "text/heading-4",
+        "text/body-sm",
+        "text/caption"
+      ],
+      "motion": "none",
+      "states": {
+        "repouso": {
+          "impl": "Card: card + border, raio md, recuo 12, vão 12",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "Card",
+          "approvedIn": "C1"
+        },
+        "valor vazio": {
+          "impl": "traço em subtle-foreground, com o porquê no title",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "Table (célula vazia)",
+          "approvedIn": "C1"
+        },
+        "entrando": {
+          "impl": "a grade da tela põe animate-surgir no item",
+          "source": "humano",
+          "rule": "ADR-068",
+          "precedent": "Quadro (cartão)",
+          "approvedIn": "C1"
+        }
+      },
+      "_states_doc": "Sem par no Figma: nasceu como o cartão do agente de IA (2026-10-02) e virou peça em 2026-10-07 (ADR-073). AUD-203."
+    },
+    {
+      "name": "DrawerDoLead",
+      "family": "overlay",
+      "figmaNode": "565:5959",
+      "batch": "C1",
+      "variants": [
+        "showcase",
+        "da tela"
+      ],
+      "tokens": [
+        "--tom-anel",
+        "--tom-texto",
+        "--tom-brilho",
+        "card",
+        "border",
+        "foreground",
+        "muted-foreground"
+      ],
+      "motion": "fast",
+      "states": {
+        "seção trocando": {
+          "impl": "o corpo entra com fade-in-fast",
+          "source": "humano",
+          "rule": "ADR-068",
+          "precedent": "Drawer",
+          "approvedIn": "C1"
+        },
+        "perfil recolhido": {
+          "impl": "DrawerBotaoCanto recolhe a coluna; o conteúdo ocupa tudo",
+          "source": "figma",
+          "rule": "—",
+          "precedent": "Drawer",
+          "approvedIn": "C1"
+        },
+        "item fixado": {
+          "impl": "sobe ao topo do menu, alfinete cheio",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "Drawer",
+          "approvedIn": "C1"
+        },
+        "largura arrastada": {
+          "impl": "720 a 1080, lembrada por memoria",
+          "source": "humano",
+          "rule": "ADR-040",
+          "precedent": "Drawer",
+          "approvedIn": "C1"
+        }
+      },
+      "_states_doc": "A composição do showcase (app/feedback/drawer) que virou peça em 2026-10-07 (ADR-073)."
+    },
+    {
+      "name": "Quadro",
+      "family": "superficie",
+      "figmaNode": null,
+      "batch": "C1",
+      "variants": [
+        "coluna neutra",
+        "coluna com cor",
+        "QuadroCartao"
+      ],
+      "tokens": [
+        "background",
+        "card",
+        "border",
+        "accent",
+        "primary",
+        "foreground",
+        "muted-foreground",
+        "subtle-foreground",
+        "warning",
+        "input/border-hover",
+        "elevation/sm",
+        "elevation/lg",
+        "elevation/float",
+        "--tom-anel",
+        "--tom-texto",
+        "radius/lg",
+        "radius/md",
+        "radius/sm",
+        "text/heading-4",
+        "text/label-lg",
+        "text/label-md",
+        "text/body-sm",
+        "text/caption",
+        "duration/base"
+      ],
+      "motion": "base",
+      "states": {
+        "hover": {
+          "impl": "cartão: traço input-border-hover + shadow-sm; título da coluna: text-primary",
+          "source": "humano",
+          "rule": "L2",
+          "precedent": "Card",
+          "approvedIn": "C1"
+        },
+        "focus": {
+          "impl": "outline 2px com respiro (foco) no cartão, no título e nas setas",
+          "source": "banco",
+          "rule": "D6",
+          "precedent": "Button",
+          "approvedIn": "C1"
+        },
+        "em movimento": {
+          "impl": "cartão de origem a opacity-40 enquanto o mouse arrasta",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "C1"
+        },
+        "pego pelo teclado": {
+          "impl": "shadow-lg + outline 2px primary no cartão; anúncio em aria-live",
+          "source": "humano",
+          "rule": "WCAG 2.5.7",
+          "precedent": "—",
+          "approvedIn": "C1"
+        },
+        "linha de destino": {
+          "impl": "Linha de 4px em primary onde o cartão cai; a coluna alvo fica accent",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "C1"
+        },
+        "coluna vazia": {
+          "impl": "caixa tracejada border com o texto vazio em subtle-foreground",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "Table (vazio)",
+          "approvedIn": "C1"
+        },
+        "cartão chegando": {
+          "impl": "animate-surgir (base): entra subindo 4px",
+          "source": "humano",
+          "rule": "ADR-068",
+          "precedent": "Conversa (balão)",
+          "approvedIn": "C1"
+        }
+      },
+      "_states_doc": "Sem par no Figma: nasceu da tela do Pipeline (2026-09-28) e virou peça em 2026-10-07 (ADR-073). AUD-203."
+    },
+    {
+      "name": "Conversa",
+      "family": "superficie",
+      "figmaNode": null,
+      "batch": "C1",
+      "variants": [
+        "Balao contato",
+        "Balao atendente",
+        "Balao nota",
+        "EventoDaConversa",
+        "Compositor mensagem",
+        "Compositor nota"
+      ],
+      "tokens": [
+        "card",
+        "border",
+        "muted",
+        "button/soft-bg",
+        "warning",
+        "foreground",
+        "muted-foreground",
+        "primary",
+        "radius/lg",
+        "radius/md",
+        "text/label-lg",
+        "text/label-sm",
+        "text/body-lg",
+        "text/caption",
+        "duration/base"
+      ],
+      "motion": "base",
+      "states": {
+        "balão chegando": {
+          "impl": "animate-surgir (base): entra subindo 4px",
+          "source": "humano",
+          "rule": "ADR-068",
+          "precedent": "Quadro (cartão)",
+          "approvedIn": "C1"
+        },
+        "enviada / lida": {
+          "impl": "Check 14 em muted-foreground; Checks 14 em primary",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "C1"
+        },
+        "nota interna": {
+          "impl": "border warning/25 + bg warning/10, selo NOTA INTERNA em warning",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "C1"
+        },
+        "finalizada": {
+          "impl": "o Compositor mostra `finalizado` no lugar do campo",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "C1"
+        },
+        "enviar desabilitado": {
+          "impl": "Button primary disabled enquanto o texto está vazio",
+          "source": "banco",
+          "rule": "I5",
+          "precedent": "Button",
+          "approvedIn": "C1"
+        }
+      },
+      "_states_doc": "Sem par no Figma: nasceu da tela de Atendimento (2026-09-29) e virou peça em 2026-10-07 (ADR-073). AUD-203."
+    },
+    {
+      "name": "ListaDeConversas",
+      "family": "superficie",
+      "figmaNode": null,
+      "batch": "C1",
+      "variants": [
+        "com contagem nas abas",
+        "vazia"
+      ],
+      "tokens": [
+        "card",
+        "border",
+        "accent",
+        "muted",
+        "primary",
+        "primary-foreground",
+        "foreground",
+        "muted-foreground",
+        "radius/md",
+        "radius/full",
+        "text/label-lg",
+        "text/label-sm",
+        "text/body-sm",
+        "text/caption"
+      ],
+      "motion": "none",
+      "states": {
+        "hover": {
+          "impl": "bg-muted na linha",
+          "source": "banco",
+          "rule": "L2",
+          "precedent": "Table (linha)",
+          "approvedIn": "C1"
+        },
+        "focus": {
+          "impl": "outline 2px por dentro (focoInterno) na linha",
+          "source": "banco",
+          "rule": "D6 · D19",
+          "precedent": "Calendario",
+          "approvedIn": "C1"
+        },
+        "aberta": {
+          "impl": "bg-accent + nome em primary + aria-current",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "Sidebar (item)",
+          "approvedIn": "C1"
+        },
+        "não lidas": {
+          "impl": "contador primary de 16px e prévia em foreground",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "Header (selo do sino)",
+          "approvedIn": "C1"
+        },
+        "vazia": {
+          "impl": "texto vazio em muted-foreground",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "Table (vazio)",
+          "approvedIn": "C1"
+        }
+      },
+      "_states_doc": "Sem par no Figma: nasceu da tela de Atendimento (2026-09-29) e virou peça em 2026-10-07 (ADR-073). AUD-203."
+    },
+    {
+      "name": "Canvas",
+      "family": "superficie",
+      "figmaNode": null,
+      "batch": "C1",
+      "variants": [
+        "bloco com itens",
+        "bloco com corpo",
+        "saída com tom"
+      ],
+      "tokens": [
+        "muted",
+        "card",
+        "border",
+        "foreground",
+        "muted-foreground",
+        "subtle-foreground",
+        "primary",
+        "accent",
+        "warning",
+        "destructive",
+        "overlay/bg",
+        "overlay/border",
+        "elevation/lg",
+        "z/popover",
+        "radius/md",
+        "radius/lg",
+        "text/heading-4",
+        "text/label-md",
+        "text/caption",
+        "duration/base",
+        "ease/enter"
+      ],
+      "motion": "base",
+      "states": {
+        "bloco marcado": {
+          "impl": "outline 2px primary no cartão; os conectores dele em destaque",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "Quadro (pego)",
+          "approvedIn": "C1"
+        },
+        "bloco em arrasto": {
+          "impl": "segue o ponteiro sem transição; assenta na grade de 8 ao soltar",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "C1"
+        },
+        "ligando": {
+          "impl": "curva provisória da bolinha até o ponteiro; o destino acende ao passar",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "C1"
+        },
+        "conector marcado": {
+          "impl": "traço mais grosso em primary; Delete remove",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "C1"
+        },
+        "laço": {
+          "impl": "retângulo accent/30 com traço primary ao arrastar com Shift",
+          "source": "humano",
+          "rule": "—",
+          "precedent": "—",
+          "approvedIn": "C1"
+        },
+        "zoom pedido por botão ou tecla": {
+          "impl": "a folha desliza em base · enter; conectores remedidos a cada quadro",
+          "source": "humano",
+          "rule": "ADR-068",
+          "precedent": "—",
+          "approvedIn": "C1"
+        },
+        "fundo": {
+          "impl": "bg-muted pontilhado em subtle-foreground, que anda e escala com a vista",
+          "source": "humano",
+          "rule": "ADR-062",
+          "precedent": "—",
+          "approvedIn": "C1"
+        }
+      },
+      "_states_doc": "Sem par no Figma: nasceu da tela de Automações (2026-10-01) e virou peça em 2026-10-07 (ADR-073). AUD-203."
     }
   ]
 }

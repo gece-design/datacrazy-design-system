@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/drawer";
 import { Tag } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
-import { CATALOGO_TAGS, LEADS, MENU_LEAD, tagsEscolhidas, linhasDoContato } from "../drawer/drawer-lead";
+import { CATALOGO_TAGS, LEADS, MENU_LEAD, tagsEscolhidas, linhasDoContato } from "@/components/ui/drawer-do-lead";
 
 import { foco, rolagemDiscreta } from "@/lib/estados";
 const LEAD = LEADS.joel;

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Drawer, DrawerMenu, DrawerPerfil, HierarquiaNo, LinhaDoTempo, type TomPerfil } from "@/components/ui/drawer";
 import { Tag } from "@/components/ui/tag";
 import { PaginaDS, Secao, Chip } from "@/components/ds/preview";
-import { DrawerLead, MENU_LEAD } from "../drawer/drawer-lead";
+import { DrawerLead, MENU_LEAD } from "@/components/ui/drawer-do-lead";
 import { PropostaBarraDeIcones, PropostaGrade, PropostaTrilhoDeIcones } from "./propostas";
 
 /* As variações do Drawer, fora da página principal: os catorze tons, o menu

@@ -1,77 +1,22 @@
 "use client";
 
 import * as React from "react";
-import {
-  ArrowCounterClockwise,
-  ArrowLeft,
-  ArrowsLeftRight,
-  Check,
-  Checks,
-  Lightning,
-  NotePencil,
-  PaperPlaneRight,
-  Paperclip,
-  SidebarSimple,
-  UserPlus,
-} from "@phosphor-icons/react";
+import { ArrowCounterClockwise, ArrowsLeftRight, Check, Lightning, Paperclip, SidebarSimple, UserPlus } from "@phosphor-icons/react";
 
-import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ComboboxPainel } from "@/components/ui/combobox";
+import { Balao, Compositor, Conversa, ConversaCabecalho, DivisorDeDia, EventoDaConversa, Mensagens, type ModoDoCompositor } from "@/components/ui/conversa";
 import { Menu } from "@/components/ui/menu";
-import { SegmentedControl } from "@/components/ui/segmented-control";
 import { Tag } from "@/components/ui/tag";
-import { Textarea } from "@/components/ui/textarea";
 import { Tooltip } from "@/components/ui/tooltip";
-import { rolagemDiscreta } from "@/lib/estados";
-import { cn } from "@/lib/utils";
-import { ATENDENTES, EU, RESPOSTAS_RAPIDAS, type Conversa, type Mensagem } from "./dados";
+import { EU, RESPOSTAS_RAPIDAS, type Conversa as DadosDaConversa } from "./dados";
 import { IconeDoCanal } from "./lista";
 import { OPCOES_DE_ATENDENTE } from "./painel";
 
-/* A coluna do meio: cabeçalho da conversa, mensagens e o compositor. Mensagem
-   recebida à esquerda, enviada à direita; a nota interna é do time (o contato
-   não vê) e tem cor própria; o evento do sistema é uma linha, não um balão. */
-
-type Modo = "mensagem" | "nota";
-
-function Balao({ m }: { m: Mensagem }) {
-  if (m.de === "sistema") {
-    return <p className="self-center py-1 text-center text-caption text-muted-foreground">{m.texto} · {m.hora}</p>;
-  }
-  const minha = m.de === "atendente";
-  const nota = m.de === "nota";
-  return (
-    // a mensagem chega subindo 4px: nova ou ao abrir a conversa
-    <div className={cn("flex max-w-[72%] flex-col gap-0.5 motion-safe:animate-surgir", minha || nota ? "self-end items-end" : "self-start items-start")}>
-      <div
-        className={cn(
-          "whitespace-pre-wrap break-words rounded-lg px-3 py-2 text-body-lg text-foreground",
-          nota ? "border border-warning/25 bg-warning/10" : minha ? "bg-button-soft" : "bg-muted",
-        )}
-      >
-        {nota ? (
-          <span className="mb-1 flex items-center gap-1 text-label-sm uppercase text-warning">
-            <NotePencil size={12} weight="regular" aria-hidden="true" />
-            Nota interna
-          </span>
-        ) : null}
-        {m.texto}
-      </div>
-      <span className="flex items-center gap-1 text-caption tabular-nums text-muted-foreground">
-        {m.autor && (minha || nota) ? `${m.autor} · ` : ""}
-        {m.hora}
-        {minha ? (
-          m.lida ? (
-            <Checks size={14} weight="regular" aria-label="Lida" className="text-primary" />
-          ) : (
-            <Check size={14} weight="regular" aria-label="Enviada" />
-          )
-        ) : null}
-      </span>
-    </div>
-  );
-}
+/* A coluna do meio, montada com as peças da `Conversa` do design system. O que
+   é da tela fica aqui: as ações do cabeçalho (assumir, transferir, finalizar,
+   mostrar o lead), as respostas rápidas e o anexar do compositor, e a
+   tradução de cada `Mensagem` dos dados para o balão, o evento ou o divisor. */
 
 export function ConversaAberta({
   conversa,
@@ -85,8 +30,8 @@ export function ConversaAberta({
   aoVoltar,
   className,
 }: {
-  conversa: Conversa;
-  aoEnviar: (texto: string, modo: Modo) => void;
+  conversa: DadosDaConversa;
+  aoEnviar: (texto: string, modo: ModoDoCompositor) => void;
   aoFinalizar: () => void;
   aoReabrir: () => void;
   aoAssumir: () => void;
@@ -97,153 +42,106 @@ export function ConversaAberta({
   aoVoltar: () => void;
   className?: string;
 }) {
-  const [modo, setModo] = React.useState<Modo>("mensagem");
+  const [modo, setModo] = React.useState<ModoDoCompositor>("mensagem");
   const [texto, setTexto] = React.useState("");
   const [menuTransferir, setMenuTransferir] = React.useState(false);
   const [menuRespostas, setMenuRespostas] = React.useState(false);
   const botaoTransferir = React.useRef<HTMLButtonElement>(null);
   const botaoRespostas = React.useRef<HTMLButtonElement>(null);
-  const fim = React.useRef<HTMLDivElement>(null);
   const finalizada = conversa.situacao === "finalizada";
 
-  // conversa nova ou mensagem nova: a última fica à vista
-  React.useEffect(() => {
-    fim.current?.scrollIntoView({ block: "end" });
-  }, [conversa.id, conversa.mensagens.length]);
   // trocar de conversa não leva o rascunho junto
   React.useEffect(() => {
     setTexto("");
     setModo("mensagem");
   }, [conversa.id]);
 
-  function enviar() {
-    const limpo = texto.trim();
-    if (!limpo) return;
-    aoEnviar(limpo, modo);
-    setTexto("");
-  }
-
   return (
-    <section aria-label={`Conversa com ${conversa.nome}`} className={cn("flex min-h-0 min-w-0 flex-1 flex-col bg-card md:overflow-hidden md:rounded-md md:border md:border-border", className)}>
-      <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-3">
-        <Button variant="ghost" size="icon-sm" aria-label="Voltar para as conversas" onClick={aoVoltar} className="md:hidden">
-          <ArrowLeft size={16} weight="regular" />
-        </Button>
-        <Avatar nome={conversa.nome} size="sm" className="shrink-0" aria-hidden="true" />
-        <div className="flex min-w-0 flex-1 flex-col">
-          <h2 className="truncate text-label-lg text-foreground">{conversa.nome}</h2>
-          <p className="flex min-w-0 items-center gap-1 text-caption text-muted-foreground">
-            <IconeDoCanal canal={conversa.canal} tamanho={12} />
-            <span className="truncate">
-              {conversa.canal} · {conversa.telefone}
-            </span>
-          </p>
-        </div>
-        {conversa.atendente ? (
-          <Tag foto="/ds/atendente.png" className="hidden sm:inline-flex">
-            {conversa.atendente}
-          </Tag>
-        ) : (
-          <Button variant="soft" size="sm" onClick={aoAssumir}>
-            <UserPlus size={16} weight="regular" />
-            Assumir
-          </Button>
-        )}
-        <Button
-          ref={botaoTransferir}
-          variant="tertiary"
-          size="sm"
-          aria-haspopup="dialog"
-          aria-expanded={menuTransferir}
-          onClick={() => setMenuTransferir((a) => !a)}
-          className="hidden sm:inline-flex"
-        >
-          <ArrowsLeftRight size={16} weight="regular" />
-          Transferir
-        </Button>
-        {/* quem recebe a conversa: lista de atendentes, cada um como a Tag que aparece no topo — não é menu de ações */}
-        <ComboboxPainel
-          aberto={menuTransferir}
-          gatilho={botaoTransferir}
-          rotulo="Transferir para"
-          opcoes={OPCOES_DE_ATENDENTE.filter((a) => a.valor !== conversa.atendente)}
-          selecionados={[]}
-          aoAlternar={(a) => aoTransferir(a)}
-          rotulos={{ busca: "Buscar atendente", vazio: "Ninguém encontrado" }}
-          aoFechar={(devolver = true) => {
-            setMenuTransferir(false);
-            if (devolver) botaoTransferir.current?.focus();
-          }}
-        />
-        {finalizada ? (
-          <Button variant="secondary" size="sm" onClick={aoReabrir}>
-            <ArrowCounterClockwise size={16} weight="regular" />
-            Reabrir
-          </Button>
-        ) : (
-          <Button size="sm" onClick={aoFinalizar}>
-            <Check size={16} weight="regular" />
-            Finalizar
-          </Button>
-        )}
-        <Tooltip content={painelAberto ? "Esconder o lead" : "Mostrar o lead"}>
-          <Button variant="ghost" size="icon-sm" aria-label={painelAberto ? "Esconder o lead" : "Mostrar o lead"} aria-pressed={painelAberto} onClick={aoAlternarPainel}>
-            <SidebarSimple size={16} weight="regular" className="-scale-x-100" />
-          </Button>
-        </Tooltip>
-      </header>
-
-      <div role="log" aria-label="Mensagens" className={cn("flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-4 py-3", rolagemDiscreta)}>
-        {conversa.mensagens.map((m, i) => {
-          const novoDia = i === 0 || conversa.mensagens[i - 1].dia !== m.dia;
-          return (
-            <React.Fragment key={m.id}>
-              {novoDia ? (
-                <p className="flex items-center gap-3 py-1 text-caption text-muted-foreground before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
-                  {m.dia}
-                </p>
-              ) : null}
-              <Balao m={m} />
-            </React.Fragment>
-          );
-        })}
-        <div ref={fim} />
-      </div>
-
-      <footer className="flex shrink-0 flex-col gap-2 border-t border-border p-3">
-        {finalizada ? (
-          <p className="text-body-sm text-muted-foreground">Atendimento finalizado. Reabra para responder.</p>
-        ) : (
-          <>
-            <div className="flex items-center justify-between gap-2">
-              <SegmentedControl
-                rotulo="O que você vai escrever"
-                atual={modo}
-                aoEscolher={(v) => setModo(v as Modo)}
-                itens={[
-                  { valor: "mensagem", rotulo: "Mensagem" },
-                  { valor: "nota", rotulo: "Nota interna" },
-                ]}
-                className="bg-muted"
-              />
-              <p className="hidden text-caption text-muted-foreground sm:block">Enter envia · Shift + Enter quebra a linha</p>
-            </div>
-            <div className="flex items-end gap-2">
-              <Textarea
-                rotulo={modo === "nota" ? "Nota interna" : "Mensagem"}
-                rotuloOculto
-                linhas={1}
-                maximoDeLinhas={6}
-                placeholder={modo === "nota" ? "Só o time vê esta nota" : `Responder como ${EU}`}
-                value={texto}
-                onChange={(e) => setTexto(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    enviar();
-                  }
+    <Conversa
+      rotulo={`Conversa com ${conversa.nome}`}
+      className={className}
+      cabecalho={
+        <ConversaCabecalho
+          avatar={{ nome: conversa.nome }}
+          titulo={conversa.nome}
+          subtitulo={
+            <>
+              <IconeDoCanal canal={conversa.canal} tamanho={12} />
+              <span className="truncate">
+                {conversa.canal} · {conversa.telefone}
+              </span>
+            </>
+          }
+          aoVoltar={aoVoltar}
+          acoes={
+            <>
+              {conversa.atendente ? (
+                <Tag foto="/ds/atendente.png" className="hidden sm:inline-flex">
+                  {conversa.atendente}
+                </Tag>
+              ) : (
+                <Button variant="soft" size="sm" onClick={aoAssumir}>
+                  <UserPlus size={16} weight="regular" />
+                  Assumir
+                </Button>
+              )}
+              <Button
+                ref={botaoTransferir}
+                variant="tertiary"
+                size="sm"
+                aria-haspopup="dialog"
+                aria-expanded={menuTransferir}
+                onClick={() => setMenuTransferir((a) => !a)}
+                className="hidden sm:inline-flex"
+              >
+                <ArrowsLeftRight size={16} weight="regular" />
+                Transferir
+              </Button>
+              {/* quem recebe a conversa: lista de atendentes, cada um como a Tag que aparece no topo — não é menu de ações */}
+              <ComboboxPainel
+                aberto={menuTransferir}
+                gatilho={botaoTransferir}
+                rotulo="Transferir para"
+                opcoes={OPCOES_DE_ATENDENTE.filter((a) => a.valor !== conversa.atendente)}
+                selecionados={[]}
+                aoAlternar={(a) => aoTransferir(a)}
+                rotulos={{ busca: "Buscar atendente", vazio: "Ninguém encontrado" }}
+                aoFechar={(devolver = true) => {
+                  setMenuTransferir(false);
+                  if (devolver) botaoTransferir.current?.focus();
                 }}
               />
+              {finalizada ? (
+                <Button variant="secondary" size="sm" onClick={aoReabrir}>
+                  <ArrowCounterClockwise size={16} weight="regular" />
+                  Reabrir
+                </Button>
+              ) : (
+                <Button size="sm" onClick={aoFinalizar}>
+                  <Check size={16} weight="regular" />
+                  Finalizar
+                </Button>
+              )}
+              <Tooltip content={painelAberto ? "Esconder o lead" : "Mostrar o lead"}>
+                <Button variant="ghost" size="icon-sm" aria-label={painelAberto ? "Esconder o lead" : "Mostrar o lead"} aria-pressed={painelAberto} onClick={aoAlternarPainel}>
+                  <SidebarSimple size={16} weight="regular" className="-scale-x-100" />
+                </Button>
+              </Tooltip>
+            </>
+          }
+        />
+      }
+      rodape={
+        <Compositor
+          valor={texto}
+          aoMudar={setTexto}
+          modo={modo}
+          aoMudarModo={setModo}
+          aoEnviar={(t) => aoEnviar(t, modo)}
+          rotulos={{ escreverMensagem: `Responder como ${EU}` }}
+          finalizado={finalizada ? "Atendimento finalizado. Reabra para responder." : undefined}
+          acoes={
+            <>
               <Tooltip content="Respostas rápidas">
                 <Button
                   ref={botaoRespostas}
@@ -272,13 +170,29 @@ export function ConversaAberta({
                   <Paperclip size={16} weight="regular" />
                 </Button>
               </Tooltip>
-              <Button size="icon-lg" aria-label={modo === "nota" ? "Salvar nota" : "Enviar mensagem"} disabled={!texto.trim()} onClick={enviar}>
-                <PaperPlaneRight size={16} weight="regular" />
-              </Button>
-            </div>
-          </>
-        )}
-      </footer>
-    </section>
+            </>
+          }
+        />
+      }
+    >
+      {/* conversa nova ou mensagem nova: a chave muda e o log rola até o fim */}
+      <Mensagens chave={`${conversa.id}:${conversa.mensagens.length}`}>
+        {conversa.mensagens.map((m, i) => {
+          const novoDia = i === 0 || conversa.mensagens[i - 1].dia !== m.dia;
+          return (
+            <React.Fragment key={m.id}>
+              {novoDia ? <DivisorDeDia>{m.dia}</DivisorDeDia> : null}
+              {m.de === "sistema" ? (
+                <EventoDaConversa hora={m.hora}>{m.texto}</EventoDaConversa>
+              ) : (
+                <Balao de={m.de} hora={m.hora} autor={m.autor} situacao={m.de === "atendente" ? (m.lida ? "lida" : "enviada") : undefined}>
+                  {m.texto}
+                </Balao>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </Mensagens>
+    </Conversa>
   );
 }

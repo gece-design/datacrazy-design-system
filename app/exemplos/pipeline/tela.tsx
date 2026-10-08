@@ -69,7 +69,7 @@ import { BotaoAgrupar, BotaoColunas, useAjustesDaTabela } from "@/components/ui/
 import { Calendario } from "@/components/ui/calendario";
 import { TelaBase } from "@/components/ui/tela-base";
 import { PainelLead } from "./painel-lead";
-import { Quadro, IconeDoCanal, agrupar, CAMPOS_DE_FABRICA, CAMPOS_DO_CARTAO, ROTULOS_DOS_CAMPOS, type CampoDoCartao, type Colunas } from "./quadro";
+import { QuadroDoFunil, IconeDoCanal, agrupar, CAMPOS_DE_FABRICA, CAMPOS_DO_CARTAO, ROTULOS_DOS_CAMPOS, type CampoDoCartao, type Colunas } from "./quadro";
 import { ICONES_DE_TAG, sinaisDaTag, type GrupoTags, type IconeDeTag as ChaveDeIcone } from "@/components/ui/tag";
 import { Menu } from "@/components/ui/menu";
 
@@ -586,7 +586,7 @@ export function Tela({
         ) : null}
 
         {visao === "quadro" ? (
-          <Quadro
+          <QuadroDoFunil
             etapas={etapas}
             grupos={grupos}
             colunas={visiveis}

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Plus, Trash, X } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { IconeDoBloco } from "@/components/ui/canvas";
 import { ComboboxPainel } from "@/components/ui/combobox";
 import { CelulaEscolha } from "@/components/ui/data-table";
 import { IconeDeMarca } from "@/components/ui/icone-de-marca";
@@ -10,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { LinhaDeCampo, ListaDeCampos, PainelLateral, PainelLateralCorpo } from "@/components/ui/painel-lateral";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { IconeDoBloco } from "./canvas";
+import { ICONES_DOS_BLOCOS } from "./canvas";
 import { TIPOS, ramificacoes, type Bloco, type Canal, type Unidade } from "./dados";
 
 const SEM_DESTINO = "nenhum";
@@ -54,7 +55,7 @@ export function PainelDoBloco({
     <PainelLateral
       titulo={bloco.titulo}
       subtitulo={tipo.rotulo}
-      inicio={<IconeDoBloco tipo={bloco.tipo} />}
+      inicio={<IconeDoBloco icone={ICONES_DOS_BLOCOS[bloco.tipo]} />}
       aoFechar={aoFechar}
       rotulos={{ fechar: "Fechar o bloco", expandir: "Abrir em tela cheia", recolher: "Voltar ao painel" }}
     >

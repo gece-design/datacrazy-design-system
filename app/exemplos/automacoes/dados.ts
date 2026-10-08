@@ -1,13 +1,16 @@
 /* Dados de exemplo da tela de Automações. No CRM, a automação vem da API —
    troque este arquivo pelos hooks do time e mantenha os formatos. */
 
+import { LARGURA_DO_BLOCO, type SaidaDoCanvas } from "@/components/ui/canvas";
+
 export type TipoDeBloco = "gatilho" | "mensagem" | "espera" | "condicao" | "acao" | "randomizador";
 export type Canal = "WhatsApp" | "Instagram";
 export type Unidade = "minutos" | "horas" | "dias";
 
-/** Uma saída do bloco: o caminho que o fluxo segue. `tom` diz se é o caminho feliz, o de alerta ou o de erro. */
-export type Saida = { id: string; rotulo: string; para?: string; tom?: "alerta" | "erro" };
+/** Uma saída do bloco: a do canvas do DS. `tom` diz se é o caminho feliz, o de alerta ou o de erro. */
+export type Saida = SaidaDoCanvas;
 
+/** O bloco da automação: o formato do `BlocoDoCanvas` mais o que é deste domínio (canal, texto, espera). */
 export type Bloco = {
   id: string;
   tipo: TipoDeBloco;
@@ -57,7 +60,6 @@ export const TIPOS: Record<TipoDeBloco, { rotulo: string; descricao: string; adi
   },
 };
 
-export const LARGURA_DO_BLOCO = 264;
 const COLUNA = LARGURA_DO_BLOCO + 72;
 const col = (n: number) => 24 + n * COLUNA;
 

@@ -8,7 +8,7 @@ import { Select } from "@/components/ui/select";
 import { SeletorTags, Tag, type GrupoTags, type IconeDeTag } from "@/components/ui/tag";
 // O drawer é UM: o mesmo `DrawerLead` da página do Drawer no design system,
 // aberto com o lead da conversa. Nada aqui é uma segunda versão dele.
-import { DrawerLead, cabecalhos, type LeadDoDrawer, type SecaoDoDrawer } from "@/app/feedback/drawer/drawer-lead";
+import { DrawerLead, cabecalhos, type LeadDoDrawer, type SecaoDoDrawer } from "@/components/ui/drawer-do-lead";
 import { gradeDeCartoes } from "@/lib/campo";
 import { tomDe } from "@/lib/tons";
 import { OPCOES_DE_ATENDENTE } from "./painel";
