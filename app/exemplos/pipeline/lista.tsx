@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/ui/menu";
+import { Pagination } from "@/components/ui/pagination";
+import { TAMANHOS_DE_PAGINA, resumoDaPaginacao, usePaginacao } from "@/lib/paginacao";
 import { Tag, sinaisDaTag, type GrupoTags } from "@/components/ui/tag";
 import { cn } from "@/lib/utils";
 import { etapaPor, moeda, tagsDe, type Etapa, type EtapaId, type Lead } from "./dados";
@@ -80,10 +82,13 @@ export function Lista({
   aoEditar,
   ajustes,
   vazio,
+  chave,
 }: {
   etapas: Etapa[];
   /** O que aparece sob a tabela sem linhas: um `EstadoVazio` que a tela escolhe (sem negócio, ou busca sem resultado). */
   vazio?: ReactNode;
+  /** O que define a lista (busca e filtros da tela): quando muda, a paginação volta à primeira. */
+  chave?: string;
   /** O catálogo de tags da conta: é estado da tela, porque dá para criar tag. */
   grupos: GrupoTags[];
   /** Cria a tag no catálogo e devolve o id: ela já sai marcada no lead. */
@@ -110,10 +115,14 @@ export function Lista({
   const [menuEtapa, setMenuEtapa] = useState(false);
   const botaoEtapa = useRef<HTMLButtonElement>(null);
   const linhas = ordenarPor(leads, ajustes.ordem, valorDe(etapas));
-  // Grupos por etapa seguem o funil; por atendente, a ordem em que aparecem.
+  // 20 por página (ADR-079): a barra só aparece quando o funil passa de uma página
+  const paginacao = usePaginacao(linhas.length, { memoria: "pipeline-lista", tamanhos: TAMANHOS_DE_PAGINA, chave: `${chave ?? ""}|${JSON.stringify(ajustes.ordem)}` });
+  const daPagina = paginacao.fatiar(linhas);
+  const rolagem = useRef<HTMLDivElement>(null);
+  // Grupos por etapa seguem o funil; por atendente, a ordem em que aparecem. São da página à vista.
   const grupos = ajustes.grupo
     ? agruparPor(
-        linhas,
+        daPagina,
         (l) =>
           ajustes.grupo === "etapa"
             ? { id: l.etapa, rotulo: etapaPor(etapas, l.etapa).rotulo }
@@ -204,7 +213,7 @@ export function Lista({
     // O bloco tem a altura do conteúdo; quando passa da tela, rola por dentro.
     <div className="flex min-h-0 flex-1 flex-col p-3">
       <div className={cn("flex min-h-0 flex-col", blocoDaTela)}>
-      <div className={cn("min-h-0 overflow-y-auto", rolagemDiscreta)}>
+      <div ref={rolagem} className={cn("min-h-0 overflow-y-auto", rolagemDiscreta)}>
         {/* Só o resumo: Agrupar e Colunas estão na fileira do Header (humano, 2026-09-24). */}
         <DataTableToolbar rotulo="Negócios em aberto" total={`${leads.length} leads · ${moeda(total)}`} />
         {/* densa: a grade de lista à la Twenty (cliente, 2026-09-27) */}
@@ -222,7 +231,7 @@ export function Lista({
                   {ajustes.recolhidos.includes(g.id) ? null : g.itens.map(linha)}
                 </Fragment>
               ))
-            : linhas.map(linha)}
+            : daPagina.map(linha)}
         </DataTable>
         {leads.length === 0 ? vazio : null}
         <BarraDeSelecao selecao={selecao}>
@@ -265,6 +274,21 @@ export function Lista({
           </Button>
         </BarraDeSelecao>
       </div>
+      {leads.length > 0 ? (
+        <Pagination
+          className="shrink-0 border-t border-border px-3 py-2.5"
+          resumo={resumoDaPaginacao(paginacao, { um: "negócio", varios: "negócios" })}
+          paginas={paginacao.totalDePaginas}
+          atual={paginacao.pagina}
+          onIr={(p) => {
+            paginacao.ir(p);
+            rolagem.current?.scrollTo({ top: 0 });
+          }}
+          tamanhos={TAMANHOS_DE_PAGINA}
+          porPagina={paginacao.porPagina}
+          aoMudarTamanho={paginacao.mudarTamanho}
+        />
+      ) : null}
       </div>
     </div>
   );

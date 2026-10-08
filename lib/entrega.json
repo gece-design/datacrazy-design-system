@@ -5,19 +5,19 @@
     "fim": "2026-10-08"
   },
   "git": {
-    "commits": 94,
-    "arquivos": 382,
-    "linhasUi": 15391,
+    "commits": 95,
+    "arquivos": 388,
+    "linhasUi": 15840,
     "linhasLib": 926,
-    "linhasDocs": 10053
+    "linhasDocs": 10399
   },
   "catalogo": {
-    "itens": 70,
+    "itens": 71,
     "porTipo": {
       "registry:theme": 4,
       "registry:block": 7,
       "registry:item": 1,
-      "registry:lib": 13,
+      "registry:lib": 14,
       "registry:ui": 45
     }
   },
@@ -350,15 +350,15 @@
     {
       "name": "pagination",
       "titulo": "Pagination",
-      "descricao": "Navegar entre as páginas de uma lista longa.",
+      "descricao": "Os controles de página de uma lista de registros, com o resumo do que está à vista e, se a tela quiser, o tamanho da página. As regras de quando aparece e como se comporta estão em ../regras.md § Paginação (ADR-079); o estado mora na tela, no `usePaginacao` de `lib/paginacao.ts`.",
       "categoria": "Navigation",
       "pagina": null,
-      "pecas": 1,
-      "props": 6,
-      "variantes": 0,
-      "estados": 4,
-      "acessibilidade": 7,
-      "linhas": 102
+      "pecas": 2,
+      "props": 17,
+      "variantes": 5,
+      "estados": 7,
+      "acessibilidade": 10,
+      "linhas": 208
     },
     {
       "name": "painel-lateral",
@@ -610,11 +610,11 @@
   ],
   "totais": {
     "componentes": 45,
-    "pecas": 157,
-    "props": 596,
-    "variantes": 133,
-    "estados": 173,
-    "acessibilidade": 274,
+    "pecas": 158,
+    "props": 607,
+    "variantes": 138,
+    "estados": 176,
+    "acessibilidade": 277,
     "paginas": 54,
     "docs": 45
   },
@@ -1338,14 +1338,19 @@
       "id": "ADR-078",
       "titulo": "Skeleton: o modelo de carregamento de página",
       "data": "2026-10-08"
+    },
+    {
+      "id": "ADR-079",
+      "titulo": "Regras de paginação: quando aparece, quanto, onde",
+      "data": "2026-10-08"
     }
   ],
   "auditoria": {
-    "total": 214,
+    "total": 215,
     "porStatus": {
       "corrigido": 67,
       "aceito": 12,
-      "adiado": 133,
+      "adiado": 134,
       "aberto": 2
     },
     "porEixo": {
@@ -1355,7 +1360,7 @@
       "paginas": 10,
       "instalacao": 11,
       "docs": 10,
-      "fidelidade": 129
+      "fidelidade": 130
     }
   },
   "pedidos": [
@@ -1393,6 +1398,11 @@
       "data": "2026-10-08",
       "origem": "Cliente",
       "titulo": "SKELETON: O MODELO DE CARREGAMENTO DE PÁGINA"
+    },
+    {
+      "data": "2026-10-08",
+      "origem": "Revisão",
+      "titulo": "REGRAS DE PAGINAÇÃO"
     },
     {
       "data": "2026-10-07",

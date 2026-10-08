@@ -210,7 +210,10 @@
       "batch": 2,
       "variants": [
         "com resumo",
-        "sem resumo"
+        "sem resumo",
+        "com tamanho",
+        "muitas páginas",
+        "celular"
       ],
       "tokens": [
         "accent",
@@ -254,9 +257,30 @@
           "rule": null,
           "precedent": null,
           "approvedIn": "lote-2"
+        },
+        "muitas páginas": {
+          "impl": "janela de 7 posições: 1 … 5 6 7 … 12, reticências aria-hidden",
+          "source": "humano",
+          "rule": "ADR-079",
+          "precedent": "—",
+          "approvedIn": "C2"
+        },
+        "celular": {
+          "impl": "abaixo de 640px: Anterior · '3 de 5' · Próxima; o tamanho some",
+          "source": "humano",
+          "rule": "ADR-079",
+          "precedent": "—",
+          "approvedIn": "C2"
+        },
+        "uma página": {
+          "impl": "não desenha nada: o total está na toolbar",
+          "source": "humano",
+          "rule": "ADR-079",
+          "precedent": "—",
+          "approvedIn": "C2"
         }
       },
-      "_states_doc": "O ativo usa DOIS sinais (fundo accent e texto primary) porque so a borda do arquivo sumia no tema escuro. Decisao do humano 2026-09-04."
+      "_states_doc": "O ativo usa DOIS sinais (fundo accent e texto primary) porque so a borda do arquivo sumia no tema escuro. Decisao do humano 2026-09-04. Em 2026-10-08 (ADR-079): regras de uso em docs/regras.md § Paginação; janela com reticências, menu de tamanho, celular, aria-live e sem barra com uma página."
     },
     {
       "name": "Toast",

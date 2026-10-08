@@ -614,6 +614,7 @@ export function Tela({
             aoExcluirEmMassa={excluirEmMassa}
             aoEditar={editar}
             ajustes={ajustesDaLista}
+            chave={`${busca}|${JSON.stringify(filtro)}`}
             vazio={
               todos.length === 0 ? (
                 <EstadoVazio

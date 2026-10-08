@@ -3417,6 +3417,22 @@
       "status": "adiado",
       "fechadoEm": null,
       "nota": "**Nasceu do pedido do cliente (2026-10-08, \"modelo de carregamento de página\"), com a forma do humano (\"skeleton loading com animação de gradient indo e voltando\").** O bloco, as montagens e a tela (ADR-078), mais dois tokens de movimento (`duration/ciclo`, `ease/vaivem`). Na remedição, o arquivo é desenhado a partir do código; o brilho não se desenha, se descreve."
+    },
+    {
+      "id": "AUD-215",
+      "eixo": "fidelidade",
+      "titulo": "Pagination: janela com reticências, tamanho e celular não têm par no arquivo",
+      "onde": [
+        "components/ui/pagination.tsx",
+        "lib/paginacao.ts"
+      ],
+      "regra": "fidelidade · código antes do arquivo (Figma é rascunho)",
+      "gravidade": "baixa",
+      "lote": "figma",
+      "verificacao": "manual",
+      "status": "adiado",
+      "fechadoEm": null,
+      "nota": "**As regras de paginação (ADR-079) nasceram no código, a pedido do humano (2026-10-08).** O nó 261:790 tem só a barra com todos os números; a janela de 7 posições, o menu '20 por página' e a versão de celular são desenhados a partir do código na remedição."
     }
   ]
 }

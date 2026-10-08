@@ -408,3 +408,8 @@ Desvio: componente novo sem par no arquivo, e dois tokens novos na escala de mov
 Motivo: pedido do cliente em 2026-10-08 ("modelo de carregamento de página"); forma definida pelo humano ("skeleton loading com animação de gradient indo e voltando").
 Aprovado por: humano (2026-10-08).
 
+## ADR-079 · Regras de paginação: quando aparece, quanto, onde · 2026-10-08
+Desvio: nenhum no arquivo (a `Pagination` é o nó 261:790); regras novas de uso e três comportamentos novos no componente — com uma página só a barra não existe; acima de 7 páginas, janela de 7 posições com reticências; abaixo de 640px, Anterior · "3 de 5" · Próxima — mais o menu de tamanho (20 · 50 · 100, `Menu` de rádio) e o resumo `aria-live`. O estado sai das telas para `usePaginacao` (`lib/paginacao.ts`): 20 por página, tamanho lembrado por tela, página nunca lembrada, `chave` (busca, filtros, ordenação) volta à primeira, a atual nunca passa da última. As doze regras estão em `docs/regras.md` § Paginação (P1–P12) e na página `/navigation/pagination` § As regras. Leads e a visão de lista do Pipeline seguem.
+Motivo: humano, 2026-10-08 ("precisa criar e documentar as regras de paginação, quando aparece, porque e etc... pensando na melhor ux"), depois do pedido do cliente de paginar os leads (ADR-076).
+Aprovado por: humano (2026-10-08).
+

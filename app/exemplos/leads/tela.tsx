@@ -57,6 +57,7 @@ import { IconeDeMarca } from "@/components/ui/icone-de-marca";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { Pagination } from "@/components/ui/pagination";
+import { TAMANHOS_DE_PAGINA, resumoDaPaginacao, usePaginacao } from "@/lib/paginacao";
 import { Select } from "@/components/ui/select";
 import { SidebarBrand, SidebarGrupo, SidebarItem, SidebarRodape, SidebarThemeSwitch, SidebarTopo, SidebarUser } from "@/components/ui/sidebar";
 import { SeletorDeTom, Tag } from "@/components/ui/tag";
@@ -140,9 +141,6 @@ const PERIODOS: { id: string; rotulo: string; vale: (l: Lead) => boolean }[] = [
   { id: "2025", rotulo: "Em 2025", vale: (l) => l.criadoEm < "2026-01-01" },
 ];
 
-/** A lista pagina em 20 (ADR-076): a tela não rola por 84 leads, e o resumo diz onde se está. */
-const POR_PAGINA = 20;
-
 /* Buscar "olivia" tem que achar "Olívia": quem digita rápido não põe acento. */
 function semAcento(texto: string) {
   return texto.normalize("NFD").replace(/\p{Diacritic}/gu, "").trim().toLowerCase();
@@ -185,7 +183,8 @@ export function Tela({
 } = {}) {
   const [rota, setRota] = React.useState("Leads");
   const [leads, setLeads] = React.useState(vazio ? [] : LEADS);
-  const [pagina, setPagina] = React.useState(1);
+  // a lista rola por dentro do bloco; ao trocar de página, volta ao topo
+  const rolagem = React.useRef<HTMLDivElement>(null);
   const [tags, setTags] = React.useState(TAGS);
   const [busca, setBusca] = React.useState("");
   const [filtro, setFiltro] = React.useState<FiltrosAtivos>({});
@@ -224,11 +223,10 @@ export function Tela({
     return semAcento([l.nome, l.email, l.telefone, l.empresa, l.documento].join(" ")).includes(termo);
   });
   const linhas = ordenarPor(visiveis, ajustes.ordem, valorDe);
-  // a página atual: a busca e os filtros voltam para a primeira; o fim da lista não passa da última
-  const totalDePaginas = Math.max(1, Math.ceil(linhas.length / POR_PAGINA));
-  const paginaAtual = Math.min(pagina, totalDePaginas);
-  const daPagina = linhas.slice((paginaAtual - 1) * POR_PAGINA, paginaAtual * POR_PAGINA);
-  React.useEffect(() => setPagina(1), [busca, filtro]);
+  // 20 por página (ADR-079): busca, filtros e ordenação voltam para a primeira; o tamanho fica lembrado
+  const paginacao = usePaginacao(linhas.length, { memoria: "leads", tamanhos: TAMANHOS_DE_PAGINA, chave: `${busca}|${JSON.stringify(filtro)}|${JSON.stringify(ajustes.ordem)}` });
+  const daPagina = paginacao.fatiar(linhas);
+  // os grupos são da página à vista
   const grupos = ajustes.grupo ? agruparPor(daPagina, (l) => ({ id: l.origem, rotulo: l.origem }), ORIGENS.map((o) => o.valor)) : null;
   const aberto = leads.find((l) => l.id === abertoId) ?? null;
 
@@ -452,7 +450,7 @@ export function Tela({
             O bloco tem a altura do conteúdo; quando passa da tela, rola por dentro. */}
         <div className="flex min-h-0 flex-1 flex-col p-3">
         <div className={cn("flex min-h-0 flex-col", blocoDaTela)}>
-        <div className={cn("min-h-0 overflow-y-auto", rolagemDiscreta)}>
+        <div ref={rolagem} className={cn("min-h-0 overflow-y-auto", rolagemDiscreta)}>
           <DataTableToolbar rotulo="Todos os leads" total={`${visiveis.length} ${visiveis.length === 1 ? "lead" : "leads"}`} />
           <DataTable colunas={COLUNAS} ajustes={ajustes} selecao={selecao} className="rounded-none border-0">
             {grupos
@@ -535,13 +533,20 @@ export function Tela({
             </Button>
           </BarraDeSelecao>
         </div>
-        {visiveis.length > 0 ? (
+        {/* a barra só existe com mais de uma página; fixa no pé do bloco, não rola com a lista */}
+        {linhas.length > 0 ? (
           <Pagination
             className="shrink-0 border-t border-border px-3 py-2.5"
-            resumo={`Mostrando ${(paginaAtual - 1) * POR_PAGINA + 1}–${Math.min(paginaAtual * POR_PAGINA, linhas.length)} de ${linhas.length} ${linhas.length === 1 ? "lead" : "leads"}`}
-            paginas={totalDePaginas}
-            atual={paginaAtual}
-            onIr={setPagina}
+            resumo={resumoDaPaginacao(paginacao, { um: "lead", varios: "leads" })}
+            paginas={paginacao.totalDePaginas}
+            atual={paginacao.pagina}
+            onIr={(p) => {
+              paginacao.ir(p);
+              rolagem.current?.scrollTo({ top: 0 });
+            }}
+            tamanhos={TAMANHOS_DE_PAGINA}
+            porPagina={paginacao.porPagina}
+            aoMudarTamanho={paginacao.mudarTamanho}
           />
         ) : null}
         </div>

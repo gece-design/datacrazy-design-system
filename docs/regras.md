@@ -95,12 +95,63 @@ contexto em `docs/processo/ux-direcao-visual.md`.
     tela que vem (tabela, cartões, quadro, conversa, painel, canvas) no lugar
     do conteúdo, enquanto a API responde. O brilho vai e volta em
     `duration/ciclo` com `ease/vaivem`. Nunca um spinner no meio da página.
-13. **Lista longa pagina** (ADR-076): 20 por página, `Pagination` sob a
-    tabela com "Mostrando 1–20 de 84 leads"; busca e filtros voltam para a
-    primeira; sem registro visível, sem paginação.
+13. **Lista longa pagina** (ADR-076, ADR-079): as regras completas estão em
+    § Paginação, abaixo.
 14. **Toggles com vão** (ADR-075): `SegmentedControl`, `ViewSwitcher` e o tema
     da `Sidebar` têm 2px de trilho entre as opções — a selecionada não encosta
     nas vizinhas.
+
+### Paginação: quando aparece, quanto, onde (ADR-079)
+
+Pensada pela experiência, não pelo componente. O componente é a `Pagination`;
+o estado mora na tela, no `usePaginacao` de `lib/paginacao.ts`. A página do
+site (`/navigation/pagination` § As regras) mostra cada uma viva.
+
+P1. **O que pagina.** Toda lista de registros em `DataTable`: leads, negócios
+    na visão de lista, bases, servidores. Não paginam: o `Quadro` (rola por
+    coluna), a `ListaDeConversas` (rola, com as recentes em cima), a grade de
+    `CartaoDeCatalogo`, o `Calendario` (anda por mês) e as tabelas do Início
+    (mostram as primeiras linhas). Rolagem infinita não entra: esconde o
+    rodapé, tira o "onde estou" e some com a `BarraDeSelecao`.
+P2. **Quando aparece.** Só com mais de uma página. Com uma só, a barra inteira
+    some — o total já está na `DataTableToolbar` e a lista acaba onde acaba.
+    Sem registro à vista, nem tabela nem barra: é o `EstadoVazio`. A regra
+    mora no componente (`paginas` 1 não desenha).
+P3. **Quanto por página.** 20. Vinte linhas de 36px, mais cabeçalho, toolbar e
+    barra, cabem numa janela de 900 sem rolar por dentro — a página inteira à
+    vista é o que faz paginar valer a pena. A pessoa troca para 50 ou 100 no
+    rodapé (`tamanhos`); a escolha fica lembrada por tela (`memoria`), a
+    página não: toda entrada começa na primeira.
+P4. **Onde fica.** No pé do bloco da tabela, fixa (`shrink-0`, fora da área
+    que rola), com traço em cima. À esquerda o tamanho e o resumo "Mostrando
+    21–40 de 84 leads" (`resumoDaPaginacao`: o nome do objeto, no plural
+    certo; com busca ou filtro, o total é o filtrado). À direita Anterior ·
+    números · Próxima. Uma barra por lista, nunca no topo, nunca flutuante.
+P5. **O que volta à primeira.** Busca, filtro, ordenação e tamanho — a lista
+    mudou de definição, a página 3 da antiga não existe mais (`chave`). A
+    atual nunca passa da última: apagar os registros da última recua para a
+    que sobrou.
+P6. **Muitas páginas.** No máximo 7 posições: a primeira, a última, a atual
+    com uma vizinha de cada lado e "…" onde pulou (`1 … 5 6 7 … 12`). Até 7,
+    todos os números. As reticências não são botão.
+P7. **Trocar de página.** A lista volta ao topo (a tela rola o bloco) e o foco
+    fica no botão clicado. O resumo é `aria-live`. Anterior e Próxima
+    desabilitam nas pontas em vez de sumir, para a barra não mudar de largura.
+P8. **Seleção entre páginas.** A caixa do cabeçalho marca a página à vista; os
+    ids marcados ficam guardados ao trocar de página e a `BarraDeSelecao`
+    mostra o total; limpar limpa tudo. Uma ação em massa vale para todos os
+    marcados, em qualquer página.
+P9. **Agrupar.** Os grupos são da página à vista, com a contagem da página.
+    Para ver um grupo inteiro, filtre por ele.
+P10. **Carregando.** A troca de página que vai ao servidor mostra
+    `SkeletonDaTabela` com o mesmo número de linhas no lugar delas; a barra
+    fica, com os botões desabilitados. Nada pula.
+P11. **No CRM.** A página e o tamanho vão para a API (`?pagina=3&porPagina=20`)
+    e a página vai na URL da tela, para o voltar do navegador e o link
+    compartilhado. O servidor devolve o total: sem total não há paginação, há
+    "carregar mais".
+P12. **No celular.** Abaixo de 640px só Anterior · "3 de 5" · Próxima; o
+    resumo fica, o tamanho some.
 
 ### O padrão de fundo: o mesmo em toda tela
 Quatro tons, sempre nos mesmos lugares (humano, 2026-10-02, ADR-066) — dashboard,
@@ -267,7 +318,7 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   `useAjustesDaTabela` e `DataTableToolbar` (só rótulo e
   total); `BotaoAgrupar` e `BotaoColunas` recolhidos na fileira do Header, ao
   lado de `HeaderBusca recolhida` e `HeaderFiltros recolhido`, que mostra e
-  esconde a `BarraDeFiltros` sob o Header; `Pagination` embaixo; seleção em massa com `useSelecaoDaTabela` + `BarraDeSelecao`;
+  esconde a `BarraDeFiltros` sob o Header; `Pagination` fixa no pé do bloco com `usePaginacao` (20 por página, § Paginação); seleção em massa com `useSelecaoDaTabela` + `BarraDeSelecao`;
   clique na linha abre o lead no `Drawer` do lead (ver "Detalhe de um registro"). Células: `CelulaLead` (nome +
   `Tag` sem cor ou com `status`), `CelulaProgresso` (etapa), `Tag foto` (pessoa),
   `CelulaEditavel` (valor editável), `CelulaEscolha` (valor que vem de lista:
