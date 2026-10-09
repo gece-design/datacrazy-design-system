@@ -406,6 +406,11 @@ O conteúdo segue uma destas quatro receitas — a referência viva é o bloco
   ação principal do Header cria o item do catálogo. Ações de cada item num
   Button `ghost icon-xs` com `DotsThree` + `Menu` (Editar, Duplicar, Excluir);
   excluir confirma em `Modal variant="destructive"`.
+- **Versões do lead em avaliação** (ADR-081, 2026-10-09): o mesmo lead abre em
+  quatro cascas na tela de Leads do protótipo (`?lead=abas|lado|cheia`): drawer
+  com menu (o padrão), drawer com abas (`DrawerLead layout="abas"`), ao lado da
+  lista (`PainelLateral` em `lateral`) e em página (`PaginaDoLead`). Até a
+  decisão, o padrão não muda; a tela nova usa o drawer com menu.
 - **Detalhe de um registro**: o lead — e todo registro do CRM com perfil
   (pessoa, empresa, negócio) — abre no `Drawer` do lead, o mesmo em toda tela
   (humano, 2026-10-02, ADR-061): `<Drawer>` com o `DrawerLead` que vem nos

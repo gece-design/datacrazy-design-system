@@ -69,7 +69,7 @@ import { useTema } from "@/lib/tema";
 import { tomDe, type Tom } from "@/lib/tons";
 import { cn } from "@/lib/utils";
 import { LEADS, NOMES_DAS_CORES, ORIGENS, TAGS, dataCurta, etiquetaDe, tagsDe, type Lead, type Origem, type TagDaConta } from "./dados";
-import { PainelLead } from "./painel-lead";
+import { LeadNaPagina, PainelLadoDoLead, PainelLead, type VersaoDoLead } from "./painel-lead";
 
 /* ---------------------------------------------------------------------------
    Tela de exemplo — NÃO é componente do design system.
@@ -173,6 +173,7 @@ export function Tela({
   aoNavegar,
   memoria = "leads",
   vazio = false,
+  versaoDoLead = "drawer",
 }: {
   /** Só no protótipo, que junta as telas: recebe o destino clicado na navegação e devolve `true` quando troca de tela. */
   aoNavegar?: (destino: string) => boolean;
@@ -180,6 +181,8 @@ export function Tela({
   memoria?: string;
   /** A variação sem nada: a conta ainda não tem lead (ADR-077). */
   vazio?: boolean;
+  /** Como o lead abre: no drawer com menu (padrão), no drawer com abas, ao lado da lista ou como página (ADR-081). */
+  versaoDoLead?: VersaoDoLead;
 } = {}) {
   const [rota, setRota] = React.useState("Leads");
   const [leads, setLeads] = React.useState(vazio ? [] : LEADS);
@@ -190,6 +193,8 @@ export function Tela({
   const [filtro, setFiltro] = React.useState<FiltrosAtivos>({});
   const [filtros, setFiltros] = React.useState(false);
   const [abertoId, setAbertoId] = React.useState<string | null>(null);
+  // só na versão ao lado: o painel aberto na janela inteira
+  const [leadCheio, setLeadCheio] = React.useState(false);
   const [novaTag, setNovaTag] = React.useState<typeof tagVazia | null>(null);
   const [erroTag, setErroTag] = React.useState<string | undefined>();
   const [novoLead, setNovoLead] = React.useState<typeof leadVazio | null>(null);
@@ -231,7 +236,13 @@ export function Tela({
   const aberto = leads.find((l) => l.id === abertoId) ?? null;
 
   const editar = (id: string, campos: Partial<Lead>) => setLeads((lista) => lista.map((l) => (l.id === id ? { ...l, ...campos } : l)));
-  const fechar = () => setAbertoId(null);
+  const fechar = () => {
+    setAbertoId(null);
+    setLeadCheio(false);
+  };
+  const propsDoLead = aberto
+    ? { lead: aberto, tags, opcoesDeOrigem: OPCOES_DE_ORIGEM, aoFechar: fechar, aoEditar: (campos: Partial<Lead>) => editar(aberto.id, campos), aoCriarTag: criarTagRapida }
+    : null;
 
   /** Tag criada na célula ou no drawer: entra no catálogo com a cor que o nome sorteia (ou a escolhida) e devolve o id. */
   function criarTagRapida(rotulo: string, tom: Tom | null = tomDe(rotulo)) {
@@ -333,6 +344,9 @@ export function Tela({
         memoria={memoria}
         // o recuo é da tela: a faixa de filtros encosta nas bordas e a lista vai num bloco branco
         recuo={false}
+        // versão ao lado (ADR-081): o lead empurra a lista; o botão de tela cheia o abre na janela inteira
+        lateral={versaoDoLead === "lado" && propsDoLead ? <PainelLadoDoLead {...propsDoLead} telaCheia={leadCheio} aoAlternarTelaCheia={() => setLeadCheio((v) => !v)} /> : undefined}
+        lateralCheia={versaoDoLead === "lado" && leadCheio}
         navegacao={
           <>
             <SidebarTopo>
@@ -384,7 +398,8 @@ export function Tela({
           </>
         }
         cabecalho={{
-          titulo: "Leads",
+          // versão em página (ADR-081): o lead vira o título da tela, e a lista volta pelo X do perfil
+          titulo: versaoDoLead === "cheia" && aberto ? aberto.nome : "Leads",
           trilha: (
             <Breadcrumb
               ancestrais
@@ -400,7 +415,12 @@ export function Tela({
               aoMarcarTodas={() => setNotificacoes((l) => l.map((n) => ({ ...n, lida: true })))}
             />
           ),
-          acoes: (
+          acoes: versaoDoLead === "cheia" && aberto ? (
+            <Button variant="tertiary" onClick={fechar}>
+              <ArrowLeft size={16} weight="regular" />
+              Voltar aos leads
+            </Button>
+          ) : (
             <>
               {/* A fileira só tem botões: busca aberta e filtros com rótulo (regra da HeaderBusca). */}
               <HeaderBusca rotulo="Pesquisar leads" placeholder="Pesquisar leads" value={busca} onChange={(e) => setBusca(e.target.value)} />
@@ -425,6 +445,10 @@ export function Tela({
           ),
         }}
       >
+        {versaoDoLead === "cheia" && propsDoLead ? (
+          <LeadNaPagina {...propsDoLead} />
+        ) : (
+          <>
         {/* Os filtros em chips: só o que está ativo ocupa espaço, e cada campo abre a própria lista com busca. */}
         {filtros ? (
           <BarraDeFiltros
@@ -551,20 +575,13 @@ export function Tela({
         ) : null}
         </div>
         </div>
+          </>
+        )}
       </TelaBase>
 
       {/* O lead abre no Drawer do design system — o mesmo da página do Drawer, com o lead clicado na lista. */}
-      <Drawer aberto={Boolean(aberto)} aoFechar={fechar} rotulo={`Lead ${aberto?.nome ?? ""}`}>
-        {aberto ? (
-          <PainelLead
-            lead={aberto}
-            tags={tags}
-            opcoesDeOrigem={OPCOES_DE_ORIGEM}
-            aoFechar={fechar}
-            aoEditar={(campos) => editar(aberto.id, campos)}
-            aoCriarTag={criarTagRapida}
-          />
-        ) : null}
+      <Drawer aberto={Boolean(propsDoLead) && (versaoDoLead === "drawer" || versaoDoLead === "abas")} aoFechar={fechar} rotulo={`Lead ${aberto?.nome ?? ""}`}>
+        {propsDoLead ? <PainelLead {...propsDoLead} layout={versaoDoLead === "abas" ? "abas" : "menu"} /> : null}
       </Drawer>
 
       {/* Criar tag: nome, descrição e uma das quinze cores. Modal curto — é decisão de poucos campos. */}

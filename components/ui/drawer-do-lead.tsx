@@ -27,6 +27,7 @@ import {
   Plus,
   Pulse,
   SidebarSimple,
+  X,
   Snowflake,
   SquaresFour,
   ThermometerSimple,
@@ -38,6 +39,8 @@ import {
   Wallet,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { TabPanel, Tabs } from "@/components/ui/tabs";
+import { rolagemDiscreta } from "@/lib/estados";
 import { ICONES_DE_TAG, SeletorTags, Tag, type GrupoTags, type OpcaoTag } from "@/components/ui/tag";
 import { Avatar } from "@/components/ui/avatar";
 import { Input, AcaoCampo, AcaoCopiar, CampoEditavel, CartaoDeCampo } from "@/components/ui/input";
@@ -211,6 +214,25 @@ export const MENU_LEAD: ItemMenuDrawer[] = [
 ];
 
 const abrir = (url: string) => window.open(url, "_blank", "noopener,noreferrer");
+
+/* ------------------------------------------------------ Versões do lead -- */
+
+/** `menu`: a coluna do perfil com o menu de 12 seções (o arquivo). `abas`: sem a coluna,
+ *  o perfil compacto em cima e as seções em quatro abas (versão em avaliação, ADR-081). */
+export type LayoutDoLead = "menu" | "abas";
+
+/** As doze seções do menu em quatro grupos, para as versões com abas e em página. */
+export const GRUPOS_DO_LEAD: { valor: string; rotulo: string; secoes: string[] }[] = [
+  { valor: "perfil", rotulo: "Perfil", secoes: ["perfil", "campos", "enderecos"] },
+  { valor: "relacionamento", rotulo: "Relacionamento", secoes: ["negocios", "atividades", "atendimentos", "historicos"] },
+  { valor: "vinculos", rotulo: "Vínculos", secoes: ["hierarquia", "pessoas", "empresas"] },
+  { valor: "documentos", rotulo: "Documentos", secoes: ["arquivos", "notas"] },
+];
+
+/** O grupo que contém uma seção do menu (`historicos` → `relacionamento`). */
+export function grupoDaSecao(id: string) {
+  return GRUPOS_DO_LEAD.find((g) => g.secoes.includes(id))?.valor ?? GRUPOS_DO_LEAD[0].valor;
+}
 
 /* -------------------------------------------------------------- Conteúdos -- */
 
@@ -790,6 +812,7 @@ export function DrawerLead({
   menuInicial = "historicos",
   aoFechar,
   memoria,
+  layout = "menu",
   className,
 }: {
   lead?: keyof typeof LEADS;
@@ -805,6 +828,8 @@ export function DrawerLead({
   aoFechar?: () => void;
   /** Chave do navegador que lembra a largura arrastada do painel. */
   memoria?: string;
+  /** `menu` (o arquivo) ou `abas` (sem a coluna do perfil; versão em avaliação, ADR-081). */
+  layout?: LayoutDoLead;
   className?: string;
 }) {
   const dados = dadosDeFora ?? LEADS[lead];
@@ -816,6 +841,65 @@ export function DrawerLead({
   const item = MENU_LEAD.find((m) => m.id === menu) ?? MENU_LEAD[0];
   const desenhado = secoes?.[menu] ?? cabecalhos[menu];
   const Corpo = desenhado?.Corpo;
+
+  if (layout === "abas") {
+    // Versão com abas: 720 de largura, sem a coluna do perfil. O perfil vira um
+    // cabeçalho compacto (avatar, nome, contato, tags, ações, as quatro métricas)
+    // e as doze seções entram em quatro abas (ADR-081).
+    return (
+      <LeadAtual.Provider value={dados}>
+        <DrawerPainel largura={720} className={className} memoria={memoria}>
+          <div data-tom={tom ?? (dados.tipo === "empresa" ? "roxo" : "azul")} className="flex min-h-0 w-full flex-col">
+            <div className="flex shrink-0 flex-col gap-3 border-b border-border p-4">
+              <div className="flex items-start gap-3">
+                <Avatar nome={dados.nome} size="md" aria-hidden="true" className="border-tom-anel text-tom-texto" />
+                <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="truncate text-h2 text-foreground">{dados.nome}</h2>
+                    <Tag tipo={dados.tipo} className="text-tom-tag">
+                      {dados.tipo === "pessoa" ? "Pessoa" : "Empresa"}
+                    </Tag>
+                  </div>
+                  <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-label-sm text-muted-foreground">
+                    {dados.telefone ? (
+                      <span className="flex items-center gap-1">
+                        <Phone size={14} weight="regular" aria-hidden="true" />
+                        {dados.telefone}
+                      </span>
+                    ) : null}
+                    {dados.email ? (
+                      <span className="flex items-center gap-1">
+                        <EnvelopeSimple size={14} weight="regular" aria-hidden="true" />
+                        {dados.email}
+                      </span>
+                    ) : null}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-1">{tags ?? <TagsDoLead iniciais={dados.tags} />}</div>
+                </div>
+                <div className="flex shrink-0 items-center gap-2">
+                  <Button>
+                    <Lightning size={16} weight="regular" />
+                    Automação
+                  </Button>
+                  <Button variant="soft">
+                    <Plus size={16} weight="regular" />
+                    Atendimento
+                  </Button>
+                  {aoFechar ? (
+                    <DrawerBotaoCanto rotulo="Fechar" onClick={aoFechar}>
+                      <X size={16} weight="regular" aria-hidden="true" />
+                    </DrawerBotaoCanto>
+                  ) : null}
+                </div>
+              </div>
+              <DrawerMetricas itens={dados.metricas} colunas={4} />
+            </div>
+            <AbasDoLead secoes={secoes} inicial={grupoDaSecao(menuInicial)} className="min-h-0 flex-1" />
+          </div>
+        </DrawerPainel>
+      </LeadAtual.Provider>
+    );
+  }
 
   return (
     <LeadAtual.Provider value={dados}>
@@ -921,6 +1005,134 @@ export function DrawerLead({
         )}
       </DrawerConteudo>
     </DrawerPainel>
+    </LeadAtual.Provider>
+  );
+}
+
+/* ------------------------------------------------- Abas e página do lead -- */
+
+/**
+ * As doze seções em quatro abas (`GRUPOS_DO_LEAD`): cada aba empilha as
+ * seções do grupo, com título e descrição. Precisa do lead atual em volta —
+ * o `DrawerLead` com `layout="abas"` e a `PaginaDoLead` já o dão.
+ */
+export function AbasDoLead({
+  secoes,
+  inicial = "perfil",
+  className,
+}: {
+  /** Seções com conteúdo próprio, por id do menu; as outras vêm do arquivo. */
+  secoes?: Partial<Record<string, SecaoDoDrawer>>;
+  /** O grupo aberto ao montar: `perfil`, `relacionamento`, `vinculos` ou `documentos`. */
+  inicial?: string;
+  className?: string;
+}) {
+  const [aba, setAba] = React.useState(inicial);
+  const id = React.useId().replace(/:/g, "");
+  const grupo = GRUPOS_DO_LEAD.find((g) => g.valor === aba) ?? GRUPOS_DO_LEAD[0];
+  return (
+    <div className={cn("flex min-h-0 flex-col", className)}>
+      <Tabs
+        id={id}
+        rotulo="Seções do lead"
+        itens={GRUPOS_DO_LEAD.map((g) => ({ valor: g.valor, rotulo: g.rotulo }))}
+        atual={grupo.valor}
+        aoEscolher={setAba}
+        className="shrink-0 border-b border-border px-4"
+      />
+      <TabPanel id={id} valor={grupo.valor} atual={grupo.valor} className={cn("min-h-0 flex-1 overflow-y-auto", rolagemDiscreta)}>
+        {/* `key`: o grupo novo entra em fade */}
+        <div key={grupo.valor} className="flex flex-col gap-6 p-4 motion-safe:animate-fade-in-fast">
+          {grupo.secoes.map((sid) => {
+            const item = MENU_LEAD.find((m) => m.id === sid);
+            const desenhado = secoes?.[sid] ?? cabecalhos[sid];
+            const Corpo = desenhado?.Corpo;
+            return (
+              <section key={sid} aria-label={desenhado?.titulo ?? item?.rotulo} className="flex flex-col gap-3">
+                <div className="flex flex-col gap-0.5">
+                  <h3 className="text-h4 text-foreground">{desenhado?.titulo ?? item?.rotulo}</h3>
+                  {desenhado?.descricao ? <p className="text-body-sm text-muted-foreground">{desenhado.descricao}</p> : null}
+                </div>
+                {Corpo ? <Corpo /> : <p className="text-body-md text-muted-foreground">O arquivo ainda não desenha o conteúdo de {item?.rotulo}.</p>}
+              </section>
+            );
+          })}
+        </div>
+      </TabPanel>
+    </div>
+  );
+}
+
+/**
+ * O lead como página da tela, no lugar da lista (versão em avaliação,
+ * ADR-081): o perfil do drawer numa coluna de 360 à esquerda e as doze seções
+ * em abas à direita, os dois em blocos brancos sobre o cinza da tela. O X do
+ * perfil é "voltar à lista".
+ */
+export function PaginaDoLead({
+  lead = "rafael",
+  dados: dadosDeFora,
+  tags,
+  secoes,
+  tom,
+  inicial = "perfil",
+  aoFechar,
+  className,
+}: {
+  lead?: keyof typeof LEADS;
+  dados?: LeadDoDrawer;
+  tags?: React.ReactNode;
+  secoes?: Partial<Record<string, SecaoDoDrawer>>;
+  tom?: TomPerfil;
+  /** O grupo de abas aberto ao montar. */
+  inicial?: string;
+  /** Volta à lista. */
+  aoFechar?: () => void;
+  className?: string;
+}) {
+  const dados = dadosDeFora ?? LEADS[lead];
+  return (
+    <LeadAtual.Provider value={dados}>
+      <div className={cn("flex min-h-0 flex-1 gap-3 p-3", className)}>
+        <div className="flex w-[360px] shrink-0 flex-col overflow-hidden rounded-md border border-border bg-card">
+          <DrawerPerfil
+            nome={dados.nome}
+            tipo={dados.tipo}
+            tom={tom}
+            rotuloTipo={dados.tipo === "pessoa" ? "Pessoa" : "Empresa"}
+            telefone={dados.telefone}
+            email={dados.email}
+            tags={tags ?? <TagsDoLead iniciais={dados.tags} />}
+            acoes={
+              <>
+                <Button>
+                  <Lightning size={16} weight="regular" />
+                  Automação
+                </Button>
+                <Button variant="soft">
+                  <Plus size={16} weight="regular" />
+                  Atendimento
+                </Button>
+              </>
+            }
+            aoFechar={aoFechar}
+            rotuloFechar="Voltar à lista"
+            className="w-full border-r-0"
+          >
+            <DrawerBloco titulo="Métricas">
+              <DrawerMetricas itens={dados.metricas} />
+            </DrawerBloco>
+            {dados.tipo === "empresa" && dados.contatoPrincipal ? (
+              <DrawerBloco titulo="Contato principal">
+                <DrawerContato linhas={linhasDoContato(dados.contatoPrincipal)} />
+              </DrawerBloco>
+            ) : null}
+          </DrawerPerfil>
+        </div>
+        <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-md border border-border bg-card">
+          <AbasDoLead secoes={secoes} inicial={inicial} className="min-h-0 flex-1" />
+        </div>
+      </div>
     </LeadAtual.Provider>
   );
 }

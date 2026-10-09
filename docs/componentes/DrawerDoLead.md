@@ -41,6 +41,7 @@ reunião de 02/10 (ADR-073). Plano e compacto desde 2026-10-02 (ADR-065).
 | `menuInicial` | `string` | não | A seção aberta ao montar. Padrão `historicos`. |
 | `aoFechar` | `() => void` | não | O X do perfil. Quem fecha a camada é a tela (`Drawer aberto`). |
 | `memoria` | `string` | não | Chave do navegador que lembra a largura arrastada (`DrawerPainel`). Uma por tela. |
+| `layout` | `"menu" \| "abas"` | não | `menu` (padrão): a coluna do perfil com o menu de 12 seções. `abas`: 720px, perfil compacto em cima e as seções em 4 abas (versão em avaliação, ADR-081). |
 | `className` | `string` | não | — |
 
 ### Outros exports
@@ -53,6 +54,9 @@ reunião de 02/10 (ADR-073). Plano e compacto desde 2026-10-02 (ADR-065).
 | `CATALOGO_TAGS`, `tagsEscolhidas` | O catálogo de tags do arquivo e as escolhidas por id, na ordem do perfil. |
 | `TagsDoLead` | A fileira de tags do perfil com o `SeletorTags` no fim; recebe `iniciais` (os ids escolhidos) e o catálogo é estado. |
 | `LEADS`, `linhasDoContato` | Os dois leads do arquivo e as linhas do bloco "Contato principal". |
+| `LayoutDoLead`, `GRUPOS_DO_LEAD`, `grupoDaSecao` | O tipo do `layout`; as doze seções em quatro grupos (Perfil, Relacionamento, Vínculos, Documentos) e o grupo de uma seção. |
+| `AbasDoLead` | As doze seções em quatro `Tabs`, cada aba empilhando as do grupo; recebe `secoes` e `inicial` (o grupo). Precisa do lead atual em volta (`DrawerLead layout="abas"` e `PaginaDoLead` dão). |
+| `PaginaDoLead` | O lead como página da tela (ADR-081): `DrawerPerfil` numa coluna de 360 e `AbasDoLead` ao lado; recebe `dados`/`lead`, `tags`, `secoes`, `tom`, `inicial`, `aoFechar` (volta à lista). |
 
 ## Variantes
 
@@ -60,6 +64,8 @@ reunião de 02/10 (ADR-073). Plano e compacto desde 2026-10-02 (ADR-065).
 |----------|-------------|
 | showcase (`lead`) | A página do Drawer: os dois leads do arquivo. |
 | da tela (`dados` + `secoes`) | Toda tela do CRM: o lead clicado, com o histórico e o perfil que a tela sabe montar. |
+| com abas (`layout="abas"`) | Em avaliação (ADR-081): 720px, sem a coluna do perfil, seções em 4 abas. |
+| em página (`PaginaDoLead`) | Em avaliação (ADR-081): no lugar da lista, perfil à esquerda e abas à direita. |
 
 ## Estados
 

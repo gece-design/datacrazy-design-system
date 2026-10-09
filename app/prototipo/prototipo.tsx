@@ -13,6 +13,7 @@ import { Tela as Atendimento } from "@/app/exemplos/atendimento/tela";
 import { Tela as Automacoes } from "@/app/exemplos/automacoes/tela";
 import { Tela as Dashboard } from "@/app/exemplos/dashboard/tela";
 import { Tela as Leads } from "@/app/exemplos/leads/tela";
+import type { VersaoDoLead } from "@/app/exemplos/leads/painel-lead";
 import { Tela as Pipeline } from "@/app/exemplos/pipeline/tela";
 
 /* ---------------------------------------------------------------------------
@@ -38,7 +39,7 @@ const TELAS = {
   automacoes: { destino: "Automações", titulo: "Automações", Tela: Automacoes, modelo: "canvas" },
   atendimento: { destino: "Chat ao vivo", titulo: "Atendimento", Tela: Atendimento, modelo: "conversa" },
   agentes: { destino: "Agentes de IA", titulo: "Agentes de IA", Tela: Agentes, modelo: "cartoes" },
-} as const satisfies Record<string, { destino: string; titulo: string; Tela: React.ComponentType<{ aoNavegar?: (d: string) => boolean; memoria?: string; vazio?: boolean }>; modelo: ModeloDeCarregamento }>;
+} as const satisfies Record<string, { destino: string; titulo: string; Tela: React.ComponentType<{ aoNavegar?: (d: string) => boolean; memoria?: string; vazio?: boolean; versaoDoLead?: VersaoDoLead }>; modelo: ModeloDeCarregamento }>;
 type IdDaTela = keyof typeof TELAS;
 
 const PRINCIPAIS = [
@@ -63,7 +64,7 @@ const TEMPO_DE_CARREGAMENTO_SIMULADO = 600;
 
 export type VariacaoDoPrototipo = "vazio" | "carregando";
 
-export function Prototipo({ telaInicial, variacao }: { telaInicial?: string; variacao?: VariacaoDoPrototipo }) {
+export function Prototipo({ telaInicial, variacao, versaoDoLead }: { telaInicial?: string; variacao?: VariacaoDoPrototipo; versaoDoLead?: VersaoDoLead }) {
   // o que está na tela: uma das seis, ou o nome de um destino que ainda não tem exemplo
   const [atual, setAtual] = React.useState<string>(telaInicial && telaInicial in TELAS ? telaInicial : "dashboard");
   // `?carregando=1` segura o Skeleton; a troca pelo menu mostra por um instante
@@ -75,12 +76,12 @@ export function Prototipo({ telaInicial, variacao }: { telaInicial?: string; var
     (destino: string) => {
       const id = (Object.keys(TELAS) as IdDaTela[]).find((k) => TELAS[k].destino === destino) ?? destino;
       setAtual(id);
-      const consulta = id in TELAS ? `?tela=${id}${vazio ? "&vazio=1" : ""}` : window.location.pathname;
+      const consulta = id in TELAS ? `?tela=${id}${vazio ? "&vazio=1" : ""}${versaoDoLead ? `&lead=${versaoDoLead}` : ""}` : window.location.pathname;
       window.history.replaceState(null, "", consulta);
       if (id in TELAS) setCarregando(true);
       return true;
     },
-    [vazio],
+    [vazio, versaoDoLead],
   );
 
   React.useEffect(() => {
@@ -100,7 +101,7 @@ export function Prototipo({ telaInicial, variacao }: { telaInicial?: string; var
       );
     }
     // `key`: cada tela começa do seu estado inicial ao entrar
-    return <Tela key={atual} aoNavegar={aoNavegar} memoria={MEMORIA} vazio={vazio} />;
+    return <Tela key={atual} aoNavegar={aoNavegar} memoria={MEMORIA} vazio={vazio} versaoDoLead={versaoDoLead} />;
   }
   return (
     <Casca destino={atual} aoNavegar={aoNavegar}>

@@ -105,6 +105,7 @@ export const navegacao: CategoriaNav[] = [
       { titulo: "Painel lateral", href: "/feedback/painel-lateral", atualizado: "2026-10-01", icone: "lateral", pronto: true, descricao: "O registro aberto ao lado da lista" },
       { titulo: "Drawer", href: "/feedback/drawer", atualizado: "2026-10-02", icone: "gaveta", pronto: true , descricao: "O registro completo, por cima da tela"},
 { titulo: "Drawer variações", href: "/feedback/drawer-variacoes", icone: "proposta", pronto: true, descricao: "Cores, menu, linha do tempo e propostas"},
+      { titulo: "Versões do lead", href: "/feedback/drawer-versoes", atualizado: "2026-10-09", icone: "gaveta", pronto: true, descricao: "Com menu, com abas, ao lado ou em página: para decidir" },
       { titulo: "Estado vazio", href: "/feedback/estado-vazio", atualizado: "2026-10-08", icone: "vazio", pronto: true, descricao: "A tela sem nada: com ícone, ou só a frase" },
       { titulo: "Carregamento", href: "/feedback/carregamento", atualizado: "2026-10-08", icone: "carregando", pronto: true, descricao: "Skeleton: a forma do que vai chegar, brilhando" },
     ],

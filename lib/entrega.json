@@ -1,15 +1,15 @@
 {
-  "geradoEm": "2026-10-08",
+  "geradoEm": "2026-10-09",
   "periodo": {
     "inicio": "2026-09-02",
     "fim": "2026-10-08"
   },
   "git": {
-    "commits": 98,
+    "commits": 99,
     "arquivos": 390,
-    "linhasUi": 15840,
+    "linhasUi": 16052,
     "linhasLib": 1038,
-    "linhasDocs": 10406
+    "linhasDocs": 10423
   },
   "catalogo": {
     "itens": 71,
@@ -223,12 +223,12 @@
       "descricao": "O lead do CRM inteiro, aberto por cima da tela: as peças do Drawer (perfil, métricas, menu, conteúdo) montadas nas cinco seções do arquivo — Histórico, Perfil, Campos adicionais, Negócios e Hierarquia — com o seletor de tags e os cartões editáveis. É UM em toda tela.",
       "categoria": null,
       "pagina": null,
-      "pecas": 5,
-      "props": 17,
-      "variantes": 2,
+      "pecas": 8,
+      "props": 21,
+      "variantes": 4,
       "estados": 4,
       "acessibilidade": 5,
-      "linhas": 927
+      "linhas": 1139
     },
     {
       "name": "estado-vazio",
@@ -610,12 +610,12 @@
   ],
   "totais": {
     "componentes": 45,
-    "pecas": 158,
-    "props": 607,
-    "variantes": 138,
+    "pecas": 161,
+    "props": 611,
+    "variantes": 140,
     "estados": 176,
     "acessibilidade": 277,
-    "paginas": 54,
+    "paginas": 55,
     "docs": 45
   },
   "tokens": {
@@ -862,8 +862,8 @@
     },
     {
       "titulo": "Feedback & Overlays",
-      "total": 16,
-      "prontas": 16,
+      "total": 17,
+      "prontas": 17,
       "itens": [
         {
           "titulo": "Tooltip",
@@ -893,6 +893,11 @@
         {
           "titulo": "Drawer variações",
           "href": "/feedback/drawer-variacoes",
+          "pronto": true
+        },
+        {
+          "titulo": "Versões do lead",
+          "href": "/feedback/drawer-versoes",
           "pronto": true
         },
         {
@@ -1348,6 +1353,11 @@
       "id": "ADR-080",
       "titulo": "O contrato e a memória do DS instalados no projeto do cliente",
       "data": "2026-10-08"
+    },
+    {
+      "id": "ADR-081",
+      "titulo": "Quatro versões do lead para a decisão",
+      "data": "2026-10-09"
     }
   ],
   "auditoria": {
@@ -1369,6 +1379,11 @@
     }
   },
   "pedidos": [
+    {
+      "data": "2026-10-09",
+      "origem": "Reunião",
+      "titulo": "QUATRO VERSÕES DO LEAD PARA A DECISÃO"
+    },
     {
       "data": "2026-10-08",
       "origem": "Lote",
@@ -1851,7 +1866,7 @@
       "exemplos",
       "regressao"
     ],
-    "capturas": 108,
+    "capturas": 110,
     "temas": 2
   },
   "bancada": {

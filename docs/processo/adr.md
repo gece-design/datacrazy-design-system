@@ -418,3 +418,8 @@ Desvio: o `setup` do catálogo passa a instalar, além da skill, dois arquivos l
 Motivo: cliente, 2026-10-08 — "pedem algo e não está sendo construído do jeito correto, telas sem componentes e sem fidelidade ao design system". A skill é lida quando o agente acha que precisa; a tela saía sem componente antes disso.
 Aprovado por: humano (2026-10-08, "cria um claude.md e ou memory.md na parte de instalação").
 
+## ADR-081 · Quatro versões do lead para a decisão · 2026-10-09
+Desvio: nenhum no padrão — o lead continua abrindo no `Drawer` com menu em toda tela (ADR-061). Entram, em avaliação, três cascas a mais para o mesmo lead, com as mesmas peças e o mesmo conteúdo: `DrawerLead layout="abas"` (720px, perfil compacto em cima, as doze seções em quatro `Tabs` — `GRUPOS_DO_LEAD`: Perfil, Relacionamento, Vínculos, Documentos — via `AbasDoLead`); ao lado da lista (o `PainelLateral` de ADR-056 em `lateral` da `TelaBase`, com campos em linha, tags, histórico e tela cheia); e em página (`PaginaDoLead`: `DrawerPerfil` numa coluna de 360 e `AbasDoLead` ao lado, no lugar da lista, com o nome do lead no Header). A tela de Leads aceita `versaoDoLead` e o protótipo expõe `?lead=abas|lado|cheia`; a página `/feedback/drawer-versoes` compara as quatro ao vivo. Quando o time decidir, a escolhida vira o padrão (ADR nova) e as outras saem, ou ficam atrás de um botão.
+Motivo: reunião de 2026-10-02 (Gava: "não gostei, não sei dizer por quê", e a lembrança do lead abrindo ao lado); humano, 2026-10-09: "precisa criar outras versões do drawer do lead, isso foi apontado na reunião".
+Aprovado por: humano (2026-10-09).
+

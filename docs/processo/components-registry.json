@@ -2156,8 +2156,10 @@
       "figmaNode": "565:5959",
       "batch": "C1",
       "variants": [
-        "showcase",
-        "da tela"
+        "com abas (layout)",
+        "da tela",
+        "em página (PaginaDoLead)",
+        "showcase"
       ],
       "tokens": [
         "--tom-anel",
@@ -2199,7 +2201,7 @@
           "approvedIn": "C1"
         }
       },
-      "_states_doc": "A composição do showcase (app/feedback/drawer) que virou peça em 2026-10-07 (ADR-073)."
+      "_states_doc": "A composição do showcase (app/feedback/drawer) que virou peça em 2026-10-07 (ADR-073). Em 2026-10-09 (ADR-081): versões com abas e em página, em avaliação; o padrão segue o menu."
     },
     {
       "name": "Quadro",
