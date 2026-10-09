@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-09-29",
+  "geradoEm": "2026-10-08",
   "casos": [
     {
       "id": "contatos",
@@ -29,9 +29,9 @@
             "/"
           ],
           "telaBase": true,
-          "densa": false,
+          "densa": true,
           "headerFiltros": false,
-          "tagsNeutras": false,
+          "tagsNeutras": true,
           "dsCheck": false,
           "tsc": true,
           "build": true,
@@ -69,9 +69,9 @@
             "/"
           ],
           "telaBase": true,
-          "densa": false,
+          "densa": true,
           "headerFiltros": false,
-          "tagsNeutras": false,
+          "tagsNeutras": true,
           "dsCheck": false,
           "tsc": true,
           "build": true,
@@ -144,6 +144,73 @@
           "turnos": 62,
           "minutos": 13,
           "custo": 8.24
+        }
+      ]
+    },
+    {
+      "rotulo": "v3",
+      "skill": "contrato + memória + hook (ADR-080)",
+      "casos": [
+        {
+          "id": "contatos",
+          "erro": null,
+          "violacoes": 0,
+          "componentes": 19,
+          "paginas": [
+            "/contatos",
+            "/leads",
+            "/"
+          ],
+          "telaBase": true,
+          "densa": true,
+          "headerFiltros": true,
+          "tagsNeutras": true,
+          "dsCheck": true,
+          "tsc": true,
+          "build": true,
+          "turnos": 58,
+          "minutos": 10,
+          "custo": 7.39
+        },
+        {
+          "id": "cadastro",
+          "erro": null,
+          "violacoes": 0,
+          "componentes": 18,
+          "paginas": [
+            "/leads",
+            "/"
+          ],
+          "telaBase": true,
+          "densa": true,
+          "headerFiltros": true,
+          "tagsNeutras": true,
+          "dsCheck": true,
+          "tsc": true,
+          "build": true,
+          "turnos": 70,
+          "minutos": 19,
+          "custo": 10.67
+        },
+        {
+          "id": "dashboard",
+          "erro": null,
+          "violacoes": 0,
+          "componentes": 16,
+          "paginas": [
+            "/dashboard",
+            "/"
+          ],
+          "telaBase": true,
+          "densa": true,
+          "headerFiltros": false,
+          "tagsNeutras": true,
+          "dsCheck": false,
+          "tsc": true,
+          "build": true,
+          "turnos": null,
+          "minutos": 10,
+          "custo": 6.61
         }
       ]
     }

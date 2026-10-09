@@ -1,13 +1,14 @@
 // Resume as rodadas da bancada em docs/processo/bancada.json — o que a página
 // /entrega mostra (via gerar-entrega). Rótulo → skill: v1 é a skill antiga
-// (só regras), v2 em diante é a skill com receitas, densidade e ds-check.
+// (só regras), v2 é a skill com receitas, densidade e ds-check, v3 é o
+// contrato + memória instalados pelo setup e o hook do ds-check ligado (ADR-080).
 //
 //   node scripts/bancada/resumo.mjs            (todas as rodadas em ~/datacrazy-bancada/rodadas)
 import fs from "node:fs";
 import path from "node:path";
 import { RODADAS, CASOS, listar } from "./lib.mjs";
 
-const SKILL = { v1: "regras (antiga)", v2: "receitas + densidade + ds-check" };
+const SKILL = { v1: "regras (antiga)", v2: "receitas + densidade + ds-check", v3: "contrato + memória + hook (ADR-080)" };
 const rodadas = [];
 for (const rotulo of fs.existsSync(RODADAS) ? fs.readdirSync(RODADAS).sort() : []) {
   const casos = [];
@@ -26,11 +27,13 @@ for (const rotulo of fs.existsSync(RODADAS) ? fs.readdirSync(RODADAS).sort() : [
       componentes: p.componentesDoDS.length,
       paginas: p.paginas.map((x) => x.rota),
       telaBase: p.paginas.every((x) => x.telaBase),
-      // só faz sentido onde há lista (null = não se aplica)
-      densa: tem(/<DataTable\b/) ? tem(/layout="densa"/) : null,
+      // só faz sentido onde há lista (null = não se aplica). A Table nasce densa (ADR-043):
+      // o que reprova é pedir `confortavel` numa lista de registros
+      densa: tem(/<DataTable\b/) ? !tem(/layout="confortavel"/) : null,
       headerFiltros: tem(/<DataTable\b/) ? tem(/HeaderFiltros/) : null,
-      // tag colorida: `tom=` na Tag ou `tom:` nas etiquetas passadas à CelulaLead
-      tagsNeutras: tem(/<Tag\b/) || tem(/etiquetas=/) ? !(tem(/<Tag\b[^>]*\btom=/) || tem(/rotulo:[^}]*\btom\s*:/)) : null,
+      // tag colorida SORTEADA: `tom` literal ou `tomDe(…)` numa Tag. A cor que vem do catálogo
+      // (`t.tom`) ou da etapa (`etapa.tom`) é a regra, não o desvio (ADR-059, ADR-069)
+      tagsNeutras: tem(/<Tag\b/) || tem(/etiquetas=/) ? !(tem(/<Tag\b[^>]*\btom="[a-z]+"/) || tem(/<Tag\b[^>]*\btom=\{tomDe\(/)) : null,
       dsCheck: tem(/ds-check/) || /ds-check/.test(fs.existsSync(path.join(dir, "resposta.md")) ? fs.readFileSync(path.join(dir, "resposta.md"), "utf8") : ""),
       tsc: p.tsc === "ok",
       build: p.build === "ok",

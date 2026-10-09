@@ -24,7 +24,7 @@ rodar(`npx --yes shadcn@latest init -d -y`, BASE);
 // 3 · os quatro passos da página de instalação
 rodar(`npx --yes shadcn@latest registry add @datacrazy=${DS_URL}/r/{name}.json`, BASE);
 rodar(`npx --yes shadcn@latest add @datacrazy/setup-v3 -y -o`, BASE);
-rodar(`node scripts/ds-setup.mjs`, BASE);
+rodar(`node scripts/ds-setup.mjs --corrigir`, BASE);
 rodar(`npx --yes shadcn@latest mcp init --client claude`, BASE);
 rodar(`npx --yes shadcn@latest add @datacrazy/tela -y -o`, BASE);
 
@@ -34,7 +34,7 @@ const faltam = esperados.filter((f) => !fs.existsSync(path.join(BASE, f)));
 console.log(`\nbase em ${BASE}`);
 console.log(faltam.length ? `✗ faltam: ${faltam.join(", ")}` : "✓ instalação deixou tudo que a página promete");
 const layout = fs.readFileSync(path.join(BASE, "app/layout.tsx"), "utf8");
-console.log(/geist/i.test(layout) ? "✓ layout declara a Geist" : "✗ layout não declara a Geist (a skill pede; a instalação não faz)");
+console.log(/<html[^>]*className=\{[^}]*geist/i.test(layout) ? "✓ layout declara a Geist no <html>" : "✗ layout não declara a Geist no <html> (a skill pede; o ds-setup --corrigir faz)");
 // compila?
 try {
   rodar("npx tsc --noEmit", BASE, { silencioso: true });

@@ -796,7 +796,11 @@ const arquivosDaSkill = [
 // regras embutidas (lá não existe scripts/lib). Vai dentro do setup.
 function checkInstalavel() {
   const regras = ler("scripts/lib/regras-tokens.mjs").replace(/^export /gm, "");
-  const corpo = ler("scripts/ds-check.mjs").replace(/^import \{ REGRAS, REGRAS_DE_TELA, semTelaBase \} from "\.\/lib\/regras-tokens\.mjs";\n/m, "");
+  // qualquer import de ./lib/regras-tokens.mjs sai: lá não existe scripts/lib. A regex
+  // antiga casava uma lista fixa de nomes e, quando o import mudou, o ds-check instalado
+  // quebrava ao abrir — e o hook falhava em silêncio no projeto do cliente (bancada v3).
+  const corpo = ler("scripts/ds-check.mjs").replace(/^import \{[^}]*\} from "\.\/lib\/regras-tokens\.mjs";\n/m, "");
+  if (/from "\.\/lib\/regras-tokens\.mjs"/.test(corpo)) throw new Error("ds-check instalável ainda importa ./lib/regras-tokens.mjs");
   const [cabecalho, resto] = corpo.split('import path from "node:path";\n');
   return `${cabecalho}import path from "node:path";\n\n/* ---- regras (geradas de scripts/lib/regras-tokens.mjs do DS) ---- */\n${regras}\n/* ---- fim das regras ---- */\n${resto}`;
 }

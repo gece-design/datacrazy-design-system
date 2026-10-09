@@ -4,6 +4,7 @@
 // não repete nada que já fez e não apaga o que é seu.
 //
 //   node scripts/ds-setup.mjs
+//   node scripts/ds-setup.mjs --corrigir   também conserta o content do Tailwind e a Geist no layout
 //
 // 1. O CLAUDE.md da raiz passa a importar .claude/datacrazy-ds/CLAUDE.md (o
 //    contrato do DS, lido em toda sessão). Se o CLAUDE.md já existe, só a
@@ -12,15 +13,40 @@
 //    arquivo que o Claude escreve em app/ ou components/, o check roda e
 //    devolve as violações para ele corrigir na hora. Mescla; não sobrescreve.
 // 3. Confere o que o instalador não faz sozinho e diz o que falta: a skill, o
-//    `content` do Tailwind com ./lib/**, a Geist no layout, o .mcp.json.
+//    `content` do Tailwind com ./lib/**, a Geist no layout, o .mcp.json. Com
+//    `--corrigir`, põe o ./lib/** no content e move a variável da Geist do
+//    <body> para o <html> (o que o create-next-app deixa de errado).
 import fs from "node:fs";
 import path from "node:path";
 
 const RAIZ = process.cwd();
+const corrigir = process.argv.includes("--corrigir");
 const IMPORT = "@.claude/datacrazy-ds/CLAUDE.md";
 const CONTRATO = ".claude/datacrazy-ds/CLAUDE.md";
 const MEMORIA = ".claude/datacrazy-ds/MEMORIA.md";
 const HOOK = { type: "command", command: "node scripts/ds-check.mjs --hook" };
+
+/** O `className=…` da tag <body>: onde começa (com o espaço antes), onde acaba e o valor — `{…}` com chaves aninhadas (template literal) ou `"…"`. */
+function classNameDoBody(texto) {
+  const tag = texto.indexOf("<body");
+  if (tag < 0) return null;
+  const attr = texto.indexOf("className=", tag);
+  const fimDaTag = texto.indexOf(">", tag);
+  if (attr < 0 || attr > fimDaTag) return null;
+  let i = attr + "className=".length;
+  let fim;
+  if (texto[i] === "{") {
+    let nivel = 0;
+    for (fim = i; fim < texto.length; fim++) {
+      if (texto[fim] === "{") nivel++;
+      else if (texto[fim] === "}" && --nivel === 0) break;
+    }
+    fim++;
+  } else if (texto[i] === '"') fim = texto.indexOf('"', i + 1) + 1;
+  else return null;
+  const inicio = texto.lastIndexOf(" ", attr);
+  return { inicio, fim, valor: texto.slice(i, fim) };
+}
 
 const ok = (m) => console.log(`✓ ${m}`);
 const feito = (m) => console.log(`+ ${m}`);
@@ -89,9 +115,13 @@ if (existe("CLAUDE.md")) {
 {
   const config = ["tailwind.config.ts", "tailwind.config.js", "tailwind.config.mjs"].find(existe);
   if (config) {
-    if (/lib\/\*\*/.test(ler(config))) ok(`${config}: content inclui ./lib/**`);
-    else {
-      falta(`${config}: o \`content\` precisa incluir \`"./lib/**/*.{ts,tsx}"\` — as classes de foco e rolagem moram em lib/estados.ts e somem sem isso`);
+    const texto = ler(config);
+    if (/lib\/\*\*/.test(texto)) ok(`${config}: content inclui ./lib/**`);
+    else if (corrigir && /content:\s*\[/.test(texto)) {
+      escrever(config, texto.replace(/content:\s*\[/, 'content: [\n    "./lib/**/*.{ts,tsx}",'));
+      feito(`${config}: "./lib/**/*.{ts,tsx}" entrou no content`);
+    } else {
+      falta(`${config}: o \`content\` precisa incluir \`"./lib/**/*.{ts,tsx}"\` — as classes de foco e rolagem moram em lib/estados.ts e somem sem isso (\`--corrigir\` faz)`);
       pendencias++;
     }
   } else {
@@ -104,8 +134,23 @@ if (existe("CLAUDE.md")) {
 
   const layout = ["app/layout.tsx", "src/app/layout.tsx"].find(existe);
   if (layout) {
-    if (/GeistSans/.test(ler(layout))) ok(`${layout}: declara a Geist`);
-    else {
+    const texto = ler(layout);
+    // a variável precisa estar no <html>: o DS aplica a fonte no html, e no <body> (onde o
+    // create-next-app põe) ela não chega — toda a tipografia cai na fonte do sistema
+    const noHtml = /<html[^>]*className=\{[^}]*(?:GeistSans\.variable|geist[A-Za-z]*\.variable|font-geist)/i.test(texto);
+    const noBody = /<body[^>]*className=\{[^}]*(?:GeistSans\.variable|geist[A-Za-z]*\.variable|font-geist)/i.test(texto);
+    if (noHtml) ok(`${layout}: a Geist está no <html>`);
+    else if (noBody && corrigir && /<html(?![^>]*className)[^>]*>/.test(texto) && classNameDoBody(texto)) {
+      // move o className inteiro do <body> para o <html>: a variável vale para a árvore toda
+      const { inicio, fim, valor } = classNameDoBody(texto);
+      // sem o atributo, a tag não fica com o espaço sobrando: `<body\n  >` vira `<body>`
+      const semBody = (texto.slice(0, inicio) + texto.slice(fim)).replace(/<body\s*>/, "<body>");
+      escrever(layout, semBody.replace(/<html([^>]*)>/, `<html$1 className=${valor}>`));
+      feito(`${layout}: a variável da Geist saiu do <body> e foi para o <html>`);
+    } else if (noBody) {
+      falta(`${layout}: a variável da Geist está no <body>, mas o DS aplica a fonte no <html> — mova o \`className\` com a variável para a tag <html> (\`--corrigir\` faz)`);
+      pendencias++;
+    } else {
       falta(`${layout}: a Geist não está declarada — \`import { GeistSans } from "geist/font/sans"\` e \`className={GeistSans.variable}\` no <html>; sem isso toda a tipografia cai na fonte do sistema`);
       pendencias++;
     }

@@ -24,8 +24,8 @@ const diagnostico = [
   { sinal: "Sai botão, campo ou tabela crus (button, input, table) ou cor em hex", causa: "o hook do ds-check não está em .claude/settings.json: a violação não volta para o Claude", cura: "node scripts/ds-setup.mjs (liga o hook) ou node scripts/ds-check.mjs à mão" },
   { sinal: "A tela tem Sidebar e Header próprios", causa: "o bloco @datacrazy/tela não foi instalado, ou o pedido não disse que é uma tela do CRM", cura: "npx shadcn@latest add @datacrazy/tela e pedir 'uma tela do CRM'" },
   { sinal: "Tabela alta, filtros em Select, tags coloridas — 'parece o DataCrazy antigo'", causa: "o pedido não apontou o bloco de referência: o Claude inventou o layout", cura: "citar o bloco no pedido (@datacrazy/leads, /pipeline, /dashboard…)" },
-  { sinal: "Os componentes estão lá, mas os tokens não (text-sm, text-gray-600, shadow-md)", causa: "o content do Tailwind não inclui ./lib/** ou o setup foi o da versão errada do Tailwind", cura: "o ds-setup aponta; conferir setup × setup-v3" },
-  { sinal: "A fonte está errada", causa: "a Geist não foi declarada no <html> do layout", cura: "o ds-setup aponta a linha; ver o passo Instalar a base" },
+  { sinal: "Os componentes estão lá, mas os tokens não (text-sm, text-gray-600, shadow-md)", causa: "o content do Tailwind não inclui ./lib/** ou o setup foi o da versão errada do Tailwind", cura: "node scripts/ds-setup.mjs --corrigir põe o ./lib/**; conferir setup × setup-v3" },
+  { sinal: "A fonte está errada", causa: "a variável da Geist está no <body> (onde o create-next-app a deixa) e o DS aplica a fonte no <html>", cura: "node scripts/ds-setup.mjs --corrigir move para o <html>" },
 ];
 
 // Seção só de comando: o bloco de código já é a caixa, então a caixa do preview sai.
@@ -131,7 +131,12 @@ export default function Installation() {
         semSeletorDeFundo
         className={semMoldura}
       >
-        <Codigo lang="bash" codigo={`node scripts/ds-setup.mjs`} />
+        <Codigo lang="bash" codigo={`node scripts/ds-setup.mjs --corrigir`} />
+        <Legenda>
+          <Chip>--corrigir</Chip> também conserta as duas coisas que o instalador não faz: põe <Chip>./lib/**</Chip> no{" "}
+          <Chip>content</Chip> do Tailwind e move a variável da Geist do <Chip>&lt;body&gt;</Chip> (onde o create-next-app
+          a deixa) para o <Chip>&lt;html&gt;</Chip>, onde o DS aplica a fonte. Sem a flag, ele só aponta.
+        </Legenda>
         <Legenda>O que ele deixa no projeto:</Legenda>
         <Codigo
           className="mt-3"
